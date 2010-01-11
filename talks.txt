@@ -1,0 +1,2 @@
+Thanh Ha - Intro to PyQt4
+Thanh Ha - Intro to freeseer
