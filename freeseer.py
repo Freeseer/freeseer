@@ -22,21 +22,23 @@
 # the #fosslc channel on IRC (freenode.net)
 
 NAME = "freeseer"
-VERSION = "2009.11"
+VERSION = "2010.01"
 
 import os, sys, time, alsaaudio, audioop
+import gobject, pygst
+pygst.require("0.10")
+import gst
 from PyQt4 import QtGui, QtCore
 
 CONFIG = dict()
 
 # Commandline processes
-CMD_GSTWATCH = ("gst-launch %(VODRIVER)s device=%(VODEVICE)s ! xvimagesink sync=false")
-CMD_GSTLAUNCH = ("gst-launch %(VODRIVER)s device=%(VODEVICE)s ! tee name=vid ! queue ! xvimagesink sync=false vid. ! theoraenc ! queue ! mux. alsasrc ! queue ! audioconvert ! queue ! vorbisenc ! queue ! mux. matroskamux name=mux ! filesink location=\"%(FILENAME)s\"")
+CMD_GSTLAUNCH = ("%(VODRIVER)s name=videosrc device=%(VODEVICE)s ! tee name=vid ! queue ! autovideosink sync=false vid. ! theoraenc ! queue ! mux. alsasrc ! queue ! audioconvert ! queue ! vorbisenc ! queue ! mux. matroskamux name=mux ! filesink name=filesink location=\"%(FILENAME)s\"")
 
 # Initialize some defaults
 PWD = os.getcwd()
 TALKSFILE = sys.path[0] + '/talks.txt'
-CONFIG['FILENAME'] = 'default'
+CONFIG['FILENAME'] = 'default.mkv'
 CONFIG['FILE_INDEX'] = 0
 CONFIG['VODEVICE'] = '/dev/video0'
 CONFIG['VODRIVER'] = 'v4lsrc'
@@ -50,25 +52,58 @@ while QtCore.QFile.exists(dev):
     dev='/dev/video'+str(viddevs)
 print 'Found ' + str(viddevs) + ' video devices.'
  
-########################################
+###########################################
 #
-# Widget to hold preview window instance
+# Widget to hold GST Player window instance
 #
-########################################
-class PreviewWidget(QtGui.QWidget):
+###########################################
+class GSTPlayerWidget(QtGui.QWidget):
        
     def __init__(self, parent):
         QtGui.QWidget.__init__(self, parent)
-#        CONFIG["WID"] = self.winId()
-        self.preview = QtCore.QProcess()
-        self.preview.start(CMD_GSTWATCH % CONFIG)
-#        self.connect(self.preview, QtCore.SIGNAL('readyReadStandardOutput()'), self.previewStdOut)
-    
-    def previewStart(self):
-        self.preview.start(CMD_GSTWATCH % CONFIG)
 
-    def previewStdOut(self):
-        print QtCore.QString(self.preview.readAllStandardOutput())
+        self.player = gst.parse_launch(CMD_GSTLAUNCH % CONFIG)
+
+        bus = self.player.get_bus()
+        bus.add_signal_watch()
+        bus.enable_sync_message_emission()
+        bus.connect("message", self.on_message)
+        bus.connect("sync-message::element", self.on_sync_message)
+
+    def on_message(self, bus, message):
+        t = message.type
+        if t == gst.MESSAGE_EOS:
+            self.player.set_state(gst.STATE_NULL)
+        elif t == gst.MESSAGE_ERROR:
+            err, debug = message.parse_error()
+            print "Error: %s" % err, debug
+            self.player.set_state(gst.STATE_NULL)
+
+    def on_sync_message(self, bus, message):
+        if message.structure is None:
+            return
+        message_name = message.structure.get_name()
+        if message_name == "prepare-xwindow-id":
+            imagesink = message.src
+            imagesink.set_property("force-aspect-ratio", True)
+            imagesink.set_xwindow_id(self.winId())
+
+    def change_videosrc(self):    
+        oldsrc = self.player.get_by_name("videosrc")
+        self.player.remove(oldsrc)
+        newsrc = gst.element_factory_make(str(CONFIG['VODRIVER']), "videosrc")
+        newsrc.set_property("device", CONFIG['VODEVICE'])
+        self.player.add(newsrc)
+        vidtee = self.player.get_by_name("vid")
+        gst.element_link_many(newsrc, vidtee)
+
+    def record(self):
+        filesink = self.player.get_by_name("filesink")
+        filesink.set_property("location", CONFIG['FILENAME'])
+        self.player.set_state(gst.STATE_PLAYING)
+
+    def stop(self):
+        self.player.set_state(gst.STATE_NULL)
 
 class volcheck(QtCore.QThread):
     def __init__(self, parent):
@@ -166,7 +201,7 @@ class MainApp(QtGui.QWidget):
         # Begin Layout
         #############################
         layout = QtGui.QVBoxLayout()
-        previewbox = QtGui.QHBoxLayout()
+        playerbox = QtGui.QHBoxLayout()
 
         self.record = QtGui.QPushButton("Record")
         self.record.setCheckable(True)
@@ -200,16 +235,15 @@ class MainApp(QtGui.QWidget):
         talkLayout.addWidget(self.talkEditButton)
         layout.addLayout(talkLayout)
 
-        self.previewWidget = PreviewWidget(self)
-        previewbox.addWidget(self.previewWidget)
-        self.previewPlayer = self.previewWidget.preview
+        self.playerWidget = GSTPlayerWidget(self)
+        playerbox.addWidget(self.playerWidget)
 
         self.volume = QtGui.QSlider(QtCore.Qt.Vertical, self)
         self.volume.setFocusPolicy(QtCore.Qt.NoFocus)
         self.volume.setRange(1, 32768)
-        previewbox.addWidget(self.volume)
+        playerbox.addWidget(self.volume)
 
-        layout.addLayout(previewbox)
+        layout.addLayout(playerbox)
 
         self.logger = QtGui.QTextBrowser(self)
         self.logger.setMaximumHeight(30)
@@ -243,14 +277,14 @@ class MainApp(QtGui.QWidget):
 
     def changeVideoDevice(self):
         print 'Changing video devices'
-        self.previewPlayer.close()
+        self.playerWidget.stop()
         CONFIG['VODEVICE'] = self.videoDevices.currentText()
         CONFIG['VODRIVER'] = self.videoDrivers.currentText()
-        self.previewWidget.previewStart()
+        self.playerWidget.change_videosrc()
 
     def closeEvent(self, event):
         print 'Exiting freeseer...'
-        self.previewWidget.preview.close()
+        self.playerWidget.stop()
         event.accept()
 
     def encoderReadOutput(self):
@@ -269,7 +303,7 @@ class MainApp(QtGui.QWidget):
             return
         
         self.checkFileExists()
-        self.previewPlayer.close()
+        self.stopCapture()
             
         self.startCapture()
 
@@ -288,20 +322,20 @@ class MainApp(QtGui.QWidget):
                 break
 
     def startCapture(self):
-        self.encoder.start(CMD_GSTLAUNCH % CONFIG)
+        self.playerWidget.record()
         self.record.setText('Stop')
         print 'Started capture'
         
     def stopCapture(self):
         self.encoder.close()
         self.record.setText('Record')
-        self.previewWidget.previewStart()
+        self.playerWidget.stop()
         print 'Stopped capture'
                 
     def finishedCapture(self):
-        self.record.setText('Record')
         self.record.toggle()
-        self.previewWidget.previewStart()
+        self.record.setText('Record')
+        self.playerWidget.stop()
         print 'Capture process unexpectedly ended'
        
 
@@ -310,6 +344,7 @@ class MainApp(QtGui.QWidget):
 #######################
 # Program starts here #
 #######################
+gobject.threads_init()
 app = QtGui.QApplication(sys.argv)
 
 widget = MainApp()

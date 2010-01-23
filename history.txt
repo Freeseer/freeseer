@@ -37,3 +37,5 @@ Update History:
         - Rewrote backend to use gstreamer via gst-launch commandline
         - Removed static path for locating talk.txt, now looks in the
           directory freeseer.py is located in
+    2010/01/23
+        - Rewrote code to not rely on gst-launch, now uses pygst
