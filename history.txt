@@ -33,3 +33,7 @@ Update History:
         - Added dropdown boxes to allow the user to select video device and driver
     2009/12/01
         - Created initial github repository
+    2010/01/22
+        - Rewrote backend to use gstreamer via gst-launch commandline
+        - Removed static path for locating talk.txt, now looks in the
+          directory freeseer.py is located in
