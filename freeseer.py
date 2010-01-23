@@ -24,20 +24,22 @@
 NAME = "freeseer"
 VERSION = "2009.11"
 
-import sys, time, alsaaudio, audioop
+import os, sys, time, alsaaudio, audioop
 from PyQt4 import QtGui, QtCore
 
 CONFIG = dict()
 
 # Commandline processes
-CMD_MPLAYER = ("mplayer -slave -quiet -noconsolecontrols -nomouseinput -wid %(WID)s -tv driver=%(VODRIVER)s:outfmt=rgb24:device=%(VODEVICE)s -fps 10 tv://")
-CMD_MENCODER = ("mencoder -tv driver=%(VODRIVER)s:outfmt=bgr24:device=%(VODEVICE)s:forceaudio:alsa -fps 10 tv:// -oac lavc -ovc lavc -lavcopts vcodec=mpeg4:keyint=100:vbitrate=8000:vhq:acodec=vorbis -o \"%(FILENAME)s\"")
+CMD_GSTWATCH = ("gst-launch %(VODRIVER)s device=%(VODEVICE)s ! xvimagesink sync=false")
+CMD_GSTLAUNCH = ("gst-launch %(VODRIVER)s device=%(VODEVICE)s ! tee name=vid ! queue ! xvimagesink sync=false vid. ! theoraenc ! queue ! mux. alsasrc ! queue ! audioconvert ! queue ! vorbisenc ! queue ! mux. matroskamux name=mux ! filesink location=\"%(FILENAME)s\"")
 
 # Initialize some defaults
+PWD = os.getcwd()
+TALKSFILE = sys.path[0] + '/talks.txt'
 CONFIG['FILENAME'] = 'default'
 CONFIG['FILE_INDEX'] = 0
 CONFIG['VODEVICE'] = '/dev/video0'
-CONFIG['VODRIVER'] = 'v4l'
+CONFIG['VODRIVER'] = 'v4lsrc'
 
 # Find video devices
 viddevs=0
@@ -50,26 +52,23 @@ print 'Found ' + str(viddevs) + ' video devices.'
  
 ########################################
 #
-# Widget to hold mplayer instance in
+# Widget to hold preview window instance
 #
 ########################################
-class MPlayerWidget(QtGui.QWidget):
+class PreviewWidget(QtGui.QWidget):
        
     def __init__(self, parent):
         QtGui.QWidget.__init__(self, parent)
-        CONFIG["WID"] = self.winId()
-        self.mplayer = QtCore.QProcess()
-        self.mplayer.start(CMD_MPLAYER % CONFIG)
-        self.connect(self.mplayer, QtCore.SIGNAL('readyReadStandardOutput()'), self.mpStdOut)
+#        CONFIG["WID"] = self.winId()
+        self.preview = QtCore.QProcess()
+        self.preview.start(CMD_GSTWATCH % CONFIG)
+#        self.connect(self.preview, QtCore.SIGNAL('readyReadStandardOutput()'), self.previewStdOut)
     
-    def __del__(self):
-        self.mplayer.close()
-    
-    def mpstart(self):
-        self.mplayer.start(CMD_MPLAYER % CONFIG)
+    def previewStart(self):
+        self.preview.start(CMD_GSTWATCH % CONFIG)
 
-    def mpStdOut(self):
-        print QtCore.QString(self.mplayer.readAllStandardOutput())
+    def previewStdOut(self):
+        print QtCore.QString(self.preview.readAllStandardOutput())
 
 class volcheck(QtCore.QThread):
     def __init__(self, parent):
@@ -78,10 +77,10 @@ class volcheck(QtCore.QThread):
 
     def run(self):
         inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
-        inp.setchannels(1)
+        inp.setchannels(2)
         inp.setrate(8000)
         inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-        
+       
         inp.setperiodsize(160)
         
         while True:
@@ -124,7 +123,7 @@ class EditTalks(QtGui.QWidget):
         self.connect(self.savTalkButton, QtCore.SIGNAL('clicked()'), self.saveTalks)
         
         # Add talks
-        file = QtCore.QFile('/home/zxiiro/workspace/Kapture/src/talks.txt')
+        file = QtCore.QFile(TALKSFILE)
         file.open(QtCore.QIODevice.ReadOnly)
         
         txtStream = QtCore.QTextStream(file)
@@ -140,7 +139,7 @@ class EditTalks(QtGui.QWidget):
         self.talkList.takeItem(self.talkList.currentRow())
         
     def saveTalks(self):
-        file = QtCore.QFile('/home/zxiiro/workspace/Kapture/src/talks.txt')
+        file = QtCore.QFile(TALKSFILE)
         file.open(QtCore.QIODevice.WriteOnly)
         
         txtStream = QtCore.QTextStream(file)
@@ -161,7 +160,7 @@ class MainApp(QtGui.QWidget):
         ##############################
         # Variable Initialization
         ##############################
-        self.mencoder = QtCore.QProcess()
+        self.encoder = QtCore.QProcess()
 
         #############################
         # Begin Layout
@@ -181,8 +180,8 @@ class MainApp(QtGui.QWidget):
             self.videoDevices.addItem('/dev/video' + str(i))
             i=i+1
         self.videoDrivers = QtGui.QComboBox()
-        self.videoDrivers.addItem('v4l')
-        self.videoDrivers.addItem('v4l2')
+        self.videoDrivers.addItem('v4lsrc')
+        self.videoDrivers.addItem('v4l2src')
         viddevLayout = QtGui.QHBoxLayout()
         viddevLayout.addWidget(videoLabel)
         viddevLayout.addWidget(self.videoDevices)
@@ -201,9 +200,9 @@ class MainApp(QtGui.QWidget):
         talkLayout.addWidget(self.talkEditButton)
         layout.addLayout(talkLayout)
 
-        self.mplayer = MPlayerWidget(self)
-        previewbox.addWidget(self.mplayer)
-        self.mplayerp = self.mplayer.mplayer
+        self.previewWidget = PreviewWidget(self)
+        previewbox.addWidget(self.previewWidget)
+        self.previewPlayer = self.previewWidget.preview
 
         self.volume = QtGui.QSlider(QtCore.Qt.Vertical, self)
         self.volume.setFocusPolicy(QtCore.Qt.NoFocus)
@@ -223,7 +222,8 @@ class MainApp(QtGui.QWidget):
 
         # Connections
         self.connect(self.record, QtCore.SIGNAL('toggled(bool)'), self.Capture)
-        self.connect(self.mencoder, QtCore.SIGNAL('readyReadStandardOutput()'), self.mencoderReadOutput)
+        self.connect(self.encoder, QtCore.SIGNAL('readyReadStandardOutput()'), self.encoderReadOutput)
+        self.connect(self.encoder, QtCore.SIGNAL('finished(int)'), self.finishedCapture)
         self.connect(self.talkEditButton, QtCore.SIGNAL('clicked()'), self.editTalks)
         self.connect(self.videoDevices, QtCore.SIGNAL('currentIndexChanged(int)'), self.changeVideoDevice)
         self.connect(self.videoDrivers, QtCore.SIGNAL('currentIndexChanged(int)'), self.changeVideoDevice)
@@ -232,7 +232,7 @@ class MainApp(QtGui.QWidget):
         self.volcheck.start()
         
         # Add talks
-        file = QtCore.QFile('/home/zxiiro/workspace/Kapture/src/talks.txt')
+        file = QtCore.QFile(TALKSFILE)
         file.open(QtCore.QIODevice.ReadOnly)
         
         txtStream = QtCore.QTextStream(file)
@@ -243,18 +243,18 @@ class MainApp(QtGui.QWidget):
 
     def changeVideoDevice(self):
         print 'Changing video devices'
-        self.mplayerp.close()
+        self.previewPlayer.close()
         CONFIG['VODEVICE'] = self.videoDevices.currentText()
         CONFIG['VODRIVER'] = self.videoDrivers.currentText()
-        self.mplayer.mpstart()
+        self.previewWidget.previewStart()
 
     def closeEvent(self, event):
         print 'Exiting freeseer...'
-        self.mplayer.mplayer.close()
+        self.previewWidget.preview.close()
         event.accept()
 
-    def mencoderReadOutput(self):
-        self.logger.setText(QtCore.QString(self.mencoder.readAllStandardOutput()))
+    def encoderReadOutput(self):
+        self.logger.setText(QtCore.QString(self.encoder.readAllStandardOutput()))
         
     def editTalks(self):
         self.talkEdit = EditTalks()
@@ -263,15 +263,13 @@ class MainApp(QtGui.QWidget):
 
     # Code for starting MEncoder
     def Capture(self):
-        #print self.mencoder.state()
+
         if not (self.record.isChecked()):
             self.stopCapture()
             return
         
         self.checkFileExists()
-        
-        if self.videoDrivers.currentText() == 'v4l2':
-            self.mplayerp.close()
+        self.previewPlayer.close()
             
         self.startCapture()
 
@@ -280,7 +278,7 @@ class MainApp(QtGui.QWidget):
     def checkFileExists(self):
         i = 0
         while True:
-            CONFIG['FILENAME'] = QtCore.QDate.currentDate().toString(QtCore.Qt.ISODate) + " " + self.talk.currentText() + " (" + str(i) + ").avi"
+            CONFIG['FILENAME'] = QtCore.QDate.currentDate().toString(QtCore.Qt.ISODate) + " " + self.talk.currentText() + " (" + str(i) + ").mkv"
             rfile = QtCore.QFileInfo(CONFIG['FILENAME'])
 
             if (rfile.exists()):
@@ -290,15 +288,22 @@ class MainApp(QtGui.QWidget):
                 break
 
     def startCapture(self):
-        self.mencoder.start(CMD_MENCODER % CONFIG)
+        self.encoder.start(CMD_GSTLAUNCH % CONFIG)
         self.record.setText('Stop')
         print 'Started capture'
         
     def stopCapture(self):
-        self.mencoder.close()
+        self.encoder.close()
         self.record.setText('Record')
-        print 'Stopping capture'
+        self.previewWidget.previewStart()
+        print 'Stopped capture'
                 
+    def finishedCapture(self):
+        self.record.setText('Record')
+        self.record.toggle()
+        self.previewWidget.previewStart()
+        print 'Capture process unexpectedly ended'
+       
 
 
 
