@@ -39,3 +39,9 @@ Update History:
           directory freeseer.py is located in
     2010/01/23
         - Rewrote code to not rely on gst-launch, now uses pygst
+    2010/01/24
+        - Cleaned up some code that is no longer used.
+        - It is now not possible to change video device/driver and filename
+          while a video is recording.
+        - Added a variable for volcheck to enable/disable volcheck (this fixes
+          an error on application close)
