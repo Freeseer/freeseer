@@ -111,6 +111,7 @@ class volcheck(QtCore.QThread):
         self.parent = parent
 
     def run(self):
+        self.run = True
         inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
         inp.setchannels(2)
         inp.setrate(8000)
@@ -118,7 +119,7 @@ class volcheck(QtCore.QThread):
        
         inp.setperiodsize(160)
         
-        while True:
+        while self.run:
             l,data = inp.read()
             if l:
                 #print audioop.max(data, 2)
@@ -192,11 +193,6 @@ class MainApp(QtGui.QWidget):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
 
-        ##############################
-        # Variable Initialization
-        ##############################
-        self.encoder = QtCore.QProcess()
-
         #############################
         # Begin Layout
         #############################
@@ -256,8 +252,6 @@ class MainApp(QtGui.QWidget):
 
         # Connections
         self.connect(self.record, QtCore.SIGNAL('toggled(bool)'), self.Capture)
-        self.connect(self.encoder, QtCore.SIGNAL('readyReadStandardOutput()'), self.encoderReadOutput)
-        self.connect(self.encoder, QtCore.SIGNAL('finished(int)'), self.finishedCapture)
         self.connect(self.talkEditButton, QtCore.SIGNAL('clicked()'), self.editTalks)
         self.connect(self.videoDevices, QtCore.SIGNAL('currentIndexChanged(int)'), self.changeVideoDevice)
         self.connect(self.videoDrivers, QtCore.SIGNAL('currentIndexChanged(int)'), self.changeVideoDevice)
@@ -284,18 +278,16 @@ class MainApp(QtGui.QWidget):
 
     def closeEvent(self, event):
         print 'Exiting freeseer...'
+        self.volcheck.run = False
         self.playerWidget.stop()
         event.accept()
 
-    def encoderReadOutput(self):
-        self.logger.setText(QtCore.QString(self.encoder.readAllStandardOutput()))
-        
     def editTalks(self):
         self.talkEdit = EditTalks()
         self.talkEdit.show()
         self.talkEdit.resize(480, 320)
 
-    # Code for starting MEncoder
+    # Check capture status, sets filename, and begin capture.
     def Capture(self):
 
         if not (self.record.isChecked()):
@@ -303,8 +295,6 @@ class MainApp(QtGui.QWidget):
             return
         
         self.checkFileExists()
-        self.stopCapture()
-            
         self.startCapture()
 
     # checks if a filename exists or not and increments index until it finds
@@ -324,21 +314,19 @@ class MainApp(QtGui.QWidget):
     def startCapture(self):
         self.playerWidget.record()
         self.record.setText('Stop')
+        self.videoDevices.setEnabled(False)
+        self.videoDrivers.setEnabled(False)
+        self.talk.setEnabled(False)
         print 'Started capture'
         
     def stopCapture(self):
-        self.encoder.close()
         self.record.setText('Record')
         self.playerWidget.stop()
+        self.videoDevices.setEnabled(True)
+        self.videoDrivers.setEnabled(True)
+        self.talk.setEnabled(True)
         print 'Stopped capture'
                 
-    def finishedCapture(self):
-        self.record.toggle()
-        self.record.setText('Record')
-        self.playerWidget.stop()
-        print 'Capture process unexpectedly ended'
-       
-
 
 
 #######################
