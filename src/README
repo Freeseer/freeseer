@@ -1,35 +1,4 @@
 
 For support, questions, suggestions or any other inquiries, visit:
-#fosslc on IRC (freenode.net)
+http://wiki.github.com/fosslc/freeseer/
 
-The following requirement list were verified under Ubuntu 9.04
-
-Requirements:
-- ffmpeg
-- mencoder
-- mplayer
-- pyqt4-dev-tools
-- python-alsaaudio 
-- vga2usb, http://www.epiphan.com/downloads/linux/
-
-
-Requirements Fedora 12:
-- vga2usb, http://www.epiphan.com/downloads/linux/
-- python-alsaaudio
-- pyqt4-devel
-
-rpmfusion repository needed for the following
-- ffmpeg
-- mencoder
-- mplayer
-
-
-Setup Instructions:
-1. cd to vga2usb folder
-2. sudo make load
-3. sudo chown fosslc:fosslc /dev/video0  (change fosslc to your laptops user)
-4. open sound recorder and do a test to ensure mic is working
-5. python freeseer.py 
-6. if video preview shows up, your ready to record.
-
-NOTES:  The video preview won't come back if vga loses it's signal eg. when presenter unplugs his laptop.  In this case just restart freeseer to get the preview back.
