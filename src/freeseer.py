@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 # freeseer - vga/presentation capture software
 #
 #  Copyright (C) 2010  Free and Open Source Software Learning Centre
@@ -21,48 +19,69 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
-NAME = "freeseer"
-VERSION = "2010.01"
-
-import os, sys, time, alsaaudio, audioop
 import gobject, pygst
 pygst.require("0.10")
 import gst
-from PyQt4 import QtGui, QtCore
 
-CONFIG = dict()
+class FreeSeeR:
+    def __init__(self):
+        self.window_id = None
+        
+        self.viddrv = 'v4lsrc'
+        self.viddev = '/dev/video0'
+        self.soundsrc = 'alsasrc'
+        self.filename = 'default.ogg'
+        self.video_codec = 'theoraenc'
+        self.audio_codec = 'vorbisenc'
+        
+        self.player = gst.Pipeline("player")
 
-# Commandline processes
-CMD_GSTLAUNCH = ("%(VODRIVER)s name=videosrc device=%(VODEVICE)s ! tee name=vid ! queue ! autovideosink sync=false vid. ! theoraenc ! queue ! mux. alsasrc ! queue ! audioconvert ! queue ! vorbisenc ! queue ! mux. matroskamux name=mux ! filesink name=filesink location=\"%(FILENAME)s\"")
+        # GST Video
+        self.vidsrc = gst.element_factory_make(self.viddrv, "vidsrc")
+        self.cspace = gst.element_factory_make("ffmpegcolorspace", "cspace")
+        self.vidtee = gst.element_factory_make("tee", "vidtee")
+        self.vidqueue1 = gst.element_factory_make("queue", "vidqueue1")
+        self.vidqueue2 = gst.element_factory_make("queue", "vidqueue2")
+        self.vidcodec = gst.element_factory_make(self.video_codec, "vidcodec")
+        self.vidsink = gst.element_factory_make("autovideosink", "vidsink")
 
-# Initialize some defaults
-PWD = os.getcwd()
-TALKSFILE = sys.path[0] + '/talks.txt'
-CONFIG['FILENAME'] = 'default.mkv'
-CONFIG['FILE_INDEX'] = 0
-CONFIG['VODEVICE'] = '/dev/video0'
-CONFIG['VODRIVER'] = 'v4lsrc'
+        # GST Video Filtering
+        self.fvidrate = gst.element_factory_make("videorate", "fvidrate")
+        self.fvidrate_cap = gst.element_factory_make("capsfilter", "fvidrate_cap")
+        self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=25/1, silent'))
+        self.fvidscale = gst.element_factory_make("videoscale", "fvidscale")
+        self.fvidscale_cap = gst.element_factory_make("capsfilter", "fvidscale_cap")
+        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
+        self.fvidcspace = gst.element_factory_make("ffmpegcolorspace", "fvidcspace")
+        
 
-# Find video devices
-viddevs=0
-dev='/dev/video' + str(viddevs)
-while QtCore.QFile.exists(dev):
-    print 'Video device ' + str(viddevs) + ' found.'
-    viddevs=viddevs+1
-    dev='/dev/video'+str(viddevs)
-print 'Found ' + str(viddevs) + ' video devices.'
- 
-###########################################
-#
-# Widget to hold GST Player window instance
-#
-###########################################
-class GSTPlayerWidget(QtGui.QWidget):
-       
-    def __init__(self, parent):
-        QtGui.QWidget.__init__(self, parent)
+        # GST Sound
+        self.sndsrc = gst.element_factory_make("alsasrc", "sndsrc")
+#        self.sndsrc.set_property("device", "alsa_output.pci-0000_00_1b.0.analog-stereo")
+        self.sndtee = gst.element_factory_make("tee", "sndtee")
+        self.sndqueue1 = gst.element_factory_make("queue", "sndqueue1")
+        self.sndqueue2 = gst.element_factory_make("queue", "sndqueue2")
+        self.audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
+        self.sndcodec = gst.element_factory_make(self.audio_codec, "sndcodec")
+        self.sndsink = gst.element_factory_make("autoaudiosink", "sndsink")
 
-        self.player = gst.parse_launch(CMD_GSTLAUNCH % CONFIG)
+        # GST Muxer
+        self.mux = gst.element_factory_make("oggmux", "mux")
+        self.filesink = gst.element_factory_make("filesink", "filesink")
+        self.filesink.set_property("location", self.filename)
+
+        # GST Add Components
+        self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
+        self.player.add(self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace)
+        self.player.add(self.sndsrc, self.sndtee, self.sndqueue1, self.audioconvert, self.sndcodec)
+        self.player.add(self.mux, self.filesink)
+
+        # GST Link Components
+        gst.element_link_many(self.vidsrc, self.cspace, self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace, self.vidtee)
+        gst.element_link_many(self.vidtee, self.vidqueue1, self.vidcodec, self.mux)
+        gst.element_link_many(self.sndsrc, self.sndtee)
+        gst.element_link_many(self.sndtee, self.sndqueue1, self.audioconvert, self.sndcodec, self.mux)
+        gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
         bus.add_signal_watch()
@@ -86,258 +105,97 @@ class GSTPlayerWidget(QtGui.QWidget):
         if message_name == "prepare-xwindow-id":
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
-            imagesink.set_xwindow_id(self.winId())
+            imagesink.set_xwindow_id(self.window_id)
 
-    def change_videosrc(self):    
-        oldsrc = self.player.get_by_name("videosrc")
-        self.player.remove(oldsrc)
-        newsrc = gst.element_factory_make(str(CONFIG['VODRIVER']), "videosrc")
-        newsrc.set_property("device", CONFIG['VODEVICE'])
-        self.player.add(newsrc)
-        vidtee = self.player.get_by_name("vid")
-        gst.element_link_many(newsrc, vidtee)
+    def _dvdemux_padded(self, dbin, pad):
+        print "dvdemux got pad %s" % pad.get_name()
+        if pad.get_name() == 'video':
+            print "Linking dvdemux to queue1"
+            self.dv1394dvdemux.link(self.dv1394q1)
 
-    def record(self):
-        filesink = self.player.get_by_name("filesink")
-        filesink.set_property("location", CONFIG['FILENAME'])
+    def change_videosrc(self, new_source, new_device):
+        if (self.viddrv == 'dv1394src'):
+            self.player.remove(self.dv1394q1)
+            self.player.remove(self.dv1394q2)
+            self.player.remove(self.dv1394dvdemux)
+            self.player.remove(self.dv1394dvdec)
+            self.dv1394q1 = None
+            self.dv1394q2 = None
+            self.dv1394dvdemux = None
+            self.dv1394dvdec = None
+            
+        self.viddrv = new_source
+        self.viddev = new_device
+        self.player.remove(self.vidsrc)
+        self.vidsrc = gst.element_factory_make(self.viddrv, "vidsrc")
+        self.player.add(self.vidsrc)
+        
+        if (self.viddrv == 'v4lsrc'):
+            self.vidsrc.set_property("device", self.viddev)
+        elif (self.viddrv == 'v4l2src'):
+            self.vidsrc.set_property("device", self.viddev)
+        elif (self.viddrv == 'dv1394src'):
+            self.dv1394q1 =  gst.element_factory_make("queue", "dv1394q1")
+            self.dv1394q2 =  gst.element_factory_make("queue", "dv1394q2")
+            self.dv1394dvdemux =  gst.element_factory_make("dvdemux", "dv1394dvdemux")
+            self.dv1394dvdec =  gst.element_factory_make("dvdec", "dv1394dvdec")
+            self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
+            self.vidsrc.link(self.dv1394dvdemux)
+            self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
+            gst.element_link_many( self.dv1394q1, self.dv1394dvdec, self.cspace)
+            return
+        
+        gst.element_link_many(self.vidsrc, self.cspace)
+
+    def change_soundsrc(self, new_source):
+        self.soundsrc = new_source
+        self.player.remove(self.sndsrc)
+        self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
+        self.player.add(self.sndsrc)
+        self.sndsrc.link(self.sndtee)
+
+    def record(self, filename):
+        self.filename = filename
+        self.filesink.set_property("location", self.filename)
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
         self.player.set_state(gst.STATE_NULL)
 
-class volcheck(QtCore.QThread):
-    def __init__(self, parent):
-        QtCore.QThread.__init__(self, parent)
-        self.parent = parent
+    def change_video_codec(self, new_vcodec):
+        self.video_codec = new_vcodec
+        self.player.remove(self.vidcodec)
+        self.vidcodec = gst.element_factory_make(self.video_codec, "vidcodec")
+        self.player.add(self.vidcodec)
+        gst.element_link_many(self.vidqueue1, self.vidcodec, self.mux)
 
-    def run(self):
-        self.run = True
-        inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
-        inp.setchannels(2)
-        inp.setrate(8000)
-        inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-       
-        inp.setperiodsize(160)
-        
-        while self.run:
-            l,data = inp.read()
-            if l:
-                #print audioop.max(data, 2)
-                self.parent.volume.setValue(audioop.max(data, 2))
-            time.sleep(.001)
+    def change_audio_codec(self, new_acodec):
+        self.audio_codec = new_acodec
+        self.player.remove(self.sndcodec)
+        self.sndcodec = gst.element_factory_make(self.audio_codec, "sndcodec")
+        self.player.add(self.sndcodec)
+        gst.element_link_many(self.audioconvert, self.sndcodec, self.mux)
 
-class EditTalks(QtGui.QWidget):
-    def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+    def change_muxer(self, new_mux):
+        self.muxer = new_mux
+        self.player.remove(self.mux)
+        self.mux = gst.element_factory_make(self.muxer, "mux")
+        self.player.add(self.mux)
+        gst.element_link_many(self.sndcodec, self.mux)
+        gst.element_link_many(self.vidcodec, self.mux)
+        gst.element_link_many(self.mux, self.filesink)
 
-        # Layout
-        layout = QtGui.QHBoxLayout()
-        
-        leftside = QtGui.QVBoxLayout()
-        self.editBox = QtGui.QLineEdit()
-        leftside.addWidget(self.editBox)
-        
-        self.talkList = QtGui.QListWidget()
-        leftside.addWidget(self.talkList)
-        
-        rightside = QtGui.QVBoxLayout()
-        self.addTalkButton = QtGui.QPushButton('add')
-        rightside.addWidget(self.addTalkButton)
-        self.delTalkButton = QtGui.QPushButton('remove')
-        rightside.addWidget(self.delTalkButton)
-        self.savTalkButton = QtGui.QPushButton('save')
-        rightside.addWidget(self.savTalkButton)
-        
-        layout.addLayout(leftside)
-        layout.addLayout(rightside)
-        self.setLayout(layout)
-        # End Layout
-        
-        # Connections
-        self.connect(self.addTalkButton, QtCore.SIGNAL('clicked()'), self.addTalk)
-        self.connect(self.delTalkButton, QtCore.SIGNAL('clicked()'), self.delTalk)
-        self.connect(self.savTalkButton, QtCore.SIGNAL('clicked()'), self.saveTalks)
-        
-        # Add talks
-        file = QtCore.QFile(TALKSFILE)
-        file.open(QtCore.QIODevice.ReadOnly)
-        
-        txtStream = QtCore.QTextStream(file)
-        while not txtStream.atEnd():
-            text = txtStream.readLine()
-            self.talkList.addItem(text)
-        file.close()
-    
-    def addTalk(self):
-        self.talkList.addItem(self.editBox.text())
-    
-    def delTalk(self):
-        self.talkList.takeItem(self.talkList.currentRow())
-        
-    def saveTalks(self):
-        file = QtCore.QFile(TALKSFILE)
-        file.open(QtCore.QIODevice.WriteOnly)
-        
-        txtStream = QtCore.QTextStream(file)
-        i = 0
-        while i < self.talkList.count():
-            txtStream << self.talkList.item(i).text() << '\n' 
-            i = i+1
-            
-        txtStream.flush()
-        file.flush()
-        file.close()
+    def enable_preview(self, window_id):
+        self.window_id = window_id
+        self.player.add(self.vidqueue2, self.vidsink)
+        gst.element_link_many(self.vidtee, self.vidqueue2, self.vidsink)
 
-class MainApp(QtGui.QWidget):
+    def disable_preview(self):
+        self.player.remove(self.vidqueue2, self.vidsink)
 
-    def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+    def enable_audio_feedback(self):
+        self.player.add(self.sndqueue2, self.sndsink)
+        gst.element_link_many(self.sndtee, self.sndqueue2, self.sndsink)
 
-        #############################
-        # Begin Layout
-        #############################
-        layout = QtGui.QVBoxLayout()
-        playerbox = QtGui.QHBoxLayout()
-
-        self.record = QtGui.QPushButton("Record")
-        self.record.setCheckable(True)
-        layout.addWidget(self.record)
-        
-        videoLabel = QtGui.QLabel('Device:')
-        videoLabel.setMaximumWidth(50)
-        self.videoDevices = QtGui.QComboBox()
-        i = 0
-        while i < viddevs:
-            self.videoDevices.addItem('/dev/video' + str(i))
-            i=i+1
-        self.videoDrivers = QtGui.QComboBox()
-        self.videoDrivers.addItem('v4lsrc')
-        self.videoDrivers.addItem('v4l2src')
-        viddevLayout = QtGui.QHBoxLayout()
-        viddevLayout.addWidget(videoLabel)
-        viddevLayout.addWidget(self.videoDevices)
-        viddevLayout.addWidget(self.videoDrivers)
-        layout.addLayout(viddevLayout)
-        
-        talkLabel = QtGui.QLabel('Title:')
-        talkLabel.setMaximumWidth(50)
-        self.talk = QtGui.QComboBox()
-        self.talk.addItem('Foo Bar - Test Presentation')
-        self.talkEditButton = QtGui.QPushButton("Edit")
-        self.talkEditButton.setMaximumWidth(50)
-        talkLayout = QtGui.QHBoxLayout()
-        talkLayout.addWidget(talkLabel)
-        talkLayout.addWidget(self.talk)
-        talkLayout.addWidget(self.talkEditButton)
-        layout.addLayout(talkLayout)
-
-        self.playerWidget = GSTPlayerWidget(self)
-        playerbox.addWidget(self.playerWidget)
-
-        self.volume = QtGui.QSlider(QtCore.Qt.Vertical, self)
-        self.volume.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.volume.setRange(1, 32768)
-        playerbox.addWidget(self.volume)
-
-        layout.addLayout(playerbox)
-
-        self.logger = QtGui.QTextBrowser(self)
-        self.logger.setMaximumHeight(30)
-        layout.addWidget(self.logger)
-
-        self.setLayout(layout)
-        ##############################
-        # End layout
-        ##############################
-
-        # Connections
-        self.connect(self.record, QtCore.SIGNAL('toggled(bool)'), self.Capture)
-        self.connect(self.talkEditButton, QtCore.SIGNAL('clicked()'), self.editTalks)
-        self.connect(self.videoDevices, QtCore.SIGNAL('currentIndexChanged(int)'), self.changeVideoDevice)
-        self.connect(self.videoDrivers, QtCore.SIGNAL('currentIndexChanged(int)'), self.changeVideoDevice)
-
-        self.volcheck = volcheck(self)
-        self.volcheck.start()
-        
-        # Add talks
-        file = QtCore.QFile(TALKSFILE)
-        file.open(QtCore.QIODevice.ReadOnly)
-        
-        txtStream = QtCore.QTextStream(file)
-        while not txtStream.atEnd():
-            text = txtStream.readLine()
-            self.talk.addItem(text)
-        file.close()
-
-    def changeVideoDevice(self):
-        print 'Changing video devices'
-        self.playerWidget.stop()
-        CONFIG['VODEVICE'] = self.videoDevices.currentText()
-        CONFIG['VODRIVER'] = self.videoDrivers.currentText()
-        self.playerWidget.change_videosrc()
-
-    def closeEvent(self, event):
-        print 'Exiting freeseer...'
-        self.volcheck.run = False
-        self.playerWidget.stop()
-        event.accept()
-
-    def editTalks(self):
-        self.talkEdit = EditTalks()
-        self.talkEdit.show()
-        self.talkEdit.resize(480, 320)
-
-    # Check capture status, sets filename, and begin capture.
-    def Capture(self):
-
-        if not (self.record.isChecked()):
-            self.stopCapture()
-            return
-        
-        self.checkFileExists()
-        self.startCapture()
-
-    # checks if a filename exists or not and increments index until it finds
-    # at filename that is not taken
-    def checkFileExists(self):
-        i = 0
-        while True:
-            CONFIG['FILENAME'] = QtCore.QDate.currentDate().toString(QtCore.Qt.ISODate) + " " + self.talk.currentText() + " (" + str(i) + ").mkv"
-            rfile = QtCore.QFileInfo(CONFIG['FILENAME'])
-
-            if (rfile.exists()):
-                i += 1
-                print "File Exists.  Incrementing index to " + str(i)
-            else:
-                break
-
-    def startCapture(self):
-        self.playerWidget.record()
-        self.record.setText('Stop')
-        self.videoDevices.setEnabled(False)
-        self.videoDrivers.setEnabled(False)
-        self.talk.setEnabled(False)
-        print 'Started capture'
-        
-    def stopCapture(self):
-        self.record.setText('Record')
-        self.playerWidget.stop()
-        self.videoDevices.setEnabled(True)
-        self.videoDrivers.setEnabled(True)
-        self.talk.setEnabled(True)
-        print 'Stopped capture'
-                
-
-
-#######################
-# Program starts here #
-#######################
-gobject.threads_init()
-app = QtGui.QApplication(sys.argv)
-
-widget = MainApp()
-widget.show()
-widget.resize(480, 320)
-
-sys.exit(app.exec_())
-
+    def disable_audio_feedback(self):
+        self.player.remove(self.sndqueue2, self.sndsink)
