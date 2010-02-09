@@ -50,6 +50,10 @@ class FreeseerCore:
             talk_titles.append(line.rstrip())
         return talk_titles
 
+    def get_record_name(self, filename):
+        recordname = filename + str(i) + '.ogg'
+        return recordname
+
     def change_videosrc(self, vid_source, vid_device):
         self.freeseer.change_videosrc(vid_source, vid_device)
 
