@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 # freeseer - vga/presentation capture software
 #
 #  Copyright (C) 2010  Free and Open Source Software Learning Centre
@@ -21,29 +19,26 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
-from freeseer_core import *
-from freeseer_ui_qt import *
-import os, sys, time, alsaaudio, audioop
-from PyQt4 import QtGui, QtCore
+from freeseer import *
 
-class MainApp(QtGui.QMainWindow):
-    def __init__(self):
-        QtGui.QMainWindow.__init__(self)
-        self.ui = Ui_FreeseerMainWindow()
-        self.ui.setupUi(self)
-        self.statusBar().showMessage('ready')
+class FreeseerCore:
+    freeseer = FreeSeeR()
 
-        self.core = FreeseerCore()
-        
-        self.core.preview(True, self.ui.previewWidget.winId())
+    def change_videosrc(self, vid_source, vid_device):
+        self.freeseer.change_videosrc(vid_source, vid_device)
 
-        self.core.change_videosrc('v4l2src', '/dev/video0')
-        self.core.record('test.ogg')
+    def change_soundsrc(self, snd_source):
+        self.freeseer.change_soundsrc(source)
 
+    def record(self, filename):
+        self.freeseer.record(filename)
 
-if __name__ == "__main__":
-    gobject.threads_init()
-    app = QtGui.QApplication(sys.argv)
-    main = MainApp()
-    main.show()
-    sys.exit(app.exec_())
+    def stop(self):
+        self.freeseer.stop()
+
+    def preview(self, enable=False, window_id=None):
+        if enable == True:
+            self.freeseer.enable_preview(window_id)
+            print 'Preview Activated'
+        else:
+            print 'Preview Deactivated'
