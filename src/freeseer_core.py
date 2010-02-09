@@ -25,7 +25,7 @@ import os
 class FreeseerCore:
     freeseer = FreeSeeR()
 
-    def get_video_sources(self):
+    def get_video_devices(self):
         i = 0
         vid_sources = []
         dev='/dev/video' + str(i)
@@ -36,7 +36,7 @@ class FreeseerCore:
         vid_sources.append('/dev/fw1')
         return vid_sources
         
-    def get_audio_sources(self):
+    def get_video_sources(self):
         snd_sources = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
         return snd_sources
 
