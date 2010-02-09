@@ -6,120 +6,174 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
-    <height>323</height>
+    <width>463</width>
+    <height>509</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>freeseer - video studio in a backpack</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>481</width>
-      <height>271</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="recordButton">
-       <property name="text">
-        <string>Record</string>
-       </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="main" native="true">
+       <attribute name="title">
+        <string>main</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPushButton" name="recordButton">
+          <property name="text">
+           <string>Record</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="optionsLayout">
+          <item>
+           <layout class="QHBoxLayout" name="deviceOptionsLayout">
+            <item>
+             <widget class="QLabel" name="deviceLabel">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Device:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="videoDeviceList"/>
+            </item>
+            <item>
+             <widget class="QComboBox" name="videoSourceList"/>
+            </item>
+            <item>
+             <widget class="QComboBox" name="audioSourceList"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="talkListLayout">
+            <item>
+             <widget class="QLabel" name="talkLabel">
+              <property name="maximumSize">
+               <size>
+                <width>40</width>
+                <height>24</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Talk:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="talkList"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="editTalksButton">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Edit</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="feedbackLayout">
+          <item>
+           <widget class="QWidget" name="previewWidget" native="true"/>
+          </item>
+          <item>
+           <widget class="QSlider" name="audioFeedbackSlider">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="deviceLabel">
-           <property name="maximumSize">
-            <size>
-             <width>40</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Device:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="videoDeviceList"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="videoSourceList"/>
-         </item>
-         <item>
-          <widget class="QComboBox" name="audioSourceList"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="talkLabel">
-           <property name="maximumSize">
-            <size>
-             <width>40</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Talk:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="talkList"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="editTalksButton">
-           <property name="maximumSize">
-            <size>
-             <width>50</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Edit</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QWidget" name="previewWidget" native="true"/>
-       </item>
-       <item>
-        <widget class="QSlider" name="audioFeedbackSlider">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
+      <widget class="QWidget" name="editTalksPage" native="true">
+       <attribute name="title">
+        <string>edit talks</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLineEdit" name="lineEdit"/>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="editActionslayout">
+          <item>
+           <widget class="QPushButton" name="addButton">
+            <property name="text">
+             <string>add</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="removeButton">
+            <property name="text">
+             <string>remove</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveButton">
+            <property name="text">
+             <string>save</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QListWidget" name="listWidget"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>499</width>
+     <width>463</width>
      <height>21</height>
     </rect>
    </property>
@@ -127,10 +181,16 @@
     <property name="title">
      <string>freeseer</string>
     </property>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFreeseer"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
