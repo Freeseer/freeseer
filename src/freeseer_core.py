@@ -54,9 +54,19 @@ class FreeseerCore:
             talk_titles.append(line.rstrip())
         return talk_titles
 
+    # Returns the filename to use when recording
+    # This function checks to see if a file exists and increments index
+    # until a filename that does not exist is found
     def get_record_name(self, filename):
-        recordname = filename + str(i) + '.ogg'
+        i = 0
+        recordname = self.make_record_name(filename, i)
+        while os.path.exists(recordname):
+            i=i+1
+            recordname = self.make_record_name(filename, i)
         return recordname
+
+    def make_record_name(self, filename, index):
+        return filename + str(index) + '.ogg'
 
     def change_videosrc(self, vid_source, vid_device):
         self.freeseer.change_videosrc(vid_source, vid_device)
