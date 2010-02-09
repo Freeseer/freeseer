@@ -20,9 +20,35 @@
 # the #fosslc channel on IRC (freenode.net)
 
 from freeseer import *
+import os
 
 class FreeseerCore:
     freeseer = FreeSeeR()
+
+    def get_video_sources(self):
+        i = 0
+        vid_sources = []
+        dev='/dev/video' + str(i)
+        while os.path.exists(dev):
+            i=i+1
+            vid_sources.append(dev)
+            dev='/dev/video'+str(i)
+        vid_sources.append('/dev/fw1')
+        return vid_sources
+        
+    def get_audio_sources(self):
+        snd_sources = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
+        return snd_sources
+
+    def get_talk_titles(self):
+        talk_titles = []
+        f = open('talks.txt', 'r')
+        lines = f.readlines()
+        f.close()
+
+        for line in lines:
+            talk_titles.append(line.rstrip())
+        return talk_titles
 
     def change_videosrc(self, vid_source, vid_device):
         self.freeseer.change_videosrc(vid_source, vid_device)
