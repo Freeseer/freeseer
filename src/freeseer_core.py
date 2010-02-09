@@ -27,17 +27,21 @@ class FreeseerCore:
 
     def get_video_devices(self):
         i = 0
-        vid_sources = []
+        vid_devices = []
         dev='/dev/video' + str(i)
         while os.path.exists(dev):
             i=i+1
-            vid_sources.append(dev)
+            vid_devices.append(dev)
             dev='/dev/video'+str(i)
-        vid_sources.append('/dev/fw1')
-        return vid_sources
+        vid_devices.append('/dev/fw1')
+        return vid_devices
         
     def get_video_sources(self):
-        snd_sources = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
+        vid_sources = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
+        return vid_sources
+
+    def get_audio_sources(self):
+        snd_sources = ['alsasrc', 'pulsesrc']
         return snd_sources
 
     def get_talk_titles(self):
