@@ -60,11 +60,25 @@ class MainApp(QtGui.QMainWindow):
 
         # connections
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
+        self.connect(self.ui.videoSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
+        self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         
         self.core.preview(True, self.ui.previewWidget.winId())
 
         # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
+
+    def change_video_device(self):
+        print 'changing video device'
+        dev = str(self.ui.videoDeviceList.currentText())
+        src = str(self.ui.videoSourceList.currentText())
+        self.core.change_videosrc(src, dev)
+        
+    def change_audio_device(self):
+        print 'changing video device'
+        src = str(self.ui.audioSourceList.currentText())
+        self.core.change_soundsrc(src)
 
     def capture(self):
         if not (self.ui.recordButton.isChecked()):
