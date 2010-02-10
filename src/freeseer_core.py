@@ -81,8 +81,9 @@ class FreeseerCore:
     def change_soundsrc(self, snd_source):
         self.freeseer.change_soundsrc(source)
 
-    def record(self, filename='default.ogg'):
-        self.freeseer.record(filename)
+    def record(self, filename='default'):
+        recordname = self.get_record_name(filename)
+        self.freeseer.record(recordname)
 
     def stop(self):
         self.freeseer.stop()
