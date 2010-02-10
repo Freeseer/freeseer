@@ -63,6 +63,9 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
         self.connect(self.ui.videoSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
+        self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         
         self.core.preview(True, self.ui.previewWidget.winId())
 
@@ -93,6 +96,23 @@ class MainApp(QtGui.QMainWindow):
         self.ui.videoDeviceList.setEnabled(False)
         self.ui.videoSourceList.setEnabled(False)
         self.ui.audioSourceList.setEnabled(False)
+
+    def add_talk(self):
+        self.ui.editTalkList.addItem(self.ui.talkLineEdit.text())
+        self.ui.talkLineEdit.clear()
+        
+    def remove_talk(self):
+        self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
+
+    def save_talks(self):
+        talk_list = []
+        i = 0
+        while i < self.ui.editTalkList.count():
+            t = self.ui.editTalkList.item(i).text() + '\n'
+            talk_list.append(t)
+            i = i+1
+
+        self.core.save_talk_titles(talk_list)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
