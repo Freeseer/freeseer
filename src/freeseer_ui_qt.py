@@ -125,6 +125,6 @@ class Ui_FreeseerMainWindow(object):
         self.removeTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "remove", None, QtGui.QApplication.UnicodeUTF8))
         self.saveTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "save", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.editTalksPage), QtGui.QApplication.translate("FreeseerMainWindow", "edit talks", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFreeseer.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "freeseer", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Exit", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuFreeseer.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
 
