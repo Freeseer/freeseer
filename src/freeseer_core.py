@@ -79,7 +79,7 @@ class FreeseerCore:
         self.freeseer.change_videosrc(vid_source, vid_device)
 
     def change_soundsrc(self, snd_source):
-        self.freeseer.change_soundsrc(source)
+        self.freeseer.change_soundsrc(snd_source)
 
     def record(self, filename='default'):
         recordname = self.get_record_name(filename)
