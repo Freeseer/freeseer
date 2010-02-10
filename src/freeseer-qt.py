@@ -114,6 +114,12 @@ class MainApp(QtGui.QMainWindow):
 
         self.core.save_talk_titles(talk_list)
 
+        # update talk list on main
+        self.ui.talkList.clear()
+        talklist = self.core.get_talk_titles()
+        for talk in talklist:
+            self.ui.talkList.addItem(talk)
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
