@@ -34,6 +34,29 @@ class MainApp(QtGui.QMainWindow):
         self.statusBar().showMessage('ready')
 
         self.core = FreeseerCore()
+
+        # get supported devices and sources
+        viddevs = self.core.get_video_devices()
+        vidsrcs = self.core.get_video_sources()
+        sndsrcs = self.core.get_audio_sources()
+
+        # add available video devices
+        for dev in viddevs:
+            self.ui.videoDeviceList.addItem(dev)
+
+        # add available video sources
+        for src in vidsrcs:
+            self.ui.videoSourceList.addItem(src)
+
+        # add available audio sources
+        for src in sndsrcs:
+            self.ui.audioSourceList.addItem(src)
+
+        # add available talk titles
+        talklist = self.core.get_talk_titles()
+        for talk in talklist:
+            self.ui.talkList.addItem(talk)
+            self.ui.editTalkList.addItem(talk)
         
         self.core.preview(True, self.ui.previewWidget.winId())
 
@@ -42,7 +65,6 @@ class MainApp(QtGui.QMainWindow):
 
 
 if __name__ == "__main__":
-    gobject.threads_init()
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
     main.show()

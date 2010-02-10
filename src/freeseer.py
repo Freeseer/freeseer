@@ -25,6 +25,7 @@ import gst
 
 class FreeSeeR:
     def __init__(self):
+        gobject.threads_init()
         self.window_id = None
         
         self.viddrv = 'v4lsrc'

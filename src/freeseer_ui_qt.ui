@@ -35,7 +35,7 @@
       <property name="documentMode">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="main" native="true">
+      <widget class="QWidget" name="main">
        <attribute name="title">
         <string>main</string>
        </attribute>
@@ -126,7 +126,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="editTalksPage" native="true">
+      <widget class="QWidget" name="editTalksPage">
        <attribute name="title">
         <string>edit talks</string>
        </attribute>
@@ -160,7 +160,7 @@
          </layout>
         </item>
         <item>
-         <widget class="QListWidget" name="listWidget"/>
+         <widget class="QListWidget" name="editTalkList"/>
         </item>
        </layout>
       </widget>
@@ -174,7 +174,7 @@
      <x>0</x>
      <y>0</y>
      <width>463</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFreeseer">
