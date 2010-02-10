@@ -56,6 +56,11 @@ class FreeseerCore:
             talk_titles.append(line.rstrip())
         return talk_titles
 
+    def save_talk_titles(self, talk_list):
+        f = open('talks.txt', 'w')
+        f.writelines(talk_list)
+        f.close()
+
     # Returns the filename to use when recording
     # This function checks to see if a file exists and increments index
     # until a filename that does not exist is found

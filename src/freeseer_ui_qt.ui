@@ -96,19 +96,6 @@
             <item>
              <widget class="QComboBox" name="talkList"/>
             </item>
-            <item>
-             <widget class="QPushButton" name="editTalksButton">
-              <property name="maximumSize">
-               <size>
-                <width>50</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>Edit</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
          </layout>
@@ -135,26 +122,26 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="talkLineEdit"/>
         </item>
         <item>
          <layout class="QHBoxLayout" name="editActionslayout">
           <item>
-           <widget class="QPushButton" name="addButton">
+           <widget class="QPushButton" name="addTalkButton">
             <property name="text">
              <string>add</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="removeButton">
+           <widget class="QPushButton" name="removeTalkButton">
             <property name="text">
              <string>remove</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="saveButton">
+           <widget class="QPushButton" name="saveTalkButton">
             <property name="text">
              <string>save</string>
             </property>
