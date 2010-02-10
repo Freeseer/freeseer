@@ -66,6 +66,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+        self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
 
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ui.audioFeedbackSlider.setRange(1, 32768)
