@@ -66,6 +66,11 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+
+        self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.ui.audioFeedbackSlider.setRange(1, 32768)
+        self.volcheck = volcheck(self)
+        self.volcheck.start()
         
         self.core.preview(True, self.ui.previewWidget.winId())
 
@@ -119,6 +124,33 @@ class MainApp(QtGui.QMainWindow):
         talklist = self.core.get_talk_titles()
         for talk in talklist:
             self.ui.talkList.addItem(talk)
+
+    def closeEvent(self, event):
+        print 'Exiting freeseer...'
+        self.volcheck.run = False
+        self.core.stop()
+        event.accept()
+
+class volcheck(QtCore.QThread):
+    def __init__(self, parent):
+        QtCore.QThread.__init__(self, parent)
+        self.parent = parent
+        
+    def run(self):
+        self.run = True
+        inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
+        inp.setchannels(2)
+        inp.setrate(8000)
+        inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
+
+        inp.setperiodsize(160)
+
+        while self.run:
+            l,data = inp.read()
+            if l:
+                #print audioop.max(data, 2)
+                self.parent.ui.audioFeedbackSlider.setValue(audioop.max(data, 2))
+                time.sleep(.001)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
