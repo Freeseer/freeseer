@@ -70,9 +70,15 @@ class MainApp(QtGui.QMainWindow):
         if not (self.ui.recordButton.isChecked()):
             self.core.stop()
             self.ui.recordButton.setText('Record')
+            self.ui.videoDeviceList.setEnabled(True)
+            self.ui.videoSourceList.setEnabled(True)
+            self.ui.audioSourceList.setEnabled(True)
             return
         self.core.record(self.ui.talkList.currentText())
         self.ui.recordButton.setText('Stop')
+        self.ui.videoDeviceList.setEnabled(False)
+        self.ui.videoSourceList.setEnabled(False)
+        self.ui.audioSourceList.setEnabled(False)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
