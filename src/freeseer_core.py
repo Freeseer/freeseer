@@ -20,10 +20,12 @@
 # the #fosslc channel on IRC (freenode.net)
 
 from freeseer import *
-import os
+import os, datetime
 
 class FreeseerCore:
-    freeseer = FreeSeeR()
+    def __init__(self):
+        self.freeseer = FreeSeeR()
+        self.spaces = False
 
     def get_video_devices(self):
         i = 0
@@ -65,8 +67,13 @@ class FreeseerCore:
             recordname = self.make_record_name(filename, i)
         return recordname
 
+    # insert date and index to a filename
     def make_record_name(self, filename, index):
-        return filename + str(index) + '.ogg'
+        date = datetime.date.today()
+        recordname = date.isoformat() + ' ' + filename + ' (' + str(index) + ').ogg'
+        if self.spaces == False:
+            recordname = recordname.replace(' ', '_')
+        return recordname
 
     def change_videosrc(self, vid_source, vid_device):
         self.freeseer.change_videosrc(vid_source, vid_device)
