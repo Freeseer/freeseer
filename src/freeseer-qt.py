@@ -57,12 +57,22 @@ class MainApp(QtGui.QMainWindow):
         for talk in talklist:
             self.ui.talkList.addItem(talk)
             self.ui.editTalkList.addItem(talk)
+
+        # connections
+        self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         
         self.core.preview(True, self.ui.previewWidget.winId())
 
+        # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
-        self.core.record('test.ogg')
 
+    def capture(self):
+        if not (self.ui.recordButton.isChecked()):
+            self.core.stop()
+            self.ui.recordButton.setText('Record')
+            return
+        self.core.record(self.ui.talkList.currentText())
+        self.ui.recordButton.setText('Stop')
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

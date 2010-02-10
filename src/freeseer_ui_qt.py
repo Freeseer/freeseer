@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'freeseer_ui_qt.ui'
 #
-# Created: Tue Feb  9 19:57:50 2010
+# Created: Tue Feb  9 20:28:27 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,6 +29,7 @@ class Ui_FreeseerMainWindow(object):
         self.verticalLayout_2 = QtGui.QVBoxLayout(self.main)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.recordButton = QtGui.QPushButton(self.main)
+        self.recordButton.setCheckable(True)
         self.recordButton.setObjectName("recordButton")
         self.verticalLayout_2.addWidget(self.recordButton)
         self.optionsLayout = QtGui.QVBoxLayout()
