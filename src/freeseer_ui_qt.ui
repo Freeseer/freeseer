@@ -132,7 +132,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QCheckBox" name="enableAudioFeedbackCheckbox">
+           <widget class="QCheckBox" name="audioFeedbackCheckbox">
             <property name="maximumSize">
              <size>
               <width>25</width>
