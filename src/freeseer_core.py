@@ -99,3 +99,11 @@ class FreeseerCore:
             print 'Preview Activated'
         else:
             print 'Preview Deactivated'
+            
+    def audioFeedback(self, enable=False):
+        if enable == True:
+            self.freeseer.enable_audio_feedback()
+            print 'Audio Feedback Activated'
+        else:
+            self.freeseer.disable_audio_feedback()
+            print 'Audio Feedback Deactivated'

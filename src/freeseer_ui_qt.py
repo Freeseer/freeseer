@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'freeseer_ui_qt.ui'
 #
-# Created: Wed Feb 10 19:21:26 2010
+# Created: Wed Feb 10 19:26:14 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -70,10 +70,10 @@ class Ui_FreeseerMainWindow(object):
         self.audioFeedbackSlider.setOrientation(QtCore.Qt.Vertical)
         self.audioFeedbackSlider.setObjectName("audioFeedbackSlider")
         self.gridLayout.addWidget(self.audioFeedbackSlider, 0, 2, 1, 1)
-        self.enableAudioFeedbackCheckbox = QtGui.QCheckBox(self.main)
-        self.enableAudioFeedbackCheckbox.setMaximumSize(QtCore.QSize(25, 16777215))
-        self.enableAudioFeedbackCheckbox.setObjectName("enableAudioFeedbackCheckbox")
-        self.gridLayout.addWidget(self.enableAudioFeedbackCheckbox, 1, 2, 1, 1)
+        self.audioFeedbackCheckbox = QtGui.QCheckBox(self.main)
+        self.audioFeedbackCheckbox.setMaximumSize(QtCore.QSize(25, 16777215))
+        self.audioFeedbackCheckbox.setObjectName("audioFeedbackCheckbox")
+        self.gridLayout.addWidget(self.audioFeedbackCheckbox, 1, 2, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout)
         self.tabWidget.addTab(self.main, "")
         self.editTalksPage = QtGui.QWidget()
@@ -129,7 +129,7 @@ class Ui_FreeseerMainWindow(object):
         self.audioSourceList.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Audio Source to use when recording.", None, QtGui.QApplication.UnicodeUTF8))
         self.talkLabel.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Talk:", None, QtGui.QApplication.UnicodeUTF8))
         self.talkList.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Title of the presentation being recorded.  For example \"Thanh Ha - Introduction to Freeseer\"", None, QtGui.QApplication.UnicodeUTF8))
-        self.enableAudioFeedbackCheckbox.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Enable audio feedback (plays back recording audio to speakers)", None, QtGui.QApplication.UnicodeUTF8))
+        self.audioFeedbackCheckbox.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Enable audio feedback (plays back recording audio to speakers)", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.main), QtGui.QApplication.translate("FreeseerMainWindow", "main", None, QtGui.QApplication.UnicodeUTF8))
         self.addTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "add", None, QtGui.QApplication.UnicodeUTF8))
         self.removeTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "remove", None, QtGui.QApplication.UnicodeUTF8))

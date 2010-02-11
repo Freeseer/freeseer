@@ -67,6 +67,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
+        self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ui.audioFeedbackSlider.setRange(1, 32768)
@@ -88,6 +89,12 @@ class MainApp(QtGui.QMainWindow):
         print 'changing video device'
         src = str(self.ui.audioSourceList.currentText())
         self.core.change_soundsrc(src)
+
+    def toggle_audio_feedback(self):
+        if (self.ui.audioFeedbackCheckbox.isChecked()):
+            self.core.audioFeedback(True)
+            return
+        self.core.audioFeedback(False)
 
     def capture(self):
         if not (self.ui.recordButton.isChecked()):
