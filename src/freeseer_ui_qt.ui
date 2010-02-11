@@ -68,13 +68,28 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="videoDeviceList"/>
+             <widget class="QComboBox" name="videoDeviceList">
+              <property name="toolTip">
+               <string>Device to use when recording.  This is ignored if xvimagesrc is used.</string>
+              </property>
+              <property name="whatsThis">
+               <string/>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="videoSourceList"/>
+             <widget class="QComboBox" name="videoSourceList">
+              <property name="toolTip">
+               <string>Video Source to use when recording.</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="audioSourceList"/>
+             <widget class="QComboBox" name="audioSourceList">
+              <property name="toolTip">
+               <string>Audio Source to use when recording.</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -94,21 +109,41 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="talkList"/>
+             <widget class="QComboBox" name="talkList">
+              <property name="toolTip">
+               <string>Title of the presentation being recorded.  For example &quot;Thanh Ha - Introduction to Freeseer&quot;</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="feedbackLayout">
-          <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0" rowspan="2">
            <widget class="QWidget" name="previewWidget" native="true"/>
           </item>
-          <item>
+          <item row="0" column="2">
            <widget class="QSlider" name="audioFeedbackSlider">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="enableAudioFeedbackCheckbox">
+            <property name="maximumSize">
+             <size>
+              <width>25</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Enable audio feedback (plays back recording audio to speakers)</string>
+            </property>
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>
@@ -167,18 +202,24 @@
      <height>20</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFreeseer">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionExit"/>
    </widget>
-   <addaction name="menuFreeseer"/>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionExit">
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
    </property>
   </action>
  </widget>
