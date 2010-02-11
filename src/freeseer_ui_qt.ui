@@ -169,7 +169,7 @@
    </property>
    <widget class="QMenu" name="menuFreeseer">
     <property name="title">
-     <string>freeseer</string>
+     <string>File</string>
     </property>
     <addaction name="actionExit"/>
    </widget>
@@ -178,7 +178,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>Quit</string>
    </property>
   </action>
  </widget>
