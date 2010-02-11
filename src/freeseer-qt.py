@@ -103,12 +103,14 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoDeviceList.setEnabled(True)
             self.ui.videoSourceList.setEnabled(True)
             self.ui.audioSourceList.setEnabled(True)
+            self.ui.audioFeedbackCheckbox.setEnabled(True)
             return
         self.core.record(self.ui.talkList.currentText())
         self.ui.recordButton.setText('Stop')
         self.ui.videoDeviceList.setEnabled(False)
         self.ui.videoSourceList.setEnabled(False)
         self.ui.audioSourceList.setEnabled(False)
+        self.ui.audioFeedbackCheckbox.setEnabled(False)
 
     def add_talk(self):
         self.ui.editTalkList.addItem(self.ui.talkLineEdit.text())
