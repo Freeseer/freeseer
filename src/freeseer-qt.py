@@ -23,8 +23,16 @@
 
 from freeseer_core import *
 from freeseer_ui_qt import *
+from freeseer_about import *
 import os, sys, time, alsaaudio, audioop
 from PyQt4 import QtGui, QtCore
+
+class AboutDialog(QtGui.QDialog):
+    def __init__(self):
+        QtGui.QDialog.__init__(self)
+        self.ui = Ui_FreeseerAbout()
+        self.ui.setupUi(self)
+
 
 class MainApp(QtGui.QMainWindow):
     def __init__(self):
@@ -32,6 +40,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui = Ui_FreeseerMainWindow()
         self.ui.setupUi(self)
         self.statusBar().showMessage('ready')
+        self.aboutDialog = AboutDialog()
 
         self.core = FreeseerCore()
 
@@ -67,6 +76,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
+        self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
