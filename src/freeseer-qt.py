@@ -170,7 +170,7 @@ class volcheck(QtCore.QThread):
             if l:
                 #print audioop.max(data, 2)
                 self.parent.ui.audioFeedbackSlider.setValue(audioop.max(data, 2))
-                time.sleep(.001)
+                time.sleep(.02)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
