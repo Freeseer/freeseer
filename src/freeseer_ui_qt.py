@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'freeseer_ui_qt.ui'
 #
-# Created: Wed Feb 10 19:26:14 2010
-#      by: PyQt4 UI code generator 4.7
+# Created: Wed Feb 17 21:12:16 2010
+#      by: PyQt4 UI code generator 4.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -102,10 +102,12 @@ class Ui_FreeseerMainWindow(object):
         self.horizontalLayout_4.addWidget(self.tabWidget)
         FreeseerMainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(FreeseerMainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 463, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 463, 25))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
         FreeseerMainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(FreeseerMainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -113,8 +115,12 @@ class Ui_FreeseerMainWindow(object):
         self.actionExit = QtGui.QAction(FreeseerMainWindow)
         self.actionExit.setShortcutContext(QtCore.Qt.ApplicationShortcut)
         self.actionExit.setObjectName("actionExit")
+        self.actionAbout = QtGui.QAction(FreeseerMainWindow)
+        self.actionAbout.setObjectName("actionAbout")
         self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(FreeseerMainWindow)
         self.tabWidget.setCurrentIndex(0)
@@ -136,6 +142,8 @@ class Ui_FreeseerMainWindow(object):
         self.saveTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "save", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.editTalksPage), QtGui.QApplication.translate("FreeseerMainWindow", "edit talks", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "&Quit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAbout.setText(QtGui.QApplication.translate("FreeseerMainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
 
