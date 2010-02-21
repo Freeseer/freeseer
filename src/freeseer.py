@@ -44,6 +44,9 @@ class FreeSeeR:
         self.vidqueue1 = gst.element_factory_make("queue", "vidqueue1")
         self.vidqueue2 = gst.element_factory_make("queue", "vidqueue2")
         self.vidcodec = gst.element_factory_make(self.video_codec, "vidcodec")
+        self.vidcodec.set_property("quality", 48)
+        self.vidcodec.set_property("sharpness", 2)
+        self.vidcodec.set_property("bitrate", 300)
         self.vidsink = gst.element_factory_make("autovideosink", "vidsink")
 
         # GST Video Filtering
@@ -52,7 +55,7 @@ class FreeSeeR:
         self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=25/1, silent'))
         self.fvidscale = gst.element_factory_make("videoscale", "fvidscale")
         self.fvidscale_cap = gst.element_factory_make("capsfilter", "fvidscale_cap")
-        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=320, height=240'))
+        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=640, height=480'))
         self.fvidcspace = gst.element_factory_make("ffmpegcolorspace", "fvidcspace")
         
 
