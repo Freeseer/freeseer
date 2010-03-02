@@ -19,6 +19,8 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+__version__=u'2.0'
+
 from freeseer_gstreamer import *
 import os, datetime
 

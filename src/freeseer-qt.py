@@ -21,15 +21,16 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+__version__=u'2.1'
+
 NAME=u'Freeseer'
-VERSION=u'2.0'
 DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentation. It captures vga output and audio and mixes them together to produce a video.'
 URL=u'http://www.fosslc.org'
 COPYRIGHT=u'Copyright (C) 2010 The Free and Open Source Software Learning Centre'
 LICENSE_TEXT=u"This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software."
 
 ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-             u'<br><b>Version: ' + VERSION + u'</b>' + \
+             u'<br><b>Version: ' + __version__ + u'</b>' + \
              u'<p>' + DESCRIPTION + u'</p>' + \
              u'<p>' + COPYRIGHT + u'</p>' + \
              u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
@@ -98,7 +99,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.audioFeedbackSlider.setRange(1, 32768)
         self.volcheck = volcheck(self)
         self.volcheck.start()
-        
+
         self.core.preview(True, self.ui.previewWidget.winId())
 
         # default to v4l2src with /dev/video0
@@ -109,7 +110,7 @@ class MainApp(QtGui.QMainWindow):
         dev = str(self.ui.videoDeviceList.currentText())
         src = str(self.ui.videoSourceList.currentText())
         self.core.change_videosrc(src, dev)
-        
+
     def change_audio_device(self):
         print 'changing video device'
         src = str(self.ui.audioSourceList.currentText())
@@ -140,7 +141,7 @@ class MainApp(QtGui.QMainWindow):
     def add_talk(self):
         self.ui.editTalkList.addItem(self.ui.talkLineEdit.text())
         self.ui.talkLineEdit.clear()
-        
+
     def remove_talk(self):
         self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
 
@@ -170,7 +171,7 @@ class volcheck(QtCore.QThread):
     def __init__(self, parent):
         QtCore.QThread.__init__(self, parent)
         self.parent = parent
-        
+
     def run(self):
         self.run = True
         inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)

@@ -19,6 +19,8 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+__version__=u'2.0'
+
 import gobject, pygst
 pygst.require("0.10")
 import gst
