@@ -21,6 +21,20 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+NAME=u'Freeseer'
+VERSION=u'2.0'
+DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentation. It captures vga output and audio and mixes them together to produce a video.'
+URL=u'http://www.fosslc.org'
+COPYRIGHT=u'Copyright (C) 2010 The Free and Open Source Software Learning Centre'
+LICENSE_TEXT=u"This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software."
+
+ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
+             u'<br><b>Version: ' + VERSION + u'</b>' + \
+             u'<p>' + DESCRIPTION + u'</p>' + \
+             u'<p>' + COPYRIGHT + u'</p>' + \
+             u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+             u'<p>' + LICENSE_TEXT + u'</p>'
+
 from freeseer_core import *
 from freeseer_ui_qt import *
 from freeseer_about import *
@@ -32,6 +46,7 @@ class AboutDialog(QtGui.QDialog):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_FreeseerAbout()
         self.ui.setupUi(self)
+        self.ui.aboutInfo.setText(ABOUT_INFO)
 
 
 class MainApp(QtGui.QMainWindow):
