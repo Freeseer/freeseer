@@ -19,7 +19,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
-from freeseer import *
+from freeseer_gstreamer import *
 import os, datetime
 
 class FreeseerCore:
