@@ -21,6 +21,18 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+import os
+import sys
+import time
+import alsaaudio
+import audioop
+
+from PyQt4 import QtGui, QtCore
+
+from freeseer_core import *
+from freeseer_ui_qt import *
+from freeseer_about import *
+
 __version__=u'2.1'
 
 NAME=u'Freeseer'
@@ -30,17 +42,12 @@ COPYRIGHT=u'Copyright (C) 2010 The Free and Open Source Software Learning Centre
 LICENSE_TEXT=u"This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software."
 
 ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-             u'<br><b>Version: ' + __version__ + u'</b>' + \
-             u'<p>' + DESCRIPTION + u'</p>' + \
-             u'<p>' + COPYRIGHT + u'</p>' + \
-             u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-             u'<p>' + LICENSE_TEXT + u'</p>'
+u'<br><b>Version: ' + __version__ + u'</b>' + \
+u'<p>' + DESCRIPTION + u'</p>' + \
+u'<p>' + COPYRIGHT + u'</p>' + \
+u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+u'<p>' + LICENSE_TEXT + u'</p>'
 
-from freeseer_core import *
-from freeseer_ui_qt import *
-from freeseer_about import *
-import os, sys, time, alsaaudio, audioop
-from PyQt4 import QtGui, QtCore
 
 class AboutDialog(QtGui.QDialog):
     '''
