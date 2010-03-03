@@ -19,17 +19,19 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
-__version__=u'2.0'
+import os
+import datetime
 
 from freeseer_gstreamer import *
-import os, datetime
+
+__version__=u'2.0'
 
 class FreeseerCore:
     '''
     Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
     '''
     def __init__(self):
-        self.freeseer = FreeSeeR()
+        self.freeseer = Freeseer()
         self.spaces = False
 
     def get_video_devices(self):
