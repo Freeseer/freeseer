@@ -47,7 +47,7 @@ class FreeseerCore:
             dev='/dev/video'+str(i)
         vid_devices.append('/dev/fw1')
         return vid_devices
-        
+
     def get_video_sources(self):
         '''
         Returns supported video sources.
@@ -131,7 +131,7 @@ class FreeseerCore:
             print 'Preview Activated'
         else:
             print 'Preview Deactivated'
-            
+
     def audioFeedback(self, enable=False):
         ''' Enable/Disable the audio preview. '''
         if enable == True:

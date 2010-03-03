@@ -33,7 +33,7 @@ from freeseer_core import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 
-__version__=u'2.1'
+__version__=u'2.0'
 
 NAME=u'Freeseer'
 DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentation. It captures vga output and audio and mixes them together to produce a video.'

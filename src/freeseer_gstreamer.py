@@ -32,14 +32,14 @@ class Freeseer:
     def __init__(self):
         gobject.threads_init()
         self.window_id = None
-        
+
         self.viddrv = 'v4lsrc'
         self.viddev = '/dev/video0'
         self.soundsrc = 'alsasrc'
         self.filename = 'default.ogg'
         self.video_codec = 'theoraenc'
         self.audio_codec = 'vorbisenc'
-        
+
         self.player = gst.Pipeline("player")
 
         # GST Video
@@ -62,7 +62,7 @@ class Freeseer:
         self.fvidscale_cap = gst.element_factory_make("capsfilter", "fvidscale_cap")
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=640, height=480'))
         self.fvidcspace = gst.element_factory_make("ffmpegcolorspace", "fvidcspace")
-        
+
 
         # GST Sound
         self.sndsrc = gst.element_factory_make("alsasrc", "sndsrc")
@@ -135,13 +135,13 @@ class Freeseer:
             self.dv1394q2 = None
             self.dv1394dvdemux = None
             self.dv1394dvdec = None
-            
+
         self.viddrv = new_source
         self.viddev = new_device
         self.player.remove(self.vidsrc)
         self.vidsrc = gst.element_factory_make(self.viddrv, "vidsrc")
         self.player.add(self.vidsrc)
-        
+
         if (self.viddrv == 'v4lsrc'):
             self.vidsrc.set_property("device", self.viddev)
         elif (self.viddrv == 'v4l2src'):
@@ -156,7 +156,7 @@ class Freeseer:
             self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
             gst.element_link_many( self.dv1394q1, self.dv1394dvdec, self.cspace)
             return
-        
+
         gst.element_link_many(self.vidsrc, self.cspace)
 
     def change_soundsrc(self, new_source):
