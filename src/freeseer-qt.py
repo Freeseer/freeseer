@@ -21,27 +21,38 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+import os
+import sys
+import time
+import alsaaudio
+import audioop
+
+from PyQt4 import QtGui, QtCore
+
+from freeseer_core import *
+from freeseer_ui_qt import *
+from freeseer_about import *
+
+__version__=u'2.0'
+
 NAME=u'Freeseer'
-VERSION=u'2.0'
 DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentation. It captures vga output and audio and mixes them together to produce a video.'
 URL=u'http://www.fosslc.org'
 COPYRIGHT=u'Copyright (C) 2010 The Free and Open Source Software Learning Centre'
 LICENSE_TEXT=u"This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software."
 
 ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-             u'<br><b>Version: ' + VERSION + u'</b>' + \
-             u'<p>' + DESCRIPTION + u'</p>' + \
-             u'<p>' + COPYRIGHT + u'</p>' + \
-             u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-             u'<p>' + LICENSE_TEXT + u'</p>'
+u'<br><b>Version: ' + __version__ + u'</b>' + \
+u'<p>' + DESCRIPTION + u'</p>' + \
+u'<p>' + COPYRIGHT + u'</p>' + \
+u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+u'<p>' + LICENSE_TEXT + u'</p>'
 
-from freeseer_core import *
-from freeseer_ui_qt import *
-from freeseer_about import *
-import os, sys, time, alsaaudio, audioop
-from PyQt4 import QtGui, QtCore
 
 class AboutDialog(QtGui.QDialog):
+    '''
+    About dialog class for displaying app information.
+    '''
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_FreeseerAbout()
@@ -50,6 +61,9 @@ class AboutDialog(QtGui.QDialog):
 
 
 class MainApp(QtGui.QMainWindow):
+    '''
+    Freeseer main gui class
+    '''
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         self.ui = Ui_FreeseerMainWindow()
@@ -98,18 +112,22 @@ class MainApp(QtGui.QMainWindow):
         self.ui.audioFeedbackSlider.setRange(1, 32768)
         self.volcheck = volcheck(self)
         self.volcheck.start()
-        
+
         self.core.preview(True, self.ui.previewWidget.winId())
 
         # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
 
     def change_video_device(self):
+        '''
+        Function for changing video device
+        eg. /dev/video1
+        '''
         print 'changing video device'
         dev = str(self.ui.videoDeviceList.currentText())
         src = str(self.ui.videoSourceList.currentText())
         self.core.change_videosrc(src, dev)
-        
+
     def change_audio_device(self):
         print 'changing video device'
         src = str(self.ui.audioSourceList.currentText())
@@ -122,6 +140,9 @@ class MainApp(QtGui.QMainWindow):
         self.core.audioFeedback(False)
 
     def capture(self):
+        '''
+        Function for recording and stopping recording.
+        '''
         if not (self.ui.recordButton.isChecked()):
             self.core.stop()
             self.ui.recordButton.setText('Record')
@@ -140,7 +161,7 @@ class MainApp(QtGui.QMainWindow):
     def add_talk(self):
         self.ui.editTalkList.addItem(self.ui.talkLineEdit.text())
         self.ui.talkLineEdit.clear()
-        
+
     def remove_talk(self):
         self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
 
@@ -167,10 +188,13 @@ class MainApp(QtGui.QMainWindow):
         event.accept()
 
 class volcheck(QtCore.QThread):
+    '''
+    Threaded class for getting mic volume information and returning the current input from mic.
+    '''
     def __init__(self, parent):
         QtCore.QThread.__init__(self, parent)
         self.parent = parent
-        
+
     def run(self):
         self.run = True
         inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
