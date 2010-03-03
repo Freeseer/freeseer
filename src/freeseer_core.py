@@ -63,6 +63,9 @@ class FreeseerCore:
         return snd_sources
 
     def get_talk_titles(self):
+        '''
+        Returns the talk titles as listed in  talks.txt
+        '''
         talk_titles = []
         f = open('talks.txt', 'r')
         lines = f.readlines()
@@ -73,14 +76,20 @@ class FreeseerCore:
         return talk_titles
 
     def save_talk_titles(self, talk_list):
+        '''
+        Saves the talk titles received by talk_list variable.
+
+        talk_list: a list of talk titles which will be saved..
+        '''
         f = open('talks.txt', 'w')
         f.writelines(talk_list)
         f.close()
 
-    # Returns the filename to use when recording
-    # This function checks to see if a file exists and increments index
-    # until a filename that does not exist is found
     def get_record_name(self, filename):
+        '''
+        Returns the filename to use when recording.
+        This function checks to see if a file exists and increments index until a filename that does not exist is found
+        '''
         i = 0
         recordname = self.make_record_name(filename, i)
         while os.path.exists(recordname):
@@ -88,8 +97,8 @@ class FreeseerCore:
             recordname = self.make_record_name(filename, i)
         return recordname
 
-    # insert date and index to a filename
     def make_record_name(self, filename, index):
+        ''' Insert date and index to a filename '''
         date = datetime.date.today()
         recordname = date.isoformat() + ' ' + filename + ' (' + str(index) + ').ogg'
         if self.spaces == False:
@@ -97,19 +106,26 @@ class FreeseerCore:
         return recordname
 
     def change_videosrc(self, vid_source, vid_device):
+        ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_videosrc(vid_source, vid_device)
 
     def change_soundsrc(self, snd_source):
+        ''' Informs backend of new audio source to use when recording. '''
         self.freeseer.change_soundsrc(snd_source)
 
     def record(self, filename='default'):
+        '''
+        Informs backend to begin recording to filename.
+        '''
         recordname = self.get_record_name(filename)
         self.freeseer.record(recordname)
 
     def stop(self):
+        ''' Informs backend to stop recording. '''
         self.freeseer.stop()
 
     def preview(self, enable=False, window_id=None):
+        ''' Enable/Disable the video preview window. '''
         if enable == True:
             self.freeseer.enable_preview(window_id)
             print 'Preview Activated'
@@ -117,6 +133,7 @@ class FreeseerCore:
             print 'Preview Deactivated'
             
     def audioFeedback(self, enable=False):
+        ''' Enable/Disable the audio preview. '''
         if enable == True:
             self.freeseer.enable_audio_feedback()
             print 'Audio Feedback Activated'

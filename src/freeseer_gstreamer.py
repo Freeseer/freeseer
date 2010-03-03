@@ -26,6 +26,9 @@ import gst
 __version__=u'2.0'
 
 class Freeseer:
+    '''
+    Freeseer backend class using gstreamer to record video and audio.
+    '''
     def __init__(self):
         gobject.threads_init()
         self.window_id = None
@@ -120,6 +123,9 @@ class Freeseer:
             self.dv1394dvdemux.link(self.dv1394q1)
 
     def change_videosrc(self, new_source, new_device):
+        '''
+        Changes the video source
+        '''
         if (self.viddrv == 'dv1394src'):
             self.player.remove(self.dv1394q1)
             self.player.remove(self.dv1394q2)
@@ -154,6 +160,9 @@ class Freeseer:
         gst.element_link_many(self.vidsrc, self.cspace)
 
     def change_soundsrc(self, new_source):
+        '''
+        Changes the sound source
+        '''
         self.soundsrc = new_source
         self.player.remove(self.sndsrc)
         self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
@@ -161,14 +170,25 @@ class Freeseer:
         self.sndsrc.link(self.sndtee)
 
     def record(self, filename):
+        '''
+        Start recording to a file.
+
+        filename: filename to record to
+        '''
         self.filename = filename
         self.filesink.set_property("location", self.filename)
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
+        '''
+        Stop recording.
+        '''
         self.player.set_state(gst.STATE_NULL)
 
     def change_video_codec(self, new_vcodec):
+        '''
+        Change the video codec
+        '''
         self.video_codec = new_vcodec
         self.player.remove(self.vidcodec)
         self.vidcodec = gst.element_factory_make(self.video_codec, "vidcodec")
@@ -176,6 +196,9 @@ class Freeseer:
         gst.element_link_many(self.vidqueue1, self.vidcodec, self.mux)
 
     def change_audio_codec(self, new_acodec):
+        '''
+        Change the audio codec
+        '''
         self.audio_codec = new_acodec
         self.player.remove(self.sndcodec)
         self.sndcodec = gst.element_factory_make(self.audio_codec, "sndcodec")
@@ -183,6 +206,9 @@ class Freeseer:
         gst.element_link_many(self.audioconvert, self.sndcodec, self.mux)
 
     def change_muxer(self, new_mux):
+        '''
+        Change the muxer
+        '''
         self.muxer = new_mux
         self.player.remove(self.mux)
         self.mux = gst.element_factory_make(self.muxer, "mux")
@@ -192,16 +218,28 @@ class Freeseer:
         gst.element_link_many(self.mux, self.filesink)
 
     def enable_preview(self, window_id):
+        '''
+        Activate video feedback. Will send video to a preview window.
+        '''
         self.window_id = window_id
         self.player.add(self.vidqueue2, self.vidsink)
         gst.element_link_many(self.vidtee, self.vidqueue2, self.vidsink)
 
     def disable_preview(self):
+        '''
+        Disable the video preview
+        '''
         self.player.remove(self.vidqueue2, self.vidsink)
 
     def enable_audio_feedback(self):
+        '''
+        Activate audio feedback.  Will send the recorded audio back out the speakers.
+        '''
         self.player.add(self.sndqueue2, self.sndsink)
         gst.element_link_many(self.sndtee, self.sndqueue2, self.sndsink)
 
     def disable_audio_feedback(self):
+        '''
+        Disable the audio feedback.
+        '''
         self.player.remove(self.sndqueue2, self.sndsink)

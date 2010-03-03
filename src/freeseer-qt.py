@@ -188,6 +188,9 @@ class MainApp(QtGui.QMainWindow):
         event.accept()
 
 class volcheck(QtCore.QThread):
+    '''
+    Threaded class for getting mic volume information and returning the current input from mic.
+    '''
     def __init__(self, parent):
         QtCore.QThread.__init__(self, parent)
         self.parent = parent
