@@ -25,11 +25,17 @@ from freeseer_gstreamer import *
 import os, datetime
 
 class FreeseerCore:
+    '''
+    Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
+    '''
     def __init__(self):
         self.freeseer = FreeSeeR()
         self.spaces = False
 
     def get_video_devices(self):
+        '''
+        Returns available video devices.
+        '''
         i = 0
         vid_devices = []
         dev='/dev/video' + str(i)
@@ -41,10 +47,16 @@ class FreeseerCore:
         return vid_devices
         
     def get_video_sources(self):
+        '''
+        Returns supported video sources.
+        '''
         vid_sources = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
         return vid_sources
 
     def get_audio_sources(self):
+        '''
+        Returns supported audio sources.
+        '''
         snd_sources = ['alsasrc', 'pulsesrc']
         return snd_sources
 

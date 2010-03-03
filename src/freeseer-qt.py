@@ -43,6 +43,9 @@ import os, sys, time, alsaaudio, audioop
 from PyQt4 import QtGui, QtCore
 
 class AboutDialog(QtGui.QDialog):
+    '''
+    About dialog class for displaying app information.
+    '''
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_FreeseerAbout()
@@ -51,6 +54,9 @@ class AboutDialog(QtGui.QDialog):
 
 
 class MainApp(QtGui.QMainWindow):
+    '''
+    Freeseer main gui class
+    '''
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         self.ui = Ui_FreeseerMainWindow()
@@ -106,6 +112,10 @@ class MainApp(QtGui.QMainWindow):
         self.core.change_videosrc('v4l2src', '/dev/video0')
 
     def change_video_device(self):
+        '''
+        Function for changing video device
+        eg. /dev/video1
+        '''
         print 'changing video device'
         dev = str(self.ui.videoDeviceList.currentText())
         src = str(self.ui.videoSourceList.currentText())
@@ -123,6 +133,9 @@ class MainApp(QtGui.QMainWindow):
         self.core.audioFeedback(False)
 
     def capture(self):
+        '''
+        Function for recording and stopping recording.
+        '''
         if not (self.ui.recordButton.isChecked()):
             self.core.stop()
             self.ui.recordButton.setText('Record')
