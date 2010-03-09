@@ -111,7 +111,7 @@ class FreeseerCore:
 
     def change_soundsrc(self, snd_source):
         ''' Informs backend of new audio source to use when recording. '''
-        self.freeseer.change_soundsrc(snd_source)
+        return self.freeseer.change_soundsrc(snd_source)
 
     def record(self, filename='default'):
         '''

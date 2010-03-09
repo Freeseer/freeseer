@@ -164,10 +164,18 @@ class Freeseer:
         Changes the sound source
         '''
         self.soundsrc = new_source
-        self.player.remove(self.sndsrc)
-        self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
+        old_sndsrc = self.sndsrc
+        
+        try:
+            self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
+        except:
+            print 'Failed to load ' + self.soundsrc + '.'
+            return False
+        
+        self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
+        return True
 
     def record(self, filename):
         '''
