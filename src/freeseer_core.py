@@ -19,7 +19,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
-import os
 import datetime
 
 from freeseer_gstreamer import *
@@ -38,29 +37,19 @@ class FreeseerCore:
         '''
         Returns available video devices.
         '''
-        i = 0
-        vid_devices = []
-        dev='/dev/video' + str(i)
-        while os.path.exists(dev):
-            i=i+1
-            vid_devices.append(dev)
-            dev='/dev/video'+str(i)
-        vid_devices.append('/dev/fw1')
-        return vid_devices
+        return self.freeseer.get_video_devices('all')
 
     def get_video_sources(self):
         '''
         Returns supported video sources.
         '''
-        vid_sources = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
-        return vid_sources
+        return self.freeseer.get_video_sources('all')
 
     def get_audio_sources(self):
         '''
         Returns supported audio sources.
         '''
-        snd_sources = ['alsasrc', 'pulsesrc']
-        return snd_sources
+        return self.freeseer.get_audio_sources()
 
     def get_talk_titles(self):
         '''
