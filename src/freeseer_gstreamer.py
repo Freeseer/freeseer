@@ -147,7 +147,18 @@ class Freeseer:
         return vid_devices
 
     def get_audio_sources(self):
-        return ['alsasrc', 'pulsesrc']
+        snd_sources_list = ['pulsesrc', 'alsasrc']
+
+        snd_sources = []
+        for src in snd_sources_list:
+            try:
+                gst.element_factory_make(src, "testsrc")
+                snd_sources.append(src)
+                print src + ' is available.'
+            except:
+                print src + ' is not available'
+
+        return snd_sources
 
     def _get_devices(self, path, index):
         i = index
@@ -206,10 +217,14 @@ class Freeseer:
         '''
         Changes the sound source
         '''
+        if self.soundsrc == new_source:
+            print self.soundsrc + ' already loaded.'
+            return True
         self.soundsrc = new_source
         old_sndsrc = self.sndsrc
         
         try:
+            print 'loading ' + self.soundsrc
             self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
         except:
             print 'Failed to load ' + self.soundsrc + '.'
@@ -218,6 +233,7 @@ class Freeseer:
         self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
+        print self.soundsrc + 'loaded.'
         return True
 
     def record(self, filename):
