@@ -19,6 +19,8 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # the #fosslc channel on IRC (freenode.net)
 
+import os
+
 import gobject, pygst
 pygst.require("0.10")
 import gst
@@ -65,7 +67,7 @@ class Freeseer:
 
 
         # GST Sound
-        self.sndsrc = gst.element_factory_make("alsasrc", "sndsrc")
+        self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
 #        self.sndsrc.set_property("device", "alsa_output.pci-0000_00_1b.0.analog-stereo")
         self.sndtee = gst.element_factory_make("tee", "sndtee")
         self.sndqueue1 = gst.element_factory_make("queue", "sndqueue1")
@@ -115,6 +117,47 @@ class Freeseer:
             imagesink = message.src
             imagesink.set_property("force-aspect-ratio", True)
             imagesink.set_xwindow_id(self.window_id)
+
+    def get_video_sources(self, stype):
+        vid_source = None
+        if stype == 'usb':
+            vid_source = ['v4l2src', 'v4lsrc']
+        elif stype == 'firewire':
+            vid_source = ['dv1394src']
+        elif stype == 'local':
+            vid_source = ['ximagesrc']
+        # return all types
+        else:
+            vid_source = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
+        return vid_source
+
+    def get_video_devices(self, videosrc):
+        vid_devices = None
+        if videosrc == 'v4l2src':
+            vid_devices = self._get_devices('/dev/video', 0)
+        elif videosrc == 'v4lsrc':
+            vid_devices = self._get_devices('/dev/video', 0)
+        elif videosrc == 'dv1394src':
+            vid_devices = self._get_devices('/dev/fw', 1)
+        # return all types
+        else:
+            vid_devices = self._get_devices('/dev/video', 0)
+            vid_devices += self._get_devices('/dev/fw', 1)
+
+        return vid_devices
+
+    def get_audio_sources(self):
+        return ['alsasrc', 'pulsesrc']
+
+    def _get_devices(self, path, index):
+        i = index
+        devices = []
+        devpath=path + str(i)
+        while os.path.exists(devpath):
+            i=i+1
+            devices.append(devpath)
+            devpath=path + str(i)
+        return devices
 
     def _dvdemux_padded(self, dbin, pad):
         print "dvdemux got pad %s" % pad.get_name()
