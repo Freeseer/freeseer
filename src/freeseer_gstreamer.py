@@ -217,9 +217,6 @@ class Freeseer:
         '''
         Changes the sound source
         '''
-        if self.soundsrc == new_source:
-            print self.soundsrc + ' already loaded.'
-            return True
         self.soundsrc = new_source
         old_sndsrc = self.sndsrc
         
@@ -233,7 +230,7 @@ class Freeseer:
         self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
-        print self.soundsrc + 'loaded.'
+        print self.soundsrc + ' loaded.'
         return True
 
     def record(self, filename):

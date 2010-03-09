@@ -117,8 +117,7 @@ class MainApp(QtGui.QMainWindow):
 
         # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
-        time.sleep(1)
-        self.core.change_soundsrc(self.ui.audioSourceList.currentText())
+        self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
 
     def change_video_device(self):
         '''
