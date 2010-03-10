@@ -96,6 +96,12 @@ class MainApp(QtGui.QMainWindow):
             self.ui.talkList.addItem(talk)
             self.ui.editTalkList.addItem(talk)
 
+        # systray
+        logo = QtGui.QPixmap('logo.png')
+        sysIcon = QtGui.QIcon(logo)
+        self.systray = QtGui.QSystemTrayIcon(sysIcon)
+        self.systray.show()
+
         # connections
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
@@ -107,6 +113,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
+        self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ui.audioFeedbackSlider.setRange(1, 32768)
@@ -114,12 +121,6 @@ class MainApp(QtGui.QMainWindow):
         self.volcheck.start()
 
         self.core.preview(True, self.ui.previewWidget.winId())
-
-        # systray
-        logo = QtGui.QPixmap('logo.png')
-        sysIcon = QtGui.QIcon(logo)
-        self.systray = QtGui.QSystemTrayIcon(sysIcon)
-        self.systray.show()
 
         # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
@@ -187,6 +188,12 @@ class MainApp(QtGui.QMainWindow):
         talklist = self.core.get_talk_titles()
         for talk in talklist:
             self.ui.talkList.addItem(talk)
+
+    def _icon_activated(self, reason):
+        if reason == QtGui.QSystemTrayIcon.Trigger:
+            if self.isHidden():
+                self.show()
+            else: self.hide()
 
     def closeEvent(self, event):
         print 'Exiting freeseer...'
