@@ -115,6 +115,12 @@ class MainApp(QtGui.QMainWindow):
 
         self.core.preview(True, self.ui.previewWidget.winId())
 
+        # systray
+        logo = QtGui.QPixmap('logo.png')
+        sysIcon = QtGui.QIcon(logo)
+        self.systray = QtGui.QSystemTrayIcon(sysIcon)
+        self.systray.show()
+
         # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
         self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
