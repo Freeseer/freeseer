@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../forms/freeseer_ui_qt.ui'
 #
-# Created: Thu Mar 11 15:14:04 2010
+# Created: Thu Mar 11 18:28:43 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -180,6 +180,23 @@ class Ui_FreeseerMainWindow(object):
         QtCore.QObject.connect(self.checkBox_2, QtCore.SIGNAL("toggled(bool)"), self.roomEdit.setEnabled)
         QtCore.QObject.connect(self.checkBox_3, QtCore.SIGNAL("toggled(bool)"), self.presenterEdit.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(FreeseerMainWindow)
+        FreeseerMainWindow.setTabOrder(self.timeEdit, self.roomEdit)
+        FreeseerMainWindow.setTabOrder(self.roomEdit, self.presenterEdit)
+        FreeseerMainWindow.setTabOrder(self.presenterEdit, self.titleEdit)
+        FreeseerMainWindow.setTabOrder(self.titleEdit, self.addTalkButton)
+        FreeseerMainWindow.setTabOrder(self.addTalkButton, self.editTalkList)
+        FreeseerMainWindow.setTabOrder(self.editTalkList, self.removeTalkButton)
+        FreeseerMainWindow.setTabOrder(self.removeTalkButton, self.checkBox)
+        FreeseerMainWindow.setTabOrder(self.checkBox, self.checkBox_2)
+        FreeseerMainWindow.setTabOrder(self.checkBox_2, self.checkBox_3)
+        FreeseerMainWindow.setTabOrder(self.checkBox_3, self.recordButton)
+        FreeseerMainWindow.setTabOrder(self.recordButton, self.videoDeviceList)
+        FreeseerMainWindow.setTabOrder(self.videoDeviceList, self.videoSourceList)
+        FreeseerMainWindow.setTabOrder(self.videoSourceList, self.audioSourceList)
+        FreeseerMainWindow.setTabOrder(self.audioSourceList, self.talkList)
+        FreeseerMainWindow.setTabOrder(self.talkList, self.audioFeedbackCheckbox)
+        FreeseerMainWindow.setTabOrder(self.audioFeedbackCheckbox, self.audioFeedbackSlider)
+        FreeseerMainWindow.setTabOrder(self.audioFeedbackSlider, self.tabWidget)
 
     def retranslateUi(self, FreeseerMainWindow):
         FreeseerMainWindow.setWindowTitle(QtGui.QApplication.translate("FreeseerMainWindow", "freeseer - video studio in a backpack", None, QtGui.QApplication.UnicodeUTF8))
@@ -201,6 +218,7 @@ class Ui_FreeseerMainWindow(object):
         self.label_4.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Presenter", None, QtGui.QApplication.UnicodeUTF8))
         self.addTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "add", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_2.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Remove Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.editTalkList.setSortingEnabled(True)
         self.removeTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "remove", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.editTalksPage), QtGui.QApplication.translate("FreeseerMainWindow", "edit talks", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))

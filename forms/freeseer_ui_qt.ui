@@ -312,7 +312,11 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
-            <widget class="QListWidget" name="editTalkList"/>
+            <widget class="QListWidget" name="editTalkList">
+             <property name="sortingEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="removeTalkButton">
@@ -372,6 +376,26 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>timeEdit</tabstop>
+  <tabstop>roomEdit</tabstop>
+  <tabstop>presenterEdit</tabstop>
+  <tabstop>titleEdit</tabstop>
+  <tabstop>addTalkButton</tabstop>
+  <tabstop>editTalkList</tabstop>
+  <tabstop>removeTalkButton</tabstop>
+  <tabstop>checkBox</tabstop>
+  <tabstop>checkBox_2</tabstop>
+  <tabstop>checkBox_3</tabstop>
+  <tabstop>recordButton</tabstop>
+  <tabstop>videoDeviceList</tabstop>
+  <tabstop>videoSourceList</tabstop>
+  <tabstop>audioSourceList</tabstop>
+  <tabstop>talkList</tabstop>
+  <tabstop>audioFeedbackCheckbox</tabstop>
+  <tabstop>audioFeedbackSlider</tabstop>
+  <tabstop>tabWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
