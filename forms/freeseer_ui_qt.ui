@@ -308,9 +308,9 @@
         <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
-           <string>Remove Title</string>
+           <string>Titles</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QListWidget" name="editTalkList">
              <property name="sortingEnabled">
@@ -319,11 +319,29 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="removeTalkButton">
-             <property name="text">
-              <string>remove</string>
-             </property>
-            </widget>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QPushButton" name="removeTalkButton">
+               <property name="text">
+                <string>remove</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="saveButton">
+               <property name="text">
+                <string>Save</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="resetButton">
+               <property name="text">
+                <string>Reset</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -383,7 +401,6 @@
   <tabstop>titleEdit</tabstop>
   <tabstop>addTalkButton</tabstop>
   <tabstop>editTalkList</tabstop>
-  <tabstop>removeTalkButton</tabstop>
   <tabstop>checkBox</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox_3</tabstop>

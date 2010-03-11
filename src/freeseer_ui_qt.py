@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../forms/freeseer_ui_qt.ui'
 #
-# Created: Thu Mar 11 18:28:43 2010
+# Created: Thu Mar 11 18:42:20 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -136,14 +136,23 @@ class Ui_FreeseerMainWindow(object):
         self.verticalLayout.addWidget(self.groupBox)
         self.groupBox_2 = QtGui.QGroupBox(self.editTalksPage)
         self.groupBox_2.setObjectName("groupBox_2")
-        self.verticalLayout_4 = QtGui.QVBoxLayout(self.groupBox_2)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.horizontalLayout_2 = QtGui.QHBoxLayout(self.groupBox_2)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.editTalkList = QtGui.QListWidget(self.groupBox_2)
         self.editTalkList.setObjectName("editTalkList")
-        self.verticalLayout_4.addWidget(self.editTalkList)
+        self.horizontalLayout_2.addWidget(self.editTalkList)
+        self.verticalLayout_4 = QtGui.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.removeTalkButton = QtGui.QPushButton(self.groupBox_2)
         self.removeTalkButton.setObjectName("removeTalkButton")
         self.verticalLayout_4.addWidget(self.removeTalkButton)
+        self.saveButton = QtGui.QPushButton(self.groupBox_2)
+        self.saveButton.setObjectName("saveButton")
+        self.verticalLayout_4.addWidget(self.saveButton)
+        self.resetButton = QtGui.QPushButton(self.groupBox_2)
+        self.resetButton.setObjectName("resetButton")
+        self.verticalLayout_4.addWidget(self.resetButton)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_4)
         self.verticalLayout.addWidget(self.groupBox_2)
         self.tabWidget.addTab(self.editTalksPage, "")
         self.horizontalLayout_4.addWidget(self.tabWidget)
@@ -185,8 +194,7 @@ class Ui_FreeseerMainWindow(object):
         FreeseerMainWindow.setTabOrder(self.presenterEdit, self.titleEdit)
         FreeseerMainWindow.setTabOrder(self.titleEdit, self.addTalkButton)
         FreeseerMainWindow.setTabOrder(self.addTalkButton, self.editTalkList)
-        FreeseerMainWindow.setTabOrder(self.editTalkList, self.removeTalkButton)
-        FreeseerMainWindow.setTabOrder(self.removeTalkButton, self.checkBox)
+        FreeseerMainWindow.setTabOrder(self.editTalkList, self.checkBox)
         FreeseerMainWindow.setTabOrder(self.checkBox, self.checkBox_2)
         FreeseerMainWindow.setTabOrder(self.checkBox_2, self.checkBox_3)
         FreeseerMainWindow.setTabOrder(self.checkBox_3, self.recordButton)
@@ -217,9 +225,11 @@ class Ui_FreeseerMainWindow(object):
         self.label_3.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Presenter", None, QtGui.QApplication.UnicodeUTF8))
         self.addTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "add", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_2.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Remove Title", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_2.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Titles", None, QtGui.QApplication.UnicodeUTF8))
         self.editTalkList.setSortingEnabled(True)
         self.removeTalkButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "remove", None, QtGui.QApplication.UnicodeUTF8))
+        self.saveButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
+        self.resetButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Reset", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.editTalksPage), QtGui.QApplication.translate("FreeseerMainWindow", "edit talks", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
