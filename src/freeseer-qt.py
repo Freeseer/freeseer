@@ -91,10 +91,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioSourceList.addItem(src)
 
         # add available talk titles
-        talklist = self.core.get_talk_titles()
-        for talk in talklist:
-            self.ui.talkList.addItem(talk)
-            self.ui.editTalkList.addItem(talk)
+        self.load_talks()
 
         # systray
         logo = QtGui.QPixmap('logo.png')
@@ -109,7 +106,8 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+        self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
@@ -167,11 +165,28 @@ class MainApp(QtGui.QMainWindow):
         self.ui.audioFeedbackCheckbox.setEnabled(False)
 
     def add_talk(self):
-        self.ui.editTalkList.addItem(self.ui.talkLineEdit.text())
-        self.ui.talkLineEdit.clear()
+        talk = ""
+        if (self.ui.timeEdit.isEnabled()): talk += (self.ui.timeEdit.text()).replace(':', '') + " - "
+        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + " - "
+        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + " - "
+        talk += self.ui.titleEdit.text()
+        self.ui.editTalkList.addItem(talk)
+
+        #clean up add title boxes
+        self.ui.roomEdit.clear()
+        self.ui.presenterEdit.clear()
+        self.ui.titleEdit.clear()
 
     def remove_talk(self):
         self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
+
+    def load_talks(self):
+        talklist = self.core.get_talk_titles()
+        self.ui.talkList.clear()
+        self.ui.editTalkList.clear()
+        for talk in talklist:
+            self.ui.talkList.addItem(talk)
+            self.ui.editTalkList.addItem(talk)
 
     def save_talks(self):
         talk_list = []
@@ -182,12 +197,7 @@ class MainApp(QtGui.QMainWindow):
             i = i+1
 
         self.core.save_talk_titles(talk_list)
-
-        # update talk list on main
-        self.ui.talkList.clear()
-        talklist = self.core.get_talk_titles()
-        for talk in talklist:
-            self.ui.talkList.addItem(talk)
+        self.load_talks()
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
