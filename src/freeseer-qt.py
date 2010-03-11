@@ -109,7 +109,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.saveTalkButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
@@ -167,7 +166,12 @@ class MainApp(QtGui.QMainWindow):
         self.ui.audioFeedbackCheckbox.setEnabled(False)
 
     def add_talk(self):
-        self.ui.editTalkList.addItem(self.ui.talkLineEdit.text())
+        talk = ""
+        if (self.ui.timeEdit.isEnabled()): talk += (self.ui.timeEdit.text()).replace(':', '') + " - "
+        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + " - "
+        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + " - "
+        talk += self.ui.titleEdit.text()
+        self.ui.editTalkList.addItem(talk)
         self.ui.talkLineEdit.clear()
 
     def remove_talk(self):
