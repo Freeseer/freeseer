@@ -33,11 +33,11 @@ class FreeseerCore:
         self.freeseer = Freeseer()
         self.spaces = False
 
-    def get_video_devices(self):
+    def get_video_devices(self, device_type):
         '''
         Returns available video devices.
         '''
-        return self.freeseer.get_video_devices('all')
+        return self.freeseer.get_video_devices(device_type)
 
     def get_video_sources(self):
         '''

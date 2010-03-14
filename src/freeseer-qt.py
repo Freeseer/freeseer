@@ -75,7 +75,7 @@ class MainApp(QtGui.QMainWindow):
         self.core = FreeseerCore()
 
         # get supported devices and sources
-        viddevs = self.core.get_video_devices()
+        viddevs = self.core.get_video_devices('all')
         vidsrcs = self.core.get_video_sources()
         sndsrcs = self.core.get_audio_sources()
 
@@ -115,6 +115,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # connections for video source radio buttons
+        self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.v4l2srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.v4lsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.dv1394srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
@@ -131,10 +132,22 @@ class MainApp(QtGui.QMainWindow):
         self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
 
     def _toggled_video_source(self):
-        if (self.ui.v4l2srcButton.isChecked()): videosrc = 'v4l2src'
-        if (self.ui.v4lsrcButton.isChecked()): videosrc = 'v4lsrc'
-        if (self.ui.dv1394srcButton.isChecked()): videosrc = 'dv1394src'
+        # recording the local desktop
+        if (self.ui.localDesktopButton.isChecked()): videosrc = 'ximagesrc'
+        # recording from hardware such as usb or fireware device
+        else:
+            if (self.ui.v4l2srcButton.isChecked()): videosrc = 'v4l2src'
+            if (self.ui.v4lsrcButton.isChecked()): videosrc = 'v4lsrc'
+            if (self.ui.dv1394srcButton.isChecked()): videosrc = 'dv1394src'
         videodev = str(self.ui.videoDeviceList.currentText())
+        
+        viddevs = self.core.get_video_devices(videosrc)
+        # add available video devices
+        for dev in viddevs:
+            self.ui.videoDeviceList.clear()
+            self.ui.videoDeviceList.addItem(dev)
+            print dev
+            
         self.core.change_videosrc(videosrc, videodev)
 
     def change_video_device(self):
