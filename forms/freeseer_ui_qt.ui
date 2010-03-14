@@ -130,7 +130,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
-         <widget class="QGroupBox" name="groupBox_2">
+         <widget class="QGroupBox" name="videoConfigBox">
           <property name="title">
            <string>Video Configuration</string>
           </property>
@@ -264,7 +264,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox_3">
+         <widget class="QGroupBox" name="soundConfigBox">
           <property name="title">
            <string>Sound Configuration</string>
           </property>
