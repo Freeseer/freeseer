@@ -68,6 +68,7 @@ class MainApp(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self)
         self.ui = Ui_FreeseerMainWindow()
         self.ui.setupUi(self)
+        self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
 
@@ -83,8 +84,8 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoDeviceList.addItem(dev)
 
         # add available video sources
-        for src in vidsrcs:
-            self.ui.videoSourceList.addItem(src)
+        #for src in vidsrcs:
+        #    self.ui.videoSourceList.addItem(src)
 
         # add available audio sources
         for src in sndsrcs:
@@ -102,7 +103,7 @@ class MainApp(QtGui.QMainWindow):
         # connections
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
-        self.connect(self.ui.videoSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
+        #self.connect(self.ui.videoSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
@@ -112,6 +113,11 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
+
+        # connections for video source radio buttons
+        self.connect(self.ui.v4l2srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.v4lsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.dv1394srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
 
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ui.audioFeedbackSlider.setRange(1, 32768)
@@ -123,6 +129,13 @@ class MainApp(QtGui.QMainWindow):
         # default to v4l2src with /dev/video0
         self.core.change_videosrc('v4l2src', '/dev/video0')
         self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+
+    def _toggled_video_source(self):
+        if (self.ui.v4l2srcButton.isChecked()): videosrc = 'v4l2src'
+        if (self.ui.v4lsrcButton.isChecked()): videosrc = 'v4lsrc'
+        if (self.ui.dv1394srcButton.isChecked()): videosrc = 'dv1394src'
+        videodev = str(self.ui.videoDeviceList.currentText())
+        self.core.change_videosrc(videosrc, videodev)
 
     def change_video_device(self):
         '''
@@ -166,7 +179,6 @@ class MainApp(QtGui.QMainWindow):
 
     def add_talk(self):
         talk = ""
-        if (self.ui.timeEdit.isEnabled()): talk += (self.ui.timeEdit.text()).replace(':', '') + " - "
         if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + " - "
         if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + " - "
         talk += self.ui.titleEdit.text()

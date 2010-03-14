@@ -97,6 +97,7 @@ class FreeseerCore:
     def change_videosrc(self, vid_source, vid_device):
         ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_videosrc(vid_source, vid_device)
+        print 'video source changed to ' + vid_source + ' using ' + vid_device
 
     def change_soundsrc(self, snd_source):
         ''' Informs backend of new audio source to use when recording. '''

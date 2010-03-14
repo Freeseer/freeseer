@@ -171,14 +171,17 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
-               <widget class="QRadioButton" name="radioButton">
+               <widget class="QRadioButton" name="recordLocalDesktopButton">
                 <property name="text">
                  <string>Desktop</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_2">
+               <widget class="QRadioButton" name="recordLocalWindowButton">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -191,7 +194,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_3">
+               <widget class="QRadioButton" name="recordLocalAreaButton">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -228,28 +231,31 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <widget class="QRadioButton" name="radioButton_4">
+               <widget class="QRadioButton" name="v4l2srcButton">
                 <property name="text">
                  <string>usb device type 1 (v4l2src)</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_5">
+               <widget class="QRadioButton" name="v4lsrcButton">
                 <property name="text">
                  <string>usb device type 2 (v4lsrc)</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="radioButton_6">
+               <widget class="QRadioButton" name="dv1394srcButton">
                 <property name="text">
                  <string>firewire device (dv1394src)</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="comboBox"/>
+               <widget class="QComboBox" name="videoDeviceList"/>
               </item>
              </layout>
             </widget>
@@ -269,12 +275,12 @@
               <string>Sound Source</string>
              </property>
              <property name="buddy">
-              <cstring>comboBox_2</cstring>
+              <cstring>audioSourceList</cstring>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBox_2"/>
+            <widget class="QComboBox" name="audioSourceList"/>
            </item>
           </layout>
          </widget>
@@ -333,7 +339,7 @@
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="2" column="0">
+             <item row="1" column="0">
               <widget class="QLabel" name="label">
                <property name="text">
                 <string>Room</string>
@@ -343,7 +349,7 @@
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item row="1" column="1">
               <widget class="QLineEdit" name="roomEdit">
                <property name="enabled">
                 <bool>false</bool>
@@ -353,67 +359,17 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QTimeEdit" name="timeEdit">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="dateTime">
-                <datetime>
-                 <hour>9</hour>
-                 <minute>0</minute>
-                 <second>0</second>
-                 <year>2000</year>
-                 <month>1</month>
-                 <day>1</day>
-                </datetime>
-               </property>
-               <property name="displayFormat">
-                <string>hh:mm</string>
-               </property>
-               <property name="time">
-                <time>
-                 <hour>9</hour>
-                 <minute>0</minute>
-                 <second>0</second>
-                </time>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QCheckBox" name="checkBox">
-               <property name="layoutDirection">
-                <enum>Qt::LeftToRight</enum>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="2">
+             <item row="1" column="2">
               <widget class="QCheckBox" name="checkBox_2">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_2">
-               <property name="text">
-                <string>Time</string>
-               </property>
-               <property name="buddy">
-                <cstring>timeEdit</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
+             <item row="3" column="1">
               <widget class="QLineEdit" name="titleEdit"/>
              </item>
-             <item row="4" column="0">
+             <item row="3" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Title</string>
@@ -423,7 +379,7 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
+             <item row="2" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Presenter</string>
@@ -433,7 +389,7 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
+             <item row="2" column="1">
               <widget class="QLineEdit" name="presenterEdit">
                <property name="enabled">
                 <bool>false</bool>
@@ -443,7 +399,7 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="2">
+             <item row="2" column="2">
               <widget class="QCheckBox" name="checkBox_3">
                <property name="text">
                 <string/>
@@ -552,13 +508,11 @@
   </action>
  </widget>
  <tabstops>
-  <tabstop>timeEdit</tabstop>
   <tabstop>roomEdit</tabstop>
   <tabstop>presenterEdit</tabstop>
   <tabstop>titleEdit</tabstop>
   <tabstop>addTalkButton</tabstop>
   <tabstop>editTalkList</tabstop>
-  <tabstop>checkBox</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox_3</tabstop>
   <tabstop>recordButton</tabstop>
@@ -569,22 +523,6 @@
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>checkBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>timeEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>420</x>
-     <y>99</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>318</x>
-     <y>94</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>checkBox_2</sender>
    <signal>toggled(bool)</signal>
