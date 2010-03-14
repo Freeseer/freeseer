@@ -168,12 +168,14 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoConfigBox.setEnabled(True)
             self.ui.soundConfigBox.setEnabled(True)
             self.ui.audioFeedbackCheckbox.setEnabled(True)
+            self.statusBar().showMessage('ready')
             return
         self.core.record(self.ui.talkList.currentText())
         self.ui.recordButton.setText('Stop')
         self.ui.videoConfigBox.setEnabled(False)
         self.ui.soundConfigBox.setEnabled(False)
         self.ui.audioFeedbackCheckbox.setEnabled(False)
+        self.statusBar().showMessage('recording...')
 
     def add_talk(self):
         talk = ""
