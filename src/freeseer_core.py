@@ -122,15 +122,15 @@ class FreeseerCore:
         ''' Enable/Disable the video preview window. '''
         if enable == True:
             self.freeseer.enable_preview(window_id)
-            self.logger.info('Preview Activated')
+            self.logger.debug('Preview Activated')
         else:
-            self.logger.warning('Preview Deactivated')
+            self.logger.debug('Preview Deactivated')
 
     def audioFeedback(self, enable=False):
         ''' Enable/Disable the audio preview. '''
         if enable == True:
             self.freeseer.enable_audio_feedback()
-            print 'Audio Feedback Activated'
+            self.logger.debug('Audio Feedback Activated')
         else:
             self.freeseer.disable_audio_feedback()
-            print 'Audio Feedback Deactivated'
+            self.logger.debug('Audio Feedback Deactivated')
