@@ -21,7 +21,7 @@ On Fedora Core:
     “sudo yum install PyQt4 python-alsaaudio”
 
 On Ubuntu:
-    “sudo apt-get install PyQt4 python-alsaaudio”
+    “sudo apt-get install python-qt4 python-alsaaudio”
 
 
 Once you have the prerequisite componets, run freeseer by changing
