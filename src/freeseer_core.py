@@ -33,11 +33,11 @@ class FreeseerCore:
         self.freeseer = Freeseer()
         self.spaces = False
 
-    def get_video_devices(self):
+    def get_video_devices(self, device_type):
         '''
         Returns available video devices.
         '''
-        return self.freeseer.get_video_devices('all')
+        return self.freeseer.get_video_devices(device_type)
 
     def get_video_sources(self):
         '''
@@ -97,6 +97,7 @@ class FreeseerCore:
     def change_videosrc(self, vid_source, vid_device):
         ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_videosrc(vid_source, vid_device)
+        print 'video source changed to ' + vid_source + ' using ' + vid_device
 
     def change_soundsrc(self, snd_source):
         ''' Informs backend of new audio source to use when recording. '''
