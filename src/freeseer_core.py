@@ -20,6 +20,7 @@
 # the #fosslc channel on IRC (freenode.net)
 
 import datetime
+import time
 
 from freeseer_gstreamer import *
 
@@ -89,7 +90,7 @@ class FreeseerCore:
     def make_record_name(self, filename, index):
         ''' Insert date and index to a filename '''
         date = datetime.date.today()
-        recordname = date.isoformat() + ' ' + filename + ' (' + str(index) + ').ogg'
+        recordname = date.isoformat() + ' - ' + time.strftime('%H%M') + ' - ' + filename + ' (' + str(index) + ').ogg'
         if self.spaces == False:
             recordname = recordname.replace(' ', '_')
         return recordname
