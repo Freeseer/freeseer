@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../forms/freeseer_ui_qt.ui'
 #
-# Created: Sat Mar 13 21:19:39 2010
+# Created: Sun Mar 14 20:21:16 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -267,7 +267,15 @@ class Ui_FreeseerMainWindow(object):
         self.audioFeedbackCheckbox.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Enable audio feedback", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.main), QtGui.QApplication.translate("FreeseerMainWindow", "main", None, QtGui.QApplication.UnicodeUTF8))
         self.videoConfigBox.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Video Configuration", None, QtGui.QApplication.UnicodeUTF8))
+        self.localDesktopButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Select this option to record the local desktop. \n"
+"Freeseer currently only supports recording the full desktop. \n"
+"We plan to support window and area modes in future versions.", None, QtGui.QApplication.UnicodeUTF8))
         self.localDesktopButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Local Desktop", None, QtGui.QApplication.UnicodeUTF8))
+        self.hardwareButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Select hardware to record from either a usb device or firewire device.\n"
+"\n"
+"Freeseer finds USB devices by scanning /dev/videoX starting from index 0.\n"
+"\n"
+"Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.", None, QtGui.QApplication.UnicodeUTF8))
         self.hardwareButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Hardware", None, QtGui.QApplication.UnicodeUTF8))
         self.localDesktopBox.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Local Desktop", None, QtGui.QApplication.UnicodeUTF8))
         self.recordLocalDesktopButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Desktop", None, QtGui.QApplication.UnicodeUTF8))
@@ -276,11 +284,18 @@ class Ui_FreeseerMainWindow(object):
         self.recordLocalAreaButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "This feature is currently not yet implemented.", None, QtGui.QApplication.UnicodeUTF8))
         self.recordLocalAreaButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Area (Not Supported)", None, QtGui.QApplication.UnicodeUTF8))
         self.hardwareBox.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Hardware", None, QtGui.QApplication.UnicodeUTF8))
+        self.v4l2srcButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "USB type 1 uses v4l2src as the video driver. Most modern webcams use this option.\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
         self.v4l2srcButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "usb device type 1 (v4l2src)", None, QtGui.QApplication.UnicodeUTF8))
+        self.v4lsrcButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "USB type 2 uses v4lsrc as the video driver, kept for devices that do not yet support v4l2src option.\n"
+"", None, QtGui.QApplication.UnicodeUTF8))
         self.v4lsrcButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "usb device type 2 (v4lsrc)", None, QtGui.QApplication.UnicodeUTF8))
+        self.dv1394srcButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Firewire mode uses dv1394src as the video driver.", None, QtGui.QApplication.UnicodeUTF8))
         self.dv1394srcButton.setText(QtGui.QApplication.translate("FreeseerMainWindow", "firewire device (dv1394src)", None, QtGui.QApplication.UnicodeUTF8))
+        self.videoDeviceList.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Select the video device to record from.", None, QtGui.QApplication.UnicodeUTF8))
         self.soundConfigBox.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Sound Configuration", None, QtGui.QApplication.UnicodeUTF8))
         self.label_5.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Sound Source", None, QtGui.QApplication.UnicodeUTF8))
+        self.audioSourceList.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Select the audio source to use for recording.", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_4.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "This feature has not yet been implemented.", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_4.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Advanced (Not Supported)", None, QtGui.QApplication.UnicodeUTF8))
         self.label_6.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Video scale size", None, QtGui.QApplication.UnicodeUTF8))

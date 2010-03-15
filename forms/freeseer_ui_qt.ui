@@ -140,6 +140,11 @@
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
                <widget class="QRadioButton" name="localDesktopButton">
+                <property name="toolTip">
+                 <string>Select this option to record the local desktop. 
+Freeseer currently only supports recording the full desktop. 
+We plan to support window and area modes in future versions.</string>
+                </property>
                 <property name="text">
                  <string>Local Desktop</string>
                 </property>
@@ -150,6 +155,13 @@
               </item>
               <item>
                <widget class="QRadioButton" name="hardwareButton">
+                <property name="toolTip">
+                 <string>Select hardware to record from either a usb device or firewire device.
+
+Freeseer finds USB devices by scanning /dev/videoX starting from index 0.
+
+Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</string>
+                </property>
                 <property name="text">
                  <string>Hardware</string>
                 </property>
@@ -232,6 +244,10 @@
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
                <widget class="QRadioButton" name="v4l2srcButton">
+                <property name="toolTip">
+                 <string>USB type 1 uses v4l2src as the video driver. Most modern webcams use this option.
+</string>
+                </property>
                 <property name="text">
                  <string>usb device type 1 (v4l2src)</string>
                 </property>
@@ -242,6 +258,10 @@
               </item>
               <item>
                <widget class="QRadioButton" name="v4lsrcButton">
+                <property name="toolTip">
+                 <string>USB type 2 uses v4lsrc as the video driver, kept for devices that do not yet support v4l2src option.
+</string>
+                </property>
                 <property name="text">
                  <string>usb device type 2 (v4lsrc)</string>
                 </property>
@@ -249,13 +269,20 @@
               </item>
               <item>
                <widget class="QRadioButton" name="dv1394srcButton">
+                <property name="toolTip">
+                 <string>Firewire mode uses dv1394src as the video driver.</string>
+                </property>
                 <property name="text">
                  <string>firewire device (dv1394src)</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="videoDeviceList"/>
+               <widget class="QComboBox" name="videoDeviceList">
+                <property name="toolTip">
+                 <string>Select the video device to record from.</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -280,7 +307,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="audioSourceList"/>
+            <widget class="QComboBox" name="audioSourceList">
+             <property name="toolTip">
+              <string>Select the audio source to use for recording.</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
