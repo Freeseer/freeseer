@@ -79,6 +79,8 @@ class MainApp(QtGui.QMainWindow):
         vidsrcs = self.core.get_video_sources()
         sndsrcs = self.core.get_audio_sources()
 
+        self.videosrc = vidsrcs[0]
+
         # add available video devices
         for dev in viddevs:
             self.ui.videoDeviceList.addItem(dev)
@@ -102,7 +104,7 @@ class MainApp(QtGui.QMainWindow):
 
         # connections
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
-        self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
+        self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
         #self.connect(self.ui.videoSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
@@ -116,6 +118,7 @@ class MainApp(QtGui.QMainWindow):
 
         # connections for video source radio buttons
         self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.v4l2srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.v4lsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.dv1394srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
@@ -133,22 +136,24 @@ class MainApp(QtGui.QMainWindow):
 
     def _toggled_video_source(self):
         # recording the local desktop
-        if (self.ui.localDesktopButton.isChecked()): videosrc = 'ximagesrc'
+        if (self.ui.localDesktopButton.isChecked()): self.videosrc = 'ximagesrc'
         # recording from hardware such as usb or fireware device
-        else:
-            if (self.ui.v4l2srcButton.isChecked()): videosrc = 'v4l2src'
-            if (self.ui.v4lsrcButton.isChecked()): videosrc = 'v4lsrc'
-            if (self.ui.dv1394srcButton.isChecked()): videosrc = 'dv1394src'
+        elif (self.ui.hardwareButton.isChecked()):
+            if (self.ui.v4l2srcButton.isChecked()): self.videosrc = 'v4l2src'
+            elif (self.ui.v4lsrcButton.isChecked()): self.videosrc = 'v4lsrc'
+            elif (self.ui.dv1394srcButton.isChecked()): self.videosrc = 'dv1394src'
+            else: return
+        else: return
         videodev = str(self.ui.videoDeviceList.currentText())
         
-        viddevs = self.core.get_video_devices(videosrc)
+        viddevs = self.core.get_video_devices(self.videosrc)
+        print viddevs
         # add available video devices
+        self.ui.videoDeviceList.clear()
         for dev in viddevs:
-            self.ui.videoDeviceList.clear()
             self.ui.videoDeviceList.addItem(dev)
-            print dev
             
-        self.core.change_videosrc(videosrc, videodev)
+        self.core.change_videosrc(self.videosrc, videodev)
 
     def change_video_device(self):
         '''
@@ -157,7 +162,7 @@ class MainApp(QtGui.QMainWindow):
         '''
         print 'changing video device'
         dev = str(self.ui.videoDeviceList.currentText())
-        src = str(self.ui.videoSourceList.currentText())
+        src = self.videosrc
         self.core.change_videosrc(src, dev)
 
     def change_audio_device(self):
