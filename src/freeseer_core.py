@@ -80,17 +80,13 @@ class FreeseerCore:
         Returns the filename to use when recording.
         This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
-        i = 0
-        recordname = self.make_record_name(filename, i)
-        while os.path.exists(recordname):
-            i=i+1
-            recordname = self.make_record_name(filename, i)
+        recordname = self.make_record_name(filename)
         return recordname
 
-    def make_record_name(self, filename, index):
+    def make_record_name(self, filename):
         ''' Insert date and index to a filename '''
         date = datetime.date.today()
-        recordname = date.isoformat() + ' - ' + time.strftime('%H%M') + ' - ' + filename + ' (' + str(index) + ').ogg'
+        recordname = date.isoformat() + ' - ' + time.strftime('%H%M') + ' - ' + filename + '.ogg'
         if self.spaces == False:
             recordname = recordname.replace(' ', '_')
         return recordname
