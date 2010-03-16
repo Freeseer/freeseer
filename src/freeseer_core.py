@@ -21,6 +21,8 @@
 
 import datetime
 import time
+import logging
+import logging.config
 
 from freeseer_gstreamer import *
 
@@ -31,6 +33,9 @@ class FreeseerCore:
     Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
     '''
     def __init__(self):
+        logging.config.fileConfig("logging.conf")
+        self.logger = logging.getLogger("root")
+        self.logger.info("Logging successfully started")
         self.freeseer = Freeseer()
         self.spaces = False
 
@@ -115,15 +120,15 @@ class FreeseerCore:
         ''' Enable/Disable the video preview window. '''
         if enable == True:
             self.freeseer.enable_preview(window_id)
-            print 'Preview Activated'
+            self.logger.debug('Preview Activated')
         else:
-            print 'Preview Deactivated'
+            self.logger.debug('Preview Deactivated')
 
     def audioFeedback(self, enable=False):
         ''' Enable/Disable the audio preview. '''
         if enable == True:
             self.freeseer.enable_audio_feedback()
-            print 'Audio Feedback Activated'
+            self.logger.debug('Audio Feedback Activated')
         else:
             self.freeseer.disable_audio_feedback()
-            print 'Audio Feedback Deactivated'
+            self.logger.debug('Audio Feedback Deactivated')

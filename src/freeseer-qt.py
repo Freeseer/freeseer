@@ -163,14 +163,14 @@ class MainApp(QtGui.QMainWindow):
         Function for changing video device
         eg. /dev/video1
         '''
-        print 'changing video device'
         dev = str(self.ui.videoDeviceList.currentText())
-        src = self.videosrc
+        src = str(self.ui.videoSourceList.currentText())
+        self.core.logger.debug('Changing video device to ' + src + ' on ' + dev)
         self.core.change_videosrc(src, dev)
 
     def change_audio_device(self):
-        print 'changing video device'
         src = str(self.ui.audioSourceList.currentText())
+        self.core.logger.debug('Changing audio device to ' + src)
         self.core.change_soundsrc(src)
 
     def toggle_audio_feedback(self):
@@ -242,7 +242,7 @@ class MainApp(QtGui.QMainWindow):
             else: self.hide()
 
     def closeEvent(self, event):
-        print 'Exiting freeseer...'
+        self.core.logger.info('Exiting freeseer...')
         self.volcheck.run = False
         self.core.stop()
         event.accept()
