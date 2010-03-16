@@ -38,24 +38,31 @@ class FreeseerCore:
         self.logger.info("Logging successfully started")
         self.freeseer = Freeseer()
         self.spaces = False
+        self.logger.info("Core initialized")
 
     def get_video_devices(self, device_type):
         '''
         Returns available video devices.
         '''
-        return self.freeseer.get_video_devices(device_type)
+        viddevs = self.freeseer.get_video_devices(device_type)
+        self.logger.debug('Available video devices for ' + device_type + ': ' + viddevs)
+        return viddevs
 
     def get_video_sources(self):
         '''
         Returns supported video sources.
         '''
-        return self.freeseer.get_video_sources('all')
+        vidsrcs = self.freeseer.get_video_sources('all')
+        self.logger.debug('Available video sources: ' + str(vidsrcs))
+        return vidsrcs
 
     def get_audio_sources(self):
         '''
         Returns supported audio sources.
         '''
-        return self.freeseer.get_audio_sources()
+        sndsrcs = self.freeseer.get_audio_sources()
+        self.logger.debug('Available audio sources: ' + str(sndsrcs))
+        return sndsrcs
 
     def get_talk_titles(self):
         '''
@@ -68,6 +75,10 @@ class FreeseerCore:
 
         for line in lines:
             talk_titles.append(line.rstrip())
+
+        self.logger.debug('Available talk titles:')
+        for talk in talk_titles:
+            self.logger.debug('  ' + talk)
         return talk_titles
 
     def save_talk_titles(self, talk_list):
@@ -79,6 +90,7 @@ class FreeseerCore:
         f = open('talks.txt', 'w')
         f.writelines(talk_list)
         f.close()
+        self.logger.debug('Saved talks to file')
 
     def get_record_name(self, filename):
         '''
@@ -86,6 +98,7 @@ class FreeseerCore:
         This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
         recordname = self.make_record_name(filename)
+        self.logger.debug('Set record name to ' + recordname)
         return recordname
 
     def make_record_name(self, filename):
@@ -111,10 +124,12 @@ class FreeseerCore:
         '''
         recordname = self.get_record_name(filename)
         self.freeseer.record(recordname)
+        self.logger.info('Recording started')
 
     def stop(self):
         ''' Informs backend to stop recording. '''
         self.freeseer.stop()
+        self.logger.info('Recording stopped')
 
     def preview(self, enable=False, window_id=None):
         ''' Enable/Disable the video preview window. '''
