@@ -74,48 +74,32 @@ class MainApp(QtGui.QMainWindow):
 
         self.core = FreeseerCore()
 
-        # get supported devices and sources
-        viddevs = self.core.get_video_devices('all')
+        # get available video sources
         vidsrcs = self.core.get_video_sources()
-        sndsrcs = self.core.get_audio_sources()
-
         self.videosrc = vidsrcs[0]
-
-        # add available video devices
-        for dev in viddevs:
-            self.ui.videoDeviceList.addItem(dev)
-
-        # add available video sources
-        #for src in vidsrcs:
-        #    self.ui.videoSourceList.addItem(src)
-
-        # add available audio sources
+            
+        # get available audio sources
+        sndsrcs = self.core.get_audio_sources()
         for src in sndsrcs:
             self.ui.audioSourceList.addItem(src)
 
         # add available talk titles
         self.load_talks()
 
-        # systray
+        # setup systray
         logo = QtGui.QPixmap('logo.png')
         sysIcon = QtGui.QIcon(logo)
         self.systray = QtGui.QSystemTrayIcon(sysIcon)
         self.systray.show()
-
-        # connections
-        self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
-        self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
-        #self.connect(self.ui.videoSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_device)
-        self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
-        self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
-        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
-        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
-        self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
+        # main tab connections
+        self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
+
+        # configure tab connections
+        self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
+        self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         # connections for video source radio buttons
         self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
@@ -123,36 +107,55 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.v4lsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.dv1394srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
 
+        # edit talks tab connections
+        self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
+
+        # Main Window Connections
+        self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
+        self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+
+        # setup audio feedback slider
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
         self.ui.audioFeedbackSlider.setRange(1, 32768)
         self.volcheck = volcheck(self)
         self.volcheck.start()
 
+        # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
 
-        # default to v4l2src with /dev/video0
-        self.core.change_videosrc('v4l2src', '/dev/video0')
+        # Setup default sources
+        self._toggled_video_source()
         self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
 
     def _toggled_video_source(self):
+        '''
+        Updates the GUI when the user selects a different video source and
+        configures core with new video source information
+        '''
         # recording the local desktop
         if (self.ui.localDesktopButton.isChecked()): self.videosrc = 'ximagesrc'
+        
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
             if (self.ui.v4l2srcButton.isChecked()): self.videosrc = 'v4l2src'
             elif (self.ui.v4lsrcButton.isChecked()): self.videosrc = 'v4lsrc'
             elif (self.ui.dv1394srcButton.isChecked()): self.videosrc = 'dv1394src'
             else: return
-        else: return
-        videodev = str(self.ui.videoDeviceList.currentText())
+
+            # add available video devices for selected source
+            viddevs = self.core.get_video_devices(self.videosrc)
+            self.ui.videoDeviceList.clear()
+            for dev in viddevs:
+                self.ui.videoDeviceList.addItem(dev)
         
-        viddevs = self.core.get_video_devices(self.videosrc)
-        print viddevs
-        # add available video devices
-        self.ui.videoDeviceList.clear()
-        for dev in viddevs:
-            self.ui.videoDeviceList.addItem(dev)
-            
+        # invalid selection (this should never happen)
+        else: return
+
+        # finally load the changes into core
+        videodev = str(self.ui.videoDeviceList.currentText())
         self.core.change_videosrc(self.videosrc, videodev)
 
     def change_video_device(self):
@@ -187,13 +190,13 @@ class MainApp(QtGui.QMainWindow):
             self.ui.soundConfigBox.setEnabled(True)
             self.ui.audioFeedbackCheckbox.setEnabled(True)
             self.statusBar().showMessage('ready')
-            return
-        self.core.record(self.ui.talkList.currentText())
-        self.ui.recordButton.setText('Stop')
-        self.ui.videoConfigBox.setEnabled(False)
-        self.ui.soundConfigBox.setEnabled(False)
-        self.ui.audioFeedbackCheckbox.setEnabled(False)
-        self.statusBar().showMessage('recording...')
+        else:
+            self.core.record(self.ui.talkList.currentText())
+            self.ui.recordButton.setText('Stop')
+            self.ui.videoConfigBox.setEnabled(False)
+            self.ui.soundConfigBox.setEnabled(False)
+            self.ui.audioFeedbackCheckbox.setEnabled(False)
+            self.statusBar().showMessage('recording...')
 
     def add_talk(self):
         talk = ""
@@ -211,6 +214,9 @@ class MainApp(QtGui.QMainWindow):
         self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
 
     def load_talks(self):
+        '''
+        This method updates the GUI with the available presentation titles.
+        '''
         talklist = self.core.get_talk_titles()
         self.ui.talkList.clear()
         self.ui.editTalkList.clear()
