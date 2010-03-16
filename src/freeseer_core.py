@@ -99,7 +99,7 @@ class FreeseerCore:
     def change_videosrc(self, vid_source, vid_device):
         ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_videosrc(vid_source, vid_device)
-        print 'video source changed to ' + vid_source + ' using ' + vid_device
+        self.logger.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
 
     def change_soundsrc(self, snd_source):
         ''' Informs backend of new audio source to use when recording. '''
@@ -120,15 +120,15 @@ class FreeseerCore:
         ''' Enable/Disable the video preview window. '''
         if enable == True:
             self.freeseer.enable_preview(window_id)
-            self.logger.debug('Preview Activated')
+            self.logger.info('Video Preview Activated')
         else:
-            self.logger.debug('Preview Deactivated')
+            self.logger.info('Video Preview Deactivated')
 
     def audioFeedback(self, enable=False):
         ''' Enable/Disable the audio preview. '''
         if enable == True:
             self.freeseer.enable_audio_feedback()
-            self.logger.debug('Audio Feedback Activated')
+            self.logger.info('Audio Feedback Activated')
         else:
             self.freeseer.disable_audio_feedback()
-            self.logger.debug('Audio Feedback Deactivated')
+            self.logger.info('Audio Feedback Deactivated')

@@ -164,8 +164,8 @@ class MainApp(QtGui.QMainWindow):
         eg. /dev/video1
         '''
         dev = str(self.ui.videoDeviceList.currentText())
-        src = str(self.ui.videoSourceList.currentText())
-        self.core.logger.debug('Changing video device to ' + src + ' on ' + dev)
+        src = self.videosrc
+        self.core.logger.debug('Changing video device to ' + dev)
         self.core.change_videosrc(src, dev)
 
     def change_audio_device(self):
