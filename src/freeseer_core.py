@@ -26,7 +26,7 @@ import logging.config
 
 from freeseer_gstreamer import *
 
-__version__=u'2.0'
+__version__=u'1.9.5'
 
 class FreeseerCore:
     '''

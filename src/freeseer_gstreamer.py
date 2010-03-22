@@ -25,7 +25,7 @@ import gobject, pygst
 pygst.require("0.10")
 import gst
 
-__version__=u'2.0'
+__version__=u'1.9.5'
 
 class Freeseer:
     '''
@@ -219,14 +219,14 @@ class Freeseer:
         '''
         self.soundsrc = new_source
         old_sndsrc = self.sndsrc
-        
+
         try:
             print 'loading ' + self.soundsrc
             self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
         except:
             print 'Failed to load ' + self.soundsrc + '.'
             return False
-        
+
         self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
