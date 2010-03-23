@@ -45,7 +45,7 @@ class FreeseerCore:
         Returns available video devices.
         '''
         viddevs = self.freeseer.get_video_devices(device_type)
-        self.logger.debug('Available video devices for ' + device_type + ': ' + viddevs)
+        self.logger.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
         return viddevs
 
     def get_video_sources(self):
