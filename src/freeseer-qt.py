@@ -33,7 +33,7 @@ from freeseer_core import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 
-__version__=u'2.0'
+__version__=u'1.9.5'
 
 NAME=u'Freeseer'
 DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentation. It captures vga output and audio and mixes them together to produce a video.'
@@ -77,7 +77,7 @@ class MainApp(QtGui.QMainWindow):
         # get available video sources
         vidsrcs = self.core.get_video_sources()
         self.videosrc = vidsrcs[0]
-            
+
         # get available audio sources
         sndsrcs = self.core.get_audio_sources()
         for src in sndsrcs:
@@ -137,7 +137,7 @@ class MainApp(QtGui.QMainWindow):
         '''
         # recording the local desktop
         if (self.ui.localDesktopButton.isChecked()): self.videosrc = 'ximagesrc'
-        
+
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
             if (self.ui.v4l2srcButton.isChecked()): self.videosrc = 'v4l2src'
@@ -150,7 +150,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoDeviceList.clear()
             for dev in viddevs:
                 self.ui.videoDeviceList.addItem(dev)
-        
+
         # invalid selection (this should never happen)
         else: return
 
