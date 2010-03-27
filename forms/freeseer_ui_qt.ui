@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
+    <width>585</width>
     <height>509</height>
    </rect>
   </property>
@@ -96,6 +96,9 @@
           </item>
           <item row="0" column="2">
            <widget class="QSlider" name="audioFeedbackSlider">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
@@ -501,8 +504,8 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>538</width>
-     <height>19</height>
+     <width>585</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
