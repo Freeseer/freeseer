@@ -203,6 +203,10 @@ class MainApp(QtGui.QMainWindow):
         if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + " - "
         if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + " - "
         talk += self.ui.titleEdit.text()
+
+        # Do not add talks if they are empty strings
+        if (len(talk) == 0): return
+        
         self.ui.editTalkList.addItem(talk)
 
         #clean up add title boxes
