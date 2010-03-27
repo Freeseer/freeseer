@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '../forms/freeseer_ui_qt.ui'
 #
-# Created: Sun Mar 14 20:21:16 2010
+# Created: Sat Mar 27 09:22:00 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt4 import QtCore, QtGui
 class Ui_FreeseerMainWindow(object):
     def setupUi(self, FreeseerMainWindow):
         FreeseerMainWindow.setObjectName("FreeseerMainWindow")
-        FreeseerMainWindow.resize(538, 509)
+        FreeseerMainWindow.resize(585, 509)
         self.centralwidget = QtGui.QWidget(FreeseerMainWindow)
         self.centralwidget.setAutoFillBackground(False)
         self.centralwidget.setObjectName("centralwidget")
@@ -51,6 +51,7 @@ class Ui_FreeseerMainWindow(object):
         self.previewWidget.setObjectName("previewWidget")
         self.gridLayout.addWidget(self.previewWidget, 0, 0, 2, 1)
         self.audioFeedbackSlider = QtGui.QSlider(self.main)
+        self.audioFeedbackSlider.setEnabled(False)
         self.audioFeedbackSlider.setOrientation(QtCore.Qt.Vertical)
         self.audioFeedbackSlider.setObjectName("audioFeedbackSlider")
         self.gridLayout.addWidget(self.audioFeedbackSlider, 0, 2, 1, 1)
@@ -213,7 +214,7 @@ class Ui_FreeseerMainWindow(object):
         self.horizontalLayout_4.addWidget(self.tabWidget)
         FreeseerMainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(FreeseerMainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 538, 19))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 585, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
