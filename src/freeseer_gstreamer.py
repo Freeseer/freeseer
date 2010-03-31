@@ -263,6 +263,17 @@ class Freeseer:
         Change the video codec
         '''
         self.video_codec = new_vcodec
+        
+        # check if the new video codec is valid
+        # if not return False
+        try:
+            self.core.logger.debug('checking availability of ' + self.video_codec)
+            self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
+        except:
+            self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
+            return False
+
+        # codec is available for use, now set pipeline to use it
         self.player.remove(self.vidcodec)
         self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         self.player.add(self.vidcodec)
