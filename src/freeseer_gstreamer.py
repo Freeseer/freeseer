@@ -110,10 +110,13 @@ class Freeseer:
             err, debug = message.parse_error()
             self.core.logger.debug('Error: ' + str(err) + str(debug))
             self.player.set_state(gst.STATE_NULL)
-            if (debug.startswith('v4l2_calls.c')):
-                self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
-                self.change_videosrc('v4lsrc', self.viddev)
-                self.player.set_state(gst.STATE_PLAYING)
+
+            if (err.startswith('Could not get/set settings from/on resource.')):
+                # if v4l2src driver does not work, fallback to the older v4lsrc
+                if (debug.startswith('v4l2_calls.c')):
+                    self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
+                    self.change_videosrc('v4lsrc', self.viddev)
+                    self.player.set_state(gst.STATE_PLAYING)
 
     def on_sync_message(self, bus, message):
         if message.structure is None:
