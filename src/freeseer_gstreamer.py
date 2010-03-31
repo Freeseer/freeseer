@@ -163,9 +163,9 @@ class Freeseer:
             try:
                 gst.element_factory_make(src, "testsrc")
                 snd_sources.append(src)
-                print src + ' is available.'
+                self.core.logger.debug(src + ' is available.')
             except:
-                print src + ' is not available'
+                self.core.logger.debug(src + ' is not available')
 
         return snd_sources
 
@@ -180,9 +180,9 @@ class Freeseer:
         return devices
 
     def _dvdemux_padded(self, dbin, pad):
-        print "dvdemux got pad %s" % pad.get_name()
+        self.core.logger.debug("dvdemux got pad %s" % pad.get_name())
         if pad.get_name() == 'video':
-            print "Linking dvdemux to queue1"
+            self.core.logger.debug('Linking dvdemux to queue1')
             self.dv1394dvdemux.link(self.dv1394q1)
 
     def change_videosrc(self, new_source, new_device):
@@ -230,16 +230,16 @@ class Freeseer:
         old_sndsrc = self.sndsrc
 
         try:
-            print 'loading ' + self.soundsrc
+            self.core.logger.debug('loading ' + self.soundsrc)
             self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
         except:
-            print 'Failed to load ' + self.soundsrc + '.'
+            self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
             return False
 
         self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
-        print self.soundsrc + ' loaded.'
+        self.core.logger.debug(self.soundsrc + ' loaded.')
         return True
 
     def record(self, filename):
