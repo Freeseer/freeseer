@@ -21,7 +21,9 @@
 
 import os
 
-import gobject, pygst
+import gobject
+gobject.threads_init()
+import pygst
 pygst.require("0.10")
 import gst
 
@@ -31,8 +33,8 @@ class Freeseer:
     '''
     Freeseer backend class using gstreamer to record video and audio.
     '''
-    def __init__(self):
-        gobject.threads_init()
+    def __init__(self, core):
+        self.core = core
         self.window_id = None
 
         self.viddrv = 'v4lsrc'
@@ -106,8 +108,12 @@ class Freeseer:
             self.player.set_state(gst.STATE_NULL)
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
-            print "Error: %s" % err, debug
+            self.core.logger.debug('Error: ' + str(err) + str(debug))
             self.player.set_state(gst.STATE_NULL)
+            if (debug.startswith('v4l2_calls.c')):
+                self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
+                self.change_videosrc('v4l2src', self.viddev)
+                self.player.set_state(gst.STATE_PLAYING)
 
     def on_sync_message(self, bus, message):
         if message.structure is None:
