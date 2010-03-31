@@ -112,7 +112,7 @@ class Freeseer:
             self.player.set_state(gst.STATE_NULL)
             if (debug.startswith('v4l2_calls.c')):
                 self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
-                self.change_videosrc('v4l2src', self.viddev)
+                self.change_videosrc('v4lsrc', self.viddev)
                 self.player.set_state(gst.STATE_PLAYING)
 
     def on_sync_message(self, bus, message):
