@@ -246,13 +246,16 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <widget class="QRadioButton" name="v4l2srcButton">
+               <widget class="QRadioButton" name="usbsrcButton">
                 <property name="toolTip">
-                 <string>USB type 1 uses v4l2src as the video driver. Most modern webcams use this option.
-</string>
+                 <string>Use this option to record from a usb device.
+
+This option tries the v4l2src driver
+and falls back to the v4lsrc driver if
+v4l2src does not work.</string>
                 </property>
                 <property name="text">
-                 <string>usb device type 1 (v4l2src)</string>
+                 <string>usb device</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -260,23 +263,12 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="v4lsrcButton">
-                <property name="toolTip">
-                 <string>USB type 2 uses v4lsrc as the video driver, kept for devices that do not yet support v4l2src option.
-</string>
-                </property>
-                <property name="text">
-                 <string>usb device type 2 (v4lsrc)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="dv1394srcButton">
+               <widget class="QRadioButton" name="firewiresrcButton">
                 <property name="toolTip">
                  <string>Firewire mode uses dv1394src as the video driver.</string>
                 </property>
                 <property name="text">
-                 <string>firewire device (dv1394src)</string>
+                 <string>firewire device</string>
                 </property>
                </widget>
               </item>
