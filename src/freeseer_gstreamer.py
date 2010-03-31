@@ -44,44 +44,44 @@ class Freeseer:
         self.video_codec = 'theoraenc'
         self.audio_codec = 'vorbisenc'
 
-        self.player = gst.Pipeline("player")
+        self.player = gst.Pipeline('player')
 
         # GST Video
-        self.vidsrc = gst.element_factory_make(self.viddrv, "vidsrc")
-        self.cspace = gst.element_factory_make("ffmpegcolorspace", "cspace")
-        self.vidtee = gst.element_factory_make("tee", "vidtee")
-        self.vidqueue1 = gst.element_factory_make("queue", "vidqueue1")
-        self.vidqueue2 = gst.element_factory_make("queue", "vidqueue2")
-        self.vidcodec = gst.element_factory_make(self.video_codec, "vidcodec")
-        self.vidcodec.set_property("quality", 48)
-        self.vidcodec.set_property("sharpness", 2)
-        self.vidcodec.set_property("bitrate", 300)
-        self.vidsink = gst.element_factory_make("autovideosink", "vidsink")
+        self.vidsrc = gst.element_factory_make(self.viddrv, 'vidsrc')
+        self.cspace = gst.element_factory_make('ffmpegcolorspace', "cspace")
+        self.vidtee = gst.element_factory_make('tee', "vidtee")
+        self.vidqueue1 = gst.element_factory_make('queue', 'vidqueue1')
+        self.vidqueue2 = gst.element_factory_make('queue', 'vidqueue2')
+        self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
+        self.vidcodec.set_property('quality', 48)
+        self.vidcodec.set_property('sharpness', 2)
+        self.vidcodec.set_property('bitrate', 300)
+        self.vidsink = gst.element_factory_make('autovideosink', 'vidsink')
 
         # GST Video Filtering
-        self.fvidrate = gst.element_factory_make("videorate", "fvidrate")
-        self.fvidrate_cap = gst.element_factory_make("capsfilter", "fvidrate_cap")
+        self.fvidrate = gst.element_factory_make('videorate', 'fvidrate')
+        self.fvidrate_cap = gst.element_factory_make('capsfilter', 'fvidrate_cap')
         self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=25/1, silent'))
-        self.fvidscale = gst.element_factory_make("videoscale", "fvidscale")
-        self.fvidscale_cap = gst.element_factory_make("capsfilter", "fvidscale_cap")
+        self.fvidscale = gst.element_factory_make('videoscale', 'fvidscale')
+        self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=1024, height=768'))
-        self.fvidcspace = gst.element_factory_make("ffmpegcolorspace", "fvidcspace")
+        self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
 
         # GST Sound
-        self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
+        self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
 #        self.sndsrc.set_property("device", "alsa_output.pci-0000_00_1b.0.analog-stereo")
-        self.sndtee = gst.element_factory_make("tee", "sndtee")
-        self.sndqueue1 = gst.element_factory_make("queue", "sndqueue1")
-        self.sndqueue2 = gst.element_factory_make("queue", "sndqueue2")
-        self.audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
-        self.sndcodec = gst.element_factory_make(self.audio_codec, "sndcodec")
-        self.sndsink = gst.element_factory_make("autoaudiosink", "sndsink")
+        self.sndtee = gst.element_factory_make('tee', 'sndtee')
+        self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')
+        self.sndqueue2 = gst.element_factory_make('queue', 'sndqueue2')
+        self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
+        self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
+        self.sndsink = gst.element_factory_make('autoaudiosink', 'sndsink')
 
         # GST Muxer
-        self.mux = gst.element_factory_make("oggmux", "mux")
-        self.filesink = gst.element_factory_make("filesink", "filesink")
-        self.filesink.set_property("location", self.filename)
+        self.mux = gst.element_factory_make('oggmux', 'mux')
+        self.filesink = gst.element_factory_make('filesink', 'filesink')
+        self.filesink.set_property('location', self.filename)
 
         # GST Add Components
         self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
@@ -99,8 +99,8 @@ class Freeseer:
         bus = self.player.get_bus()
         bus.add_signal_watch()
         bus.enable_sync_message_emission()
-        bus.connect("message", self.on_message)
-        bus.connect("sync-message::element", self.on_sync_message)
+        bus.connect('message', self.on_message)
+        bus.connect('sync-message::element', self.on_sync_message)
 
     def on_message(self, bus, message):
         t = message.type
@@ -122,9 +122,9 @@ class Freeseer:
         if message.structure is None:
             return
         message_name = message.structure.get_name()
-        if message_name == "prepare-xwindow-id":
+        if message_name == 'prepare-xwindow-id':
             imagesink = message.src
-            imagesink.set_property("force-aspect-ratio", True)
+            imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(self.window_id)
 
     def get_video_sources(self, stype):
@@ -161,7 +161,7 @@ class Freeseer:
         snd_sources = []
         for src in snd_sources_list:
             try:
-                gst.element_factory_make(src, "testsrc")
+                gst.element_factory_make(src, 'testsrc')
                 snd_sources.append(src)
                 self.core.logger.debug(src + ' is available.')
             except:
@@ -202,18 +202,18 @@ class Freeseer:
         self.viddrv = new_source
         self.viddev = new_device
         self.player.remove(self.vidsrc)
-        self.vidsrc = gst.element_factory_make(self.viddrv, "vidsrc")
+        self.vidsrc = gst.element_factory_make(self.viddrv, 'vidsrc')
         self.player.add(self.vidsrc)
 
         if (self.viddrv == 'v4lsrc'):
-            self.vidsrc.set_property("device", self.viddev)
+            self.vidsrc.set_property('device', self.viddev)
         elif (self.viddrv == 'v4l2src'):
-            self.vidsrc.set_property("device", self.viddev)
+            self.vidsrc.set_property('device', self.viddev)
         elif (self.viddrv == 'dv1394src'):
-            self.dv1394q1 =  gst.element_factory_make("queue", "dv1394q1")
-            self.dv1394q2 =  gst.element_factory_make("queue", "dv1394q2")
-            self.dv1394dvdemux =  gst.element_factory_make("dvdemux", "dv1394dvdemux")
-            self.dv1394dvdec =  gst.element_factory_make("dvdec", "dv1394dvdec")
+            self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
+            self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
+            self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
+            self.dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
             self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
             self.vidsrc.link(self.dv1394dvdemux)
             self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
@@ -231,7 +231,7 @@ class Freeseer:
 
         try:
             self.core.logger.debug('loading ' + self.soundsrc)
-            self.sndsrc = gst.element_factory_make(self.soundsrc, "sndsrc")
+            self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
         except:
             self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
             return False
@@ -249,7 +249,7 @@ class Freeseer:
         filename: filename to record to
         '''
         self.filename = filename
-        self.filesink.set_property("location", self.filename)
+        self.filesink.set_property('location', self.filename)
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
@@ -264,7 +264,7 @@ class Freeseer:
         '''
         self.video_codec = new_vcodec
         self.player.remove(self.vidcodec)
-        self.vidcodec = gst.element_factory_make(self.video_codec, "vidcodec")
+        self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         self.player.add(self.vidcodec)
         gst.element_link_many(self.vidqueue1, self.vidcodec, self.mux)
 
@@ -274,7 +274,7 @@ class Freeseer:
         '''
         self.audio_codec = new_acodec
         self.player.remove(self.sndcodec)
-        self.sndcodec = gst.element_factory_make(self.audio_codec, "sndcodec")
+        self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
         self.player.add(self.sndcodec)
         gst.element_link_many(self.audioconvert, self.sndcodec, self.mux)
 
@@ -284,7 +284,7 @@ class Freeseer:
         '''
         self.muxer = new_mux
         self.player.remove(self.mux)
-        self.mux = gst.element_factory_make(self.muxer, "mux")
+        self.mux = gst.element_factory_make(self.muxer, 'mux')
         self.player.add(self.mux)
         gst.element_link_many(self.sndcodec, self.mux)
         gst.element_link_many(self.vidcodec, self.mux)
