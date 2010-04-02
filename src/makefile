@@ -17,10 +17,16 @@
 # This makefile generates the python code for the gui
 # from an XML definition file
 
-ALL: freeseer_ui_qt.py
+ALL: freeseer_ui_qt.py resource.py
+	@echo "You can now run ./freeseer"
 
 freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
+	@echo "Compiling GUI"
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
 
+resource.py: forms/resource.qrc
+	@echo "Updating graphic resources"
+	pyrcc4 forms/resource.qrc -o resource.py
+
 clean:
-	rm -f *.ogg
+	rm -f *.ogg resource.py freeseer_ui_qt.py

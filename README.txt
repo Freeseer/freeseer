@@ -28,7 +28,12 @@ On Ubuntu:
 
 Once you have the prerequisite componets, run freeseer by changing
 directory into the src directory, and run:
+    "make"
+
+This will compile the gui files. Once this completes, you can run:
     "./freeseer"
+
+This starts up the Freeseer GUI.
 
 Read more about hardware capture options here: 
     http://wiki.github.com/fosslc/freeseer/capture-hardware
