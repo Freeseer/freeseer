@@ -36,7 +36,7 @@ class FreeseerCore:
         logging.config.fileConfig("logging.conf")
         self.logger = logging.getLogger("root")
         self.logger.info("Logging successfully started")
-        self.freeseer = Freeseer()
+        self.freeseer = Freeseer(self)
         self.spaces = False
         self.logger.info("Core initialized")
 

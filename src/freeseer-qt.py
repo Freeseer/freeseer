@@ -103,9 +103,8 @@ class MainApp(QtGui.QMainWindow):
         # connections for video source radio buttons
         self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
-        self.connect(self.ui.v4l2srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
-        self.connect(self.ui.v4lsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
-        self.connect(self.ui.dv1394srcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
 
         # edit talks tab connections
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
@@ -140,9 +139,8 @@ class MainApp(QtGui.QMainWindow):
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
-            if (self.ui.v4l2srcButton.isChecked()): self.videosrc = 'v4l2src'
-            elif (self.ui.v4lsrcButton.isChecked()): self.videosrc = 'v4lsrc'
-            elif (self.ui.dv1394srcButton.isChecked()): self.videosrc = 'dv1394src'
+            if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'v4l2src'
+            elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'dv1394src'
             else: return
 
             # add available video devices for selected source
