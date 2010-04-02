@@ -21,3 +21,6 @@ ALL: freeseer_ui_qt.py
 
 freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
+
+clean:
+	rm -f *.ogg
