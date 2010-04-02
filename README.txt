@@ -27,7 +27,7 @@ On Ubuntu:
     “sudo apt-get install python-qt4 python-alsaaudio make”
 
 
-Once you have the prerequisite componets, run freeseer by changing
+Once you have the prerequisite componets, build freeseer by changing
 directory into the src directory, and run:
     "make"
 
