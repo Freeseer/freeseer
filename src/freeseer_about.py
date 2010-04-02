@@ -16,7 +16,7 @@ class Ui_FreeseerAbout(object):
         self.gridLayout_2 = QtGui.QGridLayout(FreeseerAbout)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.label = QtGui.QLabel(FreeseerAbout)
-        self.label.setPixmap(QtGui.QPixmap("logo.png"))
+        self.label.setPixmap(QtGui.QPixmap("forms/logo.png"))
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
         self.aboutInfo = QtGui.QLabel(FreeseerAbout)
