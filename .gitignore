@@ -4,4 +4,4 @@
 *.mkv
 *~
 freeseer_ui_qt.py
-resource.py
+resource_rc.py
