@@ -16,14 +16,15 @@ http://www.fsf.org/licensing/licenses/gpl.html
 To run freeseer, you require a couple of dependencies:
     Python support for Qt4
     Python support for Alsa audio sources
+    make
 
 To do this, install the required packages as root.
 
 On Fedora Core:
-    “sudo yum install PyQt4 python-alsaaudio”
+    “sudo yum install PyQt4 python-alsaaudio make”
 
 On Ubuntu:
-    “sudo apt-get install python-qt4 python-alsaaudio”
+    “sudo apt-get install python-qt4 python-alsaaudio make”
 
 
 Once you have the prerequisite componets, run freeseer by changing
