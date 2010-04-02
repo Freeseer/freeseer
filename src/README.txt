@@ -25,7 +25,7 @@ On Ubuntu:
 
 Once you have the prerequisite componets, run freeseer by changing
 directory into the src directory, and run:
-    "./freeseer-qt.py"
+    "./freeseer"
 
 Read more about hardware capture options here: 
     http://wiki.github.com/fosslc/freeseer/capture-hardware
