@@ -3,4 +3,7 @@
     <file>record_red_button.png</file>
     <file>stop_red_button.png</file>
   </qresource>
+  <qresource prefix="headphones">
+    <file>headphones.png</file>
+  </qresource>
 </RCC>

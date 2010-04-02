@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'forms/freeseer_ui_qt.ui'
 #
-# Created: Thu Apr  1 23:19:40 2010
+# Created: Thu Apr  1 23:27:01 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -63,6 +63,9 @@ class Ui_FreeseerMainWindow(object):
         self.audioFeedbackCheckbox = QtGui.QCheckBox(self.main)
         self.audioFeedbackCheckbox.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.audioFeedbackCheckbox.setLayoutDirection(QtCore.Qt.RightToLeft)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/headphones/headphones.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.audioFeedbackCheckbox.setIcon(icon1)
         self.audioFeedbackCheckbox.setObjectName("audioFeedbackCheckbox")
         self.verticalLayout_2.addWidget(self.audioFeedbackCheckbox)
         self.tabWidget.addTab(self.main, "")
