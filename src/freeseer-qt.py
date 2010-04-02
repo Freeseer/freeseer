@@ -40,13 +40,19 @@ DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentat
 URL=u'http://www.fosslc.org'
 COPYRIGHT=u'Copyright (C) 2010 The Free and Open Source Software Learning Centre'
 LICENSE_TEXT=u"This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software."
+RECORD_BUTTON_ARTIST=u'Sekkyumu'
+RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
+HEADPHONES_ARTIST=u'Ben Fleming'
+HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
 
 ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
 u'<br><b>Version: ' + __version__ + u'</b>' + \
 u'<p>' + DESCRIPTION + u'</p>' + \
 u'<p>' + COPYRIGHT + u'</p>' + \
 u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-u'<p>' + LICENSE_TEXT + u'</p>'
+u'<p>' + LICENSE_TEXT + u'</p>' \
+u'<p>Record button graphics by: <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+u'<p>Headphones graphics by: <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
 
 
 class AboutDialog(QtGui.QDialog):
