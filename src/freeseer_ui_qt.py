@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'forms/freeseer_ui_qt.ui'
 #
-# Created: Thu Apr  1 23:50:40 2010
+# Created: Fri Apr  2 00:13:04 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -272,7 +272,6 @@ class Ui_FreeseerMainWindow(object):
         self.talkLabel.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Title", None, QtGui.QApplication.UnicodeUTF8))
         self.talkList.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Title of the presentation being recorded.  For example \"Thanh Ha - Introduction to Freeseer\"", None, QtGui.QApplication.UnicodeUTF8))
         self.audioFeedbackCheckbox.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Enable audio feedback (plays back recording audio to speakers)", None, QtGui.QApplication.UnicodeUTF8))
-        self.audioFeedbackCheckbox.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Enable audio feedback", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.main), QtGui.QApplication.translate("FreeseerMainWindow", "main", None, QtGui.QApplication.UnicodeUTF8))
         self.videoConfigBox.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Video Configuration", None, QtGui.QApplication.UnicodeUTF8))
         self.localDesktopButton.setToolTip(QtGui.QApplication.translate("FreeseerMainWindow", "Select this option to record the local desktop. \n"
