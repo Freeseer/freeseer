@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>freeseer - video studio in a backpack</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/freeseer/logo.png</normaloff>:/freeseer/logo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="autoFillBackground">
     <bool>false</bool>
