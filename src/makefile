@@ -28,5 +28,8 @@ resource.py: forms/resource.qrc
 	@echo "Updating graphic resources"
 	pyrcc4 forms/resource.qrc -o resource.py
 
+install_vga2usb: vga2usb.conf
+	sudo cp vga2usb.conf /etc/modprobe.d/
+
 clean:
 	rm -f *.ogg resource.py freeseer_ui_qt.py *.pyc
