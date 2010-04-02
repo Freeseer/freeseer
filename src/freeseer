@@ -93,7 +93,7 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
 
         # setup systray
-        logo = QtGui.QPixmap('logo.png')
+        logo = QtGui.QPixmap('forms/logo.png')
         sysIcon = QtGui.QIcon(logo)
         self.systray = QtGui.QSystemTrayIcon(sysIcon)
         self.systray.show()

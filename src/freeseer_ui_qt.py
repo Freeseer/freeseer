@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'forms/freeseer_ui_qt.ui'
 #
-# Created: Thu Apr  1 23:27:01 2010
+# Created: Thu Apr  1 23:50:40 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,6 +13,9 @@ class Ui_FreeseerMainWindow(object):
     def setupUi(self, FreeseerMainWindow):
         FreeseerMainWindow.setObjectName("FreeseerMainWindow")
         FreeseerMainWindow.resize(585, 509)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/freeseer/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        FreeseerMainWindow.setWindowIcon(icon)
         self.centralwidget = QtGui.QWidget(FreeseerMainWindow)
         self.centralwidget.setAutoFillBackground(False)
         self.centralwidget.setObjectName("centralwidget")
@@ -32,10 +35,10 @@ class Ui_FreeseerMainWindow(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.recordButton = QtGui.QPushButton(self.main)
         self.recordButton.setMinimumSize(QtCore.QSize(0, 40))
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/recordButton/record_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon.addPixmap(QtGui.QPixmap(":/recordButton/stop_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.recordButton.setIcon(icon)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/recordButton/record_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/recordButton/stop_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.recordButton.setIcon(icon1)
         self.recordButton.setCheckable(True)
         self.recordButton.setObjectName("recordButton")
         self.verticalLayout_2.addWidget(self.recordButton)
@@ -63,9 +66,9 @@ class Ui_FreeseerMainWindow(object):
         self.audioFeedbackCheckbox = QtGui.QCheckBox(self.main)
         self.audioFeedbackCheckbox.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.audioFeedbackCheckbox.setLayoutDirection(QtCore.Qt.RightToLeft)
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/headphones/headphones.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.audioFeedbackCheckbox.setIcon(icon1)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/headphones/headphones.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.audioFeedbackCheckbox.setIcon(icon2)
         self.audioFeedbackCheckbox.setObjectName("audioFeedbackCheckbox")
         self.verticalLayout_2.addWidget(self.audioFeedbackCheckbox)
         self.tabWidget.addTab(self.main, "")
