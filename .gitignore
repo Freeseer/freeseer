@@ -3,3 +3,5 @@
 *.ogg
 *.mkv
 *~
+freeseer_ui_qt.py
+resource.py

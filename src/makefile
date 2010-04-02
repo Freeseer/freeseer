@@ -29,4 +29,4 @@ resource.py: forms/resource.qrc
 	pyrcc4 forms/resource.qrc -o resource.py
 
 clean:
-	rm -f *.ogg resource.py freeseer_ui_qt.py
+	rm -f *.ogg resource.py freeseer_ui_qt.py *.pyc
