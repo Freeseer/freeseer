@@ -27,7 +27,7 @@ import pygst
 pygst.require("0.10")
 import gst
 
-__version__=u'1.9.5'
+__version__=u'1.9.6'
 
 class Freeseer:
     '''
