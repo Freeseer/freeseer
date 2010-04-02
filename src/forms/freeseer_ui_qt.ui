@@ -57,6 +57,11 @@
           <property name="text">
            <string>Record</string>
           </property>
+          <property name="icon">
+           <iconset resource="resource.qrc">
+            <normaloff>:/recordButton/record_red_button.png</normaloff>
+            <normalon>:/recordButton/stop_red_button.png</normalon>:/recordButton/record_red_button.png</iconset>
+          </property>
           <property name="checkable">
            <bool>true</bool>
           </property>
@@ -547,7 +552,9 @@ v4l2src does not work.</string>
   <tabstop>audioFeedbackSlider</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>checkBox_2</sender>

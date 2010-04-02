@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../forms/freeseer_ui_qt.ui'
+# Form implementation generated from reading ui file 'forms/freeseer_ui_qt.ui'
 #
-# Created: Tue Mar 30 21:43:51 2010
+# Created: Thu Apr  1 23:19:40 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -32,6 +32,10 @@ class Ui_FreeseerMainWindow(object):
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.recordButton = QtGui.QPushButton(self.main)
         self.recordButton.setMinimumSize(QtCore.QSize(0, 40))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/recordButton/record_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/recordButton/stop_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.recordButton.setIcon(icon)
         self.recordButton.setCheckable(True)
         self.recordButton.setObjectName("recordButton")
         self.verticalLayout_2.addWidget(self.recordButton)
@@ -317,3 +321,4 @@ class Ui_FreeseerMainWindow(object):
         self.actionExit.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAbout.setText(QtGui.QApplication.translate("FreeseerMainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
 
+import resource_rc

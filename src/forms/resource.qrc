@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="recordButton">
+    <file>record_red_button.png</file>
+    <file>stop_red_button.png</file>
+  </qresource>
+</RCC>
