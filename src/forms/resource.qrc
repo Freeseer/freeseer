@@ -4,7 +4,7 @@
     <file>stop_red_button.png</file>
   </qresource>
   <qresource prefix="freeseer">
-    <file>logo.png</file>
+    <file>forms/logo.png</file>
   </qresource>
   <qresource prefix="headphones">
     <file>headphones.png</file>

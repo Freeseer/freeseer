@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'freeseer_about.ui'
+# Form implementation generated from reading ui file 'forms/freeseer_about.ui'
 #
-# Created: Mon Mar  1 19:51:32 2010
+# Created: Fri Apr  2 20:10:35 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -16,7 +16,7 @@ class Ui_FreeseerAbout(object):
         self.gridLayout_2 = QtGui.QGridLayout(FreeseerAbout)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.label = QtGui.QLabel(FreeseerAbout)
-        self.label.setPixmap(QtGui.QPixmap("forms/logo.png"))
+        self.label.setPixmap(QtGui.QPixmap("freeseer_logo.png"))
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
         self.aboutInfo = QtGui.QLabel(FreeseerAbout)
@@ -37,6 +37,6 @@ class Ui_FreeseerAbout(object):
         QtCore.QMetaObject.connectSlotsByName(FreeseerAbout)
 
     def retranslateUi(self, FreeseerAbout):
-        FreeseerAbout.setWindowTitle(QtGui.QApplication.translate("FreeseerAbout", "About FreeSeeR", None, QtGui.QApplication.UnicodeUTF8))
+        FreeseerAbout.setWindowTitle(QtGui.QApplication.translate("FreeseerAbout", "About Freeseer", None, QtGui.QApplication.UnicodeUTF8))
         self.aboutInfo.setText(QtGui.QApplication.translate("FreeseerAbout", "Freeseer", None, QtGui.QApplication.UnicodeUTF8))
 

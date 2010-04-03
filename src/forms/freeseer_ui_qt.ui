@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
-    <normaloff>:/freeseer/logo.png</normaloff>:/freeseer/logo.png</iconset>
+    <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="autoFillBackground">
