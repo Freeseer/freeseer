@@ -54,8 +54,6 @@ class Freeseer:
         self.vidqueue2 = gst.element_factory_make('queue', 'vidqueue2')
         self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         self.vidcodec.set_property('quality', 48)
-        self.vidcodec.set_property('sharpness', 2)
-        self.vidcodec.set_property('bitrate', 300)
         self.vidsink = gst.element_factory_make('autovideosink', 'vidsink')
 
         # GST Video Filtering
