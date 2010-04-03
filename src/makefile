@@ -17,19 +17,23 @@
 # This makefile generates the python code for the gui
 # from an XML definition file
 
-ALL: freeseer_ui_qt.py resource_rc.py
+ALL: gui 
 	@echo "You can now run ./freeseer"
 
+gui: freeseer_ui_qt.py freeseer_about.py resource.py
+	@echo "Re-generating GUI"
+
 freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
-	@echo "Compiling GUI"
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
 
-resource_rc.py: forms/resource.qrc
-	@echo "Updating graphic resources"
-	pyrcc4 forms/resource.qrc -o resource_rc.py
+freeseer_about.py: forms/freeseer_about.ui
+	pyuic4 forms/freeseer_about.ui -o freeseer_about.py
 
-install_vga2usb: vga2usb.conf
-	sudo cp vga2usb.conf /etc/modprobe.d/
+resource.py: forms/resource.qrc
+	pyrcc4 forms/resource.qrc -o resource.py
 
 clean:
-	rm -f *.ogg resource_rc.py freeseer_ui_qt.py *.pyc
+	rm -f *.ogg resource.py freeseer_about.py freeseer_ui_qt.py *.pyc
+
+test: clean ALL
+	./freeseer
