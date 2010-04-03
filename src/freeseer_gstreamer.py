@@ -62,7 +62,7 @@ class Freeseer:
         self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=25/1, silent'))
         self.fvidscale = gst.element_factory_make('videoscale', 'fvidscale')
         self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
-        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=1024, height=768'))
+        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=640, height=480'))
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
 
