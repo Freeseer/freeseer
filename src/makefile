@@ -35,5 +35,5 @@ resource.py: forms/resource.qrc
 clean:
 	rm -f *.ogg resource.py freeseer_about.py freeseer_ui_qt.py *.pyc
 
-test: clean ALL
+test: ALL
 	./freeseer
