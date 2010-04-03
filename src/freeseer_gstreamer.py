@@ -63,7 +63,6 @@ class Freeseer:
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=1024, height=768'))
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
-
         # GST Sound
         self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
 #        self.sndsrc.set_property("device", "alsa_output.pci-0000_00_1b.0.analog-stereo")
@@ -162,6 +161,19 @@ class Freeseer:
                 self.core.logger.debug(src + ' is not available')
 
         return snd_sources
+
+    def get_video_codecs(self):
+        video_codec_list = ['theoraenc', 'ffenc_msmpeg4']
+        
+        video_codecs = []
+        for codec in video_codec_list:
+            try:
+                gst.element_factory_make(codec, 'testcodec')
+                video_codecs.append(src)
+                self.core.logger.debug(codec + ' is available.')
+            except:
+                self.core.logger.debug(codec + ' is not available')
+        return video_codecs
 
     def _get_devices(self, path, index):
         i = index
