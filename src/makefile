@@ -20,20 +20,20 @@
 ALL: gui 
 	@echo "You can now run ./freeseer"
 
-gui: freeseer_ui_qt.py freeseer_about.py resource.py
+gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
 	@echo "Re-generating GUI"
 
-freeseer_ui_qt.py:
+freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
 
 freeseer_about.py: forms/freeseer_about.ui
 	pyuic4 forms/freeseer_about.ui -o freeseer_about.py
 
-resource.py: forms/resource.qrc
-	pyrcc4 forms/resource.qrc -o resource.py
+resource_rc.py: forms/resource.qrc
+	pyrcc4 forms/resource.qrc -o resource_rc.py
 
 clean:
-	rm -f *.ogg resource.py freeseer_about.py freeseer_ui_qt.py *.pyc
+	rm -f *.ogg resource_rc.py freeseer_about.py freeseer_ui_qt.py *.pyc
 
-test: clean ALL
+test: ALL
 	./freeseer
