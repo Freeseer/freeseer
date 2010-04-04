@@ -33,7 +33,7 @@ class FreeseerCore:
     Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
     '''
     def __init__(self):
-        logging.config.fileConfig("logging.conf")
+        logging.config.fileConfig("config/logging.conf")
         self.logger = logging.getLogger("root")
         self.logger.info("Logging successfully started")
         self.freeseer = Freeseer(self)
