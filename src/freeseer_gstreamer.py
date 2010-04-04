@@ -51,10 +51,8 @@ class Freeseer:
         self.cspace = gst.element_factory_make('ffmpegcolorspace', "cspace")
         self.vidtee = gst.element_factory_make('tee', "vidtee")
         self.vidqueue1 = gst.element_factory_make('queue', 'vidqueue1')
-        self.vidqueue2 = gst.element_factory_make('queue', 'vidqueue2')
         self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         self.vidcodec.set_property('quality', 48)
-        self.vidsink = gst.element_factory_make('autovideosink', 'vidsink')
 
         # GST Video Filtering
         self.fvidrate = gst.element_factory_make('videorate', 'fvidrate')
@@ -65,16 +63,13 @@ class Freeseer:
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=1024, height=768'))
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
-
         # GST Sound
         self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
 #        self.sndsrc.set_property("device", "alsa_output.pci-0000_00_1b.0.analog-stereo")
         self.sndtee = gst.element_factory_make('tee', 'sndtee')
-        self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')
-        self.sndqueue2 = gst.element_factory_make('queue', 'sndqueue2')
+        self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
         self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
-        self.sndsink = gst.element_factory_make('autoaudiosink', 'sndsink')
 
         # GST Muxer
         self.mux = gst.element_factory_make('oggmux', 'mux')
@@ -166,6 +161,19 @@ class Freeseer:
                 self.core.logger.debug(src + ' is not available')
 
         return snd_sources
+
+    def get_video_codecs(self):
+        video_codec_list = ['theoraenc', 'ffenc_msmpeg4']
+        
+        video_codecs = []
+        for codec in video_codec_list:
+            try:
+                gst.element_factory_make(codec, 'testcodec')
+                video_codecs.append(src)
+                self.core.logger.debug(codec + ' is available.')
+            except:
+                self.core.logger.debug(codec + ' is not available')
+        return video_codecs
 
     def _get_devices(self, path, index):
         i = index
@@ -304,24 +312,34 @@ class Freeseer:
         Activate video feedback. Will send video to a preview window.
         '''
         self.window_id = window_id
-        self.player.add(self.vidqueue2, self.vidsink)
-        gst.element_link_many(self.vidtee, self.vidqueue2, self.vidsink)
+
+        vpqueue = gst.element_factory_make('queue', 'vpqueue')
+        vpsink = gst.element_factory_make('autovideosink', 'vpsink')
+        
+        self.player.add(vpqueue, vpsink)
+        gst.element_link_many(self.vidtee, vpqueue, vpsink)
 
     def disable_preview(self):
         '''
         Disable the video preview
         '''
-        self.player.remove(self.vidqueue2, self.vidsink)
+        vpqueue = self.player.get_by_name('vpqueue')
+        vpsink = self.player.get_by_name('vpsink')
+        self.player.remove(vpqueue, vpsink)
 
     def enable_audio_feedback(self):
         '''
         Activate audio feedback.  Will send the recorded audio back out the speakers.
         '''
-        self.player.add(self.sndqueue2, self.sndsink)
-        gst.element_link_many(self.sndtee, self.sndqueue2, self.sndsink)
+        afqueue = gst.element_factory_make('queue', 'afqueue')
+        afsink = gst.element_factory_make('autoaudiosink', 'afsink')
+        self.player.add(afqueue, afsink)
+        gst.element_link_many(self.sndtee, afqueue, afsink)
 
     def disable_audio_feedback(self):
         '''
         Disable the audio feedback.
         '''
-        self.player.remove(self.sndqueue2, self.sndsink)
+        afqueue = self.player.get_by_name('afqueue')
+        afsink = self.player.get_by_name('afsink')
+        self.player.remove(afqueue, afsink)
