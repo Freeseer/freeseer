@@ -10,5 +10,5 @@ setup(name='freeseer',
                   ('/etc/freeseer', ['src/config/logging.conf'])],
       packages=['freeseer'],
       package_dir={'freeseer': 'src'},
-      package_data={'freeseer': ['freeseer', 'talks.txt']},
+      package_data={'freeseer': ['freeseer']},
       )

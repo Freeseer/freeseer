@@ -3,6 +3,7 @@
 *.ogg
 *.mkv
 *~
+.directory
 dist
 build
 MANIFEST
