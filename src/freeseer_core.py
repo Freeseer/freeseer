@@ -33,9 +33,21 @@ class FreeseerCore:
     Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
     '''
     def __init__(self):
-        logging.config.fileConfig("logging.conf")
+        logging.config.fileConfig("config/logging.conf")
         self.logger = logging.getLogger("root")
         self.logger.info("Logging successfully started")
+
+        # Initialize directories
+        home = os.path.expanduser('~')
+        try:
+            os.makedirs(home + '/.freeseer')
+            self.logger.info('created ' + home + '/.freeseer')
+        except OSError:
+            self.logger.debug("freeseer directory exists.")
+            
+        self.talksfile=home+'/.freeseer/talks.txt'
+
+        # Start Freeseer Recording Backend
         self.freeseer = Freeseer(self)
         self.spaces = False
         self.logger.info("Core initialized")
@@ -69,7 +81,15 @@ class FreeseerCore:
         Returns the talk titles as listed in  talks.txt
         '''
         talk_titles = []
-        f = open('talks.txt', 'r')
+        try:
+            f = open(self.talksfile, 'r')
+        except:
+            self.logger.debug('talks.txt not found, creating default.')
+            f = open(self.talksfile, 'w')
+            f.writelines('T103 - Thanh Ha - Intro to Freeseer')
+            f.close()
+            f = open(self.talksfile, 'r')
+            
         lines = f.readlines()
         f.close()
 
@@ -87,7 +107,7 @@ class FreeseerCore:
 
         talk_list: a list of talk titles which will be saved..
         '''
-        f = open('talks.txt', 'w')
+        f = open(self.talksfile, 'w')
         f.writelines(talk_list)
         f.close()
         self.logger.debug('Saved talks to file')
