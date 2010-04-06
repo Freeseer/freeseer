@@ -10,9 +10,6 @@ http://www.fsf.org/licensing/licenses/gpl.html
 
 Freeseer supports free (royalty free) audio and video codecs.
 
- licensed under the GPL license version 3:
-http://www.fsf.org/licensing/licenses/gpl.html
-
 To run freeseer, you require a couple of dependencies:
     Python support for Qt4
     Python support for Alsa audio sources
