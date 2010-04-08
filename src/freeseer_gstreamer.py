@@ -52,15 +52,15 @@ class Freeseer:
         self.vidtee = gst.element_factory_make('tee', "vidtee")
         self.vidqueue1 = gst.element_factory_make('queue', 'vidqueue1')
         self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
-        self.vidcodec.set_property('quality', 48)
+        self.vidcodec.set_property('bitrate', 2400)
 
         # GST Video Filtering
         self.fvidrate = gst.element_factory_make('videorate', 'fvidrate')
         self.fvidrate_cap = gst.element_factory_make('capsfilter', 'fvidrate_cap')
-        self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=25/1, silent'))
+        self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=10/1, silent'))
         self.fvidscale = gst.element_factory_make('videoscale', 'fvidscale')
         self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
-        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=640, height=480'))
+        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=800, height=600'))
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
         # GST Sound
