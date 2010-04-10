@@ -24,13 +24,12 @@ import os
 
 class Config:
     '''
-    classdocs
+    This class is responsible for reading/writing settings to/from a config file.
     '''
-
 
     def __init__(self):
         '''
-        Constructor
+        Initialize settings from a configfile
         '''
         # Get the user's home directory
         self.userhome = os.path.expanduser('~')
@@ -71,6 +70,9 @@ class Config:
         self.talksfile = config.get('Global', 'talks_file')
         
     def writeConfig(self):
+        '''
+        Write settings to a config file.
+        '''
         config = ConfigParser.ConfigParser()
         
         # Set config settings
