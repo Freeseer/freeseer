@@ -5,27 +5,28 @@ for capturing presentations and demonstrations.
 Freeseer is written in Python, and uses Qt4 for its
 GUI. It also uses Gstreamer for video/audio processing.
 
+Our packages will handle these dependencies automatically.
+
 Freeseer is licensed under the GPL license, version 3.
 http://www.fsf.org/licensing/licenses/gpl.html
 
 Freeseer supports free (royalty free) audio and video codecs.
 
-To run freeseer, you require a couple of dependencies:
-    Python support for Qt4
-    Python support for Alsa audio sources
+-------------------------------------------------------------------------
 
-To develop freeseer, you require a couple additional dependencies:
-    make
-    PyQt4-devel
+To develop freeseer, you require:
+    Make, Git, PyQT development tools
 
-To do this, install the required packages as root.
+If you are pulling the code from git, then you should install
+the following packages first.
 
 On Fedora Core:
-    “sudo yum install PyQt4 python-alsaaudio make PyQt4-devel”
+    “sudo yum install git make PyQt4-devel”
 
 On Ubuntu:
-    “sudo apt-get install git-core pyqt4-dev-tools python-alsaaudio”
+    “sudo apt-get install git-core pyqt4-dev-tools”
 
+-------------------------------------------------------------------------
 
 Once you have the prerequisite componets, build freeseer by changing
 directory into the src directory, and run:
@@ -35,6 +36,8 @@ This will compile the gui files. Once this completes, you can run:
     "./freeseer"
 
 This starts up the Freeseer GUI.
+
+-------------------------------------------------------------------------
 
 Read more about hardware capture options here: 
     http://wiki.github.com/fosslc/freeseer/capture-hardware
