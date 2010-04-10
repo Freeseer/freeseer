@@ -138,8 +138,9 @@ class FreeseerCore:
         '''
         Informs backend to begin recording to filename.
         '''
-        recordname = self.get_record_name(filename)
-        self.freeseer.record(recordname)
+        record_name = self.get_record_name(filename)
+        record_location = self.config.videodir + record_name
+        self.freeseer.record(record_location)
         self.logger.info('Recording started')
 
     def stop(self):
