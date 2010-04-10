@@ -120,10 +120,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
 
-        # setup audio feedback slider
-        self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.ui.audioFeedbackSlider.setRange(1, 100)
-
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
 

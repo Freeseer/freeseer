@@ -108,6 +108,15 @@
             <property name="enabled">
              <bool>false</bool>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>0</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
