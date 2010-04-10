@@ -25,6 +25,7 @@ import logging
 import logging.config
 
 from freeseer_gstreamer import *
+from config import Config
 
 __version__=u'1.9.6'
 
@@ -38,16 +39,9 @@ class FreeseerCore:
         logging.config.fileConfig("config/logging.conf")
         self.logger = logging.getLogger("root")
         self.logger.info("Logging successfully started")
-
-        # Initialize directories
-        home = os.path.expanduser('~')
-        try:
-            os.makedirs(home + '/.freeseer')
-            self.logger.info('created ' + home + '/.freeseer')
-        except OSError:
-            self.logger.debug("freeseer directory exists.")
-            
-        self.talksfile=home+'/.freeseer/talks.txt'
+        
+        # Read in config information
+        self.config = Config()
 
         # Start Freeseer Recording Backend
         self.freeseer = Freeseer(self)
@@ -84,13 +78,13 @@ class FreeseerCore:
         '''
         talk_titles = []
         try:
-            f = open(self.talksfile, 'r')
+            f = open(self.config.talksfile, 'r')
         except:
             self.logger.debug('talks.txt not found, creating default.')
-            f = open(self.talksfile, 'w')
+            f = open(self.config.talksfile, 'w')
             f.writelines('T103 - Thanh Ha - Intro to Freeseer')
             f.close()
-            f = open(self.talksfile, 'r')
+            f = open(self.config.talksfile, 'r')
             
         lines = f.readlines()
         f.close()
@@ -109,7 +103,7 @@ class FreeseerCore:
 
         talk_list: a list of talk titles which will be saved..
         '''
-        f = open(self.talksfile, 'w')
+        f = open(self.config.talksfile, 'w')
         f.writelines(talk_list)
         f.close()
         self.logger.debug('Saved talks to file')
