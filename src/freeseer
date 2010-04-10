@@ -185,6 +185,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoConfigBox.setEnabled(True)
             self.ui.soundConfigBox.setEnabled(True)
             self.ui.audioFeedbackCheckbox.setEnabled(True)
+            self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
         else:
             self.core.record(self.ui.talkList.currentText())
