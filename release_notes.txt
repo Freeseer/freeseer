@@ -1,0 +1,11 @@
+
+Differences in 1.9.7 
+- removed dependency on alsa-audio
+- provided correct (minimal) package dependencies for Fedora/Ubuntu
+- talks.txt moved to ${HOME}/.freeseer/
+- some prep work for rpm and deb packages
+
+Differences in 1.9.6
+- initial version of release_notes.txt
+- tuned gstreamer settings to improve video quality on Fedora
+- reduced frame rate to lower CPU load
