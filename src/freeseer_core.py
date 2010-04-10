@@ -32,7 +32,9 @@ class FreeseerCore:
     '''
     Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
     '''
-    def __init__(self):
+    def __init__(self, ui):
+        self.ui = ui
+        
         logging.config.fileConfig("config/logging.conf")
         self.logger = logging.getLogger("root")
         self.logger.info("Logging successfully started")
@@ -167,3 +169,7 @@ class FreeseerCore:
         else:
             self.freeseer.disable_audio_feedback()
             self.logger.info('Audio Feedback Deactivated')
+
+    def audioFeedbackEvent(self, percent):
+        event_type = 'audio_feedback'
+        self.ui.coreEvent(event_type, percent)
