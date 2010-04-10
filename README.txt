@@ -24,7 +24,7 @@ On Fedora Core:
     “sudo yum install PyQt4 python-alsaaudio make PyQt4-devel”
 
 On Ubuntu:
-    “sudo apt-get install python-qt4 python-alsaaudio make PyQt4-devel”
+    “sudo apt-get install git-core pyqt4-dev-tools python-alsaaudio”
 
 
 Once you have the prerequisite componets, build freeseer by changing
