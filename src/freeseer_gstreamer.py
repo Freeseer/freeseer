@@ -124,7 +124,10 @@ class Freeseer:
                 
                 # This is an inaccurate representation of decibels into percent
                 # conversion, this code should be revisited.
-                percent = (int(round(rms_dB)) + 50) * 2
+                try:
+                    percent = (int(round(rms_dB)) + 50) * 2
+                except OverflowError:
+                    percent = 0
                 self.core.audioFeedbackEvent(percent)
             
     def on_sync_message(self, bus, message):
