@@ -88,6 +88,7 @@ class Config:
         with open(self.configfile, 'w') as configfile:
             config.write(configfile)
             
+# Config class test code
 if __name__ == "__main__":
     config = Config()
     print('\nTesting freeseer config file')
