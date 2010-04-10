@@ -24,8 +24,6 @@
 import os
 import sys
 import time
-import alsaaudio
-import audioop
 
 from PyQt4 import QtGui, QtCore
 
@@ -78,7 +76,7 @@ class MainApp(QtGui.QMainWindow):
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
 
-        self.core = FreeseerCore()
+        self.core = FreeseerCore(self)
 
         # get available video sources
         vidsrcs = self.core.get_video_sources()
@@ -124,9 +122,7 @@ class MainApp(QtGui.QMainWindow):
 
         # setup audio feedback slider
         self.ui.audioFeedbackSlider.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.ui.audioFeedbackSlider.setRange(1, 32768)
-        self.volcheck = volcheck(self)
-        self.volcheck.start()
+        self.ui.audioFeedbackSlider.setRange(1, 100)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
@@ -249,35 +245,14 @@ class MainApp(QtGui.QMainWindow):
                 self.show()
             else: self.hide()
 
+    def coreEvent(self, event_type, value):
+        if event_type == 'audio_feedback':
+            self.ui.audioFeedbackSlider.setValue(value)
+
     def closeEvent(self, event):
         self.core.logger.info('Exiting freeseer...')
-        self.volcheck.run = False
         self.core.stop()
         event.accept()
-
-class volcheck(QtCore.QThread):
-    '''
-    Threaded class for getting mic volume information and returning the current input from mic.
-    '''
-    def __init__(self, parent):
-        QtCore.QThread.__init__(self, parent)
-        self.parent = parent
-
-    def run(self):
-        self.run = True
-        inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NONBLOCK)
-        inp.setchannels(2)
-        inp.setrate(8000)
-        inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
-
-        inp.setperiodsize(160)
-
-        while self.run:
-            l,data = inp.read()
-            if l:
-                #print audioop.max(data, 2)
-                self.parent.ui.audioFeedbackSlider.setValue(audioop.max(data, 2))
-                time.sleep(.02)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

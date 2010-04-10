@@ -69,6 +69,8 @@ class Freeseer:
         self.sndtee = gst.element_factory_make('tee', 'sndtee')
         self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
+        self.audiolevel = gst.element_factory_make('level', 'audiolevel')
+        self.audiolevel.set_property('interval', 20000000)
         self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
 
         # GST Muxer
@@ -79,14 +81,14 @@ class Freeseer:
         # GST Add Components
         self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
         self.player.add(self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace)
-        self.player.add(self.sndsrc, self.sndtee, self.sndqueue1, self.audioconvert, self.sndcodec)
+        self.player.add(self.sndsrc, self.sndtee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec)
         self.player.add(self.mux, self.filesink)
 
         # GST Link Components
         gst.element_link_many(self.vidsrc, self.cspace, self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace, self.vidtee)
         gst.element_link_many(self.vidtee, self.vidqueue1, self.vidcodec, self.mux)
         gst.element_link_many(self.sndsrc, self.sndtee)
-        gst.element_link_many(self.sndtee, self.sndqueue1, self.audioconvert, self.sndcodec, self.mux)
+        gst.element_link_many(self.sndtee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
@@ -97,6 +99,7 @@ class Freeseer:
 
     def on_message(self, bus, message):
         t = message.type
+      
         if t == gst.MESSAGE_EOS:
             self.player.set_state(gst.STATE_NULL)
         elif t == gst.MESSAGE_ERROR:
@@ -110,7 +113,20 @@ class Freeseer:
                     self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
                     self.change_videosrc('v4lsrc', self.viddev)
                     self.player.set_state(gst.STATE_PLAYING)
+                    
+        elif message.structure is not None:
+            s = message.structure.get_name()
 
+            # Check the mic audio levels and pass it up as a percent value to core
+            if s == 'level':
+                msg = message.structure.to_string()
+                rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
+                
+                # This is an inaccurate representation of decibels into percent
+                # conversion, this code should be revisited.
+                percent = (int(round(rms_dB)) + 50) * 2
+                self.core.audioFeedbackEvent(percent)
+            
     def on_sync_message(self, bus, message):
         if message.structure is None:
             return
