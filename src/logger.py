@@ -39,7 +39,6 @@ class Logger():
         
         # If logger.conf does not exist then create it with some defaults.
         if not os.path.isfile(self.logconf):
-            print 'hello'
             self.writeConfig()
             
         logging.config.fileConfig(self.logconf)
