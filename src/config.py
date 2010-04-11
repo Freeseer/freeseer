@@ -36,7 +36,7 @@ class Config:
         
         # Config location
         self.configdir = configdir
-        self.configfile = "%sfreeseer.cfg" % self.configdir
+        self.configfile = "%sfreeseer.conf" % self.configdir
         
         # Set default settings
         self.videodir = '%s/Videos/' % self.userhome
