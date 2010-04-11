@@ -85,7 +85,7 @@ class MainApp(QtGui.QMainWindow):
         for src in sndsrcs:
             self.ui.audioSourceList.addItem(src)
 
-        self.load_talks()        
+        self.load_talks()
         self.load_settings()
 
         # setup systray
@@ -182,11 +182,16 @@ class MainApp(QtGui.QMainWindow):
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
+        resolution = self.ui.resolutionComboBox.findText(self.core.config.resolution)
+        if not (resolution < 0): self.ui.resolutionComboBox.setCurrentIndex(resolution)
         
     def save_settings(self):
         self.core.config.videodir = self.ui.videoDirectoryLineEdit.text()
         self.core.config.talksdir = self.ui.talksFileLineEdit.text()
+        self.core.config.resolution = str(self.ui.resolutionComboBox.currentText())
         self.core.config.writeConfig()
+        
+        self.change_output_resolution()
         
     def browse_video_directory(self):
         directory = self.ui.videoDirectoryLineEdit.text()
@@ -208,6 +213,12 @@ class MainApp(QtGui.QMainWindow):
         src = self.videosrc
         self.core.logger.log.debug('Changing video device to ' + dev)
         self.core.change_videosrc(src, dev)
+        
+    def change_output_resolution(self):
+        s = str(self.ui.resolutionComboBox.currentText()).split('x')
+        width = s[0]
+        height = s[1]
+        self.core.change_output_resolution(width, height)
 
     def change_audio_device(self):
         src = str(self.ui.audioSourceList.currentText())

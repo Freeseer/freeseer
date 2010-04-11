@@ -44,6 +44,9 @@ class FreeseerCore:
 
         # Start Freeseer Recording Backend
         self.freeseer = Freeseer(self)
+        resolution = self.config.resolution.split('x')
+        self.change_output_resolution(resolution[0], resolution[1])
+        
         self.spaces = False
         self.logger.log.info("Core initialized")
 
@@ -128,6 +131,10 @@ class FreeseerCore:
         ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_videosrc(vid_source, vid_device)
         self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
+
+    def change_output_resolution(self, width, height):
+        self.freeseer.change_output_resolution(width, height)
+        self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
 
     def change_soundsrc(self, snd_source):
         ''' Informs backend of new audio source to use when recording. '''
