@@ -23,9 +23,10 @@ import datetime
 import time
 import logging
 import logging.config
-
+ 
 from freeseer_gstreamer import *
 from config import Config
+from logger import Logger
 
 __version__=u'1.9.6'
 
@@ -36,24 +37,22 @@ class FreeseerCore:
     def __init__(self, ui):
         self.ui = ui
         
-        logging.config.fileConfig("config/logging.conf")
-        self.logger = logging.getLogger("root")
-        self.logger.info("Logging successfully started")
-        
         # Read in config information
-        self.config = Config()
+        configdir = os.path.expanduser('~/.freeseer/')
+        self.config = Config(configdir)
+        self.logger = Logger(configdir)
 
         # Start Freeseer Recording Backend
         self.freeseer = Freeseer(self)
         self.spaces = False
-        self.logger.info("Core initialized")
+        self.logger.log.info("Core initialized")
 
     def get_video_devices(self, device_type):
         '''
         Returns available video devices.
         '''
         viddevs = self.freeseer.get_video_devices(device_type)
-        self.logger.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
+        self.logger.log.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
         return viddevs
 
     def get_video_sources(self):
@@ -61,7 +60,7 @@ class FreeseerCore:
         Returns supported video sources.
         '''
         vidsrcs = self.freeseer.get_video_sources('all')
-        self.logger.debug('Available video sources: ' + str(vidsrcs))
+        self.logger.log.debug('Available video sources: ' + str(vidsrcs))
         return vidsrcs
 
     def get_audio_sources(self):
@@ -69,7 +68,7 @@ class FreeseerCore:
         Returns supported audio sources.
         '''
         sndsrcs = self.freeseer.get_audio_sources()
-        self.logger.debug('Available audio sources: ' + str(sndsrcs))
+        self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
         return sndsrcs
 
     def get_talk_titles(self):
@@ -80,7 +79,7 @@ class FreeseerCore:
         try:
             f = open(self.config.talksfile, 'r')
         except:
-            self.logger.debug('talks.txt not found, creating default.')
+            self.logger.log.debug('talks.txt not found, creating default.')
             f = open(self.config.talksfile, 'w')
             f.writelines('T103 - Thanh Ha - Intro to Freeseer')
             f.close()
@@ -92,9 +91,9 @@ class FreeseerCore:
         for line in lines:
             talk_titles.append(line.rstrip())
 
-        self.logger.debug('Available talk titles:')
+        self.logger.log.debug('Available talk titles:')
         for talk in talk_titles:
-            self.logger.debug('  ' + talk)
+            self.logger.log.debug('  ' + talk)
         return talk_titles
 
     def save_talk_titles(self, talk_list):
@@ -106,7 +105,7 @@ class FreeseerCore:
         f = open(self.config.talksfile, 'w')
         f.writelines(talk_list)
         f.close()
-        self.logger.debug('Saved talks to file')
+        self.logger.log.debug('Saved talks to file')
 
     def get_record_name(self, filename):
         '''
@@ -114,7 +113,7 @@ class FreeseerCore:
         This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
         recordname = self.make_record_name(filename)
-        self.logger.debug('Set record name to ' + recordname)
+        self.logger.log.debug('Set record name to ' + recordname)
         return recordname
 
     def make_record_name(self, filename):
@@ -128,7 +127,7 @@ class FreeseerCore:
     def change_videosrc(self, vid_source, vid_device):
         ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_videosrc(vid_source, vid_device)
-        self.logger.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
+        self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
 
     def change_soundsrc(self, snd_source):
         ''' Informs backend of new audio source to use when recording. '''
@@ -141,29 +140,29 @@ class FreeseerCore:
         record_name = self.get_record_name(filename)
         record_location = self.config.videodir + record_name
         self.freeseer.record(record_location)
-        self.logger.info('Recording started')
+        self.logger.log.info('Recording started')
 
     def stop(self):
         ''' Informs backend to stop recording. '''
         self.freeseer.stop()
-        self.logger.info('Recording stopped')
+        self.logger.log.info('Recording stopped')
 
     def preview(self, enable=False, window_id=None):
         ''' Enable/Disable the video preview window. '''
         if enable == True:
             self.freeseer.enable_preview(window_id)
-            self.logger.info('Video Preview Activated')
+            self.logger.log.info('Video Preview Activated')
         else:
-            self.logger.info('Video Preview Deactivated')
+            self.logger.log.info('Video Preview Deactivated')
 
     def audioFeedback(self, enable=False):
         ''' Enable/Disable the audio preview. '''
         if enable == True:
             self.freeseer.enable_audio_feedback()
-            self.logger.info('Audio Feedback Activated')
+            self.logger.log.info('Audio Feedback Activated')
         else:
             self.freeseer.disable_audio_feedback()
-            self.logger.info('Audio Feedback Deactivated')
+            self.logger.log.info('Audio Feedback Deactivated')
 
     def audioFeedbackEvent(self, percent):
         event_type = 'audio_feedback'

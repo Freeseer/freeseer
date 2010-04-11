@@ -187,12 +187,12 @@ class MainApp(QtGui.QMainWindow):
         '''
         dev = str(self.ui.videoDeviceList.currentText())
         src = self.videosrc
-        self.core.logger.debug('Changing video device to ' + dev)
+        self.core.logger.log.debug('Changing video device to ' + dev)
         self.core.change_videosrc(src, dev)
 
     def change_audio_device(self):
         src = str(self.ui.audioSourceList.currentText())
-        self.core.logger.debug('Changing audio device to ' + src)
+        self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.change_soundsrc(src)
 
     def toggle_audio_feedback(self):
@@ -273,7 +273,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioFeedbackSlider.setValue(value)
 
     def closeEvent(self, event):
-        self.core.logger.info('Exiting freeseer...')
+        self.core.logger.log.info('Exiting freeseer...')
         self.core.stop()
         event.accept()
 

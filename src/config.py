@@ -27,7 +27,7 @@ class Config:
     This class is responsible for reading/writing settings to/from a config file.
     '''
 
-    def __init__(self):
+    def __init__(self, configdir):
         '''
         Initialize settings from a configfile
         '''
@@ -35,12 +35,12 @@ class Config:
         self.userhome = os.path.expanduser('~')
         
         # Config location
-        self.home = '%s/.freeseer/' % self.userhome
-        self.configfile = "%sfreeseer.cfg" % self.home
+        self.configdir = configdir
+        self.configfile = "%sfreeseer.cfg" % self.configdir
         
         # Set default settings
         self.videodir = '%s/Videos/' % self.userhome
-        self.talksfile = '%stalks.txt' % self.home
+        self.talksfile = '%stalks.txt' % self.configdir
         
         # Read in the config file
         self.readConfig()
@@ -82,7 +82,7 @@ class Config:
         
         # Make sure the config directory exists before writing to the configfile 
         try:
-            os.makedirs(self.home)
+            os.makedirs(self.configdir)
         except OSError:
             print('freeseer directory exists.')
         
@@ -92,7 +92,7 @@ class Config:
             
 # Config class test code
 if __name__ == "__main__":
-    config = Config()
+    config = Config(os.path.expanduser('~/.freeseer/'))
     print('\nTesting freeseer config file')
     print('Video Directory at %s' % config.videodir)
     print('Talks file at %s' % config.talksfile)
