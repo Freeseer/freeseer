@@ -41,7 +41,8 @@ class FreeseerCore:
         self.logger.info("Logging successfully started")
         
         # Read in config information
-        self.config = Config()
+        configdir = os.path.expanduser('~/.freeseer/')
+        self.config = Config(configdir)
 
         # Start Freeseer Recording Backend
         self.freeseer = Freeseer(self)
