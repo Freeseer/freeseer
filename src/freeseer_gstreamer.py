@@ -188,7 +188,7 @@ class Freeseer:
         for codec in video_codec_list:
             try:
                 gst.element_factory_make(codec, 'testcodec')
-                video_codecs.append(src)
+                video_codecs.append(codec)
                 self.core.logger.log.debug(codec + ' is available.')
             except:
                 self.core.logger.log.debug(codec + ' is not available')
