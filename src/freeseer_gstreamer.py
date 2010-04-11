@@ -104,13 +104,13 @@ class Freeseer:
             self.player.set_state(gst.STATE_NULL)
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
-            self.core.logger.debug('Error: ' + str(err) + str(debug))
+            self.core.logger.log.log.debug('Error: ' + str(err) + str(debug))
             self.player.set_state(gst.STATE_NULL)
 
             if (err.startswith('Could not get/set settings from/on resource.')):
                 # if v4l2src driver does not work, fallback to the older v4lsrc
                 if (debug.startswith('v4l2_calls.c')):
-                    self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
+                    self.core.logger.log.debug('v4l2src failed, falling back to v4lsrc')
                     self.change_videosrc('v4lsrc', self.viddev)
                     self.player.set_state(gst.STATE_PLAYING)
                     
@@ -175,9 +175,9 @@ class Freeseer:
             try:
                 gst.element_factory_make(src, 'testsrc')
                 snd_sources.append(src)
-                self.core.logger.debug(src + ' is available.')
+                self.core.logger.log.debug(src + ' is available.')
             except:
-                self.core.logger.debug(src + ' is not available')
+                self.core.logger.log.debug(src + ' is not available')
 
         return snd_sources
 
@@ -189,9 +189,9 @@ class Freeseer:
             try:
                 gst.element_factory_make(codec, 'testcodec')
                 video_codecs.append(src)
-                self.core.logger.debug(codec + ' is available.')
+                self.core.logger.log.debug(codec + ' is available.')
             except:
-                self.core.logger.debug(codec + ' is not available')
+                self.core.logger.log.debug(codec + ' is not available')
         return video_codecs
 
     def _get_devices(self, path, index):
@@ -205,9 +205,9 @@ class Freeseer:
         return devices
 
     def _dvdemux_padded(self, dbin, pad):
-        self.core.logger.debug("dvdemux got pad %s" % pad.get_name())
+        self.core.logger.log.debug("dvdemux got pad %s" % pad.get_name())
         if pad.get_name() == 'video':
-            self.core.logger.debug('Linking dvdemux to queue1')
+            self.core.logger.log.debug('Linking dvdemux to queue1')
             self.dv1394dvdemux.link(self.dv1394q1)
 
     def change_videosrc(self, new_source, new_device):
@@ -255,16 +255,16 @@ class Freeseer:
         old_sndsrc = self.sndsrc
 
         try:
-            self.core.logger.debug('loading ' + self.soundsrc)
+            self.core.logger.log.debug('loading ' + self.soundsrc)
             self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
         except:
-            self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
+            self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
             return False
 
         self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
-        self.core.logger.debug(self.soundsrc + ' loaded.')
+        self.core.logger.log.debug(self.soundsrc + ' loaded.')
         return True
 
     def record(self, filename):
@@ -292,10 +292,10 @@ class Freeseer:
         # check if the new video codec is valid
         # if not return False
         try:
-            self.core.logger.debug('checking availability of ' + self.video_codec)
+            self.core.logger.log.debug('checking availability of ' + self.video_codec)
             self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         except:
-            self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
+            self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
             return False
 
         # codec is available for use, now set pipeline to use it
