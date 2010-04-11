@@ -183,6 +183,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
                    <widget class="QRadioButton" name="localDesktopButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Select this option to record the local desktop. 
 Freeseer currently only supports recording the full desktop. 
@@ -198,6 +201,9 @@ We plan to support window and area modes in future versions.</string>
                   </item>
                   <item>
                    <widget class="QRadioButton" name="hardwareButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Select hardware to record from either a usb device or firewire device.
 
@@ -287,6 +293,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
                    <widget class="QRadioButton" name="usbsrcButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Use this option to record from a usb device.
 
@@ -304,6 +313,9 @@ v4l2src does not work.</string>
                   </item>
                   <item>
                    <widget class="QRadioButton" name="firewiresrcButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Firewire mode uses dv1394src as the video driver.</string>
                     </property>
@@ -354,6 +366,14 @@ v4l2src does not work.</string>
            </layout>
           </widget>
           <widget class="QWidget" name="page_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>177</width>
+             <height>64</height>
+            </rect>
+           </property>
            <attribute name="label">
             <string>File Locations</string>
            </attribute>
@@ -409,8 +429,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>219</width>
+             <height>74</height>
             </rect>
            </property>
            <attribute name="label">

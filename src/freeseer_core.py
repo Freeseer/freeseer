@@ -59,7 +59,7 @@ class FreeseerCore:
         '''
         Returns supported video sources.
         '''
-        vidsrcs = self.freeseer.get_video_sources('all')
+        vidsrcs = self.freeseer.get_video_sources()
         self.logger.log.debug('Available video sources: ' + str(vidsrcs))
         return vidsrcs
 

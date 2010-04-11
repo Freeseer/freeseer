@@ -77,9 +77,8 @@ class MainApp(QtGui.QMainWindow):
 
         self.core = FreeseerCore(self)
 
-        # get available video sources
-        vidsrcs = self.core.get_video_sources()
-        self.videosrc = vidsrcs[0]
+        # get supported video sources and enable the UI for supported devices.
+        self.configure_supported_video_sources()
 
         # get available audio sources
         sndsrcs = self.core.get_audio_sources()
@@ -104,10 +103,10 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         # connections for video source radio buttons
-        self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
-        self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
-        self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
-        self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
         self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
@@ -129,21 +128,42 @@ class MainApp(QtGui.QMainWindow):
         self.core.preview(True, self.ui.previewWidget.winId())
 
         # Setup default sources
-        self._toggled_video_source()
+        self.toggle_video_source()
         self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
 
-    def _toggled_video_source(self):
+    def configure_supported_video_sources(self):
+        vidsrcs = self.core.get_video_sources()
+        for src in vidsrcs:
+            if (src == 'desktop'): self.ui.localDesktopButton.setEnabled(True)
+            elif (src == 'usb'):
+                self.ui.hardwareButton.setEnabled(True)
+                self.ui.usbsrcButton.setEnabled(True)
+            elif (src == 'firewire'):
+                self.ui.hardwareButton.setEnabled(True)
+                self.ui.firewiresrcButton.setEnabled(True)
+                
+        self.videosrc = vidsrcs[0]
+        if (self.videosrc == 'desktop'):
+            self.ui.localDesktopButton.setChecked(True)
+        elif (self.videosrc == 'usb'):
+            self.ui.hardwareButton.setChecked(True)
+            self.ui.usbsrcButton.setChecked(True)
+        elif (self.videosrc == 'firewire'):
+            self.ui.hardwareButton.setChecked(True)
+            self.ui.firewiresrcButton.setChecked(True)
+
+    def toggle_video_source(self):
         '''
         Updates the GUI when the user selects a different video source and
         configures core with new video source information
         '''
         # recording the local desktop
-        if (self.ui.localDesktopButton.isChecked()): self.videosrc = 'ximagesrc'
+        if (self.ui.localDesktopButton.isChecked()): self.videosrc = 'desktop'
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
-            if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'v4l2src'
-            elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'dv1394src'
+            if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'usb'
+            elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'firewire'
             else: return
 
             # add available video devices for selected source

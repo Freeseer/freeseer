@@ -139,26 +139,14 @@ class Freeseer:
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(self.window_id)
 
-    def get_video_sources(self, stype):
-        vid_source = None
-        if stype == 'usb':
-            vid_source = ['v4l2src', 'v4lsrc']
-        elif stype == 'firewire':
-            vid_source = ['dv1394src']
-        elif stype == 'local':
-            vid_source = ['ximagesrc']
-        # return all types
-        else:
-            vid_source = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
-        return vid_source
+    def get_video_sources(self):
+        return ['desktop', 'usb', 'firewire']
 
     def get_video_devices(self, videosrc):
         vid_devices = None
-        if videosrc == 'v4l2src':
+        if videosrc == 'usb':
             vid_devices = self._get_devices('/dev/video', 0)
-        elif videosrc == 'v4lsrc':
-            vid_devices = self._get_devices('/dev/video', 0)
-        elif videosrc == 'dv1394src':
+        elif videosrc == 'firewire':
             vid_devices = self._get_devices('/dev/fw', 1)
         # return all types
         else:
@@ -214,7 +202,7 @@ class Freeseer:
         '''
         Changes the video source
         '''
-        if (self.viddrv == 'dv1394src'):
+        if (self.viddrv == 'firewire'):
             self.player.remove(self.dv1394q1)
             self.player.remove(self.dv1394q2)
             self.player.remove(self.dv1394dvdemux)
@@ -227,14 +215,15 @@ class Freeseer:
         self.viddrv = new_source
         self.viddev = new_device
         self.player.remove(self.vidsrc)
-        self.vidsrc = gst.element_factory_make(self.viddrv, 'vidsrc')
-        self.player.add(self.vidsrc)
 
-        if (self.viddrv == 'v4lsrc'):
+        if (self.viddrv == 'desktop'):
+            self.vidsrc = gst.element_factory_make('ximagesrc', 'vidsrc')
+        elif (self.viddrv == 'usb'):
+            self.vidsrc = gst.element_factory_make('v4l2src', 'vidsrc')
             self.vidsrc.set_property('device', self.viddev)
-        elif (self.viddrv == 'v4l2src'):
-            self.vidsrc.set_property('device', self.viddev)
-        elif (self.viddrv == 'dv1394src'):
+        elif (self.viddrv == 'firewire'):
+            self.vidsrc = gst.element_factory_make('dv1394src', 'vidsrc')
+            self.player.add(self.vidsrc)
             self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
             self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
             self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
@@ -242,9 +231,10 @@ class Freeseer:
             self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
             self.vidsrc.link(self.dv1394dvdemux)
             self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
-            gst.element_link_many( self.dv1394q1, self.dv1394dvdec, self.cspace)
+            gst.element_link_many(self.dv1394q1, self.dv1394dvdec, self.cspace)
             return
 
+        self.player.add(self.vidsrc)
         gst.element_link_many(self.vidsrc, self.cspace)
 
     def change_soundsrc(self, new_source):
