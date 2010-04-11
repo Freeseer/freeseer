@@ -2,7 +2,9 @@
 Differences in 1.9.7 
 - removed dependency on alsa-audio
 - provided correct (minimal) package dependencies for Fedora/Ubuntu
-- talks.txt moved to ${HOME}/.freeseer/
+- config data now saved in ${HOME}/.freeseer/freeseer.conf
+- list of talks (talks.txt) moved to ${HOME}/.freeseer/
+- videos now save in ${HOME}/Videos/
 - some prep work for rpm and deb packages
 
 Differences in 1.9.6
