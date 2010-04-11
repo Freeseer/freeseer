@@ -63,7 +63,6 @@ class AboutDialog(QtGui.QDialog):
         self.ui.setupUi(self)
         self.ui.aboutInfo.setText(ABOUT_INFO)
 
-
 class MainApp(QtGui.QMainWindow):
     '''
     Freeseer main gui class
