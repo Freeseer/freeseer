@@ -87,8 +87,8 @@ class MainApp(QtGui.QMainWindow):
         for src in sndsrcs:
             self.ui.audioSourceList.addItem(src)
 
-        # add available talk titles
-        self.load_talks()
+        self.load_talks()        
+        self.load_settings()
 
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -109,6 +109,12 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
         self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self._toggled_video_source)
+        self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
+        self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
+        
+        # connections for configure > File Locations
+        self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
+        self.connect(self.ui.talksFileButton, QtCore.SIGNAL('clicked()'), self.browse_talksfile)
 
         # edit talks tab connections
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
@@ -153,6 +159,26 @@ class MainApp(QtGui.QMainWindow):
         # finally load the changes into core
         videodev = str(self.ui.videoDeviceList.currentText())
         self.core.change_videosrc(self.videosrc, videodev)
+        
+    def load_settings(self):
+        self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
+        self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
+        
+    def save_settings(self):
+        self.core.config.videodir = self.ui.videoDirectoryLineEdit.text()
+        self.core.config.talksdir = self.ui.talksFileLineEdit.text()
+        self.core.config.writeConfig()
+        
+    def browse_video_directory(self):
+        directory = self.ui.videoDirectoryLineEdit.text()
+        videodir = QtGui.QFileDialog.getExistingDirectory(self, 'Select Video Directory', directory) + '/'
+        self.ui.videoDirectoryLineEdit.setText(videodir)
+        
+    def browse_talksfile(self):
+        directory = str(self.ui.talksFileLineEdit.text()).rsplit('/', 1)[0]
+        talksfile = QtGui.QFileDialog.getOpenFileName(self, 'Select Talks File', directory, 'Talks File (*.txt)')
+        if talksfile:
+            self.ui.talksFileLineEdit.setText(talksfile)
 
     def change_video_device(self):
         '''
