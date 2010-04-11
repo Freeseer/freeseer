@@ -183,6 +183,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
                    <widget class="QRadioButton" name="localDesktopButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Select this option to record the local desktop. 
 Freeseer currently only supports recording the full desktop. 
@@ -198,6 +201,9 @@ We plan to support window and area modes in future versions.</string>
                   </item>
                   <item>
                    <widget class="QRadioButton" name="hardwareButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Select hardware to record from either a usb device or firewire device.
 
@@ -287,6 +293,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
                    <widget class="QRadioButton" name="usbsrcButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Use this option to record from a usb device.
 
@@ -304,6 +313,9 @@ v4l2src does not work.</string>
                   </item>
                   <item>
                    <widget class="QRadioButton" name="firewiresrcButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
                     <property name="toolTip">
                      <string>Firewire mode uses dv1394src as the video driver.</string>
                     </property>
@@ -354,6 +366,14 @@ v4l2src does not work.</string>
            </layout>
           </widget>
           <widget class="QWidget" name="page_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>177</width>
+             <height>64</height>
+            </rect>
+           </property>
            <attribute name="label">
             <string>File Locations</string>
            </attribute>
@@ -416,45 +436,39 @@ v4l2src does not work.</string>
            <attribute name="label">
             <string>Advanced Settings</string>
            </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QGroupBox" name="groupBox_4">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="toolTip">
-               <string>This feature has not yet been implemented.</string>
-              </property>
-              <property name="title">
-               <string>Advanced (Not Supported)</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_5">
-               <item>
-                <widget class="QLabel" name="label_6">
+             <layout class="QGridLayout" name="advancedGrid">
+              <item row="0" column="1">
+               <widget class="QComboBox" name="resolutionComboBox">
+                <item>
                  <property name="text">
-                  <string>Video scale size</string>
+                  <string>640x480</string>
                  </property>
-                 <property name="buddy">
-                  <cstring>comboBox_3</cstring>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>800x600</string>
                  </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="comboBox_3">
-                 <item>
-                  <property name="text">
-                   <string>640x480</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>1024x768</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </widget>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>1024x768</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="resolutionLabel">
+                <property name="text">
+                 <string>Video scale size</string>
+                </property>
+                <property name="buddy">
+                 <cstring>resolutionComboBox</cstring>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>

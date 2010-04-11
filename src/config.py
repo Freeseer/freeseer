@@ -41,6 +41,7 @@ class Config:
         # Set default settings
         self.videodir = '%s/Videos/' % self.userhome
         self.talksfile = '%stalks.txt' % self.configdir
+        self.resolution = '800x600'
         
         # Read in the config file
         self.readConfig()
@@ -66,8 +67,13 @@ class Config:
             return
                 
         # Config file exists, read in the settings
-        self.videodir = config.get('Global', 'video_directory')
-        self.talksfile = config.get('Global', 'talks_file')
+        try:
+            self.videodir = config.get('Global', 'video_directory')
+            self.talksfile = config.get('Global', 'talks_file')
+            self.resolution = config.get('Global', 'resolution')
+        except:
+            print('Corrupt config found, creating a new one.')
+            self.writeConfig()
         
     def writeConfig(self):
         '''
@@ -79,6 +85,7 @@ class Config:
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'talks_file', self.talksfile)
+        config.set('Global', 'resolution', self.resolution)
         
         # Make sure the config directory exists before writing to the configfile 
         try:
