@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>590</width>
-    <height>503</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -164,8 +164,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>568</width>
+             <height>261</height>
             </rect>
            </property>
            <attribute name="label">
@@ -354,6 +354,14 @@ v4l2src does not work.</string>
            </layout>
           </widget>
           <widget class="QWidget" name="page_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>192</width>
+             <height>80</height>
+            </rect>
+           </property>
            <attribute name="label">
             <string>File Locations</string>
            </attribute>
@@ -409,8 +417,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>249</width>
+             <height>81</height>
             </rect>
            </property>
            <attribute name="label">
@@ -584,7 +592,7 @@ v4l2src does not work.</string>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>27</height>
+            <height>29</height>
            </size>
           </property>
           <property name="html">
@@ -599,7 +607,7 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>PushButton</string>
+           <string>Load</string>
           </property>
          </widget>
         </item>
