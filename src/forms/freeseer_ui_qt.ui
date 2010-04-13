@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>freeseer - video studio in a backpack</string>
+   <string>freeseer - portable presentation recording station</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
