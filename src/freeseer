@@ -252,9 +252,9 @@ class MainApp(QtGui.QMainWindow):
             self.statusBar().showMessage('recording...')
 
     def add_talk(self):
-        talk = ""
-        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + " - "
-        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + " - "
+        talk = u""
+        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + u" - "
+        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + u" - "
         talk += self.ui.titleEdit.text()
 
         # Do not add talks if they are empty strings

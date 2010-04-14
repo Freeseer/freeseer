@@ -48,7 +48,7 @@ class FreeseerCore:
         self.change_output_resolution(resolution[0], resolution[1])
         
         self.spaces = False
-        self.logger.log.info("Core initialized")
+        self.logger.log.info(u"Core initialized")
 
     def get_video_devices(self, device_type):
         '''
