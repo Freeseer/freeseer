@@ -167,7 +167,7 @@ class MainApp(QtGui.QMainWindow):
                 self.videosrc = 'desktop'
                 self.ui.areaButton.setEnabled(False)
             elif (self.ui.recordLocalAreaButton.isChecked()):
-                self.videosrc = 'desktop_area'
+                self.videosrc = 'desktop'
                 self.ui.areaButton.setEnabled(True)
 
         # recording from hardware such as usb or fireware device
@@ -240,6 +240,7 @@ class MainApp(QtGui.QMainWindow):
         self.start_y = start_y
         self.end_x = end_x
         self.end_y = end_y
+        self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
 
     def change_audio_device(self):
