@@ -30,6 +30,7 @@ from PyQt4 import QtGui, QtCore
 from freeseer_core import *
 from freeseer_ui_qt import *
 from freeseer_about import *
+from qt_area_selector import QtAreaSelector
 
 __version__=u'1.9.6'
 
@@ -104,9 +105,12 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         # connections for video source radio buttons
         self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        self.connect(self.ui.recordLocalDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        self.connect(self.ui.recordLocalAreaButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
         self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
         self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
         self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        self.connect(self.ui.areaButton, QtCore.SIGNAL('clicked()'), self.area_select)
         self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
@@ -158,7 +162,13 @@ class MainApp(QtGui.QMainWindow):
         configures core with new video source information
         '''
         # recording the local desktop
-        if (self.ui.localDesktopButton.isChecked()): self.videosrc = 'desktop'
+        if (self.ui.localDesktopButton.isChecked()): 
+            if (self.ui.recordLocalDesktopButton.isChecked()):
+                self.videosrc = 'desktop'
+                self.ui.areaButton.setEnabled(False)
+            elif (self.ui.recordLocalAreaButton.isChecked()):
+                self.videosrc = 'desktop_area'
+                self.ui.areaButton.setEnabled(True)
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
@@ -219,6 +229,18 @@ class MainApp(QtGui.QMainWindow):
         width = s[0]
         height = s[1]
         self.core.change_output_resolution(width, height)
+        
+    def area_select(self):
+        self.area_selector = QtAreaSelector(self)
+        self.area_selector.show()
+        self.core.logger.log.info('Desktop area selector started.')
+    
+    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
+        self.start_x = start_x
+        self.start_y = start_y
+        self.end_x = end_x
+        self.end_y = end_y
+        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
 
     def change_audio_device(self):
         src = str(self.ui.audioSourceList.currentText())
