@@ -26,9 +26,25 @@ import sys
 from PyQt4 import QtCore, QtGui
 
 class QtAreaSelector(QtGui.QWidget):
+    '''
+    This class provides a simple app for allowing the user to select an area
+    on the screen by pressing left click and dragging the mouse. The start
+    points are recorded when the user presses the left mouse button and the
+    end points are recorded when the user releases the mouse button. The
+    result start and end points are then returned to the parent class as
+    through the desktopAreaEvent() function. 
+    
+    The parent class using this app must implement the deskopAreaEvent
+    function.
+    '''
     def __init__(self, parent=None):
+        '''
+        Create a translucent fullscreen widgit and initialize variables
+        used in this app.
+        '''
         QtGui.QWidget.__init__(self, None, QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground) # Translucent
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowState(QtCore.Qt.WindowFullScreen)
         
         self.parent = parent
@@ -40,10 +56,16 @@ class QtAreaSelector(QtGui.QWidget):
         self.current_y = 0
 
     def mousePressEvent(self, event):
+        '''
+        Save the users starting x/y points.
+        '''
         self.start_x = event.globalX()
         self.start_y = event.globalY()
         
     def mouseReleaseEvent(self, event):
+        '''
+        Save the users end x/y points and close the area selector app.
+        '''
         self.end_x = event.globalX()
         self.end_y = event.globalY()
         if not self.parent == None:
@@ -56,6 +78,11 @@ class QtAreaSelector(QtGui.QWidget):
         self.repaint()
         
     def paintEvent(self, event):
+        '''
+        Paints area the user is currently selecting starting from point
+        start_x and, start_y ending at the position of the user's mouse
+        currently on screen.
+        '''
         paint = QtGui.QPainter()
         paint.begin(self)
         paint.setPen(QtCore.Qt.blue)
