@@ -76,6 +76,9 @@ class QtAreaSelector(QtGui.QWidget):
         self.current_x = event.globalX()
         self.current_y = event.globalY()
         self.repaint()
+
+        text = "Start: %sx%s \nEnd: %sx%s" % (self.start_x, self.start_y, self.current_x, self.current_y)
+        QtGui.QToolTip.showText(event.pos(), text)
         
     def paintEvent(self, event):
         '''
