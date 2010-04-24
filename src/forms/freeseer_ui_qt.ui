@@ -233,6 +233,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                  <layout class="QVBoxLayout" name="verticalLayout_6">
                   <item>
                    <widget class="QRadioButton" name="recordLocalDesktopButton">
+                    <property name="toolTip">
+                     <string>Select this option to record the entire desktop.</string>
+                    </property>
                     <property name="text">
                      <string>Desktop</string>
                     </property>
@@ -260,7 +263,7 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                      <bool>true</bool>
                     </property>
                     <property name="toolTip">
-                     <string>This feature is currently not yet implemented.</string>
+                     <string>Select this option to record an small area of the desktop.</string>
                     </property>
                     <property name="text">
                      <string>Area</string>
