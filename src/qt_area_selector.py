@@ -43,7 +43,7 @@ class QtAreaSelector(QtGui.QWidget):
         used in this app.
         '''
         QtGui.QWidget.__init__(self, None, QtCore.Qt.FramelessWindowHint)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground) # Translucent
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowState(QtCore.Qt.WindowFullScreen)
         
