@@ -237,6 +237,12 @@ class Freeseer:
         self.player.add(self.vidsrc)
         gst.element_link_many(self.vidsrc, self.cspace)
 
+    def set_recording_area(self, start_x, start_y, end_x, end_y):
+        self.vidsrc.set_property('startx', start_x)
+        self.vidsrc.set_property('starty', start_y)
+        self.vidsrc.set_property('endx', end_x)
+        self.vidsrc.set_property('endy', end_y)
+
     def change_output_resolution(self, width, height):
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s' % (width, height)))
 

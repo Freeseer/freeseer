@@ -233,6 +233,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                  <layout class="QVBoxLayout" name="verticalLayout_6">
                   <item>
                    <widget class="QRadioButton" name="recordLocalDesktopButton">
+                    <property name="toolTip">
+                     <string>Select this option to record the entire desktop.</string>
+                    </property>
                     <property name="text">
                      <string>Desktop</string>
                     </property>
@@ -257,13 +260,23 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                   <item>
                    <widget class="QRadioButton" name="recordLocalAreaButton">
                     <property name="enabled">
-                     <bool>false</bool>
+                     <bool>true</bool>
                     </property>
                     <property name="toolTip">
-                     <string>This feature is currently not yet implemented.</string>
+                     <string>Select this option to record an small area of the desktop.</string>
                     </property>
                     <property name="text">
-                     <string>Area (Not Supported)</string>
+                     <string>Area</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="areaButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Set Area</string>
                     </property>
                    </widget>
                   </item>
@@ -429,8 +442,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>203</width>
+             <height>35</height>
             </rect>
            </property>
            <attribute name="label">

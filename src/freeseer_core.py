@@ -132,6 +132,9 @@ class FreeseerCore:
         self.freeseer.change_videosrc(vid_source, vid_device)
         self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
 
+    def set_recording_area(self, x1, y1, x2, y2):
+        self.freeseer.set_recording_area(x1, y1, x2, y2)
+
     def change_output_resolution(self, width, height):
         self.freeseer.change_output_resolution(width, height)
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
