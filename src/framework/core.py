@@ -101,7 +101,7 @@ class FreeseerCore:
 
         self.logger.log.debug('Available talk titles:')
         for talk in talk_titles:
-            self.logger.log.debug('  ' + talk)
+            self.logger.log.debug('  ' + talk.encode('utf-8'))
         return talk_titles
 
     def save_talk_titles(self, talk_list):
