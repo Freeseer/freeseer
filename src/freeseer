@@ -270,7 +270,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
         else:
-            self.core.record(self.ui.talkList.currentText())
+            self.core.record(self.ui.talkList.currentText().toUtf8())
             self.ui.recordButton.setText('Stop')
             self.ui.videoConfigBox.setEnabled(False)
             self.ui.soundConfigBox.setEnabled(False)
