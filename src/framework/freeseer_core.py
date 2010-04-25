@@ -44,7 +44,7 @@ class FreeseerCore:
         self.logger = Logger(configdir)
 
         # Start Freeseer Recording Backend
-        self.freeseer = Freeseer(self)
+        self.freeseer = Freeseer_gstreamer(self)
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
         
