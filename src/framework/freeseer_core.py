@@ -23,16 +23,17 @@ import datetime
 import time
 import logging
 import logging.config
+import os
  
-from freeseer_gstreamer import *
-from config import Config
-from logger import Logger
+from backend.gstreamer import *
+from framework.config import Config
+from framework.logger import Logger
 
 __version__=u'1.9.6'
 
 class FreeseerCore:
     '''
-    Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
+    Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as backend.gstreamer
     '''
     def __init__(self, ui):
         self.ui = ui
@@ -43,7 +44,7 @@ class FreeseerCore:
         self.logger = Logger(configdir)
 
         # Start Freeseer Recording Backend
-        self.freeseer = Freeseer(self)
+        self.freeseer = Freeseer_gstreamer(self)
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
         

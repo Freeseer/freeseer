@@ -29,7 +29,7 @@ import gst
 
 __version__=u'1.9.6'
 
-class Freeseer:
+class Freeseer_gstreamer:
     '''
     Freeseer backend class using gstreamer to record video and audio.
     '''

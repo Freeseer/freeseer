@@ -27,10 +27,10 @@ import time
 
 from PyQt4 import QtGui, QtCore
 
-from freeseer_core import *
+from framework.freeseer_core import *
+from framework.qt_area_selector import *
 from freeseer_ui_qt import *
 from freeseer_about import *
-from qt_area_selector import QtAreaSelector
 
 __version__=u'1.9.6'
 
