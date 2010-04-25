@@ -27,7 +27,7 @@ import time
 
 from PyQt4 import QtGui, QtCore
 
-from framework.freeseer_core import *
+from framework.core import *
 from framework.qt_area_selector import *
 from freeseer_ui_qt import *
 from freeseer_about import *
