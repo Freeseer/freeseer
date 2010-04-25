@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import codecs
 import datetime
 import time
 import logging
@@ -84,13 +85,13 @@ class FreeseerCore:
         '''
         talk_titles = []
         try:
-            f = open(self.config.talksfile, 'r')
+            f = codecs.open(self.config.talksfile, 'r', 'utf-8')
         except:
             self.logger.log.debug('talks.txt not found, creating default.')
-            f = open(self.config.talksfile, 'w')
+            f = codecs.open(self.config.talksfile, 'w', 'utf-8')
             f.writelines('T103 - Thanh Ha - Intro to Freeseer')
             f.close()
-            f = open(self.config.talksfile, 'r')
+            f = codecs.open(self.config.talksfile, 'r', 'utf-8')
             
         lines = f.readlines()
         f.close()
@@ -109,7 +110,7 @@ class FreeseerCore:
 
         talk_list: a list of talk titles which will be saved..
         '''
-        f = open(self.config.talksfile, 'w')
+        f = codecs.open(self.config.talksfile, 'w', 'utf-8')
         f.writelines(talk_list)
         f.close()
         self.logger.log.debug('Saved talks to file')

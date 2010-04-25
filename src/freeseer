@@ -311,7 +311,7 @@ class MainApp(QtGui.QMainWindow):
         talk_list = []
         i = 0
         while i < self.ui.editTalkList.count():
-            t = self.ui.editTalkList.item(i).text() + '\n'
+            t = unicode(self.ui.editTalkList.item(i).text()) + '\n'
             talk_list.append(t)
             i = i+1
 
