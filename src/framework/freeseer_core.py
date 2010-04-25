@@ -25,7 +25,7 @@ import logging
 import logging.config
 import os
  
-from backend.freeseer_gstreamer import *
+from backend.gstreamer import *
 from framework.config import Config
 from framework.logger import Logger
 
