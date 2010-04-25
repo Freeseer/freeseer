@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # freeseer - vga/presentation capture software
 #
 #  Copyright (C) 2010  Free and Open Source Software Learning Centre
