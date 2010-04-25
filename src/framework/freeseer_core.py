@@ -33,7 +33,7 @@ __version__=u'1.9.6'
 
 class FreeseerCore:
     '''
-    Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as freeseer_gstreamer.py
+    Freeseer core logic code.  Used to link a GUI frontend with a recording backend such as backend.gstreamer
     '''
     def __init__(self, ui):
         self.ui = ui
