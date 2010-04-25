@@ -23,10 +23,11 @@ import datetime
 import time
 import logging
 import logging.config
+import os
  
-from freeseer_gstreamer import *
-from config import Config
-from logger import Logger
+from backend.freeseer_gstreamer import *
+from framework.config import Config
+from framework.logger import Logger
 
 __version__=u'1.9.6'
 
