@@ -43,7 +43,7 @@ class QtAreaSelector(QtGui.QWidget):
         used in this app.
         '''
         QtGui.QWidget.__init__(self, None, QtCore.Qt.FramelessWindowHint)
-        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowState(QtCore.Qt.WindowFullScreen)
         
@@ -54,6 +54,7 @@ class QtAreaSelector(QtGui.QWidget):
         self.end_y = 0
         self.current_x = 0
         self.current_y = 0
+        self.setWindowOpacity(0.3)
 
     def mousePressEvent(self, event):
         '''
