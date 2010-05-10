@@ -107,7 +107,7 @@ class Freeseer_gstreamer:
             self.player.set_state(gst.STATE_NULL)
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
-            self.core.logger.log.log.debug('Error: ' + str(err) + str(debug))
+            self.core.logger.log.debug('Error: ' + str(err) + str(debug))
             self.player.set_state(gst.STATE_NULL)
 
             if (str(err).startswith('Could not get/set settings from/on resource.')):
