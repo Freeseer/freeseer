@@ -110,11 +110,11 @@ class Freeseer_gstreamer:
             self.core.logger.log.log.debug('Error: ' + str(err) + str(debug))
             self.player.set_state(gst.STATE_NULL)
 
-            if (err.startswith('Could not get/set settings from/on resource.')):
+            if (str(err).startswith('Could not get/set settings from/on resource.')):
                 # if v4l2src driver does not work, fallback to the older v4lsrc
-                if (debug.startswith('v4l2_calls.c')):
+                if (str(debug).startswith('v4l2_calls.c')):
                     self.core.logger.log.debug('v4l2src failed, falling back to v4lsrc')
-                    self.change_videosrc('v4lsrc', self.viddev)
+                    self.change_videosrc('usb_fallback', self.viddev)
                     self.player.set_state(gst.STATE_PLAYING)
                     
         elif message.structure is not None:
@@ -223,6 +223,9 @@ class Freeseer_gstreamer:
             self.vidsrc = gst.element_factory_make('ximagesrc', 'vidsrc')
         elif (self.viddrv == 'usb'):
             self.vidsrc = gst.element_factory_make('v4l2src', 'vidsrc')
+            self.vidsrc.set_property('device', self.viddev)
+        elif (self.viddrv == 'usb_fallback'):
+            self.vidsrc = gst.element_factory_make('v4lsrc', 'vidsrc')
             self.vidsrc.set_property('device', self.viddev)
         elif (self.viddrv == 'firewire'):
             self.vidsrc = gst.element_factory_make('dv1394src', 'vidsrc')
