@@ -197,8 +197,8 @@ class MainApp(QtGui.QMainWindow):
         if not (resolution < 0): self.ui.resolutionComboBox.setCurrentIndex(resolution)
         
     def save_settings(self):
-        self.core.config.videodir = self.ui.videoDirectoryLineEdit.text()
-        self.core.config.talksdir = self.ui.talksFileLineEdit.text()
+        self.core.config.videodir = str(self.ui.videoDirectoryLineEdit.text())
+        self.core.config.talksdir = str(self.ui.talksFileLineEdit.text())
         self.core.config.resolution = str(self.ui.resolutionComboBox.currentText())
         self.core.config.writeConfig()
         
