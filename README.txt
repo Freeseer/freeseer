@@ -43,7 +43,12 @@ Read more about hardware capture options here:
     http://wiki.github.com/fosslc/freeseer/capture-hardware
 
 If you wish to capture vga input using epiphan's vga2usb device:
-    "sudo cp vga2usb.conf /etc/modprobe.d/"
+    first, copy the vga2usb.ko driver to /lib/modules/<kernel version>
+    for the kernel you're running. Epiphan provides a list of pre-compiled
+    drivers at http://epiphan.com
+
+    Then, configure the driver:
+    "sudo cp vga2usb.conf /etc/modprobe.d/; depmod -a"
 
 For support, questions, suggestions or any other inquiries, visit:
     http://wiki.github.com/fosslc/freeseer/
