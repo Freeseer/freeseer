@@ -26,13 +26,12 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-FF_OPTS="-s svga -acodec libvorbis -ab 64k -aspect 4:3"
+FF_OPTS="-s svga -acodec libvorbis -ab 64k -aspect 4:3 -qscale 6"
 
 ls *.ogg | \
 while read source
 do
-  echo "Transcoding: ${source}"
   OUTPUT="`echo ${source} | sed \"s/.ogg/_processed.ogg/g\"`"
-  echo "Creating: ${OUTPUT}"
-  ffmpeg -i ${source} ${FF_OPTS} ${OUTPUT}
+  COMMAND="ffmpeg -i ${source} ${FF_OPTS} ${OUTPUT}"
+  echo "${COMMAND}"
 done
