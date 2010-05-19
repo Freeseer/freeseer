@@ -3,6 +3,8 @@
 *.ogg
 *.mkv
 *~
+.project
+.pydevproject
 .directory
 dist
 build

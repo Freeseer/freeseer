@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # freeseer - vga/presentation capture software
 #
 #  Copyright (C) 2010  Free and Open Source Software Learning Centre
@@ -27,9 +30,9 @@ import pygst
 pygst.require("0.10")
 import gst
 
-__version__=u'1.9.6'
+__version__=u'1.9.7'
 
-class Freeseer:
+class Freeseer_gstreamer:
     '''
     Freeseer backend class using gstreamer to record video and audio.
     '''
@@ -60,7 +63,7 @@ class Freeseer:
         self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=10/1, silent'))
         self.fvidscale = gst.element_factory_make('videoscale', 'fvidscale')
         self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
-        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=800, height=600'))
+        #self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=800, height=600'))
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
         # GST Sound
@@ -69,6 +72,8 @@ class Freeseer:
         self.sndtee = gst.element_factory_make('tee', 'sndtee')
         self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
+        self.audiolevel = gst.element_factory_make('level', 'audiolevel')
+        self.audiolevel.set_property('interval', 20000000)
         self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
 
         # GST Muxer
@@ -79,14 +84,14 @@ class Freeseer:
         # GST Add Components
         self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
         self.player.add(self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace)
-        self.player.add(self.sndsrc, self.sndtee, self.sndqueue1, self.audioconvert, self.sndcodec)
+        self.player.add(self.sndsrc, self.sndtee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec)
         self.player.add(self.mux, self.filesink)
 
         # GST Link Components
         gst.element_link_many(self.vidsrc, self.cspace, self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace, self.vidtee)
         gst.element_link_many(self.vidtee, self.vidqueue1, self.vidcodec, self.mux)
         gst.element_link_many(self.sndsrc, self.sndtee)
-        gst.element_link_many(self.sndtee, self.sndqueue1, self.audioconvert, self.sndcodec, self.mux)
+        gst.element_link_many(self.sndtee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
@@ -97,20 +102,37 @@ class Freeseer:
 
     def on_message(self, bus, message):
         t = message.type
+      
         if t == gst.MESSAGE_EOS:
             self.player.set_state(gst.STATE_NULL)
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
-            self.core.logger.debug('Error: ' + str(err) + str(debug))
+            self.core.logger.log.debug('Error: ' + str(err) + str(debug))
             self.player.set_state(gst.STATE_NULL)
 
-            if (err.startswith('Could not get/set settings from/on resource.')):
+            if (str(err).startswith('Could not get/set settings from/on resource.')):
                 # if v4l2src driver does not work, fallback to the older v4lsrc
-                if (debug.startswith('v4l2_calls.c')):
-                    self.core.logger.debug('v4l2src failed, falling back to v4lsrc')
-                    self.change_videosrc('v4lsrc', self.viddev)
+                if (str(debug).startswith('v4l2_calls.c')):
+                    self.core.logger.log.debug('v4l2src failed, falling back to v4lsrc')
+                    self.change_videosrc('usb_fallback', self.viddev)
                     self.player.set_state(gst.STATE_PLAYING)
+                    
+        elif message.structure is not None:
+            s = message.structure.get_name()
 
+            # Check the mic audio levels and pass it up as a percent value to core
+            if s == 'level':
+                msg = message.structure.to_string()
+                rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
+                
+                # This is an inaccurate representation of decibels into percent
+                # conversion, this code should be revisited.
+                try:
+                    percent = (int(round(rms_dB)) + 50) * 2
+                except OverflowError:
+                    percent = 0
+                self.core.audioFeedbackEvent(percent)
+            
     def on_sync_message(self, bus, message):
         if message.structure is None:
             return
@@ -120,26 +142,14 @@ class Freeseer:
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(self.window_id)
 
-    def get_video_sources(self, stype):
-        vid_source = None
-        if stype == 'usb':
-            vid_source = ['v4l2src', 'v4lsrc']
-        elif stype == 'firewire':
-            vid_source = ['dv1394src']
-        elif stype == 'local':
-            vid_source = ['ximagesrc']
-        # return all types
-        else:
-            vid_source = ['v4l2src', 'v4lsrc', 'dv1394src', 'ximagesrc']
-        return vid_source
+    def get_video_sources(self):
+        return ['desktop', 'usb', 'firewire']
 
     def get_video_devices(self, videosrc):
         vid_devices = None
-        if videosrc == 'v4l2src':
+        if videosrc == 'usb':
             vid_devices = self._get_devices('/dev/video', 0)
-        elif videosrc == 'v4lsrc':
-            vid_devices = self._get_devices('/dev/video', 0)
-        elif videosrc == 'dv1394src':
+        elif videosrc == 'firewire':
             vid_devices = self._get_devices('/dev/fw', 1)
         # return all types
         else:
@@ -156,9 +166,9 @@ class Freeseer:
             try:
                 gst.element_factory_make(src, 'testsrc')
                 snd_sources.append(src)
-                self.core.logger.debug(src + ' is available.')
+                self.core.logger.log.debug(src + ' is available.')
             except:
-                self.core.logger.debug(src + ' is not available')
+                self.core.logger.log.debug(src + ' is not available')
 
         return snd_sources
 
@@ -169,10 +179,10 @@ class Freeseer:
         for codec in video_codec_list:
             try:
                 gst.element_factory_make(codec, 'testcodec')
-                video_codecs.append(src)
-                self.core.logger.debug(codec + ' is available.')
+                video_codecs.append(codec)
+                self.core.logger.log.debug(codec + ' is available.')
             except:
-                self.core.logger.debug(codec + ' is not available')
+                self.core.logger.log.debug(codec + ' is not available')
         return video_codecs
 
     def _get_devices(self, path, index):
@@ -186,16 +196,16 @@ class Freeseer:
         return devices
 
     def _dvdemux_padded(self, dbin, pad):
-        self.core.logger.debug("dvdemux got pad %s" % pad.get_name())
+        self.core.logger.log.debug("dvdemux got pad %s" % pad.get_name())
         if pad.get_name() == 'video':
-            self.core.logger.debug('Linking dvdemux to queue1')
+            self.core.logger.log.debug('Linking dvdemux to queue1')
             self.dv1394dvdemux.link(self.dv1394q1)
 
     def change_videosrc(self, new_source, new_device):
         '''
         Changes the video source
         '''
-        if (self.viddrv == 'dv1394src'):
+        if (self.viddrv == 'firewire'):
             self.player.remove(self.dv1394q1)
             self.player.remove(self.dv1394q2)
             self.player.remove(self.dv1394dvdemux)
@@ -208,14 +218,18 @@ class Freeseer:
         self.viddrv = new_source
         self.viddev = new_device
         self.player.remove(self.vidsrc)
-        self.vidsrc = gst.element_factory_make(self.viddrv, 'vidsrc')
-        self.player.add(self.vidsrc)
 
-        if (self.viddrv == 'v4lsrc'):
+        if (self.viddrv == 'desktop'):
+            self.vidsrc = gst.element_factory_make('ximagesrc', 'vidsrc')
+        elif (self.viddrv == 'usb'):
+            self.vidsrc = gst.element_factory_make('v4l2src', 'vidsrc')
             self.vidsrc.set_property('device', self.viddev)
-        elif (self.viddrv == 'v4l2src'):
+        elif (self.viddrv == 'usb_fallback'):
+            self.vidsrc = gst.element_factory_make('v4lsrc', 'vidsrc')
             self.vidsrc.set_property('device', self.viddev)
-        elif (self.viddrv == 'dv1394src'):
+        elif (self.viddrv == 'firewire'):
+            self.vidsrc = gst.element_factory_make('dv1394src', 'vidsrc')
+            self.player.add(self.vidsrc)
             self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
             self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
             self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
@@ -223,10 +237,20 @@ class Freeseer:
             self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
             self.vidsrc.link(self.dv1394dvdemux)
             self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
-            gst.element_link_many( self.dv1394q1, self.dv1394dvdec, self.cspace)
+            gst.element_link_many(self.dv1394q1, self.dv1394dvdec, self.cspace)
             return
 
+        self.player.add(self.vidsrc)
         gst.element_link_many(self.vidsrc, self.cspace)
+
+    def set_recording_area(self, start_x, start_y, end_x, end_y):
+        self.vidsrc.set_property('startx', start_x)
+        self.vidsrc.set_property('starty', start_y)
+        self.vidsrc.set_property('endx', end_x)
+        self.vidsrc.set_property('endy', end_y)
+
+    def change_output_resolution(self, width, height):
+        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s' % (width, height)))
 
     def change_soundsrc(self, new_source):
         '''
@@ -236,16 +260,16 @@ class Freeseer:
         old_sndsrc = self.sndsrc
 
         try:
-            self.core.logger.debug('loading ' + self.soundsrc)
+            self.core.logger.log.debug('loading ' + self.soundsrc)
             self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
         except:
-            self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
+            self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
             return False
 
         self.player.remove(old_sndsrc)
         self.player.add(self.sndsrc)
         self.sndsrc.link(self.sndtee)
-        self.core.logger.debug(self.soundsrc + ' loaded.')
+        self.core.logger.log.debug(self.soundsrc + ' loaded.')
         return True
 
     def record(self, filename):
@@ -273,10 +297,10 @@ class Freeseer:
         # check if the new video codec is valid
         # if not return False
         try:
-            self.core.logger.debug('checking availability of ' + self.video_codec)
+            self.core.logger.log.debug('checking availability of ' + self.video_codec)
             self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         except:
-            self.core.logger.debug('Failed to load ' + self.soundsrc + '.')
+            self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
             return False
 
         # codec is available for use, now set pipeline to use it
