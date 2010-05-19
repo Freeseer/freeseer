@@ -33,7 +33,7 @@ resource_rc.py: forms/resource.qrc
 	pyrcc4 forms/resource.qrc -o resource_rc.py
 
 clean:
-	rm -f *.ogg resource_rc.py freeseer_about.py freeseer_ui_qt.py *.pyc
+	rm -f *.ogg resource_rc.py freeseer_about.py freeseer_ui_qt.py *.pyc backend/*.pyc framework/*.pyc
 
 test: ALL
 	./freeseer

@@ -33,7 +33,7 @@ from backend.gstreamer import *
 from framework.config import Config
 from framework.logger import Logger
 
-__version__=u'1.9.6'
+__version__=u'1.9.7'
 
 class FreeseerCore:
     '''
