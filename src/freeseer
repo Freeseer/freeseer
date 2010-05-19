@@ -33,7 +33,7 @@ from framework.qt_area_selector import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 
-__version__=u'1.9.6'
+__version__=u'1.9.7'
 
 NAME=u'Freeseer'
 DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.'
