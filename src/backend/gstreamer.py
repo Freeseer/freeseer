@@ -30,9 +30,11 @@ import pygst
 pygst.require("0.10")
 import gst
 
+from framework.backend_interface import *
+
 __version__=u'1.9.7'
 
-class Freeseer_gstreamer:
+class Freeseer_gstreamer(BackendInterface):
     '''
     Freeseer backend class using gstreamer to record video and audio.
     '''
