@@ -68,8 +68,8 @@ class Freeseer_gstreamer(BackendInterface):
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
         # GST Sound
-        self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
-        self.sndtee = gst.element_factory_make('tee', 'sndtee')
+        #self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
+        self.audio_tee = gst.element_factory_make('tee', 'sndtee')
         self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
         self.audiolevel = gst.element_factory_make('level', 'audiolevel')
@@ -84,14 +84,14 @@ class Freeseer_gstreamer(BackendInterface):
         # GST Add Components
         self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
         self.player.add(self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace)
-        self.player.add(self.sndsrc, self.sndtee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec)
+        self.player.add(self.audio_tee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec)
         self.player.add(self.mux, self.filesink)
 
         # GST Link Components
         gst.element_link_many(self.vidsrc, self.cspace, self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace, self.vidtee)
         gst.element_link_many(self.vidtee, self.vidqueue1, self.vidcodec, self.mux)
-        gst.element_link_many(self.sndsrc, self.sndtee)
-        gst.element_link_many(self.sndtee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec, self.mux)
+        #gst.element_link_many(self.sndsrc, self.sndtee)
+        gst.element_link_many(self.audio_tee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
@@ -252,12 +252,22 @@ class Freeseer_gstreamer(BackendInterface):
     def change_output_resolution(self, width, height):
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s' % (width, height)))
 
+    def set_audio_source(self):
+        audio_src = gst.element_factory_make(self.audio_source, 'audio_src')
+        self.player.add(audio_src)
+        audio_src.link(self.audio_tee)
+
+    def clear_audio_source(self):
+        audio_src = self.player.get_by_name('audio_src')
+        self.player.remove(audio_src)
+
     def change_soundsrc(self, new_source):
         '''
         Changes the sound source
         '''
         self.soundsrc = new_source
-        old_sndsrc = self.sndsrc
+        #old_sndsrc = self.sndsrc
+        self.audio_source = new_source
 
         try:
             self.core.logger.log.debug('loading ' + self.soundsrc)
@@ -266,9 +276,9 @@ class Freeseer_gstreamer(BackendInterface):
             self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
             return False
 
-        self.player.remove(old_sndsrc)
-        self.player.add(self.sndsrc)
-        self.sndsrc.link(self.sndtee)
+        #self.player.remove(old_sndsrc)
+        #self.player.add(self.sndsrc)
+        #self.sndsrc.link(self.sndtee)
         self.core.logger.log.debug(self.soundsrc + ' loaded.')
         return True
 
@@ -280,6 +290,8 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         self.filename = filename
         self.filesink.set_property('location', self.filename)
+
+        self.set_audio_source()
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
@@ -287,6 +299,7 @@ class Freeseer_gstreamer(BackendInterface):
         Stop recording.
         '''
         self.player.set_state(gst.STATE_NULL)
+        self.clear_audio_source()
 
     def change_video_codec(self, new_vcodec):
         '''
