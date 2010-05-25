@@ -265,21 +265,18 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         Changes the sound source
         '''
-        self.soundsrc = new_source
-        #old_sndsrc = self.sndsrc
-        self.audio_source = new_source
 
+        # Ensure the new sound source is valid
         try:
-            self.core.logger.log.debug('loading ' + self.soundsrc)
-            self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
+            self.core.logger.log.debug('loading ' + new_source)
+            src = gst.element_factory_make(new_source, 'sndsrc')
         except:
-            self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
+            self.core.logger.log.debug('Failed to load ' + new_source + '.')
             return False
 
-        #self.player.remove(old_sndsrc)
-        #self.player.add(self.sndsrc)
-        #self.sndsrc.link(self.sndtee)
+        self.audio_source = new_source
         self.core.logger.log.debug(self.soundsrc + ' loaded.')
+        
         return True
 
     def record(self, filename):
