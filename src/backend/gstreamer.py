@@ -65,12 +65,10 @@ class Freeseer_gstreamer(BackendInterface):
         self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=10/1, silent'))
         self.fvidscale = gst.element_factory_make('videoscale', 'fvidscale')
         self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
-        #self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=800, height=600'))
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
         # GST Sound
         self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
-#        self.sndsrc.set_property("device", "alsa_output.pci-0000_00_1b.0.analog-stereo")
         self.sndtee = gst.element_factory_make('tee', 'sndtee')
         self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
