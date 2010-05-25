@@ -104,11 +104,13 @@ class Freeseer_gstreamer(BackendInterface):
         t = message.type
       
         if t == gst.MESSAGE_EOS:
-            self.player.set_state(gst.STATE_NULL)
+            #self.player.set_state(gst.STATE_NULL)
+            self.stop()
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
             self.core.logger.log.debug('Error: ' + str(err) + str(debug))
-            self.player.set_state(gst.STATE_NULL)
+            #self.player.set_state(gst.STATE_NULL)
+            self.stop()
 
             if (str(err).startswith('Could not get/set settings from/on resource.')):
                 # if v4l2src driver does not work, fallback to the older v4lsrc
