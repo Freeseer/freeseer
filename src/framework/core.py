@@ -165,9 +165,10 @@ class FreeseerCore:
     def preview(self, enable=False, window_id=None):
         ''' Enable/Disable the video preview window. '''
         if enable == True:
-            self.freeseer.enable_preview(window_id)
+            self.freeseer.enable_video_preview(window_id)
             self.logger.log.info('Video Preview Activated')
         else:
+            self.freeseer.disable_video_preview()
             self.logger.log.info('Video Preview Deactivated')
 
     def audioFeedback(self, enable=False):

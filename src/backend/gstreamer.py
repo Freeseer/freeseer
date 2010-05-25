@@ -331,7 +331,7 @@ class Freeseer_gstreamer(BackendInterface):
         gst.element_link_many(self.vidcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
-    def enable_preview(self, window_id):
+    def enable_video_preview(self, window_id):
         '''
         Activate video feedback. Will send video to a preview window.
         '''
@@ -343,7 +343,7 @@ class Freeseer_gstreamer(BackendInterface):
         self.player.add(vpqueue, vpsink)
         gst.element_link_many(self.vidtee, vpqueue, vpsink)
 
-    def disable_preview(self):
+    def disable_video_preview(self):
         '''
         Disable the video preview
         '''
