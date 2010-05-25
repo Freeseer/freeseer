@@ -67,7 +67,6 @@ class Freeseer_gstreamer(BackendInterface):
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
         # GST Sound
-        #self.sndsrc = gst.element_factory_make(self.soundsrc, 'sndsrc')
         self.audio_tee = gst.element_factory_make('tee', 'sndtee')
         self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
         self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
