@@ -44,7 +44,6 @@ class Freeseer_gstreamer(BackendInterface):
 
         self.viddrv = 'v4lsrc'
         self.viddev = '/dev/video0'
-        self.soundsrc = 'alsasrc'
         self.filename = 'default.ogg'
         self.video_codec = 'theoraenc'
         self.audio_codec = 'vorbisenc'
@@ -277,7 +276,7 @@ class Freeseer_gstreamer(BackendInterface):
             return False
 
         self.audio_source = new_source
-        self.core.logger.log.debug(self.soundsrc + ' loaded.')
+        self.core.logger.log.debug(self.audio_source + ' loaded.')
         
         return True
 
