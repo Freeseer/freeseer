@@ -42,6 +42,9 @@ class Freeseer_gstreamer(BackendInterface):
         self.core = core
         self.window_id = None
 
+        # Global State Variables
+        self.record_audio == True
+        
         self.viddrv = 'v4lsrc'
         self.viddev = '/dev/video0'
         self.filename = 'default.ogg'
@@ -288,14 +291,16 @@ class Freeseer_gstreamer(BackendInterface):
         self.filename = filename
         self.filesink.set_property('location', self.filename)
 
-        self.set_audio_source()
+        if self.record_audio == True:
+            self.set_audio_source()
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
         '''
         Stop recording.
         '''
-        self.player.set_state(gst.STATE_NULL)
+        if self.record_audio == True:
+            self.player.set_state(gst.STATE_NULL)
         self.clear_audio_source()
 
     def change_video_codec(self, new_vcodec):
