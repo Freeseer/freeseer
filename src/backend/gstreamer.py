@@ -179,12 +179,6 @@ class Freeseer_gstreamer(BackendInterface):
             devpath=path + str(i)
         return devices
 
-    def _dvdemux_padded(self, dbin, pad):
-        self.core.logger.log.debug("dvdemux got pad %s" % pad.get_name())
-        if pad.get_name() == 'video':
-            self.core.logger.log.debug('Linking dvdemux to queue1')
-            self.dv1394dvdemux.link(self.dv1394q1)
-
     def change_videosrc(self, source_type, source_device):
         '''
         Changes the video source
@@ -193,51 +187,13 @@ class Freeseer_gstreamer(BackendInterface):
         self.video_device = source_device
 
         if (source_type == 'desktop'):
-            self.video_source = 'autovideosrc' # ximagesrc
+            self.video_source = 'ximagesrc'
         elif (source_type == 'usb'):
             self.video_source = 'v4l2src'
         elif (source_type == 'usb_fallback'):
             self.video_source = 'v4lsrc'
         elif (source_type == 'firewire'):
             self.video_source = 'dv1394src'
-        
-        #if (self.viddrv == 'firewire'):
-            #self.player.remove(self.dv1394q1)
-            #self.player.remove(self.dv1394q2)
-            #self.player.remove(self.dv1394dvdemux)
-            #self.player.remove(self.dv1394dvdec)
-            #self.dv1394q1 = None
-            #self.dv1394q2 = None
-            #self.dv1394dvdemux = None
-            #self.dv1394dvdec = None
-
-        #self.viddrv = new_source
-        #self.viddev = new_device
-        #self.player.remove(self.vidsrc)
-
-        #if (self.viddrv == 'desktop'):
-            #self.vidsrc = gst.element_factory_make('ximagesrc', 'vidsrc')
-        #elif (self.viddrv == 'usb'):
-            #self.vidsrc = gst.element_factory_make('v4l2src', 'vidsrc')
-            #self.vidsrc.set_property('device', self.viddev)
-        #elif (self.viddrv == 'usb_fallback'):
-            #self.vidsrc = gst.element_factory_make('v4lsrc', 'vidsrc')
-            #self.vidsrc.set_property('device', self.viddev)
-        #elif (self.viddrv == 'firewire'):
-            #self.vidsrc = gst.element_factory_make('dv1394src', 'vidsrc')
-            #self.player.add(self.vidsrc)
-            #self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
-            #self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
-            #self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
-            #self.dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
-            #self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
-            #self.vidsrc.link(self.dv1394dvdemux)
-            #self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
-            #gst.element_link_many(self.dv1394q1, self.dv1394dvdec, self.cspace)
-            #return
-
-        #self.player.add(self.vidsrc)
-        #gst.element_link_many(self.vidsrc, self.cspace)
 
     def set_recording_area(self, start_x, start_y, end_x, end_y):
         self.vidsrc.set_property('startx', start_x)
@@ -281,8 +237,25 @@ class Freeseer_gstreamer(BackendInterface):
                         video_cspace,
                         self.video_tee)
 
-        gst.element_link_many(video_src,
-                              video_rate,
+        if (self.video_source_type == 'firewire'):
+            self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
+            self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
+            self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
+            self.dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
+            
+            self.player.add(self.dv1394q1,
+                            self.dv1394q2,
+                            self.dv1394dvdemux,
+                            self.dv1394dvdec)
+                            
+            video_src.link(self.dv1394dvdemux)
+            
+            self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
+            gst.element_link_many(self.dv1394q1, self.dv1394dvdec, video_rate)
+        else:
+            video_src.link(video_rate)
+
+        gst.element_link_many(video_rate,
                               video_rate_cap,
                               video_scale,
                               video_scale_cap,
@@ -305,6 +278,12 @@ class Freeseer_gstreamer(BackendInterface):
                            video_cspace,
                            self.video_tee)
 
+        if (self.video_source_type == 'firewire'):
+            self.player.remove(self.dv1394q1,
+                               self.dv1394q2,
+                               self.dv1394dvdemux,
+                               self.dv1394dvdec)
+
     def _set_video_feedback(self):
         vpqueue = gst.element_factory_make('queue', 'vpqueue')
         vpsink = gst.element_factory_make('autovideosink', 'vpsink')
@@ -316,6 +295,12 @@ class Freeseer_gstreamer(BackendInterface):
         vpqueue = self.player.get_by_name('vpqueue')
         vpsink = self.player.get_by_name('vpsink')
         self.player.remove(vpqueue, vpsink)
+
+    def _dvdemux_padded(self, dbin, pad):
+        self.core.logger.log.debug("dvdemux got pad %s" % pad.get_name())
+        if pad.get_name() == 'video':
+            self.core.logger.log.debug('Linking dvdemux to queue1')
+            self.dv1394dvdemux.link(self.dv1394q1)
 
     ###
     ### Audio Functions
