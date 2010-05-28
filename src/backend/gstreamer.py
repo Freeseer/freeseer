@@ -43,7 +43,12 @@ class Freeseer_gstreamer(BackendInterface):
         self.window_id = None
 
         # Global State Variables
+        self.record_video = True
         self.record_audio = True
+        self.recording_video_feedback = False
+        self.recording_audio_feedback = False
+        self.recording_width = 0
+        self.recording_height = 0
         
         self.viddrv = 'v4lsrc'
         self.viddev = '/dev/video0'
@@ -54,20 +59,9 @@ class Freeseer_gstreamer(BackendInterface):
         self.player = gst.Pipeline('player')
 
         # GST Video
-        self.vidsrc = gst.element_factory_make(self.viddrv, 'vidsrc')
-        self.cspace = gst.element_factory_make('ffmpegcolorspace', "cspace")
-        self.vidtee = gst.element_factory_make('tee', "vidtee")
         self.vidqueue1 = gst.element_factory_make('queue', 'vidqueue1')
         self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
         self.vidcodec.set_property('bitrate', 2400)
-
-        # GST Video Filtering
-        self.fvidrate = gst.element_factory_make('videorate', 'fvidrate')
-        self.fvidrate_cap = gst.element_factory_make('capsfilter', 'fvidrate_cap')
-        self.fvidrate_cap.set_property('caps', gst.caps_from_string('video/x-raw-rgb, framerate=10/1, silent'))
-        self.fvidscale = gst.element_factory_make('videoscale', 'fvidscale')
-        self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
-        self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
         # GST Muxer
         self.mux = gst.element_factory_make('oggmux', 'mux')
@@ -75,13 +69,11 @@ class Freeseer_gstreamer(BackendInterface):
         self.filesink.set_property('location', self.filename)
 
         # GST Add Components
-        self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
-        self.player.add(self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace)
+        self.player.add(self.vidqueue1, self.vidcodec)
         self.player.add(self.mux, self.filesink)
 
         # GST Link Components
-        gst.element_link_many(self.vidsrc, self.cspace, self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace, self.vidtee)
-        gst.element_link_many(self.vidtee, self.vidqueue1, self.vidcodec, self.mux)
+        gst.element_link_many(self.vidqueue1, self.vidcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
@@ -107,7 +99,7 @@ class Freeseer_gstreamer(BackendInterface):
                 if (str(debug).startswith('v4l2_calls.c')):
                     self.core.logger.log.debug('v4l2src failed, falling back to v4lsrc')
                     self.change_videosrc('usb_fallback', self.viddev)
-                    self.player.set_state(gst.STATE_PLAYING)
+                    self.record()
                     
         elif message.structure is not None:
             s = message.structure.get_name()
@@ -193,47 +185,59 @@ class Freeseer_gstreamer(BackendInterface):
             self.core.logger.log.debug('Linking dvdemux to queue1')
             self.dv1394dvdemux.link(self.dv1394q1)
 
-    def change_videosrc(self, new_source, new_device):
+    def change_videosrc(self, source_type, source_device):
         '''
         Changes the video source
         '''
-        if (self.viddrv == 'firewire'):
-            self.player.remove(self.dv1394q1)
-            self.player.remove(self.dv1394q2)
-            self.player.remove(self.dv1394dvdemux)
-            self.player.remove(self.dv1394dvdec)
-            self.dv1394q1 = None
-            self.dv1394q2 = None
-            self.dv1394dvdemux = None
-            self.dv1394dvdec = None
+        self.video_source_type = source_type
+        self.video_device = source_device
 
-        self.viddrv = new_source
-        self.viddev = new_device
-        self.player.remove(self.vidsrc)
+        if (source_type == 'desktop'):
+            self.video_source = 'autovideosrc' # ximagesrc
+        elif (source_type == 'usb'):
+            self.video_source = 'v4l2src'
+        elif (source_type == 'usb_fallback'):
+            self.video_source = 'v4lsrc'
+        elif (source_type == 'firewire'):
+            self.video_source = 'dv1394src'
+        
+        #if (self.viddrv == 'firewire'):
+            #self.player.remove(self.dv1394q1)
+            #self.player.remove(self.dv1394q2)
+            #self.player.remove(self.dv1394dvdemux)
+            #self.player.remove(self.dv1394dvdec)
+            #self.dv1394q1 = None
+            #self.dv1394q2 = None
+            #self.dv1394dvdemux = None
+            #self.dv1394dvdec = None
 
-        if (self.viddrv == 'desktop'):
-            self.vidsrc = gst.element_factory_make('ximagesrc', 'vidsrc')
-        elif (self.viddrv == 'usb'):
-            self.vidsrc = gst.element_factory_make('v4l2src', 'vidsrc')
-            self.vidsrc.set_property('device', self.viddev)
-        elif (self.viddrv == 'usb_fallback'):
-            self.vidsrc = gst.element_factory_make('v4lsrc', 'vidsrc')
-            self.vidsrc.set_property('device', self.viddev)
-        elif (self.viddrv == 'firewire'):
-            self.vidsrc = gst.element_factory_make('dv1394src', 'vidsrc')
-            self.player.add(self.vidsrc)
-            self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
-            self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
-            self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
-            self.dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
-            self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
-            self.vidsrc.link(self.dv1394dvdemux)
-            self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
-            gst.element_link_many(self.dv1394q1, self.dv1394dvdec, self.cspace)
-            return
+        #self.viddrv = new_source
+        #self.viddev = new_device
+        #self.player.remove(self.vidsrc)
 
-        self.player.add(self.vidsrc)
-        gst.element_link_many(self.vidsrc, self.cspace)
+        #if (self.viddrv == 'desktop'):
+            #self.vidsrc = gst.element_factory_make('ximagesrc', 'vidsrc')
+        #elif (self.viddrv == 'usb'):
+            #self.vidsrc = gst.element_factory_make('v4l2src', 'vidsrc')
+            #self.vidsrc.set_property('device', self.viddev)
+        #elif (self.viddrv == 'usb_fallback'):
+            #self.vidsrc = gst.element_factory_make('v4lsrc', 'vidsrc')
+            #self.vidsrc.set_property('device', self.viddev)
+        #elif (self.viddrv == 'firewire'):
+            #self.vidsrc = gst.element_factory_make('dv1394src', 'vidsrc')
+            #self.player.add(self.vidsrc)
+            #self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
+            #self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
+            #self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
+            #self.dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
+            #self.player.add(self.dv1394q1, self.dv1394q2, self.dv1394dvdemux, self.dv1394dvdec)
+            #self.vidsrc.link(self.dv1394dvdemux)
+            #self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
+            #gst.element_link_many(self.dv1394q1, self.dv1394dvdec, self.cspace)
+            #return
+
+        #self.player.add(self.vidsrc)
+        #gst.element_link_many(self.vidsrc, self.cspace)
 
     def set_recording_area(self, start_x, start_y, end_x, end_y):
         self.vidsrc.set_property('startx', start_x)
@@ -242,7 +246,76 @@ class Freeseer_gstreamer(BackendInterface):
         self.vidsrc.set_property('endy', end_y)
 
     def change_output_resolution(self, width, height):
-        self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s' % (width, height)))
+        self.recording_width = width
+        self.recording_height = height
+
+    ###
+    ### Video Functions
+    ###
+    def _set_video_source(self):
+        video_src = gst.element_factory_make(self.video_source, 'video_src')
+        if (self.video_source_type == 'usb'):
+            video_src.set_property('device', self.video_device)
+        video_rate = gst.element_factory_make('videorate', 'video_rate')
+        video_rate_cap = gst.element_factory_make('capsfilter',
+                                                    'video_rate_cap')
+        video_rate_cap.set_property('caps',
+                        gst.caps_from_string('framerate=10/1'))
+        video_scale = gst.element_factory_make('videoscale', 'video_scale')
+        video_scale_cap = gst.element_factory_make('capsfilter',
+                                                    'video_scale_cap')
+        video_cspace = gst.element_factory_make('ffmpegcolorspace',
+                                                    'video_cspace')
+        self.video_tee = gst.element_factory_make('tee', 'video_tee')
+
+        if self.recording_width != 0:
+            video_scale_cap.set_property('caps',
+                gst.caps_from_string('width=%s, height=%s'
+                % (self.recording_width, self.recording_height)))
+
+        self.player.add(video_src,
+                        video_rate,
+                        video_rate_cap,
+                        video_scale,
+                        video_scale_cap,
+                        video_cspace,
+                        self.video_tee)
+
+        gst.element_link_many(video_src,
+                              video_rate,
+                              video_rate_cap,
+                              video_scale,
+                              video_scale_cap,
+                              video_cspace,
+                              self.video_tee, self.vidqueue1)
+
+    def _clear_video_source(self):
+        video_src = self.player.get_by_name('video_src')
+        video_rate = self.player.get_by_name('video_rate')
+        video_rate_cap = self.player.get_by_name('video_rate_cap')
+        video_scale = self.player.get_by_name('video_scale')
+        video_scale_cap = self.player.get_by_name('video_scale_cap')
+        video_cspace = self.player.get_by_name('video_cspace')
+
+        self.player.remove(video_src,
+                           video_rate,
+                           video_rate_cap,
+                           video_scale,
+                           video_scale_cap,
+                           video_cspace,
+                           self.video_tee)
+
+    def _set_video_feedback(self):
+        vpqueue = gst.element_factory_make('queue', 'vpqueue')
+        vpsink = gst.element_factory_make('autovideosink', 'vpsink')
+
+        self.player.add(vpqueue, vpsink)
+        gst.element_link_many(self.video_tee, vpqueue, vpsink)
+    
+    def _clear_video_feedback(self):
+        vpqueue = self.player.get_by_name('vpqueue')
+        vpsink = self.player.get_by_name('vpsink')
+        self.player.remove(vpqueue, vpsink)
 
     ###
     ### Audio Functions
@@ -329,6 +402,12 @@ class Freeseer_gstreamer(BackendInterface):
         self.filename = filename
         self.filesink.set_property('location', self.filename)
 
+        if self.record_video == True:
+            self._set_video_source()
+
+            if self.recording_video_feedback == True:
+                self._set_video_feedback()
+
         if self.record_audio == True:
             self._set_audio_source()
             self._set_audio_encoder()
@@ -339,7 +418,13 @@ class Freeseer_gstreamer(BackendInterface):
         Stop recording.
         '''
         self.player.set_state(gst.STATE_NULL)
-        
+
+        if self.record_video == True:
+            self._clear_video_source()
+            
+            if self.recording_video_feedback == True:
+                self._clear_video_feedback()
+            
         if self.record_audio == True:
             self._clear_audio_source()
             self._clear_audio_encoder()
@@ -391,21 +476,14 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         Activate video feedback. Will send video to a preview window.
         '''
+        self.recording_video_feedback = True
         self.window_id = window_id
-
-        vpqueue = gst.element_factory_make('queue', 'vpqueue')
-        vpsink = gst.element_factory_make('autovideosink', 'vpsink')
-        
-        self.player.add(vpqueue, vpsink)
-        gst.element_link_many(self.vidtee, vpqueue, vpsink)
 
     def disable_video_preview(self):
         '''
         Disable the video preview
         '''
-        vpqueue = self.player.get_by_name('vpqueue')
-        vpsink = self.player.get_by_name('vpsink')
-        self.player.remove(vpqueue, vpsink)
+        self.recording_video_feedback = False
 
     def enable_audio_feedback(self):
         '''
