@@ -43,7 +43,7 @@ class Freeseer_gstreamer(BackendInterface):
         self.window_id = None
 
         # Global State Variables
-        self.record_audio == True
+        self.record_audio = True
         
         self.viddrv = 'v4lsrc'
         self.viddev = '/dev/video0'
@@ -69,14 +69,6 @@ class Freeseer_gstreamer(BackendInterface):
         self.fvidscale_cap = gst.element_factory_make('capsfilter', 'fvidscale_cap')
         self.fvidcspace = gst.element_factory_make('ffmpegcolorspace', 'fvidcspace')
 
-        # GST Sound
-        self.audio_tee = gst.element_factory_make('tee', 'sndtee')
-        self.sndqueue1 = gst.element_factory_make('queue', 'sndqueue1')        
-        self.audioconvert = gst.element_factory_make('audioconvert', 'audioconvert')
-        self.audiolevel = gst.element_factory_make('level', 'audiolevel')
-        self.audiolevel.set_property('interval', 20000000)
-        self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
-
         # GST Muxer
         self.mux = gst.element_factory_make('oggmux', 'mux')
         self.filesink = gst.element_factory_make('filesink', 'filesink')
@@ -85,14 +77,11 @@ class Freeseer_gstreamer(BackendInterface):
         # GST Add Components
         self.player.add(self.vidsrc, self.cspace, self.vidtee, self.vidqueue1, self.vidcodec)
         self.player.add(self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace)
-        self.player.add(self.audio_tee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec)
         self.player.add(self.mux, self.filesink)
 
         # GST Link Components
         gst.element_link_many(self.vidsrc, self.cspace, self.fvidrate, self.fvidrate_cap, self.fvidscale, self.fvidscale_cap, self.fvidcspace, self.vidtee)
         gst.element_link_many(self.vidtee, self.vidqueue1, self.vidcodec, self.mux)
-        #gst.element_link_many(self.sndsrc, self.sndtee)
-        gst.element_link_many(self.audio_tee, self.sndqueue1, self.audioconvert, self.audiolevel, self.sndcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
@@ -257,12 +246,53 @@ class Freeseer_gstreamer(BackendInterface):
 
     def set_audio_source(self):
         audio_src = gst.element_factory_make(self.audio_source, 'audio_src')
-        self.player.add(audio_src)
+        self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
+        self.player.add(audio_src, self.audio_tee)
         audio_src.link(self.audio_tee)
 
     def clear_audio_source(self):
         audio_src = self.player.get_by_name('audio_src')
-        self.player.remove(audio_src)
+        self.player.remove(audio_src, self.audio_tee)
+
+    def _set_audio_encoder(self):
+        '''
+        Sets the audio encoder pipeline
+        '''
+        
+        audioenc_queue = gst.element_factory_make('queue',
+                                                        'audioenc_queue')
+        audioenc_convert = gst.element_factory_make('audioconvert',
+                                                        'audioenc_convert')
+        audioenc_level = gst.element_factory_make('level', 'audioenc_level')
+        audioenc_level.set_property('interval', 20000000)
+        audioenc_codec = gst.element_factory_make(self.audio_codec,
+                                                        'audioenc_codec')
+
+        self.player.add(audioenc_queue,
+                        audioenc_convert,
+                        audioenc_level,
+                        audioenc_codec)
+
+        gst.element_link_many(self.audio_tee,
+                              audioenc_queue,
+                              audioenc_convert,
+                              audioenc_level,
+                              audioenc_codec,
+                              self.mux)
+                              
+    def _clear_audio_encoder(self):
+        '''
+        Clears the audio encoder pipeline
+        '''
+        audioenc_queue = self.player.get_by_name('audioenc_queue')
+        audioenc_convert = self.player.get_by_name('audioenc_convert')
+        audioenc_level = self.player.get_by_name('audioenc_level')
+        audioenc_codec = self.player.get_by_name('audioenc_codec')
+
+        self.player.remove(audioenc_queue,
+                           audioenc_convert,
+                           audioenc_level,
+                           audioenc_codec)
 
     def change_soundsrc(self, new_source):
         '''
@@ -293,15 +323,18 @@ class Freeseer_gstreamer(BackendInterface):
 
         if self.record_audio == True:
             self.set_audio_source()
+            self._set_audio_encoder()
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
         '''
         Stop recording.
         '''
+        self.player.set_state(gst.STATE_NULL)
+        
         if self.record_audio == True:
-            self.player.set_state(gst.STATE_NULL)
-        self.clear_audio_source()
+            self.clear_audio_source()
+            self._clear_audio_encoder()
 
     def change_video_codec(self, new_vcodec):
         '''
