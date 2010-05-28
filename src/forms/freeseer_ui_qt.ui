@@ -6,13 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-<<<<<<< HEAD
-    <width>590</width>
-    <height>520</height>
-=======
     <width>585</width>
     <height>509</height>
->>>>>>> master
    </rect>
   </property>
   <property name="windowTitle">
@@ -221,13 +216,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-<<<<<<< HEAD
-             <width>568</width>
-             <height>261</height>
-=======
              <width>545</width>
              <height>265</height>
->>>>>>> master
             </rect>
            </property>
            <attribute name="label">
@@ -245,12 +235,9 @@
                  <layout class="QVBoxLayout" name="verticalLayout_5">
                   <item>
                    <widget class="QRadioButton" name="localDesktopButton">
-<<<<<<< HEAD
-=======
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
->>>>>>> master
                     <property name="toolTip">
                      <string>Select this option to record the local desktop. 
 Freeseer currently only supports recording the full desktop. 
@@ -266,12 +253,9 @@ We plan to support window and area modes in future versions.</string>
                   </item>
                   <item>
                    <widget class="QRadioButton" name="hardwareButton">
-<<<<<<< HEAD
-=======
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
->>>>>>> master
                     <property name="toolTip">
                      <string>Select hardware to record from either a usb device or firewire device.
 
@@ -301,12 +285,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                  <layout class="QVBoxLayout" name="verticalLayout_6">
                   <item>
                    <widget class="QRadioButton" name="recordLocalDesktopButton">
-<<<<<<< HEAD
-=======
                     <property name="toolTip">
                      <string>Select this option to record the entire desktop.</string>
                     </property>
->>>>>>> master
                     <property name="text">
                      <string>Desktop</string>
                     </property>
@@ -331,15 +312,6 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                   <item>
                    <widget class="QRadioButton" name="recordLocalAreaButton">
                     <property name="enabled">
-<<<<<<< HEAD
-                     <bool>false</bool>
-                    </property>
-                    <property name="toolTip">
-                     <string>This feature is currently not yet implemented.</string>
-                    </property>
-                    <property name="text">
-                     <string>Area (Not Supported)</string>
-=======
                      <bool>true</bool>
                     </property>
                     <property name="toolTip">
@@ -357,7 +329,6 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                     </property>
                     <property name="text">
                      <string>Set Area</string>
->>>>>>> master
                     </property>
                    </widget>
                   </item>
@@ -387,12 +358,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
                  <layout class="QVBoxLayout" name="verticalLayout_7">
                   <item>
                    <widget class="QRadioButton" name="usbsrcButton">
-<<<<<<< HEAD
-=======
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
->>>>>>> master
                     <property name="toolTip">
                      <string>Use this option to record from a usb device.
 
@@ -410,12 +378,9 @@ v4l2src does not work.</string>
                   </item>
                   <item>
                    <widget class="QRadioButton" name="firewiresrcButton">
-<<<<<<< HEAD
-=======
                     <property name="enabled">
                      <bool>false</bool>
                     </property>
->>>>>>> master
                     <property name="toolTip">
                      <string>Firewire mode uses dv1394src as the video driver.</string>
                     </property>
@@ -470,11 +435,7 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-<<<<<<< HEAD
-             <width>192</width>
-=======
              <width>187</width>
->>>>>>> master
              <height>80</height>
             </rect>
            </property>
@@ -486,45 +447,6 @@ v4l2src does not work.</string>
              <layout class="QGridLayout" name="gridLayout_3">
               <item row="0" column="1">
                <widget class="QLineEdit" name="videoDirectoryLineEdit"/>
-<<<<<<< HEAD
-              </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="videoDirectoryButton">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="videoDirectoryLabel">
-                <property name="text">
-                 <string>Video Directory</string>
-                </property>
-                <property name="buddy">
-                 <cstring>videoDirectoryLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="talksFileLabel">
-                <property name="text">
-                 <string>Talks File</string>
-                </property>
-                <property name="buddy">
-                 <cstring>talksFileLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QToolButton" name="talksFileButton">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="talksFileLineEdit"/>
-=======
               </item>
               <item row="0" column="2">
                <widget class="QToolButton" name="videoDirectoryButton">
@@ -610,89 +532,12 @@ v4l2src does not work.</string>
                  <cstring>resolutionComboBox</cstring>
                 </property>
                </widget>
->>>>>>> master
               </item>
              </layout>
             </item>
            </layout>
           </widget>
-<<<<<<< HEAD
-          <widget class="QWidget" name="settings_advanced">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>249</width>
-             <height>81</height>
-            </rect>
-           </property>
-           <attribute name="label">
-            <string>Advanced Settings</string>
-           </attribute>
-           <layout class="QHBoxLayout" name="horizontalLayout_6">
-            <item>
-             <widget class="QGroupBox" name="groupBox_4">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="toolTip">
-               <string>This feature has not yet been implemented.</string>
-              </property>
-              <property name="title">
-               <string>Advanced (Not Supported)</string>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_5">
-               <item>
-                <widget class="QLabel" name="label_6">
-                 <property name="text">
-                  <string>Video scale size</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>comboBox_3</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="comboBox_3">
-                 <item>
-                  <property name="text">
-                   <string>640x480</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>1024x768</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
          </widget>
-=======
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QPushButton" name="resetSettingsButton">
-            <property name="text">
-             <string>reset</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="applySettingsButton">
-            <property name="text">
-             <string>apply</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
->>>>>>> master
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -849,40 +694,6 @@ v4l2src does not work.</string>
          </widget>
         </item>
         <item>
-<<<<<<< HEAD
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>RSS Feed</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="textEdit">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>29</height>
-           </size>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Type the RSS url here&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Load</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-=======
->>>>>>> master
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
            <string>Titles</string>
@@ -1046,12 +857,6 @@ p, li { white-space: pre-wrap; }
     <hint type="sourcelabel">
      <x>95</x>
      <y>228</y>
-<<<<<<< HEAD
-    </hint>
-    <hint type="destinationlabel">
-     <x>554</x>
-     <y>216</y>
-=======
     </hint>
     <hint type="destinationlabel">
      <x>554</x>
@@ -1088,7 +893,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>313</x>
      <y>210</y>
->>>>>>> master
     </hint>
    </hints>
   </connection>
