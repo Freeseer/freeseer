@@ -30,18 +30,6 @@ class BackendInterface:
     def stop(self):
         raise NotImplementedError('This method must be implemented.')
 
-    def set_video_source(self):
-        raise NotImplementedError('This method must be implemented.')
-
-    def clear_video_source(self):
-        raise NotImplementedError('This method must be implemented.')
-
-    def set_audio_source(self):
-        raise NotImplementedError('This method must be implemented.')
-
-    def clear_audio_source(self):
-        raise NotImplementedError('This method must be implemented.')
-
     def enable_video_preview(self):
         raise NotImplementedError('This method must be implemented.')
 
