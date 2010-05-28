@@ -240,7 +240,8 @@ class Freeseer_gstreamer(BackendInterface):
         if (self.video_source_type == 'firewire'):
             self.dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
             self.dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
-            self.dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
+            self.dv1394dvdemux =  gst.element_factory_make('dvdemux',
+                                                           'dv1394dvdemux')
             self.dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
             
             self.player.add(self.dv1394q1,
