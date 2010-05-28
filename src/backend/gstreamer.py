@@ -248,13 +248,13 @@ class Freeseer_gstreamer(BackendInterface):
     ### Audio Functions
     ###
 
-    def set_audio_source(self):
+    def _set_audio_source(self):
         audio_src = gst.element_factory_make(self.audio_source, 'audio_src')
         self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
         self.player.add(audio_src, self.audio_tee)
         audio_src.link(self.audio_tee)
 
-    def clear_audio_source(self):
+    def _clear_audio_source(self):
         audio_src = self.player.get_by_name('audio_src')
         self.player.remove(audio_src, self.audio_tee)
 
@@ -330,7 +330,7 @@ class Freeseer_gstreamer(BackendInterface):
         self.filesink.set_property('location', self.filename)
 
         if self.record_audio == True:
-            self.set_audio_source()
+            self._set_audio_source()
             self._set_audio_encoder()
         self.player.set_state(gst.STATE_PLAYING)
 
@@ -341,7 +341,7 @@ class Freeseer_gstreamer(BackendInterface):
         self.player.set_state(gst.STATE_NULL)
         
         if self.record_audio == True:
-            self.clear_audio_source()
+            self._clear_audio_source()
             self._clear_audio_encoder()
 
     def change_video_codec(self, new_vcodec):
