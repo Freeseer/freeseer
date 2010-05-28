@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>590</width>
-    <height>503</height>
+    <width>585</width>
+    <height>509</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>freeseer - video studio in a backpack</string>
+   <string>freeseer - portable presentation recording station</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resource.qrc">
@@ -99,6 +99,58 @@
          </layout>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="eventListLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Event</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox">
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="roomListLayout">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Room</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_2">
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0" rowspan="2">
            <widget class="QWidget" name="previewWidget" native="true"/>
@@ -107,6 +159,15 @@
            <widget class="QSlider" name="audioFeedbackSlider">
             <property name="enabled">
              <bool>false</bool>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>0</number>
             </property>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -144,224 +205,357 @@
        <attribute name="title">
         <string>configure</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
+       <layout class="QVBoxLayout" name="verticalLayout_9">
         <item>
-         <widget class="QGroupBox" name="videoConfigBox">
-          <property name="title">
-           <string>Video Configuration</string>
+         <widget class="QToolBox" name="toolBox">
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QWidget" name="widget" native="true">
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <widget class="QRadioButton" name="localDesktopButton">
-                <property name="toolTip">
-                 <string>Select this option to record the local desktop. 
+          <widget class="QWidget" name="page">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>545</width>
+             <height>265</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Basic Settings</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QGroupBox" name="videoConfigBox">
+              <property name="title">
+               <string>Video Configuration</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QWidget" name="widget" native="true">
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QRadioButton" name="localDesktopButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>Select this option to record the local desktop. 
 Freeseer currently only supports recording the full desktop. 
 We plan to support window and area modes in future versions.</string>
-                </property>
-                <property name="text">
-                 <string>Local Desktop</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="hardwareButton">
-                <property name="toolTip">
-                 <string>Select hardware to record from either a usb device or firewire device.
+                    </property>
+                    <property name="text">
+                     <string>Local Desktop</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="hardwareButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>Select hardware to record from either a usb device or firewire device.
 
 Freeseer finds USB devices by scanning /dev/videoX starting from index 0.
 
 Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</string>
-                </property>
-                <property name="text">
-                 <string>Hardware</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="localDesktopBox">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>138</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>Local Desktop</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_6">
-              <item>
-               <widget class="QRadioButton" name="recordLocalDesktopButton">
-                <property name="text">
-                 <string>Desktop</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="recordLocalWindowButton">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="toolTip">
-                 <string>This feature is currently not yet implemented.</string>
-                </property>
-                <property name="text">
-                 <string>Window (Not Supported)</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="recordLocalAreaButton">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="toolTip">
-                 <string>This feature is currently not yet implemented.</string>
-                </property>
-                <property name="text">
-                 <string>Area (Not Supported)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="hardwareBox">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>138</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>Hardware</string>
-             </property>
-             <property name="flat">
-              <bool>false</bool>
-             </property>
-             <property name="checkable">
-              <bool>false</bool>
-             </property>
-             <property name="checked">
-              <bool>false</bool>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
-              <item>
-               <widget class="QRadioButton" name="usbsrcButton">
-                <property name="toolTip">
-                 <string>Use this option to record from a usb device.
+                    </property>
+                    <property name="text">
+                     <string>Hardware</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="localDesktopBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>138</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Local Desktop</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <item>
+                   <widget class="QRadioButton" name="recordLocalDesktopButton">
+                    <property name="toolTip">
+                     <string>Select this option to record the entire desktop.</string>
+                    </property>
+                    <property name="text">
+                     <string>Desktop</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="recordLocalWindowButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>This feature is currently not yet implemented.</string>
+                    </property>
+                    <property name="text">
+                     <string>Window (Not Supported)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="recordLocalAreaButton">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>Select this option to record an small area of the desktop.</string>
+                    </property>
+                    <property name="text">
+                     <string>Area</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="areaButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Set Area</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="hardwareBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>138</height>
+                  </size>
+                 </property>
+                 <property name="title">
+                  <string>Hardware</string>
+                 </property>
+                 <property name="flat">
+                  <bool>false</bool>
+                 </property>
+                 <property name="checkable">
+                  <bool>false</bool>
+                 </property>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_7">
+                  <item>
+                   <widget class="QRadioButton" name="usbsrcButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>Use this option to record from a usb device.
 
 This option tries the v4l2src driver
 and falls back to the v4lsrc driver if
 v4l2src does not work.</string>
-                </property>
+                    </property>
+                    <property name="text">
+                     <string>usb device</string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="firewiresrcButton">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="toolTip">
+                     <string>Firewire mode uses dv1394src as the video driver.</string>
+                    </property>
+                    <property name="text">
+                     <string>firewire device</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QComboBox" name="videoDeviceList">
+                    <property name="toolTip">
+                     <string>Select the video device to record from.</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="soundConfigBox">
+              <property name="title">
+               <string>Sound Configuration</string>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Sound Source</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>audioSourceList</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="audioSourceList">
+                 <property name="toolTip">
+                  <string>Select the audio source to use for recording.</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="page_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>187</width>
+             <height>80</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>File Locations</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="videoDirectoryLineEdit"/>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="videoDirectoryButton">
                 <property name="text">
-                 <string>usb device</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
+                 <string>...</string>
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QRadioButton" name="firewiresrcButton">
-                <property name="toolTip">
-                 <string>Firewire mode uses dv1394src as the video driver.</string>
-                </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="videoDirectoryLabel">
                 <property name="text">
-                 <string>firewire device</string>
+                 <string>Video Directory</string>
+                </property>
+                <property name="buddy">
+                 <cstring>videoDirectoryLineEdit</cstring>
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QComboBox" name="videoDeviceList">
-                <property name="toolTip">
-                 <string>Select the video device to record from.</string>
+              <item row="1" column="0">
+               <widget class="QLabel" name="talksFileLabel">
+                <property name="text">
+                 <string>Talks File</string>
+                </property>
+                <property name="buddy">
+                 <cstring>talksFileLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="talksFileButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="talksFileLineEdit"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="settings_advanced">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>223</width>
+             <height>51</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Advanced Settings</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <layout class="QGridLayout" name="advancedGrid">
+              <item row="0" column="1">
+               <widget class="QComboBox" name="resolutionComboBox">
+                <item>
+                 <property name="text">
+                  <string>640x480</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>800x600</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>1024x768</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="resolutionLabel">
+                <property name="text">
+                 <string>Video scale size</string>
+                </property>
+                <property name="buddy">
+                 <cstring>resolutionComboBox</cstring>
                 </property>
                </widget>
               </item>
              </layout>
-            </widget>
-           </item>
-          </layout>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="soundConfigBox">
-          <property name="title">
-           <string>Sound Configuration</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_5">
-             <property name="text">
-              <string>Sound Source</string>
-             </property>
-             <property name="buddy">
-              <cstring>audioSourceList</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="audioSourceList">
-             <property name="toolTip">
-              <string>Select the audio source to use for recording.</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="toolTip">
-           <string>This feature has not yet been implemented.</string>
-          </property>
-          <property name="title">
-           <string>Advanced (Not Supported)</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>Video scale size</string>
-             </property>
-             <property name="buddy">
-              <cstring>comboBox_3</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBox_3">
-             <item>
-              <property name="text">
-               <string>640x480</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>1024x768</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QPushButton" name="resetSettingsButton">
+            <property name="text">
+             <string>reset</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="applySettingsButton">
+            <property name="text">
+             <string>apply</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -405,10 +599,10 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
+             <item row="5" column="1">
               <widget class="QLineEdit" name="titleEdit"/>
              </item>
-             <item row="3" column="0">
+             <item row="5" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Title</string>
@@ -445,6 +639,48 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Event</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="eventEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Time</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QTimeEdit" name="timeEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QCheckBox" name="checkBox">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QCheckBox" name="checkBox_4">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
@@ -455,37 +691,6 @@ v4l2src does not work.</string>
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>RSS Feed</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QTextEdit" name="textEdit">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>27</height>
-           </size>
-          </property>
-          <property name="html">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Type the RSS url here&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
          </widget>
         </item>
         <item>
@@ -540,8 +745,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>590</width>
-     <height>25</height>
+     <width>585</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -602,12 +807,12 @@ p, li { white-space: pre-wrap; }
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>415</x>
-     <y>118</y>
+     <x>562</x>
+     <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>319</x>
-     <y>119</y>
+     <x>403</x>
+     <y>112</y>
     </hint>
    </hints>
   </connection>
@@ -618,12 +823,12 @@ p, li { white-space: pre-wrap; }
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>420</x>
-     <y>151</y>
+     <x>562</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
-     <x>407</x>
-     <y>149</y>
+     <x>491</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>
@@ -634,12 +839,12 @@ p, li { white-space: pre-wrap; }
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>113</x>
-     <y>118</y>
+     <x>143</x>
+     <y>175</y>
     </hint>
     <hint type="destinationlabel">
-     <x>168</x>
-     <y>95</y>
+     <x>358</x>
+     <y>214</y>
     </hint>
    </hints>
   </connection>
@@ -650,12 +855,44 @@ p, li { white-space: pre-wrap; }
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>65</x>
-     <y>179</y>
+     <x>95</x>
+     <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>331</x>
-     <y>97</y>
+     <x>554</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eventEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>313</x>
+     <y>177</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>timeEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>210</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>313</x>
+     <y>210</y>
     </hint>
    </hints>
   </connection>
