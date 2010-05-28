@@ -244,6 +244,10 @@ class Freeseer_gstreamer(BackendInterface):
     def change_output_resolution(self, width, height):
         self.fvidscale_cap.set_property('caps', gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s' % (width, height)))
 
+    ###
+    ### Audio Functions
+    ###
+
     def set_audio_source(self):
         audio_src = gst.element_factory_make(self.audio_source, 'audio_src')
         self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
@@ -293,6 +297,10 @@ class Freeseer_gstreamer(BackendInterface):
                            audioenc_convert,
                            audioenc_level,
                            audioenc_codec)
+
+    ###
+    ### Framework Required Functions
+    ###
 
     def change_soundsrc(self, new_source):
         '''
