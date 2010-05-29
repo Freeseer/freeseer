@@ -330,7 +330,7 @@ class MainApp(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         self.core.logger.log.info('Exiting freeseer...')
-        self.core.stop()
+        #self.core.stop()
         event.accept()
 
 if __name__ == "__main__":
