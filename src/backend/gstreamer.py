@@ -49,9 +49,8 @@ class Freeseer_gstreamer(BackendInterface):
         self.recording_audio_feedback = False
         self.recording_width = 0
         self.recording_height = 0
-        
-        self.viddrv = 'v4lsrc'
-        self.viddev = '/dev/video0'
+
+        # To be deprecated
         self.filename = 'default.ogg'
         self.video_codec = 'theoraenc'
         self.audio_codec = 'vorbisenc'
