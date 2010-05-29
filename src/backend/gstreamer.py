@@ -157,10 +157,6 @@ class Freeseer_gstreamer(BackendInterface):
         self.vidsrc.set_property('endx', end_x)
         self.vidsrc.set_property('endy', end_y)
 
-    def change_output_resolution(self, width, height):
-        self.recording_width = width
-        self.recording_height = height
-
     ###
     ### Muxer Functions
     ###
@@ -420,6 +416,13 @@ class Freeseer_gstreamer(BackendInterface):
             self.video_source = 'v4lsrc'
         elif (source_type == 'firewire'):
             self.video_source = 'dv1394src'
+
+    def change_output_resolution(self, width, height):
+        '''
+        Sets the resolution of the recorded video.
+        '''
+        self.recording_width = width
+        self.recording_height = height
 
     def change_audio_source(self, new_source):
         '''
