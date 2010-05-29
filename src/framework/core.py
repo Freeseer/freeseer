@@ -55,30 +55,6 @@ class FreeseerCore:
         self.spaces = False
         self.logger.log.info(u"Core initialized")
 
-    def get_video_devices(self, device_type):
-        '''
-        Returns available video devices.
-        '''
-        viddevs = self.freeseer.get_video_devices(device_type)
-        self.logger.log.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
-        return viddevs
-
-    def get_video_sources(self):
-        '''
-        Returns supported video sources.
-        '''
-        vidsrcs = self.freeseer.get_video_sources()
-        self.logger.log.debug('Available video sources: ' + str(vidsrcs))
-        return vidsrcs
-
-    def get_audio_sources(self):
-        '''
-        Returns supported audio sources.
-        '''
-        sndsrcs = self.freeseer.get_audio_sources()
-        self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
-        return sndsrcs
-
     def get_talk_titles(self):
         '''
         Returns the talk titles as listed in  talks.txt
@@ -132,6 +108,34 @@ class FreeseerCore:
             recordname = recordname.replace(' ', '_')
         return recordname
 
+
+    ##
+    ## Backend Functions
+    ##
+    def get_video_sources(self):
+        '''
+        Returns supported video sources.
+        '''
+        vidsrcs = self.freeseer.get_video_sources()
+        self.logger.log.debug('Available video sources: ' + str(vidsrcs))
+        return vidsrcs
+        
+    def get_video_devices(self, device_type):
+        '''
+        Returns available video devices.
+        '''
+        viddevs = self.freeseer.get_video_devices(device_type)
+        self.logger.log.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
+        return viddevs
+    
+    def get_audio_sources(self):
+        '''
+        Returns supported audio sources.
+        '''
+        sndsrcs = self.freeseer.get_audio_sources()
+        self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
+        return sndsrcs
+        
     def change_videosrc(self, vid_source, vid_device):
         ''' Informs backend of new video source to use when recording. '''
         self.freeseer.change_video_source(vid_source, vid_device)
