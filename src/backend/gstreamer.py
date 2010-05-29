@@ -91,7 +91,7 @@ class Freeseer_gstreamer(BackendInterface):
                 # if v4l2src driver does not work, fallback to the older v4lsrc
                 if (str(debug).startswith('v4l2_calls.c')):
                     self.core.logger.log.debug('v4l2src failed, falling back to v4lsrc')
-                    self.change_videosrc('usb_fallback', self.viddev)
+                    self.change_videosrc('usb_fallback', self.video_device)
                     self.record()
                     
         elif message.structure is not None:
@@ -139,8 +139,9 @@ class Freeseer_gstreamer(BackendInterface):
     ###
     def _set_video_source(self):
         video_src = gst.element_factory_make(self.video_source, 'video_src')
-        if (self.video_source_type == 'usb'):
+        if (self.video_source_type.startswith('usb')):
             video_src.set_property('device', self.video_device)
+            
         video_rate = gst.element_factory_make('videorate', 'video_rate')
         video_rate_cap = gst.element_factory_make('capsfilter',
                                                     'video_rate_cap')
