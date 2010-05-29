@@ -47,6 +47,11 @@ class Freeseer_gstreamer(BackendInterface):
         ##
         self.record_video = True
         self.record_audio = True
+        self.record_desktop_area = False
+        self.record_desktop_area_start_x = 0
+        self.record_desktop_area_start_y = 0
+        self.record_desktop_area_end_x = 0
+        self.record_desktop_area_end_y = 0
 
         # Video Related
         self.recording_video_bitrate = 2400
@@ -67,6 +72,9 @@ class Freeseer_gstreamer(BackendInterface):
         bus.connect('message', self.on_message)
         bus.connect('sync-message::element', self.on_sync_message)
 
+    ##
+    ## GST Player Functions
+    ##
     def on_message(self, bus, message):
         t = message.type
       
@@ -150,12 +158,6 @@ class Freeseer_gstreamer(BackendInterface):
             devices.append(devpath)
             devpath=path + str(i)
         return devices
-
-    def set_recording_area(self, start_x, start_y, end_x, end_y):
-        self.vidsrc.set_property('startx', start_x)
-        self.vidsrc.set_property('starty', start_y)
-        self.vidsrc.set_property('endx', end_x)
-        self.vidsrc.set_property('endy', end_y)
 
     ###
     ### Muxer Functions
@@ -251,6 +253,13 @@ class Freeseer_gstreamer(BackendInterface):
                                self.dv1394q2,
                                self.dv1394dvdemux,
                                self.dv1394dvdec)
+
+    def _set_recording_area(self):
+        video_src = self.player.get_by_name('video_src')
+        video_src.set_property('startx', self.record_desktop_area_start_x)
+        video_src.set_property('starty', self.record_desktop_area_start_y)
+        video_src.set_property('endx', self.record_desktop_area_end_x)
+        video_src.set_property('endy', self.record_desktop_area_end_y)
 
     def _set_video_encoder(self):
         videoenc_queue = gst.element_factory_make('queue', 'videoenc_queue')
@@ -371,6 +380,9 @@ class Freeseer_gstreamer(BackendInterface):
             if self.recording_video_feedback == True:
                 self._set_video_feedback()
 
+            if self.record_desktop_area == True:
+                self._set_recording_area()
+
         if self.record_audio == True:
             self._set_audio_source()
             self._set_audio_encoder()
@@ -416,6 +428,15 @@ class Freeseer_gstreamer(BackendInterface):
             self.video_source = 'v4lsrc'
         elif (source_type == 'firewire'):
             self.video_source = 'dv1394src'
+
+    def set_recording_area(self, start_x, start_y, end_x, end_y):
+        '''
+        Sets the area on the desktop to be recorded.
+        '''
+        self.record_desktop_area_start_x = start_x
+        self.record_desktop_area_start_y = start_y
+        self.record_desktop_area_end_x = end_x
+        self.record_desktop_area_end_y = end_y
 
     def change_output_resolution(self, width, height):
         '''
