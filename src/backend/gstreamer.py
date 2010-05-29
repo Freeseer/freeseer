@@ -445,37 +445,6 @@ class Freeseer_gstreamer(BackendInterface):
             self._clear_audio_source()
             self._clear_audio_encoder()
 
-    def change_video_codec(self, new_vcodec):
-        '''
-        Change the video codec
-        '''
-        self.video_codec = new_vcodec
-        
-        # check if the new video codec is valid
-        # if not return False
-        try:
-            self.core.logger.log.debug('checking availability of ' + self.video_codec)
-            self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
-        except:
-            self.core.logger.log.debug('Failed to load ' + self.soundsrc + '.')
-            return False
-
-        # codec is available for use, now set pipeline to use it
-        self.player.remove(self.vidcodec)
-        self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
-        self.player.add(self.vidcodec)
-        gst.element_link_many(self.vidqueue1, self.vidcodec, self.mux)
-
-    def change_audio_codec(self, new_acodec):
-        '''
-        Change the audio codec
-        '''
-        self.audio_codec = new_acodec
-        self.player.remove(self.sndcodec)
-        self.sndcodec = gst.element_factory_make(self.audio_codec, 'sndcodec')
-        self.player.add(self.sndcodec)
-        gst.element_link_many(self.audioconvert, self.sndcodec, self.mux)
-
     def enable_video_feedback(self, window_id):
         '''
         Activate video feedback. Will send video to a preview window.
