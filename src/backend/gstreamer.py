@@ -172,8 +172,9 @@ class Freeseer_gstreamer(BackendInterface):
         self.video_tee = gst.element_factory_make('tee', 'video_tee')
 
         if self.recording_width != 0:
+            print 'here'
             video_scale_cap.set_property('caps',
-                gst.caps_from_string('width=%s, height=%s'
+                gst.caps_from_string('video/x-raw-rgb, width=%s, height=%s'
                 % (self.recording_width, self.recording_height)))
 
         self.player.add(video_src,
