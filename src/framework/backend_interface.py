@@ -33,7 +33,7 @@ class BackendInterface:
     def change_video_source(self, new_source):
         raise NotImplementedError('This method must be implemented.')
 
-    def change_output_resolution(self):
+    def change_output_resolution(self, width, height):
         raise NotImplementedError('This method must be implemented.')
 
     def change_audio_source(self, new_source):
