@@ -119,46 +119,6 @@ class Freeseer_gstreamer(BackendInterface):
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(self.window_id)
 
-    def get_video_sources(self):
-        return ['desktop', 'usb', 'firewire']
-
-    def get_video_devices(self, videosrc):
-        vid_devices = None
-        if videosrc == 'usb':
-            vid_devices = self._get_devices('/dev/video', 0)
-        elif videosrc == 'firewire':
-            vid_devices = self._get_devices('/dev/fw', 1)
-        # return all types
-        else:
-            vid_devices = self._get_devices('/dev/video', 0)
-            vid_devices += self._get_devices('/dev/fw', 1)
-
-        return vid_devices
-
-    def get_audio_sources(self):
-        snd_sources_list = ['pulsesrc', 'alsasrc']
-
-        snd_sources = []
-        for src in snd_sources_list:
-            try:
-                gst.element_factory_make(src, 'testsrc')
-                snd_sources.append(src)
-                self.core.logger.log.debug(src + ' is available.')
-            except:
-                self.core.logger.log.debug(src + ' is not available')
-
-        return snd_sources
-
-    def _get_devices(self, path, index):
-        i = index
-        devices = []
-        devpath=path + str(i)
-        while os.path.exists(devpath):
-            i=i+1
-            devices.append(devpath)
-            devpath=path + str(i)
-        return devices
-
     ###
     ### Muxer Functions
     ###
@@ -413,6 +373,61 @@ class Freeseer_gstreamer(BackendInterface):
             if self.recording_audio_feedback == True:
                 self._clear_audio_feedback()
 
+    def get_video_sources(self):
+        '''
+        Returns the supported video sources by this backend.
+        '''
+        return ['desktop', 'usb', 'firewire']
+
+    def get_video_devices(self, videosrc):
+        '''
+        Returns the supported video devices by this backend.
+        '''
+        vid_devices = None
+
+        if videosrc == 'usb':
+            vid_devices = self._get_devices('/dev/video', 0)
+        elif videosrc == 'firewire':
+            vid_devices = self._get_devices('/dev/fw', 1)
+        # return all types
+        else:
+            vid_devices = self._get_devices('/dev/video', 0)
+            vid_devices += self._get_devices('/dev/fw', 1)
+
+        return vid_devices
+
+    def _get_devices(self, path, index):
+        '''
+        Returns devices that are found to exist.
+        '''
+        i = index
+        devices = []
+        devpath=path + str(i)
+
+        while os.path.exists(devpath):
+            i=i+1
+            devices.append(devpath)
+            devpath=path + str(i)
+
+        return devices
+
+    def get_audio_sources(self):
+        '''
+        Returns the supported audio sources by this backend.
+        '''
+        snd_sources_list = ['pulsesrc', 'alsasrc']
+
+        snd_sources = []
+        for src in snd_sources_list:
+            try:
+                gst.element_factory_make(src, 'testsrc')
+                snd_sources.append(src)
+                self.core.logger.log.debug(src + ' is available.')
+            except:
+                self.core.logger.log.debug(src + ' is not available')
+
+        return snd_sources
+
     def change_video_source(self, source_type, source_device):
         '''
         Changes the video source
@@ -487,4 +502,3 @@ class Freeseer_gstreamer(BackendInterface):
         Disable the audio feedback.
         '''
         self.recording_audio_feedback = False
-        
