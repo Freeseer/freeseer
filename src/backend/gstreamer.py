@@ -285,6 +285,12 @@ class Freeseer_gstreamer(BackendInterface):
                                self.dv1394dvdemux,
                                self.dv1394dvdec)
 
+    def _set_video_encoder(self):
+        pass
+
+    def _clear_video_encoder(self):
+        pass
+
     def _set_video_feedback(self):
         vpqueue = gst.element_factory_make('queue', 'vpqueue')
         vpsink = gst.element_factory_make('autovideosink', 'vpsink')
