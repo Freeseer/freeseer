@@ -374,6 +374,17 @@ class Freeseer_gstreamer(BackendInterface):
                            audioenc_level,
                            audioenc_codec)
 
+    def _set_audio_feedback(self):
+        afqueue = gst.element_factory_make('queue', 'afqueue')
+        afsink = gst.element_factory_make('autoaudiosink', 'afsink')
+        self.player.add(afqueue, afsink)
+        gst.element_link_many(self.audio_tee, afqueue, afsink)
+
+    def _clear_audio_feedback(self):
+        afqueue = self.player.get_by_name('afqueue')
+        afsink = self.player.get_by_name('afsink')
+        self.player.remove(afqueue, afsink)
+
     ###
     ### Framework Required Functions
     ###
@@ -494,15 +505,11 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         Activate audio feedback.  Will send the recorded audio back out the speakers.
         '''
-        afqueue = gst.element_factory_make('queue', 'afqueue')
-        afsink = gst.element_factory_make('autoaudiosink', 'afsink')
-        self.player.add(afqueue, afsink)
-        gst.element_link_many(self.sndtee, afqueue, afsink)
+        self.recording_audio_feedback = True
 
     def disable_audio_feedback(self):
         '''
         Disable the audio feedback.
         '''
-        afqueue = self.player.get_by_name('afqueue')
-        afsink = self.player.get_by_name('afsink')
-        self.player.remove(afqueue, afsink)
+        self.recording_audio_feedback = False
+        
