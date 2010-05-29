@@ -389,24 +389,6 @@ class Freeseer_gstreamer(BackendInterface):
     ### Framework Required Functions
     ###
 
-    def change_soundsrc(self, new_source):
-        '''
-        Changes the sound source
-        '''
-
-        # Ensure the new sound source is valid
-        try:
-            self.core.logger.log.debug('loading ' + new_source)
-            src = gst.element_factory_make(new_source, 'sndsrc')
-        except:
-            self.core.logger.log.debug('Failed to load ' + new_source + '.')
-            return False
-
-        self.audio_source = new_source
-        self.core.logger.log.debug(self.audio_source + ' loaded.')
-        
-        return True
-
     def record(self, filename):
         '''
         Start recording to a file.
@@ -445,6 +427,23 @@ class Freeseer_gstreamer(BackendInterface):
             self._clear_audio_source()
             self._clear_audio_encoder()
 
+    def change_audio_source(self, new_audio_source):
+        '''
+        Changes the audio source
+        '''
+
+        # Ensure the new sound source is valid
+        try:
+            self.core.logger.log.debug('loading ' + new_audio_source)
+            src = gst.element_factory_make(new_audio_source, 'test_src')
+        except:
+            self.core.logger.log.debug('Failed to load ' + new_audio_source + '.')
+            return False
+
+        self.audio_source = new_audio_source
+        self.core.logger.log.debug(self.audio_source + ' loaded.')
+        return True
+
     def enable_video_feedback(self, window_id):
         '''
         Activate video feedback. Will send video to a preview window.
@@ -460,7 +459,8 @@ class Freeseer_gstreamer(BackendInterface):
 
     def enable_audio_feedback(self):
         '''
-        Activate audio feedback.  Will send the recorded audio back out the speakers.
+        Activate audio feedback.
+        Will send the recorded audio back out the speakers.
         '''
         self.recording_audio_feedback = True
 
