@@ -164,22 +164,6 @@ class Freeseer_gstreamer(BackendInterface):
             devpath=path + str(i)
         return devices
 
-    def change_videosrc(self, source_type, source_device):
-        '''
-        Changes the video source
-        '''
-        self.video_source_type = source_type
-        self.video_device = source_device
-
-        if (source_type == 'desktop'):
-            self.video_source = 'ximagesrc'
-        elif (source_type == 'usb'):
-            self.video_source = 'v4l2src'
-        elif (source_type == 'usb_fallback'):
-            self.video_source = 'v4lsrc'
-        elif (source_type == 'firewire'):
-            self.video_source = 'dv1394src'
-
     def set_recording_area(self, start_x, start_y, end_x, end_y):
         self.vidsrc.set_property('startx', start_x)
         self.vidsrc.set_property('starty', start_y)
@@ -427,20 +411,36 @@ class Freeseer_gstreamer(BackendInterface):
             self._clear_audio_source()
             self._clear_audio_encoder()
 
-    def change_audio_source(self, new_audio_source):
+    def change_video_source(self, source_type, source_device):
+        '''
+        Changes the video source
+        '''
+        self.video_source_type = source_type
+        self.video_device = source_device
+
+        if (source_type == 'desktop'):
+            self.video_source = 'ximagesrc'
+        elif (source_type == 'usb'):
+            self.video_source = 'v4l2src'
+        elif (source_type == 'usb_fallback'):
+            self.video_source = 'v4lsrc'
+        elif (source_type == 'firewire'):
+            self.video_source = 'dv1394src'
+
+    def change_audio_source(self, new_source):
         '''
         Changes the audio source
         '''
 
         # Ensure the new sound source is valid
         try:
-            self.core.logger.log.debug('loading ' + new_audio_source)
-            src = gst.element_factory_make(new_audio_source, 'test_src')
+            self.core.logger.log.debug('loading ' + new_source)
+            src = gst.element_factory_make(new_source, 'test_src')
         except:
-            self.core.logger.log.debug('Failed to load ' + new_audio_source + '.')
+            self.core.logger.log.debug('Failed to load ' + new_source + '.')
             return False
 
-        self.audio_source = new_audio_source
+        self.audio_source = new_source
         self.core.logger.log.debug(self.audio_source + ' loaded.')
         return True
 
