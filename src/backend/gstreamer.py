@@ -476,18 +476,6 @@ class Freeseer_gstreamer(BackendInterface):
         self.player.add(self.sndcodec)
         gst.element_link_many(self.audioconvert, self.sndcodec, self.mux)
 
-    def change_muxer(self, new_mux):
-        '''
-        Change the muxer
-        '''
-        self.muxer = new_mux
-        self.player.remove(self.mux)
-        self.mux = gst.element_factory_make(self.muxer, 'mux')
-        self.player.add(self.mux)
-        gst.element_link_many(self.sndcodec, self.mux)
-        gst.element_link_many(self.vidcodec, self.mux)
-        gst.element_link_many(self.mux, self.filesink)
-
     def enable_video_feedback(self, window_id):
         '''
         Activate video feedback. Will send video to a preview window.
