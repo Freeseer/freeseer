@@ -391,6 +391,10 @@ class Freeseer_gstreamer(BackendInterface):
         if self.record_audio == True:
             self._set_audio_source()
             self._set_audio_encoder()
+
+            if self.recording_audio_feedback == True:
+                self._set_audio_feedback()
+                
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
@@ -410,6 +414,9 @@ class Freeseer_gstreamer(BackendInterface):
         if self.record_audio == True:
             self._clear_audio_source()
             self._clear_audio_encoder()
+
+            if self.recording_audio_feedback == True:
+                self._clear_audio_feedback()
 
     def change_video_source(self, source_type, source_device):
         '''
