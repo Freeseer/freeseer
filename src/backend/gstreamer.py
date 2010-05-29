@@ -295,7 +295,7 @@ class Freeseer_gstreamer(BackendInterface):
         gst.element_link_many(self.video_tee,
                               videoenc_queue,
                               videoenc_codec,
-                              self.muxer)
+                              self.mux)
 
     def _clear_video_encoder(self):
         videoenc_queue = self.player.get_by_name('videoenc_queue')
@@ -406,6 +406,7 @@ class Freeseer_gstreamer(BackendInterface):
 
         if self.record_video == True:
             self._set_video_source()
+            self._set_video_encoder()
 
             if self.recording_video_feedback == True:
                 self._set_video_feedback()
@@ -420,9 +421,11 @@ class Freeseer_gstreamer(BackendInterface):
         Stop recording.
         '''
         self.player.set_state(gst.STATE_NULL)
+        self._clear_muxer()
 
         if self.record_video == True:
             self._clear_video_source()
+            self._clear_video_encoder()
             
             if self.recording_video_feedback == True:
                 self._clear_video_feedback()
