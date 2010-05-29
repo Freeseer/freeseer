@@ -141,19 +141,6 @@ class Freeseer_gstreamer(BackendInterface):
 
         return snd_sources
 
-    def get_video_codecs(self):
-        video_codec_list = ['theoraenc', 'ffenc_msmpeg4']
-        
-        video_codecs = []
-        for codec in video_codec_list:
-            try:
-                gst.element_factory_make(codec, 'testcodec')
-                video_codecs.append(codec)
-                self.core.logger.log.debug(codec + ' is available.')
-            except:
-                self.core.logger.log.debug(codec + ' is not available')
-        return video_codecs
-
     def _get_devices(self, path, index):
         i = index
         devices = []
