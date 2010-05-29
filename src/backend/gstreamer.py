@@ -349,6 +349,8 @@ class Freeseer_gstreamer(BackendInterface):
         self.player.set_state(gst.STATE_PLAYING)
 
     def test_feedback_stop(self):
+        self.player.set_state(gst.STATE_NULL)
+        
         if self.test_video == True:
             self._clear_video_source()
             self._clear_video_feedback()
@@ -356,8 +358,7 @@ class Freeseer_gstreamer(BackendInterface):
         if self.test_audio == True:
             self._clear_audio_source()
             self._clear_audio_feedback()
-        
-        self.player.set_state(gst.STATE_NULL)
+
         del self.test_video
         del self.test_audio
 

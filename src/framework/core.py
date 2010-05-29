@@ -52,7 +52,8 @@ class FreeseerCore:
         self.backend = Freeseer_gstreamer(self)
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
-        
+
+        self.feedback = False
         self.spaces = False
         self.logger.log.info(u"Core initialized")
 
@@ -175,6 +176,14 @@ class FreeseerCore:
         self.backend.stop()
         self.logger.log.info('Recording stopped')
 
+    def test_feedback(self, video, audio):
+        if self.feedback:
+            self.feedback = False
+            self.backend.test_feedback_stop()
+        else:
+            self.feedback = True
+            self.backend.test_feedback_start(video, audio)
+            
     def preview(self, enable=False, window_id=None):
         '''
         Enable/Disable the video preview window.
