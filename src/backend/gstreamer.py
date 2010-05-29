@@ -58,23 +58,9 @@ class Freeseer_gstreamer(BackendInterface):
         # Audio Related
         self.recording_audio_codec = 'vorbisenc'
         self.recording_audio_feedback = False
-
-        self.filename = 'default.ogg'
         
         # Initialize Player
         self.player = gst.Pipeline('player')
-
-        # GST Muxer
-        self.mux = gst.element_factory_make('oggmux', 'mux')
-        self.filesink = gst.element_factory_make('filesink', 'filesink')
-        self.filesink.set_property('location', self.filename)
-
-        # GST Add Components
-        self.player.add(self.mux, self.filesink)
-
-        # GST Link Components
-        gst.element_link_many(self.mux, self.filesink)
-
         bus = self.player.get_bus()
         bus.add_signal_watch()
         bus.enable_sync_message_emission()
@@ -203,6 +189,21 @@ class Freeseer_gstreamer(BackendInterface):
     def change_output_resolution(self, width, height):
         self.recording_width = width
         self.recording_height = height
+
+    ###
+    ### Muxer Functions
+    ###
+    def _set_muxer(self, filename):
+        self.mux = gst.element_factory_make('oggmux', 'mux')
+        filesink = gst.element_factory_make('filesink', 'filesink')
+        filesink.set_property('location', filename)
+
+        self.player.add(self.mux, filesink)
+        gst.element_link_many(self.mux, filesink)
+
+    def _clear_muxer(self):
+        filesink = self.player.get_by_name('filesink')
+        self.player.remove(self.mux, filesink)
 
     ###
     ### Video Functions
@@ -401,8 +402,7 @@ class Freeseer_gstreamer(BackendInterface):
 
         filename: filename to record to
         '''
-        self.filename = filename
-        self.filesink.set_property('location', self.filename)
+        self._set_muxer(filename)
 
         if self.record_video == True:
             self._set_video_source()
