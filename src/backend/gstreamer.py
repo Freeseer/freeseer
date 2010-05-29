@@ -39,6 +39,9 @@ class Freeseer_gstreamer(BackendInterface):
     Freeseer backend class using gstreamer to record video and audio.
     '''
     def __init__(self, core):
+        '''
+        Initializes the gstreamer pipeline.
+        '''
         self.core = core
         self.window_id = None
 
@@ -123,6 +126,9 @@ class Freeseer_gstreamer(BackendInterface):
     ### Muxer Functions
     ###
     def _set_muxer(self, filename):
+        '''
+        Sets up the filesink and muxer.
+        '''
         self.mux = gst.element_factory_make('oggmux', 'mux')
         filesink = gst.element_factory_make('filesink', 'filesink')
         filesink.set_property('location', filename)
@@ -131,6 +137,9 @@ class Freeseer_gstreamer(BackendInterface):
         gst.element_link_many(self.mux, filesink)
 
     def _clear_muxer(self):
+        '''
+        Frees up the muxer and filesink from the pipeline.
+        '''
         filesink = self.player.get_by_name('filesink')
         self.player.remove(self.mux, filesink)
 
