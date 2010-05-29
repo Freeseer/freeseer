@@ -42,25 +42,27 @@ class Freeseer_gstreamer(BackendInterface):
         self.core = core
         self.window_id = None
 
-        # Global State Variables
+        ##
+        ## Global State Variables
+        ##
         self.record_video = True
         self.record_audio = True
+
+        # Video Related
+        self.recording_video_bitrate = 2400
+        self.recording_video_codec = 'theoraenc'
         self.recording_video_feedback = False
-        self.recording_audio_feedback = False
         self.recording_width = 0
         self.recording_height = 0
 
-        # To be deprecated
+        # Audio Related
+        self.recording_audio_codec = 'vorbisenc'
+        self.recording_audio_feedback = False
+
         self.filename = 'default.ogg'
-        self.video_codec = 'theoraenc'
-        self.audio_codec = 'vorbisenc'
-
+        
+        # Initialize Player
         self.player = gst.Pipeline('player')
-
-        # GST Video
-        self.vidqueue1 = gst.element_factory_make('queue', 'vidqueue1')
-        self.vidcodec = gst.element_factory_make(self.video_codec, 'vidcodec')
-        self.vidcodec.set_property('bitrate', 2400)
 
         # GST Muxer
         self.mux = gst.element_factory_make('oggmux', 'mux')
@@ -68,11 +70,9 @@ class Freeseer_gstreamer(BackendInterface):
         self.filesink.set_property('location', self.filename)
 
         # GST Add Components
-        self.player.add(self.vidqueue1, self.vidcodec)
         self.player.add(self.mux, self.filesink)
 
         # GST Link Components
-        gst.element_link_many(self.vidqueue1, self.vidcodec, self.mux)
         gst.element_link_many(self.mux, self.filesink)
 
         bus = self.player.get_bus()
@@ -260,7 +260,7 @@ class Freeseer_gstreamer(BackendInterface):
                               video_scale,
                               video_scale_cap,
                               video_cspace,
-                              self.video_tee, self.vidqueue1)
+                              self.video_tee)
 
     def _clear_video_source(self):
         video_src = self.player.get_by_name('video_src')
@@ -285,10 +285,21 @@ class Freeseer_gstreamer(BackendInterface):
                                self.dv1394dvdec)
 
     def _set_video_encoder(self):
-        pass
+        videoenc_queue = gst.element_factory_make('queue', 'videoenc_queue')
+        videoenc_codec = gst.element_factory_make(self.recording_video_codec,
+                                                    'videoenc_codec')
+        videoenc_codec.set_property('bitrate', self.recording_video_bitrate)
+
+        self.player.add(videoenc_queue, videoenc_codec)
+        gst.element_link_many(self.video_tee,
+                              videoenc_queue,
+                              videoenc_codec,
+                              self.muxer)
 
     def _clear_video_encoder(self):
-        pass
+        videoenc_queue = self.player.get_by_name('videoenc_queue')
+        videoenc_codec = self.player.get_by_name('videoenc_codec')
+        self.player.remove(videoenc_queue, videoenc_codec)
 
     def _set_video_feedback(self):
         vpqueue = gst.element_factory_make('queue', 'vpqueue')
@@ -333,7 +344,7 @@ class Freeseer_gstreamer(BackendInterface):
                                                         'audioenc_convert')
         audioenc_level = gst.element_factory_make('level', 'audioenc_level')
         audioenc_level.set_property('interval', 20000000)
-        audioenc_codec = gst.element_factory_make(self.audio_codec,
+        audioenc_codec = gst.element_factory_make(self.recording_audio_codec,
                                                         'audioenc_codec')
 
         self.player.add(audioenc_queue,
