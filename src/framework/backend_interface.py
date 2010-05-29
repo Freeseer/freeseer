@@ -23,6 +23,11 @@
 # the #fosslc channel on IRC (freenode.net)
 
 class BackendInterface:
+    def test_feedback_start(self, video=False, audio=False):
+        raise NotImplementedError('This method must be implemented.')
+    
+    def test_feedback_stop(self):
+        raise NotImplementedError('This method must be implemented.')
 
     def record(self):
         raise NotImplementedError('This method must be implemented.')

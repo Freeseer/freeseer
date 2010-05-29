@@ -334,6 +334,32 @@ class Freeseer_gstreamer(BackendInterface):
     ###
     ### Framework Required Functions
     ###
+    def test_feedback_start(self, video=False, audio=False):
+        self.test_video = video
+        self.test_audio = audio
+        
+        if self.test_video == True:
+            self._set_video_source()
+            self._set_video_feedback()
+
+        if self.test_audio == True:
+            self._set_audio_source()
+            self._set_audio_feedback()
+
+        self.player.set_state(gst.STATE_PLAYING)
+
+    def test_feedback_stop(self):
+        if self.test_video == True:
+            self._clear_video_source()
+            self._clear_video_feedback()
+            
+        if self.test_audio == True:
+            self._clear_audio_source()
+            self._clear_audio_feedback()
+        
+        self.player.set_state(gst.STATE_NULL)
+        del self.test_video
+        del self.test_audio
 
     def record(self, filename):
         '''
