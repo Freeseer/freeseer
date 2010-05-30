@@ -160,10 +160,11 @@ class MainApp(QtGui.QMainWindow):
             self.ui.firewiresrcButton.setChecked(True)
 
     def toggle_video_recording(self, state):
-        if state == True:
-            self.core.logger.log.info('Video recording: ENABLED')
-        else:
-            self.core.logger.log.info('Video recording: DISABLED')
+        '''
+        Enables / Disables video recording depending on if the user has
+        checked the video box in configuration mode.
+        '''
+        self.core.set_video_mode(state)
 
     def toggle_video_source(self):
         '''
