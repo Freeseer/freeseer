@@ -69,6 +69,8 @@ class Freeseer_gstreamer(BackendInterface):
 
         # Icecast Related
         self.icecast = True
+        self.icecast_ip = '127.0.0.1'
+        self.icecast_port = 8000
         self.icecast_password = 'hackme'
         self.icecast_mount = 'freeseer.ogg'
         
@@ -135,13 +137,12 @@ class Freeseer_gstreamer(BackendInterface):
         Sets up the filesink and muxer.
         '''
         self.mux = gst.element_factory_make('oggmux', 'mux')
-        self.mux_tee = gst.element_factory_make('tee', 'mux_tee')
         filequeue = gst.element_factory_make('queue', 'filequeue')
         filesink = gst.element_factory_make('filesink', 'filesink')
         filesink.set_property('location', filename)
 
-        self.player.add(self.mux, self.mux_tee, filequeue, filesink)
-        gst.element_link_many(self.mux, self.mux_tee, filequeue, filesink)
+        self.player.add(self.mux, filequeue, filesink)
+        gst.element_link_many(self.mux, filequeue, filesink)
 
     def _clear_muxer(self):
         '''
@@ -344,16 +345,48 @@ class Freeseer_gstreamer(BackendInterface):
     ###
     def _set_icecast_streaming(self):
         icecast = gst.element_factory_make('shout2send', 'icecast')
+        icecast.set_property('ip', self.icecast_ip)
+        icecast.set_property('port', self.icecast_port)
         icecast.set_property('password', self.icecast_password)
         icecast.set_property('mount', self.icecast_mount)
+        
         icecast_queue = gst.element_factory_make('queue', 'icecast_queue')
-        self.player.add(icecast, icecast_queue)
-        gst.element_link_many(self.mux_tee, icecast_queue, icecast)
+        icecast_scale = gst.element_factory_make('videoscale', 'icecast_scale')
+        icecast_scale_cap = gst.element_factory_make('capsfilter', 'icecast_scale_cap')
+        icecast_scale_cap.set_property('caps',
+            gst.caps_from_string('video/x-raw-yuv,width=320,height=240'))
+        icecast_encoder = gst.element_factory_make('theoraenc', 'icecast_encoder')
+        icecast_mux = gst.element_factory_make('oggmux', 'icecast_mux')
+        
+        self.player.add(icecast,
+                        icecast_queue,
+                        icecast_encoder,
+                        icecast_mux,
+                        icecast_scale,
+                        icecast_scale_cap)
+                        
+        gst.element_link_many(self.video_tee,
+                              icecast_queue,
+                              icecast_scale,
+                              icecast_scale_cap,
+                              icecast_encoder,
+                              icecast_mux,
+                              icecast)
         
     def _clear_icecast_streaming(self):
         icecast = self.player.get_by_name('icecast')
         icecast_queue = self.player.get_by_name('icecast_queue')
-        self.player.remove(self.mux_tee, icecast_queue, icecast)
+        icecast_scale = self.player.get_by_name('icecast_scale')
+        icecast_scale_cap = self.player.get_by_name('icecast_scale_cap')
+        icecast_encoder = self.player.get_by_name('icecast_encoder')
+        icecast_mux = self.player.get_by_name('icecast_mux')
+        
+        self.player.remove(icecast,
+                           icecast_queue,
+                           icecast_scale,
+                           icecast_scale_cap,
+                           icecast_encoder,
+                           icecast_mux)
 
     ###
     ### Framework Required Functions
