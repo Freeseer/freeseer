@@ -102,8 +102,11 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         # configure tab connections
+        self.connect(self.ui.videoConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
+        self.connect(self.ui.soundConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_recording)
         self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
+        
         # connections for video source radio buttons
         self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
         self.connect(self.ui.recordLocalDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
@@ -156,6 +159,20 @@ class MainApp(QtGui.QMainWindow):
         elif (self.videosrc == 'firewire'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.firewiresrcButton.setChecked(True)
+
+    def toggle_video_recording(self, state):
+        '''
+        Enables / Disables video recording depending on if the user has
+        checked the video box in configuration mode.
+        '''
+        self.core.set_video_mode(state)
+
+    def toggle_audio_recording(self, state):
+        '''
+        Enables / Disables audio recording depending on if the user has
+        checked the audio box in configuration mode.
+        '''
+        self.core.set_audio_mode(state)
 
     def toggle_video_source(self):
         '''

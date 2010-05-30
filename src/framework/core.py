@@ -139,6 +139,18 @@ class FreeseerCore:
         sndsrcs = self.backend.get_audio_sources()
         self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
         return sndsrcs
+
+    def set_video_mode(self, mode):
+        '''
+        Enables video recording when mode is set to True
+        Disables video recording when mode is set to False
+        '''
+        if mode == True:
+            self.logger.log.info('Video recording: ENABLED')
+        else:
+            self.logger.log.info('Video recording: DISABLED')
+            
+        self.backend.set_video_mode(mode)
         
     def change_videosrc(self, vid_source, vid_device):
         '''
@@ -153,6 +165,18 @@ class FreeseerCore:
     def change_output_resolution(self, width, height):
         self.backend.change_output_resolution(width, height)
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
+
+    def set_audio_mode(self, mode):
+        '''
+        Enables video recording when mode is set to True
+        Disables video recording when mode is set to False
+        '''
+        if mode == True:
+            self.logger.log.info('Audio recording: ENABLED')
+        else:
+            self.logger.log.info('Audio recording: DISABLED')
+
+        self.backend.set_audio_mode(mode)
 
     def change_soundsrc(self, snd_source):
         '''
