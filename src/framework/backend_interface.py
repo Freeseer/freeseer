@@ -65,6 +65,9 @@ class BackendInterface:
     def disable_video_feedback(self):
         raise NotImplementedError('This method must be implemented.')
 
+    def set_audio_mode(self):
+        raise NotImplementedError('This method must be implemented.')
+
     def enable_audio_feedback(self):
         raise NotImplementedError('This method must be implemented.')
 

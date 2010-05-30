@@ -604,6 +604,13 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         self.recording_video_feedback = False
 
+    def set_audio_mode(self, mode):
+        '''
+        Activates audio recording when mode = True
+        Disables audio recording when mode = False
+        '''
+        self.record_audio = mode
+
     def enable_audio_feedback(self):
         '''
         Activate audio feedback.

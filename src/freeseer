@@ -103,7 +103,7 @@ class MainApp(QtGui.QMainWindow):
 
         # configure tab connections
         self.connect(self.ui.videoConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
-        #self.connect(self.ui.soundConfigBox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_recording)
+        self.connect(self.ui.soundConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_recording)
         self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
         self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         # connections for video source radio buttons
@@ -165,6 +165,13 @@ class MainApp(QtGui.QMainWindow):
         checked the video box in configuration mode.
         '''
         self.core.set_video_mode(state)
+
+    def toggle_audio_recording(self, state):
+        '''
+        Enables / Disables audio recording depending on if the user has
+        checked the audio box in configuration mode.
+        '''
+        self.core.set_audio_mode(state)
 
     def toggle_video_source(self):
         '''

@@ -166,6 +166,18 @@ class FreeseerCore:
         self.backend.change_output_resolution(width, height)
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
 
+    def set_audio_mode(self, mode):
+        '''
+        Enables video recording when mode is set to True
+        Disables video recording when mode is set to False
+        '''
+        if mode == True:
+            self.logger.log.info('Audio recording: ENABLED')
+        else:
+            self.logger.log.info('Audio recording: DISABLED')
+
+        self.backend.set_audio_mode(mode)
+
     def change_soundsrc(self, snd_source):
         '''
         Informs backend of new audio source to use when recording.
