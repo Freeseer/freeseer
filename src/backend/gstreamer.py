@@ -462,7 +462,6 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         self.player.set_state(gst.STATE_NULL)
         self._clear_muxer()
-        del self.filename
 
         if self.record_video == True:
             self._clear_video_source()
