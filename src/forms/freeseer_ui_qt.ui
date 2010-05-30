@@ -125,27 +125,41 @@
          </layout>
         </item>
         <item>
-         <widget class="QCheckBox" name="audioFeedbackCheckbox">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string>Enable audio feedback (plays back recording audio to speakers)</string>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::RightToLeft</enum>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/headphones/headphones.png</normaloff>:/headphones/headphones.png</iconset>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QPushButton" name="testButton">
+            <property name="text">
+             <string>Test</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="audioFeedbackCheckbox">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Enable audio feedback (plays back recording audio to speakers)</string>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::RightToLeft</enum>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="resource.qrc">
+              <normaloff>:/headphones/headphones.png</normaloff>:/headphones/headphones.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -773,6 +787,38 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>554</x>
      <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>recordButton</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>461</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>252</x>
+     <y>80</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>audioFeedbackCheckbox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>220</x>
+     <y>466</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>559</x>
+     <y>463</y>
     </hint>
    </hints>
   </connection>
