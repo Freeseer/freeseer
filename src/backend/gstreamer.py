@@ -344,6 +344,9 @@ class Freeseer_gstreamer(BackendInterface):
     ### Icecast Functions
     ###
     def _set_icecast_streaming(self):
+        '''
+        Sets up the icecast stream pipeline.
+        '''
         icecast = gst.element_factory_make('shout2send', 'icecast')
         icecast.set_property('ip', self.icecast_ip)
         icecast.set_property('port', self.icecast_port)
@@ -374,6 +377,9 @@ class Freeseer_gstreamer(BackendInterface):
                               icecast)
         
     def _clear_icecast_streaming(self):
+        '''
+        Clears the icecast stream pipeline
+        '''
         icecast = self.player.get_by_name('icecast')
         icecast_queue = self.player.get_by_name('icecast_queue')
         icecast_scale = self.player.get_by_name('icecast_scale')
