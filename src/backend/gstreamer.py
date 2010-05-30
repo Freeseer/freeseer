@@ -68,7 +68,7 @@ class Freeseer_gstreamer(BackendInterface):
         self.recording_audio_feedback = False
 
         # Icecast Related
-        self.icecast = True
+        self.icecast = False
         self.icecast_ip = '127.0.0.1'
         self.icecast_port = 8000
         self.icecast_password = 'hackme'
