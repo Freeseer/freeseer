@@ -177,6 +177,9 @@
               <property name="title">
                <string>Video Configuration</string>
               </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
                 <widget class="QWidget" name="widget" native="true">
@@ -355,6 +358,9 @@ v4l2src does not work.</string>
               <property name="title">
                <string>Sound Configuration</string>
               </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
                 <widget class="QLabel" name="label_5">
@@ -383,8 +389,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>177</width>
-             <height>64</height>
+             <width>551</width>
+             <height>301</height>
             </rect>
            </property>
            <attribute name="label">
@@ -442,8 +448,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>203</width>
-             <height>35</height>
+             <width>551</width>
+             <height>301</height>
             </rect>
            </property>
            <attribute name="label">
