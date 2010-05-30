@@ -101,8 +101,8 @@ class Freeseer_gstreamer(BackendInterface):
                 # if v4l2src driver does not work, fallback to the older v4lsrc
                 if (str(debug).startswith('v4l2_calls.c')):
                     self.core.logger.log.debug('v4l2src failed, falling back to v4lsrc')
-                    self.change_videosrc('usb_fallback', self.video_device)
-                    self.record()
+                    self.change_video_source('usb_fallback', self.video_device)
+                    self.record(self.filename)
                     
         elif message.structure is not None:
             s = message.structure.get_name()
@@ -431,6 +431,7 @@ class Freeseer_gstreamer(BackendInterface):
 
         filename: filename to record to
         '''
+        self.filename = filename
         self._set_muxer(filename)
 
         if self.record_video == True:
@@ -461,6 +462,7 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         self.player.set_state(gst.STATE_NULL)
         self._clear_muxer()
+        del self.filename
 
         if self.record_video == True:
             self._clear_video_source()
