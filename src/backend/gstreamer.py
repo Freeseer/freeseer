@@ -584,6 +584,13 @@ class Freeseer_gstreamer(BackendInterface):
         self.core.logger.log.debug(self.audio_source + ' loaded.')
         return True
 
+    def set_video_mode(self, mode):
+        '''
+        Activates video recording when mode = True
+        Disables video recording when mode = False
+        '''
+        self.record_video = mode
+
     def enable_video_feedback(self, window_id):
         '''
         Activate video feedback. Will send video to a preview window.
