@@ -145,7 +145,7 @@ class FreeseerCore:
         Enables video recording when mode is set to True
         Disables video recording when mode is set to False
         '''
-        if mode = True:
+        if mode == True:
             self.logger.log.info('Video recording: ENABLED')
         else:
             self.logger.log.info('Video recording: DISABLED')
