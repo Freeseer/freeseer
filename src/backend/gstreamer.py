@@ -66,6 +66,13 @@ class Freeseer_gstreamer(BackendInterface):
         # Audio Related
         self.recording_audio_codec = 'vorbisenc'
         self.recording_audio_feedback = False
+
+        # Icecast Related
+        self.icecast = False
+        self.icecast_ip = '127.0.0.1'
+        self.icecast_port = 8000
+        self.icecast_password = 'hackme'
+        self.icecast_mount = 'freeseer.ogg'
         
         # Initialize Player
         self.player = gst.Pipeline('player')
@@ -130,18 +137,20 @@ class Freeseer_gstreamer(BackendInterface):
         Sets up the filesink and muxer.
         '''
         self.mux = gst.element_factory_make('oggmux', 'mux')
+        filequeue = gst.element_factory_make('queue', 'filequeue')
         filesink = gst.element_factory_make('filesink', 'filesink')
         filesink.set_property('location', filename)
 
-        self.player.add(self.mux, filesink)
-        gst.element_link_many(self.mux, filesink)
+        self.player.add(self.mux, filequeue, filesink)
+        gst.element_link_many(self.mux, filequeue, filesink)
 
     def _clear_muxer(self):
         '''
         Frees up the muxer and filesink from the pipeline.
         '''
         filesink = self.player.get_by_name('filesink')
-        self.player.remove(self.mux, filesink)
+        filequeue = self.player.get_by_name('filequeue')
+        self.player.remove(self.mux, filequeue, filesink)
 
     ###
     ### Video Functions
@@ -164,7 +173,6 @@ class Freeseer_gstreamer(BackendInterface):
         self.video_tee = gst.element_factory_make('tee', 'video_tee')
 
         if self.recording_width != 0:
-            print 'here'
             video_scale_cap.set_property('caps',
                 gst.caps_from_string('video/x-raw-rgb, width=%s, height=%s'
                 % (self.recording_width, self.recording_height)))
@@ -333,6 +341,60 @@ class Freeseer_gstreamer(BackendInterface):
         self.player.remove(afqueue, afsink)
 
     ###
+    ### Icecast Functions
+    ###
+    def _set_icecast_streaming(self):
+        '''
+        Sets up the icecast stream pipeline.
+        '''
+        icecast = gst.element_factory_make('shout2send', 'icecast')
+        icecast.set_property('ip', self.icecast_ip)
+        icecast.set_property('port', self.icecast_port)
+        icecast.set_property('password', self.icecast_password)
+        icecast.set_property('mount', self.icecast_mount)
+        
+        icecast_queue = gst.element_factory_make('queue', 'icecast_queue')
+        icecast_scale = gst.element_factory_make('videoscale', 'icecast_scale')
+        icecast_scale_cap = gst.element_factory_make('capsfilter', 'icecast_scale_cap')
+        icecast_scale_cap.set_property('caps',
+            gst.caps_from_string('video/x-raw-yuv,width=320,height=240'))
+        icecast_encoder = gst.element_factory_make('theoraenc', 'icecast_encoder')
+        icecast_mux = gst.element_factory_make('oggmux', 'icecast_mux')
+        
+        self.player.add(icecast,
+                        icecast_queue,
+                        icecast_encoder,
+                        icecast_mux,
+                        icecast_scale,
+                        icecast_scale_cap)
+                        
+        gst.element_link_many(self.video_tee,
+                              icecast_queue,
+                              icecast_scale,
+                              icecast_scale_cap,
+                              icecast_encoder,
+                              icecast_mux,
+                              icecast)
+        
+    def _clear_icecast_streaming(self):
+        '''
+        Clears the icecast stream pipeline
+        '''
+        icecast = self.player.get_by_name('icecast')
+        icecast_queue = self.player.get_by_name('icecast_queue')
+        icecast_scale = self.player.get_by_name('icecast_scale')
+        icecast_scale_cap = self.player.get_by_name('icecast_scale_cap')
+        icecast_encoder = self.player.get_by_name('icecast_encoder')
+        icecast_mux = self.player.get_by_name('icecast_mux')
+        
+        self.player.remove(icecast,
+                           icecast_queue,
+                           icecast_scale,
+                           icecast_scale_cap,
+                           icecast_encoder,
+                           icecast_mux)
+
+    ###
     ### Framework Required Functions
     ###
     def test_feedback_start(self, video=False, audio=False):
@@ -388,6 +450,9 @@ class Freeseer_gstreamer(BackendInterface):
             if self.recording_audio_feedback == True:
                 self._set_audio_feedback()
                 
+        if self.icecast == True:
+            self._set_icecast_streaming()
+            
         self.player.set_state(gst.STATE_PLAYING)
 
     def stop(self):
@@ -410,6 +475,9 @@ class Freeseer_gstreamer(BackendInterface):
 
             if self.recording_audio_feedback == True:
                 self._clear_audio_feedback()
+
+        if self.icecast == True:
+            self._clear_icecast_streaming()
 
     def get_video_sources(self):
         '''
@@ -540,3 +608,16 @@ class Freeseer_gstreamer(BackendInterface):
         Disable the audio feedback.
         '''
         self.recording_audio_feedback = False
+        
+    def enable_icecast_streaming(self, ip='127.0.0.1',
+                                       port=8000,
+                                       password='hackme',
+                                       mount='freeseer.ogg'):
+        self.icecast = True
+        self.icecast_ip = ip
+        self.icecast_port = port
+        self.icecast_password = password
+        self.icecast_mount = mount
+
+    def disable_icecast_streaming(self):
+        self.icecast = False

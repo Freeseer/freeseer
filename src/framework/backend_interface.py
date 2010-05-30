@@ -67,4 +67,9 @@ class BackendInterface:
 
     def disable_audio_feedback(self):
         raise NotImplementedError('This method must be implemented.')
-    
+
+    def enable_icecast_streaming(self, ip, port, password, mount):
+        raise NotImplementedError('This method must be implemented.')
+
+    def disable_icecast_streaming(self):
+        raise NotImplementedError('This method must be implemented.')
