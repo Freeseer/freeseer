@@ -609,7 +609,7 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         self.recording_audio_feedback = False
         
-    def enable_icecast_streaming(self, ip=127.0.0.1,
+    def enable_icecast_streaming(self, ip='127.0.0.1',
                                        port=8000,
                                        password='hackme',
                                        mount='freeseer.ogg'):
