@@ -281,17 +281,11 @@ class MainApp(QtGui.QMainWindow):
         if not (self.ui.recordButton.isChecked()):
             self.core.stop()
             self.ui.recordButton.setText('Record')
-            self.ui.videoConfigBox.setEnabled(True)
-            self.ui.soundConfigBox.setEnabled(True)
-            self.ui.audioFeedbackCheckbox.setEnabled(True)
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
         else:
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
-            self.ui.videoConfigBox.setEnabled(False)
-            self.ui.soundConfigBox.setEnabled(False)
-            self.ui.audioFeedbackCheckbox.setEnabled(False)
             self.statusBar().showMessage('recording...')
 
     def add_talk(self):

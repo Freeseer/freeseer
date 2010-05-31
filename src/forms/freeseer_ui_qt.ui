@@ -822,5 +822,117 @@ v4l2src does not work.</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>videoConfigBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>292</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>soundConfigBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>151</x>
+     <y>463</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>292</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>testButton</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>463</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>audioFeedbackCheckbox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>83</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>482</x>
+     <y>460</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>talkList</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>374</x>
+     <y>78</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>374</x>
+     <y>110</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>soundConfigBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>292</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>videoConfigBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>292</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>292</x>
+     <y>181</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>
