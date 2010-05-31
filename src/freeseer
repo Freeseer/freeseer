@@ -275,19 +275,21 @@ class MainApp(QtGui.QMainWindow):
             return
         self.core.audioFeedback(False)
 
-    def capture(self):
+    def capture(self, state):
         '''
         Function for recording and stopping recording.
         '''
-        if not (self.ui.recordButton.isChecked()):
+        if (state): # Start Recording.
+            self.core.record(str(self.ui.talkList.currentText().toUtf8()))
+            self.ui.recordButton.setText('Stop')
+            self.statusBar().showMessage('recording...')
+            
+        else: # Stop Recording.
             self.core.stop()
             self.ui.recordButton.setText('Record')
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
-        else:
-            self.core.record(str(self.ui.talkList.currentText().toUtf8()))
-            self.ui.recordButton.setText('Stop')
-            self.statusBar().showMessage('recording...')
+            
 
     def test_sources(self, state):
         # Test video and audio sources
