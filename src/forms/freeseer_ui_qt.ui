@@ -72,6 +72,60 @@
          </widget>
         </item>
         <item>
+         <layout class="QHBoxLayout" name="eventAndRoomLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Event</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox">
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Room</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_2">
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="talkListLayout">
           <item>
            <widget class="QLabel" name="talkLabel">
@@ -178,8 +232,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>545</width>
+             <height>267</height>
             </rect>
            </property>
            <attribute name="label">
@@ -403,8 +457,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>177</width>
-             <height>64</height>
+             <width>187</width>
+             <height>80</height>
             </rect>
            </property>
            <attribute name="label">
@@ -462,8 +516,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>223</width>
+             <height>51</height>
             </rect>
            </property>
            <attribute name="label">
@@ -545,7 +599,7 @@ v4l2src does not work.</string>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="1" column="0">
+             <item row="2" column="0">
               <widget class="QLabel" name="label">
                <property name="text">
                 <string>Room</string>
@@ -555,7 +609,7 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="2" column="1">
               <widget class="QLineEdit" name="roomEdit">
                <property name="enabled">
                 <bool>false</bool>
@@ -565,17 +619,17 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item row="2" column="2">
               <widget class="QCheckBox" name="checkBox_2">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
+             <item row="5" column="1">
               <widget class="QLineEdit" name="titleEdit"/>
              </item>
-             <item row="3" column="0">
+             <item row="5" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Title</string>
@@ -585,7 +639,7 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item row="4" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Presenter</string>
@@ -595,7 +649,7 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item row="4" column="1">
               <widget class="QLineEdit" name="presenterEdit">
                <property name="enabled">
                 <bool>false</bool>
@@ -605,8 +659,63 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="2">
+             <item row="4" column="2">
               <widget class="QCheckBox" name="checkBox_3">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Event</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="eventEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QCheckBox" name="checkBox">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Date&amp;Time</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QDateTimeEdit" name="dateTimeEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="dateTime">
+                <datetime>
+                 <hour>0</hour>
+                 <minute>0</minute>
+                 <second>0</second>
+                 <year>2010</year>
+                 <month>1</month>
+                 <day>1</day>
+                </datetime>
+               </property>
+               <property name="displayFormat">
+                <string>MM/dd/yyyy hh:mm </string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QCheckBox" name="checkBox_4">
                <property name="text">
                 <string/>
                </property>
@@ -677,7 +786,7 @@ v4l2src does not work.</string>
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -725,7 +834,6 @@ v4l2src does not work.</string>
   <tabstop>talkList</tabstop>
   <tabstop>audioFeedbackCheckbox</tabstop>
   <tabstop>audioFeedbackSlider</tabstop>
-  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
@@ -936,6 +1044,38 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>292</x>
      <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eventEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>111</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>dateTimeEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>540</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>318</x>
+     <y>177</y>
     </hint>
    </hints>
   </connection>
