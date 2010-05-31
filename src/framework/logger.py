@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # freeseer - vga/presentation capture software
 #
 #  Copyright (C) 2010  Free and Open Source Software Learning Centre
@@ -35,7 +38,7 @@ class Logger():
         Initialize settings from a configfile
         '''
         self.configdir = configdir
-        self.logconf = "%slogging.conf" % self.configdir
+        self.logconf = os.path.abspath("%s/logging.conf" % self.configdir)
         
         # If logger.conf does not exist then create it with some defaults.
         if not os.path.isfile(self.logconf):
@@ -87,7 +90,7 @@ class Logger():
             config.write(configfile)
         
 if __name__ == "__main__":
-    logger = Logger(os.path.expanduser('~/.freeseer/'))
+    logger = Logger(os.path.abspath(os.path.expanduser('~/.freeseer/')))
     logger.log.debug('This is a debug log')
     logger.log.critical('This is a critical log')
     logger.log.error('This is an error log')

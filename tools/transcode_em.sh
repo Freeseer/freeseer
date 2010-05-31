@@ -1,3 +1,15 @@
+#!/bin/bash
+
+# TODO
+# - add a help option
+# - add a directory option to send us to another directory to transcode
+# - check the return code to see if it worked
+
+# freeseer - vga/presentation capture software
+#
+#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  http://fosslc.org
+#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -14,26 +26,12 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-# This makefile generates the python code for the gui
-# from an XML definition file
+FF_OPTS="-s svga -acodec libvorbis -ab 64k -aspect 4:3 -qscale 6"
 
-ALL: gui 
-	@echo "You can now run ./freeseer"
-
-gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
-	@echo "Re-generating GUI"
-
-freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
-	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
-
-freeseer_about.py: forms/freeseer_about.ui
-	pyuic4 forms/freeseer_about.ui -o freeseer_about.py
-
-resource_rc.py: forms/resource.qrc
-	pyrcc4 forms/resource.qrc -o resource_rc.py
-
-clean:
-	rm -f *.ogg resource_rc.py freeseer_about.py freeseer_ui_qt.py *.pyc backend/*.pyc framework/*.pyc
-
-test: ALL
-	./freeseer
+ls *.ogg | \
+while read source
+do
+  OUTPUT="`echo ${source} | sed \"s/.ogg/_processed.ogg/g\"`"
+  COMMAND="ffmpeg -i ${source} ${FF_OPTS} ${OUTPUT}"
+  echo "${COMMAND}"
+done

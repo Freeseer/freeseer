@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 # freeseer - vga/presentation capture software
 #
 #  Copyright (C) 2010  Free and Open Source Software Learning Centre
@@ -36,11 +39,12 @@ class Config:
         
         # Config location
         self.configdir = configdir
-        self.configfile = "%sfreeseer.conf" % self.configdir
+        self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
         
         # Set default settings
-        self.videodir = '%s/Videos/' % self.userhome
-        self.talksfile = '%stalks.txt' % self.configdir
+        self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
+        self.talksfile = os.path.abspath('%s/talks.txt' % self.configdir)
+        self.resolution = '0x0' # no scaling for video
         
         # Read in the config file
         self.readConfig()
@@ -66,8 +70,13 @@ class Config:
             return
                 
         # Config file exists, read in the settings
-        self.videodir = config.get('Global', 'video_directory')
-        self.talksfile = config.get('Global', 'talks_file')
+        try:
+            self.videodir = config.get('Global', 'video_directory')
+            self.talksfile = config.get('Global', 'talks_file')
+            self.resolution = config.get('Global', 'resolution')
+        except:
+            print('Corrupt config found, creating a new one.')
+            self.writeConfig()
         
     def writeConfig(self):
         '''
@@ -79,6 +88,7 @@ class Config:
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'talks_file', self.talksfile)
+        config.set('Global', 'resolution', self.resolution)
         
         # Make sure the config directory exists before writing to the configfile 
         try:
@@ -92,7 +102,7 @@ class Config:
             
 # Config class test code
 if __name__ == "__main__":
-    config = Config(os.path.expanduser('~/.freeseer/'))
+    config = Config(os.path.abspath(os.path.expanduser('~/.freeseer/')))
     print('\nTesting freeseer config file')
     print('Video Directory at %s' % config.videodir)
     print('Talks file at %s' % config.talksfile)
