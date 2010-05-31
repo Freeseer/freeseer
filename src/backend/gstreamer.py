@@ -172,7 +172,9 @@ class Freeseer_gstreamer(BackendInterface):
                                                     'video_cspace')
         self.video_tee = gst.element_factory_make('tee', 'video_tee')
 
-        if self.recording_width != 0:
+        if self.recording_width != '0':
+            self.core.logger.log.debug('Recording will be scaled to %sx%s'
+                % (self.recording_width, self.recording_height))
             video_scale_cap.set_property('caps',
                 gst.caps_from_string('video/x-raw-rgb, width=%s, height=%s'
                 % (self.recording_width, self.recording_height)))

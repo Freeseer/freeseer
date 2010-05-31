@@ -403,8 +403,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>177</width>
+             <height>64</height>
             </rect>
            </property>
            <attribute name="label">
@@ -474,6 +474,11 @@ v4l2src does not work.</string>
              <layout class="QGridLayout" name="advancedGrid">
               <item row="0" column="1">
                <widget class="QComboBox" name="resolutionComboBox">
+                <item>
+                 <property name="text">
+                  <string>NONE</string>
+                 </property>
+                </item>
                 <item>
                  <property name="text">
                   <string>640x480</string>
