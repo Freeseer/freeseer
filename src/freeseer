@@ -99,6 +99,7 @@ class MainApp(QtGui.QMainWindow):
 
         # main tab connections
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         # configure tab connections
@@ -287,6 +288,14 @@ class MainApp(QtGui.QMainWindow):
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
             self.statusBar().showMessage('recording...')
+
+    def test_sources(self, state):
+        # Test video and audio sources
+        if (self.ui.audioFeedbackCheckbox.isChecked()):
+            self.core.test_sources(state, True, True)
+        # Test only video source
+        else:
+            self.core.test_sources(state, True, False)
 
     def add_talk(self):
         talk = u""

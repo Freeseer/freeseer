@@ -184,6 +184,12 @@ class FreeseerCore:
         '''
         return self.backend.change_audio_source(snd_source)
 
+    def test_sources(self, state, video=False, audio=False):
+        if state == True:
+            self.backend.test_feedback_start(video, audio)
+        else:
+            self.backend.test_feedback_stop()
+
     def record(self, filename='default'):
         '''
         Informs backend to begin recording to filename.
