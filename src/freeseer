@@ -99,6 +99,7 @@ class MainApp(QtGui.QMainWindow):
 
         # main tab connections
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         # configure tab connections
@@ -274,25 +275,29 @@ class MainApp(QtGui.QMainWindow):
             return
         self.core.audioFeedback(False)
 
-    def capture(self):
+    def capture(self, state):
         '''
         Function for recording and stopping recording.
         '''
-        if not (self.ui.recordButton.isChecked()):
-            self.core.stop()
-            self.ui.recordButton.setText('Record')
-            self.ui.videoConfigBox.setEnabled(True)
-            self.ui.soundConfigBox.setEnabled(True)
-            self.ui.audioFeedbackCheckbox.setEnabled(True)
-            self.ui.audioFeedbackSlider.setValue(0)
-            self.statusBar().showMessage('ready')
-        else:
+        if (state): # Start Recording.
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
-            self.ui.videoConfigBox.setEnabled(False)
-            self.ui.soundConfigBox.setEnabled(False)
-            self.ui.audioFeedbackCheckbox.setEnabled(False)
             self.statusBar().showMessage('recording...')
+            
+        else: # Stop Recording.
+            self.core.stop()
+            self.ui.recordButton.setText('Record')
+            self.ui.audioFeedbackSlider.setValue(0)
+            self.statusBar().showMessage('ready')
+            
+
+    def test_sources(self, state):
+        # Test video and audio sources
+        if (self.ui.audioFeedbackCheckbox.isChecked()):
+            self.core.test_sources(state, True, True)
+        # Test only video source
+        else:
+            self.core.test_sources(state, True, False)
 
     def add_talk(self):
         talk = u""
