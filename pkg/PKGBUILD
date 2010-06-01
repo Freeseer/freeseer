@@ -33,7 +33,7 @@ build() {
 
   mkdir -p $pkgdir/usr/bin/
   mkdir -p $pkgdir/usr/lib/python2.6/site-packages/freeseer/
-  cp ../run-freeseer $pkgdir/usr/bin/
+  cp ../run-freeseer $pkgdir/usr/bin/freeseer
   cp *.py $pkgdir/usr/lib/python2.6/site-packages/freeseer/
   cp -r backend framework $pkgdir/usr/lib/python2.6/site-packages/freeseer/
 }
