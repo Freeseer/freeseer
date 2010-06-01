@@ -29,7 +29,7 @@ import logging
 import logging.config
 import os
  
-from backend.gstreamer import *
+from freeseer.backend.gstreamer import *
 from config import Config
 from logger import Logger
 
