@@ -30,7 +30,7 @@ import pygst
 pygst.require("0.10")
 import gst
 
-from freeseer.framework.backend_interface import *
+from framework.backend_interface import *
 
 __version__=u'1.9.7'
 

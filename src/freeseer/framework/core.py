@@ -29,9 +29,9 @@ import logging
 import logging.config
 import os
  
-from freeseer.backend.gstreamer import *
-from freeseer.framework.config import Config
-from freeseer.framework.logger import Logger
+from backend.gstreamer import *
+from config import Config
+from logger import Logger
 
 __version__=u'1.9.7'
 
