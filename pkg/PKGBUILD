@@ -24,14 +24,16 @@ _gitroot="git://github.com/fosslc/freeseer.git"
 
 build() {
   git clone $_gitroot 
-  cd ${srcdir}/freeseer
-  git checkout development
-  cd src
+  cd ${srcdir}/freeseer/
+  git checkout -b pkgbuild origin/development
+  cd src/
+
+  make || return 1
+  cd freeseer/
 
   mkdir -p $pkgdir/usr/bin/
   mkdir -p $pkgdir/usr/lib/python2.6/site-packages/freeseer/
   cp freeseer $pkgdir/usr/bin/
   cp *.py $pkgdir/usr/lib/python2.6/site-packages/freeseer/
   cp -r backend framework $pkgdir/usr/lib/python2.6/site-packages/freeseer/
-  make || return 1                                                                        
 }
