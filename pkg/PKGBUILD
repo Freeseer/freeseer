@@ -1,7 +1,7 @@
 # Contributor: Thanh Ha <zxiiro@gmail.com>
 pkgname=freeseer-git
 pkgver=20100531
-pkgrel=1
+pkgrel=2
 pkgdesc="This project contains code for a video capture utility capable of capturing presentations. It captures vga output and audio and mixes them together to produce a video thus enabling you to capture great presentations, demos, or training material easily."
 arch=('i686' 'x86_64')
 url="http://wiki.github.com/fosslc/freeseer/"
