@@ -184,10 +184,8 @@ class MainApp(QtGui.QMainWindow):
         if (self.ui.localDesktopButton.isChecked()): 
             if (self.ui.recordLocalDesktopButton.isChecked()):
                 self.videosrc = 'desktop'
-                self.ui.areaButton.setEnabled(False)
             elif (self.ui.recordLocalAreaButton.isChecked()):
                 self.videosrc = 'desktop'
-                self.ui.areaButton.setEnabled(True)
                 self.core.set_record_area(True)
 
         # recording from hardware such as usb or fireware device

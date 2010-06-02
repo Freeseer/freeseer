@@ -462,8 +462,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>203</width>
+             <height>35</height>
             </rect>
            </property>
            <attribute name="label">
@@ -738,12 +738,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>562</x>
-     <y>111</y>
+     <x>93</x>
+     <y>85</y>
     </hint>
     <hint type="destinationlabel">
-     <x>403</x>
-     <y>112</y>
+     <x>68</x>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -754,12 +754,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>562</x>
-     <y>140</y>
+     <x>93</x>
+     <y>87</y>
     </hint>
     <hint type="destinationlabel">
-     <x>491</x>
-     <y>141</y>
+     <x>68</x>
+     <y>87</y>
     </hint>
    </hints>
   </connection>
@@ -936,6 +936,22 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>292</x>
      <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordLocalAreaButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>areaButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>257</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>
