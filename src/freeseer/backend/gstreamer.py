@@ -241,6 +241,7 @@ class Freeseer_gstreamer(BackendInterface):
         video_src.set_property('starty', self.record_desktop_area_start_y)
         video_src.set_property('endx', self.record_desktop_area_end_x)
         video_src.set_property('endy', self.record_desktop_area_end_y)
+        print 'success'
 
     def _set_video_encoder(self):
         videoenc_queue = gst.element_factory_make('queue', 'videoenc_queue')
@@ -552,6 +553,9 @@ class Freeseer_gstreamer(BackendInterface):
             self.video_source = 'v4lsrc'
         elif (source_type == 'firewire'):
             self.video_source = 'dv1394src'
+
+    def set_record_area(self, enabled):
+        self.record_desktop_area = enabled
 
     def set_recording_area(self, start_x, start_y, end_x, end_y):
         '''

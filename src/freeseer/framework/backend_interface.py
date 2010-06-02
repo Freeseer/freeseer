@@ -47,6 +47,9 @@ class BackendInterface:
     def change_video_source(self, new_source):
         raise NotImplementedError('This method must be implemented.')
 
+    def set_record_area(self, enabled):
+        raise NotImplementedError('This method must be implemented.')
+
     def set_recording_area(self, start_x, start_y, end_x, end_y):
         raise NotImplementedError('This method must be implemented.')
 

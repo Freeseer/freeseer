@@ -159,8 +159,22 @@ class FreeseerCore:
         self.backend.change_video_source(vid_source, vid_device)
         self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
 
+    def set_record_area(self, enabled):
+        self.backend.set_record_area(enabled)
+
     def set_recording_area(self, x1, y1, x2, y2):
-        self.backend.set_recording_area(x1, y1, x2, y2)
+        # gstreamer backend needs to have the lower x/y coordinates
+        # sent first.
+        if (x2 < x1):
+            if (y2 < y1):
+                self.backend.set_recording_area(x2, y2, x1, y1)
+            else:
+                self.backend.set_recording_area(x2, y1, x1, y2)
+        else:
+            if (y2 < y1):
+                self.backend.set_recording_area(x1, y2, x2, y1)
+            else:
+                self.backend.set_recording_area(x1, y1, x2, y2)
 
     def change_output_resolution(self, width, height):
         self.backend.change_output_resolution(width, height)
