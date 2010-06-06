@@ -20,7 +20,7 @@ To develop freeseer, you require:
 If you are pulling the code from git, then you should install
 the following packages first.
 
-On typical fresh Fedora Core install:
+On typical fresh Fedora install:
     “sudo yum install git make PyQt4-devel”
 
 On typical fresh Ubuntu install:
