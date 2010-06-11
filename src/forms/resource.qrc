@@ -6,6 +6,9 @@
   <qresource prefix="freeseer">
     <file>freeseer_logo.png</file>
   </qresource>
+  <qresource prefix="freeseer">
+    <file>freeseer_logo_rec.png</file>
+  </qresource>
   <qresource prefix="headphones">
     <file>headphones.png</file>
   </qresource>

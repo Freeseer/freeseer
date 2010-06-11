@@ -178,8 +178,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>483</width>
+             <height>257</height>
             </rect>
            </property>
            <attribute name="label">
@@ -403,7 +403,7 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>177</width>
+             <width>174</width>
              <height>64</height>
             </rect>
            </property>
@@ -666,6 +666,30 @@ v4l2src does not work.</string>
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="extraPage">
+       <attribute name="title">
+        <string>extra</string>
+       </attribute>
+       <widget class="QCheckBox" name="autoHideCheckbox">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>141</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="toolTip">
+         <string>Disables auto-hide to system tray.</string>
+        </property>
+        <property name="text">
+         <string>Enable Auto-Hide</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>

@@ -128,13 +128,16 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
+        
+        # extra tab connections
+        self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-
+        
         # setup video preview widget
-        self.core.preview(True, self.ui.previewWidget.winId())
+        self.core.preview(False, self.ui.previewWidget.winId())
 
         # Setup default sources
         self.toggle_video_source()
@@ -289,16 +292,24 @@ class MainApp(QtGui.QMainWindow):
         Function for recording and stopping recording.
         '''
         if (state): # Start Recording.
+	    logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
+	    sysIcon2 = QtGui.QIcon(logo_rec)
+	    self.systray.setIcon(sysIcon2)
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
-            self.statusBar().showMessage('recording...')
+            if (not self.ui.autoHideCheckbox.isChecked()):
+		self.statusBar().showMessage('recording...')
+	    else:
+		self.hide()
             
         else: # Stop Recording.
+	    logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
+            sysIcon = QtGui.QIcon(logo_rec)
+            self.systray.setIcon(sysIcon)
             self.core.stop()
             self.ui.recordButton.setText('Record')
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
-            
 
     def test_sources(self, state):
         # Test video and audio sources
@@ -348,6 +359,11 @@ class MainApp(QtGui.QMainWindow):
 
         self.core.save_talk_titles(talk_list)
         self.load_talks()
+        
+    def toggle_auto_hide(self):
+	if self.ui.autoHideCheckbox.isChecked():
+	    self.core.preview(False, self.ui.previewWidget.winId())
+	else: self.core.preview(True, self.ui.previewWidget.winId())
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
