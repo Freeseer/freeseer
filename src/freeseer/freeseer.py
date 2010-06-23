@@ -54,7 +54,7 @@ u'<p>' + LICENSE_TEXT + u'</p>' \
 u'<p>Record button graphics by: <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
 u'<p>Headphones graphics by: <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
 
-
+recflag = False
 class AboutDialog(QtGui.QDialog):
     '''
     About dialog class for displaying app information.
@@ -95,6 +95,14 @@ class MainApp(QtGui.QMainWindow):
         sysIcon = QtGui.QIcon(logo)
         self.systray = QtGui.QSystemTrayIcon(sysIcon)
         self.systray.show()
+        self.systray.menu = QtGui.QMenu()
+        showWinCM = self.systray.menu.addAction("Hide/Show Main Window")
+        recordCM = self.systray.menu.addAction("Record")
+        stopCM = self.systray.menu.addAction("Stop")
+	self.systray.setContextMenu(self.systray.menu)
+	self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.showMainWin)
+	self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
+	self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
@@ -135,8 +143,9 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        
+
         # setup video preview widget
+        self.core.preview(True, self.ui.previewWidget.winId())
         self.core.preview(False, self.ui.previewWidget.winId())
 
         # Setup default sources
@@ -291,12 +300,14 @@ class MainApp(QtGui.QMainWindow):
         '''
         Function for recording and stopping recording.
         '''
+        global recflag
         if (state): # Start Recording.
 	    logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
 	    sysIcon2 = QtGui.QIcon(logo_rec)
 	    self.systray.setIcon(sysIcon2)
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
+            recflag = state
             if (not self.ui.autoHideCheckbox.isChecked()):
 		self.statusBar().showMessage('recording...')
 	    else:
@@ -310,6 +321,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.recordButton.setText('Record')
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
+            recflag = state
 
     def test_sources(self, state):
         # Test video and audio sources
@@ -370,6 +382,27 @@ class MainApp(QtGui.QMainWindow):
             if self.isHidden():
                 self.show()
             else: self.hide()
+        if reason == QtGui.QSystemTrayIcon.DoubleClick:
+	    global recflag
+	    if recflag == False:
+		self.capture(True)
+	    else:
+		self.capture(False)
+
+    def showMainWin(self):
+	if self.isHidden():
+	    self.show()
+	else: self.hide()
+
+    def recContextM(self):
+	global recflag
+	if recflag == False:
+	  self.capture(True)
+
+    def stopContextM(self):
+	global recflag
+	if recflag == True:
+	    self.capture(False)
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
