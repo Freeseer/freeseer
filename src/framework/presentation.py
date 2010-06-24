@@ -23,8 +23,8 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 from sqlite3 import *
-import os
 from config import Config
+import os
 
 class Presentation():	
     '''
@@ -57,63 +57,17 @@ class Presentation():
     	Create a connection with a database file,
     	if it doesnt exists, we create them
     	'''
-	if os.path.isfile(self.presentationsfile):		
-		self.database = connect(self.presentationsfile)
-	else:				
-		connection = connect(self.presentationsfile)
-		cursor = connection.cursor()
-		cursor.execute('''create table presentations
-				(Speaker varchar(100) primary key, Title varchar(255), Description text, Level varchar(25), Event varchar(100),
-				Time timestamp, Room varchar(25) )''')
-		cursor.close()
-		self.database = connection
-    
-    ''' 
-    All getters and setters
-    '''
-
-    def getSpeaker(self):
-	return self.speaker
-
-    def setSpeaker(self,speaker):
-	self.speaker = speaker
-
-    def getTitle(self):
-	return self.title
-
-    def setTitle(self,title):
-	self.title = title
-
-    def getDescription(self):
-	return self.description
-
-    def setDescription(self,description):
-	self.description = description
-
-    def getLevel(self):
-	return self.level
-
-    def setLevel(self,level):
-	self.level = level
-
-    def getEvent(self):
-	return self.event
-
-    def setEvent(self,event):
-	self.event = event
-
-    def getTime(self):
-	return self.time
-
-    def setTime(self,time):
-	self.time = time
-
-    def getRoom(self):
-	return self.room
-
-    def setRoom(self,room):
-	self.room = room     
-
+	if os.path.isfile(self.presentationsfile):	
+            self.database = connect(self.presentationsfile)
+	else:	
+            connection = connect(self.presentationsfile)
+	    cursor = connection.cursor()
+	    cursor.execute('''create table presentations
+			    (Speaker varchar(100), Title varchar(255), Description text, Level varchar(25), Event varchar(100),
+			    Time timestamp, Room varchar(25) )''')
+	    cursor.close()
+	    self.database = connection    
+  
     def saveToDB(self):
 	'''
 	Write current presentation data on database
@@ -135,7 +89,9 @@ class Presentation():
 		print row
 
 
-myPresentation = Presentation("Felipe","Felipe's Presentation","That's my presentation")
-myPresentation.saveToDB()
-myPresentation.showBd()
+if __name__ == "__main__":
+	myPresentation = Presentation("Felipe","Felipe's Presentation 2","That's my presentation")
+	myPresentation.saveToDB()
+	myPresentation.showBd()
+
 
