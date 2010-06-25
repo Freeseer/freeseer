@@ -29,6 +29,7 @@ import logging
 import logging.config
 import os
  
+from sqlite3 import *
 from backend.gstreamer import *
 from framework.config import Config
 from framework.logger import Logger
@@ -51,8 +52,21 @@ class FreeseerCore:
         self.freeseer = Freeseer_gstreamer(self)
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
-        
+        self.presentationsfile = self.config.presentations_file
         self.spaces = False
+        
+        if os.path.isfile(self.presentationsfile):            
+                self.database_connection = connect(self.presentationsfile)
+        else:    
+            self.database_connection = connect(self.presentationsfile)
+            cursor = self.database_connection.cursor()
+            cursor.execute('''create table presentations
+                    (Speaker varchar(100), Title varchar(255), Description text, Level varchar(25), Event varchar(100),
+                    Time timestamp, Room varchar(25) )''')
+            # Default entry
+            cursor.execute('''insert into presentations values ("Thanh Ha","Intro to Freeseer","","","","","T105")''')
+            cursor.close() 
+            self.database_connection.commit()          
         self.logger.log.info(u"Core initialized")
 
     def get_video_devices(self, device_type):
@@ -79,41 +93,43 @@ class FreeseerCore:
         self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
         return sndsrcs
 
-    def get_talk_titles(self):
-        '''
-        Returns the talk titles as listed in  talks.txt
-        '''
+    def get_talk_titles(self):        
         talk_titles = []
-        try:
-            f = codecs.open(self.config.talksfile, 'r', 'utf-8')
-        except:
-            self.logger.log.debug('talks.txt not found, creating default.')
-            f = codecs.open(self.config.talksfile, 'w', 'utf-8')
-            f.writelines('T103 - Thanh Ha - Intro to Freeseer')
-            f.close()
-            f = codecs.open(self.config.talksfile, 'r', 'utf-8')
-            
-        lines = f.readlines()
-        f.close()
+        
+        cursor = self.database_connection.cursor()        
+        cursor.execute('''select * from presentations''')
 
-        for line in lines:
-            talk_titles.append(line.rstrip())
+        for row in cursor:
+            print row
+            talk_titles.append("%s - %s - %s" % (row[0], row[1],row[6]))
 
         self.logger.log.debug('Available talk titles:')
         for talk in talk_titles:
             self.logger.log.debug('  ' + talk.encode('utf-8'))
         return talk_titles
+    
+    def get_talk_events(self):
+        talk_events = []
+        
+        cursor = self.database_connection.cursor()        
+        cursor.execute('''select distinct Event from presentations''')
+        
+        for row in cursor:
+            talk_events.append(row[0])
+        
+        return talk_events
+    
+    def get_talk_rooms(self):
+        talk_rooms = []
+        
+        cursor = self.database_connection.cursor()        
+        cursor.execute('''select distinct Room from presentations''')
+        
+        for row in cursor:
+            talk_rooms.append(row[0])
+        
+        return talk_rooms
 
-    def save_talk_titles(self, talk_list):
-        '''
-        Saves the talk titles received by talk_list variable.
-
-        talk_list: a list of talk titles which will be saved..
-        '''
-        f = codecs.open(self.config.talksfile, 'w', 'utf-8')
-        f.writelines(talk_list)
-        f.close()
-        self.logger.log.debug('Saved talks to file')
 
     def get_record_name(self, filename):
         '''

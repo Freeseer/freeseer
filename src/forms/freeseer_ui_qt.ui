@@ -93,7 +93,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="eventList">
             <item>
              <property name="text">
               <string>All</string>
@@ -115,7 +115,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_2">
+           <widget class="QComboBox" name="roomList">
             <item>
              <property name="text">
               <string>All</string>

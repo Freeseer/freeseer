@@ -25,9 +25,11 @@
 import os
 import sys
 import time
+import framework.presentation
 
 from PyQt4 import QtGui, QtCore
 
+from sqlite3 import *
 from framework.core import *
 from framework.qt_area_selector import *
 from freeseer_ui_qt import *
@@ -76,6 +78,9 @@ class MainApp(QtGui.QMainWindow):
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
+        
+        self.talks_to_save = []
+        self.talks_to_delete = []
 
         self.core = FreeseerCore(self)
 
@@ -88,6 +93,8 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioSourceList.addItem(src)
 
         self.load_talks()
+        self.load_events()
+        self.load_rooms()
         self.load_settings()
 
         # setup systray
@@ -98,6 +105,8 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.filter_by_event)
+        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'),self.filter_by_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
@@ -278,23 +287,64 @@ class MainApp(QtGui.QMainWindow):
             self.statusBar().showMessage('recording...')
 
     def add_talk(self):
-        talk = u""
-        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + u" - "
-        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + u" - "
-        talk += self.ui.titleEdit.text()
-
+        talk = ""
+        
+        event = ""
+        room = ""
+        dateTime = ""
+        presenter = ""
+        
+        
+        
+        if (self.ui.presenterEdit.isEnabled()): 
+            talk += self.ui.presenterEdit.text()+u" - "
+            presenter = self.ui.presenterEdit.text()
+        
+        talk += self.ui.titleEdit.text()        
+        title = self.ui.titleEdit.text()
+        
+        if (self.ui.eventEdit.isEnabled()): event = self.ui.eventEdit.text()
+            
+        if (self.ui.roomEdit.isEnabled()): 
+            talk += u" - "+self.ui.roomEdit.text() 
+            room = self.ui.roomEdit.text()
+            
+        if (self.ui.dateTimeEdit.isEnabled()): dateTime = self.ui.dateTimeEdit.text()            
+        
         # Do not add talks if they are empty strings
         if (len(talk) == 0): return
-        
+      
+      
+        self.talks_to_save.append(framework.presentation.Presentation(str(title),str(presenter),"","",str(event),str(dateTime),str(room)))
         self.ui.editTalkList.addItem(talk)
 
-        #clean up add title boxes
+        #disable checkboxes
+        
+        self.ui.checkBox.setChecked(False)
+        self.ui.checkBox_2.setChecked(False)
+        self.ui.checkBox_3.setChecked(False)
+        self.ui.checkBox_4.setChecked(False)
+        
+        #clean up and add title boxes
+        
+        self.ui.eventEdit.clear()
+        self.ui.dateTimeEdit.clear()
         self.ui.roomEdit.clear()
         self.ui.presenterEdit.clear()
         self.ui.titleEdit.clear()
+        
+        #disable non-mandatory fields
+        self.ui.eventEdit.setDisabled(True)       
+        self.ui.dateTimeEdit.setDisabled(True)       
+        self.ui.roomEdit.setDisabled(True)       
+        self.ui.presenterEdit.setDisabled(True)       
 
     def remove_talk(self):
+        item = str(self.ui.editTalkList.item(self.ui.editTalkList.currentRow()).text())        
+        data = item.split(" - ")       
+        self.talks_to_delete.append(data)       
         self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
+
 
     def load_talks(self):
         '''
@@ -306,17 +356,51 @@ class MainApp(QtGui.QMainWindow):
         for talk in talklist:
             self.ui.talkList.addItem(talk)
             self.ui.editTalkList.addItem(talk)
+            
+    def load_events(self):
+        '''
+        This method updates the GUI with the available presentation events.
+        '''
+        eventList = self.core.get_talk_events()
+        self.ui.eventList.clear()
+        self.ui.eventList.addItem("All")
+        for event in eventList:
+            if len(event)>0:    self.ui.eventList.addItem(event)
+            
+    def load_rooms(self):
+        '''
+        This method updates the GUI with the available presentation rooms.
+        '''
+        
+        roomList = self.core.get_talk_rooms()   
+        self.ui.roomList.clear()
+        self.ui.roomList.addItem("All")     
+        for room in roomList:
+            if len(room)>0:    self.ui.roomList.addItem(room)
+        
+
+            
 
     def save_talks(self):
-        talk_list = []
-        i = 0
-        while i < self.ui.editTalkList.count():
-            t = unicode(self.ui.editTalkList.item(i).text()) + '\n'
-            talk_list.append(t)
-            i = i+1
-
-        self.core.save_talk_titles(talk_list)
-        self.load_talks()
+        for item in self.talks_to_save:            
+            item.save_to_db()
+        
+        for item in self.talks_to_delete:
+            self.database_connection = connect(self.core.presentationsfile)
+            cursor = self.database_connection.cursor()
+            cursor.execute('''delete from presentations 
+                                    where Speaker=? and Title=? and Room=?''',
+                                        [item[0],item[1],item[2]])
+            self.database_connection.commit()
+            cursor.close()
+            
+        del self.talks_to_delete[:]
+        del self.talks_to_save[:]
+        
+        #reload filters
+        self.load_talks()        
+        self.load_events()
+        self.load_rooms()
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
@@ -332,6 +416,68 @@ class MainApp(QtGui.QMainWindow):
         self.core.logger.log.info('Exiting freeseer...')
         self.core.stop()
         event.accept()
+
+    def filter_by_room(self,roomName):
+        talks_matched = []
+        
+        defaultconnection = connect(self.core.presentationsfile)
+        defaultcursor = defaultconnection.cursor()       
+        
+        self.ui.talkList.clear()
+        if roomName != "All":            
+            if(self.ui.eventList.currentText()!="All"):
+                defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
+                                        where Event=? and Room=? ''', [str(self.ui.eventList.currentText()),str(roomName)])
+            else:
+                defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
+                                        where Room=? ''', [str(roomName)])           
+            for row in defaultcursor:
+                text = "%s - %s - %s" % (row[0],row[1],row[2])
+                talks_matched.append(text)
+            for entry in talks_matched:
+                self.ui.talkList.addItem(entry)
+        else:
+            if(self.ui.eventList.currentText()=="All"):
+                self.load_talks()
+            else:
+                defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
+                                        where Event=? ''', [str(self.ui.eventList.currentText())])
+                for row in defaultcursor:
+                    text = "%s - %s - %s" % (row[0],row[1],row[2])
+                    talks_matched.append(text)
+                for entry in talks_matched:
+                    self.ui.talkList.addItem(entry)
+            
+    def filter_by_event(self,eventName):
+        talks_matched = []
+        
+        defaultconnection = connect(self.core.presentationsfile)
+        defaultcursor = defaultconnection.cursor()         
+            
+        self.ui.talkList.clear()
+        if eventName != "All":       
+            if(self.ui.roomList.currentText()!="All"):
+                defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
+                                        where Event=? and Room=? ''', [str(eventName),str(self.ui.eventList.currentText())])
+            else:
+                defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
+                                        where Event=? ''', [str(eventName)])  
+            for row in defaultcursor:
+                text = "%s - %s - %s" % (row[0],row[1],row[2])
+                talks_matched.append(text)
+            for entry in talks_matched:
+                self.ui.talkList.addItem(entry)
+        else:
+            if(self.ui.roomList.currentText()=="All"):
+                self.load_talks()
+            else:
+                defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
+                                        where Room=? ''', [str(self.ui.roomList.currentText())])
+                for row in defaultcursor:
+                    text = "%s - %s - %s" % (row[0],row[1],row[2])
+                    talks_matched.append(text)
+                for entry in talks_matched:
+                    self.ui.talkList.addItem(entry)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
