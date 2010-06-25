@@ -131,7 +131,7 @@ class MainApp(QtGui.QMainWindow):
         # edit talks tab connections
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+        #self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
 
         # Main Window Connections
@@ -287,8 +287,7 @@ class MainApp(QtGui.QMainWindow):
             self.statusBar().showMessage('recording...')
 
     def add_talk(self):
-        talk = ""
-        
+        talk = ""        
         event = ""
         room = ""
         dateTime = ""
@@ -325,13 +324,22 @@ class MainApp(QtGui.QMainWindow):
         self.ui.roomEdit.clear()
         self.ui.presenterEdit.clear()
         self.ui.titleEdit.clear()
-     
+        
+        #disable non-mandatory fields
+        self.ui.eventEdit.setDisabled(True)       
+        self.ui.dateTimeEdit.setDisabled(True)       
+        self.ui.roomEdit.setDisabled(True)       
+        self.ui.presenterEdit.setDisabled(True) 
+        
+        self.save_talks()      
 
     def remove_talk(self):
         item = str(self.ui.editTalkList.item(self.ui.editTalkList.currentRow()).text())        
         data = item.split(" - ")       
         self.talks_to_delete.append(data)       
         self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
+        
+        self.save_talks()
 
 
     def load_talks(self):

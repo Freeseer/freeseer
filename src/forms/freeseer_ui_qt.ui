@@ -233,7 +233,7 @@
              <x>0</x>
              <y>0</y>
              <width>545</width>
-             <height>267</height>
+             <height>265</height>
             </rect>
            </property>
            <attribute name="label">
@@ -752,13 +752,6 @@ v4l2src does not work.</string>
               <widget class="QPushButton" name="removeTalkButton">
                <property name="text">
                 <string>remove</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="saveButton">
-               <property name="text">
-                <string>Save</string>
                </property>
               </widget>
              </item>
