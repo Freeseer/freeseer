@@ -317,13 +317,6 @@ class MainApp(QtGui.QMainWindow):
       
         self.talks_to_save.append(framework.presentation.Presentation(str(title),str(presenter),"","",str(event),str(dateTime),str(room)))
         self.ui.editTalkList.addItem(talk)
-
-        #disable checkboxes
-        
-        self.ui.checkBox.setChecked(False)
-        self.ui.checkBox_2.setChecked(False)
-        self.ui.checkBox_3.setChecked(False)
-        self.ui.checkBox_4.setChecked(False)
         
         #clean up and add title boxes
         
@@ -332,12 +325,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.roomEdit.clear()
         self.ui.presenterEdit.clear()
         self.ui.titleEdit.clear()
-        
-        #disable non-mandatory fields
-        self.ui.eventEdit.setDisabled(True)       
-        self.ui.dateTimeEdit.setDisabled(True)       
-        self.ui.roomEdit.setDisabled(True)       
-        self.ui.presenterEdit.setDisabled(True)       
+     
 
     def remove_talk(self):
         item = str(self.ui.editTalkList.item(self.ui.editTalkList.currentRow()).text())        
@@ -458,7 +446,7 @@ class MainApp(QtGui.QMainWindow):
         if eventName != "All":       
             if(self.ui.roomList.currentText()!="All"):
                 defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? and Room=? ''', [str(eventName),str(self.ui.eventList.currentText())])
+                                        where Event=? and Room=? ''', [str(eventName),str(self.ui.roomList.currentText())])
             else:
                 defaultcursor.execute('''select distinct Speaker,Title,Room from presentations \
                                         where Event=? ''', [str(eventName)])  
