@@ -17,8 +17,11 @@
 # This makefile generates the python code for the gui
 # from an XML definition file
 
+# Set the name of the executable here
+exec = run-freeseer
+
 ALL: gui 
-	@echo "You can now run ./freeseer"
+	@echo "You can now run $(exec)"
 
 gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
 	@echo "Re-generating GUI"
@@ -36,4 +39,4 @@ clean:
 	rm -f freeseer/resource_rc.py freeseer/freeseer_about.py freeseer/freeseer_ui_qt.py freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
 
 test: ALL
-	./freeseer
+	./$(exec)
