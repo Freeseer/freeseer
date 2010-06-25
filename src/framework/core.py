@@ -100,7 +100,7 @@ class FreeseerCore:
         cursor.execute('''select * from presentations''')
 
         for row in cursor:
-            print row
+            
             talk_titles.append("%s - %s - %s" % (row[0], row[1],row[6]))
 
         self.logger.log.debug('Available talk titles:')
