@@ -98,10 +98,10 @@ class MainApp(QtGui.QMainWindow):
         showWinCM = self.systray.menu.addAction("Hide/Show Main Window")
         recordCM = self.systray.menu.addAction("Record")
         stopCM = self.systray.menu.addAction("Stop")
-	self.systray.setContextMenu(self.systray.menu)
-	self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.showMainWin)
-	self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
-	self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
+        self.systray.setContextMenu(self.systray.menu)
+        self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.showMainWin)
+        self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
+        self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
@@ -300,18 +300,18 @@ class MainApp(QtGui.QMainWindow):
         Function for recording and stopping recording.
         '''
         if (state): # Start Recording.
-	    logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
-	    sysIcon2 = QtGui.QIcon(logo_rec)
-	    self.systray.setIcon(sysIcon2)
+            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
+            sysIcon2 = QtGui.QIcon(logo_rec)
+            self.systray.setIcon(sysIcon2)
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
             if (not self.ui.autoHideCheckbox.isChecked()):
-		self.statusBar().showMessage('recording...')
-	    else:
-		self.hide()
+                self.statusBar().showMessage('recording...')
+            else:
+                self.hide()
             
         else: # Stop Recording.
-	    logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
+            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.core.stop()
@@ -369,9 +369,9 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
         
     def toggle_auto_hide(self):
-	if self.ui.autoHideCheckbox.isChecked():
-	    self.core.preview(False, self.ui.previewWidget.winId())
-	else: self.core.preview(True, self.ui.previewWidget.winId())
+        if self.ui.autoHideCheckbox.isChecked():
+            self.core.preview(False, self.ui.previewWidget.winId())
+        else: self.core.preview(True, self.ui.previewWidget.winId())
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
@@ -379,20 +379,20 @@ class MainApp(QtGui.QMainWindow):
                 self.show()
             else: self.hide()
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
-	    self.ui.recordButton.toggle()
+            self.ui.recordButton.toggle()
 
     def showMainWin(self):
-	if self.isHidden():
-	    self.show()
-	else: self.hide()
+        if self.isHidden():
+            self.show()
+        else: self.hide()
 
     def recContextM(self):
-	if not self.ui.recordButton.isChecked():
-	    self.ui.recordButton.toggle()
+        if not self.ui.recordButton.isChecked():
+            self.ui.recordButton.toggle()
 
     def stopContextM(self):
-	if self.ui.recordButton.isChecked():
-	    self.ui.recordButton.toggle()
+        if self.ui.recordButton.isChecked():
+            self.ui.recordButton.toggle()
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
