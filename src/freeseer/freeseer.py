@@ -54,7 +54,6 @@ u'<p>' + LICENSE_TEXT + u'</p>' \
 u'<p>Record button graphics by: <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
 u'<p>Headphones graphics by: <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
 
-recflag = False
 class AboutDialog(QtGui.QDialog):
     '''
     About dialog class for displaying app information.
@@ -300,14 +299,12 @@ class MainApp(QtGui.QMainWindow):
         '''
         Function for recording and stopping recording.
         '''
-        global recflag
         if (state): # Start Recording.
 	    logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
 	    sysIcon2 = QtGui.QIcon(logo_rec)
 	    self.systray.setIcon(sysIcon2)
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
-            recflag = state
             if (not self.ui.autoHideCheckbox.isChecked()):
 		self.statusBar().showMessage('recording...')
 	    else:
@@ -321,7 +318,6 @@ class MainApp(QtGui.QMainWindow):
             self.ui.recordButton.setText('Record')
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
-            recflag = state
 
     def test_sources(self, state):
         # Test video and audio sources
@@ -383,11 +379,7 @@ class MainApp(QtGui.QMainWindow):
                 self.show()
             else: self.hide()
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
-	    global recflag
-	    if recflag == False:
-		self.capture(True)
-	    else:
-		self.capture(False)
+	    self.ui.recordButton.toggle()
 
     def showMainWin(self):
 	if self.isHidden():
@@ -395,14 +387,12 @@ class MainApp(QtGui.QMainWindow):
 	else: self.hide()
 
     def recContextM(self):
-	global recflag
-	if recflag == False:
-	  self.capture(True)
+	if not self.ui.recordButton.isChecked():
+	    self.ui.recordButton.toggle()
 
     def stopContextM(self):
-	global recflag
-	if recflag == True:
-	    self.capture(False)
+	if self.ui.recordButton.isChecked():
+	    self.ui.recordButton.toggle()
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
