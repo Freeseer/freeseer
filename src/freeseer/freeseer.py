@@ -162,13 +162,17 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.firewiresrcButton.setEnabled(True)
                 
-        self.videosrc = vidsrcs[0]
-        if (self.videosrc == 'desktop'):
+        #self.videosrc = vidsrcs[0]
+        if (self.core.config.videosrc == 'desktop'):
             self.ui.localDesktopButton.setChecked(True)
-        elif (self.videosrc == 'usb'):
+            if (self.core.config.videodev == 'local area'):
+                self.ui.recordLocalAreaButton.setChecked(True)
+                # this line here is not working as I was hoping it would :(
+                self.desktopAreaEvent(self.core.config.start_x, self.core.config.start_y, self.core.config.end_x, self.core.config.end_y)
+        elif (self.core.config.videosrc == 'usb'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.usbsrcButton.setChecked(True)
-        elif (self.videosrc == 'firewire'):
+        elif (self.core.config.videosrc == 'firewire'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.firewiresrcButton.setChecked(True)
 
@@ -195,8 +199,10 @@ class MainApp(QtGui.QMainWindow):
         if (self.ui.localDesktopButton.isChecked()): 
             if (self.ui.recordLocalDesktopButton.isChecked()):
                 self.videosrc = 'desktop'
+                self.core.config.videodev = 'default'
             elif (self.ui.recordLocalAreaButton.isChecked()):
                 self.videosrc = 'desktop'
+                self.core.config.videodev = 'local area'
                 self.core.set_record_area(True)
 
         # recording from hardware such as usb or fireware device
@@ -210,13 +216,13 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoDeviceList.clear()
             for dev in viddevs:
                 self.ui.videoDeviceList.addItem(dev)
+            self.core.config.videodev = str(self.ui.videoDeviceList.currentText())
 
         # invalid selection (this should never happen)
         else: return
 
         # finally load the changes into core
-        videodev = str(self.ui.videoDeviceList.currentText())
-        self.core.change_videosrc(self.videosrc, videodev)
+        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
         
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
@@ -254,7 +260,7 @@ class MainApp(QtGui.QMainWindow):
         Function for changing video device
         eg. /dev/video1
         '''
-        dev = str(self.ui.videoDeviceList.currentText())
+        dev = self.core.config.videodev = str(self.ui.videoDeviceList.currentText())
         src = self.videosrc
         self.core.logger.log.debug('Changing video device to ' + dev)
         self.core.change_videosrc(src, dev)
@@ -276,10 +282,10 @@ class MainApp(QtGui.QMainWindow):
         self.hide()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-        self.start_x = start_x
-        self.start_y = start_y
-        self.end_x = end_x
-        self.end_y = end_y
+        self.start_x = self.core.config.start_x = start_x
+        self.start_y = self.core.config.start_y = start_y
+        self.end_x = self.core.config.end_x = end_x
+        self.end_y = self.core.config.end_y = end_y
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
@@ -309,6 +315,8 @@ class MainApp(QtGui.QMainWindow):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
+            self.core.config.videosrc = self.videosrc
+            self.core.config.writeConfig()
             
         else: # Stop Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")

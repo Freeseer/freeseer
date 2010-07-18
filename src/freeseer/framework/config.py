@@ -45,6 +45,14 @@ class Config:
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.talksfile = os.path.abspath('%s/talks.txt' % self.configdir)
         self.resolution = '0x0' # no scaling for video
+        self.videosrc = 'desktop'
+        self.videodev = 'none'
+        self.start_x = 0
+        self.start_y = 0
+        self.end_x = 0
+        self.end_y = 0
+        self.audiosrc = 'none'
+        self.audiofb = 'none'
         
         # Read in the config file
         self.readConfig()
@@ -74,6 +82,12 @@ class Config:
             self.videodir = config.get('Global', 'video_directory')
             self.talksfile = config.get('Global', 'talks_file')
             self.resolution = config.get('Global', 'resolution')
+            self.videosrc = config.get('lastrun', 'video_source')
+            self.videodev = config.get('lastrun', 'video_device')
+            self.start_x = config.get('lastrun', 'area_start_x')
+            self.start_y = config.get('lastrun', 'area_start_y')
+            self.end_x = config.get('lastrun', 'area_end_x')
+            self.end_y = config.get('lastrun', 'area_end_y')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -89,7 +103,17 @@ class Config:
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'talks_file', self.talksfile)
         config.set('Global', 'resolution', self.resolution)
-        
+        # Add for shortcuts later
+        config.add_section('lastrun')
+        config.set('lastrun', 'video_source', self.videosrc)
+        config.set('lastrun', 'video_device', self.videodev)
+        config.set('lastrun', 'area_start_x', self.start_x)
+        config.set('lastrun', 'area_start_y', self.start_y)
+        config.set('lastrun', 'area_end_x', self.end_x)
+        config.set('lastrun', 'area_end_y', self.end_y)
+        config.set('lastrun', 'audio_source', self.audiosrc)
+        config.set('lastrun', 'audio_feedback', self.audiofb)
+                
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
