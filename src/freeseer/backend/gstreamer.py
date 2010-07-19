@@ -237,10 +237,10 @@ class Freeseer_gstreamer(BackendInterface):
 
     def _set_recording_area(self):
         video_src = self.player.get_by_name('video_src')
-        video_src.set_property('startx', self.record_desktop_area_start_x)
-        video_src.set_property('starty', self.record_desktop_area_start_y)
-        video_src.set_property('endx', self.record_desktop_area_end_x)
-        video_src.set_property('endy', self.record_desktop_area_end_y)
+        video_src.set_property('startx', int(self.record_desktop_area_start_x))
+        video_src.set_property('starty', int(self.record_desktop_area_start_y))
+        video_src.set_property('endx', int(self.record_desktop_area_end_x))
+        video_src.set_property('endy', int(self.record_desktop_area_end_y))
         print 'success'
 
     def _set_video_encoder(self):
@@ -565,6 +565,8 @@ class Freeseer_gstreamer(BackendInterface):
         self.record_desktop_area_start_y = start_y
         self.record_desktop_area_end_x = end_x
         self.record_desktop_area_end_y = end_y
+        print self.record_desktop_area_start_x
+        print self.record_desktop_area_start_y
 
     def change_output_resolution(self, width, height):
         '''

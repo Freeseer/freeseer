@@ -167,7 +167,6 @@ class MainApp(QtGui.QMainWindow):
             self.ui.localDesktopButton.setChecked(True)
             if (self.core.config.videodev == 'local area'):
                 self.ui.recordLocalAreaButton.setChecked(True)
-                # this line here is not working as I was hoping it would :(
                 self.desktopAreaEvent(self.core.config.start_x, self.core.config.start_y, self.core.config.end_x, self.core.config.end_y)
         elif (self.core.config.videosrc == 'usb'):
             self.ui.hardwareButton.setChecked(True)
