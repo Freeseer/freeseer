@@ -152,6 +152,8 @@ class MainApp(QtGui.QMainWindow):
         if (self.core.config.audiosrc == 'none'):
             self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
         else: self.core.change_soundsrc(self.core.config.audiosrc)
+        if (self.core.config.audiofb == 'True'):
+            self.ui.audioFeedbackCheckbox.toggle()
 
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
@@ -316,6 +318,9 @@ class MainApp(QtGui.QMainWindow):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
+            if (self.ui.audioFeedbackCheckbox.isChecked()):
+                self.core.config.audiofb = 'True'
+            else: self.core.config.audiofb = 'False'
             self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
             

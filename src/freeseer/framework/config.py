@@ -52,7 +52,7 @@ class Config:
         self.end_x = 0
         self.end_y = 0
         self.audiosrc = 'none'
-        self.audiofb = 'none'
+        self.audiofb = 'False'
         
         # Read in the config file
         self.readConfig()
@@ -89,6 +89,7 @@ class Config:
             self.end_x = config.get('lastrun', 'area_end_x')
             self.end_y = config.get('lastrun', 'area_end_y')
             self.audiosrc = config.get('lastrun', 'audio_source')
+            self.audiofb = config.get('lastrun', 'audio_feedback')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
