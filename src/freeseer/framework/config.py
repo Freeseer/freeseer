@@ -88,6 +88,7 @@ class Config:
             self.start_y = config.get('lastrun', 'area_start_y')
             self.end_x = config.get('lastrun', 'area_end_x')
             self.end_y = config.get('lastrun', 'area_end_y')
+            self.audiosrc = config.get('lastrun', 'audio_source')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
