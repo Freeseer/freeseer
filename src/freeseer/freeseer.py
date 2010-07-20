@@ -149,7 +149,9 @@ class MainApp(QtGui.QMainWindow):
 
         # Setup default sources
         self.toggle_video_source()
-        self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+        if (self.core.config.audiosrc == 'none'):
+            self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+        else: self.core.change_soundsrc(self.core.config.audiosrc)
 
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
@@ -290,7 +292,7 @@ class MainApp(QtGui.QMainWindow):
         self.show()
 
     def change_audio_device(self):
-        src = str(self.ui.audioSourceList.currentText())
+        src = self.core.config.audiosrc = str(self.ui.audioSourceList.currentText())      
         self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.change_soundsrc(src)
 
