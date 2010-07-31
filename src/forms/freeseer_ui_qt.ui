@@ -31,7 +31,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -233,7 +233,7 @@
              <x>0</x>
              <y>0</y>
              <width>545</width>
-             <height>287</height>
+             <height>265</height>
             </rect>
            </property>
            <attribute name="label">
