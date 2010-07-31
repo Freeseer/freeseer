@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>585</width>
-    <height>509</height>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="editTab">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -31,7 +31,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -233,7 +233,7 @@
              <x>0</x>
              <y>0</y>
              <width>545</width>
-             <height>265</height>
+             <height>287</height>
             </rect>
            </property>
            <attribute name="label">
@@ -671,6 +671,9 @@ v4l2src does not work.</string>
                <property name="text">
                 <string>Event</string>
                </property>
+               <property name="buddy">
+                <cstring>eventEdit</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -691,6 +694,9 @@ v4l2src does not work.</string>
               <widget class="QLabel" name="label_8">
                <property name="text">
                 <string>Date&amp;Time</string>
+               </property>
+               <property name="buddy">
+                <cstring>dateTimeEdit</cstring>
                </property>
               </widget>
              </item>
@@ -730,6 +736,38 @@ v4l2src does not work.</string>
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="font">
+              <font>
+               <family>Sans Serif</family>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Add from RSS feed</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="1">
+              <widget class="QPushButton" name="rssButton">
+               <property name="text">
+                <string>Load talks from rss</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/rss_logo/rss_logo.png</normaloff>:/rss_logo/rss_logo.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLineEdit" name="rssEdit"/>
+             </item>
+            </layout>
+           </item>
           </layout>
          </widget>
         </item>
@@ -740,10 +778,66 @@ v4l2src does not work.</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QListWidget" name="editTalkList">
+            <widget class="QTableWidget" name="editTable">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::ExtendedSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <property name="showGrid">
+              <bool>false</bool>
+             </property>
              <property name="sortingEnabled">
               <bool>true</bool>
              </property>
+             <property name="columnCount">
+              <number>4</number>
+             </property>
+             <property name="km" stdset="0">
+              <number>0</number>
+             </property>
+             <attribute name="horizontalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>142</number>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>142</number>
+             </attribute>
+             <column>
+              <property name="text">
+               <string>Speaker</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Room</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true">Id</string>
+              </property>
+             </column>
             </widget>
            </item>
            <item>
@@ -820,7 +914,6 @@ v4l2src does not work.</string>
   <tabstop>presenterEdit</tabstop>
   <tabstop>titleEdit</tabstop>
   <tabstop>addTalkButton</tabstop>
-  <tabstop>editTalkList</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox_3</tabstop>
   <tabstop>recordButton</tabstop>
@@ -839,12 +932,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>562</x>
-     <y>111</y>
+     <x>554</x>
+     <y>153</y>
     </hint>
     <hint type="destinationlabel">
-     <x>403</x>
-     <y>112</y>
+     <x>176</x>
+     <y>157</y>
     </hint>
    </hints>
   </connection>
@@ -855,12 +948,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>562</x>
-     <y>140</y>
+     <x>554</x>
+     <y>219</y>
     </hint>
     <hint type="destinationlabel">
-     <x>491</x>
-     <y>141</y>
+     <x>176</x>
+     <y>223</y>
     </hint>
    </hints>
   </connection>
@@ -891,8 +984,8 @@ v4l2src does not work.</string>
      <y>228</y>
     </hint>
     <hint type="destinationlabel">
-     <x>554</x>
-     <y>216</y>
+     <x>546</x>
+     <y>276</y>
     </hint>
    </hints>
   </connection>
@@ -919,12 +1012,12 @@ v4l2src does not work.</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>466</y>
+     <x>232</x>
+     <y>465</y>
     </hint>
     <hint type="destinationlabel">
-     <x>559</x>
-     <y>463</y>
+     <x>563</x>
+     <y>462</y>
     </hint>
    </hints>
   </connection>
@@ -1003,8 +1096,8 @@ v4l2src does not work.</string>
      <y>78</y>
     </hint>
     <hint type="destinationlabel">
-     <x>374</x>
-     <y>110</y>
+     <x>432</x>
+     <y>188</y>
     </hint>
    </hints>
   </connection>
@@ -1037,6 +1130,22 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>292</x>
      <y>181</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordLocalAreaButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>areaButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>387</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>245</y>
     </hint>
    </hints>
   </connection>

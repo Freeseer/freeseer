@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# freeseer - vga/presentation capture software
+#
+#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  http://fosslc.org
+#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -14,29 +22,15 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-# This makefile generates the python code for the gui
-# from an XML definition file
+import sys
 
-# Set the name of the executable here
-exec = run-freeseer
+from PyQt4 import QtGui
 
-ALL: gui 
-	@echo "You can now run $(exec)"
+from freeseer.freeseer import *
 
-gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
-	@echo "Re-generating GUI"
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    main = MainApp()
+    main.show()
+    sys.exit(app.exec_())
 
-freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
-	pyuic4 forms/freeseer_ui_qt.ui -o freeseer/freeseer_ui_qt.py
-
-freeseer_about.py: forms/freeseer_about.ui
-	pyuic4 forms/freeseer_about.ui -o freeseer/freeseer_about.py
-
-resource_rc.py: forms/resource.qrc
-	pyrcc4 forms/resource.qrc -o freeseer/resource_rc.py
-
-clean:
-	rm -f freeseer/resource_rc.py freeseer/freeseer_about.py freeseer/freeseer_ui_qt.py freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
-
-test: ALL
-	./$(exec)
