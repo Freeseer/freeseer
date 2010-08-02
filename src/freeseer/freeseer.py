@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+
 
 # freeseer - vga/presentation capture software
 #
@@ -29,6 +29,7 @@ from framework.qt_area_selector import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 
+import framework.db_connector
 import framework.presentation
 import framework.rss_parser
 
@@ -463,12 +464,14 @@ class MainApp(QtGui.QMainWindow):
             print a.build_data_dictionary()[18]
            
             for presentation in a.build_data_dictionary():
-                talk = framework.presentation.Presentation("",presentation["Speaker"],"",presentation["Level"],presentation["Event"],presentation["Time"],presentation["Room"])
+                talk = framework.presentation.Presentation(presentation["Title"],presentation["Speaker"],"",presentation["Level"],presentation["Event"],presentation["Time"],presentation["Room"])
+                db_reference = framework.db_connector.DB_Connector(None)
                 
-                talk.save_to_db()                
-                self.load_talks()
-                self.load_events()
-                self.load_rooms()
+                if not db_reference.db_contains(talk):
+                    talk.save_to_db()                
+                    self.load_talks()
+                    self.load_events()
+                    self.load_rooms()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

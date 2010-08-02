@@ -147,14 +147,14 @@ class FeedParser:
         presentations_list = []
         
         for i in range (len(self.get_entries())):
-            title = str(self.get_entry_title(i))
-            speaker = str(self.get_entry_speaker(i))
-            abstract = self._remove_tag_indicators(self.get_entry_abstract(i))
-            level = str(self.get_entry_level(i))
-            status = str(self.get_entry_status(i))
-            time = self._remove_tag_indicators(str(self.get_entry_time(i)))
-            event = str(self.get_entry_event(i))
-            room = str(self.get_entry_room(i))
+            title = unicode(self.get_entry_title(i))
+            speaker = unicode(self.get_entry_speaker(i))
+            abstract = unicode(self._remove_tag_indicators(self.get_entry_abstract(i)))
+            level = unicode(self.get_entry_level(i))
+            status = unicode(self.get_entry_status(i))
+            time = unicode(self._remove_tag_indicators(str(self.get_entry_time(i))))
+            event = unicode(self.get_entry_event(i))
+            room = unicode(self.get_entry_room(i))
             
             presentation = {}
             

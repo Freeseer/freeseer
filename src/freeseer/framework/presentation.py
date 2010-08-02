@@ -23,7 +23,8 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 from config import Config
-from db_connector import DB_Connector
+import db_connector
+
 import os
 
 
@@ -46,7 +47,7 @@ class Presentation():
         self.time = time
         self.room = room
     
-        self.db_connection = DB_Connector(None)
+        self.db_connection = db_connector.DB_Connector(None)
   
     def save_to_db(self):
         '''

@@ -23,10 +23,12 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 import os
+import presentation
 
 from logger import Logger
 from config import Config
 from sqlite3 import connect
+
 
 
 class DB_Connector():
@@ -37,7 +39,7 @@ class DB_Connector():
     def __init__(self,gui):
         
         self._CREATE_QUERY = '''create table presentations
-                    (Speaker varchar(100), Title varchar(255), Description text, Level varchar(25), Event varchar(100),
+                    (Speaker varchar(100), Title varchar(255) UNIQUE, Description text, Level varchar(25), Event varchar(100),
                     Time timestamp, Room varchar(25), Id INTEGER PRIMARY KEY)'''
         self._DEFAULT_TALK = '''insert into presentations values ("Thanh Ha","Intro to Freeseer","","","","","T105",NULL)'''
                     
@@ -60,7 +62,10 @@ class DB_Connector():
         
     def run_query(self,querie,args=None):
         self.cursor = self.db_connection.cursor()
-        self.cursor.execute(querie,args)            
+        try:
+            self.cursor.execute(querie,args)
+        except:
+            return            
         self.db_connection.commit()
         return self.cursor
        
@@ -118,6 +123,19 @@ class DB_Connector():
             talk_rooms.append(row[0])
         
         return talk_rooms
+    
+    def db_contains(self,presentation):
+        '''
+        Check if database already contains such presentation
+        Two presentations are considered the same if they have same title, same event and same speaker
+        '''
+        talk_titles = self.cursor.execute('''select distinct Title from presentations''')
+        talk_events = self.cursor.execute('''select distinct Event from presentations''')
+        talk_speakers = self.cursor.execute('''select distinct Speaker from presentations''')
+        
+        if (presentation.title in talk_titles and presentation.event in talk_events and presentation.speaker in talk_speakers):
+            return True
+        return False
     
     def filter_by_room(self,roomName):
         talks_matched = []
