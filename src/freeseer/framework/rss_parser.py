@@ -145,11 +145,15 @@ class FeedParser:
     ''' 
     def build_data_dictionary(self):
         presentations_list = []
+       
         
-        for i in range (len(self.get_entries())):
-            title = unicode(self.get_entry_title(i))
-            speaker = unicode(self.get_entry_speaker(i))
-            abstract = unicode(self._remove_tag_indicators(self.get_entry_abstract(i)))
+        for i in range (len(self.get_entries())):          
+            
+            title = unicode(self.get_entry_title(i))      
+            title = title.encode('ascii', 'replace')  
+            
+            speaker = unicode(self.get_entry_speaker(i)) 
+            abstract = unicode(self._remove_tag_indicators(self.get_entry_abstract(i)))             
             level = unicode(self.get_entry_level(i))
             status = unicode(self.get_entry_status(i))
             time = unicode(self._remove_tag_indicators(str(self.get_entry_time(i))))

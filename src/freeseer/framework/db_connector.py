@@ -91,6 +91,7 @@ class DB_Connector():
         self.cursor.execute('''select * from presentations''')
 
         for row in self.cursor:
+            print row
             talk_titles.append([row[0],row[1],row[6],row[7]])            
 
         #self.logger.log.debug('Available talk titles:')

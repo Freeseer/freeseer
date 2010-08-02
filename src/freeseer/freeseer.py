@@ -381,8 +381,8 @@ class MainApp(QtGui.QMainWindow):
         for talk in talklist:
             index = self.ui.editTable.rowCount()
             self.ui.editTable.insertRow(index)            
-            for i in range(len(talk)): 
-                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(str(talk[i])))
+            for i in range(len(talk)):               
+                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))
         
             item = "%s - %s - %s" % (talk[0],talk[1],talk[2])
             self.ui.talkList.addItem(item)
