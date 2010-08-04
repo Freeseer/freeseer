@@ -32,6 +32,7 @@ from framework.core import *
 from framework.qt_area_selector import *
 from freeseer_ui_qt import *
 from freeseer_about import *
+import qxtglobalshortcut
 
 __version__=u'1.9.7'
 
@@ -126,7 +127,22 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
-        # connections for configure > File Locations
+        # connections for configure > Extra Settings
+        self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
+        
+        # connections for configure > Extra Settings > Shortkeys
+        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_rec_key.setShortcut(QtGui.QKeySequence("Ctrl+Shift+R"))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence("Ctrl+Shift+E"))
+        self.short_rec_key.setEnabled(True)
+        self.short_stop_key.setEnabled(True)
+        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+        self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
+        
+        # connections for configure > Extra Settings > File Locations
         self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.ui.talksFileButton, QtCore.SIGNAL('clicked()'), self.browse_talksfile)
 
@@ -135,9 +151,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
-        
-        # extra tab connections
-        self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
@@ -221,6 +234,8 @@ class MainApp(QtGui.QMainWindow):
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
+        self.ui.shortRecordLineEdit.setText("Set shortkey for recording.")
+        self.ui.shortStopLineEdit.setText("Set shortkey for stopping.")
 
         if self.core.config.resolution == '0x0':
             resolution = 0
@@ -393,6 +408,23 @@ class MainApp(QtGui.QMainWindow):
     def stopContextM(self):
         if self.ui.recordButton.isChecked():
             self.ui.recordButton.toggle()
+    
+    def grab_rec_key(self):
+        # set button down
+        # display text on box and set cursor
+        #if (event.type()==QEvent.KeyPress):
+            #self.emit(SIGNAL(event.key().toString()))
+        self.grab_rec_set()
+        
+    def grab_rec_set(self, event):
+        if (type(event)==QtGui.QKeyEvent):
+            self.emit(SIGNAL(event.key().toString()))
+            
+    def grab_stop_key(self):
+        # set button down
+        # display text on box and set cursor
+        if (event.type()==QEvent.KeyPress):
+            self.emit(SIGNAL(event.key().toString()))
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
