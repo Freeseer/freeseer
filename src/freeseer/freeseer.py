@@ -127,9 +127,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
-        # connections for configure > Extra Settings
-        self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
-        
         # connections for configure > Extra Settings > Shortkeys
         self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
         self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
@@ -151,6 +148,9 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
         self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
+        
+        # extra tab connections
+        self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
@@ -158,16 +158,20 @@ class MainApp(QtGui.QMainWindow):
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
-        self.core.preview(False, self.ui.previewWidget.winId())
 
         # Setup default sources
         self.toggle_video_source()
-        self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+        if (self.core.config.audiosrc == 'none'):
+            self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+        else: self.core.change_soundsrc(self.core.config.audiosrc)
+        if (self.core.config.audiofb == 'True'):
+            self.ui.audioFeedbackCheckbox.toggle()
 
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
         for src in vidsrcs:
-            if (src == 'desktop'): self.ui.localDesktopButton.setEnabled(True)
+            if (src == 'desktop'):
+                self.ui.localDesktopButton.setEnabled(True)
             elif (src == 'usb'):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.usbsrcButton.setEnabled(True)
@@ -175,13 +179,16 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.firewiresrcButton.setEnabled(True)
                 
-        self.videosrc = vidsrcs[0]
-        if (self.videosrc == 'desktop'):
+        #self.videosrc = vidsrcs[0]
+        if (self.core.config.videosrc == 'desktop'):
             self.ui.localDesktopButton.setChecked(True)
-        elif (self.videosrc == 'usb'):
+            if (self.core.config.videodev == 'local area'):
+                self.ui.recordLocalAreaButton.setChecked(True)
+                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+        elif (self.core.config.videosrc == 'usb'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.usbsrcButton.setChecked(True)
-        elif (self.videosrc == 'firewire'):
+        elif (self.core.config.videosrc == 'firewire'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.firewiresrcButton.setChecked(True)
 
@@ -206,14 +213,18 @@ class MainApp(QtGui.QMainWindow):
         '''
         # recording the local desktop
         if (self.ui.localDesktopButton.isChecked()): 
+            self.ui.autoHideCheckbox.setChecked(True)
             if (self.ui.recordLocalDesktopButton.isChecked()):
                 self.videosrc = 'desktop'
+                self.core.config.videodev = 'default'
             elif (self.ui.recordLocalAreaButton.isChecked()):
                 self.videosrc = 'desktop'
+                self.core.config.videodev = 'local area'
                 self.core.set_record_area(True)
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
+            self.ui.autoHideCheckbox.setChecked(False)
             if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'usb'
             elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'firewire'
             else: return
@@ -223,13 +234,13 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoDeviceList.clear()
             for dev in viddevs:
                 self.ui.videoDeviceList.addItem(dev)
+            self.core.config.videodev = str(self.ui.videoDeviceList.currentText())
 
         # invalid selection (this should never happen)
         else: return
 
         # finally load the changes into core
-        videodev = str(self.ui.videoDeviceList.currentText())
-        self.core.change_videosrc(self.videosrc, videodev)
+        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
         
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
@@ -269,7 +280,7 @@ class MainApp(QtGui.QMainWindow):
         Function for changing video device
         eg. /dev/video1
         '''
-        dev = str(self.ui.videoDeviceList.currentText())
+        dev = self.core.config.videodev = str(self.ui.videoDeviceList.currentText())
         src = self.videosrc
         self.core.logger.log.debug('Changing video device to ' + dev)
         self.core.change_videosrc(src, dev)
@@ -291,24 +302,28 @@ class MainApp(QtGui.QMainWindow):
         self.hide()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-        self.start_x = start_x
-        self.start_y = start_y
-        self.end_x = end_x
-        self.end_y = end_y
+        self.start_x = self.core.config.start_x = start_x
+        self.start_y = self.core.config.start_y = start_y
+        self.end_x = self.core.config.end_x = end_x
+        self.end_y = self.core.config.end_y = end_y
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
 
     def change_audio_device(self):
-        src = str(self.ui.audioSourceList.currentText())
+        src = self.core.config.audiosrc = str(self.ui.audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.change_soundsrc(src)
 
     def toggle_audio_feedback(self):
         if (self.ui.audioFeedbackCheckbox.isChecked()):
             self.core.audioFeedback(True)
+            self.core.config.audiofb = 'True'
+            self.core.config.writeConfig()
             return
+        self.core.config.audiofb = 'False'
         self.core.audioFeedback(False)
+        self.core.config.writeConfig()
 
     def capture(self, state):
         '''
@@ -324,6 +339,8 @@ class MainApp(QtGui.QMainWindow):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
+            self.core.config.videosrc = self.videosrc
+            self.core.config.writeConfig()
             
         else: # Stop Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -408,7 +425,7 @@ class MainApp(QtGui.QMainWindow):
     def stopContextM(self):
         if self.ui.recordButton.isChecked():
             self.ui.recordButton.toggle()
-    
+
     def grab_rec_key(self):
         # set button down
         # display text on box and set cursor
