@@ -145,7 +145,6 @@ class MainApp(QtGui.QMainWindow):
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
-        self.core.preview(False, self.ui.previewWidget.winId())
 
         # Setup default sources
         self.toggle_video_source()
@@ -158,7 +157,8 @@ class MainApp(QtGui.QMainWindow):
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
         for src in vidsrcs:
-            if (src == 'desktop'): self.ui.localDesktopButton.setEnabled(True)
+            if (src == 'desktop'):
+                self.ui.localDesktopButton.setEnabled(True)
             elif (src == 'usb'):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.usbsrcButton.setEnabled(True)
@@ -200,6 +200,7 @@ class MainApp(QtGui.QMainWindow):
         '''
         # recording the local desktop
         if (self.ui.localDesktopButton.isChecked()): 
+            self.ui.autoHideCheckbox.setChecked(True)
             if (self.ui.recordLocalDesktopButton.isChecked()):
                 self.videosrc = 'desktop'
                 self.core.config.videodev = 'default'
@@ -210,6 +211,7 @@ class MainApp(QtGui.QMainWindow):
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
+            self.ui.autoHideCheckbox.setChecked(False)
             if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'usb'
             elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'firewire'
             else: return

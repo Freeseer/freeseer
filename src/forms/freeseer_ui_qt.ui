@@ -403,8 +403,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>301</height>
+             <width>200</width>
+             <height>35</height>
             </rect>
            </property>
            <attribute name="label">
@@ -466,14 +466,20 @@ v4l2src does not work.</string>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
              <widget class="QCheckBox" name="autoHideCheckbox">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="toolTip">
                <string>Enables auto-hide to system tray.</string>
               </property>
               <property name="text">
                <string>Enable Auto-Hide</string>
               </property>
-              <property name="checked">
+              <property name="checkable">
                <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
               </property>
              </widget>
             </item>
