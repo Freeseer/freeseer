@@ -301,8 +301,12 @@ class MainApp(QtGui.QMainWindow):
     def toggle_audio_feedback(self):
         if (self.ui.audioFeedbackCheckbox.isChecked()):
             self.core.audioFeedback(True)
+            self.core.config.audiofb = 'True'
+            self.core.config.writeConfig()
             return
+        self.core.config.audiofb = 'False'
         self.core.audioFeedback(False)
+        self.core.config.writeConfig()
 
     def capture(self, state):
         '''
@@ -318,9 +322,6 @@ class MainApp(QtGui.QMainWindow):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
-            if (self.ui.audioFeedbackCheckbox.isChecked()):
-                self.core.config.audiofb = 'True'
-            else: self.core.config.audiofb = 'False'
             self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
             
