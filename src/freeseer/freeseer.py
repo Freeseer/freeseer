@@ -212,6 +212,7 @@ class MainApp(QtGui.QMainWindow):
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
             self.ui.autoHideCheckbox.setChecked(False)
+            self.core.set_record_area(False)
             if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'usb'
             elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'firewire'
             else: return
