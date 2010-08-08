@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
+
 
 # freeseer - vga/presentation capture software
 #
@@ -22,16 +22,18 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import os
-import sys
-import time
-
 from PyQt4 import QtGui, QtCore
-
+from framework.db_connector import *
 from framework.core import *
 from framework.qt_area_selector import *
 from freeseer_ui_qt import *
 from freeseer_about import *
+
+import framework.db_connector
+import framework.presentation
+import framework.rss_parser
+
+
 
 __version__=u'1.9.7'
 
@@ -77,7 +79,11 @@ class MainApp(QtGui.QMainWindow):
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
 
+        self.talks_to_save = []
+        self.talks_to_delete = []
+
         self.core = FreeseerCore(self)
+        self.db_connection = DB_Connector(self.ui)
 
         # get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
@@ -88,6 +94,8 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioSourceList.addItem(src)
 
         self.load_talks()
+        self.load_events()
+        self.load_rooms()
         self.load_settings()
 
         # setup systray
@@ -98,6 +106,8 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.filter_by_event)
+        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'),self.filter_by_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
@@ -125,9 +135,10 @@ class MainApp(QtGui.QMainWindow):
 
         # edit talks tab connections
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talk_from_rss)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
-        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
+        #self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
+        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
@@ -309,45 +320,114 @@ class MainApp(QtGui.QMainWindow):
             self.core.test_sources(state, True, False)
 
     def add_talk(self):
-        talk = u""
-        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + u" - "
-        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + u" - "
-        talk += self.ui.titleEdit.text()
-
-        # Do not add talks if they are empty strings
-        if (len(talk) == 0): return
+        talk_title = self.ui.titleEdit.text()
+        talk_room = self.ui.roomEdit.text()
+        talk_speaker = self.ui.presenterEdit.text()
+        talk_event = self.ui.eventEdit.text()
+        talk_time = self.ui.dateTimeEdit   
         
-        self.ui.editTalkList.addItem(talk)
-
-        #clean up add title boxes
+        # Do not add talks if they are empty strings
+        if (len(talk_title) == 0): return   
+        
+        presentation = framework.presentation.Presentation(str(talk_title),str(talk_speaker),"","",str(talk_event),str(talk_time),str(talk_room))
+        presentation.save_to_db()
+        
+        
+        self.ui.editTable.setRowCount(0)
+        self.ui.editTable.clear()
+        
+        self.load_talks()
+        self.load_events()
+        self.load_rooms()
+        
+        #clean up and add title boxes        
+        self.ui.eventEdit.clear()
+        self.ui.dateTimeEdit.clear()
         self.ui.roomEdit.clear()
         self.ui.presenterEdit.clear()
         self.ui.titleEdit.clear()
 
     def remove_talk(self):
-        self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
+        row_clicked = self.ui.editTable.selectionModel().selection().indexes()[0].row()
+        id = self.ui.editTable.item(row_clicked, 3).text() 
+        self.db_connection.delete_talk(str(id))
+        
+        self.ui.editTable.setRowCount(0)
+        self.ui.editTable.clear()
+        
+        
+        self.load_talks()
+        self.load_rooms()
+        self.load_events()
 
+        
+    
+    def reset(self):
+        self.db_connection.clear_database()
+        self.load_events()
+        self.load_rooms()
+        self.load_talks()
+                  
     def load_talks(self):
         '''
         This method updates the GUI with the available presentation titles.
         '''
-        talklist = self.core.get_talk_titles()
+        talklist = self.db_connection.get_talk_titles()
         self.ui.talkList.clear()
-        self.ui.editTalkList.clear()
+        self.ui.editTable.clear()
+        self.ui.editTable.setRowCount(0)
+        
+        
         for talk in talklist:
-            self.ui.talkList.addItem(talk)
-            self.ui.editTalkList.addItem(talk)
+            index = self.ui.editTable.rowCount()
+            self.ui.editTable.insertRow(index)            
+            for i in range(len(talk)):               
+                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))
+        
+            item = "%s - %s - %s" % (talk[0],talk[1],talk[2])
+            self.ui.talkList.addItem(item)
+
+            
+    def load_events(self):
+        '''
+        This method updates the GUI with the available presentation events.
+        '''
+        eventList = self.db_connection.get_talk_events()
+        self.ui.eventList.clear()
+        self.ui.eventList.addItem("All")
+        for event in eventList:
+            if len(event)>0:    self.ui.eventList.addItem(event)
+            
+    def load_rooms(self):
+        '''
+        This method updates the GUI with the available presentation rooms.
+        '''
+        
+        roomList = self.db_connection.get_talk_rooms()   
+        self.ui.roomList.clear()
+        self.ui.roomList.addItem("All")     
+        for room in roomList:
+            if len(room)>0:    self.ui.roomList.addItem(room)
+        
+
+            
 
     def save_talks(self):
-        talk_list = []
-        i = 0
-        while i < self.ui.editTalkList.count():
-            t = unicode(self.ui.editTalkList.item(i).text()) + '\n'
-            talk_list.append(t)
-            i = i+1
-
-        self.core.save_talk_titles(talk_list)
-        self.load_talks()
+        for item in self.talks_to_save:            
+            item.save_to_db()
+        
+        for item in self.talks_to_delete:
+            self.db_connection.delete_talk(item)
+            
+        del self.talks_to_delete[:]
+        del self.talks_to_save[:]
+        
+        self.db_connection.aux()
+        
+        #reload filters
+        self.load_talks()        
+        self.load_events()
+        self.load_rooms()
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
@@ -363,6 +443,35 @@ class MainApp(QtGui.QMainWindow):
         self.core.logger.log.info('Exiting freeseer...')
         #self.core.stop()
         event.accept()
+
+    def filter_by_room(self,roomName):
+        if not self.db_connection.filter_by_room(roomName):
+            self.load_talks()
+            
+    def filter_by_event(self,eventName):
+        if not self.db_connection.filter_by_event(eventName):
+            self.load_talks()
+    
+    def add_talk_from_rss(self):
+        entry = str(self.ui.rssEdit.text())
+        a = framework.rss_parser.FeedParser(entry)
+        if len(a.build_data_dictionary())==0:
+            message = QtGui.QMessageBox()      
+            message.setText("No data found")
+            message.exec_()
+        else:
+            
+            print a.build_data_dictionary()[18]
+           
+            for presentation in a.build_data_dictionary():
+                talk = framework.presentation.Presentation(presentation["Title"],presentation["Speaker"],"",presentation["Level"],presentation["Event"],presentation["Time"],presentation["Room"])
+                db_reference = framework.db_connector.DB_Connector(None)
+                
+                if not db_reference.db_contains(talk):
+                    talk.save_to_db()                
+                    self.load_talks()
+                    self.load_events()
+                    self.load_rooms()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

@@ -28,6 +28,7 @@ import time
 import logging
 import logging.config
 import os
+
  
 from freeseer.backend.gstreamer import *
 from config import Config
@@ -53,45 +54,12 @@ class FreeseerCore:
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
 
+
         self.feedback = False
         self.spaces = False
-        self.logger.log.info(u"Core initialized")
+      
+        self.logger.log.info(u"Core initialized")   
 
-    def get_talk_titles(self):
-        '''
-        Returns the talk titles as listed in  talks.txt
-        '''
-        talk_titles = []
-        try:
-            f = codecs.open(self.config.talksfile, 'r', 'utf-8')
-        except:
-            self.logger.log.debug('talks.txt not found, creating default.')
-            f = codecs.open(self.config.talksfile, 'w', 'utf-8')
-            f.writelines('T103 - Thanh Ha - Intro to Freeseer')
-            f.close()
-            f = codecs.open(self.config.talksfile, 'r', 'utf-8')
-            
-        lines = f.readlines()
-        f.close()
-
-        for line in lines:
-            talk_titles.append(line.rstrip())
-
-        self.logger.log.debug('Available talk titles:')
-        for talk in talk_titles:
-            self.logger.log.debug('  ' + talk.encode('utf-8'))
-        return talk_titles
-
-    def save_talk_titles(self, talk_list):
-        '''
-        Saves the talk titles received by talk_list variable.
-
-        talk_list: a list of talk titles which will be saved..
-        '''
-        f = codecs.open(self.config.talksfile, 'w', 'utf-8')
-        f.writelines(talk_list)
-        f.close()
-        self.logger.log.debug('Saved talks to file')
 
     def get_record_name(self, filename):
         '''
