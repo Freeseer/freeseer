@@ -52,7 +52,7 @@ class QtKeyGrabber(QtGui.QWidget):
         elif event.key() == QtCore.Qt.Key_Meta:
             if self.modifiers.has_key(QtCore.Qt.Key_Meta):
                 del self.modifiers[QtCore.Qt.Key_Meta]
-        print len(self.modifiers)
+        #print len(self.modifiers)
         if len(self.modifiers) == 0:
             if self.flag == True:
                 self.parent.grab_rec_set(self.key_string)
