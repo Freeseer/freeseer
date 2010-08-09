@@ -30,6 +30,7 @@ from PyQt4 import QtGui, QtCore
 
 from framework.core import *
 from framework.qt_area_selector import *
+from framework.qt_key_grabber import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 import qxtglobalshortcut
@@ -130,8 +131,8 @@ class MainApp(QtGui.QMainWindow):
         # connections for configure > Extra Settings > Shortkeys
         self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
         self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_rec_key.setShortcut(QtGui.QKeySequence("Ctrl+Shift+R"))
-        self.short_stop_key.setShortcut(QtGui.QKeySequence("Ctrl+Shift+E"))
+        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
         self.short_rec_key.setEnabled(True)
         self.short_stop_key.setEnabled(True)
         self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
@@ -225,6 +226,7 @@ class MainApp(QtGui.QMainWindow):
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
             self.ui.autoHideCheckbox.setChecked(False)
+            self.core.set_record_area(False)
             if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'usb'
             elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'firewire'
             else: return
@@ -245,8 +247,8 @@ class MainApp(QtGui.QMainWindow):
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
-        self.ui.shortRecordLineEdit.setText("Set shortkey for recording.")
-        self.ui.shortStopLineEdit.setText("Set shortkey for stopping.")
+        self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
+        self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
 
         if self.core.config.resolution == '0x0':
             resolution = 0
@@ -427,21 +429,34 @@ class MainApp(QtGui.QMainWindow):
             self.ui.recordButton.toggle()
 
     def grab_rec_key(self):
-        # set button down
-        # display text on box and set cursor
-        #if (event.type()==QEvent.KeyPress):
-            #self.emit(SIGNAL(event.key().toString()))
-        self.grab_rec_set()
+        self.core.config.key_rec = 'Ctrl+Shift+R'
+        self.core.config.writeConfig()
+        self.key_grabber = QtKeyGrabber(self)
+        self.hide()
+        self.core.logger.log.info('Storing keys.')
+        self.key_grabber.show()
         
-    def grab_rec_set(self, event):
-        if (type(event)==QtGui.QKeyEvent):
-            self.emit(SIGNAL(event.key().toString()))
+    def grab_rec_set(self, key):
+        self.ui.shortRecordLineEdit.setText(key)
+        self.core.config.key_rec = key
+        self.core.config.writeConfig()
+        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.show()
             
     def grab_stop_key(self):
-        # set button down
-        # display text on box and set cursor
-        if (event.type()==QEvent.KeyPress):
-            self.emit(SIGNAL(event.key().toString()))
+        self.core.config.key_stop = 'Ctrl+Shift+E'
+        self.core.config.writeConfig()
+        self.key_grabber = QtKeyGrabber(self)
+        self.hide()
+        self.core.logger.log.info('Storing keys.')
+        self.key_grabber.show()
+
+    def grab_stop_set(self, key):
+        self.ui.shortStopLineEdit.setText(key)
+        self.core.config.key_stop = key
+        self.core.config.writeConfig()
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+        self.show()
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
