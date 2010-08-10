@@ -77,8 +77,8 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
-        self.aboutDialog = AboutDialog()
-
+        self.aboutDialog = AboutDialog()    
+        self.ui.editTable.setColumnHidden(3,True)
         self.talks_to_save = []
         self.talks_to_delete = []
 
@@ -334,7 +334,7 @@ class MainApp(QtGui.QMainWindow):
         
         
         self.ui.editTable.setRowCount(0)
-        self.ui.editTable.clear()
+        self.ui.editTable.clearContents()
         
         self.load_talks()
         self.load_events()
@@ -353,7 +353,7 @@ class MainApp(QtGui.QMainWindow):
         self.db_connection.delete_talk(str(id))
         
         self.ui.editTable.setRowCount(0)
-        self.ui.editTable.clear()
+        self.ui.editTable.clearContents()
         
         
         self.load_talks()
@@ -374,7 +374,7 @@ class MainApp(QtGui.QMainWindow):
         '''
         talklist = self.db_connection.get_talk_titles()
         self.ui.talkList.clear()
-        self.ui.editTable.clear()
+        self.ui.editTable.clearContents()
         self.ui.editTable.setRowCount(0)
         
         
