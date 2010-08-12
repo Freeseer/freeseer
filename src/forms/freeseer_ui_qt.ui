@@ -233,7 +233,7 @@
              <x>0</x>
              <y>0</y>
              <width>545</width>
-             <height>287</height>
+             <height>265</height>
             </rect>
            </property>
            <attribute name="label">
@@ -792,7 +792,7 @@ v4l2src does not work.</string>
               <bool>false</bool>
              </property>
              <property name="sortingEnabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="rowCount">
               <number>0</number>

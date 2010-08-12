@@ -79,6 +79,7 @@ class MainApp(QtGui.QMainWindow):
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()    
         self.ui.editTable.setColumnHidden(3,True)
+        
         self.talks_to_save = []
         self.talks_to_delete = []
 
@@ -344,6 +345,9 @@ class MainApp(QtGui.QMainWindow):
         self.load_events()
         self.load_rooms()
         
+        for i in range(self.ui.editTable.rowCount()):
+            self.ui.editTable.setRowHeight(i,20)
+        
         #clean up and add title boxes        
         self.ui.eventEdit.clear()
         self.ui.dateTimeEdit.clear()
@@ -352,7 +356,11 @@ class MainApp(QtGui.QMainWindow):
         self.ui.titleEdit.clear()
 
     def remove_talk(self):
-        row_clicked = self.ui.editTable.selectionModel().selection().indexes()[0].row()
+        try:
+            row_clicked = self.ui.editTable.selectionModel().selection().indexes()[0].row()
+        except:
+            return
+        
         id = self.ui.editTable.item(row_clicked, 3).text() 
         self.db_connection.delete_talk(str(id))
         
@@ -363,6 +371,11 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
         self.load_rooms()
         self.load_events()
+        
+        for i in range(self.ui.editTable.rowCount()):
+            self.ui.editTable.setRowHeight(i,20)
+        
+        
         
         
 
@@ -382,14 +395,14 @@ class MainApp(QtGui.QMainWindow):
         self.ui.talkList.clear()
         self.ui.editTable.clearContents()
         self.ui.editTable.setRowCount(0)        
-        row = 0
+       
         for talk in talklist:          
             index = self.ui.editTable.rowCount()
-            self.ui.editTable.insertRow(index)            
+            self.ui.editTable.insertRow(index)  
+            self.ui.editTable.setRowHeight(index,20)                   
             for i in range(len(talk)):                
-                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))
-                self.ui.editTable.setRowHeight(row,20)                
-            row+=1
+                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))                         
+        
         
             item = "%s - %s - %s" % (talk[0],talk[1],talk[2])
             self.ui.talkList.addItem(item)
@@ -466,9 +479,7 @@ class MainApp(QtGui.QMainWindow):
             message = QtGui.QMessageBox()      
             message.setText("No data found")
             message.exec_()
-        else:
-            
-            print a.build_data_dictionary()[18]
+        else:           
            
             for presentation in a.build_data_dictionary():
                 talk = framework.presentation.Presentation(presentation["Title"],presentation["Speaker"],"",presentation["Level"],presentation["Event"],presentation["Time"],presentation["Room"])
@@ -480,14 +491,27 @@ class MainApp(QtGui.QMainWindow):
                     self.load_events()
                     self.load_rooms()
                     
-    def edit_talk(self,row,cell):
-        new_speaker = self.ui.editTable.item(row, 0).text() 
-        new_title = self.ui.editTable.item(row, 1).text() 
-        new_room = self.ui.editTable.item(row, 2).text() 
-        id = self.ui.editTable.item(row, 3).text() 
-        
-        
-        self.db_connection.update_talk(id, new_speaker, new_title, new_room)
+    def edit_talk(self,row,cell):        
+        try:
+            new_speaker = self.ui.editTable.item(row, 0).text() 
+        except:
+            new_speaker = ""            
+        try:
+            new_title = self.ui.editTable.item(row, 1).text() 
+        except:
+            new_title = ""
+        try:
+            new_room = self.ui.editTable.item(row, 2).text() 
+        except:
+            new_room = ""            
+        try:
+            id = self.ui.editTable.item(row, 3).text() 
+        except:
+            id = ""             
+        try:
+            self.db_connection.update_talk(id, new_speaker, new_title, new_room)
+        except:
+            return
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
