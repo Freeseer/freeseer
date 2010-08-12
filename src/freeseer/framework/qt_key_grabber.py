@@ -33,7 +33,9 @@ class QtKeyGrabber(QtGui.QWidget):
         else:
             other = event.text()
         if other:
-            self.key_string = u'+'.join(self.modifiers.values() + [unicode(other)])
+            if self.modifiers.has_key(QtCore.Qt.Key_Control):
+                self.key_string = u'+'.join(self.modifiers.values() + [unicode(chr(event.key()))])
+            else: self.key_string = u'+'.join(self.modifiers.values() + [unicode(other)])
         else:
             self.key_string = u'+'.join(self.modifiers.values())
         if (self.parent.core.config.key_rec == 'Ctrl+Shift+R'):
