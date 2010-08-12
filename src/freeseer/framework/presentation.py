@@ -34,7 +34,7 @@ class Presentation():
     and its database related operations
     '''
 
-    def __init__(self,title,speaker="",description="",level="",event="",time="",room=""):
+    def __init__(self,title,speaker=None,description="",level="",event="",time="",room=None):
         
         '''
         Initialize a presentation instance

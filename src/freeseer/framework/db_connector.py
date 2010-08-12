@@ -210,6 +210,13 @@ class DB_Connector():
         self.cursor.execute('''delete from presentations''')
         self.db_connection.commit()
         self.cursor.close()
+        
+    def update_talk(self,id,new_speaker,new_title,new_room):        
+        self.cursor.execute('''update presentations set Speaker=?,Title=?,Room=? where Id=?''',[str(new_speaker),
+                                                                                        str(new_title), str(new_room),
+                                                                                        str(id)])
+        self.db_connection.commit()
+        self.cursor.close()
 
 
         

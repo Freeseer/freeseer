@@ -143,6 +143,10 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        
+        # EditTable Connections
+        
+        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged  (int,int)'), self.edit_talk)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
@@ -359,6 +363,8 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
         self.load_rooms()
         self.load_events()
+        
+        
 
         
     
@@ -375,14 +381,15 @@ class MainApp(QtGui.QMainWindow):
         talklist = self.db_connection.get_talk_titles()
         self.ui.talkList.clear()
         self.ui.editTable.clearContents()
-        self.ui.editTable.setRowCount(0)
-        
-        
-        for talk in talklist:
+        self.ui.editTable.setRowCount(0)        
+        row = 0
+        for talk in talklist:          
             index = self.ui.editTable.rowCount()
             self.ui.editTable.insertRow(index)            
-            for i in range(len(talk)):               
+            for i in range(len(talk)):                
                 self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))
+                self.ui.editTable.setRowHeight(row,20)                
+            row+=1
         
             item = "%s - %s - %s" % (talk[0],talk[1],talk[2])
             self.ui.talkList.addItem(item)
@@ -472,6 +479,15 @@ class MainApp(QtGui.QMainWindow):
                     self.load_talks()
                     self.load_events()
                     self.load_rooms()
+                    
+    def edit_talk(self,row,cell):
+        new_speaker = self.ui.editTable.item(row, 0).text() 
+        new_title = self.ui.editTable.item(row, 1).text() 
+        new_room = self.ui.editTable.item(row, 2).text() 
+        id = self.ui.editTable.item(row, 3).text() 
+        
+        
+        self.db_connection.update_talk(id, new_speaker, new_title, new_room)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
