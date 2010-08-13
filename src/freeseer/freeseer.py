@@ -345,9 +345,6 @@ class MainApp(QtGui.QMainWindow):
         self.load_events()
         self.load_rooms()
         
-        for i in range(self.ui.editTable.rowCount()):        
-            self.ui.editTable.setRowHeight(i,20)
-        
         #clean up and add title boxes        
         self.ui.eventEdit.clear()
         self.ui.dateTimeEdit.clear()
@@ -372,8 +369,8 @@ class MainApp(QtGui.QMainWindow):
         self.load_rooms()
         self.load_events()
         
-        for i in range(self.ui.editTable.rowCount()):
-            self.ui.editTable.setRowHeight(i,20)  
+        self.ui.editTable.resizeRowsToContents()
+        
     def reset(self):
         self.db_connection.clear_database()
         self.load_events()
@@ -399,7 +396,7 @@ class MainApp(QtGui.QMainWindow):
         
             item = "%s - %s - %s" % (talk[0],talk[1],talk[2])
             self.ui.talkList.addItem(item)
-
+        self.ui.editTable.resizeRowsToContents()
             
     def load_events(self):
         '''
