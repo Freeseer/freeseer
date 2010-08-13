@@ -217,7 +217,14 @@ class DB_Connector():
                                                                                         str(id)])
         self.db_connection.commit()
         self.cursor.close()
-
+        
+    def get_presentation_id(self,presentation):
+        self.cursor.execute('''select id from presentations where Speaker=? and Title=? and Event=?''', [str(presentation.speaker),
+                                                                                str(presentation.title),str(presentation.event)])
+        for row in self.cursor:
+            id = row[0]
+            
+        return id
 
         
         
