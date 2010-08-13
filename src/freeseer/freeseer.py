@@ -345,13 +345,20 @@ class MainApp(QtGui.QMainWindow):
         if presentation.room not in room_list and len(presentation.room)>0:
             self.ui.roomList.addItem(presentation.room)
             
+        item = "%s - %s - %s" % (presentation.speaker,presentation.title,presentation.room)
+        self.ui.talkList.addItem(item)
+            
         presentation.save_to_db()   
+        id = self.db_connection.get_presentation_id(presentation)
+
         
         self.ui.editTable.insertRow(self.ui.editTable.rowCount())            
         self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,0,QtGui.QTableWidgetItem(presentation.speaker))
         self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,1,QtGui.QTableWidgetItem(presentation.title))
         self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,2,QtGui.QTableWidgetItem(presentation.room))
-        self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,3,QtGui.QTableWidgetItem(self.db_connection.get_presentation_id(presentation)))
+        self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,3,QtGui.QTableWidgetItem(str(id)))
+
+        
                     
         #clean up and add title boxes        
         self.ui.eventEdit.clear()
@@ -360,25 +367,16 @@ class MainApp(QtGui.QMainWindow):
         self.ui.presenterEdit.clear()
         self.ui.titleEdit.clear()
 
-    def remove_talk(self):
+    def remove_talk(self): 
         try:
-            row_clicked = self.ui.editTable.selectionModel().selection().indexes()[0].row()
-        except:
+            row_clicked = self.ui.editTable.currentRow()
+        except:            
             return
         
         id = self.ui.editTable.item(row_clicked, 3).text() 
         self.db_connection.delete_talk(str(id))
-        
-        self.ui.editTable.setRowCount(0)
-        self.ui.editTable.clearContents()
-        
-        
-        self.load_talks()
-        self.load_rooms()
-        self.load_events()
-        
-        self.ui.editTable.resizeRowsToContents()
-        
+        self.ui.editTable.removeRow(row_clicked)
+   
     def reset(self):
         self.db_connection.clear_database()
         self.load_events()
