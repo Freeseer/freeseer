@@ -407,6 +407,9 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
         
     def toggle_auto_hide(self):
+        '''
+        This function disables the preview when auto-hide box is checked.
+        '''
         if self.ui.autoHideCheckbox.isChecked():
             self.core.preview(False, self.ui.previewWidget.winId())
         else: self.core.preview(True, self.ui.previewWidget.winId())
@@ -433,6 +436,9 @@ class MainApp(QtGui.QMainWindow):
             self.ui.recordButton.toggle()
 
     def grab_rec_key(self):
+        '''
+        When the button is pressed, it will call the keygrabber widget and log keys
+        '''
         self.core.config.key_rec = 'Ctrl+Shift+R'
         self.core.config.writeConfig()
         self.key_grabber = QtKeyGrabber(self)
@@ -441,6 +447,9 @@ class MainApp(QtGui.QMainWindow):
         self.key_grabber.show()
         
     def grab_rec_set(self, key):
+        '''
+        Keygrabber widget calls this function to set and store the hotkey.
+        '''
         self.ui.shortRecordLineEdit.setText(key)
         self.core.config.key_rec = key
         self.core.config.writeConfig()
@@ -448,6 +457,9 @@ class MainApp(QtGui.QMainWindow):
         self.show()
             
     def grab_stop_key(self):
+        '''
+        When the button is pressed, it will call the keygrabber widget and log keys
+        '''
         self.core.config.key_stop = 'Ctrl+Shift+E'
         self.core.config.writeConfig()
         self.key_grabber = QtKeyGrabber(self)
@@ -456,6 +468,9 @@ class MainApp(QtGui.QMainWindow):
         self.key_grabber.show()
 
     def grab_stop_set(self, key):
+        '''
+        Keygrabber widget calls this function to set and store the hotkey.
+        '''
         self.ui.shortStopLineEdit.setText(key)
         self.core.config.key_stop = key
         self.core.config.writeConfig()
