@@ -483,8 +483,6 @@ v4l2src does not work.</string>
                 <width>16777215</width>
                 <height>64</height>
                </size>
-              <property name="enabled">
-               <bool>true</bool>
               </property>
               <property name="toolTip">
                <string>Enables auto-hide to system tray.</string>
@@ -492,11 +490,8 @@ v4l2src does not work.</string>
               <property name="text">
                <string>Enable Auto-Hide</string>
               </property>
-              <property name="checkable">
-               <bool>true</bool>
-              </property>
               <property name="checked">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
              </widget>
             </item>

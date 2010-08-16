@@ -31,7 +31,7 @@ class QxtGlobalShortcut : QObject
 {
 
 %TypeHeaderCode
-//include <qxtglobalshortcut.h>
+#include <qxtglobalshortcut.h>
 %End
 
 public:
