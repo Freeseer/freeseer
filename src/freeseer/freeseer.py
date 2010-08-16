@@ -357,7 +357,9 @@ class MainApp(QtGui.QMainWindow):
         self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,1,QtGui.QTableWidgetItem(presentation.title))
         self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,2,QtGui.QTableWidgetItem(presentation.room))
         self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,3,QtGui.QTableWidgetItem(str(id)))
-
+        
+        
+        self.ui.editTable.resizeRowsToContents()
         
                     
         #clean up and add title boxes        
@@ -376,6 +378,10 @@ class MainApp(QtGui.QMainWindow):
         id = self.ui.editTable.item(row_clicked, 3).text() 
         self.db_connection.delete_talk(str(id))
         self.ui.editTable.removeRow(row_clicked)
+        
+        self.load_events()
+        self.load_rooms()
+        
    
     def reset(self):
         self.db_connection.clear_database()
