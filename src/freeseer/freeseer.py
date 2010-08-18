@@ -76,8 +76,9 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
-        self.aboutDialog = AboutDialog()
-
+        self.aboutDialog = AboutDialog()    
+        self.ui.editTable.setColumnHidden(3,True)
+        
         self.talks_to_save = []
         self.talks_to_delete = []
 
@@ -153,6 +154,10 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        
+        # EditTable Connections
+        
+        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged  (int,int)'), self.edit_talk)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
@@ -362,21 +367,38 @@ class MainApp(QtGui.QMainWindow):
         talk_speaker = self.ui.presenterEdit.text()
         talk_event = self.ui.eventEdit.text()
         talk_time = self.ui.dateTimeEdit   
-        
+                
         # Do not add talks if they are empty strings
         if (len(talk_title) == 0): return   
         
         presentation = framework.presentation.Presentation(str(talk_title),str(talk_speaker),"","",str(talk_event),str(talk_time),str(talk_room))
-        presentation.save_to_db()
+        
+        event_list = self.db_connection.get_talk_events()
+        room_list = self.db_connection.get_talk_rooms()
+        
+        if presentation.event not in event_list and len(presentation.event)>0:
+            self.ui.eventList.addItem(presentation.event)
+        
+        if presentation.room not in room_list and len(presentation.room)>0:
+            self.ui.roomList.addItem(presentation.room)
+            
+        item = "%s - %s - %s" % (presentation.speaker,presentation.title,presentation.room)
+        self.ui.talkList.addItem(item)
+            
+        presentation.save_to_db()   
+        id = self.db_connection.get_presentation_id(presentation)
+
+        
+        self.ui.editTable.insertRow(self.ui.editTable.rowCount())            
+        self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,0,QtGui.QTableWidgetItem(presentation.speaker))
+        self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,1,QtGui.QTableWidgetItem(presentation.title))
+        self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,2,QtGui.QTableWidgetItem(presentation.room))
+        self.ui.editTable.setItem(self.ui.editTable.rowCount()-1,3,QtGui.QTableWidgetItem(str(id)))
         
         
-        self.ui.editTable.setRowCount(0)
-        self.ui.editTable.clear()
+        self.ui.editTable.resizeRowsToContents()
         
-        self.load_talks()
-        self.load_events()
-        self.load_rooms()
-        
+                    
         #clean up and add title boxes        
         self.ui.eventEdit.clear()
         self.ui.dateTimeEdit.clear()
@@ -384,21 +406,20 @@ class MainApp(QtGui.QMainWindow):
         self.ui.presenterEdit.clear()
         self.ui.titleEdit.clear()
 
-    def remove_talk(self):
-        row_clicked = self.ui.editTable.selectionModel().selection().indexes()[0].row()
+    def remove_talk(self): 
+        try:
+            row_clicked = self.ui.editTable.currentRow()
+        except:            
+            return
+        
         id = self.ui.editTable.item(row_clicked, 3).text() 
         self.db_connection.delete_talk(str(id))
+        self.ui.editTable.removeRow(row_clicked)
         
-        self.ui.editTable.setRowCount(0)
-        self.ui.editTable.clear()
-        
-        
-        self.load_talks()
-        self.load_rooms()
         self.load_events()
-
+        self.load_rooms()
         
-    
+   
     def reset(self):
         self.db_connection.clear_database()
         self.load_events()
@@ -411,39 +432,41 @@ class MainApp(QtGui.QMainWindow):
         '''
         talklist = self.db_connection.get_talk_titles()
         self.ui.talkList.clear()
-        self.ui.editTable.clear()
-        self.ui.editTable.setRowCount(0)
-        
-        
-        for talk in talklist:
+        self.ui.editTable.clearContents()
+        self.ui.editTable.setRowCount(0)        
+       
+        for talk in talklist:          
             index = self.ui.editTable.rowCount()
-            self.ui.editTable.insertRow(index)            
-            for i in range(len(talk)):               
-                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))
+            self.ui.editTable.insertRow(index)  
+            self.ui.editTable.setRowHeight(index,20)                   
+            for i in range(len(talk)):                
+                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))                         
+        
         
             item = "%s - %s - %s" % (talk[0],talk[1],talk[2])
             self.ui.talkList.addItem(item)
-
+        self.ui.editTable.resizeRowsToContents()
             
     def load_events(self):
         '''
         This method updates the GUI with the available presentation events.
         '''
-        eventList = self.db_connection.get_talk_events()
+        event_list = self.db_connection.get_talk_events()
         self.ui.eventList.clear()
         self.ui.eventList.addItem("All")
-        for event in eventList:
-            if len(event)>0:    self.ui.eventList.addItem(event)
+        
+        for event in event_list:
+            if len(event)>0: self.ui.eventList.addItem(event)   
             
     def load_rooms(self):
         '''
         This method updates the GUI with the available presentation rooms.
         '''
         
-        roomList = self.db_connection.get_talk_rooms()   
+        room_list = self.db_connection.get_talk_rooms()   
         self.ui.roomList.clear()
         self.ui.roomList.addItem("All")     
-        for room in roomList:
+        for room in room_list:
             if len(room)>0:    self.ui.roomList.addItem(room)
         
 
@@ -509,26 +532,48 @@ class MainApp(QtGui.QMainWindow):
         if not self.db_connection.filter_by_event(eventName):
             self.load_talks()
     
-    def add_talk_from_rss(self):
+    def add_talk_from_rss(self):        
         entry = str(self.ui.rssEdit.text())
         a = framework.rss_parser.FeedParser(entry)
+        
         if len(a.build_data_dictionary())==0:
-            message = QtGui.QMessageBox()      
+            message = QtGui.QMessageBox()     
             message.setText("No data found")
             message.exec_()
-        else:
-            
-            print a.build_data_dictionary()[18]
-           
+
+        else: 
             for presentation in a.build_data_dictionary():
                 talk = framework.presentation.Presentation(presentation["Title"],presentation["Speaker"],"",presentation["Level"],presentation["Event"],presentation["Time"],presentation["Room"])
-                db_reference = framework.db_connector.DB_Connector(None)
-                
+                db_reference = framework.db_connector.DB_Connector(None)             
+
                 if not db_reference.db_contains(talk):
-                    talk.save_to_db()                
-                    self.load_talks()
-                    self.load_events()
-                    self.load_rooms()
+                    talk.save_to_db()                   
+
+            self.load_talks()
+            self.load_events()
+            self.load_rooms()
+                   
+    def edit_talk(self,row,cell):        
+        try:
+            new_speaker = self.ui.editTable.item(row, 0).text() 
+        except:
+            new_speaker = ""            
+        try:
+            new_title = self.ui.editTable.item(row, 1).text() 
+        except:
+            new_title = ""
+        try:
+            new_room = self.ui.editTable.item(row, 2).text() 
+        except:
+            new_room = ""            
+        try:
+            id = self.ui.editTable.item(row, 3).text() 
+        except:
+            id = ""             
+        try:
+            self.db_connection.update_talk(id, new_speaker, new_title, new_room)
+        except:
+            return
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
