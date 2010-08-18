@@ -26,8 +26,10 @@ from PyQt4 import QtGui, QtCore
 from framework.db_connector import *
 from framework.core import *
 from framework.qt_area_selector import *
+from framework.qt_key_grabber import *
 from freeseer_ui_qt import *
 from freeseer_about import *
+import qxtglobalshortcut
 
 import framework.db_connector
 import framework.presentation
@@ -137,7 +139,19 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
-        # connections for configure > File Locations
+        # connections for configure > Extra Settings > Shortkeys
+        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+        self.short_rec_key.setEnabled(True)
+        self.short_stop_key.setEnabled(True)
+        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+        self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
+        
+        # connections for configure > Extra Settings > File Locations
         self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.ui.talksFileButton, QtCore.SIGNAL('clicked()'), self.browse_talksfile)
 
@@ -169,6 +183,10 @@ class MainApp(QtGui.QMainWindow):
         else: self.core.change_soundsrc(self.core.config.audiosrc)
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
+
+        # Setup spacebar key
+        self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
+        self.ui.recordButton.setFocus()
 
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
@@ -249,6 +267,8 @@ class MainApp(QtGui.QMainWindow):
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
+        self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
+        self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
 
         if self.core.config.resolution == '0x0':
             resolution = 0
@@ -313,7 +333,7 @@ class MainApp(QtGui.QMainWindow):
         self.show()
 
     def change_audio_device(self):
-        src = self.core.config.audiosrc = str(self.ui.audioSourceList.currentText())      
+        src = self.core.config.audiosrc = str(self.ui.audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.change_soundsrc(src)
 
@@ -490,6 +510,9 @@ class MainApp(QtGui.QMainWindow):
         self.load_rooms()
         
     def toggle_auto_hide(self):
+        '''
+        This function disables the preview when auto-hide box is checked.
+        '''
         if self.ui.autoHideCheckbox.isChecked():
             self.core.preview(False, self.ui.previewWidget.winId())
         else: self.core.preview(True, self.ui.previewWidget.winId())
@@ -514,6 +537,48 @@ class MainApp(QtGui.QMainWindow):
     def stopContextM(self):
         if self.ui.recordButton.isChecked():
             self.ui.recordButton.toggle()
+
+    def grab_rec_key(self):
+        '''
+        When the button is pressed, it will call the keygrabber widget and log keys
+        '''
+        self.core.config.key_rec = 'Ctrl+Shift+R'
+        self.core.config.writeConfig()
+        self.key_grabber = QtKeyGrabber(self)
+        self.hide()
+        self.core.logger.log.info('Storing keys.')
+        self.key_grabber.show()
+        
+    def grab_rec_set(self, key):
+        '''
+        Keygrabber widget calls this function to set and store the hotkey.
+        '''
+        self.ui.shortRecordLineEdit.setText(key)
+        self.core.config.key_rec = key
+        self.core.config.writeConfig()
+        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.show()
+            
+    def grab_stop_key(self):
+        '''
+        When the button is pressed, it will call the keygrabber widget and log keys
+        '''
+        self.core.config.key_stop = 'Ctrl+Shift+E'
+        self.core.config.writeConfig()
+        self.key_grabber = QtKeyGrabber(self)
+        self.hide()
+        self.core.logger.log.info('Storing keys.')
+        self.key_grabber.show()
+
+    def grab_stop_set(self, key):
+        '''
+        Keygrabber widget calls this function to set and store the hotkey.
+        '''
+        self.ui.shortStopLineEdit.setText(key)
+        self.core.config.key_stop = key
+        self.core.config.writeConfig()
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+        self.show()
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':

@@ -54,6 +54,8 @@ class Config:
         self.end_y = 0
         self.audiosrc = 'none'
         self.audiofb = 'False'
+        self.key_rec = 'Ctrl+Shift+R'
+        self.key_stop = 'Ctrl+Shift+E'
         
         # Read in the config file
         self.readConfig()
@@ -91,6 +93,8 @@ class Config:
             self.end_y = config.get('lastrun', 'area_end_y')
             self.audiosrc = config.get('lastrun', 'audio_source')
             self.audiofb = config.get('lastrun', 'audio_feedback')
+            self.key_rec = config.get('lastrun', 'shortkey_rec')
+            self.key_stop = config.get('lastrun', 'shortkey_stop')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -106,7 +110,6 @@ class Config:
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'talks_file', self.talksfile)
         config.set('Global', 'resolution', self.resolution)
-        # Add for shortcuts later
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
         config.set('lastrun', 'video_device', self.videodev)
@@ -116,6 +119,8 @@ class Config:
         config.set('lastrun', 'area_end_y', self.end_y)
         config.set('lastrun', 'audio_source', self.audiosrc)
         config.set('lastrun', 'audio_feedback', self.audiofb)
+        config.set('lastrun', 'shortkey_rec', self.key_rec)
+        config.set('lastrun', 'shortkey_stop', self.key_stop)
                 
         # Make sure the config directory exists before writing to the configfile 
         try:

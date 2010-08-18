@@ -20,11 +20,21 @@
 # Set the name of the executable here
 exec = run-freeseer
 
-ALL: gui 
+ALL: gui lib
 	@echo "You can now run $(exec)"
 
+lib: sipqxtglobalshortcutQxtGlobalShortcut.cpp sipqxtglobalshortcutQxtGlobalShortcut.o
+	@echo "Re-generated libraries"
+
 gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
-	@echo "Re-generating GUI"
+	@echo "Re-generated GUI"
+
+sipqxtglobalshortcutQxtGlobalShortcut.cpp: lib/qxtglobalshortcut.sip
+	sip -t Qt_4_4_1 -I /usr/share/sip/ -t WS_X11 -c lib/. lib/qxtglobalshortcut.sip
+
+sipqxtglobalshortcutQxtGlobalShortcut.o: lib/config.py
+	cd lib; python config.py; make 
+	mv lib/*.so ./freeseer
 
 freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer/freeseer_ui_qt.py
@@ -36,7 +46,7 @@ resource_rc.py: forms/resource.qrc
 	pyrcc4 forms/resource.qrc -o freeseer/resource_rc.py
 
 clean:
-	rm -f freeseer/resource_rc.py freeseer/freeseer_about.py freeseer/freeseer_ui_qt.py freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
+	rm -f freeseer/resource_rc.py freeseer/freeseer_about.py freeseer/freeseer_ui_qt.py freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~ lib/Makefile lib/qxtglobalshortcutconfig.py lib/*.exp lib/*.sbf lib/sip* freeseer/qxtglobalshortcut.so
 
 test: ALL
 	./$(exec)
