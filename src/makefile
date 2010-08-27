@@ -19,6 +19,11 @@
 
 ALL: gui lib 
 	@echo "You can now run ./freeseer"
+# Set the name of the executable here
+exec = run-freeseer
+
+ALL: gui 
+	@echo "You can now run $(exec)"
 
 lib: sipqxtglobalshortcutQxtGlobalShortcut.cpp sipqxtglobalshortcutQxtGlobalShortcut.o
 	@echo "Re-generated libraries"
@@ -46,4 +51,4 @@ clean:
 	rm -f freeseer/resource_rc.py freeseer/freeseer_about.py freeseer/freeseer_ui_qt.py freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~ lib/Makefile lib/qxtglobalshortcutconfig.py lib/*.exp lib/*.sbf lib/sip* freeseer/qxtglobalshortcut.so
 
 test: ALL
-	./freeseer
+	./$(exec)
