@@ -22,7 +22,7 @@ ALL: gui lib
 # Set the name of the executable here
 exec = run-freeseer
 
-ALL: gui 
+ALL: gui lib
 	@echo "You can now run $(exec)"
 
 lib: sipqxtglobalshortcutQxtGlobalShortcut.cpp sipqxtglobalshortcutQxtGlobalShortcut.o

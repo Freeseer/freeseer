@@ -44,6 +44,7 @@ class Config:
         # Set default settings
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.talksfile = os.path.abspath('%s/talks.txt' % self.configdir)
+        self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.resolution = '0x0' # no scaling for video
         self.videosrc = 'desktop'
         self.videodev = 'none'

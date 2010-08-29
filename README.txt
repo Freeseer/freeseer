@@ -21,10 +21,10 @@ If you are pulling the code from git, then you should install
 the following packages first.
 
 On typical fresh Fedora Core install:
-    “sudo yum install git make PyQt4-devel”
+    “sudo yum install git make PyQt4-devel python-feedparser.noarch”    
 
 On typical fresh Ubuntu install:
-    “sudo apt-get install git-core pyqt4-dev-tools”
+    “sudo apt-get install git-core pyqt4-dev-tools python-feedparser”
 
 -------------------------------------------------------------------------
 
