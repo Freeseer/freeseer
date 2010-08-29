@@ -22,11 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-from config import Config
-import db_connector
-
 import os
-
 
 class Presentation():	
     '''
@@ -34,7 +30,7 @@ class Presentation():
     and its database related operations
     '''
 
-    def __init__(self,title,speaker=None,description="",level="",event="",time="",room=None):
+    def __init__(self, title, speaker=None, description="", level="", event="", time="", room=None, talk_id=None):
         
         '''
         Initialize a presentation instance
@@ -46,15 +42,4 @@ class Presentation():
         self.event = event
         self.time = time
         self.room = room
-    
-        self.db_connection = db_connector.DB_Connector(None)
-  
-    def save_to_db(self):
-        '''
-	    Write current presentation data on database
-	    '''      
-        self.db_connection.run_query('''insert into presentations values (?,?,?,?,?,?,?,NULL)''',[self.speaker,self.title,self.description,self.level,
-                                            self.event,self.time,self.room])            
-
-
-
+        self.talk_id = talk_id

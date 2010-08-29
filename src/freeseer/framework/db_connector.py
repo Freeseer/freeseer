@@ -23,34 +23,43 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 import os
-import presentation
+from sqlite3 import connect
 
 from logger import Logger
 from config import Config
-from sqlite3 import connect
-
-
+import presentation
 
 class DB_Connector():
     '''
-    Freeseer database connection. Used to link database code with
-    Freeseer GUI
+    Freeseer database connection.
     '''    
-    def __init__(self,gui):
+    def __init__(self, configdir):
         
-        self._CREATE_QUERY = '''create table presentations
-                    (Speaker varchar(100), Title varchar(255) UNIQUE, Description text, Level varchar(25), Event varchar(100),
-                    Time timestamp, Room varchar(25), Id INTEGER PRIMARY KEY)'''
-        self._DEFAULT_TALK = '''insert into presentations values ("Thanh Ha","Intro to Freeseer","","","","","T105",NULL)'''
-                    
-        configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
-        self.config = Config(configdir)
-        self.presentations_file = self.config.presentations_file
+        self._CREATE_QUERY = '''CREATE TABLE presentations
+                                (Speaker varchar(100),
+                                Title varchar(255) UNIQUE,
+                                Description text,
+                                Level varchar(25),
+                                Event varchar(100),
+                                Time timestamp,
+                                Room varchar(25),
+                                Id INTEGER PRIMARY KEY)'''
+                                
+        self._DEFAULT_TALK = '''INSERT INTO presentations VALUES
+                                ("Thanh Ha",
+                                 "Intro to Freeseer",
+                                 "",
+                                 "",
+                                 "",
+                                 "",
+                                 "T105",
+                                 NULL)'''
+
+        self.configdir = configdir
+        self.presentations_file = os.path.abspath("%s/presentations.db" % self.configdir)
         self.cursor = None
-        self.logger = Logger(configdir)
-        self.ui = gui
         
-        if not os.path.isfile(self.config.presentations_file):
+        if not os.path.isfile(self.presentations_file):
             self.db_connection = connect(self.presentations_file)            
             self.create_table() 
             self.cursor = self.db_connection.cursor() 
@@ -73,14 +82,8 @@ class DB_Connector():
         self.cursor = self.db_connection.cursor()
         self.cursor.execute(self._CREATE_QUERY)
         self.cursor.execute(self._DEFAULT_TALK)        
-        self.end_query()
-        self.db_connection.commit()
-        
-    def aux(self):
-        self.cursor.execute('''select * from presentations''')
-
-    def end_query(self):
         self.cursor.close()
+        self.db_connection.commit()
         
     def get_talk_titles(self):
         '''
@@ -88,44 +91,39 @@ class DB_Connector():
         '''
         talk_titles = []
  
-        self.cursor.execute('''select * from presentations''')
+        self.cursor.execute('''SELECT * FROM presentations''')
 
         for row in self.cursor:
             print row
-            talk_titles.append([row[0],row[1],row[6],row[7]])            
-
-        #self.logger.log.debug('Available talk titles:')
-        
-        #for talk in talk_titles:
-            #self.logger.log.debug('  ' + talk.encode('utf-8'))
+            talk_titles.append([row[0],row[1],row[6],row[7]])
             
-        self.end_query()
+        self.cursor.close()
             
         return talk_titles
     
     def get_talk_events(self):
         talk_events = []
  
-        self.cursor.execute('''select distinct Event from presentations''')
+        self.cursor.execute('''SELECT DISTINCT Event FROM presentations''')
         
         for row in self.cursor:
             talk_events.append(row[0])
             
-        self.end_query()
+        self.cursor.close()
         
         return talk_events
     
     def get_talk_rooms(self):
         talk_rooms = []
  
-        self.cursor.execute('''select distinct Room from presentations''')
+        self.cursor.execute('''SELECT DISTINCT Room FROM presentations''')
         
         for row in self.cursor:
             talk_rooms.append(row[0])
         
         return talk_rooms
     
-    def db_contains(self,presentation):
+    def db_contains(self, presentation):
         '''
         Check if database already contains such presentation
         Two presentations are considered the same if they have same title, same event and same speaker
@@ -137,108 +135,74 @@ class DB_Connector():
         if (presentation.title in talk_titles and presentation.event in talk_events and presentation.speaker in talk_speakers):
             return True
         return False
-    
-    def filter_by_room(self,roomName):
-        talks_matched = []
-        
-        self.ui.talkList.clear()
-        if roomName != "All":            
-            if(self.ui.eventList.currentText()!="All"):
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? and Room=? ''', [str(self.ui.eventList.currentText()),str(roomName)])
-            else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Room=? ''', [str(roomName)])           
-            for row in self.cursor:
-                text = "%s - %s - %s" % (row[0],row[1],row[2])
-                talks_matched.append(text)
-            for entry in talks_matched:
-                self.ui.talkList.addItem(entry)
-        else:
-            if(self.ui.eventList.currentText()=="All"):
-                return False
-            else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? ''', [str(self.ui.eventList.currentText())])
-                for row in self.cursor:
-                    text = "%s - %s - %s" % (row[0],row[1],row[2])
-                    talks_matched.append(text)
-                for entry in talks_matched:
-                    self.ui.talkList.addItem(entry)
-    
-        return True
-    
-    def filter_by_event(self,eventName):
+
+    def filter_talks_by_event_room(self, event, room):
         talks_matched = []
 
-        self.ui.talkList.clear()
-        if eventName != "All":       
-            if(self.ui.roomList.currentText()!="All"):
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? and Room=? ''', [str(eventName),str(self.ui.roomList.currentText())])
+        if (event == "All"):
+            if (room == "All"):
+                self.cursor.execute('''SELECT * FROM presentations''')
             else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? ''', [str(eventName)])  
-            for row in self.cursor:
-                text = "%s - %s - %s" % (row[0],row[1],row[2])
-                talks_matched.append(text)
-            for entry in talks_matched:
-                self.ui.talkList.addItem(entry)
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                                       WHERE Room=?''', [str(room)])
+            
         else:
-            if(self.ui.roomList.currentText()=="All"):
-                return False
+            if (room == "All"):
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                                       WHERE Event=?''', [str(event)])
             else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Room=? ''', [str(self.ui.roomList.currentText())])
-                for row in self.cursor:
-                    text = "%s - %s - %s" % (row[0],row[1],row[2])
-                    talks_matched.append(text)
-                for entry in talks_matched:
-                    self.ui.talkList.addItem(entry)
-        return True
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                                       WHERE Event=? and Room=?''', [str(event), str(room)])
+
+        # Prepare list to be returned
+        for row in self.cursor:
+            text = "%s - %s - %s" % (row[0],row[1],row[2])
+            talks_matched.append(text)
+
+        return talks_matched
+        
+    def add_talk(self, presentation):
+        '''
+        Write current presentation data on database
+        '''
+        self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL)''',
+                    [presentation.speaker,
+                     presentation.title,
+                     presentation.description,
+                     presentation.level,
+                     presentation.event,
+                     presentation.time,
+                     presentation.room])
     
-    def delete_talk(self,id):
-        self.cursor.execute('''delete from presentations 
-                                    where Id=?''',
-                                        [str(id)])
-        self.cursor.execute('''select * from presentations''')        
+    def delete_talk(self, talk_id):
+        self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
+                               [str(talk_id)])
+        self.cursor.execute('''SELECT * FROM presentations''')
         self.db_connection.commit()
   
         self.cursor.close()
     
     def clear_database(self):
-        self.cursor.execute('''delete from presentations''')
+        self.cursor.execute('''DELETE FROM presentations''')
         self.db_connection.commit()
         self.cursor.close()
         
-    def update_talk(self,id,new_speaker,new_title,new_room):        
-        self.cursor.execute('''update presentations set Speaker=?,Title=?,Room=? where Id=?''',[str(new_speaker),
-                                                                                        str(new_title), str(new_room),
-                                                                                        str(id)])
+    def update_talk(self, talk_id, new_speaker, new_title, new_room):        
+        self.cursor.execute('''UPDATE presentations SET Speaker=?, Title=?, Room=? WHERE Id=?''',
+                            [str(new_speaker),
+                             str(new_title),
+                             str(new_room),
+                             str(talk_id)])
         self.db_connection.commit()
         self.cursor.close()
         
-    def get_presentation_id(self,presentation):
-        self.cursor.execute('''select id from presentations where Speaker=? and Title=? and Event=?''', [str(presentation.speaker),
-                                                                                str(presentation.title),str(presentation.event)])
+    def get_presentation_id(self, presentation):
+        self.cursor.execute('''SELECT id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
+                            [str(presentation.speaker),
+                             str(presentation.title),
+                             str(presentation.event)])
+        
         for row in self.cursor:
             id = row[0]
             
         return id
-
-        
-        
-            
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
