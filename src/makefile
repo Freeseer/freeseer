@@ -17,8 +17,6 @@
 # This makefile generates the python code for the gui
 # from an XML definition file
 
-ALL: gui lib 
-	@echo "You can now run ./freeseer"
 # Set the name of the executable here
 exec = run-freeseer
 

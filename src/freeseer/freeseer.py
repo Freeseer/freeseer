@@ -169,14 +169,13 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
-        # EditTable Connections
-        
+        # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged  (int,int)'), self.edit_talk)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
 
-        # Setup default sources
+        # setup default sources
         self.toggle_video_source()
         if (self.core.config.audiosrc == 'none'):
             self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
@@ -184,7 +183,7 @@ class MainApp(QtGui.QMainWindow):
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
 
-        # Setup spacebar key
+        # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 
@@ -200,7 +199,6 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.firewiresrcButton.setEnabled(True)
                 
-        #self.videosrc = vidsrcs[0]
         if (self.core.config.videosrc == 'desktop'):
             self.ui.localDesktopButton.setChecked(True)
             if (self.core.config.videodev == 'local area'):
@@ -482,15 +480,11 @@ class MainApp(QtGui.QMainWindow):
         '''
         This method updates the GUI with the available presentation rooms.
         '''
-        
         room_list = self.db_connection.get_talk_rooms()   
         self.ui.roomList.clear()
         self.ui.roomList.addItem("All")     
         for room in room_list:
             if len(room)>0:    self.ui.roomList.addItem(room)
-        
-
-            
 
     def save_talks(self):
         for item in self.talks_to_save:            

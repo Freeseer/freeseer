@@ -51,10 +51,8 @@ class Presentation():
   
     def save_to_db(self):
         '''
-	    Write current presentation data on database
-	    '''      
-        self.db_connection.run_query('''insert into presentations values (?,?,?,?,?,?,?,NULL)''',[self.speaker,self.title,self.description,self.level,
-                                            self.event,self.time,self.room])            
-
-
-
+        Write current presentation data on database
+        '''      
+        self.db_connection.run_query('''insert into presentations values (?,?,?,?,?,?,?,NULL)''',
+            [self.speaker,self.title,self.description,self.level,
+            self.event,self.time,self.room])            

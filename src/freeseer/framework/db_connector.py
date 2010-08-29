@@ -58,7 +58,6 @@ class DB_Connector():
         
         self.db_connection = connect(self.presentations_file)
         self.cursor = self.db_connection.cursor()
-
         
     def run_query(self,querie,args=None):
         self.cursor = self.db_connection.cursor()
@@ -127,8 +126,8 @@ class DB_Connector():
     
     def db_contains(self,presentation):
         '''
-        Check if database already contains such presentation
-        Two presentations are considered the same if they have same title, same event and same speaker
+        Check if database already contains such presentation. Two presentations
+        are considered the same if they have same title, same event and same speaker.
         '''
         talk_titles = self.cursor.execute('''select distinct Title from presentations''')
         talk_events = self.cursor.execute('''select distinct Event from presentations''')
@@ -144,22 +143,22 @@ class DB_Connector():
         self.ui.talkList.clear()
         if roomName != "All":            
             if(self.ui.eventList.currentText()!="All"):
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? and Room=? ''', [str(self.ui.eventList.currentText()),str(roomName)])
+                self.cursor.execute('''select distinct Speaker,Title,Room from presentations 
+                    where Event = ? and Room = ?''', [str(self.ui.eventList.currentText()),str(roomName)])
             else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Room=? ''', [str(roomName)])           
+                self.cursor.execute('''select distinct Speaker,Title,Room from presentations 
+                    where Room = ?''', [str(roomName)])           
             for row in self.cursor:
                 text = "%s - %s - %s" % (row[0],row[1],row[2])
                 talks_matched.append(text)
             for entry in talks_matched:
                 self.ui.talkList.addItem(entry)
         else:
-            if(self.ui.eventList.currentText()=="All"):
+            if(self.ui.eventList.currentText() == "All"):
                 return False
             else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? ''', [str(self.ui.eventList.currentText())])
+                self.cursor.execute('''select distinct Speaker,Title,Room from presentations 
+                    where Event = ?''', [str(self.ui.eventList.currentText())])
                 for row in self.cursor:
                     text = "%s - %s - %s" % (row[0],row[1],row[2])
                     talks_matched.append(text)
@@ -174,11 +173,11 @@ class DB_Connector():
         self.ui.talkList.clear()
         if eventName != "All":       
             if(self.ui.roomList.currentText()!="All"):
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? and Room=? ''', [str(eventName),str(self.ui.roomList.currentText())])
+                self.cursor.execute('''select distinct Speaker,Title,Room from presentations 
+                    where Event = ? and Room = ?''', [str(eventName),str(self.ui.roomList.currentText())])
             else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Event=? ''', [str(eventName)])  
+                self.cursor.execute('''select distinct Speaker,Title,Room from presentations 
+                    where Event = ?''', [str(eventName)])  
             for row in self.cursor:
                 text = "%s - %s - %s" % (row[0],row[1],row[2])
                 talks_matched.append(text)
@@ -188,8 +187,7 @@ class DB_Connector():
             if(self.ui.roomList.currentText()=="All"):
                 return False
             else:
-                self.cursor.execute('''select distinct Speaker,Title,Room from presentations \
-                                        where Room=? ''', [str(self.ui.roomList.currentText())])
+                self.cursor.execute('''select distinct Speaker,Title,Room from presentations where Room = ? ''', [str(self.ui.roomList.currentText())])
                 for row in self.cursor:
                     text = "%s - %s - %s" % (row[0],row[1],row[2])
                     talks_matched.append(text)
@@ -198,9 +196,7 @@ class DB_Connector():
         return True
     
     def delete_talk(self,id):
-        self.cursor.execute('''delete from presentations 
-                                    where Id=?''',
-                                        [str(id)])
+        self.cursor.execute('''delete from presentations where Id = ?''', [str(id)])
         self.cursor.execute('''select * from presentations''')        
         self.db_connection.commit()
   
@@ -212,33 +208,17 @@ class DB_Connector():
         self.cursor.close()
         
     def update_talk(self,id,new_speaker,new_title,new_room):        
-        self.cursor.execute('''update presentations set Speaker=?,Title=?,Room=? where Id=?''',[str(new_speaker),
-                                                                                        str(new_title), str(new_room),
-                                                                                        str(id)])
+        self.cursor.execute('''update presentations set Speaker = ?, Title = ?,
+            Room = ? where Id = ?''', [str(new_speaker),str(new_title),
+            str(new_room),str(id)])
         self.db_connection.commit()
         self.cursor.close()
         
     def get_presentation_id(self,presentation):
-        self.cursor.execute('''select id from presentations where Speaker=? and Title=? and Event=?''', [str(presentation.speaker),
-                                                                                str(presentation.title),str(presentation.event)])
+        self.cursor.execute('''select id from presentations where Speaker = ? 
+            and Title = ? and Event = ?''',[str(presentation.speaker),
+            str(presentation.title),str(presentation.event)])
         for row in self.cursor:
             id = row[0]
             
         return id
-
-        
-        
-            
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
