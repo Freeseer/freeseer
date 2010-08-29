@@ -67,7 +67,6 @@ class DB_Connector():
         
         self.db_connection = connect(self.presentations_file)
         self.cursor = self.db_connection.cursor()
-
         
     def run_query(self,querie,args=None):
         self.cursor = self.db_connection.cursor()
@@ -94,7 +93,6 @@ class DB_Connector():
         self.cursor.execute('''SELECT * FROM presentations''')
 
         for row in self.cursor:
-            print row
             talk_titles.append([row[0],row[1],row[6],row[7]])
             
         self.cursor.close()
@@ -125,8 +123,8 @@ class DB_Connector():
     
     def db_contains(self, presentation):
         '''
-        Check if database already contains such presentation
-        Two presentations are considered the same if they have same title, same event and same speaker
+        Check if database already contains such presentation. Two presentations
+        are considered the same if they have same title, same event and same speaker.
         '''
         talk_titles = self.cursor.execute('''select distinct Title from presentations''')
         talk_events = self.cursor.execute('''select distinct Event from presentations''')

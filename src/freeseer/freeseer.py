@@ -163,14 +163,14 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
-        # EditTable Connections
-        
-        self.connect(self.ui.editTable, QtCore.SIGNAL('currentCellChanged(int, int, int, int)'), self.edit_talk)
+        # editTable Connections
+        # disabled for now due to performance issues
+        #self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
 
-        # Setup default sources
+        # setup default sources
         self.toggle_video_source()
         if (self.core.config.audiosrc == 'none'):
             self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
@@ -178,7 +178,7 @@ class MainApp(QtGui.QMainWindow):
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
 
-        # Setup spacebar key
+        # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 
@@ -194,7 +194,6 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.firewiresrcButton.setEnabled(True)
                 
-        #self.videosrc = vidsrcs[0]
         if (self.core.config.videosrc == 'desktop'):
             self.ui.localDesktopButton.setChecked(True)
             if (self.core.config.videodev == 'local area'):
@@ -388,6 +387,13 @@ class MainApp(QtGui.QMainWindow):
         if (len(presentation.title) == 0): return
         
         self.core.add_talk(presentation)
+
+        # cleanup
+        self.ui.titleEdit.clear()
+        self.ui.presenterEdit.clear()
+        self.ui.eventEdit.clear()
+        self.ui.dateTimeEdit.clear()
+        self.ui.roomEdit.clear()
         
         # finish up
         self.load_events()
@@ -407,18 +413,26 @@ class MainApp(QtGui.QMainWindow):
         # finish up
         self.load_talks()
 
-    def edit_talk(self, prev_row, prev_col, current_row, current_col):
-        speaker = self.ui.editTable.item(current_row, 0).text()
-        title = self.ui.editTable.item(current_row, 1).text()
-        room = self.ui.editTable.item(current_row, 2).text()
-        talk_id = self.ui.editTable.item(current_row, 3).text()
+    # This method currently causing performance issues.
+    def edit_talk(self, row, col):
+        try:
+            speaker = self.ui.editTable.item(row, 0).text()
+            title = self.ui.editTable.item(row, 1).text()
+            room = self.ui.editTable.item(row, 2).text()
+            talk_id = self.ui.editTable.item(row, 3).text()
+        except:
+            return
 
         self.core.update_talk(talk_id, speaker, title, room)
 
-        #finish up
+        # Update the main tab
         self.load_events()
         self.load_rooms()
-        self.load_talks()
+        
+        event = str(self.ui.eventList.currentText())
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
    
     def reset(self):
         self.core.clear_database()
@@ -484,7 +498,6 @@ class MainApp(QtGui.QMainWindow):
         '''
         This method updates the GUI with the available presentation rooms.
         '''
-        
         room_list = self.core.get_talk_rooms()
         self.ui.roomList.clear()
         self.ui.roomList.addItem("All")

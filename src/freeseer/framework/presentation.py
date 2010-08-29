@@ -43,3 +43,4 @@ class Presentation():
         self.time = time
         self.room = room
         self.talk_id = talk_id
+
