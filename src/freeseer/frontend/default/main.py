@@ -24,10 +24,10 @@
 
 from PyQt4 import QtGui, QtCore
 
-from framework.core import *
-from framework.qt_area_selector import *
-from framework.qt_key_grabber import *
-from framework.presentation import *
+from freeseer.framework.core import *
+from freeseer.framework.qt_area_selector import *
+from freeseer.framework.qt_key_grabber import *
+from freeseer.framework.presentation import *
 
 from freeseer_ui_qt import *
 from freeseer_about import *
