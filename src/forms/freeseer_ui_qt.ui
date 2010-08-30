@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>585</width>
-    <height>509</height>
+    <height>529</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_4">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="QTabWidget" name="editTab">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -70,6 +70,60 @@
            <bool>true</bool>
           </property>
          </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="eventAndRoomLayout">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Event</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="eventList">
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Room</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="roomList">
+            <item>
+             <property name="text">
+              <string>All</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="talkListLayout">
@@ -179,7 +233,7 @@
              <x>0</x>
              <y>0</y>
              <width>551</width>
-             <height>301</height>
+             <height>321</height>
             </rect>
            </property>
            <attribute name="label">
@@ -398,72 +452,13 @@ v4l2src does not work.</string>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="page_2">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>177</width>
-             <height>64</height>
-            </rect>
-           </property>
-           <attribute name="label">
-            <string>File Locations</string>
-           </attribute>
-           <layout class="QVBoxLayout" name="verticalLayout_10">
-            <item>
-             <layout class="QGridLayout" name="gridLayout_3">
-              <item row="0" column="1">
-               <widget class="QLineEdit" name="videoDirectoryLineEdit"/>
-              </item>
-              <item row="0" column="2">
-               <widget class="QToolButton" name="videoDirectoryButton">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="videoDirectoryLabel">
-                <property name="text">
-                 <string>Video Directory</string>
-                </property>
-                <property name="buddy">
-                 <cstring>videoDirectoryLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="talksFileLabel">
-                <property name="text">
-                 <string>Talks File</string>
-                </property>
-                <property name="buddy">
-                 <cstring>talksFileLineEdit</cstring>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QToolButton" name="talksFileButton">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QLineEdit" name="talksFileLineEdit"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
           <widget class="QWidget" name="settings_advanced">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>203</width>
-             <height>35</height>
+             <width>211</width>
+             <height>34</height>
             </rect>
            </property>
            <attribute name="label">
@@ -510,6 +505,165 @@ v4l2src does not work.</string>
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="page_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>190</width>
+             <height>181</height>
+            </rect>
+           </property>
+           <attribute name="label">
+            <string>Extra Settings</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <item>
+             <widget class="QCheckBox" name="autoHideCheckbox">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>64</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Enables auto-hide to system tray.</string>
+              </property>
+              <property name="text">
+               <string>Enable Auto-Hide</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="videoDirectoryLineEdit"/>
+              </item>
+              <item row="4" column="2">
+               <widget class="QToolButton" name="videoDirectoryButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="videoDirectoryLabel">
+                <property name="text">
+                 <string>Video Directory</string>
+                </property>
+                <property name="indent">
+                 <number>15</number>
+                </property>
+                <property name="buddy">
+                 <cstring>videoDirectoryLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="talksFileLabel">
+                <property name="text">
+                 <string>Talks File</string>
+                </property>
+                <property name="indent">
+                 <number>15</number>
+                </property>
+                <property name="buddy">
+                 <cstring>talksFileLineEdit</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QToolButton" name="talksFileButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="talksFileLineEdit"/>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Shortkeys</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>File Locations</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="shortRecordLabel">
+                <property name="text">
+                 <string>Record</string>
+                </property>
+                <property name="indent">
+                 <number>15</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="shortStopLabel">
+                <property name="text">
+                 <string>Stop</string>
+                </property>
+                <property name="indent">
+                 <number>15</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="shortRecordLineEdit"/>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="shortStopLineEdit"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="shortRecordButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QToolButton" name="shortStopButton">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
         <item>
@@ -545,7 +699,7 @@ v4l2src does not work.</string>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="1" column="0">
+             <item row="2" column="0">
               <widget class="QLabel" name="label">
                <property name="text">
                 <string>Room</string>
@@ -555,7 +709,7 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="2" column="1">
               <widget class="QLineEdit" name="roomEdit">
                <property name="enabled">
                 <bool>false</bool>
@@ -565,17 +719,17 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="2">
+             <item row="2" column="2">
               <widget class="QCheckBox" name="checkBox_2">
                <property name="text">
                 <string/>
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
+             <item row="5" column="1">
               <widget class="QLineEdit" name="titleEdit"/>
              </item>
-             <item row="3" column="0">
+             <item row="5" column="0">
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Title</string>
@@ -585,7 +739,7 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="0">
+             <item row="4" column="0">
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Presenter</string>
@@ -595,7 +749,7 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="1">
+             <item row="4" column="1">
               <widget class="QLineEdit" name="presenterEdit">
                <property name="enabled">
                 <bool>false</bool>
@@ -605,8 +759,69 @@ v4l2src does not work.</string>
                </property>
               </widget>
              </item>
-             <item row="2" column="2">
+             <item row="4" column="2">
               <widget class="QCheckBox" name="checkBox_3">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Event</string>
+               </property>
+               <property name="buddy">
+                <cstring>eventEdit</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="eventEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QCheckBox" name="checkBox">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Date&amp;Time</string>
+               </property>
+               <property name="buddy">
+                <cstring>dateTimeEdit</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QDateTimeEdit" name="dateTimeEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="dateTime">
+                <datetime>
+                 <hour>0</hour>
+                 <minute>0</minute>
+                 <second>0</second>
+                 <year>2010</year>
+                 <month>1</month>
+                 <day>1</day>
+                </datetime>
+               </property>
+               <property name="displayFormat">
+                <string>MM/dd/yyyy hh:mm </string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QCheckBox" name="checkBox_4">
                <property name="text">
                 <string/>
                </property>
@@ -621,6 +836,38 @@ v4l2src does not work.</string>
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="font">
+              <font>
+               <family>Sans Serif</family>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Add from RSS feed</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="1">
+              <widget class="QPushButton" name="rssButton">
+               <property name="text">
+                <string>Load talks from rss</string>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/rss_logo/rss_logo.png</normaloff>:/rss_logo/rss_logo.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLineEdit" name="rssEdit"/>
+             </item>
+            </layout>
+           </item>
           </layout>
          </widget>
         </item>
@@ -631,10 +878,106 @@ v4l2src does not work.</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QListWidget" name="editTalkList">
-             <property name="sortingEnabled">
-              <bool>true</bool>
+            <widget class="QTableWidget" name="editTable">
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
              </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::SingleSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectRows</enum>
+             </property>
+             <property name="showGrid">
+              <bool>false</bool>
+             </property>
+             <property name="sortingEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+             <property name="cornerButtonEnabled">
+              <bool>false</bool>
+             </property>
+             <property name="rowCount">
+              <number>0</number>
+             </property>
+             <property name="columnCount">
+              <number>4</number>
+             </property>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>142</number>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="verticalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderVisible">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderCascadingSectionResizes">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="verticalHeaderStretchLastSection">
+              <bool>true</bool>
+             </attribute>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>142</number>
+             </attribute>
+             <column>
+              <property name="text">
+               <string notr="true">Speaker</string>
+              </property>
+              <property name="background">
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Title</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Room</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string notr="true">Id</string>
+              </property>
+             </column>
             </widget>
            </item>
            <item>
@@ -643,13 +986,6 @@ v4l2src does not work.</string>
               <widget class="QPushButton" name="removeTalkButton">
                <property name="text">
                 <string>remove</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="saveButton">
-               <property name="text">
-                <string>Save</string>
                </property>
               </widget>
              </item>
@@ -718,35 +1054,17 @@ v4l2src does not work.</string>
   <tabstop>presenterEdit</tabstop>
   <tabstop>titleEdit</tabstop>
   <tabstop>addTalkButton</tabstop>
-  <tabstop>editTalkList</tabstop>
   <tabstop>checkBox_2</tabstop>
   <tabstop>checkBox_3</tabstop>
   <tabstop>recordButton</tabstop>
   <tabstop>talkList</tabstop>
   <tabstop>audioFeedbackCheckbox</tabstop>
   <tabstop>audioFeedbackSlider</tabstop>
-  <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>checkBox_2</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>roomEdit</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>93</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>68</x>
-     <y>85</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>checkBox_3</sender>
    <signal>toggled(bool)</signal>
@@ -754,12 +1072,28 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>93</x>
-     <y>87</y>
+     <x>564</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
-     <x>68</x>
-     <y>87</y>
+     <x>258</x>
+     <y>188</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>roomEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>564</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>258</x>
+     <y>134</y>
     </hint>
    </hints>
   </connection>
@@ -770,8 +1104,8 @@ v4l2src does not work.</string>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>143</x>
-     <y>175</y>
+     <x>164</x>
+     <y>172</y>
     </hint>
     <hint type="destinationlabel">
      <x>358</x>
@@ -786,12 +1120,12 @@ v4l2src does not work.</string>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>95</x>
-     <y>228</y>
+     <x>116</x>
+     <y>225</y>
     </hint>
     <hint type="destinationlabel">
-     <x>554</x>
-     <y>216</y>
+     <x>556</x>
+     <y>257</y>
     </hint>
    </hints>
   </connection>
@@ -802,8 +1136,8 @@ v4l2src does not work.</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>105</x>
-     <y>461</y>
+     <x>114</x>
+     <y>494</y>
     </hint>
     <hint type="destinationlabel">
      <x>252</x>
@@ -818,12 +1152,12 @@ v4l2src does not work.</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>466</y>
+     <x>241</x>
+     <y>494</y>
     </hint>
     <hint type="destinationlabel">
-     <x>559</x>
-     <y>463</y>
+     <x>571</x>
+     <y>492</y>
     </hint>
    </hints>
   </connection>
@@ -834,44 +1168,12 @@ v4l2src does not work.</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>151</x>
-     <y>463</y>
+     <x>160</x>
+     <y>494</y>
     </hint>
     <hint type="destinationlabel">
      <x>292</x>
      <y>181</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>testButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>soundConfigBox</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>463</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>292</x>
-     <y>329</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>recordButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>testButton</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>177</x>
-     <y>77</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>463</y>
     </hint>
    </hints>
   </connection>
@@ -886,8 +1188,24 @@ v4l2src does not work.</string>
      <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>482</x>
-     <y>460</y>
+     <x>571</x>
+     <y>492</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>soundConfigBox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>160</x>
+     <y>494</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>292</x>
+     <y>329</y>
     </hint>
    </hints>
   </connection>
@@ -902,8 +1220,24 @@ v4l2src does not work.</string>
      <y>78</y>
     </hint>
     <hint type="destinationlabel">
-     <x>374</x>
-     <y>110</y>
+     <x>485</x>
+     <y>152</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>testButton</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>166</x>
+     <y>494</y>
     </hint>
    </hints>
   </connection>
@@ -924,6 +1258,22 @@ v4l2src does not work.</string>
    </hints>
   </connection>
   <connection>
+   <sender>recordLocalAreaButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>areaButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>382</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>257</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>recordButton</sender>
    <signal>toggled(bool)</signal>
    <receiver>videoConfigBox</receiver>
@@ -940,18 +1290,34 @@ v4l2src does not work.</string>
    </hints>
   </connection>
   <connection>
-   <sender>recordLocalAreaButton</sender>
+   <sender>checkBox_4</sender>
    <signal>toggled(bool)</signal>
-   <receiver>areaButton</receiver>
+   <receiver>dateTimeEdit</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>216</y>
+     <x>564</x>
+     <y>160</y>
     </hint>
     <hint type="destinationlabel">
-     <x>257</x>
-     <y>245</y>
+     <x>400</x>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eventEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>551</x>
+     <y>94</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>96</y>
     </hint>
    </hints>
   </connection>

@@ -22,16 +22,16 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import os
-import sys
-import time
-
 from PyQt4 import QtGui, QtCore
 
 from framework.core import *
 from framework.qt_area_selector import *
+from framework.qt_key_grabber import *
+from framework.presentation import *
+
 from freeseer_ui_qt import *
 from freeseer_about import *
+import qxtglobalshortcut
 
 __version__=u'1.9.7'
 
@@ -54,7 +54,6 @@ u'<p>' + LICENSE_TEXT + u'</p>' \
 u'<p>Record button graphics by: <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
 u'<p>Headphones graphics by: <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
 
-
 class AboutDialog(QtGui.QDialog):
     '''
     About dialog class for displaying app information.
@@ -75,7 +74,11 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
-        self.aboutDialog = AboutDialog()
+        self.aboutDialog = AboutDialog()    
+        self.ui.editTable.setColumnHidden(3,True)
+        
+        self.talks_to_save = []
+        self.talks_to_delete = []
 
         self.core = FreeseerCore(self)
 
@@ -88,6 +91,8 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioSourceList.addItem(src)
 
         self.load_talks()
+        self.load_events()
+        self.load_rooms()
         self.load_settings()
 
         # setup systray
@@ -95,9 +100,19 @@ class MainApp(QtGui.QMainWindow):
         sysIcon = QtGui.QIcon(logo)
         self.systray = QtGui.QSystemTrayIcon(sysIcon)
         self.systray.show()
+        self.systray.menu = QtGui.QMenu()
+        showWinCM = self.systray.menu.addAction("Hide/Show Main Window")
+        recordCM = self.systray.menu.addAction("Record")
+        stopCM = self.systray.menu.addAction("Stop")
+        self.systray.setContextMenu(self.systray.menu)
+        self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.showMainWin)
+        self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
+        self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_event)
+        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
@@ -119,31 +134,59 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
-        # connections for configure > File Locations
+        # connections for configure > Extra Settings > Shortkeys
+        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+        self.short_rec_key.setEnabled(True)
+        self.short_stop_key.setEnabled(True)
+        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+        self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
+        
+        # connections for configure > Extra Settings > File Locations
         self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.ui.talksFileButton, QtCore.SIGNAL('clicked()'), self.browse_talksfile)
 
         # edit talks tab connections
         self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.saveButton, QtCore.SIGNAL('clicked()'), self.save_talks)
-        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.load_talks)
+        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
+        
+        # extra tab connections
+        self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        
+        # editTable Connections
+        # disabled for now due to performance issues
+        #self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
 
-        # Setup default sources
+        # setup default sources
         self.toggle_video_source()
-        self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+        if (self.core.config.audiosrc == 'none'):
+            self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
+        else: self.core.change_soundsrc(self.core.config.audiosrc)
+        if (self.core.config.audiofb == 'True'):
+            self.ui.audioFeedbackCheckbox.toggle()
+
+        # setup spacebar key
+        self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
+        self.ui.recordButton.setFocus()
 
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
         for src in vidsrcs:
-            if (src == 'desktop'): self.ui.localDesktopButton.setEnabled(True)
+            if (src == 'desktop'):
+                self.ui.localDesktopButton.setEnabled(True)
             elif (src == 'usb'):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.usbsrcButton.setEnabled(True)
@@ -151,13 +194,15 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.firewiresrcButton.setEnabled(True)
                 
-        self.videosrc = vidsrcs[0]
-        if (self.videosrc == 'desktop'):
+        if (self.core.config.videosrc == 'desktop'):
             self.ui.localDesktopButton.setChecked(True)
-        elif (self.videosrc == 'usb'):
+            if (self.core.config.videodev == 'local area'):
+                self.ui.recordLocalAreaButton.setChecked(True)
+                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+        elif (self.core.config.videosrc == 'usb'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.usbsrcButton.setChecked(True)
-        elif (self.videosrc == 'firewire'):
+        elif (self.core.config.videosrc == 'firewire'):
             self.ui.hardwareButton.setChecked(True)
             self.ui.firewiresrcButton.setChecked(True)
 
@@ -182,14 +227,19 @@ class MainApp(QtGui.QMainWindow):
         '''
         # recording the local desktop
         if (self.ui.localDesktopButton.isChecked()): 
+            self.ui.autoHideCheckbox.setChecked(True)
             if (self.ui.recordLocalDesktopButton.isChecked()):
                 self.videosrc = 'desktop'
+                self.core.config.videodev = 'default'
             elif (self.ui.recordLocalAreaButton.isChecked()):
                 self.videosrc = 'desktop'
+                self.core.config.videodev = 'local area'
                 self.core.set_record_area(True)
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.hardwareButton.isChecked()):
+            self.ui.autoHideCheckbox.setChecked(False)
+            self.core.set_record_area(False)
             if (self.ui.usbsrcButton.isChecked()): self.videosrc = 'usb'
             elif (self.ui.firewiresrcButton.isChecked()): self.videosrc = 'firewire'
             else: return
@@ -199,17 +249,19 @@ class MainApp(QtGui.QMainWindow):
             self.ui.videoDeviceList.clear()
             for dev in viddevs:
                 self.ui.videoDeviceList.addItem(dev)
+            self.core.config.videodev = str(self.ui.videoDeviceList.currentText())
 
         # invalid selection (this should never happen)
         else: return
 
         # finally load the changes into core
-        videodev = str(self.ui.videoDeviceList.currentText())
-        self.core.change_videosrc(self.videosrc, videodev)
+        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
         
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
+        self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
+        self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
 
         if self.core.config.resolution == '0x0':
             resolution = 0
@@ -243,7 +295,7 @@ class MainApp(QtGui.QMainWindow):
         Function for changing video device
         eg. /dev/video1
         '''
-        dev = str(self.ui.videoDeviceList.currentText())
+        dev = self.core.config.videodev = str(self.ui.videoDeviceList.currentText())
         src = self.videosrc
         self.core.logger.log.debug('Changing video device to ' + dev)
         self.core.change_videosrc(src, dev)
@@ -265,40 +317,54 @@ class MainApp(QtGui.QMainWindow):
         self.hide()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-        self.start_x = start_x
-        self.start_y = start_y
-        self.end_x = end_x
-        self.end_y = end_y
+        self.start_x = self.core.config.start_x = start_x
+        self.start_y = self.core.config.start_y = start_y
+        self.end_x = self.core.config.end_x = end_x
+        self.end_y = self.core.config.end_y = end_y
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
 
     def change_audio_device(self):
-        src = str(self.ui.audioSourceList.currentText())
+        src = self.core.config.audiosrc = str(self.ui.audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.change_soundsrc(src)
 
     def toggle_audio_feedback(self):
         if (self.ui.audioFeedbackCheckbox.isChecked()):
             self.core.audioFeedback(True)
+            self.core.config.audiofb = 'True'
+            self.core.config.writeConfig()
             return
+        self.core.config.audiofb = 'False'
         self.core.audioFeedback(False)
+        self.core.config.writeConfig()
 
     def capture(self, state):
         '''
         Function for recording and stopping recording.
         '''
         if (state): # Start Recording.
+            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
+            sysIcon2 = QtGui.QIcon(logo_rec)
+            self.systray.setIcon(sysIcon2)
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
             self.ui.recordButton.setText('Stop')
-            self.statusBar().showMessage('recording...')
+            if (not self.ui.autoHideCheckbox.isChecked()):
+                self.statusBar().showMessage('recording...')
+            else:
+                self.hide()
+            self.core.config.videosrc = self.videosrc
+            self.core.config.writeConfig()
             
         else: # Stop Recording.
+            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
+            sysIcon = QtGui.QIcon(logo_rec)
+            self.systray.setIcon(sysIcon)
             self.core.stop()
             self.ui.recordButton.setText('Record')
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
-            
 
     def test_sources(self, state):
         # Test video and audio sources
@@ -309,51 +375,216 @@ class MainApp(QtGui.QMainWindow):
             self.core.test_sources(state, True, False)
 
     def add_talk(self):
-        talk = u""
-        if (self.ui.roomEdit.isEnabled()): talk += self.ui.roomEdit.text() + u" - "
-        if (self.ui.presenterEdit.isEnabled()): talk += self.ui.presenterEdit.text() + u" - "
-        talk += self.ui.titleEdit.text()
-
+        presentation = Presentation(str(self.ui.titleEdit.text()),
+                                    str(self.ui.presenterEdit.text()),
+                                    "",         # description
+                                    "",         # level
+                                    str(self.ui.eventEdit.text()),
+                                    str(self.ui.dateTimeEdit),
+                                    str(self.ui.roomEdit.text()))
+                
         # Do not add talks if they are empty strings
-        if (len(talk) == 0): return
+        if (len(presentation.title) == 0): return
         
-        self.ui.editTalkList.addItem(talk)
+        self.core.add_talk(presentation)
 
-        #clean up add title boxes
-        self.ui.roomEdit.clear()
-        self.ui.presenterEdit.clear()
+        # cleanup
         self.ui.titleEdit.clear()
+        self.ui.presenterEdit.clear()
+        self.ui.eventEdit.clear()
+        self.ui.dateTimeEdit.clear()
+        self.ui.roomEdit.clear()
+        
+        # finish up
+        self.load_events()
+        self.load_rooms()
+        self.load_talks()
 
-    def remove_talk(self):
-        self.ui.editTalkList.takeItem(self.ui.editTalkList.currentRow())
+    def remove_talk(self): 
+        try:
+            row_clicked = self.ui.editTable.currentRow()
+        except:            
+            return
+        
+        id = self.ui.editTable.item(row_clicked, 3).text() 
+        self.core.delete_talk(str(id))
+        self.ui.editTable.removeRow(row_clicked)
 
+        # finish up
+        self.load_talks()
+
+    # This method currently causing performance issues.
+    def edit_talk(self, row, col):
+        try:
+            speaker = self.ui.editTable.item(row, 0).text()
+            title = self.ui.editTable.item(row, 1).text()
+            room = self.ui.editTable.item(row, 2).text()
+            talk_id = self.ui.editTable.item(row, 3).text()
+        except:
+            return
+
+        self.core.update_talk(talk_id, speaker, title, room)
+
+        # Update the main tab
+        self.load_events()
+        self.load_rooms()
+        
+        event = str(self.ui.eventList.currentText())
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+   
+    def reset(self):
+        self.core.clear_database()
+        self.load_events()
+        self.load_rooms()
+        self.load_talks()
+
+    def get_talks_at_event(self, event):
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+        
+    def get_talks_at_room(self, room):
+        event = str(self.ui.eventList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+
+    def update_talk_list(self, talk_list):
+        self.ui.talkList.clear()
+        
+        for talk in talk_list:
+            self.ui.talkList.addItem(talk)
+                  
     def load_talks(self):
         '''
         This method updates the GUI with the available presentation titles.
         '''
+        
+        # Update the main tab
+        event = str(self.ui.eventList.currentText())
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+
+        # Update the Edit Talks Table
         talklist = self.core.get_talk_titles()
-        self.ui.talkList.clear()
-        self.ui.editTalkList.clear()
-        for talk in talklist:
-            self.ui.talkList.addItem(talk)
-            self.ui.editTalkList.addItem(talk)
+        
+        self.ui.editTable.clearContents()
+        self.ui.editTable.setRowCount(0)    
+       
+        for talk in talklist:          
+            index = self.ui.editTable.rowCount()
+            self.ui.editTable.insertRow(index)
+            
+            for i in range(len(talk)):                
+                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))                         
+        
+        self.ui.editTable.resizeRowsToContents()
+            
+    def load_events(self):
+        '''
+        This method updates the GUI with the available presentation events.
+        '''
+        event_list = self.core.get_talk_events()
+        self.ui.eventList.clear()
+        self.ui.eventList.addItem("All")
+        
+        for event in event_list:
+            if len(event)>0:
+                self.ui.eventList.addItem(event)   
+            
+    def load_rooms(self):
+        '''
+        This method updates the GUI with the available presentation rooms.
+        '''
+        room_list = self.core.get_talk_rooms()
+        self.ui.roomList.clear()
+        self.ui.roomList.addItem("All")
+        
+        for room in room_list:
+            if len(room)>0:
+                self.ui.roomList.addItem(room)
 
-    def save_talks(self):
-        talk_list = []
-        i = 0
-        while i < self.ui.editTalkList.count():
-            t = unicode(self.ui.editTalkList.item(i).text()) + '\n'
-            talk_list.append(t)
-            i = i+1
+    def add_talks_from_rss(self):
+        rss_url = str(self.ui.rssEdit.text())
+        self.core.add_talks_from_rss(rss_url)
 
-        self.core.save_talk_titles(talk_list)
+        # finish up
+        self.load_events()
+        self.load_rooms()
         self.load_talks()
+        
+    def toggle_auto_hide(self):
+        '''
+        This function disables the preview when auto-hide box is checked.
+        '''
+        if self.ui.autoHideCheckbox.isChecked():
+            self.core.preview(False, self.ui.previewWidget.winId())
+        else: self.core.preview(True, self.ui.previewWidget.winId())
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             if self.isHidden():
                 self.show()
             else: self.hide()
+        if reason == QtGui.QSystemTrayIcon.DoubleClick:
+            self.ui.recordButton.toggle()
+
+    def showMainWin(self):
+        if self.isHidden():
+            self.show()
+        else: self.hide()
+
+    def recContextM(self):
+        if not self.ui.recordButton.isChecked():
+            self.ui.recordButton.toggle()
+
+    def stopContextM(self):
+        if self.ui.recordButton.isChecked():
+            self.ui.recordButton.toggle()
+
+    def grab_rec_key(self):
+        '''
+        When the button is pressed, it will call the keygrabber widget and log keys
+        '''
+        self.core.config.key_rec = 'Ctrl+Shift+R'
+        self.core.config.writeConfig()
+        self.key_grabber = QtKeyGrabber(self)
+        self.hide()
+        self.core.logger.log.info('Storing keys.')
+        self.key_grabber.show()
+        
+    def grab_rec_set(self, key):
+        '''
+        Keygrabber widget calls this function to set and store the hotkey.
+        '''
+        self.ui.shortRecordLineEdit.setText(key)
+        self.core.config.key_rec = key
+        self.core.config.writeConfig()
+        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.show()
+            
+    def grab_stop_key(self):
+        '''
+        When the button is pressed, it will call the keygrabber widget and log keys
+        '''
+        self.core.config.key_stop = 'Ctrl+Shift+E'
+        self.core.config.writeConfig()
+        self.key_grabber = QtKeyGrabber(self)
+        self.hide()
+        self.core.logger.log.info('Storing keys.')
+        self.key_grabber.show()
+
+    def grab_stop_set(self, key):
+        '''
+        Keygrabber widget calls this function to set and store the hotkey.
+        '''
+        self.ui.shortStopLineEdit.setText(key)
+        self.core.config.key_stop = key
+        self.core.config.writeConfig()
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+        self.show()
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':

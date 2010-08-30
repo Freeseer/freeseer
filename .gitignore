@@ -13,3 +13,4 @@ MANIFEST
 freeseer_ui_qt.py
 resource_rc.py
 freeseer_about.py
+qxtglobalshortcut.so
