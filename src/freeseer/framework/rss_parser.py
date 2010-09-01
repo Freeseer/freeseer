@@ -162,14 +162,14 @@ class FeedParser:
             
             presentation = {}
             
-            presentation["Title"] = title
-            presentation["Speaker"] = speaker
-            presentation["Abstract"] = abstract
-            presentation["Level"] = level
-            presentation["Status"] = status
-            presentation["Time"] = time
-            presentation["Event"] = event
-            presentation["Room"] = room
+            presentation["Title"] = title.strip()
+            presentation["Speaker"] = speaker.strip()
+            presentation["Abstract"] = abstract.strip()
+            presentation["Level"] = level.strip()
+            presentation["Status"] = status.strip()
+            presentation["Time"] = time.strip()
+            presentation["Event"] = event.strip()
+            presentation["Room"] = room.strip()
             
             presentations_list.append(presentation)
         
