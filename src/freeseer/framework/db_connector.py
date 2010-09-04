@@ -93,7 +93,11 @@ class DB_Connector():
         self.cursor.execute('''SELECT * FROM presentations''')
 
         for row in self.cursor:
-            talk_titles.append([row[0],row[1],row[6],row[7]])
+            speaker = row[0]
+            title = row[1]
+            room = row[6]
+            talk_id = row[7]
+            talk_titles.append([speaker, title, room, talk_id])
             
         self.cursor.close()
             
@@ -154,7 +158,11 @@ class DB_Connector():
 
         # Prepare list to be returned
         for row in self.cursor:
-            text = "%s - %s - %s" % (row[0],row[1],row[2])
+            speaker = row[0]
+            title = row[1]
+            room = row[6]
+            
+            text = "%s - %s - %s" % (room, speaker, title)
             talks_matched.append(text)
 
         return talks_matched
