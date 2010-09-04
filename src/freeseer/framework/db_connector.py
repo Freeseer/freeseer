@@ -161,8 +161,12 @@ class DB_Connector():
             speaker = row[0]
             title = row[1]
             room = row[6]
-            
-            text = "%s - %s - %s" % (room, speaker, title)
+
+            if (room == 'None'):
+                text = "%s - %s" % (speaker, title)
+            else:
+                text = "%s - %s - %s" % (room, speaker, title)
+                
             talks_matched.append(text)
 
         return talks_matched
