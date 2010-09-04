@@ -151,10 +151,11 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.talksFileButton, QtCore.SIGNAL('clicked()'), self.browse_talksfile)
 
         # edit talks tab connections
-        self.connect(self.ui.addTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
         self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
+        self.ui.addTalkGroupBox.setHidden(True)
         
         # extra tab connections
         self.connect(self.ui.autoHideCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
