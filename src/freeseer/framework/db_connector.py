@@ -145,15 +145,15 @@ class DB_Connector():
             if (room == "All"):
                 self.cursor.execute('''SELECT * FROM presentations''')
             else:
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
                                        WHERE Room=?''', [str(room)])
             
         else:
             if (room == "All"):
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
                                        WHERE Event=?''', [str(event)])
             else:
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
                                        WHERE Event=? and Room=?''', [str(event), str(room)])
 
         # Prepare list to be returned
