@@ -187,7 +187,6 @@ class DB_Connector():
     def delete_talk(self, talk_id):
         self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
                                [str(talk_id)])
-        self.cursor.execute('''SELECT * FROM presentations''')
         self.db_connection.commit()
   
         self.cursor.close()
