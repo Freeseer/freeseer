@@ -58,34 +58,57 @@ class FreeseerCore:
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
 
-
+	##Paul: testing here
+	self. unique_char_ptr = 0;
+	##
         self.feedback = False
         self.spaces = False
       
         self.logger.log.info(u"Core initialized")   
 
-
-    def get_record_name(self, filename):
+    ##Paul: Testing Here
+    def get_record_name(self, event):
         '''
         Returns the filename to use when recording.
         This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
-        recordname = self.make_record_name(filename)
-        self.logger.log.debug('Set record name to ' + recordname)
-	## Testing here	
-	self.logger.log.debug('Events: '+ str(self.db.get_talk_events()))
-	##         
+        recordname = self.make_record_name(event)
+        self.logger.log.debug('Set record name to ' + recordname)        
 	return recordname
 
-    def make_record_name(self, filename):
+    def make_record_name(self, event):
         '''
-        Insert date and index to a filename
+        create an EVENT-UNIQUE.ogg record name
         '''
         date = datetime.date.today()
-        recordname = date.isoformat() + ' - ' + time.strftime('%H%M') + ' - ' + filename + '.ogg'
+        recordname = self.get_event_shortname(event)+'-'+self.get_unique_id()+'.ogg'
+	## this can probably be removed
         if self.spaces == False:
             recordname = recordname.replace(' ', '_')
+	##
         return recordname
+
+    def get_unique_id(self):
+       	'''
+	Returns the next unique ID
+	'''	
+	## this string can also be in constructor
+	unique_chars ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+	##	
+	index1 = self.unique_char_ptr % unique_chars.__len__()
+	index0 = self.unique_char_ptr / unique_chars.__len__()
+	index0 = int(index0)
+	self.unique_char_ptr += 1
+	return unique_chars[index0]+unique_chars[index1]
+
+    def get_event_shortname(self, event):
+	'''
+	Returns the first four characters of the event (for now).
+	'''
+	return event[0:4]
+
+    ##    
+
 
     ##
     ## Database Functions
@@ -237,11 +260,14 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
-    def record(self, filename='default'):
+    def record(self, event='default'):
         '''
         Informs backend to begin recording to filename.
         '''
-        record_name = self.get_record_name(str(filename))
+	##Paul: Testing here ("event" used to be "filename")
+        record_name = self.get_record_name(str(event))
+	self.logger.log.info('Recording for event: '+event)
+	##
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)
         self.logger.log.info('Recording started')

@@ -348,7 +348,9 @@ class MainApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-            self.core.record(str(self.ui.talkList.currentText().toUtf8()))
+	    ## Paul: changed record parameter from "talk" (talkList) to "event" (eventList)
+            self.core.record(str(self.ui.eventList.currentText().toUtf8()))
+ 	    ##
             self.ui.recordButton.setText('Stop')
             if (not self.ui.autoHideCheckbox.isChecked()):
                 self.statusBar().showMessage('recording...')
