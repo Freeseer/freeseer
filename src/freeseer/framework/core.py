@@ -72,7 +72,10 @@ class FreeseerCore:
         '''
         recordname = self.make_record_name(filename)
         self.logger.log.debug('Set record name to ' + recordname)
-        return recordname
+	## Testing here	
+	self.logger.log.debug('Events: '+ str(self.db.get_talk_events()))
+	##         
+	return recordname
 
     def make_record_name(self, filename):
         '''
