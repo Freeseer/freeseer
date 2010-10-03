@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+
 import codecs
 import datetime
 import time
@@ -67,21 +68,21 @@ class FreeseerCore:
         self.logger.log.info(u"Core initialized")   
 
     ##Paul: Testing Here
-    def get_record_name(self, event):
+    def get_record_name(self, filename):
         '''
         Returns the filename to use when recording.
         This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
-        recordname = self.make_record_name(event)
+        recordname = self.make_record_name(filename)
         self.logger.log.debug('Set record name to ' + recordname)        
 	return recordname
 
-    def make_record_name(self, event):
+    def make_record_name(self, filename):
         '''
         create an EVENT-UNIQUE.ogg record name
         '''
         date = datetime.date.today()
-        recordname = self.get_event_shortname(event)+'-'+self.get_unique_id()+'.ogg'
+        recordname = self.get_event_shortname(filename)+'-'+self.get_unique_id()+'.ogg'
 	## this can probably be removed
         if self.spaces == False:
             recordname = recordname.replace(' ', '_')
@@ -105,8 +106,7 @@ class FreeseerCore:
 	'''
 	Returns the first four characters of the event (for now).
 	'''
-	return event[0:4]
-
+	return event[0:4].upper()
     ##    
 
 
@@ -260,13 +260,13 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
-    def record(self, event='default'):
+    def record(self, filename='default'):
         '''
         Informs backend to begin recording to filename.
         '''
-	##Paul: Testing here ("event" used to be "filename")
-        record_name = self.get_record_name(str(event))
-	self.logger.log.info('Recording for event: '+event)
+	##Paul: Testing here ("filename" is actually the "event name")
+        record_name = self.get_record_name(str(filename))
+	self.logger.log.info('Recording for event: '+filename)
 	##
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)

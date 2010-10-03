@@ -212,6 +212,7 @@ class Freeseer_gstreamer(BackendInterface):
                               video_scale_cap,
                               video_cspace,
                               self.video_tee)
+	
 
     def _clear_video_source(self):
         video_src = self.player.get_by_name('video_src')
