@@ -71,7 +71,7 @@ class FreeseerCore:
     def get_record_name(self, filename):
         '''
         Returns the filename to use when recording.
-        This function checks to see if a file exists and increments index until a filename that does not exist is found
+        This function checks to see if a file exists and increments index until a filename 		that does not exist is found
         '''
         recordname = self.make_record_name(filename)
         self.logger.log.debug('Set record name to ' + recordname)        
