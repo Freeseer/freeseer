@@ -232,8 +232,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>551</width>
-             <height>321</height>
+             <width>560</width>
+             <height>271</height>
             </rect>
            </property>
            <attribute name="label">
@@ -457,8 +457,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>211</width>
-             <height>34</height>
+             <width>231</width>
+             <height>51</height>
             </rect>
            </property>
            <attribute name="label">
@@ -510,8 +510,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>190</width>
-             <height>181</height>
+             <width>204</width>
+             <height>220</height>
             </rect>
            </property>
            <attribute name="label">
@@ -1041,7 +1041,7 @@ v4l2src does not work.</string>
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1056,8 +1056,20 @@ v4l2src does not work.</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+    <widget class="QMenu" name="menuLanguage">
+     <property name="title">
+      <string>Language</string>
+     </property>
+    </widget>
+    <addaction name="menuLanguage"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuOptions"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionExit">
@@ -1074,6 +1086,11 @@ v4l2src does not work.</string>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string/>
    </property>
   </action>
  </widget>
