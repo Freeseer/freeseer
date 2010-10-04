@@ -23,7 +23,8 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 from PyQt4 import QtGui, QtCore
-
+import locale
+from os import getcwd;
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
@@ -36,33 +37,58 @@ import qxtglobalshortcut
 __version__=u'1.9.7'
 
 NAME=u'Freeseer'
-DESCRIPTION=u'Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.'
 URL=u'http://github.com/fosslc/freeseer'
-COPYRIGHT=u'Copyright (C) 2010 The Free and Open Source Software Learning Centre'
-LICENSE_TEXT=u"Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software."
 RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
 HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
-
-ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-u'<br><b>Version: ' + __version__ + u'</b>' + \
-u'<p>' + DESCRIPTION + u'</p>' + \
-u'<p>' + COPYRIGHT + u'</p>' + \
-u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-u'<p>' + LICENSE_TEXT + u'</p>' \
-u'<p>Record button graphics by: <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-u'<p>Headphones graphics by: <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
-
 class AboutDialog(QtGui.QDialog):
     '''
-    About dialog class for displaying app information.
+    About dialog class for displaying app information
     '''
+    
+    
+    
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_FreeseerAbout()
         self.ui.setupUi(self)
-        self.ui.aboutInfo.setText(ABOUT_INFO)
+	self.translate();
+    def	translate(self):
+        DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
+	COPYRIGHT=self.tr('Copyright (C) 2010 The Free and Open Source Software Learning Centre')
+	LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
+	
+	ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
+	u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
+	u'<p>' + self.tr(DESCRIPTION) + u'</p>' + \
+	u'<p>' + self.tr(COPYRIGHT) + u'</p>' + \
+	u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+	u'<p>' + self.tr(LICENSE_TEXT) + u'</p>' \
+	u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+	u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
+        
+	self.ui.retranslateUi(self);
+	self.ui.aboutInfo.setText(ABOUT_INFO);
+	
+
+  
+class SystemLanguages:
+  def __init__(self):
+    self.languages = []
+    try:
+      file_languages = open('freeseer/frontend/default/languages/languages.txt');   
+      data = file_languages.readlines();
+      data = map(lambda x: x.rstrip().split(' '),data);
+      self.languages = data;
+    except:
+      print("Error Opening Language Config");
+      pass;
+    
+    
+    #Add more languages heref
+
+
 
 class MainApp(QtGui.QMainWindow):
     '''
@@ -81,20 +107,28 @@ class MainApp(QtGui.QMainWindow):
         self.talks_to_delete = []
 
         self.core = FreeseerCore(self)
-
+        
         # get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
-
+        
+	self.LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
+	self.uiTranslator = QtCore.QTranslator();
+	self.langActionGroup = QtGui.QActionGroup(self);
+	self.setupLanguageMenu();
+	
+	
+	
+	
         # get available audio sources
         sndsrcs = self.core.get_audio_sources()
         for src in sndsrcs:
             self.ui.audioSourceList.addItem(src)
-
+            
         self.load_talks()
         self.load_events()
         self.load_rooms()
         self.load_settings()
-
+        
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
         sysIcon = QtGui.QIcon(logo)
@@ -181,6 +215,35 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
+
+    
+    def setupLanguageMenu(self):
+      
+	#Add Languages to the Menu Ensure only one is clicked 
+	self.langActionGroup.setExclusive(True)
+	default_ending = locale.getlocale()[0].split('_')[0];	#Retrieve Current Locale from the operating system          
+	self.translateFile(default_ending); #Translate the System into the default language 
+	language_table = SystemLanguages(); #Load all languages from the language folder 
+	for language_name in language_table.languages:
+	  translator = QtCore.QTranslator(); #Create a translator to translate names
+	  data = translator.load(self.LANGUAGE_DIR+'tr_'+language_name[1]);  
+	  #Create the button
+	  language_display_text = translator.translate("MainApp","language_name");
+	  if(language_display_text!=''):
+	    language_menu_button = QtGui.QAction(self);
+	    language_menu_button.setCheckable(True);
+	    if(language_name[1] == default_ending):
+	      language_menu_button.setChecked(True);
+	  #language_name is a holder for the language name in the translation file tr_*.ts   
+	    language_menu_button.setText(language_display_text);
+	    language_menu_button.setData(language_name[1]);
+	    self.ui.menuLanguage.addAction(language_menu_button); 
+	    self.langActionGroup.addAction(language_menu_button);
+	#Set up the event handling for each of the menu items  
+        self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
+	
+
+
 
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
@@ -596,9 +659,24 @@ class MainApp(QtGui.QMainWindow):
         self.core.logger.log.info('Exiting freeseer...')
         #self.core.stop()
         event.accept()
+    
+    def translateAction(self ,action):
+      language_prefix = action.data().toString();
+      self.translateFile(language_prefix);
+      
+    def translateFile(self,file_ending):
+      load_string = self.LANGUAGE_DIR+'tr_'+ file_ending;
+      loaded = self.uiTranslator.load(load_string);
+      if(loaded == True or file_ending=='en'):
+       self.ui.retranslateUi(self);
+       self.aboutDialog.translate();
+      else:
+       print("Invalid Locale Resorting to Default Language: English");
+    
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
-    main.show()
+    app.installTranslator(main.uiTranslator); #install translator 
+    main.show();
     sys.exit(app.exec_())
