@@ -83,8 +83,14 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>40</width>
+              <width>16777215</width>
               <height>24</height>
+             </size>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>10</width>
+              <height>0</height>
              </size>
             </property>
             <property name="text">
@@ -105,7 +111,7 @@
            <widget class="QLabel" name="label_6">
             <property name="maximumSize">
              <size>
-              <width>40</width>
+              <width>16777215</width>
               <height>24</height>
              </size>
             </property>
