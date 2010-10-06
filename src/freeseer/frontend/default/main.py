@@ -674,7 +674,7 @@ class MainApp(QtGui.QMainWindow):
        print("Invalid Locale Resorting to Default Language: English");
     
 
-if __name__ == "__main__":
+if __name__ == "__main__":xs
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
     app.installTranslator(main.uiTranslator); #install translator 
