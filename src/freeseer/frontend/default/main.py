@@ -24,7 +24,7 @@
 
 from PyQt4 import QtGui, QtCore
 import locale
-from os import getcwd;
+from os import listdir;
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
@@ -42,54 +42,75 @@ RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
 HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
+
+LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
+	
+
 class AboutDialog(QtGui.QDialog):
     '''
     About dialog class for displaying app information
     '''
-    
-    
-    
+
     def __init__(self):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_FreeseerAbout()
         self.ui.setupUi(self)
 	self.translate();
+	
+	
     def	translate(self):
-        DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
+        '''
+	 Translates the about dialog. Calls the retranslateUi function of the about dialog itself
+        '''
+	DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
 	COPYRIGHT=self.tr('Copyright (C) 2010 The Free and Open Source Software Learning Centre')
 	LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
 	
 	ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
 	u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
-	u'<p>' + self.tr(DESCRIPTION) + u'</p>' + \
-	u'<p>' + self.tr(COPYRIGHT) + u'</p>' + \
+	u'<p>' + DESCRIPTION + u'</p>' + \
+	u'<p>' +  COPYRIGHT + u'</p>' + \
 	u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-	u'<p>' + self.tr(LICENSE_TEXT) + u'</p>' \
+	u'<p>' + LICENSE_TEXT + u'</p>' \
 	u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
 	u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
-        
+ 
 	self.ui.retranslateUi(self);
 	self.ui.aboutInfo.setText(ABOUT_INFO);
 	
-
-  
+	
 class SystemLanguages:
+  '''
+    Language system class that is responsible for retrieving valid languages in the system 
+  '''
   def __init__(self):
     self.languages = []
-    try:
-      file_languages = open('freeseer/frontend/default/languages/languages.txt');   
-      data = file_languages.readlines();
-      data = map(lambda x: x.rstrip().split(' '),data);
-      self.languages = data;
-    except:
-      print("Error Opening Language Config");
-      pass;
+    self.languages = self.getAllLanguages();
     
-    
-    #Add more languages heref
+    #try:
+      #file_languages = open('freeseer/frontend/default/languages/languages.txt');   
+      #data = file_languages.readlines();
+      #data = map(lambda x: x.rstrip().split(' '),data);
+      #self.languages = data;
+      
+    #except:
+      #print("Error Opening Language Config");
+      #pass;
+  
 
-
-
+  def getAllLanguages(self):
+    '''    
+    Returns all the valid languages that have existing qm files. In other words languages 
+    that can be loaded into the translator
+    '''    
+    files = listdir(LANGUAGE_DIR);
+    files = map(lambda x: x.split('.') , files);
+    qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
+    language_prefix = map(lambda x: x[0].split("_")[1],qm_files);
+    return language_prefix;    
+ 
+ 
+ 
 class MainApp(QtGui.QMainWindow):
     '''
     Freeseer main gui class
@@ -111,13 +132,10 @@ class MainApp(QtGui.QMainWindow):
         # get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
         
-	self.LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
+        #Setup the translator and populate the language menu under options
 	self.uiTranslator = QtCore.QTranslator();
 	self.langActionGroup = QtGui.QActionGroup(self);
 	self.setupLanguageMenu();
-	
-	
-	
 	
         # get available audio sources
         sndsrcs = self.core.get_audio_sources()
@@ -218,7 +236,6 @@ class MainApp(QtGui.QMainWindow):
 
     
     def setupLanguageMenu(self):
-      
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
 	default_ending = locale.getlocale()[0].split('_')[0];	#Retrieve Current Locale from the operating system          
@@ -226,25 +243,23 @@ class MainApp(QtGui.QMainWindow):
 	language_table = SystemLanguages(); #Load all languages from the language folder 
 	for language_name in language_table.languages:
 	  translator = QtCore.QTranslator(); #Create a translator to translate names
-	  data = translator.load(self.LANGUAGE_DIR+'tr_'+language_name[1]);  
+	  data = translator.load(LANGUAGE_DIR+'tr_'+language_name);  
 	  #Create the button
 	  language_display_text = translator.translate("MainApp","language_name");
-	  if(language_display_text!=''):
+	  if(language_display_text!='' or data==False):
 	    language_menu_button = QtGui.QAction(self);
 	    language_menu_button.setCheckable(True);
-	    if(language_name[1] == default_ending):
+	    if(language_name == default_ending):
 	      language_menu_button.setChecked(True);
 	  #language_name is a holder for the language name in the translation file tr_*.ts   
 	    language_menu_button.setText(language_display_text);
-	    language_menu_button.setData(language_name[1]);
+	    language_menu_button.setData(language_name);
 	    self.ui.menuLanguage.addAction(language_menu_button); 
 	    self.langActionGroup.addAction(language_menu_button);
 	#Set up the event handling for each of the menu items  
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
 	
-
-
-
+	
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
         for src in vidsrcs:
@@ -661,20 +676,28 @@ class MainApp(QtGui.QMainWindow):
         event.accept()
     
     def translateAction(self ,action):
-      language_prefix = action.data().toString();
-      self.translateFile(language_prefix);
+     '''
+      When a language is selected from the language menu this function is called
+      The language to be changed to is retrieved
+     '''
+     language_prefix = action.data().toString();  
+     self.translateFile(language_prefix);
       
     def translateFile(self,file_ending):
-      load_string = self.LANGUAGE_DIR+'tr_'+ file_ending;
-      loaded = self.uiTranslator.load(load_string);
+      '''
+      Actually perfoms the translation. This is called by the handler for the language menu
+      Note: If the language file can not be loaded then the default language is english 
+      '''
+      load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
+      loaded = self.uiTranslator.load(load_string); 
       if(loaded == True or file_ending=='en'):
-       self.ui.retranslateUi(self);
+       self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
       else:
        print("Invalid Locale Resorting to Default Language: English");
     
 
-if __name__ == "__main__":xs
+if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
     app.installTranslator(main.uiTranslator); #install translator 
