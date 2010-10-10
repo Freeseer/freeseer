@@ -17,12 +17,9 @@ src_files = filter(lambda x: x[len(x)-1]=='py',src_files);
 ui_files = map(lambda x:x.split('.'),ui_files);
 ui_files = filter(lambda x: x[len(x)-1]=='ui',ui_files);
 
-language_file = open(LANGAUGE_DIRECTORY+'/languages.txt' , 'r');
+language_file = open('languages.txt' , 'r');
 languages = language_file.readlines();
-languages = map(lambda x: x.rstrip().split(' '),languages);
-
-language_names = map(lambda x: x[0],languages);
-language_prefixs = map(lambda x: x[1],languages);
+languages = map(lambda x: x.rstrip() , languages);
 language_file.close();
 
 
@@ -41,11 +38,10 @@ for i in range(0,len(ui_files)):
   print(FORM_DIRECTORY+"/"+ui_files[i][0]+'.'+ui_files[i][1] + ""+ end);
 
 print('TRANSLATIONS = \\');
-for i in range(0,len(language_prefixs)):
+for i in range(0,len(languages)):
   end = '\\';
-  if(i == len(language_prefixs)-1):
+  if(i == len(languages)-1):
     end = '';
-  print(LANGAUGE_DIRECTORY+"/"+'tr_'+language_prefixs[i] + ".ts" + end);
-  
-  
+  print(LANGAUGE_DIRECTORY+"/"+'tr_'+languages[i] + ".ts" + end);
+
   
