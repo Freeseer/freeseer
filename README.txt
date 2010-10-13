@@ -41,19 +41,19 @@ This starts up the Freeseer GUI.
 
 Internationalisation
 
-
- Changing languages
- 
+Changing languages
   To change the language simply click:
       options -> languages and select a new language from the menu
 
-
- Adding a Language 
+Adding a Language 
 
  Creating the translation files
 
   Go to the src folder and open the directory tools. Simply run:
-    ./add_language.sh [ language_id ] *
+    ./add_language.sh [ language_id ] 
+
+  note: If you are running for the firs time please ensure that add_language.sh
+  create_language.py and create_pro.py have their permissions set to executable.
 
   The language id can be either the first part of the locale id or 
   the entire locale id. Use the entire locale id if the dialect is specific
@@ -66,39 +66,23 @@ Internationalisation
 
  Translating the Text 
 
- Open the language file created with step 1 or a previously existing .ts files
- with QT Linguist. You will be prompted to select the target language and the source
- language. Select english as the source language. 
+  Open the language file created with step 1 or a previously existing .ts files
+  with QT Linguist. You will be prompted to select the target language and the source
+  language. Select english as the source language. 
 
- In the context area (left side bar). Under the context MainApp there is a single word
- 'language_name'. This is where you put the name of the language that will appear in the language
- menu. Note: This must be filled in, in order for the language to appear in the menu
+  In the context area (left side bar). Under the context MainApp there is a single word
+  'language_name'. This is where you put the name of the language that will appear in the language
+  menu. Note: This must be filled in, in order for the language to appear in the menu
 
- The instructions for using QT Linguist can be found at:
- http://doc.qt.nokia.com/4.1/linguist-translators.html  
+  The instructions for using QT Linguist can be found at:
+    http://doc.qt.nokia.com/4.1/linguist-translators.html  
    
 
  Creating the (.qm) files 
 
- Qt uses .qm files to translate the text at runtime. The files can be generated using 
- Qt Linguist. Once step 2 is complete, the qm file can be generated from the ts file by
- going to file -> release. This will create the .qm file with the correct name.
-
-
-
-
-
-
-
-
-
-         
-
-
-
-
-
-
+  Qt uses .qm files to translate the text at runtime. The files can be generated using 
+  Qt Linguist. Once step 2 is complete, the qm file can be generated from the ts file by
+  going to file -> release. This will create the .qm file with the correct name.
 
 -------------------------------------------------------------------------
 
