@@ -16,7 +16,7 @@ FORM_DIRECTORY = '../freeseer/frontend/default/forms';
 files = os.listdir(LANGAUGE_DIRECTORY);
 files = map(lambda x: x.split('.') , files);
 qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
-languages_existing = map(lambda x: x[0].split("_")[1],qm_files);
+languages_existing = map(lambda x: x[0].split("tr_")[1],qm_files);
 
 language_file = open('languages.txt' , 'w');
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -410,7 +411,7 @@ v4l2src does not work.</source>
     <message>
         <location filename="../freeseer/frontend/default/main.py" line="248"/>
         <source>language_name</source>
-        <translation type="unfinished">English</translation>
+        <translation type="unfinished">English US</translation>
     </message>
 </context>
 </TS>
