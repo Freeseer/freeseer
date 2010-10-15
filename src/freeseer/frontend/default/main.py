@@ -23,7 +23,6 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 from PyQt4 import QtGui, QtCore
-import locale
 from os import listdir;
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
@@ -112,7 +111,7 @@ class MainApp(QtGui.QMainWindow):
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()    
         self.ui.editTable.setColumnHidden(3,True)
-        
+        self.default_language = 'en';
         self.talks_to_save = []
         self.talks_to_delete = []
 
@@ -222,12 +221,12 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
-
-    
+	self.translateFile('fr');
+	
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
-	default_ending = locale.getlocale()[0];	#Retrieve Current Locale from the operating system          
+	default_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system          
 	
 	active_button = None;
 	current_lang_length = 0;
@@ -238,30 +237,29 @@ class MainApp(QtGui.QMainWindow):
 	  data = translator.load(LANGUAGE_DIR+'tr_'+language_name);  
 	  #Create the button
 	  language_display_text = translator.translate("MainApp","language_name");
-	  if(language_display_text!='' or data==False):
+	  if(language_display_text!='' or data!=False):
 	    language_menu_button = QtGui.QAction(self);
 	    language_menu_button.setCheckable(True);
 	    #Dialect handling for locales from operating system. Use possible match
 	    if(language_name == default_ending):
-	      active_button =language_menu_button;
+	      active_button = language_menu_button;
 	      current_lang_length = 2;
+	      self.default_language = default_ending;
 	    else:
 	      if(language_name == default_ending.split("_")[0]):
 		if(current_lang_length < 1):
 		 active_button = language_menu_button;
 		 current_lang_length = 1;
-		  
+		 self.default_language = language_name
 	  #language_name is a holder for the language name in the translation file tr_*.ts   
 	    language_menu_button.setText(language_display_text);
 	    language_menu_button.setData(language_name);
 	    self.ui.menuLanguage.addAction(language_menu_button); 
-	    self.langActionGroup.addAction(language_menu_button);
-	    self.translateFile(active_button.data().toString());
-	    active_button.setChecked(True);
+	    self.langActionGroup.addAction(language_menu_button);	 
+	active_button.setChecked(True);
 	    
 	#Set up the event handling for each of the menu items  
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
-	
 	
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
@@ -692,10 +690,13 @@ class MainApp(QtGui.QMainWindow):
       Note: If the language file can not be loaded then the default language is english 
       '''
       load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
-      loaded = self.uiTranslator.load(load_string); 
+      loaded = self.uiTranslator.load(load_string);
+  
       if(loaded == True or file_ending=='en'):
+      
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
+       
       else:
        print("Invalid Locale Resorting to Default Language: English");
     
@@ -703,6 +704,5 @@ class MainApp(QtGui.QMainWindow):
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
-    app.installTranslator(main.uiTranslator); #install translator 
     main.show();
     sys.exit(app.exec_())
