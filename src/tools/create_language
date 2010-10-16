@@ -1,0 +1,140 @@
+#!/usr/bin/python
+
+from create_language_ui import *
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+import sys
+from os import system;
+from os import listdir;
+LANGUAGES = [('Abkhazian',QLocale.Abkhazian),('Afan',QLocale.Afan),('Afar',QLocale.Afar),('Afrikaans',QLocale.Afrikaans),('Albanian',QLocale.Albanian),('Amharic',QLocale.Amharic),('Arabic',QLocale.Arabic),('Armenian',QLocale.Armenian),('Assamese',QLocale.Assamese),('Aymara',QLocale.Aymara),('Azerbaijani',QLocale.Azerbaijani),('Bashkir',QLocale.Bashkir),('Basque',QLocale.Basque),('Bengali',QLocale.Bengali),('Bhutani',QLocale.Bhutani),('Bihari',QLocale.Bihari),('Bislama',QLocale.Bislama),('Bosnian',QLocale.Bosnian),('Breton',QLocale.Breton),('Bulgarian',QLocale.Bulgarian),('Burmese',QLocale.Burmese),('Byelorussian',QLocale.Byelorussian),('Cambodian',QLocale.Cambodian),('Catalan',QLocale.Catalan),('Chinese',QLocale.Chinese),('Cornish',QLocale.Cornish),('Corsican',QLocale.Corsican),('Croatian',QLocale.Croatian),('Czech',QLocale.Czech),('Danish',QLocale.Danish),('Divehi',QLocale.Divehi),('Dutch',QLocale.Dutch),('English',QLocale.English),('Esperanto',QLocale.Esperanto),('Estonian',QLocale.Estonian),('Faroese',QLocale.Faroese),('FijiLanguage',QLocale.FijiLanguage),('Finnish',QLocale.Finnish),('French',QLocale.French),('Frisian',QLocale.Frisian),('Gaelic',QLocale.Gaelic),('Galician',QLocale.Galician),('Georgian',QLocale.Georgian),('German',QLocale.German),('Greek',QLocale.Greek),('Greenlandic',QLocale.Greenlandic),('Guarani',QLocale.Guarani),('Gujarati',QLocale.Gujarati),('Hausa',QLocale.Hausa),('Hebrew',QLocale.Hebrew),('Hindi',QLocale.Hindi),('Hungarian',QLocale.Hungarian),('Icelandic',QLocale.Icelandic),('Indonesian',QLocale.Indonesian),('Interlingua',QLocale.Interlingua),('Interlingue',QLocale.Interlingue),('Inuktitut',QLocale.Inuktitut),('Inupiak',QLocale.Inupiak),('Irish',QLocale.Irish),('Italian',QLocale.Italian),('Japanese',QLocale.Japanese),('Javanese',QLocale.Javanese),('Kannada',QLocale.Kannada),('Kashmiri',QLocale.Kashmiri),('Kazakh',QLocale.Kazakh),('Kinyarwanda',QLocale.Kinyarwanda),('Kirghiz',QLocale.Kirghiz),('Korean',QLocale.Korean),('Kurdish',QLocale.Kurdish),('Kurundi',QLocale.Kurundi),('Laothian',QLocale.Laothian),('Latin',QLocale.Latin),('Latvian',QLocale.Latvian),('Lingala',QLocale.Lingala),('Lithuanian',QLocale.Lithuanian),('Macedonian',QLocale.Macedonian),('Malagasy',QLocale.Malagasy),('Malay',QLocale.Malay),('Malayalam',QLocale.Malayalam),('Maltese',QLocale.Maltese),('Manx',QLocale.Manx),('Maori',QLocale.Maori),('Marathi',QLocale.Marathi),('Moldavian',QLocale.Moldavian),('Mongolian',QLocale.Mongolian),('NauruLanguage',QLocale.NauruLanguage),('Nepali',QLocale.Nepali),('Norwegian',QLocale.Norwegian),('NorwegianNynorsk',QLocale.NorwegianNynorsk),('Occitan',QLocale.Occitan),('Oriya',QLocale.Oriya),('Pashto',QLocale.Pashto),('Persian',QLocale.Persian),('Polish',QLocale.Polish),('Portuguese',QLocale.Portuguese),('Punjabi',QLocale.Punjabi),('Quechua',QLocale.Quechua),('RhaetoRomance',QLocale.RhaetoRomance),('Romanian',QLocale.Romanian),('Russian',QLocale.Russian),('Samoan',QLocale.Samoan),('Sangho',QLocale.Sangho),('Sanskrit',QLocale.Sanskrit),('Serbian',QLocale.Serbian),('SerboCroatian',QLocale.SerboCroatian),('Sesotho',QLocale.Sesotho),('Setswana',QLocale.Setswana),('Shona',QLocale.Shona),('Sindhi',QLocale.Sindhi),('Singhalese',QLocale.Singhalese),('Siswati',QLocale.Siswati),('Slovak',QLocale.Slovak),('Slovenian',QLocale.Slovenian),('Somali',QLocale.Somali),('Spanish',QLocale.Spanish),('Sundanese',QLocale.Sundanese),('Swahili',QLocale.Swahili),('Swedish',QLocale.Swedish),('Tagalog',QLocale.Tagalog),('Tajik',QLocale.Tajik),('Tamil',QLocale.Tamil),('Tatar',QLocale.Tatar),('Telugu',QLocale.Telugu),('Thai',QLocale.Thai),('Tibetan',QLocale.Tibetan),('Tigrinya',QLocale.Tigrinya),('TongaLanguage',QLocale.TongaLanguage),('Tsonga',QLocale.Tsonga),('Turkish',QLocale.Turkish),('Turkmen',QLocale.Turkmen),('Twi',QLocale.Twi),('Uigur',QLocale.Uigur),('Ukrainian',QLocale.Ukrainian),('Urdu',QLocale.Urdu),('Uzbek',QLocale.Uzbek),('Vietnamese',QLocale.Vietnamese),('Volapuk',QLocale.Volapuk),('Welsh',QLocale.Welsh),('Wolof',QLocale.Wolof),('Xhosa',QLocale.Xhosa),('Yiddish',QLocale.Yiddish),('Yoruba',QLocale.Yoruba),('Zhuang',QLocale.Zhuang), ('Welsh' , QLocale.Welsh) ,(' Wolof',QLocale.Wolof),(' Xhosa',QLocale.Xhosa),(' Yiddish',QLocale.Yiddish),(' Yoruba',QLocale.Yoruba),(' Zhuang',QLocale.Zhuang),(' Zulu',QLocale.Zulu),(' Bosnian',QLocale.Bosnian),(' Divehi',QLocale.Divehi),(' Manx',QLocale.Manx),(' Cornish',QLocale.Cornish),(' Akan',QLocale.Akan),(' Konkani',QLocale.Konkani),(' Ga',QLocale.Ga),(' Igbo',QLocale.Igbo),(' Kamba',QLocale.Kamba),(' Syriac',QLocale.Syriac),(' Blin',QLocale.Blin),(' Geez',QLocale.Geez),(' Koro',QLocale.Koro),(' Sidamo',QLocale.Sidamo),(' Atsam',QLocale.Atsam),(' Tigre',QLocale.Tigre),(' Jju',QLocale.Jju),(' Friulian',QLocale.Friulian),(' Venda',QLocale.Venda),(' Ewe',QLocale.Ewe),(' Walamo',QLocale.Walamo),(' Hawaiian',QLocale.Hawaiian),(' Tyap',QLocale.Tyap),(' Chewa',QLocale.Chewa)];
+LANGAUGE_DIRECTORY = '../freeseer/frontend/default/languages';  
+MAIN_DIRECTORY = '../freeseer/frontend/default/';  
+FORM_DIRECTORY = '../freeseer/frontend/default/forms';  
+
+class MainWindow(QtGui.QMainWindow):
+ def __init__(self):
+  QtGui.QMainWindow.__init__(self)
+  self.ui = Ui_languageMainWindow()
+  self.ui.setupUi(self);
+  self.ui.language_box.addItems(map(lambda x: x[0],LANGUAGES));
+  self.current_countries = [];
+  self.connect(self.ui.language_box, QtCore.SIGNAL('currentIndexChanged(int)'), self.GetCountries)
+  self.connect(self.ui.create_button,QtCore.SIGNAL('clicked()'),self.process_language);
+  self.added_languages = [];
+
+  self.connect(self.ui.translateAction,QtCore.SIGNAL('triggered()'),self.genList);
+  self.connect(self.ui.actionExit,QtCore.SIGNAL('triggered()'),self.close);
+ 
+ def GetCountries(self,value):
+   language = LANGUAGES[value][1];
+   self.current_countries = QLocale.countriesForLanguage(language);
+   names = [];
+   for country in self.current_countries:
+     names.append(QLocale.countryToString(country))
+   self.ui.country_box.clear();
+   self.ui.country_box.addItems(names);
+   
+ def process_language(self):
+   index_lang = self.ui.language_box.currentIndex();
+   index_country = self.ui.country_box.currentIndex();
+   QLocale.setDefault(QLocale.c());
+   if(index_country!=-1):
+     q = QLocale(LANGUAGES[index_lang][1] , self.current_countries[index_country]);
+   else:
+     q = QLocale(LANGUAGES[index_lang][1]);
+   
+   if(q.name() == QLocale().c().name()):
+     QMessageBox.warning(self, "Unsupported Language", "The language you selected is currently unsupported" , QMessageBox.Ok);
+   else:
+    result = self.UpdateLanguages(q.name());
+    if(result == True):
+      self.gen_ts();
+    self.added_languages = [];
+ 
+ def genList(self):
+   self.UpdateLanguages(-1);
+   self.gen_ts();
+ 
+ def gen_ts(self):
+   self.CreateProfile();
+   system("pylupdate4 freeseer.pro");
+   print("Successfully Updated Languages");
+   
+    
+ def UpdateLanguages(self,lang_id):
+    
+   try:
+     files = listdir(LANGAUGE_DIRECTORY); 
+   except:
+     return False; 
+
+   files = map(lambda x: x.split('.') , files);
+   qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
+   languages_existing = map(lambda x: x[0].split("tr_")[1],qm_files);
+   self.added_languages = languages_existing;
+   if(lang_id!=-1):
+    if(languages_existing.count(lang_id!=0)):
+      QMessageBox.warning(self, "Language Exists", "The language you have selected already exists" , QMessageBox.Ok);
+      return False;
+     
+    self.added_languages.append(lang_id);    
+   return True;
+
+
+ def CreateProfile(self):
+  try:
+    src_files = listdir(MAIN_DIRECTORY);
+    ui_files =  listdir(FORM_DIRECTORY);
+
+
+    #Select the valid ui files that end in .ui
+    ui_files = map(lambda x:x.split('.'),ui_files);
+    ui_files = filter(lambda x: x[len(x)-1]=='ui',ui_files);
+
+    #Get the names of the ui files 
+    ui_names = map(lambda x:x[0:len(x)-1],ui_files);
+
+
+    #Select valid src files that end in .py and are not generated by the ui files
+    src_files = map(lambda x:x.split('.'),src_files);
+    src_files = filter(lambda x: x[len(x)-1]=='py',src_files);
+    src_files = filter(lambda x: ui_names.count(x[0:len(x)-1]) == 0 , src_files);
+    
+    languages = self.added_languages;
+
+
+    #Retrieve system languages 
+    project_file = open('freeseer.pro','w');  
+    #Generate the project file    
+    project_file.write('SOURCES = \\\n');
+    for i in range(0,len(src_files)):
+      end = '\\\n';
+      if(i == len(src_files)-1):
+	end = '\n';
+      project_file.write(MAIN_DIRECTORY+"/"+src_files[i][0]+'.'+src_files[i][1] + ""+ end);
+      
+    project_file.write('FORMS = \\\n');
+    for i in range(0,len(ui_files)):
+      end = '\\\n';
+      if(i == len(ui_files)-1):
+	end = '\n';
+      project_file.write(FORM_DIRECTORY+"/"+ui_files[i][0]+'.'+ui_files[i][1] + ""+ end);
+
+    project_file.write('TRANSLATIONS = \\\n');
+    for i in range(0,len(languages)):
+      end = '\\\n';
+      if(i == len(languages)-1):
+	end = '\n';
+      project_file.write(LANGAUGE_DIRECTORY+"/"+'tr_'+languages[i] + ".ts" + end);
+      
+    project_file.close();
+  except:
+     pass;
+
+
+if __name__=="__main__":
+  app = QApplication(sys.argv)
+  main = MainWindow()
+  main.show();
+  sys.exit(app.exec_())
+    

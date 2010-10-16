@@ -3,7 +3,7 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="67"/>
+        <location filename="../freeseer/frontend/default/main.py" line="66"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;, without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
         <translation type="unfinished">Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;, without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</translation>
     </message>
@@ -13,17 +13,17 @@
         <translation type="obsolete">Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="66"/>
+        <location filename="../freeseer/frontend/default/main.py" line="65"/>
         <source>Copyright (C) 2010 The Free and Open Source Software Learning Centre</source>
         <translation>Copyright (C) 2010 The Free and Open Source Software Learning Centre</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="70"/>
+        <location filename="../freeseer/frontend/default/main.py" line="69"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="75"/>
+        <location filename="../freeseer/frontend/default/main.py" line="74"/>
         <source>Record button graphics by</source>
         <translation type="unfinished">Le graphique pour le bouton d&apos;enregistrement par</translation>
     </message>
@@ -33,13 +33,13 @@
         <translation type="obsolete">Les graphismes de casque á ecouters</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="65"/>
+        <location filename="../freeseer/frontend/default/main.py" line="64"/>
         <source>AboutDialog</source>
         <comment>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="76"/>
+        <location filename="../freeseer/frontend/default/main.py" line="75"/>
         <source>Headphones graphics by</source>
         <translation type="unfinished">Graphique du casque par</translation>
     </message>
@@ -418,7 +418,7 @@ v4l2src does not work.</source>
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="248"/>
+        <location filename="../freeseer/frontend/default/main.py" line="236"/>
         <source>language_name</source>
         <translation type="unfinished">Français</translation>
     </message>

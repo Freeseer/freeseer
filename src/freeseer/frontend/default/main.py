@@ -221,16 +221,13 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
-	self.translateFile('fr');
 	
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
-	default_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system          
-	
+	default_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system         
 	active_button = None;
-	current_lang_length = 0;
-	
+	current_lang_length = 0;	
 	language_table = SystemLanguages(); #Load all languages from the language folder 
 	for language_name in language_table.languages:
 	  translator = QtCore.QTranslator(); #Create a translator to translate names
@@ -246,7 +243,7 @@ class MainApp(QtGui.QMainWindow):
 	      current_lang_length = 2;
 	      self.default_language = default_ending;
 	    else:
-	      if(language_name == default_ending.split("_")[0]):
+	      if(language_name.split("_")[0] == default_ending.split("_")[0]):
 		if(current_lang_length < 1):
 		 active_button = language_menu_button;
 		 current_lang_length = 1;
