@@ -92,22 +92,28 @@
     </property>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="updateAction">
+   <widget class="QMenu" name="menuUpdate">
     <property name="title">
-     <string>&amp;Actions</string>
+     <string>&amp;Update</string>
     </property>
     <addaction name="translateAction"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="updateAction"/>
+   <addaction name="menuUpdate"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionExit">
    <property name="text">
-    <string>&amp;Quit</string>
+    <string>&amp;Close</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">Quit</string>
+   </property>
+   <property name="toolTip">
+    <string notr="true">Quit</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Q</string>
+    <string>Ctrl+C</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ApplicationShortcut</enum>
