@@ -27,21 +27,21 @@ class MainWindow(QtGui.QMainWindow):
   self.connect(self.ui.actionExit,QtCore.SIGNAL('triggered()'),self.close);
  
  def GetCountries(self,value):
- '''
-  Returns a list of countries that are available for the given language
- '''
- language = LANGUAGES[value][1];
-   self.current_countries = QLocale.countriesForLanguage(language);
-   names = [];
-   for country in self.current_countries:
-     names.append(QLocale.countryToString(country))
-   self.ui.country_box.clear();
-   self.ui.country_box.addItems(names);
+  '''
+   Returns a list of countries that are available for the given language
+  '''
+  language = LANGUAGES[value][1];
+  self.current_countries = QLocale.countriesForLanguage(language);
+  names = [];
+  for country in self.current_countries:
+    names.append(QLocale.countryToString(country))
+  self.ui.country_box.clear();
+  self.ui.country_box.addItems(names);
    
    
  def process_language(self):
    '''
-    Generates the language file name and then calls gen_ts to create the ts files  
+   Generates the language file name and then calls gen_ts to create the ts files  
    '''
    index_lang = self.ui.language_box.currentIndex();
    index_country = self.ui.country_box.currentIndex();
@@ -103,10 +103,10 @@ class MainWindow(QtGui.QMainWindow):
 
 
  def CreateProfile(self):
-   '''
+  '''
     Create the project (.pro) file used by plyupdate to generate the 
     .ts translation files 
-   '''
+  '''
   try:
     src_files = listdir(MAIN_DIRECTORY);
     ui_files =  listdir(FORM_DIRECTORY);

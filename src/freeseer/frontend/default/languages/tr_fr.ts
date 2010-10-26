@@ -418,7 +418,7 @@ v4l2src does not work.</source>
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="236"/>
+        <location filename="../freeseer/frontend/default/main.py" line="239"/>
         <source>language_name</source>
         <translation type="unfinished">Français</translation>
     </message>
