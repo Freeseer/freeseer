@@ -50,17 +50,20 @@ Adding a Language
  Creating the translation files
 
   Go to the src folder and open the directory tools. Simply run:
-    ./add_language.sh [ language_id ] 
+     "make"
 
-  note: If you are running for the firs time please ensure that add_language.sh
-  create_language.py and create_pro.py have their permissions set to executable.
+  This will compile the gui. Once this is done you can run:
+    ./create_language
 
-  The language id can be either the first part of the locale id or 
-  the entire locale id. Use the entire locale id if the dialect is specific
-  
-  Example. For a language such as english the first part 'en' would be a good choice. However for chinese
-  there is a difference between zn_CN (simple) and zn_TW(Traditional). 
+  If you need to update the current language files open the update menu and click Update Translation Files.
+ 
+  In order to add a language select the language from the drop down menu. Once a language has been selected the list
+  of countries for that language will appear in the second drop down menu. If a language is dramatically different
+  for a specific country then this is important.  
 
+  An example of where it does not matter would be english. US english is understood by all english speakers. However
+  for languages such as chinese, this could make a difference. 
+ 
   The appropriate .ts file will be created in /src/freeseer/frontend/default/languages
   
 
