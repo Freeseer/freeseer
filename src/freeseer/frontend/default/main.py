@@ -90,11 +90,14 @@ class SystemLanguages:
     '''    
     Returns all the valid languages that have existing qm files. In other words languages 
     that can be loaded into the translator
-    '''    
-    files = listdir(LANGUAGE_DIR);
-    files = map(lambda x: x.split('.') , files);
-    qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
-    language_prefix = map(lambda x: x[0].split("tr_")[1],qm_files); 
+    ''' 
+    try:
+      files = listdir(LANGUAGE_DIR);
+      files = map(lambda x: x.split('.') , files);
+      qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
+      language_prefix = map(lambda x: x[0].split("tr_")[1],qm_files); 
+    except:
+      return [];
     return language_prefix;    
     
  
