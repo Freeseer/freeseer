@@ -36,7 +36,7 @@ lib: sipqxtglobalshortcutQxtGlobalShortcut.cpp sipqxtglobalshortcutQxtGlobalShor
 	@echo "Re-generated libraries"
 
 sipqxtglobalshortcutQxtGlobalShortcut.cpp: lib/qxtglobalshortcut.sip
-	sip -t Qt_4_4_1 -I /usr/share/sip/ -t WS_X11 -c lib/. lib/qxtglobalshortcut.sip
+	sip -t Qt_4_4_1 -I /usr/share/sip/PyQt4 -t WS_X11 -c lib/. lib/qxtglobalshortcut.sip
 
 sipqxtglobalshortcutQxtGlobalShortcut.o: lib/config.py
 	cd lib; python config.py; make
