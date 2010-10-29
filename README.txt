@@ -21,7 +21,7 @@ If you are pulling the code from git, then you should install
 the following packages first.
 
 On typical fresh Fedora Core install:
-    “sudo yum install git make PyQt4-devel python-feedparser.noarch sip-devel libqxt”    
+    “sudo yum install git make PyQt4-devel python-feedparser.noarch sip-devel libqxt libqxt-devel”    
 
 On typical fresh Ubuntu install:
     “sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev python-qt4 python-qt4-dev python-sip python-sip-dev python2.6-dev python-feedparser”
