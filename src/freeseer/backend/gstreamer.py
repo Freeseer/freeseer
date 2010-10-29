@@ -176,7 +176,7 @@ class Freeseer_gstreamer(BackendInterface):
             self.core.logger.log.debug('Recording will be scaled to %sx%s'
                 % (self.recording_width, self.recording_height))
             video_scale_cap.set_property('caps',
-                gst.caps_from_string('video/x-raw-rgb, width=%s, height=%s'
+                gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s'
                 % (self.recording_width, self.recording_height)))
 
         self.player.add(video_src,
