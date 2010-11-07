@@ -227,29 +227,43 @@ class MainApp(QtGui.QMainWindow):
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
-	default_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system         
-	active_button = None;
-	current_lang_length = 0;	
+	system_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system         
+	default_ending = "en" #English is the default ending
+	active_button = None; #the current active menu item (menu item for default language)
+	current_lang_length = 0; #Used to determine the length of prefix that match for the current default language
+	'''
+	  Current Lang Length
+	    0 -  No Common Prefix
+	    1 -  Common Language 
+	    2 -  Common Language and Country
+	'''
 	language_table = SystemLanguages(); #Load all languages from the language folder 
+	
 	for language_name in language_table.languages:
 	  translator = QtCore.QTranslator(); #Create a translator to translate names
 	  data = translator.load(LANGUAGE_DIR+'tr_'+language_name);  
 	  #Create the button
+	  if(data == False):	
+	    continue;
 	  language_display_text = translator.translate("MainApp","language_name");
-	  if(language_display_text!='' or data!=False):
+	  if(language_display_text!=''):
 	    language_menu_button = QtGui.QAction(self);
 	    language_menu_button.setCheckable(True);
 	    #Dialect handling for locales from operating system. Use possible match
-	    if(language_name == default_ending):
+	    if(language_name == system_ending): #direct match 
 	      active_button = language_menu_button;
-	      current_lang_length = 2;
-	      self.default_language = default_ending;
+	      current_lang_length = 2; 
+	      self.default_language = system_ending;
 	    else:
-	      if(language_name.split("_")[0] == default_ending.split("_")[0]):
-		if(current_lang_length < 1):
+	      if(language_name.split("_")[0] == system_ending.split("_")[0]): #If language matches but not country 
+		if(current_lang_length < 1): #if there has been no direct match yet.
 		 active_button = language_menu_button;
 		 current_lang_length = 1;
 		 self.default_language = language_name
+	      if(language_name.split("_")[0] == default_ending): #default language hit and no other language has been set
+		if(current_lang_length == 0):
+		  active_button = language_menu_button;
+		  self.default_language = language_name;  
 	  #language_name is a holder for the language name in the translation file tr_*.ts   
 	    language_menu_button.setText(language_display_text);
 	    language_menu_button.setData(language_name);
@@ -683,8 +697,8 @@ class MainApp(QtGui.QMainWindow):
       load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
       loaded = self.uiTranslator.load(load_string);
   
-      if(loaded == True or file_ending=='en'):
-      
+      if(loaded == True):
+   
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
        

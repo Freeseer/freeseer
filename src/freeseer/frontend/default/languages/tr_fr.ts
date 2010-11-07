@@ -70,12 +70,12 @@
         <translation type="unfinished">principal</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="638"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="615"/>
         <source>Record</source>
         <translation type="unfinished">Enregistrer</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="784"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="761"/>
         <source>Event</source>
         <translation type="unfinished">Événement</translation>
     </message>
@@ -85,12 +85,12 @@
         <translation type="unfinished">Tout</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1001"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="957"/>
         <source>Room</source>
         <translation type="unfinished">Salle</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="996"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="952"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>
@@ -275,7 +275,7 @@ v4l2src does not work.</source>
         <translation type="unfinished">Active Masquer Automatique</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="671"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="648"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -287,100 +287,100 @@ v4l2src does not work.</source>
     <message>
         <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="595"/>
         <source>Talks File</source>
-        <translation type="unfinished">Fichier de conférences</translation>
+        <translation type="obsolete">Fichier de conférences</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="618"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="595"/>
         <source>Shortkeys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="628"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="605"/>
         <source>File Locations</source>
         <translation type="unfinished">Lieu de dossiers</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="648"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="625"/>
         <source>Stop</source>
         <translation type="unfinished">Halte</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="686"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="663"/>
         <source>reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="693"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="670"/>
         <source>apply</source>
         <translation type="unfinished">Appliquer</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="703"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="680"/>
         <source>Talk Editor</source>
         <translation type="unfinished">Éditeur de les conférences</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="709"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="686"/>
         <source>Add Title</source>
         <translation type="unfinished">Ajouter un Titre</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="757"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="734"/>
         <source>Presenter</source>
         <translation type="unfinished">Présentateur</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="808"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="785"/>
         <source>Date&amp;Time</source>
         <translation type="unfinished">Date&amp;Heur</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="831"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="808"/>
         <source>MM/dd/yyyy hh:mm </source>
         <translation type="unfinished">MM/dd/yyyy hh:mm </translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1016"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="972"/>
         <source>Add</source>
         <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="856"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="833"/>
         <source>Cancel</source>
         <translation type="unfinished">Annuler</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="868"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="845"/>
         <source>Talks</source>
         <translation type="unfinished">Les Conférences</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="883"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="860"/>
         <source>URL</source>
         <translation type="unfinished">URL</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="896"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="873"/>
         <source>Load talks from rss</source>
         <translation type="unfinished">Chargez les conférences issu  rss</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1026"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="982"/>
         <source>Remove</source>
         <translation type="unfinished">Supprimer</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1033"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="989"/>
         <source>Reset</source>
         <translation type="unfinished">Réinitialiser</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1061"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1017"/>
         <source>&amp;File</source>
         <translation type="unfinished">&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1067"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1023"/>
         <source>Help</source>
         <translation type="unfinished">Aide</translation>
     </message>
@@ -390,27 +390,27 @@ v4l2src does not work.</source>
         <translation type="obsolete">Outils</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1089"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1045"/>
         <source>&amp;Quit</source>
         <translation type="unfinished">&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1092"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1048"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished">Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1100"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1056"/>
         <source>About</source>
         <translation type="unfinished">A propos</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1073"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1029"/>
         <source>&amp;Options</source>
         <translation type="unfinished">&amp;Configuration</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1077"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1033"/>
         <source>Language</source>
         <translation type="unfinished">Langue</translation>
     </message>
@@ -418,7 +418,7 @@ v4l2src does not work.</source>
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="239"/>
+        <location filename="../freeseer/frontend/default/main.py" line="238"/>
         <source>language_name</source>
         <translation type="unfinished">Français</translation>
     </message>
