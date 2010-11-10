@@ -30,31 +30,31 @@ class MainWindow(QtGui.QMainWindow):
   '''
    Returns a list of countries that are available for the given language
   '''
-  language = LANGUAGES[value][1];
+  language = LANGUAGES[value][1]; #Retrieve locale for language 
   self.current_countries = QLocale.countriesForLanguage(language);
   names = [];
   for country in self.current_countries:
     names.append(QLocale.countryToString(country))
   self.ui.country_box.clear();
-  self.ui.country_box.addItems(names);
+  self.ui.country_box.addItems(names); 
    
    
  def process_language(self):
    '''
    Generates the language file name and then calls gen_ts to create the ts files  
    '''
-   index_lang = self.ui.language_box.currentIndex();
-   index_country = self.ui.country_box.currentIndex();
-   QLocale.setDefault(QLocale.c());
+   index_lang = self.ui.language_box.currentIndex();  #language to be created 
+   index_country = self.ui.country_box.currentIndex(); #country where language is spoken
+   QLocale.setDefault(QLocale.c()); #set the default locale to be the system locale.
    if(index_country!=-1):
-     q = QLocale(LANGUAGES[index_lang][1] , self.current_countries[index_country]);
+     locale_to_be_created = QLocale(LANGUAGES[index_lang][1] , self.current_countries[index_country]);
    else:
-     q = QLocale(LANGUAGES[index_lang][1]);
+     locale_to_be_created = QLocale(LANGUAGES[index_lang][1]);
    
-   if(q.name() == QLocale().c().name()):
+   if(local_to_be_created.name() == QLocale().c().name()): #Check to see if the language is supported
      QMessageBox.warning(self, "Unsupported Language", "The language you selected is currently unsupported" , QMessageBox.Ok);
    else:
-    result = self.UpdateLanguages(q.name());
+    result = self.UpdateLanguages(local_to_be_created.name());
     if(result == True):
       self.gen_ts();
     self.added_languages = [];
@@ -76,8 +76,11 @@ class MainWindow(QtGui.QMainWindow):
    '''
    result = self.CreateProfile();
    if(result==True):
-    system("pylupdate4 freeseer.pro");
-    print("Successfully Updated Languages");
+    success = system("pylupdate4 freeseer.pro"); #Run language update tool 
+    if(success == 0):
+      print("Successfully Updated Languages");
+    else:
+      print("An error occured while trying to generate the language files");
    
     
  def UpdateLanguages(self,lang_id):
@@ -92,10 +95,10 @@ class MainWindow(QtGui.QMainWindow):
 
    files = map(lambda x: x.split('.') , files);
    qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
-   languages_existing = map(lambda x: x[0].split("tr_")[1],qm_files);
+   languages_existing = map(lambda x: x[0].split("tr_")[1],qm_files); #Retrieve list of languages available
    self.added_languages = languages_existing;
    if(lang_id!=-1):
-    if(languages_existing.count(lang_id!=0)):
+    if(languages_existing.count(lang_id)!=0): 
       QMessageBox.warning(self, "Language Exists", "The language you have selected already exists" , QMessageBox.Ok);
       return False;
      
@@ -130,7 +133,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
     #Retrieve system languages 
-    project_file = open('freeseer.pro','w');  
+    project_file = open('freeseer.pro','w');
     #Generate the project file    
     project_file.write('SOURCES = \\\n');
     for i in range(0,len(src_files)):
@@ -154,8 +157,11 @@ class MainWindow(QtGui.QMainWindow):
       project_file.write(LANGAUGE_DIRECTORY+"/"+'tr_'+languages[i] + ".ts" + end);
       
     project_file.close();
-  except:
-    print("Error: Updating File");
+  except IOError:
+    print("Error: Could not create/edit the project file");
+    return False;
+  except OSError:
+    print("Error: Could not search directories please ensure the directories are valid");
     return False;
   return True;  
     
