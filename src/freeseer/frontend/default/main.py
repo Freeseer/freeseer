@@ -340,6 +340,37 @@ class MainApp(QtGui.QMainWindow):
         self.core.audioFeedback(False)
         self.core.config.writeConfig()
 
+
+    # PAUL -------------------------------
+    def create_current_presentation(self):
+	'''
+	Creates a presentation object from the current showing parameters on the UI
+	'''
+	## ui title contains the room, speaker and title of the talk in the following format:
+        ## "room | speaker | title" 
+	## Must be a better way to get this data from the UI. This works for now but will
+	## fail if room, speaker or title themselves contain a " | " string.
+
+	ui_title = str(self.ui.talkList.currentText().toUtf8());
+	title_data = ui_title.split(" | ")
+
+	room = title_data[0]
+	speaker = title_data[1]	 
+	title = title_data[2]
+	event = str(self.ui.eventList.currentText().toUtf8())
+	
+	## grab the talk id based on the position of the current title text in the combobox
+	## NOTE: this talk id only corresponds to the database ID if we are recording under 
+	##	 the "ALL" Events tab.
+	talk_id = self.ui.talkList.findText(ui_title) + 1
+	
+	## create a presentation object
+	currentPresentation = Presentation(title, speaker, "", "", event, "", room, talk_id)
+
+	return currentPresentation
+	
+    #-------------------------------------
+
     def capture(self, state):
         '''
         Function for recording and stopping recording.
@@ -348,8 +379,12 @@ class MainApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-	    ## Paul: changed record parameter from "talk" (talkList) to "event" (eventList)
-            self.core.record(str(self.ui.eventList.currentText().toUtf8()))
+
+	    ## Paul: changed record parameter from "talk" string to a presentation object
+
+	    ## pass this presentation to the core record function
+            self.core.record(self.create_current_presentation())
+
  	    ##
             self.ui.recordButton.setText('Stop')
             if (not self.ui.autoHideCheckbox.isChecked()):

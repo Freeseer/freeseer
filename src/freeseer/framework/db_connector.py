@@ -43,17 +43,19 @@ class DB_Connector():
                                 Event varchar(100),
                                 Time timestamp,
                                 Room varchar(25),
-                                Id INTEGER PRIMARY KEY)'''
+                                Id INTEGER PRIMARY KEY,
+				FileNameId INTEGER)''' # PAUL : added FileNameId column 
                                 
         self._DEFAULT_TALK = '''INSERT INTO presentations VALUES
                                 ("Thanh Ha",
                                  "Intro to Freeseer",
                                  "",
                                  "",
-                                 "",
+                                 "All",
                                  "",
                                  "T105",
-                                 NULL)'''
+                                 NULL,
+				 0)''' # PAUL : added FileNameId column default entry
 
         self.configdir = configdir
         self.presentations_file = os.path.abspath("%s/presentations.db" % self.configdir)
@@ -162,28 +164,61 @@ class DB_Connector():
             title = row[1]
             room = row[6]
 
+	    ## PAUL: changed from "-" to "|" for now, since "|" is a less common character that could be used in room, speaker, or title
+	    ## 	     band aid fix until data can be gotten from the GUI more easily inside the main.py "create_current_presentation" function
             if (room == 'None'):
-                text = "%s - %s" % (speaker, title)
+                text = "%s | %s" % (speaker, title)	
             else:
-                text = "%s - %s - %s" % (room, speaker, title)
+                text = "%s | %s | %s" % (room, speaker, title)
                 
             talks_matched.append(text)
 
         return talks_matched
+
+    ## PAUL -------------------------------------------
+    def get_talk_event(self, talk_id):
+	self.cursor.execute('''SELECT Event FROM presentations WHERE Id=?''',
+				[str(talk_id)])
+	for row in self.cursor:
+            event = row[0]
+	    return event
+ 
+    def make_filename_id(self, event_name):
+	self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
+				[str(event_name)])
+
+        for row in self.cursor:
+            id = row[0]
+	    return id
+   
+    def get_filename_id(self, talk_id):
+	self.cursor.execute('''SELECT FileNameId FROM presentations WHERE Id=?''',
+			 	[str(talk_id)])
+        for row in self.cursor:
+            id = row[0]
+	    return id
         
     def add_talk(self, presentation):
         '''
         Write current presentation data on database
         '''
-        self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL)''',
+	if(presentation.event == ""):
+		presentation.event = "All"		
+
+	#create filename id (id's for each talk at an event)
+	filename_id = str(self.make_filename_id(presentation.event))
+
+        self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL,?)''',
                     [presentation.speaker,
                      presentation.title,
                      presentation.description,
                      presentation.level,
                      presentation.event,
                      presentation.time,
-                     presentation.room])
-    
+                     presentation.room,
+		     filename_id])
+
+    ## -------------------------------------------------
     def delete_talk(self, talk_id):
         self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
                                [str(talk_id)])
@@ -206,12 +241,11 @@ class DB_Connector():
         self.cursor.close()
         
     def get_presentation_id(self, presentation):
-        self.cursor.execute('''SELECT id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
+        self.cursor.execute('''SELECT Id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
                             [str(presentation.speaker),
                              str(presentation.title),
                              str(presentation.event)])
         
         for row in self.cursor:
             id = row[0]
-            
-        return id
+            return id

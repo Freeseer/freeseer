@@ -59,54 +59,63 @@ class FreeseerCore:
         resolution = self.config.resolution.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
 
-	##Paul: testing here
-	self. unique_char_ptr = 0;
-	##
         self.feedback = False
         self.spaces = False
       
         self.logger.log.info(u"Core initialized")   
-
+	
     ##Paul: Testing Here
-    def get_record_name(self, filename):
+    def check_event_name(self, presentation):
+	'''
+	Makes sure that the event name for this presentation is consistant with what's in the database.
+	'''
+	## If a presentation object (created in main.py) has the event "All", (i.e. we are recording under
+	## the "All" event tab) check to see that this presentation does not have an event in the database.
+	## If it does, use the event in the database for this presentation instead.
+	if(presentation.event == "All"):
+		presentation.event = self.db.get_talk_event(presentation.talk_id)
+
+    def get_record_name(self, presentation):
         '''
         Returns the filename to use when recording.
-        This function checks to see if a file exists and increments index until a filename 		that does not exist is found
+        This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
-        recordname = self.make_record_name(filename)
+        recordname = self.make_record_name(presentation)
         self.logger.log.debug('Set record name to ' + recordname)        
 	return recordname
 
-    def make_record_name(self, filename):
+    def make_record_name(self, presentation):
         '''
-        create an EVENT-UNIQUE.ogg record name
-        '''
-        date = datetime.date.today()
-        recordname = self.get_event_shortname(filename)+'-'+self.get_unique_id()+'.ogg'
+        Create an EVENT-UNIQUE.ogg record name
+        '''	
+	eventname = presentation.event
+	talk_id = self.db.get_presentation_id(presentation)
+	filename_id = self.db.get_filename_id(talk_id)
+	
+        recordname = self.make_event_shortname(eventname)+'-'+self.make_unique_id(filename_id)+'.ogg'
+
 	## this can probably be removed
         if self.spaces == False:
             recordname = recordname.replace(' ', '_')
 	##
         return recordname
 
-    def get_unique_id(self):
+    def make_unique_id(self, filename_id):
        	'''
 	Returns the next unique ID
 	'''	
-	## this string can also be in constructor
+	## valid characters for UNIQUE
 	unique_chars ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	##	
-	index1 = self.unique_char_ptr % unique_chars.__len__()
-	index0 = self.unique_char_ptr / unique_chars.__len__()
-	index0 = int(index0)
-	self.unique_char_ptr += 1
+
+	index1 = filename_id % unique_chars.__len__()
+	index0 = int( filename_id / unique_chars.__len__() )
 	return unique_chars[index0]+unique_chars[index1]
 
-    def get_event_shortname(self, event):
+    def make_event_shortname(self, eventname):
 	'''
 	Returns the first four characters of the event (for now).
 	'''
-	return event[0:4].upper()
+	return eventname[0:4].upper()
     ##    
 
 
@@ -260,17 +269,20 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
-    def record(self, filename='default'):
+    ## Paul: (need default parameter for presentation?)
+    def record(self, presentation):
         '''
-        Informs backend to begin recording to filename.
+        Informs backend to begin recording presentation.
         '''
-	##Paul: Testing here ("filename" is actually the "event name")
-        record_name = self.get_record_name(str(filename))
-	self.logger.log.info('Recording for event: '+filename)
-	##
+	self.check_event_name(presentation)
+        record_name = self.get_record_name(presentation)
+
+	self.logger.log.info('Recording for event: '+presentation.event)
+
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)
         self.logger.log.info('Recording started')
+    ##
 
     def stop(self):
         '''
@@ -305,7 +317,6 @@ class FreeseerCore:
         if enable == True:
             self.backend.enable_audio_feedback()
             self.logger.log.info('Audio Feedback Activated')
-        else:
             self.backend.disable_audio_feedback()
             self.logger.log.info('Audio Feedback Deactivated')
 
