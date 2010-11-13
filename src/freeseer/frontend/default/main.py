@@ -148,7 +148,6 @@ class MainApp(QtGui.QMainWindow):
         
         # connections for configure > Extra Settings > File Locations
         self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
-        self.connect(self.ui.talksFileButton, QtCore.SIGNAL('clicked()'), self.browse_talksfile)
 
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
@@ -259,7 +258,6 @@ class MainApp(QtGui.QMainWindow):
         
     def load_settings(self):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
-        self.ui.talksFileLineEdit.setText(self.core.config.talksfile)
         self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
         self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
 
@@ -271,7 +269,6 @@ class MainApp(QtGui.QMainWindow):
         
     def save_settings(self):
         self.core.config.videodir = str(self.ui.videoDirectoryLineEdit.text())
-        self.core.config.talksdir = str(self.ui.talksFileLineEdit.text())
         self.core.config.resolution = str(self.ui.resolutionComboBox.currentText())
         if self.core.config.resolution == 'NONE':
             self.core.config.resolution = '0x0'
@@ -283,12 +280,6 @@ class MainApp(QtGui.QMainWindow):
         directory = self.ui.videoDirectoryLineEdit.text()
         videodir = QtGui.QFileDialog.getExistingDirectory(self, 'Select Video Directory', directory) + '/'
         self.ui.videoDirectoryLineEdit.setText(videodir)
-        
-    def browse_talksfile(self):
-        directory = str(self.ui.talksFileLineEdit.text()).rsplit('/', 1)[0]
-        talksfile = QtGui.QFileDialog.getOpenFileName(self, 'Select Talks File', directory, 'Talks File (*.txt)')
-        if talksfile:
-            self.ui.talksFileLineEdit.setText(talksfile)
 
     def change_video_device(self):
         '''

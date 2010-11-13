@@ -1,6 +1,6 @@
 Freeseer is a video capture program capable of capturing desktop or vga
 input and mixing it with audio to create a video. It is optimized
-for capturing presentations and demonstrations.
+for capturing presentations and demonstrations at conferences.
 
 Freeseer is written in Python, and uses Qt4 for its
 GUI. It also uses Gstreamer for video/audio processing.
@@ -20,8 +20,8 @@ To develop freeseer, you require:
 If you are pulling the code from git, then you should install
 the following packages first.
 
-On typical fresh Fedora Core install:
-    “sudo yum install git make PyQt4-devel python-feedparser.noarch sip-devel libqxt”    
+On typical fresh Fedora install:
+    “sudo yum install git make PyQt4-devel python-feedparser.noarch sip-devel libqxt libqxt-devel”    
 
 On typical fresh Ubuntu install:
     “sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev python-qt4 python-qt4-dev python-sip python-sip-dev python2.6-dev python-feedparser”

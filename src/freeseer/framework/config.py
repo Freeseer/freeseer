@@ -43,7 +43,6 @@ class Config:
         
         # Set default settings
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
-        self.talksfile = os.path.abspath('%s/talks.txt' % self.configdir)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.resolution = '0x0' # no scaling for video
         self.videosrc = 'desktop'
@@ -83,7 +82,6 @@ class Config:
         # Config file exists, read in the settings
         try:
             self.videodir = config.get('Global', 'video_directory')
-            self.talksfile = config.get('Global', 'talks_file')
             self.resolution = config.get('Global', 'resolution')
             self.videosrc = config.get('lastrun', 'video_source')
             self.videodev = config.get('lastrun', 'video_device')
@@ -108,7 +106,6 @@ class Config:
         # Set config settings
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
-        config.set('Global', 'talks_file', self.talksfile)
         config.set('Global', 'resolution', self.resolution)
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
@@ -137,5 +134,4 @@ if __name__ == "__main__":
     config = Config(os.path.abspath(os.path.expanduser('~/.freeseer/')))
     print('\nTesting freeseer config file')
     print('Video Directory at %s' % config.videodir)
-    print('Talks file at %s' % config.talksfile)
     print('Test complete!')

@@ -164,7 +164,7 @@ class Freeseer_gstreamer(BackendInterface):
         video_rate_cap = gst.element_factory_make('capsfilter',
                                                     'video_rate_cap')
         video_rate_cap.set_property('caps',
-                        gst.caps_from_string('framerate=10/1'))
+                        gst.caps_from_string('video/x-raw-yuv, framerate=10/1'))
         video_scale = gst.element_factory_make('videoscale', 'video_scale')
         video_scale_cap = gst.element_factory_make('capsfilter',
                                                     'video_scale_cap')
@@ -176,7 +176,7 @@ class Freeseer_gstreamer(BackendInterface):
             self.core.logger.log.debug('Recording will be scaled to %sx%s'
                 % (self.recording_width, self.recording_height))
             video_scale_cap.set_property('caps',
-                gst.caps_from_string('video/x-raw-rgb, width=%s, height=%s'
+                gst.caps_from_string('video/x-raw-yuv, width=%s, height=%s'
                 % (self.recording_width, self.recording_height)))
 
         self.player.add(video_src,
