@@ -65,20 +65,9 @@ class FreeseerCore:
         self.logger.log.info(u"Core initialized")   
 	
     ##Paul: Testing Here
-    def check_event_name(self, presentation):
-	'''
-	Makes sure that the event name for this presentation is consistant with what's in the database.
-	'''
-	## If a presentation object (created in main.py) has the event "All", (i.e. we are recording under
-	## the "All" event tab) check to see that this presentation does not have an event in the database.
-	## If it does, use the event in the database for this presentation instead.
-	if(presentation.event == "All"):
-		presentation.event = self.db.get_talk_event(presentation.talk_id)
-
     def get_record_name(self, presentation):
         '''
         Returns the filename to use when recording.
-        This function checks to see if a file exists and increments index until a filename that does not exist is found
         '''
         recordname = self.make_record_name(presentation)
         self.logger.log.debug('Set record name to ' + recordname)        
@@ -89,9 +78,7 @@ class FreeseerCore:
         Create an EVENT-UNIQUE.ogg record name
         '''	
 	eventname = presentation.event
-	talk_id = self.db.get_presentation_id(presentation)
-	filename_id = self.db.get_filename_id(talk_id)
-	
+	filename_id = presentation.filename_id
         recordname = self.make_event_shortname(eventname)+'-'+self.make_unique_id(filename_id)+'.ogg'
 
 	## this can probably be removed
@@ -133,6 +120,24 @@ class FreeseerCore:
 
     def filter_talks_by_event_room(self, event, room):
         return self.db.filter_talks_by_event_room(event, room)
+
+    ## PAUL ---------------------------------------------
+    def get_presentation_id_by_selected_title(self, title):
+    	'''
+    	Obtains a presentation ID given a title string from the GUI
+    	'''
+	# Run a database query as if we have selected "All" Events "All" Rooms,
+        # and check the index of the title string in this list, this corresponds
+	# to the presentation id in the database. (If we add 1 to this index)
+	# NOTE: This method of obtaining the presentation id relies on the GUI
+	#	using the method: filter_talks_by_event_room() to populate it's 
+	#	talk list, since we are comparing strings created by this method.
+	talkTitles = self.db.filter_talks_by_event_room("All", "All")
+	return talkTitles.index(title) + 1
+	
+    def get_presentation(self, presentation_id):
+	return self.db.get_presentation(presentation_id)
+    ## ---------------------------------------------
 
     def add_talks_from_rss(self, rss):
         entry = str(rss)
@@ -269,14 +274,14 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
-    ## Paul: (need default parameter for presentation?)
+    ## Paul:----------------------------------------- 
+
+    ## (need default parameter for presentation?)
     def record(self, presentation):
         '''
         Informs backend to begin recording presentation.
         '''
-	self.check_event_name(presentation)
         record_name = self.get_record_name(presentation)
-
 	self.logger.log.info('Recording for event: '+presentation.event)
 
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)

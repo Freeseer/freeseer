@@ -333,32 +333,14 @@ class MainApp(QtGui.QMainWindow):
 
 
     # PAUL -------------------------------
-    def create_current_presentation(self):
+
+    def current_presentation(self):
 	'''
-	Creates a presentation object from the current showing parameters on the UI
+	Creates a presentation object from the current showing title parameter on the GUI
 	'''
-	## ui title contains the room, speaker and title of the talk in the following format:
-        ## "room | speaker | title" 
-	## Must be a better way to get this data from the UI. This works for now but will
-	## fail if room, speaker or title themselves contain a " | " string.
-
-	ui_title = str(self.ui.talkList.currentText().toUtf8());
-	title_data = ui_title.split(" | ")
-
-	room = title_data[0]
-	speaker = title_data[1]	 
-	title = title_data[2]
-	event = str(self.ui.eventList.currentText().toUtf8())
-	
-	## grab the talk id based on the position of the current title text in the combobox
-	## NOTE: this talk id only corresponds to the database ID if we are recording under 
-	##	 the "ALL" Events tab.
-	talk_id = self.ui.talkList.findText(ui_title) + 1
-	
-	## create a presentation object
-	currentPresentation = Presentation(title, speaker, "", "", event, "", room, talk_id)
-
-	return currentPresentation
+        title = str(self.ui.talkList.currentText().toUtf8())
+	p_id = self.core.get_presentation_id_by_selected_title(title)
+	return self.core.get_presentation(p_id)
 	
     #-------------------------------------
 
@@ -373,10 +355,9 @@ class MainApp(QtGui.QMainWindow):
 
 	    ## Paul: changed record parameter from "talk" string to a presentation object
 
-	    ## pass this presentation to the core record function
-            self.core.record(self.create_current_presentation())
+	    ## pass the current presentation to the core record function
+            self.core.record(self.current_presentation())	
 
- 	    ##
             self.ui.recordButton.setText('Stop')
             if (not self.ui.autoHideCheckbox.isChecked()):
                 self.statusBar().showMessage('recording...')

@@ -27,7 +27,7 @@ from sqlite3 import connect
 
 from logger import Logger
 from config import Config
-import presentation
+from presentation import *
 
 class DB_Connector():
     '''
@@ -145,7 +145,7 @@ class DB_Connector():
 
         if (event == "All"):
             if (room == "All"):
-                self.cursor.execute('''SELECT * FROM presentations''')
+                self.cursor.execute('''SELECT * FROM presentations ORDER BY Id''')
             else:
                 self.cursor.execute('''SELECT DISTINCT * FROM presentations \
                                        WHERE Room=?''', [str(room)])
@@ -164,24 +164,32 @@ class DB_Connector():
             title = row[1]
             room = row[6]
 
-	    ## PAUL: changed from "-" to "|" for now, since "|" is a less common character that could be used in room, speaker, or title
-	    ## 	     band aid fix until data can be gotten from the GUI more easily inside the main.py "create_current_presentation" function
             if (room == 'None'):
-                text = "%s | %s" % (speaker, title)	
+                text = "%s - %s" % (speaker, title)	
             else:
-                text = "%s | %s | %s" % (room, speaker, title)
+                text = "%s - %s - %s" % (room, speaker, title)
                 
             talks_matched.append(text)
 
         return talks_matched
 
     ## PAUL -------------------------------------------
-    def get_talk_event(self, talk_id):
-	self.cursor.execute('''SELECT Event FROM presentations WHERE Id=?''',
+    def get_presentation(self, talk_id):
+	self.cursor.execute('''SELECT * FROM presentations WHERE Id=?''',
 				[str(talk_id)])
 	for row in self.cursor:
-            event = row[0]
-	    return event
+            speaker 	= row[0]
+	    title 	= row[1]
+	    description = row[2]
+	    level 	= row[3]
+	    event 	= row[4]
+	    time	= row[5]
+	    room	= row[6]
+	    Id 		= row[7]
+	    filenameId  = row[8]
+    
+	    return Presentation(speaker, title, description, level, event, time, room, Id, filenameId)	 
+	    
  
     def make_filename_id(self, event_name):
 	self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
@@ -197,7 +205,7 @@ class DB_Connector():
         for row in self.cursor:
             id = row[0]
 	    return id
-        
+ 
     def add_talk(self, presentation):
         '''
         Write current presentation data on database
