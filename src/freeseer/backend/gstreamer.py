@@ -288,6 +288,7 @@ class Freeseer_gstreamer(BackendInterface):
         self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
         self.player.add(audio_src, self.audio_tee)
         audio_src.link(self.audio_tee)
+	
 
     def _clear_audio_source(self):
         audio_src = self.player.get_by_name('audio_src')
@@ -307,16 +308,33 @@ class Freeseer_gstreamer(BackendInterface):
         audioenc_codec = gst.element_factory_make(self.recording_audio_codec,
                                                         'audioenc_codec')
 
+	## PAUL-----
+	# create a VorbisTag element and merge tags from tag list
+	audioenc_tags = gst.element_factory_make("vorbistag", "audioenc_tags")
+
+	## [MERGE MODES:]
+	## 0 - GST_TAG_MERGE_UNDEFINED, 1 - GST_TAG_MERGE_REPLACE_ALL, 2 - GST_TAG_MERGE_REPLACE,  3 - GST_TAG_MERGE_APPEND 	
+	## 4 - GST_TAG_MERGE_PREPEND,   5 - GST_TAG_MERGE_KEEP,        6 - GST_TAG_MERGE_KEEP_ALL, 7 - GST_TAG_MERGE_COUNT
+
+	# set tag merge mode 
+	merge_mode = gst.TagMergeMode.__enum_values__[2]
+
+	audioenc_tags.merge_tags(self.tags, merge_mode)
+	audioenc_tags.set_tag_merge_mode(merge_mode)
+	## --------------
+
         self.player.add(audioenc_queue,
                         audioenc_convert,
                         audioenc_level,
-                        audioenc_codec)
+                        audioenc_codec,
+			audioenc_tags)
 
         gst.element_link_many(self.audio_tee,
                               audioenc_queue,
                               audioenc_convert,
                               audioenc_level,
                               audioenc_codec,
+			      audioenc_tags,
                               self.mux)
                               
     def _clear_audio_encoder(self):
@@ -327,11 +345,13 @@ class Freeseer_gstreamer(BackendInterface):
         audioenc_convert = self.player.get_by_name('audioenc_convert')
         audioenc_level = self.player.get_by_name('audioenc_level')
         audioenc_codec = self.player.get_by_name('audioenc_codec')
+	audioenc_tags = self.player.get_by_name('audioenc_tags')
 
         self.player.remove(audioenc_queue,
                            audioenc_convert,
                            audioenc_level,
-                           audioenc_codec)
+                           audioenc_codec,
+			   audioenc_tags)
 
     def _set_audio_feedback(self):
         afqueue = gst.element_factory_make('queue', 'afqueue')
@@ -428,6 +448,22 @@ class Freeseer_gstreamer(BackendInterface):
 
         del self.test_video
         del self.test_audio
+
+    ## PAUL: -------------------------------------
+    def populate_metadata(self, data):
+	'''
+	Populate global tag list variable with file metadata for
+	vorbistag audio element
+	'''
+	self.tags = gst.TagList()
+	
+	for tag in data.keys():
+		if(gst.tag_exists(tag)):
+			self.tags[tag] = data[tag]
+		else:
+			self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered in gstreamer.")
+		
+    ## -------------------------------------------
 
     def record(self, filename):
         '''

@@ -188,7 +188,7 @@ class DB_Connector():
 	    Id 		= row[7]
 	    filenameId  = row[8]
     
-	    return Presentation(speaker, title, description, level, event, time, room, Id, filenameId)	 
+	    return Presentation(title, speaker, description, level, event, time, room, Id, filenameId)	 
 	    
  
     def make_filename_id(self, event_name):

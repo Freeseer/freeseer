@@ -274,20 +274,39 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
-    ## Paul:----------------------------------------- 
+    ## Paul:-----------------------------------------
+    def prepare_metadata(self, presentation):
+	'''
+	Returns a dictionary of tags and tag values for
+	the currently playing presentation.
+	'''
+	
+	date = time.localtime()
+	return { "title" : presentation.title,
+		 "artist" : presentation.speaker,
+		 "performer" : presentation.speaker,
+		 "album" : presentation.event,
+		 "location" : presentation.room,
+		 "date" : str(date.tm_year) + '-' + str(date.tm_mon) + '-' + str(date.tm_mday),
+		 "comment" : presentation.description}
 
-    ## (need default parameter for presentation?)
     def record(self, presentation):
         '''
         Informs backend to begin recording presentation.
         '''
+	
+	#create a filename to record to
         record_name = self.get_record_name(presentation)
 	self.logger.log.info('Recording for event: '+presentation.event)
+
+	#populate metadata
+	data = self.prepare_metadata(presentation)
+	self.backend.populate_metadata(data)
 
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)
         self.logger.log.info('Recording started')
-    ##
+    ## --------------------
 
     def stop(self):
         '''
