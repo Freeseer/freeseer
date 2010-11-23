@@ -51,10 +51,10 @@ class MainWindow(QtGui.QMainWindow):
    else:
      locale_to_be_created = QLocale(LANGUAGES[index_lang][1]);
    
-   if(local_to_be_created.name() == QLocale().c().name()): #Check to see if the language is supported
+   if(locale_to_be_created.name() == QLocale().c().name()): #Check to see if the language is supported
      QMessageBox.warning(self, "Unsupported Language", "The language you selected is currently unsupported" , QMessageBox.Ok);
    else:
-    result = self.UpdateLanguages(local_to_be_created.name());
+    result = self.UpdateLanguages(locale_to_be_created.name());
     if(result == True):
       self.gen_ts();
     self.added_languages = [];
