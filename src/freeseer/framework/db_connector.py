@@ -196,7 +196,7 @@ class DB_Connector():
 				[str(event_name)])
 
         for row in self.cursor:
-            id = row[0]
+ 	    id = row[0]
 	    return id
    
     def get_filename_id(self, talk_id):

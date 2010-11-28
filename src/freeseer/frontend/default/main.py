@@ -336,7 +336,7 @@ class MainApp(QtGui.QMainWindow):
 
     def current_presentation(self):
 	'''
-	Creates a presentation object from the current showing title parameter on the GUI
+	Creates a presentation object from the currently selected title parameter on the GUI
 	'''
         title = str(self.ui.talkList.currentText().toUtf8())
 	p_id = self.core.get_presentation_id_by_selected_title(title)

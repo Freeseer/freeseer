@@ -461,7 +461,7 @@ class Freeseer_gstreamer(BackendInterface):
 		if(gst.tag_exists(tag)):
 			self.tags[tag] = data[tag]
 		else:
-			self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered in gstreamer.")
+			self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
 		
     ## -------------------------------------------
 

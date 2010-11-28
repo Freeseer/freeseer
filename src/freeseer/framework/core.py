@@ -64,22 +64,49 @@ class FreeseerCore:
       
         self.logger.log.info(u"Core initialized")   
 	
-    ##Paul: Testing Here
+    ##Paul: ---------------
+    def duplicate_exists(self, recordname):
+	'''
+	Checks to see if a record name already exists in the directory.
+	'''
+	filename = self.config.videodir + '/' + recordname
+	try:
+		result = open(filename, 'r')
+	except IOError:
+		return False
+	return True
+	
+    def add_duplicate_count(self, recordname, count):
+	'''
+	Adds "-NN" ending to duplicated filenames in the directory.
+	'''
+	ending = self.make_id_from_string(count, '0123456789')
+	return recordname + "-" + ending
+
     def get_record_name(self, presentation):
         '''
         Returns the filename to use when recording.
         '''
         recordname = self.make_record_name(presentation)
+
+	count = 0
+	tempname = recordname
+	while(self.duplicate_exists(tempname + ".ogg")):
+	    tempname = recordname
+	    tempname = self.add_duplicate_count(tempname, count)
+	    count+=1
+	
+	recordname = tempname + ".ogg"
         self.logger.log.debug('Set record name to ' + recordname)        
 	return recordname
 
     def make_record_name(self, presentation):
         '''
-        Create an EVENT-UNIQUE.ogg record name
+        Create an 'EVENT-UNIQUE' record name
         '''	
 	eventname = presentation.event
 	filename_id = presentation.filename_id
-        recordname = self.make_event_shortname(eventname)+'-'+self.make_unique_id(filename_id)+'.ogg'
+        recordname = self.make_event_shortname(eventname)+'-'+self.make_id_from_string(filename_id)
 
 	## this can probably be removed
         if self.spaces == False:
@@ -87,23 +114,21 @@ class FreeseerCore:
 	##
         return recordname
 
-    def make_unique_id(self, filename_id):
+    def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
        	'''
-	Returns the next unique ID
+	Returns an "NN" id given an integer and a string of valid characters for the id
+	('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
 	'''	
-	## valid characters for UNIQUE
-	unique_chars ='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-	index1 = filename_id % unique_chars.__len__()
-	index0 = int( filename_id / unique_chars.__len__() )
-	return unique_chars[index0]+unique_chars[index1]
+	index1 = position % string.__len__()
+	index0 = int( position / string.__len__() )
+	return string[index0]+string[index1]
 
     def make_event_shortname(self, eventname):
 	'''
 	Returns the first four characters of the event (for now).
 	'''
 	return eventname[0:4].upper()
-    ##    
+    ## ---------------
 
 
     ##
@@ -280,14 +305,12 @@ class FreeseerCore:
 	Returns a dictionary of tags and tag values for
 	the currently playing presentation.
 	'''
-	
-	date = time.localtime()
 	return { "title" : presentation.title,
 		 "artist" : presentation.speaker,
 		 "performer" : presentation.speaker,
 		 "album" : presentation.event,
 		 "location" : presentation.room,
-		 "date" : str(date.tm_year) + '-' + str(date.tm_mon) + '-' + str(date.tm_mday),
+		 "date" : str(datetime.date.today()),
 		 "comment" : presentation.description}
 
     def record(self, presentation):
