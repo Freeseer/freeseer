@@ -41,7 +41,6 @@ RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
 HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
-
 LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
 	
 
@@ -228,9 +227,9 @@ class MainApp(QtGui.QMainWindow):
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
 	system_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system         
-	default_ending = "en" #English is the default ending
 	active_button = None; #the current active menu item (menu item for default language)
 	current_lang_length = 0; #Used to determine the length of prefix that match for the current default language
+	default_ending = self.default_language;
 	'''
 	  Current Lang Length
 	    0 -  No Common Prefix
@@ -269,8 +268,9 @@ class MainApp(QtGui.QMainWindow):
 	    language_menu_button.setData(language_name);
 	    self.ui.menuLanguage.addAction(language_menu_button); 
 	    self.langActionGroup.addAction(language_menu_button);	 
-	active_button.setChecked(True);
-	    
+	if(active_button!=None):	
+	  active_button.setChecked(True);
+	  print('There are no languages available in the system except english. Please check the language directory to ensure qm files exist');  
 	#Set up the event handling for each of the menu items  
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
 	
