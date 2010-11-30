@@ -433,7 +433,7 @@ class MainApp(QtGui.QMainWindow):
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
             self.core.record(str(self.ui.talkList.currentText().toUtf8()))
-            self.ui.recordButton.setText('Stop')
+            self.ui.recordButton.setText(self.tr('Stop'))
             if (not self.ui.autoHideCheckbox.isChecked()):
                 self.statusBar().showMessage('recording...')
             else:
@@ -446,7 +446,7 @@ class MainApp(QtGui.QMainWindow):
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.core.stop()
-            self.ui.recordButton.setText('Record')
+            self.ui.recordButton.setText(self.tr('Record'))
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
 
