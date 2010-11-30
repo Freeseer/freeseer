@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="de_DE" sourcelanguage="en_US">
+<!DOCTYPE TS><TS version="1.1" language="de_DE">
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="64"/>
+        <location filename="../freeseer/frontend/default/main.py" line="63"/>
         <source>AboutDialog</source>
         <comment>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</comment>
         <translation>Freeseer ist ein Videoaufnahme Dienstprogramm, das Vorträge aufnehmen kann. Es nimmt Videoquellen wie USB, Firewire, oder lokale Desktop-Computer auf und mit Audio vermischt um ein Video zum produzieren</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="65"/>
+        <location filename="../freeseer/frontend/default/main.py" line="64"/>
         <source>Copyright (C) 2010 The Free and Open Source Software Learning Centre</source>
         <translation>Copyright (C) 2010 The Free and Open Source Software Learning Centre</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="66"/>
+        <location filename="../freeseer/frontend/default/main.py" line="65"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;, without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
         <translation>Freeseer ist unter die GPL Version 3 lizenziert.Die Software ist sowieso schon mitgeliefert, ohne irgendeine ausdrückende oder impliziert Garantie.Unter keinen Umständen sind die Autoren verantwortlich fuer den Schadenersatz, der aufkommend aus Softwarebenutzen könnten.</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="69"/>
+        <location filename="../freeseer/frontend/default/main.py" line="68"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="74"/>
+        <location filename="../freeseer/frontend/default/main.py" line="73"/>
         <source>Record button graphics by</source>
         <translation>Aufnahmenknopfgrafiks von</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="75"/>
+        <location filename="../freeseer/frontend/default/main.py" line="74"/>
         <source>Headphones graphics by</source>
         <translation>Kopfhörergrafiks von</translation>
     </message>
@@ -409,9 +408,19 @@ funktioniert nicht.</translation>
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="248"/>
+        <location filename="../freeseer/frontend/default/main.py" line="247"/>
         <source>language_name</source>
         <translation>Deutsch</translation>
+    </message>
+    <message>
+        <location filename="../freeseer/frontend/default/main.py" line="436"/>
+        <source>Stop</source>
+        <translation type="unfinished">Halt</translation>
+    </message>
+    <message>
+        <location filename="../freeseer/frontend/default/main.py" line="449"/>
+        <source>Record</source>
+        <translation type="unfinished">Aufnahme</translation>
     </message>
 </context>
 </TS>
