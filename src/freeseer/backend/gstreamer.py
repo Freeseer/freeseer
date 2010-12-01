@@ -308,7 +308,6 @@ class Freeseer_gstreamer(BackendInterface):
         audioenc_codec = gst.element_factory_make(self.recording_audio_codec,
                                                         'audioenc_codec')
 
-	## PAUL-----
 	# create a VorbisTag element and merge tags from tag list
 	audioenc_tags = gst.element_factory_make("vorbistag", "audioenc_tags")
 
@@ -321,7 +320,6 @@ class Freeseer_gstreamer(BackendInterface):
 
 	audioenc_tags.merge_tags(self.tags, merge_mode)
 	audioenc_tags.set_tag_merge_mode(merge_mode)
-	## --------------
 
         self.player.add(audioenc_queue,
                         audioenc_convert,
@@ -449,7 +447,6 @@ class Freeseer_gstreamer(BackendInterface):
         del self.test_video
         del self.test_audio
 
-    ## PAUL: -------------------------------------
     def populate_metadata(self, data):
 	'''
 	Populate global tag list variable with file metadata for
@@ -462,8 +459,6 @@ class Freeseer_gstreamer(BackendInterface):
 			self.tags[tag] = data[tag]
 		else:
 			self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
-		
-    ## -------------------------------------------
 
     def record(self, filename):
         '''

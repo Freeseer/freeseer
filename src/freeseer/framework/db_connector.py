@@ -44,7 +44,7 @@ class DB_Connector():
                                 Time timestamp,
                                 Room varchar(25),
                                 Id INTEGER PRIMARY KEY,
-				FileNameId INTEGER)''' # PAUL : added FileNameId column 
+				FileNameId INTEGER)'''
                                 
         self._DEFAULT_TALK = '''INSERT INTO presentations VALUES
                                 ("Thanh Ha",
@@ -55,7 +55,7 @@ class DB_Connector():
                                  "",
                                  "T105",
                                  NULL,
-				 0)''' # PAUL : added FileNameId column default entry
+				 0)'''
 
         self.configdir = configdir
         self.presentations_file = os.path.abspath("%s/presentations.db" % self.configdir)
@@ -92,13 +92,13 @@ class DB_Connector():
         '''
         talk_titles = []
  
-        self.cursor.execute('''SELECT * FROM presentations''')
+        self.cursor.execute('''SELECT Speaker, Title, Room, Id FROM presentations''')
 
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
-            room = row[6]
-            talk_id = row[7]
+            room = row[2]
+            talk_id = row[3]
             talk_titles.append([speaker, title, room, talk_id])
             
         self.cursor.close()
@@ -145,24 +145,24 @@ class DB_Connector():
 
         if (event == "All"):
             if (room == "All"):
-                self.cursor.execute('''SELECT * FROM presentations ORDER BY Id''')
+                self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
             else:
-                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
                                        WHERE Room=?''', [str(room)])
             
         else:
             if (room == "All"):
-                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
                                        WHERE Event=?''', [str(event)])
             else:
-                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
                                        WHERE Event=? and Room=?''', [str(event), str(room)])
 
         # Prepare list to be returned
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
-            room = row[6]
+            room = row[2]
 
             if (room == 'None'):
                 text = "%s - %s" % (speaker, title)	
@@ -173,9 +173,17 @@ class DB_Connector():
 
         return talks_matched
 
-    ## PAUL -------------------------------------------
     def get_presentation(self, talk_id):
-	self.cursor.execute('''SELECT * FROM presentations WHERE Id=?''',
+	self.cursor.execute('''SELECT Speaker, 
+				      Title, 
+				      Description, 
+			              Level, 
+				      Event, 
+				      Time, 
+				      Room, 
+				      Id, 
+				      FileNameId 
+				FROM presentations WHERE Id=?''',
 				[str(talk_id)])
 	for row in self.cursor:
             speaker 	= row[0]
@@ -226,7 +234,6 @@ class DB_Connector():
                      presentation.room,
 		     filename_id])
 
-    ## -------------------------------------------------
     def delete_talk(self, talk_id):
         self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
                                [str(talk_id)])

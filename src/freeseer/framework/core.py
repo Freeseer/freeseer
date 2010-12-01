@@ -64,7 +64,6 @@ class FreeseerCore:
       
         self.logger.log.info(u"Core initialized")   
 	
-    ##Paul: ---------------
     def duplicate_exists(self, recordname):
 	'''
 	Checks to see if a record name already exists in the directory.
@@ -108,10 +107,9 @@ class FreeseerCore:
 	filename_id = presentation.filename_id
         recordname = self.make_event_shortname(eventname)+'-'+self.make_id_from_string(filename_id)
 
-	## this can probably be removed
         if self.spaces == False:
             recordname = recordname.replace(' ', '_')
-	##
+
         return recordname
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
@@ -121,6 +119,16 @@ class FreeseerCore:
 	'''	
 	index1 = position % string.__len__()
 	index0 = int( position / string.__len__() )
+
+	if(index0 >= string.__len__() ):
+		self.logger.log.debug('WARNING: Unable to generate unique filename.')
+		# Return a unique 2 character string which will not overwrite previous files.
+		# There is a possibility of infinite looping on testing duplicates once
+		# all possible UNIQUE's and NN's are exhausted if all the files are kept 
+		# in the same directory.
+		# (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
+		return "##" 
+
 	return string[index0]+string[index1]
 
     def make_event_shortname(self, eventname):
@@ -128,8 +136,6 @@ class FreeseerCore:
 	Returns the first four characters of the event (for now).
 	'''
 	return eventname[0:4].upper()
-    ## ---------------
-
 
     ##
     ## Database Functions
@@ -146,7 +152,6 @@ class FreeseerCore:
     def filter_talks_by_event_room(self, event, room):
         return self.db.filter_talks_by_event_room(event, room)
 
-    ## PAUL ---------------------------------------------
     def get_presentation_id_by_selected_title(self, title):
     	'''
     	Obtains a presentation ID given a title string from the GUI
@@ -162,7 +167,6 @@ class FreeseerCore:
 	
     def get_presentation(self, presentation_id):
 	return self.db.get_presentation(presentation_id)
-    ## ---------------------------------------------
 
     def add_talks_from_rss(self, rss):
         entry = str(rss)
@@ -299,11 +303,10 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
-    ## Paul:-----------------------------------------
     def prepare_metadata(self, presentation):
 	'''
-	Returns a dictionary of tags and tag values for
-	the currently playing presentation.
+	Returns a dictionary of tags and tag values to be used
+	to populate the current recording's file metadata.
 	'''
 	return { "title" : presentation.title,
 		 "artist" : presentation.speaker,
@@ -322,14 +325,13 @@ class FreeseerCore:
         record_name = self.get_record_name(presentation)
 	self.logger.log.info('Recording for event: '+presentation.event)
 
-	#populate metadata
+	#prepare metadata
 	data = self.prepare_metadata(presentation)
 	self.backend.populate_metadata(data)
 
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)
         self.logger.log.info('Recording started')
-    ## --------------------
 
     def stop(self):
         '''
@@ -364,6 +366,7 @@ class FreeseerCore:
         if enable == True:
             self.backend.enable_audio_feedback()
             self.logger.log.info('Audio Feedback Activated')
+	else:
             self.backend.disable_audio_feedback()
             self.logger.log.info('Audio Feedback Deactivated')
 

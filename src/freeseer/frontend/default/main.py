@@ -331,18 +331,13 @@ class MainApp(QtGui.QMainWindow):
         self.core.audioFeedback(False)
         self.core.config.writeConfig()
 
-
-    # PAUL -------------------------------
-
     def current_presentation(self):
 	'''
-	Creates a presentation object from the currently selected title parameter on the GUI
+	Creates a presentation object from the currently selected title on the GUI
 	'''
         title = str(self.ui.talkList.currentText().toUtf8())
 	p_id = self.core.get_presentation_id_by_selected_title(title)
 	return self.core.get_presentation(p_id)
-	
-    #-------------------------------------
 
     def capture(self, state):
         '''
@@ -353,9 +348,6 @@ class MainApp(QtGui.QMainWindow):
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
 
-	    ## Paul: changed record parameter from "talk" string to a presentation object
-
-	    ## pass the current presentation to the core record function
             self.core.record(self.current_presentation())	
 
             self.ui.recordButton.setText('Stop')
