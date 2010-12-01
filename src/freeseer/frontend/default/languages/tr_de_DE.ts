@@ -415,12 +415,12 @@ funktioniert nicht.</translation>
     <message>
         <location filename="../freeseer/frontend/default/main.py" line="436"/>
         <source>Stop</source>
-        <translation type="unfinished">Halt</translation>
+        <translation>Halt</translation>
     </message>
     <message>
         <location filename="../freeseer/frontend/default/main.py" line="449"/>
         <source>Record</source>
-        <translation type="unfinished">Aufnahme</translation>
+        <translation>Aufnahme</translation>
     </message>
 </context>
 </TS>
