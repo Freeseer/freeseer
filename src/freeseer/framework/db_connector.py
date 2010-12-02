@@ -186,17 +186,17 @@ class DB_Connector():
 				FROM presentations WHERE Id=?''',
 				[str(talk_id)])
 	for row in self.cursor:
-            speaker 	= row[0]
-	    title 	= row[1]
-	    description = row[2]
-	    level 	= row[3]
-	    event 	= row[4]
-	    time	= row[5]
-	    room	= row[6]
-	    Id 		= row[7]
-	    filenameId  = row[8]
+            speaker 	 = row[0]
+	    title 	 = row[1]
+	    description  = row[2]
+	    level 	 = row[3]
+	    event 	 = row[4]
+	    time	 = row[5]
+	    room	 = row[6]
+	    talk_id 	 = row[7]
+	    filename_id  = row[8]
     
-	    return Presentation(title, speaker, description, level, event, time, room, Id, filenameId)	 
+	    return Presentation(title, speaker, description, level, event, time, room, talk_id, filename_id)	 
 	    
  
     def make_filename_id(self, event_name):

@@ -311,11 +311,7 @@ class Freeseer_gstreamer(BackendInterface):
 	# create a VorbisTag element and merge tags from tag list
 	audioenc_tags = gst.element_factory_make("vorbistag", "audioenc_tags")
 
-	## [MERGE MODES:]
-	## 0 - GST_TAG_MERGE_UNDEFINED, 1 - GST_TAG_MERGE_REPLACE_ALL, 2 - GST_TAG_MERGE_REPLACE,  3 - GST_TAG_MERGE_APPEND 	
-	## 4 - GST_TAG_MERGE_PREPEND,   5 - GST_TAG_MERGE_KEEP,        6 - GST_TAG_MERGE_KEEP_ALL, 7 - GST_TAG_MERGE_COUNT
-
-	# set tag merge mode 
+	# set tag merge mode to GST_TAG_MERGE_REPLACE
 	merge_mode = gst.TagMergeMode.__enum_values__[2]
 
 	audioenc_tags.merge_tags(self.tags, merge_mode)

@@ -74,13 +74,6 @@ class FreeseerCore:
 	except IOError:
 		return False
 	return True
-	
-    def add_duplicate_count(self, recordname, count):
-	'''
-	Adds "-NN" ending to duplicated filenames in the directory.
-	'''
-	ending = self.make_id_from_string(count, '0123456789')
-	return recordname + "-" + ending
 
     def get_record_name(self, presentation):
         '''
@@ -90,9 +83,9 @@ class FreeseerCore:
 
 	count = 0
 	tempname = recordname
+	# check if this record name already exists in this directory and add "-NN" ending if so.
 	while(self.duplicate_exists(tempname + ".ogg")):
-	    tempname = recordname
-	    tempname = self.add_duplicate_count(tempname, count)
+	    tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
 	    count+=1
 	
 	recordname = tempname + ".ogg"
