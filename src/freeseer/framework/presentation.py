@@ -30,7 +30,7 @@ class Presentation():
     and its database related operations
     '''
 
-    def __init__(self, title, speaker=None, description="", level="", event="", time="", room=None, talk_id=None):
+    def __init__(self, title, speaker=None, description="", level="", event="", time="", room=None, talk_id=None, filename_id=None):
         
         '''
         Initialize a presentation instance
@@ -43,4 +43,5 @@ class Presentation():
         self.time = time
         self.room = room
         self.talk_id = talk_id
+	self.filename_id = filename_id
 

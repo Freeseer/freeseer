@@ -424,6 +424,14 @@ class MainApp(QtGui.QMainWindow):
         self.core.audioFeedback(False)
         self.core.config.writeConfig()
 
+    def current_presentation(self):
+	'''
+	Creates a presentation object from the currently selected title on the GUI
+	'''
+        title = str(self.ui.talkList.currentText().toUtf8())
+	p_id = self.core.get_presentation_id_by_selected_title(title)
+	return self.core.get_presentation(p_id)
+
     def capture(self, state):
         '''
         Function for recording and stopping recording.
@@ -432,8 +440,11 @@ class MainApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-            self.core.record(str(self.ui.talkList.currentText().toUtf8()))
+
+
+            self.core.record(self.current_presentation())	
             self.ui.recordButton.setText(self.tr('Stop'))
+
             if (not self.ui.autoHideCheckbox.isChecked()):
                 self.statusBar().showMessage('recording...')
             else:

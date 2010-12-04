@@ -27,7 +27,7 @@ from sqlite3 import connect
 
 from logger import Logger
 from config import Config
-import presentation
+from presentation import *
 
 class DB_Connector():
     '''
@@ -43,7 +43,8 @@ class DB_Connector():
                                 Event varchar(100),
                                 Time timestamp,
                                 Room varchar(25),
-                                Id INTEGER PRIMARY KEY)'''
+                                Id INTEGER PRIMARY KEY,
+				FileNameId INTEGER)'''
                                 
         self._DEFAULT_TALK = '''INSERT INTO presentations VALUES
                                 ("Thanh Ha",
@@ -53,7 +54,8 @@ class DB_Connector():
                                  "",
                                  "",
                                  "T105",
-                                 NULL)'''
+                                 NULL,
+				 0)'''
 
         self.configdir = configdir
         self.presentations_file = os.path.abspath("%s/presentations.db" % self.configdir)
@@ -90,13 +92,13 @@ class DB_Connector():
         '''
         talk_titles = []
  
-        self.cursor.execute('''SELECT * FROM presentations''')
+        self.cursor.execute('''SELECT Speaker, Title, Room, Id FROM presentations''')
 
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
-            room = row[6]
-            talk_id = row[7]
+            room = row[2]
+            talk_id = row[3]
             talk_titles.append([speaker, title, room, talk_id])
             
         self.cursor.close()
@@ -143,47 +145,92 @@ class DB_Connector():
 
         if (event == "All"):
             if (room == "All"):
-                self.cursor.execute('''SELECT * FROM presentations''')
+                self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
             else:
-                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
                                        WHERE Room=?''', [str(room)])
             
         else:
             if (room == "All"):
-                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
                                        WHERE Event=?''', [str(event)])
             else:
-                self.cursor.execute('''SELECT DISTINCT * FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
                                        WHERE Event=? and Room=?''', [str(event), str(room)])
 
         # Prepare list to be returned
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
-            room = row[6]
+            room = row[2]
 
             if (room == 'None'):
-                text = "%s - %s" % (speaker, title)
+                text = "%s - %s" % (speaker, title)	
             else:
                 text = "%s - %s - %s" % (room, speaker, title)
                 
             talks_matched.append(text)
 
         return talks_matched
-        
+
+    def get_presentation(self, talk_id):
+	self.cursor.execute('''SELECT Speaker, 
+				      Title, 
+				      Description, 
+			              Level, 
+				      Event, 
+				      Time, 
+				      Room, 
+				      Id, 
+				      FileNameId 
+				FROM presentations WHERE Id=?''',
+				[str(talk_id)])
+	for row in self.cursor:
+            speaker 	 = row[0]
+	    title 	 = row[1]
+	    description  = row[2]
+	    level 	 = row[3]
+	    event 	 = row[4]
+	    time	 = row[5]
+	    room	 = row[6]
+	    talk_id 	 = row[7]
+	    filename_id  = row[8]
+    
+	    return Presentation(title, speaker, description, level, event, time, room, talk_id, filename_id)	 
+	    
+ 
+    def make_filename_id(self, event_name):
+	self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
+				[str(event_name)])
+
+        for row in self.cursor:
+ 	    id = row[0]
+	    return id
+   
+    def get_filename_id(self, talk_id):
+	self.cursor.execute('''SELECT FileNameId FROM presentations WHERE Id=?''',
+			 	[str(talk_id)])
+        for row in self.cursor:
+            id = row[0]
+	    return id
+ 
     def add_talk(self, presentation):
         '''
         Write current presentation data on database
-        '''
-        self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL)''',
+        '''		
+	#create filename id (id's for each talk at an event)
+	filename_id = str(self.make_filename_id(presentation.event))
+
+        self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL,?)''',
                     [presentation.speaker,
                      presentation.title,
                      presentation.description,
                      presentation.level,
                      presentation.event,
                      presentation.time,
-                     presentation.room])
-    
+                     presentation.room,
+		     filename_id])
+
     def delete_talk(self, talk_id):
         self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
                                [str(talk_id)])
@@ -206,12 +253,11 @@ class DB_Connector():
         self.cursor.close()
         
     def get_presentation_id(self, presentation):
-        self.cursor.execute('''SELECT id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
+        self.cursor.execute('''SELECT Id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
                             [str(presentation.speaker),
                              str(presentation.title),
                              str(presentation.event)])
         
         for row in self.cursor:
             id = row[0]
-            
-        return id
+            return id
