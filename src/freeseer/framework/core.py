@@ -100,6 +100,9 @@ class FreeseerCore:
 	title = self.make_shortname(presentation.title)
 	unique = self.make_id_from_string(presentation.filename_id)
  
+	if(event == ""):
+		return title+"-"+unique
+
 	return event+"-"+title+"-"+unique
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
