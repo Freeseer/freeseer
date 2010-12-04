@@ -316,7 +316,6 @@ class FreeseerCore:
 	
 	#create a filename to record to
         record_name = self.get_record_name(presentation)
-	self.logger.log.info('Recording for event: '+presentation.event)
 
 	#prepare metadata
 	data = self.prepare_metadata(presentation)
