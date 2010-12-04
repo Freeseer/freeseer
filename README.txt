@@ -37,7 +37,7 @@ This will compile the gui files. Once this completes, you can run:
 
 This starts up the Freeseer GUI.
 
--------------------------------------------------------------------------
+--------------------------------------------------------------------------
 
 Read more about hardware capture options here: 
     http://wiki.github.com/fosslc/freeseer/capture-hardware
