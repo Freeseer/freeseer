@@ -94,16 +94,13 @@ class FreeseerCore:
 
     def make_record_name(self, presentation):
         '''
-        Create an 'EVENT-UNIQUE' record name
+        Create an 'EVENT-TITLE-UNIQUE' record name
         '''	
-	eventname = presentation.event
-	filename_id = presentation.filename_id
-        recordname = self.make_event_shortname(eventname)+'-'+self.make_id_from_string(filename_id)
-
-        if self.spaces == False:
-            recordname = recordname.replace(' ', '_')
-
-        return recordname
+	event = self.make_shortname(presentation.event)
+	title = self.make_shortname(presentation.title)
+	unique = self.make_id_from_string(presentation.filename_id)
+ 
+	return event+"-"+title+"-"+unique
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
        	'''
@@ -124,11 +121,12 @@ class FreeseerCore:
 
 	return string[index0]+string[index1]
 
-    def make_event_shortname(self, eventname):
+    def make_shortname(self, string):
 	'''
-	Returns the first four characters of the event (for now).
+	Returns the first four characters of a string, excluding spaces.
 	'''
-	return eventname[0:4].upper()
+	string = string.replace(" ", "")
+	return string[0:4].upper()
 
     ##
     ## Database Functions

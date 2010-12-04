@@ -51,7 +51,7 @@ class DB_Connector():
                                  "Intro to Freeseer",
                                  "",
                                  "",
-                                 "All",
+                                 "",
                                  "",
                                  "T105",
                                  NULL,
@@ -217,10 +217,7 @@ class DB_Connector():
     def add_talk(self, presentation):
         '''
         Write current presentation data on database
-        '''
-	if(presentation.event == ""):
-		presentation.event = "All"		
-
+        '''		
 	#create filename id (id's for each talk at an event)
 	filename_id = str(self.make_filename_id(presentation.event))
 
