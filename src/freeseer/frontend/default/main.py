@@ -125,6 +125,7 @@ class MainApp(QtGui.QMainWindow):
         #Setup the translator and populate the language menu under options
 	self.uiTranslator = QtCore.QTranslator();
 	self.langActionGroup = QtGui.QActionGroup(self);
+	QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
 	self.setupLanguageMenu();
 	
         # get available audio sources

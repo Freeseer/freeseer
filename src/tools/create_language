@@ -134,7 +134,8 @@ class MainWindow(QtGui.QMainWindow):
 
     #Retrieve system languages 
     project_file = open('freeseer.pro','w');
-    #Generate the project file    
+    #Generate the project file   
+    project_file.write('CODECFORTR = UTF-8\n');
     project_file.write('SOURCES = \\\n');
     for i in range(0,len(src_files)):
       end = '\\\n';

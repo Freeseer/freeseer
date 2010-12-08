@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="en_CA">
+<!DOCTYPE TS><TS version="1.1" language="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -51,7 +50,7 @@
 <context>
     <name>FreeseerMainWindow</name>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="972"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="993"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
@@ -71,12 +70,12 @@
         <translation type="unfinished">Espace</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1023"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1044"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="957"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="978"/>
         <source>Room</source>
         <translation>Salle</translation>
     </message>
@@ -96,12 +95,12 @@
         <translation>principal</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1017"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1038"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1045"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1066"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
@@ -111,7 +110,7 @@
         <translation>Audio Source</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1056"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1077"/>
         <source>About</source>
         <translation>A propos</translation>
     </message>
@@ -121,7 +120,7 @@
         <translation>Événement</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="989"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1010"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
@@ -131,7 +130,7 @@
         <translation>Les Conférences</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="952"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="973"/>
         <source>Title</source>
         <translation>Titre</translation>
     </message>
@@ -176,7 +175,7 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1048"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1069"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
@@ -196,7 +195,7 @@
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="982"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1003"/>
         <source>Remove</source>
         <translation>Supprimer</translation>
     </message>
@@ -211,7 +210,7 @@
         <translation>Ajouter un Titre</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1029"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1050"/>
         <source>&amp;Options</source>
         <translation>&amp;Configuration</translation>
     </message>
@@ -231,7 +230,7 @@
         <translation>Activer masquer automatique a la barre d&apos;etat systéme</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1033"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1054"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
@@ -404,17 +403,17 @@ v4l2src does not work.</source>
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="247"/>
+        <location filename="../freeseer/frontend/default/main.py" line="248"/>
         <source>language_name</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="436"/>
+        <location filename="../freeseer/frontend/default/main.py" line="447"/>
         <source>Stop</source>
         <translation>Halte</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="449"/>
+        <location filename="../freeseer/frontend/default/main.py" line="461"/>
         <source>Record</source>
         <translation>Enregistrer</translation>
     </message>
