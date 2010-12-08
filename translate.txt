@@ -46,3 +46,31 @@ Adding a Language
   Qt uses .qm files to translate the text at runtime. The files can be generated using 
   Qt Linguist. Once step 2 is complete, the qm file can be generated from the ts file by
   going to file -> release. This will create the .qm file with the correct name.
+
+
+Developers Guide
+
+Adding New UI Designer Files
+
+For each object that can be translated, there is an option , under text in the property browser,  that can be set 	   to true  if the text is to be translateable. This option is checked by default. When the .py file is generated from 	 the designer file, it will contain all the code necessary for the translation of the object. The language creation 	tool assumes that the .py file to  be generated has the same name as the .ui file. If this is not the case you will 	have to remove the ui .py files before updating the languages.  Secondly,  the tool assumes that the UI files are all 	in the forms directory. 
+ 
+ 
+Adding New Words(manually not using QT Designer)
+
+New words can be added for translation in two ways. If the words are in a QObject the words to be translated 		should be passed to self.tr(). If not the the words should be passed into the translate function of the 	   	   QTranslator (see QT Documentation for how to use these functions) Once this is done, the language files can be 		updated. 
+
+
+Updating Languages 
+
+The language files can be updated by opening the language creation tool (found in the tools folder in the src)  	and clicking "Update Translation Files" under the update menu.
+
+Troubleshooting
+
+ Recovery From Deleted .ts File
+ 
+ In order to recover the ts file from a deleted .ts one has to open the corresponding qm file with QTlinguist and save it 
+ as a .ts file. After doing this one can update the files and the missing words from the ts file will be added.
+
+ Recovery From Deleted .qm file
+
+ Re release the corresponding .ts file using QTLinguist.

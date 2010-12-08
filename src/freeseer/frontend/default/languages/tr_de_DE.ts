@@ -75,12 +75,12 @@
         <translation>Alles</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="957"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="978"/>
         <source>Room</source>
         <translation>Zimmer</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="952"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="973"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
@@ -335,7 +335,7 @@ funktioniert nicht.</translation>
         <translation>MM/tt/jjjj ss:mm</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="972"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="993"/>
         <source>Add</source>
         <translation>Anfügen</translation>
     </message>
@@ -360,47 +360,47 @@ funktioniert nicht.</translation>
         <translation>Lade Vorträge aus rss</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="982"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1003"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="989"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1010"/>
         <source>Reset</source>
         <translation>Neustart</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1017"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1038"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1023"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1044"/>
         <source>Help</source>
         <translation>Hilfe</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1029"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1050"/>
         <source>&amp;Options</source>
         <translation>&amp;Optionen</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1033"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1054"/>
         <source>Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1045"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1066"/>
         <source>&amp;Quit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1048"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1069"/>
         <source>Ctrl+Q</source>
         <translation>Strg+Q</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1056"/>
+        <location filename="../freeseer/frontend/default/forms/freeseer_ui_qt.ui" line="1077"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
@@ -408,17 +408,17 @@ funktioniert nicht.</translation>
 <context>
     <name>MainApp</name>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="247"/>
+        <location filename="../freeseer/frontend/default/main.py" line="248"/>
         <source>language_name</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="436"/>
+        <location filename="../freeseer/frontend/default/main.py" line="447"/>
         <source>Stop</source>
         <translation>Halt</translation>
     </message>
     <message>
-        <location filename="../freeseer/frontend/default/main.py" line="449"/>
+        <location filename="../freeseer/frontend/default/main.py" line="461"/>
         <source>Record</source>
         <translation>Aufnahme</translation>
     </message>
