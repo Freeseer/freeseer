@@ -64,6 +64,13 @@ makefile = pyqtconfig.QtGuiModuleMakefile(
 # ".dll" extension on Windows).
 makefile.extra_libs = ["QxtGui"]
 
+# Add library path locations for where libQxt is installed
+# -
+# /usr/local/Qxt/lib - this location is for those who manually installed libQxt
+# using "./configure && make" from source
+# -
+makefile.extra_lib_dirs = ["/usr/local/Qxt/lib"]
+
 # Generate the Makefile itself.
 makefile.generate()
 
