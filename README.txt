@@ -26,6 +26,17 @@ On typical fresh Fedora install:
 On typical fresh Ubuntu install:
     “sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev python-qt4 python-qt4-dev python-sip python-sip-dev python2.6-dev python-feedparser”
 
+Distros with no libQxt:
+    On some distros such as Ubuntu there is no libQxt package in the repositories. In this case libQxt can be installed manually as follows.
+
+    1. Download libqxt from http://dev.libqxt.org/libqxt/wiki/Home
+    2. Unzip / Untar the package
+    3. Navigate to the unpacked location
+    4. Run the following command: 
+        "./configure && make && make install"
+
+    This will install libQxt into /usr/local/Qxt. Freeseer is configured to locate libQxt libraries in /usr/local/Qxt/lib if it exists.
+
 -------------------------------------------------------------------------
 
 Once you have the prerequisite componets, build freeseer by changing
