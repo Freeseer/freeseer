@@ -34,7 +34,7 @@ Distros with no libQxt:
     3. Navigate to the unpacked location
     4. Run the following command: 
         "./configure; make; sudo make install"
-    5. sudo echo "/usr/local/Qxt/lib" > /etc/ld.so.conf.d/freeseer.conf
+    5. Run "sudo vi /etc/ld.so.conf.d/freeseer.conf", then add this single line: /usr/local/Qxt/lib, and save
     6. sudo ldconfig
 
     This will install libQxt into /usr/local/Qxt. Freeseer is configured to locate libQxt libraries in /usr/local/Qxt/lib if it exists. Steps 5 and 6 tell the system where to find the libraries so they can be loaded.
