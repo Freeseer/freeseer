@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'freeseer_configtool.ui'
+# Form implementation generated from reading ui file 'freeseer_configtool_ui.ui'
 #
-# Created: Fri Feb 11 22:48:15 2011
+# Created: Fri Feb 11 23:21:35 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
