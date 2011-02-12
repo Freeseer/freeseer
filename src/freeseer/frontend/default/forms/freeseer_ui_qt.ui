@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>585</width>
-    <height>529</height>
+    <height>542</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -237,15 +237,15 @@
         <item>
          <widget class="QToolBox" name="toolBox">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="page">
            <property name="geometry">
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>560</width>
-             <height>271</height>
+             <width>568</width>
+             <height>276</height>
             </rect>
            </property>
            <attribute name="label">
@@ -469,8 +469,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>231</width>
-             <height>51</height>
+             <width>545</width>
+             <height>291</height>
             </rect>
            </property>
            <attribute name="label">
@@ -522,8 +522,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>204</width>
-             <height>187</height>
+             <width>545</width>
+             <height>291</height>
             </rect>
            </property>
            <attribute name="label">
@@ -935,27 +935,6 @@ v4l2src does not work.</string>
                <attribute name="verticalHeaderStretchLastSection">
                 <bool>true</bool>
                </attribute>
-               <attribute name="verticalHeaderVisible">
-                <bool>false</bool>
-               </attribute>
-               <attribute name="horizontalHeaderStretchLastSection">
-                <bool>true</bool>
-               </attribute>
-               <attribute name="horizontalHeaderCascadingSectionResizes">
-                <bool>true</bool>
-               </attribute>
-               <attribute name="verticalHeaderCascadingSectionResizes">
-                <bool>true</bool>
-               </attribute>
-               <attribute name="verticalHeaderShowSortIndicator" stdset="0">
-                <bool>true</bool>
-               </attribute>
-               <attribute name="verticalHeaderStretchLastSection">
-                <bool>true</bool>
-               </attribute>
-               <attribute name="horizontalHeaderDefaultSectionSize">
-                <number>142</number>
-               </attribute>
                <column>
                 <property name="text">
                  <string notr="true">Speaker</string>
@@ -1030,7 +1009,7 @@ v4l2src does not work.</string>
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>23</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1055,6 +1034,7 @@ v4l2src does not work.</string>
      </property>
     </widget>
     <addaction name="menuLanguage"/>
+    <addaction name="actionPerfermance"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
@@ -1082,6 +1062,11 @@ v4l2src does not work.</string>
     <string/>
    </property>
   </action>
+  <action name="actionPerfermance">
+   <property name="text">
+    <string>Performance</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
   <tabstop>roomEdit</tabstop>
@@ -1106,12 +1091,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>564</x>
-     <y>187</y>
+     <x>554</x>
+     <y>226</y>
     </hint>
     <hint type="destinationlabel">
-     <x>258</x>
-     <y>188</y>
+     <x>209</x>
+     <y>231</y>
     </hint>
    </hints>
   </connection>
@@ -1122,12 +1107,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>564</x>
-     <y>133</y>
+     <x>554</x>
+     <y>158</y>
     </hint>
     <hint type="destinationlabel">
-     <x>258</x>
-     <y>134</y>
+     <x>209</x>
+     <y>163</y>
     </hint>
    </hints>
   </connection>
@@ -1138,8 +1123,8 @@ v4l2src does not work.</string>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
-     <y>172</y>
+     <x>174</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
      <x>348</x>
@@ -1154,8 +1139,8 @@ v4l2src does not work.</string>
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>137</x>
-     <y>225</y>
+     <x>173</x>
+     <y>256</y>
     </hint>
     <hint type="destinationlabel">
      <x>481</x>
@@ -1190,8 +1175,8 @@ v4l2src does not work.</string>
      <y>494</y>
     </hint>
     <hint type="destinationlabel">
-     <x>571</x>
-     <y>492</y>
+     <x>563</x>
+     <y>497</y>
     </hint>
    </hints>
   </connection>
@@ -1222,8 +1207,8 @@ v4l2src does not work.</string>
      <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>571</x>
-     <y>492</y>
+     <x>563</x>
+     <y>497</y>
     </hint>
    </hints>
   </connection>
@@ -1238,8 +1223,8 @@ v4l2src does not work.</string>
      <y>494</y>
     </hint>
     <hint type="destinationlabel">
-     <x>302</x>
-     <y>305</y>
+     <x>312</x>
+     <y>374</y>
     </hint>
    </hints>
   </connection>
@@ -1254,8 +1239,8 @@ v4l2src does not work.</string>
      <y>78</y>
     </hint>
     <hint type="destinationlabel">
-     <x>485</x>
-     <y>152</y>
+     <x>543</x>
+     <y>186</y>
     </hint>
    </hints>
   </connection>
@@ -1282,12 +1267,12 @@ v4l2src does not work.</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>74</y>
+     <x>303</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
-     <x>302</x>
-     <y>305</y>
+     <x>312</x>
+     <y>374</y>
     </hint>
    </hints>
   </connection>
@@ -1298,12 +1283,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>382</x>
-     <y>220</y>
+     <x>400</x>
+     <y>247</y>
     </hint>
     <hint type="destinationlabel">
-     <x>382</x>
-     <y>248</y>
+     <x>400</x>
+     <y>281</y>
     </hint>
    </hints>
   </connection>
@@ -1314,8 +1299,8 @@ v4l2src does not work.</string>
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>74</y>
+     <x>303</x>
+     <y>115</y>
     </hint>
     <hint type="destinationlabel">
      <x>292</x>
@@ -1330,12 +1315,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>564</x>
-     <y>160</y>
+     <x>554</x>
+     <y>192</y>
     </hint>
     <hint type="destinationlabel">
-     <x>400</x>
-     <y>161</y>
+     <x>209</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
@@ -1346,12 +1331,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>551</x>
-     <y>94</y>
+     <x>554</x>
+     <y>124</y>
     </hint>
     <hint type="destinationlabel">
-     <x>501</x>
-     <y>96</y>
+     <x>119</x>
+     <y>105</y>
     </hint>
    </hints>
   </connection>
@@ -1362,12 +1347,12 @@ v4l2src does not work.</string>
    <slot>setShown(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>509</x>
-     <y>358</y>
+     <x>553</x>
+     <y>416</y>
     </hint>
     <hint type="destinationlabel">
-     <x>393</x>
-     <y>63</y>
+     <x>101</x>
+     <y>78</y>
     </hint>
    </hints>
   </connection>
@@ -1379,11 +1364,11 @@ v4l2src does not work.</string>
    <hints>
     <hint type="sourcelabel">
      <x>553</x>
-     <y>352</y>
+     <y>416</y>
     </hint>
     <hint type="destinationlabel">
-     <x>510</x>
-     <y>317</y>
+     <x>101</x>
+     <y>322</y>
     </hint>
    </hints>
   </connection>
@@ -1394,12 +1379,12 @@ v4l2src does not work.</string>
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>274</x>
-     <y>225</y>
+     <x>137</x>
+     <y>301</y>
     </hint>
     <hint type="destinationlabel">
-     <x>534</x>
-     <y>363</y>
+     <x>553</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
@@ -1410,12 +1395,12 @@ v4l2src does not work.</string>
    <slot>toggle()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>234</y>
+     <x>399</x>
+     <y>301</y>
     </hint>
     <hint type="destinationlabel">
-     <x>496</x>
-     <y>352</y>
+     <x>553</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
