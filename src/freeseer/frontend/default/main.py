@@ -24,11 +24,13 @@
 
 from PyQt4 import QtGui, QtCore
 from os import listdir;
+
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 
+from freeseer.frontend.default.configtool.freeseer_configtool import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 import qxtglobalshortcut
@@ -111,7 +113,8 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
-        self.aboutDialog = AboutDialog()    
+        self.aboutDialog = AboutDialog()
+        self.perfermaceDialog = ConfigTool()
         self.ui.editTable.setColumnHidden(3,True)
         self.default_language = 'en';
         self.talks_to_save = []
@@ -205,6 +208,7 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.ui.actionPerfermance, QtCore.SIGNAL('triggered()'),self.perfermaceDialog.show)
         
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)

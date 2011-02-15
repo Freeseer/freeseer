@@ -25,6 +25,7 @@ ALL: gui
 
 gui: 
 	cd freeseer/frontend/default; make
+	cd freeseer/frontend/default/configtool; make
 	@echo "Re-generated GUI"
 
 clean_gui:
