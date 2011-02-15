@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'freeseer_configtool_ui.ui'
+# Form implementation generated from reading ui file '../forms/freeseer_configtool_ui.ui'
 #
-# Created: Mon Feb 14 20:38:44 2011
+# Created: Tue Feb 15 15:56:31 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,7 +28,8 @@ class Ui_ConfigureTool(object):
         self.groupBox_videoSource = QtGui.QGroupBox(self.SourceSetting)
         self.groupBox_videoSource.setGeometry(QtCore.QRect(14, 10, 531, 181))
         self.groupBox_videoSource.setFlat(False)
-        self.groupBox_videoSource.setCheckable(False)
+        self.groupBox_videoSource.setCheckable(True)
+        self.groupBox_videoSource.setChecked(True)
         self.groupBox_videoSource.setObjectName("groupBox_videoSource")
         self.horizontalLayout_2 = QtGui.QHBoxLayout(self.groupBox_videoSource)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -85,12 +86,13 @@ class Ui_ConfigureTool(object):
         self.radioButton_firewiresrc.setEnabled(False)
         self.radioButton_firewiresrc.setObjectName("radioButton_firewiresrc")
         self.verticalLayout_13.addWidget(self.radioButton_firewiresrc)
-        self.comoboBox_videoDeviceList = QtGui.QComboBox(self.groupBox_hardware)
-        self.comoboBox_videoDeviceList.setObjectName("comoboBox_videoDeviceList")
-        self.verticalLayout_13.addWidget(self.comoboBox_videoDeviceList)
+        self.comboBox_videoDeviceList = QtGui.QComboBox(self.groupBox_hardware)
+        self.comboBox_videoDeviceList.setObjectName("comboBox_videoDeviceList")
+        self.verticalLayout_13.addWidget(self.comboBox_videoDeviceList)
         self.horizontalLayout_2.addWidget(self.groupBox_hardware)
         self.groupBox_soundSource = QtGui.QGroupBox(self.SourceSetting)
         self.groupBox_soundSource.setGeometry(QtCore.QRect(10, 200, 521, 161))
+        self.groupBox_soundSource.setCheckable(True)
         self.groupBox_soundSource.setObjectName("groupBox_soundSource")
         self.horizontalLayoutWidget = QtGui.QWidget(self.groupBox_soundSource)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(20, 20, 501, 141))
@@ -248,7 +250,7 @@ class Ui_ConfigureTool(object):
         self.label_videoDirectory.setBuddy(self.lineEdit_videoDirectory)
 
         self.retranslateUi(ConfigureTool)
-        self.configureTab.setCurrentIndex(2)
+        self.configureTab.setCurrentIndex(1)
         QtCore.QObject.connect(self.radioButton_localDesktop, QtCore.SIGNAL("toggled(bool)"), self.groupBox_localDesktopBox.setVisible)
         QtCore.QObject.connect(self.radioButton_recordLocalArea, QtCore.SIGNAL("toggled(bool)"), self.pushButton_setArea.setVisible)
         QtCore.QObject.connect(self.radioButton_hardware, QtCore.SIGNAL("toggled(bool)"), self.groupBox_hardware.setVisible)
@@ -263,8 +265,8 @@ class Ui_ConfigureTool(object):
         ConfigureTool.setTabOrder(self.radioButton_recordLocalWindow, self.pushButton_setArea)
         ConfigureTool.setTabOrder(self.pushButton_setArea, self.radioButton_USBsrc)
         ConfigureTool.setTabOrder(self.radioButton_USBsrc, self.radioButton_firewiresrc)
-        ConfigureTool.setTabOrder(self.radioButton_firewiresrc, self.comoboBox_videoDeviceList)
-        ConfigureTool.setTabOrder(self.comoboBox_videoDeviceList, self.comboBox_audioSourceList)
+        ConfigureTool.setTabOrder(self.radioButton_firewiresrc, self.comboBox_videoDeviceList)
+        ConfigureTool.setTabOrder(self.comboBox_videoDeviceList, self.comboBox_audioSourceList)
         ConfigureTool.setTabOrder(self.comboBox_audioSourceList, self.comboBox_videoQualityList)
         ConfigureTool.setTabOrder(self.comboBox_videoQualityList, self.groupBox_enableStreaming)
         ConfigureTool.setTabOrder(self.groupBox_enableStreaming, self.lineEdit_URL_IP)
@@ -279,7 +281,7 @@ class Ui_ConfigureTool(object):
 
     def retranslateUi(self, ConfigureTool):
         ConfigureTool.setWindowTitle(QtGui.QApplication.translate("ConfigureTool", "Performance", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_videoSource.setTitle(QtGui.QApplication.translate("ConfigureTool", "Video", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_videoSource.setTitle(QtGui.QApplication.translate("ConfigureTool", "Enable Video Recoding", None, QtGui.QApplication.UnicodeUTF8))
         self.radioButton_localDesktop.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Select this option to record the local desktop. \n"
 "Freeseer currently only supports recording the full desktop. \n"
 "We plan to support window and area modes in future versions.", None, QtGui.QApplication.UnicodeUTF8))
@@ -307,8 +309,8 @@ class Ui_ConfigureTool(object):
         self.radioButton_USBsrc.setText(QtGui.QApplication.translate("ConfigureTool", "&usb device", None, QtGui.QApplication.UnicodeUTF8))
         self.radioButton_firewiresrc.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Firewire mode uses dv1394src as the video driver.", None, QtGui.QApplication.UnicodeUTF8))
         self.radioButton_firewiresrc.setText(QtGui.QApplication.translate("ConfigureTool", "&firewire device", None, QtGui.QApplication.UnicodeUTF8))
-        self.comoboBox_videoDeviceList.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Select the video device to record from.", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_soundSource.setTitle(QtGui.QApplication.translate("ConfigureTool", "Sound", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoDeviceList.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Select the video device to record from.", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_soundSource.setTitle(QtGui.QApplication.translate("ConfigureTool", "Enable Sound Recoding", None, QtGui.QApplication.UnicodeUTF8))
         self.label_soundSource.setText(QtGui.QApplication.translate("ConfigureTool", "&Sound Source", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_audioSourceList.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Select the audio source to use for recording.", None, QtGui.QApplication.UnicodeUTF8))
         self.configureTab.setTabText(self.configureTab.indexOf(self.SourceSetting), QtGui.QApplication.translate("ConfigureTool", "Source Setting ", None, QtGui.QApplication.UnicodeUTF8))
@@ -319,7 +321,7 @@ class Ui_ConfigureTool(object):
         self.comboBox_videoQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "480P(Medium)", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_videoQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "720P(High)", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_videoQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1080P(Extreme)", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupBox_enableStreaming.setTitle(QtGui.QApplication.translate("ConfigureTool", "Enable Streaming", None, QtGui.QApplication.UnicodeUTF8))
+        self.groupBox_enableStreaming.setTitle(QtGui.QApplication.translate("ConfigureTool", "&Enable Streaming", None, QtGui.QApplication.UnicodeUTF8))
         self.label_mountPointl.setText(QtGui.QApplication.translate("ConfigureTool", "&Mount point", None, QtGui.QApplication.UnicodeUTF8))
         self.label_port.setText(QtGui.QApplication.translate("ConfigureTool", "&Port", None, QtGui.QApplication.UnicodeUTF8))
         self.label_URL_IP.setText(QtGui.QApplication.translate("ConfigureTool", "&URL/IP", None, QtGui.QApplication.UnicodeUTF8))

@@ -25,12 +25,13 @@ ALL: gui
 
 gui: 
 	cd freeseer/frontend/default; make
-	cd freeseer/frontend/default/configtool; make
 	@echo "Re-generated GUI"
 
 clean_gui:
 	cd freeseer/frontend/default; make clean
+	cd freeseer/frontend/default/configtool; make clean
 	@echo "GUI files cleaned up"
+	
 
 clean: clean_gui
 	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
