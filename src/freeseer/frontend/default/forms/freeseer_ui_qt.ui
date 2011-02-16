@@ -237,7 +237,7 @@
         <item>
          <widget class="QToolBox" name="toolBox">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="page">
            <property name="geometry">
@@ -245,7 +245,7 @@
              <x>0</x>
              <y>0</y>
              <width>568</width>
-             <height>262</height>
+             <height>276</height>
             </rect>
            </property>
            <attribute name="label">
