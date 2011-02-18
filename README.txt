@@ -65,3 +65,5 @@ If you wish to capture vga input using epiphan's vga2usb device:
 
 For support, questions, suggestions or any other inquiries, visit:
     http://wiki.github.com/fosslc/freeseer/
+    
+--------------------------------------------------------------------------
