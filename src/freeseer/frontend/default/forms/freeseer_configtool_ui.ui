@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Performance</string>
+   <string>Freeseer Config Tool</string>
   </property>
   <widget class="QTabWidget" name="configureTab">
    <property name="enabled">
@@ -87,6 +87,9 @@ We plan to support window and area modes in future versions.</string>
            </property>
            <property name="text">
             <string>&amp;Local Desktop</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -632,13 +635,20 @@ v4l2src does not work.</string>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>230</x>
      <y>450</y>
-     <width>321</width>
+     <width>331</width>
      <height>41</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_Apply_Reset">
+    <item>
+     <widget class="QPushButton" name="pushButton_reset">
+      <property name="text">
+       <string>&amp;Reset</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QPushButton" name="pushButton_apply">
       <property name="mouseTracking">
@@ -652,21 +662,12 @@ v4l2src does not work.</string>
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_reset">
-      <property name="text">
-       <string>&amp;Reset</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <zorder>layoutWidget</zorder>
   <zorder>configureTab</zorder>
  </widget>
  <tabstops>
-  <tabstop>pushButton_apply</tabstop>
-  <tabstop>pushButton_reset</tabstop>
   <tabstop>configureTab</tabstop>
   <tabstop>radioButton_localDesktop</tabstop>
   <tabstop>radioButton_hardware</tabstop>

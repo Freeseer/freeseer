@@ -21,7 +21,6 @@
 ALL: gui lib
 
 gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
-	cd configtool; make
 	@echo "Re-generated GUI"
 
 freeseer_ui_qt.py: forms/freeseer_ui_qt.ui

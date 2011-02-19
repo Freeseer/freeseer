@@ -30,7 +30,7 @@ from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 
-from freeseer.frontend.default.configtool.freeseer_configtool import *
+from freeseer.configtool.freeseer_configtool import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 import qxtglobalshortcut
@@ -45,7 +45,6 @@ HEADPHONES_ARTIST=u'Ben Fleming'
 HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
 LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
 	
-
 class AboutDialog(QtGui.QDialog):
     '''
     About dialog class for displaying app information
@@ -114,7 +113,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
-        self.perfermaceDialog = ConfigTool()
+        self.configTool = ConfigTool()
         self.ui.editTable.setColumnHidden(3,True)
         self.default_language = 'en';
         self.talks_to_save = []
@@ -139,7 +138,7 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
         self.load_events()
         self.load_rooms()
-        self.load_settings()
+        #self.load_settings()
         
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -187,8 +186,12 @@ class MainApp(QtGui.QMainWindow):
         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
         self.short_rec_key.setEnabled(True)
         self.short_stop_key.setEnabled(True)
+        #self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        #self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        
         self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
         self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        
         self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
         self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
         
@@ -208,7 +211,7 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionPerfermance, QtCore.SIGNAL('triggered()'),self.perfermaceDialog.show)
+        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.configTool.show)
         
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
@@ -227,6 +230,9 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
+	
+	# get update if perfermance changed
+	#self.update()
 	
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
@@ -717,11 +723,12 @@ class MainApp(QtGui.QMainWindow):
    
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
+       #self.perfermaceDialog.translate();
        
       else:
        print("Invalid Locale Resorting to Default Language: English");
-    
-
+     
+	
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()

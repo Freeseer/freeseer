@@ -469,8 +469,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>545</width>
-             <height>291</height>
+             <width>225</width>
+             <height>48</height>
             </rect>
            </property>
            <attribute name="label">
@@ -1034,7 +1034,7 @@ v4l2src does not work.</string>
      </property>
     </widget>
     <addaction name="menuLanguage"/>
-    <addaction name="actionPerfermance"/>
+    <addaction name="actionPrefercences"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOptions"/>
@@ -1062,9 +1062,9 @@ v4l2src does not work.</string>
     <string/>
    </property>
   </action>
-  <action name="actionPerfermance">
+  <action name="actionPrefercences">
    <property name="text">
-    <string>Performance</string>
+    <string>Preferences</string>
    </property>
   </action>
  </widget>

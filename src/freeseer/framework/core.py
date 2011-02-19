@@ -291,48 +291,6 @@ class FreeseerCore:
         '''
         return self.backend.change_audio_source(snd_source)
 
-    def test_sources(self, state, video=False, audio=False):
-        if state == True:
-            self.backend.test_feedback_start(video, audio)
-        else:
-            self.backend.test_feedback_stop()
-
-    def prepare_metadata(self, presentation):
-	'''
-	Returns a dictionary of tags and tag values to be used
-	to populate the current recording's file metadata.
-	'''
-	return { "title" : presentation.title,
-		 "artist" : presentation.speaker,
-		 "performer" : presentation.speaker,
-		 "album" : presentation.event,
-		 "location" : presentation.room,
-		 "date" : str(datetime.date.today()),
-		 "comment" : presentation.description}
-
-    def record(self, presentation):
-        '''
-        Informs backend to begin recording presentation.
-        '''
-	
-	#create a filename to record to
-        record_name = self.get_record_name(presentation)
-
-	#prepare metadata
-	data = self.prepare_metadata(presentation)
-	self.backend.populate_metadata(data)
-
-        record_location = os.path.abspath(self.config.videodir + '/' + record_name)
-        self.backend.record(record_location)
-        self.logger.log.info('Recording started')
-
-    def stop(self):
-        '''
-        Informs backend to stop recording.
-        '''
-        self.backend.stop()
-        self.logger.log.info('Recording stopped')
-
     def test_feedback(self, video, audio):
         if self.feedback:
             self.feedback = False
