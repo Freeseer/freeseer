@@ -723,7 +723,8 @@ class MainApp(QtGui.QMainWindow):
    
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
-       #self.perfermaceDialog.translate();
+       self.configTool.translate();
+
        
       else:
        print("Invalid Locale Resorting to Default Language: English");
