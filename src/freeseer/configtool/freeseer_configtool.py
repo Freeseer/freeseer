@@ -44,7 +44,17 @@ class ConfigTool(QtGui.QDialog):
         self.ui = Ui_ConfigureTool()
         self.ui.setupUi(self)
 	self.default_language = 'en';
+	
 	self.ui.groupBox_hardware.hide()
+	
+	self.ui.label_check_1.setVisible(False)
+        self.ui.label_check_2.setVisible(False)
+        self.ui.label_check_3.setVisible(False)
+        self.ui.label_check_4.setVisible(False)
+ 
+        
+	#self.ui.pushButton_testStreaming.setEnabled(False)
+	
 	self.core = ConfigCore(self)
 		
 	# get supported video sources and enable the UI for supported devices.
@@ -76,6 +86,16 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.pushButton_reset, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'), self.save_settings)
         
+        #connections for Video Setting -> Enable Streaming
+
+        self.connect(self.ui.groupBox_enableStreaming,QtCore.SIGNAL('toggle(bool)'), self.toggle_enable_streaming)
+        '''
+        self.connect(self.ui.lineEdit_URL_IP,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+        self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+        self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+        self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+	'''
+        self.connect(self.ui.pushButton_testStreaming,QtCore.SIGNAL('clicked()'),self.test_streaming)
         
         # connections for Extra Setting -> ShortKeys
         self.connect(self.ui.pushButton_recodrdKey, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
@@ -85,6 +105,7 @@ class ConfigTool(QtGui.QDialog):
         # connections for Extra Settings > File Locations
         self.connect(self.ui.pushButton_open, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         
+ 
         
         # get available audio sources
         sndsrcs = self.core.get_audio_sources()
@@ -121,7 +142,6 @@ class ConfigTool(QtGui.QDialog):
         elif (self.core.config.videosrc == 'firewire'):
             self.ui.radioButton_hardware.setChecked(True)
             self.ui.radioButton_firewiresrc.setChecked(True)
-            
             
     def toggle_video_recording(self, state):
         '''
@@ -175,7 +195,20 @@ class ConfigTool(QtGui.QDialog):
         # finally load the changes into core
         self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 
-        
+    
+    def toggle_enable_streaming(self,state):
+	'''
+	Enable /Disables streaming if the user has checked the
+	enable streaming box in config tool
+	'''
+	pass
+
+	
+    def test_streaming(self):
+	self.ui.label_check_1.setPixmap(QtGui.QPixmap(":/streamingCheck/pass.png"))
+	self.ui.label_check_1.show()
+	self.ui.label_check_2.setPixmap(QtGui.QPixmap(":/streamingCheck/error.png"))
+	self.ui.label_check_2.show()
     def load_settings(self):
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
@@ -250,9 +283,19 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.key_rec = 'Ctrl+Shift+R'
         self.core.config.writeConfig()
         self.key_grabber = QtKeyGrabber(self)
-        self.hide()
+        #self.hide()
         self.core.logger.log.info('Storing keys.')
+        '''
+	message = QtGui.QMessageBox(self)
+        message.setText('Please press a key (or a key combination).The dialog will be closed when the key is released.')
+        message.setWindowTitle('Please press a key or a key combination')
+        message.setIcon(QtGui.QMessageBox.Question)
+	message.exec_()
+	'''
         self.key_grabber.show()
+
+
+        
     
     def grab_rec_set(self, key):
         '''
@@ -261,7 +304,7 @@ class ConfigTool(QtGui.QDialog):
         self.ui.lineEdit_recordKey.setText(key)
         self.core.config.key_rec = key
         self.core.config.writeConfig()
-        self.show()
+        #self.show()
             
     
     def grab_stop_key(self):

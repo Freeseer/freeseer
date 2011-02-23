@@ -84,6 +84,7 @@ class QtKeyGrabber(QtGui.QWidget):
                 self.parent.grab_rec_set(self.key_string)
             else: self.parent.grab_stop_set(self.key_string)
             self.close()
+    
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

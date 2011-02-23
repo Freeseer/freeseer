@@ -14,7 +14,7 @@
    <string>Freeseer Config Tool</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../frontend/default/forms/resource.qrc">
+   <iconset>
     <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <widget class="QTabWidget" name="configureTab">
@@ -32,11 +32,14 @@
    <property name="cursor">
     <cursorShape>ArrowCursor</cursorShape>
    </property>
+   <property name="inputMethodHints">
+    <set>Qt::ImhNone</set>
+   </property>
    <property name="tabPosition">
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -366,7 +369,7 @@ v4l2src does not work.</string>
           <x>10</x>
           <y>120</y>
           <width>521</width>
-          <height>261</height>
+          <height>271</height>
          </rect>
         </property>
         <property name="title">
@@ -383,21 +386,14 @@ v4l2src does not work.</string>
           <rect>
            <x>10</x>
            <y>20</y>
-           <width>511</width>
-           <height>201</height>
+           <width>501</width>
+           <height>211</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_EnableStreaming">
           <property name="topMargin">
            <number>0</number>
           </property>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_URL_IP">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="1">
            <widget class="QLineEdit" name="lineEdit_password">
             <property name="echoMode">
@@ -429,7 +425,11 @@ v4l2src does not work.</string>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_port"/>
+           <widget class="QLineEdit" name="lineEdit_port">
+            <property name="inputMethodHints">
+             <set>Qt::ImhNone</set>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_URL_IP">
@@ -500,12 +500,93 @@ v4l2src does not work.</string>
             </property>
            </widget>
           </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_URL_IP">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Minimum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>32</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="3">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::MinimumExpanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="3">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="3">
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="3" column="3">
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>1</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
         <widget class="QPushButton" name="pushButton_testStreaming">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="geometry">
           <rect>
-           <x>420</x>
+           <x>410</x>
            <y>230</y>
            <width>96</width>
            <height>28</height>
@@ -734,8 +815,38 @@ v4l2src does not work.</string>
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>configureTab</tabstop>
+  <tabstop>pushButton_reset</tabstop>
+  <tabstop>pushButton_apply</tabstop>
+  <tabstop>groupBox_videoSource</tabstop>
+  <tabstop>radioButton_localDesktop</tabstop>
+  <tabstop>radioButton_hardware</tabstop>
+  <tabstop>radioButton_recordLocalDesktop</tabstop>
+  <tabstop>radioButton_recordLocalArea</tabstop>
+  <tabstop>radioButton_recordLocalWindow</tabstop>
+  <tabstop>pushButton_setArea</tabstop>
+  <tabstop>radioButton_USBsrc</tabstop>
+  <tabstop>radioButton_firewiresrc</tabstop>
+  <tabstop>comboBox_videoDeviceList</tabstop>
+  <tabstop>groupBox_soundSource</tabstop>
+  <tabstop>comboBox_audioSourceList</tabstop>
+  <tabstop>comboBox_videoQualityList</tabstop>
+  <tabstop>groupBox_enableStreaming</tabstop>
+  <tabstop>lineEdit_URL_IP</tabstop>
+  <tabstop>lineEdit_port</tabstop>
+  <tabstop>lineEdit_mountPoint</tabstop>
+  <tabstop>lineEdit_password</tabstop>
+  <tabstop>pushButton_testStreaming</tabstop>
+  <tabstop>checkbox_autoHide</tabstop>
+  <tabstop>lineEdit_recordKey</tabstop>
+  <tabstop>pushButton_recodrdKey</tabstop>
+  <tabstop>lineEdit_stopKey</tabstop>
+  <tabstop>pushButton_StopKey</tabstop>
+  <tabstop>lineEdit_videoDirectory</tabstop>
+  <tabstop>pushButton_open</tabstop>
+ </tabstops>
  <resources>
-  <include location="../../frontend/default/forms/resource.qrc"/>
   <include location="resource.qrc"/>
  </resources>
  <connections>
@@ -784,6 +895,86 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>276</x>
      <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_mountPoint</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_3</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>466</x>
+     <y>307</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>504</x>
+     <y>310</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_URL_IP</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_1</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>442</x>
+     <y>214</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>505</x>
+     <y>212</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_port</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_2</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>466</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>259</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_password</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_4</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>484</x>
+     <y>358</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>508</x>
+     <y>360</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>groupBox_enableStreaming</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pushButton_testStreaming</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>39</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>470</x>
+     <y>416</y>
     </hint>
    </hints>
   </connection>
