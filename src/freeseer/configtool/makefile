@@ -18,10 +18,12 @@
 # from an XML definition file
 ALL: gui 
 
-gui: freeseer_configtool_ui.py
+gui: freeseer_configtool_ui.py resource_rc.py
 
-freeseer_configtool_ui.py: ./freeseer_configtool_ui.ui
-	pyuic4 ./freeseer_configtool_ui.ui -o freeseer_configtool_ui.py
+freeseer_configtool_ui.py: ./forms/freeseer_configtool_ui.ui
+	pyuic4 ./forms/freeseer_configtool_ui.ui -o freeseer_configtool_ui.py
 
+resource_rc.py: forms/resource.qrc
+	pyrcc4 forms/resource.qrc -o resource_rc.py
 clean: 
 	rm -f  freeseer_configtool_ui.py  *.pyc *~

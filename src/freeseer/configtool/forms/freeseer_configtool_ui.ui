@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Freeseer Config Tool</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../frontend/default/forms/resource.qrc">
+    <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
+  </property>
   <widget class="QTabWidget" name="configureTab">
    <property name="enabled">
     <bool>true</bool>
@@ -354,6 +358,9 @@ v4l2src does not work.</string>
         </layout>
        </widget>
        <widget class="QGroupBox" name="groupBox_enableStreaming">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -376,8 +383,8 @@ v4l2src does not work.</string>
           <rect>
            <x>10</x>
            <y>20</y>
-           <width>501</width>
-           <height>231</height>
+           <width>511</width>
+           <height>201</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_EnableStreaming">
@@ -444,7 +451,69 @@ v4l2src does not work.</string>
             </property>
            </widget>
           </item>
+          <item row="3" column="2">
+           <widget class="QLabel" name="label_check_4">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_check_3">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_check_2">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_check_1">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
          </layout>
+        </widget>
+        <widget class="QPushButton" name="pushButton_testStreaming">
+         <property name="geometry">
+          <rect>
+           <x>420</x>
+           <y>230</y>
+           <width>96</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>&amp;Test</string>
+         </property>
         </widget>
        </widget>
       </widget>
@@ -665,24 +734,11 @@ v4l2src does not work.</string>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../frontend/default/forms/resource.qrc"/>
+  <include location="resource.qrc"/>
+ </resources>
  <connections>
-  <connection>
-   <sender>radioButton_localDesktop</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>groupBox_localDesktopBox</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>134</x>
-     <y>108</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>188</x>
-     <y>116</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>radioButton_hardware</sender>
    <signal>toggled(bool)</signal>
@@ -696,6 +752,22 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>400</x>
      <y>186</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_localDesktop</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>groupBox_localDesktopBox</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>116</y>
     </hint>
    </hints>
   </connection>

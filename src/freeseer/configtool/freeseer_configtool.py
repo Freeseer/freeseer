@@ -54,7 +54,8 @@ class ConfigTool(QtGui.QDialog):
 	self.uiTranslator = QtCore.QTranslator();
 	self.langActionGroup = QtGui.QActionGroup(self);
 	QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
-
+	
+	#load setting for the config data
         self.load_settings()
 	
 	
@@ -95,8 +96,7 @@ class ConfigTool(QtGui.QDialog):
         if (self.core.config.audiosrc == 'none'):
             self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
         else: self.core.change_soundsrc(self.core.config.audiosrc)
-        if (self.core.config.audiofb == 'True'):
-            self.ui.audioFeedbackCheckbox.toggle()
+
             
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
