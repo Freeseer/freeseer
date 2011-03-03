@@ -333,7 +333,7 @@ v4l2src does not work.</string>
           <widget class="QComboBox" name="comboBox_videoQualityList">
            <item>
             <property name="text">
-             <string>None</string>
+             <string>NONE</string>
             </property>
            </item>
            <item>
@@ -353,6 +353,11 @@ v4l2src does not work.</string>
            </item>
            <item>
             <property name="text">
+             <string>1280x800</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>1920x1080</string>
             </property>
            </item>
@@ -360,246 +365,299 @@ v4l2src does not work.</string>
          </item>
         </layout>
        </widget>
-       <widget class="QGroupBox" name="groupBox_enableStreaming">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>120</y>
-          <width>521</width>
-          <height>271</height>
-         </rect>
-        </property>
-        <property name="title">
-         <string>&amp;Enable Streaming</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-        <widget class="QWidget" name="layoutWidget_7">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>20</y>
-           <width>501</width>
-           <height>211</height>
-          </rect>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_EnableStreaming">
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_password">
-            <property name="echoMode">
-             <enum>QLineEdit::Password</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_mountPointl">
-            <property name="text">
-             <string>&amp;Mount point</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_mountPoint</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_mountPoint"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_port">
-            <property name="text">
-             <string>&amp;Port</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_port</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_port">
-            <property name="inputMethodHints">
-             <set>Qt::ImhNone</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_URL_IP">
-            <property name="text">
-             <string>&amp;URL/IP</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_URL_IP</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_password">
-            <property name="text">
-             <string>&amp;Password</string>
-            </property>
-            <property name="buddy">
-             <cstring>lineEdit_password</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="label_check_4">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="label_check_3">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="label_check_2">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_check_1">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="textFormat">
-             <enum>Qt::AutoText</enum>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_URL_IP">
-            <property name="text">
-             <string/>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Minimum</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>32</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="3">
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::MinimumExpanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>1</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="1" column="3">
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>1</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="2" column="3">
-           <spacer name="verticalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>1</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="3" column="3">
-           <spacer name="verticalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>1</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QPushButton" name="pushButton_testStreaming">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>410</x>
-           <y>230</y>
-           <width>96</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>&amp;Test</string>
-         </property>
-        </widget>
-       </widget>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Steaming</string>
+    </attribute>
+    <widget class="QGroupBox" name="groupBox_enableStreaming">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>531</width>
+       <height>381</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>&amp;Enable Streaming</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="layoutWidget_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>521</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_EnableStreaming">
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lineEdit_password">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_mountPointl">
+         <property name="text">
+          <string>&amp;Mount point</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_mountPoint</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_mountPoint"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_port">
+         <property name="text">
+          <string>&amp;Port</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_port</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_port">
+         <property name="inputMethodHints">
+          <set>Qt::ImhNone</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_URL_IP">
+         <property name="text">
+          <string>&amp;URL/IP</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_URL_IP</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_password">
+         <property name="text">
+          <string>&amp;Password</string>
+         </property>
+         <property name="buddy">
+          <cstring>lineEdit_password</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="label_check_4">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_check_3">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_check_2">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_check_1">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::AutoText</enum>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_URL_IP">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Minimum</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>32</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="3">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::MinimumExpanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>1</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="3">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>1</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="3">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>1</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="3">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>1</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="pushButton_testStreaming">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>320</y>
+        <width>96</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&amp;Test</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>230</y>
+        <width>521</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Streming Quality</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_stremingQualityList">
+         <item>
+          <property name="text">
+           <string>None</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>480x360</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>640x480</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1280x720</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1920x1080</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </widget>
    <widget class="QWidget" name="Extrasetting">
     <attribute name="title">
@@ -831,13 +889,6 @@ v4l2src does not work.</string>
   <tabstop>comboBox_videoDeviceList</tabstop>
   <tabstop>groupBox_soundSource</tabstop>
   <tabstop>comboBox_audioSourceList</tabstop>
-  <tabstop>comboBox_videoQualityList</tabstop>
-  <tabstop>groupBox_enableStreaming</tabstop>
-  <tabstop>lineEdit_URL_IP</tabstop>
-  <tabstop>lineEdit_port</tabstop>
-  <tabstop>lineEdit_mountPoint</tabstop>
-  <tabstop>lineEdit_password</tabstop>
-  <tabstop>pushButton_testStreaming</tabstop>
   <tabstop>checkbox_autoHide</tabstop>
   <tabstop>lineEdit_recordKey</tabstop>
   <tabstop>pushButton_recodrdKey</tabstop>
@@ -899,82 +950,18 @@ v4l2src does not work.</string>
    </hints>
   </connection>
   <connection>
-   <sender>lineEdit_mountPoint</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_3</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>466</x>
-     <y>307</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>504</x>
-     <y>310</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_URL_IP</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_1</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>442</x>
-     <y>214</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>505</x>
-     <y>212</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_port</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_2</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>466</x>
-     <y>263</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>503</x>
-     <y>259</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_password</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_4</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>484</x>
-     <y>358</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>508</x>
-     <y>360</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>groupBox_enableStreaming</sender>
    <signal>toggled(bool)</signal>
    <receiver>pushButton_testStreaming</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>39</x>
-     <y>171</y>
+     <x>25</x>
+     <y>54</y>
     </hint>
     <hint type="destinationlabel">
-     <x>470</x>
-     <y>416</y>
+     <x>494</x>
+     <y>387</y>
     </hint>
    </hints>
   </connection>

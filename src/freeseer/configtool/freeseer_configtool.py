@@ -209,16 +209,23 @@ class ConfigTool(QtGui.QDialog):
 	self.ui.label_check_1.show()
 	self.ui.label_check_2.setPixmap(QtGui.QPixmap(":/streamingCheck/error.png"))
 	self.ui.label_check_2.show()
+	
     def load_settings(self):
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
         self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
 
+	desktop = QtGui.QApplication.desktop()
+	width = desktop.width()
+	height = desktop.height()
+	self.core.logger.log.info('screen resolution is : ' + str(width) + 'x' + str(height))
+	screenres = str(width) + 'x' + str(height)
         if self.core.config.resolution == '0x0':
-            resolution = 0
+            resolution = self.ui.comboBox_videoQualityList.findText(screenres)
         else:
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
+        
         
     def save_settings(self):
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
