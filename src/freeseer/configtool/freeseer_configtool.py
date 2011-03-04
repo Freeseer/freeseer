@@ -56,7 +56,7 @@ class ConfigTool(QtGui.QDialog):
 	#self.ui.pushButton_testStreaming.setEnabled(False)
 	
 	self.core = ConfigCore(self)
-		
+	self.desktop = QtGui.QApplication.desktop()	
 	# get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
         
@@ -86,7 +86,9 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.pushButton_reset, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'), self.save_settings)
         
-        self.connect(self.ui.pushButton_derectScreenResoltion,QtCore.SIGNAL('clicked()'),self.screensize)
+        self.connect(self.ui.pushButton_derectScreenResoltion,QtCore.SIGNAL('clicked()'),self.screen_size)
+        self.connect(self.desktop ,QtCore.SIGNAL('resized(int)'),self.screen_size)
+        self.connect(self.desktop ,QtCore.SIGNAL('screenCountChanged(int)'),self.screen_size)
         #connections for Video Setting -> Enable Streaming
 
         self.connect(self.ui.groupBox_enableStreaming,QtCore.SIGNAL('toggle(bool)'), self.toggle_enable_streaming)
@@ -216,30 +218,31 @@ class ConfigTool(QtGui.QDialog):
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
         self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
 	
-	self.screensize()
-	
-	desktop = QtGui.QApplication.desktop()
-	width = desktop.width()
-	height = desktop.height()
-	self.core.logger.log.info('screen resolution is : ' + str(width) + 'x' + str(height))
-	screenres = str(width) + 'x' + str(height)
+	self.screen_size()
+	screenres = self.primary_screen_size()
+
         if self.core.config.resolution == '0x0':
             resolution = self.ui.comboBox_videoQualityList.findText(screenres)
         else:
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
         
-    def screensize(self):
-	desktop = QtGui.QApplication.desktop()
+    def screen_size(self):
+
+	self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
 	i = 0
-	self.ui.tableWidget_screenResolution.setRowCount(desktop.screenCount())
-	while i < desktop.screenCount():
-	  newItem = QtGui.QTableWidgetItem(str(desktop.screenGeometry(i).width()) + 'x' + str(desktop.screenGeometry(i).height()))
+	while i < self.desktop.screenCount():
+	  newItem = QtGui.QTableWidgetItem(str(self.desktop.screenGeometry(i).width()) + 'x' + str(self.desktop.screenGeometry(i).height()))
 	  self.ui.tableWidget_screenResolution.setItem(i,0,newItem)
 	  i = i + 1
+	  
+    def screen_resize(self):
+	self.core.logger.log.info('resized')
 
-
-
+    def primary_screen_size(self):
+	width = self.desktop.screenGeometry(self.desktop.primaryScreen ()).width()
+	height = self.desktop.screenGeometry(self.desktop.primaryScreen ()).height()
+	return str(width) + 'x' + str(height)
 	
 	  
     def save_settings(self):
