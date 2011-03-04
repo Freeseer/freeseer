@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './forms/freeseer_configtool_ui.ui'
 #
-# Created: Wed Mar  2 17:54:41 2011
+# Created: Thu Mar  3 16:58:52 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -134,6 +134,17 @@ class Ui_ConfigureTool(object):
         self.comboBox_videoQualityList.addItem("")
         self.comboBox_videoQualityList.addItem("")
         self.horizontalLayout_VideoQuality_2.addWidget(self.comboBox_videoQualityList)
+        self.pushButton_derectScreenResoltion = QtGui.QPushButton(self.groupBox_videoQuality)
+        self.pushButton_derectScreenResoltion.setGeometry(QtCore.QRect(10, 340, 241, 28))
+        self.pushButton_derectScreenResoltion.setObjectName("pushButton_derectScreenResoltion")
+        self.tableWidget_screenResolution = QtGui.QTableWidget(self.groupBox_videoQuality)
+        self.tableWidget_screenResolution.setGeometry(QtCore.QRect(10, 130, 521, 192))
+        self.tableWidget_screenResolution.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.tableWidget_screenResolution.setObjectName("tableWidget_screenResolution")
+        self.tableWidget_screenResolution.setColumnCount(1)
+        self.tableWidget_screenResolution.setRowCount(0)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget_screenResolution.setHorizontalHeaderItem(0, item)
         self.verticalLayout_2.addWidget(self.groupBox_videoQuality)
         self.configureTab.addTab(self.Videosetting, "")
         self.tab = QtGui.QWidget()
@@ -320,11 +331,12 @@ class Ui_ConfigureTool(object):
         self.label_videoDirectory.setBuddy(self.lineEdit_videoDirectory)
 
         self.retranslateUi(ConfigureTool)
-        self.configureTab.setCurrentIndex(1)
-        QtCore.QObject.connect(self.radioButton_hardware, QtCore.SIGNAL("toggled(bool)"), self.groupBox_hardware.setVisible)
-        QtCore.QObject.connect(self.radioButton_localDesktop, QtCore.SIGNAL("toggled(bool)"), self.groupBox_localDesktopBox.setVisible)
-        QtCore.QObject.connect(self.radioButton_recordLocalArea, QtCore.SIGNAL("toggled(bool)"), self.pushButton_setArea.setEnabled)
+        self.configureTab.setCurrentIndex(2)
         QtCore.QObject.connect(self.groupBox_enableStreaming, QtCore.SIGNAL("toggled(bool)"), self.pushButton_testStreaming.setEnabled)
+        QtCore.QObject.connect(self.lineEdit_URL_IP, QtCore.SIGNAL("textChanged(QString)"), self.label_check_1.show)
+        QtCore.QObject.connect(self.lineEdit_port, QtCore.SIGNAL("textChanged(QString)"), self.label_check_2.show)
+        QtCore.QObject.connect(self.lineEdit_mountPoint, QtCore.SIGNAL("textChanged(QString)"), self.label_check_3.show)
+        QtCore.QObject.connect(self.lineEdit_password, QtCore.SIGNAL("textChanged(QString)"), self.label_check_4.show)
         QtCore.QMetaObject.connectSlotsByName(ConfigureTool)
         ConfigureTool.setTabOrder(self.configureTab, self.pushButton_reset)
         ConfigureTool.setTabOrder(self.pushButton_reset, self.pushButton_apply)
@@ -386,11 +398,13 @@ class Ui_ConfigureTool(object):
         self.groupBox_videoQuality.setTitle(QtGui.QApplication.translate("ConfigureTool", "Video Quality", None, QtGui.QApplication.UnicodeUTF8))
         self.label_videoQuality.setText(QtGui.QApplication.translate("ConfigureTool", "Video Quality", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_videoQualityList.setItemText(0, QtGui.QApplication.translate("ConfigureTool", "NONE", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "480x360", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "1280x720", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "800x600", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "1024x768", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_videoQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1280x800", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_videoQualityList.setItemText(5, QtGui.QApplication.translate("ConfigureTool", "1920x1080", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_derectScreenResoltion.setText(QtGui.QApplication.translate("ConfigureTool", "&Detect screen resolution", None, QtGui.QApplication.UnicodeUTF8))
+        self.tableWidget_screenResolution.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("ConfigureTool", "Resolution", None, QtGui.QApplication.UnicodeUTF8))
         self.configureTab.setTabText(self.configureTab.indexOf(self.Videosetting), QtGui.QApplication.translate("ConfigureTool", "Video setting", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_enableStreaming.setTitle(QtGui.QApplication.translate("ConfigureTool", "&Enable Streaming", None, QtGui.QApplication.UnicodeUTF8))
         self.label_mountPointl.setText(QtGui.QApplication.translate("ConfigureTool", "&Mount point", None, QtGui.QApplication.UnicodeUTF8))
@@ -420,4 +434,5 @@ class Ui_ConfigureTool(object):
         self.pushButton_reset.setText(QtGui.QApplication.translate("ConfigureTool", "&Reset", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_apply.setText(QtGui.QApplication.translate("ConfigureTool", "&Apply", None, QtGui.QApplication.UnicodeUTF8))
 
+import resource_rc
 import resource_rc

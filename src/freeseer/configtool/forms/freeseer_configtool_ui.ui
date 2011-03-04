@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -338,17 +338,17 @@ v4l2src does not work.</string>
            </item>
            <item>
             <property name="text">
-             <string>480x360</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
              <string>640x480</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>1280x720</string>
+             <string>800x600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>1024x768</string>
             </property>
            </item>
            <item>
@@ -364,6 +364,37 @@ v4l2src does not work.</string>
           </widget>
          </item>
         </layout>
+       </widget>
+       <widget class="QPushButton" name="pushButton_derectScreenResoltion">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>340</y>
+          <width>241</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&amp;Detect screen resolution</string>
+        </property>
+       </widget>
+       <widget class="QTableWidget" name="tableWidget_screenResolution">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>130</y>
+          <width>521</width>
+          <height>192</height>
+         </rect>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <column>
+         <property name="text">
+          <string>Resolution</string>
+         </property>
+        </column>
        </widget>
       </widget>
      </item>
@@ -899,56 +930,9 @@ v4l2src does not work.</string>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
+  <include location="../../../../../.designer/backup/resource.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>radioButton_hardware</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>groupBox_hardware</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>102</x>
-     <y>165</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>400</x>
-     <y>186</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_localDesktop</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>groupBox_localDesktopBox</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>134</x>
-     <y>108</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>188</x>
-     <y>116</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_recordLocalArea</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>pushButton_setArea</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>265</x>
-     <y>123</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>276</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>groupBox_enableStreaming</sender>
    <signal>toggled(bool)</signal>
@@ -956,12 +940,76 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>25</x>
-     <y>54</y>
+     <x>110</x>
+     <y>53</y>
     </hint>
     <hint type="destinationlabel">
-     <x>494</x>
-     <y>387</y>
+     <x>479</x>
+     <y>371</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_URL_IP</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_1</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>188</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>515</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_port</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_2</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>489</x>
+     <y>148</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>511</x>
+     <y>148</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_mountPoint</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_3</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>492</x>
+     <y>196</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>509</x>
+     <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit_password</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>label_check_4</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>492</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>503</x>
+     <y>234</y>
     </hint>
    </hints>
   </connection>

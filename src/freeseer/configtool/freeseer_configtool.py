@@ -86,6 +86,7 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.pushButton_reset, QtCore.SIGNAL('clicked()'), self.load_settings)
         self.connect(self.ui.pushButton_apply, QtCore.SIGNAL('clicked()'), self.save_settings)
         
+        self.connect(self.ui.pushButton_derectScreenResoltion,QtCore.SIGNAL('clicked()'),self.screensize)
         #connections for Video Setting -> Enable Streaming
 
         self.connect(self.ui.groupBox_enableStreaming,QtCore.SIGNAL('toggle(bool)'), self.toggle_enable_streaming)
@@ -214,7 +215,9 @@ class ConfigTool(QtGui.QDialog):
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
         self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
-
+	
+	self.screensize()
+	
 	desktop = QtGui.QApplication.desktop()
 	width = desktop.width()
 	height = desktop.height()
@@ -226,7 +229,19 @@ class ConfigTool(QtGui.QDialog):
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
         
-        
+    def screensize(self):
+	desktop = QtGui.QApplication.desktop()
+	i = 0
+	self.ui.tableWidget_screenResolution.setRowCount(desktop.screenCount())
+	while i < desktop.screenCount():
+	  newItem = QtGui.QTableWidgetItem(str(desktop.screenGeometry(i).width()) + 'x' + str(desktop.screenGeometry(i).height()))
+	  self.ui.tableWidget_screenResolution.setItem(i,0,newItem)
+	  i = i + 1
+
+
+
+	
+	  
     def save_settings(self):
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
@@ -290,15 +305,8 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.key_rec = 'Ctrl+Shift+R'
         self.core.config.writeConfig()
         self.key_grabber = QtKeyGrabber(self)
-        #self.hide()
+        self.hide()
         self.core.logger.log.info('Storing keys.')
-        '''
-	message = QtGui.QMessageBox(self)
-        message.setText('Please press a key (or a key combination).The dialog will be closed when the key is released.')
-        message.setWindowTitle('Please press a key or a key combination')
-        message.setIcon(QtGui.QMessageBox.Question)
-	message.exec_()
-	'''
         self.key_grabber.show()
 
 
