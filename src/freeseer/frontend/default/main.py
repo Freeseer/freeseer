@@ -211,7 +211,7 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.configTool.show)
+        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
         
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
@@ -729,7 +729,14 @@ class MainApp(QtGui.QMainWindow):
       else:
        print("Invalid Locale Resorting to Default Language: English");
      
-	
+    def config_tool(self):
+	self.configTool.show()
+	if self.configTool.ui.autoHideCheckbox.isChecked():
+            self.core.preview(False, self.ui.previewWidget.winId())
+            self.core.logger.log.info('disable preview')
+        else: 
+	    self.core.preview(True, self.ui.previewWidget.winId())
+	    self.core.logger.log.info('enable preview')
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()

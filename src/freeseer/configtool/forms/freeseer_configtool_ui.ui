@@ -125,6 +125,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox_localDesktopBox">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -402,7 +405,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Steaming</string>
+     <string>Steaming setting</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_enableStreaming">
      <property name="enabled">
@@ -653,7 +656,10 @@ v4l2src does not work.</string>
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Streming Quality</string>
+          <string>Streaming Quality</string>
+         </property>
+         <property name="buddy">
+          <cstring>comboBox_stremingQualityList</cstring>
          </property>
         </widget>
        </item>
@@ -930,9 +936,56 @@ v4l2src does not work.</string>
  </tabstops>
  <resources>
   <include location="resource.qrc"/>
-  <include location="../../../../../.designer/backup/resource.qrc"/>
  </resources>
  <connections>
+  <connection>
+   <sender>radioButton_recordLocalArea</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pushButton_setArea</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>256</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_localDesktop</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>groupBox_localDesktopBox</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>236</x>
+     <y>77</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_hardware</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>groupBox_hardware</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>110</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>425</x>
+     <y>79</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>groupBox_enableStreaming</sender>
    <signal>toggled(bool)</signal>
@@ -940,12 +993,12 @@ v4l2src does not work.</string>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>110</x>
-     <y>53</y>
+     <x>63</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>479</x>
-     <y>371</y>
+     <x>470</x>
+     <y>379</y>
     </hint>
    </hints>
   </connection>
@@ -956,12 +1009,12 @@ v4l2src does not work.</string>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>188</x>
-     <y>108</y>
+     <x>484</x>
+     <y>107</y>
     </hint>
     <hint type="destinationlabel">
-     <x>515</x>
-     <y>99</y>
+     <x>513</x>
+     <y>103</y>
     </hint>
    </hints>
   </connection>
@@ -972,12 +1025,12 @@ v4l2src does not work.</string>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>489</x>
-     <y>148</y>
+     <x>470</x>
+     <y>150</y>
     </hint>
     <hint type="destinationlabel">
-     <x>511</x>
-     <y>148</y>
+     <x>509</x>
+     <y>146</y>
     </hint>
    </hints>
   </connection>
@@ -988,11 +1041,11 @@ v4l2src does not work.</string>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>492</x>
-     <y>196</y>
+     <x>494</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
-     <x>509</x>
+     <x>510</x>
      <y>196</y>
     </hint>
    </hints>
@@ -1004,12 +1057,12 @@ v4l2src does not work.</string>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>492</x>
-     <y>234</y>
+     <x>494</x>
+     <y>245</y>
     </hint>
     <hint type="destinationlabel">
-     <x>503</x>
-     <y>234</y>
+     <x>509</x>
+     <y>243</y>
     </hint>
    </hints>
   </connection>

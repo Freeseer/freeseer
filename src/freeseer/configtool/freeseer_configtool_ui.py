@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './forms/freeseer_configtool_ui.ui'
 #
-# Created: Thu Mar  3 16:58:52 2011
+# Created: Sun Mar  6 23:12:16 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -53,6 +53,7 @@ class Ui_ConfigureTool(object):
         self.verticalLayout_11.addWidget(self.radioButton_hardware)
         self.horizontalLayout_2.addWidget(self.widget_videoSource)
         self.groupBox_localDesktopBox = QtGui.QGroupBox(self.groupBox_videoSource)
+        self.groupBox_localDesktopBox.setEnabled(True)
         self.groupBox_localDesktopBox.setMinimumSize(QtCore.QSize(0, 138))
         self.groupBox_localDesktopBox.setObjectName("groupBox_localDesktopBox")
         self.verticalLayout_12 = QtGui.QVBoxLayout(self.groupBox_localDesktopBox)
@@ -326,12 +327,16 @@ class Ui_ConfigureTool(object):
         self.label_port.setBuddy(self.lineEdit_port)
         self.label_URL_IP.setBuddy(self.lineEdit_URL_IP)
         self.label_password.setBuddy(self.lineEdit_password)
+        self.label.setBuddy(self.comboBox_stremingQualityList)
         self.label_record.setBuddy(self.lineEdit_recordKey)
         self.label_stop.setBuddy(self.lineEdit_stopKey)
         self.label_videoDirectory.setBuddy(self.lineEdit_videoDirectory)
 
         self.retranslateUi(ConfigureTool)
         self.configureTab.setCurrentIndex(2)
+        QtCore.QObject.connect(self.radioButton_recordLocalArea, QtCore.SIGNAL("toggled(bool)"), self.pushButton_setArea.setEnabled)
+        QtCore.QObject.connect(self.radioButton_localDesktop, QtCore.SIGNAL("toggled(bool)"), self.groupBox_localDesktopBox.setVisible)
+        QtCore.QObject.connect(self.radioButton_hardware, QtCore.SIGNAL("toggled(bool)"), self.groupBox_hardware.setVisible)
         QtCore.QObject.connect(self.groupBox_enableStreaming, QtCore.SIGNAL("toggled(bool)"), self.pushButton_testStreaming.setEnabled)
         QtCore.QObject.connect(self.lineEdit_URL_IP, QtCore.SIGNAL("textChanged(QString)"), self.label_check_1.show)
         QtCore.QObject.connect(self.lineEdit_port, QtCore.SIGNAL("textChanged(QString)"), self.label_check_2.show)
@@ -412,13 +417,13 @@ class Ui_ConfigureTool(object):
         self.label_URL_IP.setText(QtGui.QApplication.translate("ConfigureTool", "&URL/IP", None, QtGui.QApplication.UnicodeUTF8))
         self.label_password.setText(QtGui.QApplication.translate("ConfigureTool", "&Password", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_testStreaming.setText(QtGui.QApplication.translate("ConfigureTool", "&Test", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("ConfigureTool", "Streming Quality", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("ConfigureTool", "Streaming Quality", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_stremingQualityList.setItemText(0, QtGui.QApplication.translate("ConfigureTool", "None", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_stremingQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "480x360", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_stremingQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_stremingQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "1280x720", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_stremingQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1920x1080", None, QtGui.QApplication.UnicodeUTF8))
-        self.configureTab.setTabText(self.configureTab.indexOf(self.tab), QtGui.QApplication.translate("ConfigureTool", "Steaming", None, QtGui.QApplication.UnicodeUTF8))
+        self.configureTab.setTabText(self.configureTab.indexOf(self.tab), QtGui.QApplication.translate("ConfigureTool", "Steaming setting", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_autoHide.setTitle(QtGui.QApplication.translate("ConfigureTool", "Auto Hide", None, QtGui.QApplication.UnicodeUTF8))
         self.checkbox_autoHide.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Enables auto-hide to system tray.", None, QtGui.QApplication.UnicodeUTF8))
         self.checkbox_autoHide.setText(QtGui.QApplication.translate("ConfigureTool", "&Enable Auto-Hide", None, QtGui.QApplication.UnicodeUTF8))
@@ -434,5 +439,4 @@ class Ui_ConfigureTool(object):
         self.pushButton_reset.setText(QtGui.QApplication.translate("ConfigureTool", "&Reset", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_apply.setText(QtGui.QApplication.translate("ConfigureTool", "&Apply", None, QtGui.QApplication.UnicodeUTF8))
 
-import resource_rc
 import resource_rc
