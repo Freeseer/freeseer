@@ -45,6 +45,7 @@ class Config:
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.resolution = '0x0' # no scaling for video
+        self.streaming = '0x0' #no scaling for streaming
         self.videosrc = 'desktop'
         self.videodev = 'none'
         self.start_x = 0
@@ -55,7 +56,8 @@ class Config:
         self.audiofb = 'False'
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'
-        
+        self.auto_hidden = 'True'
+        self.enable_streaming = 'False'
         # Read in the config file
         self.readConfig()
         
@@ -83,6 +85,7 @@ class Config:
         try:
             self.videodir = config.get('Global', 'video_directory')
             self.resolution = config.get('Global', 'resolution')
+            self.streaming = config.get('Global','streaming')
             self.videosrc = config.get('lastrun', 'video_source')
             self.videodev = config.get('lastrun', 'video_device')
             self.start_x = config.get('lastrun', 'area_start_x')
@@ -93,6 +96,8 @@ class Config:
             self.audiofb = config.get('lastrun', 'audio_feedback')
             self.key_rec = config.get('lastrun', 'shortkey_rec')
             self.key_stop = config.get('lastrun', 'shortkey_stop')
+	    self.auto_hidden = config.get('lastrun', 'auto_hidden')
+	    self.enable_streaming = config.get('lastrun', 'enable_streaming')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -107,6 +112,7 @@ class Config:
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
+        config.set('Global','streaming',self.streaming)
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
         config.set('lastrun', 'video_device', self.videodev)
@@ -118,7 +124,8 @@ class Config:
         config.set('lastrun', 'audio_feedback', self.audiofb)
         config.set('lastrun', 'shortkey_rec', self.key_rec)
         config.set('lastrun', 'shortkey_stop', self.key_stop)
-                
+        config.set('lastrun', 'auto_hidden', self.auto_hidden)
+        config.set('lastrun', 'enable_streaming', self.enable_streaming)
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)

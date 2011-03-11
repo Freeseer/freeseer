@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './forms/freeseer_configtool_ui.ui'
 #
-# Created: Sun Mar  6 23:12:16 2011
+# Created: Thu Mar 10 19:13:59 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -234,14 +234,14 @@ class Ui_ConfigureTool(object):
         self.label = QtGui.QLabel(self.horizontalLayoutWidget_2)
         self.label.setObjectName("label")
         self.horizontalLayout_3.addWidget(self.label)
-        self.comboBox_stremingQualityList = QtGui.QComboBox(self.horizontalLayoutWidget_2)
-        self.comboBox_stremingQualityList.setObjectName("comboBox_stremingQualityList")
-        self.comboBox_stremingQualityList.addItem("")
-        self.comboBox_stremingQualityList.addItem("")
-        self.comboBox_stremingQualityList.addItem("")
-        self.comboBox_stremingQualityList.addItem("")
-        self.comboBox_stremingQualityList.addItem("")
-        self.horizontalLayout_3.addWidget(self.comboBox_stremingQualityList)
+        self.comboBox_streamingQualityList = QtGui.QComboBox(self.horizontalLayoutWidget_2)
+        self.comboBox_streamingQualityList.setObjectName("comboBox_streamingQualityList")
+        self.comboBox_streamingQualityList.addItem("")
+        self.comboBox_streamingQualityList.addItem("")
+        self.comboBox_streamingQualityList.addItem("")
+        self.comboBox_streamingQualityList.addItem("")
+        self.comboBox_streamingQualityList.addItem("")
+        self.horizontalLayout_3.addWidget(self.comboBox_streamingQualityList)
         self.configureTab.addTab(self.tab, "")
         self.Extrasetting = QtGui.QWidget()
         self.Extrasetting.setObjectName("Extrasetting")
@@ -327,7 +327,7 @@ class Ui_ConfigureTool(object):
         self.label_port.setBuddy(self.lineEdit_port)
         self.label_URL_IP.setBuddy(self.lineEdit_URL_IP)
         self.label_password.setBuddy(self.lineEdit_password)
-        self.label.setBuddy(self.comboBox_stremingQualityList)
+        self.label.setBuddy(self.comboBox_streamingQualityList)
         self.label_record.setBuddy(self.lineEdit_recordKey)
         self.label_stop.setBuddy(self.lineEdit_stopKey)
         self.label_videoDirectory.setBuddy(self.lineEdit_videoDirectory)
@@ -418,11 +418,11 @@ class Ui_ConfigureTool(object):
         self.label_password.setText(QtGui.QApplication.translate("ConfigureTool", "&Password", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_testStreaming.setText(QtGui.QApplication.translate("ConfigureTool", "&Test", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("ConfigureTool", "Streaming Quality", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_stremingQualityList.setItemText(0, QtGui.QApplication.translate("ConfigureTool", "None", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_stremingQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "480x360", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_stremingQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_stremingQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "1280x720", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_stremingQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1920x1080", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_streamingQualityList.setItemText(0, QtGui.QApplication.translate("ConfigureTool", "None", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_streamingQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "480x360", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_streamingQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_streamingQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "1280x720", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_streamingQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1920x1080", None, QtGui.QApplication.UnicodeUTF8))
         self.configureTab.setTabText(self.configureTab.indexOf(self.tab), QtGui.QApplication.translate("ConfigureTool", "Steaming setting", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox_autoHide.setTitle(QtGui.QApplication.translate("ConfigureTool", "Auto Hide", None, QtGui.QApplication.UnicodeUTF8))
         self.checkbox_autoHide.setToolTip(QtGui.QApplication.translate("ConfigureTool", "Enables auto-hide to system tray.", None, QtGui.QApplication.UnicodeUTF8))

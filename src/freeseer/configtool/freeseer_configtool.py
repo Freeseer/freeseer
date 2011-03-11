@@ -227,6 +227,13 @@ class ConfigTool(QtGui.QDialog):
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
         
+        if self.core.config.resolution == '0x0':
+	    streaming_resolution = 0
+	else:
+	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming)
+	if not (streaming_resolution < 0):
+	    self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
+        
     def screen_size(self):
 
 	self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
@@ -250,9 +257,14 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
         if self.core.config.resolution == 'NONE':
             self.core.config.resolution = '0x0'
+	self.core.config.streaming = str(self.ui.comboBox_streamingQualityList.currentText())
+	if self.core.config.streaming == 'NONE':
+	    self.core.config.streaming == '0x0'
+	
         self.core.config.writeConfig()
         
         self.change_output_resolution()
+        self.change_streaming_resoltion()
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()
@@ -279,6 +291,16 @@ class ConfigTool(QtGui.QDialog):
         height = s[1]
         self.core.change_output_resolution(width, height)
 
+    def change_streaming_resoltion(self):
+	res = str(self.ui.comboBox_streamingQualityList.currentText())
+        if res == 'NONE':
+            s = '0x0'.split('x')
+        else:
+            s = res.split('x')
+        width = s[0]
+        height = s[1]
+        #need change here
+        #self.core.change_output_resolution(width, height)
         
     def area_select(self):
         self.area_selector = QtAreaSelector(self)
