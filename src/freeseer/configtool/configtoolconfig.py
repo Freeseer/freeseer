@@ -56,8 +56,8 @@ class Config:
         self.audiofb = 'False'
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'
-        self.auto_hidden = 'True'
-        # self.enable_streaming = 'False'
+        #self.auto_hidden = 'True'
+        self.enable_streaming = 'False'
         # Read in the config file
         self.readConfig()
         

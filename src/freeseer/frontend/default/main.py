@@ -138,7 +138,7 @@ class MainApp(QtGui.QMainWindow):
         self.load_talks()
         self.load_events()
         self.load_rooms()
-        #self.load_settings()
+        self.load_settings()
         
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -186,8 +186,8 @@ class MainApp(QtGui.QMainWindow):
         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
         self.short_rec_key.setEnabled(True)
         self.short_stop_key.setEnabled(True)
-        #self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        #self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
         
         self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
         self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
@@ -231,8 +231,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 	
-	# get update if perfermance changed
-	#self.update()
+
 	
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
@@ -364,7 +363,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
         self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
-
+	
         if self.core.config.resolution == '0x0':
             resolution = 0
         else:
@@ -730,15 +729,9 @@ class MainApp(QtGui.QMainWindow):
        print("Invalid Locale Resorting to Default Language: English");
      
     def config_tool(self):
-	self.configTool.show()
-	if self.configTool.exec_():
-	    if self.configTool.ui.autoHideCheckbox.isChecked():
-	       self.core.preview(False, self.ui.previewWidget.winId())
-               self.core.logger.log.info('disable preview')
-            else: 
-	       self.core.preview(True, self.ui.previewWidget.winId())
-	       self.core.logger.log.info('enable preview')
-	       
+	self.configTool.exec_()
+	self.load_settings()
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
