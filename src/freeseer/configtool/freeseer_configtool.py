@@ -60,14 +60,15 @@ class ConfigTool(QtGui.QDialog):
 	# get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
         
+        #load setting for the config data
+        self.load_settings()
+	
         #Setup the translator and populate the language menu under options
 	self.uiTranslator = QtCore.QTranslator();
 	self.langActionGroup = QtGui.QActionGroup(self);
 	QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
 	
-	#load setting for the config data
-        self.load_settings()
-	
+
 	
 	# configure tab connections
         self.connect(self.ui.groupBox_videoSource, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
@@ -89,9 +90,10 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.pushButton_derectScreenResoltion,QtCore.SIGNAL('clicked()'),self.screen_size)
         self.connect(self.desktop ,QtCore.SIGNAL('resized(int)'),self.screen_size)
         self.connect(self.desktop ,QtCore.SIGNAL('screenCountChanged(int)'),self.screen_size)
+        
         #connections for Video Setting -> Enable Streaming
 
-        self.connect(self.ui.groupBox_enableStreaming,QtCore.SIGNAL('toggle(bool)'), self.toggle_enable_streaming)
+        self.connect(self.ui.groupBox_enableStreaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
         '''
         self.connect(self.ui.lineEdit_URL_IP,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
@@ -117,11 +119,7 @@ class ConfigTool(QtGui.QDialog):
         
         # set default source
         self.toggle_video_source()
-        if (self.core.config.audiosrc == 'none'):
-            self.core.change_soundsrc(str(self.ui.audioSourceList.currentText()))
-        else: self.core.change_soundsrc(self.core.config.audiosrc)
-
-            
+                    
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
         for src in vidsrcs:
@@ -134,32 +132,22 @@ class ConfigTool(QtGui.QDialog):
                 self.ui.radioButton_hardware.setEnabled(True)
                 self.ui.radioButton_firewiresrc.setEnabled(True)
                 
-        if (self.core.config.videosrc == 'desktop'):
-            self.ui.radioButton_recordLocalDesktop.setChecked(True)
-            if (self.core.config.videodev == 'local area'):
-                self.ui.radioButton_recordLocalArea.setChecked(True)
-                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-        elif (self.core.config.videosrc == 'usb'):
-            self.ui.radioButton_hardware.setChecked(True)
-            self.ui.radioButton_USBsrc.setChecked(True)
-        elif (self.core.config.videosrc == 'firewire'):
-            self.ui.radioButton_hardware.setChecked(True)
-            self.ui.radioButton_firewiresrc.setChecked(True)
             
     def toggle_video_recording(self, state):
         '''
         Enables / Disables video recording depending on if the user has
         checked the video box in configuration mode.
         '''
-        self.core.set_video_mode(state)
-
+        self.core.config.enable_video_recoding = state
+	self.core.logger.log.debug('Enable video recoding: ' + str(state))
+	
     def toggle_audio_recording(self,state):
         '''
         Enables / Disables audio recording depending on if the user has
         checked the audio box in configuration mode.
         '''
-        self.core.set_audio_mode(state)
-
+        self.core.config.enable_audio_recoding = state
+	self.core.logger.log.debug('Enable audio recoding: ' + str(state))
 
     def toggle_video_source(self):
         '''
@@ -169,20 +157,24 @@ class ConfigTool(QtGui.QDialog):
         # recording the local desktop
         if (self.ui.radioButton_localDesktop.isChecked()): 
             self.ui.checkbox_autoHide.setChecked(True)
-            if (self.ui.radioButton_recordLocalDesktop.isChecked()):
-                self.videosrc = 'desktop'
+            self.core.config.videosrc = 'desktop'
+            if (self.ui.radioButton_recordLocalDesktop.isChecked()):         
                 self.core.config.videodev = 'default'
-            elif (self.ui.radioButton_recordLocalArea.isChecked()):
                 self.videosrc = 'desktop'
+            elif (self.ui.radioButton_recordLocalArea.isChecked()):
                 self.core.config.videodev = 'local area'
-                self.core.set_record_area(True)
-
+		self.videosrc = 'desktop'
+		
         # recording from hardware such as usb or fireware device
         elif (self.ui.radioButton_hardware.isChecked()):
+
             self.ui.checkbox_autoHide.setChecked(False)
-            self.core.set_record_area(False)
-            if (self.ui.radioButton_USBsrc.isChecked()): self.videosrc = 'usb'
-            elif (self.ui.radioButton_firewiresrc.isChecked()): self.videosrc = 'firewire'
+            if (self.ui.radioButton_USBsrc.isChecked()): 
+		self.videosrc = 'usb'
+		self.core.config.videosrc = 'usb'
+            elif (self.ui.radioButton_firewiresrc.isChecked()): 
+		self.videosrc = 'firewire'
+		self.core.config.videosrc = 'firewire'
             else: return
 
             # add available video devices for selected source
@@ -196,15 +188,16 @@ class ConfigTool(QtGui.QDialog):
         else: return
 
         # finally load the changes into core
-        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+        #self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 
     
-    def toggle_enable_streaming(self,state):
+    def toggle_streaming(self,state):
 	'''
 	Enable /Disables streaming if the user has checked the
 	enable streaming box in config tool
 	'''
-	pass
+	self.core.logger.log.debug('Enable streaming: ' + str(state))
+        self.core.config.enable_streaming = state
 
 	
     def test_streaming(self):
@@ -217,8 +210,36 @@ class ConfigTool(QtGui.QDialog):
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
         self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
+        
+        if self.core.config.enable_video_recoding == 'False':
+	  self.ui.groupBox_videoSource.setChecked(False)
+	else:
+	  self.ui.groupBox_videoSource.setChecked(True)
+	  
+	if self.core.config.enable_audio_recoding == 'False':
+	  self.ui.groupBox_soundSource.setChecked(False)
+	else:
+	  self.ui.groupBox_soundSource.setChecked(True)
 	
-	self.screen_size()
+	if self.core.config.enable_streaming == 'True':
+	  self.ui.groupBox_enableStreaming.setChecked(True)
+	else:
+	  self.ui.groupBox_enableStreaming.setChecked(False)	  
+	
+        if (self.core.config.videosrc == 'desktop'):
+            self.ui.radioButton_recordLocalDesktop.setChecked(True)
+            if (self.core.config.videodev == 'local area'):
+                self.ui.radioButton_recordLocalArea.setChecked(True)
+                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+                
+        elif (self.core.config.videosrc == 'usb'):
+            self.ui.radioButton_hardware.setChecked(True)
+            self.ui.radioButton_USBsrc.setChecked(True)
+            
+        elif (self.core.config.videosrc == 'firewire'):
+            self.ui.radioButton_hardware.setChecked(True)
+            self.ui.radioButton_firewiresrc.setChecked(True)
+	
 	screenres = self.primary_screen_size()
 
         if self.core.config.resolution == '0x0':
@@ -227,7 +248,7 @@ class ConfigTool(QtGui.QDialog):
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
         
-        if self.core.config.resolution == '0x0':
+        if self.core.config.streaming == '0x0':
 	    streaming_resolution = 0
 	else:
 	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming)
@@ -244,7 +265,7 @@ class ConfigTool(QtGui.QDialog):
 	  i = i + 1
 	  
     def screen_resize(self):
-	self.core.logger.log.info('resized')
+	self.core.logger.log.info('sreen resized ... ')
 
     def primary_screen_size(self):
 	width = self.desktop.screenGeometry(self.desktop.primaryScreen ()).width()
@@ -263,8 +284,6 @@ class ConfigTool(QtGui.QDialog):
 	
         self.core.config.writeConfig()
         
-        self.change_output_resolution()
-        self.change_streaming_resoltion()
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()
@@ -279,29 +298,9 @@ class ConfigTool(QtGui.QDialog):
         dev = self.core.config.videodev = str(self.ui.comboBox_videoDeviceList.currentText())
         src = self.videosrc
         self.core.logger.log.debug('Changing video device to ' + dev)
-        self.core.change_videosrc(src, dev)
-        
-    def change_output_resolution(self):
-        res = str(self.ui.comboBox_videoQualityList.currentText())
-        if res == 'NONE':
-            s = '0x0'.split('x')
-        else:
-            s = res.split('x')
-        width = s[0]
-        height = s[1]
-        self.core.change_output_resolution(width, height)
+        self.core.config.video_device = src
+     
 
-    def change_streaming_resoltion(self):
-	res = str(self.ui.comboBox_streamingQualityList.currentText())
-        if res == 'NONE':
-            s = '0x0'.split('x')
-        else:
-            s = res.split('x')
-        width = s[0]
-        height = s[1]
-        #need change here
-        #self.core.change_output_resolution(width, height)
-        
     def area_select(self):
         self.area_selector = QtAreaSelector(self)
         self.area_selector.show()
@@ -320,8 +319,8 @@ class ConfigTool(QtGui.QDialog):
     def change_audio_device(self):
         src = self.core.config.audiosrc = str(self.ui.comboBox_audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
-        self.core.change_soundsrc(src)
-    
+        self.core.config.audio_source = src
+   
     
     def grab_rec_key(self):
         '''
@@ -344,7 +343,7 @@ class ConfigTool(QtGui.QDialog):
         self.ui.lineEdit_recordKey.setText(key)
         self.core.config.key_rec = key
         self.core.config.writeConfig()
-        #self.show()
+        self.show()
             
     
     def grab_stop_key(self):

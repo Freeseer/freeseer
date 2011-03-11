@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -266,7 +266,7 @@ v4l2src does not work.</string>
       </rect>
      </property>
      <property name="title">
-      <string>Enable Sound Recoding</string>
+      <string>Enable Audio Recoding</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -284,7 +284,7 @@ v4l2src does not work.</string>
        <item>
         <widget class="QLabel" name="label_soundSource">
          <property name="text">
-          <string>&amp;Sound Source</string>
+          <string>&amp;Audio Source</string>
          </property>
          <property name="buddy">
           <cstring>comboBox_audioSourceList</cstring>

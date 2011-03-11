@@ -32,7 +32,7 @@ import os
 
 from freeseer.backend.gstreamer import *
 
-from configtoolconfig import Config
+from configtool_configloader import Config
 from freeseer.framework.logger import Logger
 from freeseer.framework.presentation import *
 
@@ -50,11 +50,8 @@ class ConfigCore:
         self.logger = Logger(configdir)
 
         # Start Freeseer Recording Backend
-        self.backend = Freeseer_gstreamer(self)
-        resolution = self.config.resolution.split('x')
-        self.change_output_resolution(resolution[0], resolution[1])      
-        
-        self.logger.log.info(u"Core initialized")   
+        self.backend = Freeseer_gstreamer(self)       
+        self.logger.log.info(u"Config Core initialized")   
 	
    
     ##
@@ -76,72 +73,15 @@ class ConfigCore:
         self.logger.log.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
         return viddevs
     
+
     def get_audio_sources(self):
         '''
         Returns supported audio sources.
         '''
         sndsrcs = self.backend.get_audio_sources()
         self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
-        return sndsrcs
-
-    def set_video_mode(self, mode):
-        '''
-        Enables video recording when mode is set to True
-        Disables video recording when mode is set to False
-        '''
-        if mode == True:
-            self.logger.log.info('Video recording: ENABLED')
-        else:
-            self.logger.log.info('Video recording: DISABLED')
-            
-        self.backend.set_video_mode(mode)
+        return sndsrcs     
         
-    def change_videosrc(self, vid_source, vid_device):
-        '''
-        Informs backend of new video source to use when recording.
-        '''
-        self.backend.change_video_source(vid_source, vid_device)
-        self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
-
-    def set_record_area(self, enabled):
-        self.backend.set_record_area(enabled)
-
-    def set_recording_area(self, x1, y1, x2, y2):
-        # gstreamer backend needs to have the lower x/y coordinates
-        # sent first.
-        if (x2 < x1):
-            if (y2 < y1):
-                self.backend.set_recording_area(x2, y2, x1, y1)
-            else:
-                self.backend.set_recording_area(x2, y1, x1, y2)
-        else:
-            if (y2 < y1):
-                self.backend.set_recording_area(x1, y2, x2, y1)
-            else:
-                self.backend.set_recording_area(x1, y1, x2, y2)
-
-    def change_output_resolution(self, width, height):
-        self.backend.change_output_resolution(width, height)
-        self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
-
-    def set_audio_mode(self, mode):
-        '''
-        Enables video recording when mode is set to True
-        Disables video recording when mode is set to False
-        '''
-        if mode == True:
-            self.logger.log.info('Audio recording: ENABLED')
-        else:
-            self.logger.log.info('Audio recording: DISABLED')
-
-        self.backend.set_audio_mode(mode)
-
-    def change_soundsrc(self, snd_source):
-        '''
-        Informs backend of new audio source to use when recording.
-        '''
-        return self.backend.change_audio_source(snd_source)
-            
     def preview(self, enable=False, window_id=None):
         '''
         Enable/Disable the video preview window.

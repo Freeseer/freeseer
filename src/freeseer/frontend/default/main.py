@@ -24,13 +24,13 @@
 
 from PyQt4 import QtGui, QtCore
 from os import listdir;
-
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 
 from freeseer.configtool.freeseer_configtool import *
+
 from freeseer_ui_qt import *
 from freeseer_about import *
 import qxtglobalshortcut
@@ -45,6 +45,7 @@ HEADPHONES_ARTIST=u'Ben Fleming'
 HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
 LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
 	
+
 class AboutDialog(QtGui.QDialog):
     '''
     About dialog class for displaying app information
@@ -188,10 +189,6 @@ class MainApp(QtGui.QMainWindow):
         self.short_stop_key.setEnabled(True)
         self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
         self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
-        
-        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
-        
         self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
         self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
         
@@ -212,7 +209,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
-        
+                
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 
@@ -230,8 +227,6 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
-	
-
 	
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
@@ -280,7 +275,7 @@ class MainApp(QtGui.QMainWindow):
 	    self.langActionGroup.addAction(language_menu_button);	 
 	if(active_button!=None):	
 	  active_button.setChecked(True);
-	  print('There are no languages available in the system except english. Please check the language directory to ensure qm files exist');  
+	  #print('There are no languages available in the system except english. Please check the language directory to ensure qm files exist');  
 	#Set up the event handling for each of the menu items  
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
 	
@@ -363,7 +358,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
         self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
         self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
-	
+
         if self.core.config.resolution == '0x0':
             resolution = 0
         else:
@@ -722,12 +717,10 @@ class MainApp(QtGui.QMainWindow):
    
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
-       self.configTool.translate();
-
        
       else:
        print("Invalid Locale Resorting to Default Language: English");
-     
+    
     def config_tool(self):
 	self.configTool.exec_()
 	self.load_settings()
