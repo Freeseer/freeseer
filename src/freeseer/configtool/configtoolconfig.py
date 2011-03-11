@@ -60,10 +60,10 @@ class Config:
         self.readConfig()
         
         # Make the recording directory
-        #try:
-            #os.makedirs(self.videodir)
-        #except OSError:
-            #print('Video directory exists.')
+        try:
+            os.makedirs(self.videodir)
+        except OSError:
+            print('Video directory exists.')
             
     def readConfig(self):
         '''

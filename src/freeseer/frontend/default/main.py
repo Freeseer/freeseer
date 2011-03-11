@@ -731,12 +731,14 @@ class MainApp(QtGui.QMainWindow):
      
     def config_tool(self):
 	self.configTool.show()
-	if self.configTool.ui.autoHideCheckbox.isChecked():
-            self.core.preview(False, self.ui.previewWidget.winId())
-            self.core.logger.log.info('disable preview')
-        else: 
-	    self.core.preview(True, self.ui.previewWidget.winId())
-	    self.core.logger.log.info('enable preview')
+	if self.configTool.exec_():
+	    if self.configTool.ui.autoHideCheckbox.isChecked():
+	       self.core.preview(False, self.ui.previewWidget.winId())
+               self.core.logger.log.info('disable preview')
+            else: 
+	       self.core.preview(True, self.ui.previewWidget.winId())
+	       self.core.logger.log.info('enable preview')
+	       
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
