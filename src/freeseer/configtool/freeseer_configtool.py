@@ -40,7 +40,7 @@ class ConfigTool(QtGui.QDialog):
     '''
 
     def __init__(self):
-        QtGui.QWidget.__init__(self)
+        QtGui.QDialog.__init__(self)
         self.ui = Ui_ConfigureTool()
         self.ui.setupUi(self)
 	self.default_language = 'en';
@@ -293,7 +293,7 @@ class ConfigTool(QtGui.QDialog):
 	    self.core.config.streaming = '0x0'
 	
         self.core.config.writeConfig()
-        
+        self.emit(QtCore.SIGNAL("changed"))
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()

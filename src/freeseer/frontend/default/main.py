@@ -113,7 +113,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
-        #self.configTool = ConfigTool()
+        self.configTool = ConfigTool()
         self.ui.editTable.setColumnHidden(3,True)
         self.default_language = 'en';
         self.talks_to_save = []
@@ -175,11 +175,13 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        #self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
+        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.configTool.show)
                 
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 
+
+	self.connect(self.configTool, QtCore.SIGNAL("changed"),self.config_tool)
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
@@ -260,6 +262,7 @@ class MainApp(QtGui.QMainWindow):
 	  if src in vidsrcs:
 	    newItem = QtGui.QTableWidgetItem('OK')
 	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
+
 	    if (src == 'desktop'):
                 self.videosrc = 'desktop'
                 newItem = QtGui.QTableWidgetItem('OK')
@@ -288,22 +291,23 @@ class MainApp(QtGui.QMainWindow):
 		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
 	    else:
 		 newItem = QtGui.QTableWidgetItem('Error')
-		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
-		 
-	    dev = self.core.config.videodev
-	    viddevs = self.core.get_video_devices(self.videosrc)
-    
+	         self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	    
 	    newItem = QtGui.QTableWidgetItem(self.videosrc)
 	    self.ui.tableWidget_infoTable.setItem(1,0,newItem)
 	    
-	    if dev in viddevs:
-		self.core.change_videosrc(self.videosrc, self.core.config.videodev)
-		newItem = QtGui.QTableWidgetItem(dev)
-		self.ui.tableWidget_infoTable.setItem(2,0,newItem)
-	    else:
-	        self.core.logger.log.debug('Can NOT find video device: '+ dev)
-		newItem = QtGui.QTableWidgetItem('Error')
-		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	    if src == 'usb' or src == 'fireware':
+		dev = self.core.config.videodev
+		viddevs = self.core.get_video_devices(self.videosrc)
+		
+		if dev in viddevs:
+		    self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+		    newItem = QtGui.QTableWidgetItem(dev)
+		    self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+		else:
+		    self.core.logger.log.debug('Can NOT find video device: '+ dev)
+		    newItem = QtGui.QTableWidgetItem('Error')
+		    self.ui.tableWidget_infoTable.setItem(2,1,newItem)
 	  else:
 	    newItem = QtGui.QTableWidgetItem('Error')
 	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
@@ -654,8 +658,7 @@ class MainApp(QtGui.QMainWindow):
        print("Invalid Locale Resorting to Default Language: English");
     
     def config_tool(self):
-	self.configTool.exec_()
-	self.load_settings()
+	  self.load_settings()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
