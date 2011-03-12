@@ -156,23 +156,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
-
-        # configure tab connections
-        #self.connect(self.ui.videoConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
-        #self.connect(self.ui.soundConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_recording)
-        #self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
-        #self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
-        
-        # connections for video source radio buttons
-        #self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        #self.connect(self.ui.recordLocalDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        #self.connect(self.ui.recordLocalAreaButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        #self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        #self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        #self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        #self.connect(self.ui.areaButton, QtCore.SIGNAL('clicked()'), self.area_select)
-        #self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
-        #self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
         # connections for configure > Extra Settings > Shortkeys
         self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
@@ -197,9 +180,6 @@ class MainApp(QtGui.QMainWindow):
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 
-        # setup video preview widget
-        self.core.preview(True, self.ui.previewWidget.winId())
-	
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
@@ -372,11 +352,16 @@ class MainApp(QtGui.QMainWindow):
 	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
 	
         #load auto hidden setting
-        self.auto_hidden=  self.core.config.auto_hidden
+        self.auto_hide=  self.core.config.auto_hide
 	
-	newItem = QtGui.QTableWidgetItem(self.auto_hidden)
+	newItem = QtGui.QTableWidgetItem(self.auto_hide)
 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
 	
+	if self.auto_hide == 'True':
+            self.core.preview(False, self.ui.previewWidget.winId())
+        else: 
+	    self.core.preview(True, self.ui.previewWidget.winId())
+	    
 	newItem = QtGui.QTableWidgetItem(self.core.config.videodir)
 	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
 	
@@ -446,7 +431,7 @@ class MainApp(QtGui.QMainWindow):
             self.core.record(self.current_presentation())	
             self.ui.recordButton.setText(self.tr('Stop'))
 
-            if (not self.ui.autoHideCheckbox.isChecked()):
+            if (not self.autoHide):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
@@ -613,14 +598,6 @@ class MainApp(QtGui.QMainWindow):
         # lets not forget to reactivate the editTable signal
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
         
-    def toggle_auto_hide(self):
-        '''
-        This function disables the preview when auto-hide box is checked.
-        '''
-        if self.ui.autoHideCheckbox.isChecked():
-            self.core.preview(False, self.ui.previewWidget.winId())
-        else: self.core.preview(True, self.ui.previewWidget.winId())
-
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             if self.isHidden():

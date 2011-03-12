@@ -256,10 +256,11 @@ class ConfigTool(QtGui.QDialog):
 	if not (streaming_resolution < 0):
 	    self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
         #load auto hidden setting
-        if self.core.config.auto_hidden == 'True':
+        if self.core.config.auto_hide == 'True':
 	   self.ui.checkbox_autoHide.setChecked(True)
 	else:
 	    self.ui.groupBox_enableStreaming.setChecked(False)
+	    
 	#load shortkey and video directory
 	self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
@@ -334,7 +335,7 @@ class ConfigTool(QtGui.QDialog):
         '''
 	when user toggle auto hidden, save it to conifg file
 	'''
-	self.core.config.auto_hidden = state
+	self.core.config.auto_hide = state
 	self.core.logger.log.debug('Set auto hidden to: ' + str(state))
 	
     def grab_rec_key(self):
