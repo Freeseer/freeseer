@@ -273,9 +273,6 @@ class ConfigTool(QtGui.QDialog):
 	  newItem = QtGui.QTableWidgetItem(str(self.desktop.screenGeometry(i).width()) + 'x' + str(self.desktop.screenGeometry(i).height()))
 	  self.ui.tableWidget_screenResolution.setItem(i,0,newItem)
 	  i = i + 1
-	  
-    def screen_resize(self):
-	self.core.logger.log.info('sreen resized ... ')
 
     def primary_screen_size(self):
 	width = self.desktop.screenGeometry(self.desktop.primaryScreen ()).width()

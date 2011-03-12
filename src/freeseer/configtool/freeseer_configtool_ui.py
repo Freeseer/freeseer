@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './forms/freeseer_configtool_ui.ui'
 #
-# Created: Sat Mar 12 14:56:07 2011
+# Created: Sat Mar 12 15:27:19 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!

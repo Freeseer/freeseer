@@ -563,7 +563,7 @@
           <x>20</x>
           <y>10</y>
           <width>521</width>
-          <height>411</height>
+          <height>371</height>
          </rect>
         </property>
         <property name="editTriggers">
@@ -662,6 +662,19 @@
           <string>status</string>
          </property>
         </column>
+       </widget>
+       <widget class="QPushButton" name="pushButton_reload">
+        <property name="geometry">
+         <rect>
+          <x>440</x>
+          <y>400</y>
+          <width>96</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>reload</string>
+        </property>
        </widget>
       </widget>
      </widget>

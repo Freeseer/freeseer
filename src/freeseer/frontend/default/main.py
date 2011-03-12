@@ -175,13 +175,12 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.configTool.show)
+        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
                 
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
-
-
-	self.connect(self.configTool, QtCore.SIGNAL("changed"),self.config_tool)
+	
+	self.connect(self.ui.pushButton_reload, QtCore.SIGNAL('clicked()'),self.load_settings)
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
@@ -242,12 +241,17 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
 	        
     def load_settings(self): 
-
+	self.core.logger.log.info('loading setting...')
 	i = 0
 	while i < self.ui.tableWidget_infoTable.rowCount():
 	  newItem = QtGui.QTableWidgetItem('Unknow')
 	  self.ui.tableWidget_infoTable.setItem(i,0,newItem)
+	  newItem = QtGui.QTableWidgetItem('')
+	  self.ui.tableWidget_infoTable.setItem(i,1,newItem)
 	  i =  i + 1
+	
+	#load the config file
+	self.core.config.readConfig()
 	
 	#load enable_video_recoding setting
 	newItem = QtGui.QTableWidgetItem(self.core.config.enable_video_recoding)
@@ -375,7 +379,7 @@ class MainApp(QtGui.QMainWindow):
 	newItem = QtGui.QTableWidgetItem(self.core.config.key_rec)
 	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
 
-        
+
     def change_output_resolution(self):
         res = str(self.resolution)
         s = res.split('x')
@@ -658,8 +662,9 @@ class MainApp(QtGui.QMainWindow):
        print("Invalid Locale Resorting to Default Language: English");
     
     def config_tool(self):
-	  self.load_settings()
-
+        self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
+       	self.configTool.show()
+       	
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
