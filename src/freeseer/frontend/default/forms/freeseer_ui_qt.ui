@@ -555,7 +555,7 @@
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
-        <string>info Tab</string>
+        <string>Info Tab</string>
        </attribute>
        <widget class="QTableWidget" name="tableWidget_infoTable">
         <property name="geometry">
@@ -634,7 +634,7 @@
         </row>
         <row>
          <property name="text">
-          <string>Autohidden</string>
+          <string>Auto-Hide</string>
          </property>
         </row>
         <row>
