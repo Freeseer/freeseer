@@ -114,7 +114,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.hardwareBox.hide()
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
-        self.configTool = ConfigTool()
+        #self.configTool = ConfigTool()
         self.ui.editTable.setColumnHidden(3,True)
         self.default_language = 'en';
         self.talks_to_save = []
@@ -157,28 +157,28 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
-        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_event)
-        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
-        self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
-        self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
-        self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
+        #self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_event)
+        #self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
+        #self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        #self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
+        #self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         # configure tab connections
-        self.connect(self.ui.videoConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
-        self.connect(self.ui.soundConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_recording)
-        self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
-        self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
+        #self.connect(self.ui.videoConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
+        #self.connect(self.ui.soundConfigBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_recording)
+        #self.connect(self.ui.videoDeviceList, QtCore.SIGNAL('activated(int)'), self.change_video_device)
+        #self.connect(self.ui.audioSourceList, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_device)
         
         # connections for video source radio buttons
-        self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        self.connect(self.ui.recordLocalDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        self.connect(self.ui.recordLocalAreaButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
-        self.connect(self.ui.areaButton, QtCore.SIGNAL('clicked()'), self.area_select)
-        self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
-        self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
+        #self.connect(self.ui.localDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        #self.connect(self.ui.recordLocalDesktopButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        #self.connect(self.ui.recordLocalAreaButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        #self.connect(self.ui.hardwareButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        #self.connect(self.ui.usbsrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        #self.connect(self.ui.firewiresrcButton, QtCore.SIGNAL('clicked()'), self.toggle_video_source)
+        #self.connect(self.ui.areaButton, QtCore.SIGNAL('clicked()'), self.area_select)
+        #self.connect(self.ui.resetSettingsButton, QtCore.SIGNAL('clicked()'), self.load_settings)
+        #self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
         # connections for configure > Extra Settings > Shortkeys
         self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
@@ -187,19 +187,19 @@ class MainApp(QtGui.QMainWindow):
         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
         self.short_rec_key.setEnabled(True)
         self.short_stop_key.setEnabled(True)
-        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
-        self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
-        self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
+        #self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        #self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        #self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+        #self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
         
         # connections for configure > Extra Settings > File Locations
-        self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
+        #self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
 
         # edit talks tab connections
-        self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
-        self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
-        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
+        #self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        #self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
+        #self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
+        #self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
         self.ui.addTalkGroupBox.setHidden(True)
         
         # extra tab connections
@@ -208,14 +208,14 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
+        #self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
                 
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 
         # setup video preview widget
         self.core.preview(True, self.ui.previewWidget.winId())
-
+	
         # setup default sources
         self.toggle_video_source()
         if (self.core.config.audiosrc == 'none'):
@@ -291,17 +291,6 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.hardwareButton.setEnabled(True)
                 self.ui.firewiresrcButton.setEnabled(True)
                 
-        if (self.core.config.videosrc == 'desktop'):
-            self.ui.localDesktopButton.setChecked(True)
-            if (self.core.config.videodev == 'local area'):
-                self.ui.recordLocalAreaButton.setChecked(True)
-                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-        elif (self.core.config.videosrc == 'usb'):
-            self.ui.hardwareButton.setChecked(True)
-            self.ui.usbsrcButton.setChecked(True)
-        elif (self.core.config.videosrc == 'firewire'):
-            self.ui.hardwareButton.setChecked(True)
-            self.ui.firewiresrcButton.setChecked(True)
 
     def toggle_video_recording(self, state):
         '''
@@ -354,16 +343,131 @@ class MainApp(QtGui.QMainWindow):
         # finally load the changes into core
         self.core.change_videosrc(self.videosrc, self.core.config.videodev)
         
-    def load_settings(self):
-        self.ui.videoDirectoryLineEdit.setText(self.core.config.videodir)
-        self.ui.shortRecordLineEdit.setText(self.core.config.key_rec)
-        self.ui.shortStopLineEdit.setText(self.core.config.key_stop)
+    def load_settings(self): 
 
-        if self.core.config.resolution == '0x0':
-            resolution = 0
-        else:
-            resolution = self.ui.resolutionComboBox.findText(self.core.config.resolution)
-        if not (resolution < 0): self.ui.resolutionComboBox.setCurrentIndex(resolution)
+	i = 0
+	while i < self.ui.tableWidget_infoTable.rowCount():
+	  newItem = QtGui.QTableWidgetItem('Unknow')
+	  self.ui.tableWidget_infoTable.setItem(i,0,newItem)
+	  i =  i + 1
+	
+	#load enable_video_recoding setting
+	newItem = QtGui.QTableWidgetItem(self.core.config.enable_video_recoding)
+	self.ui.tableWidget_infoTable.setItem(0,0,newItem)
+	if self.core.config.enable_video_recoding == 'False':
+	  self.core.set_video_mode(False)
+	else:
+	  self.core.set_video_mode(True)
+	  # load video source setting
+	  vidsrcs = self.core.get_video_sources()
+	  src = self.core.config.videosrc
+	  if src in vidsrcs:
+	    newItem = QtGui.QTableWidgetItem('OK')
+	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
+	    if (src == 'desktop'):
+                self.videosrc = 'desktop'
+                newItem = QtGui.QTableWidgetItem('OK')
+		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+                if (self.core.config.videodev == 'local area'):
+		  self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+		  newItem = QtGui.QTableWidgetItem(self.core.config.start_x +','+ self.core.config.start_y +','+ self.core.config.end_x +','+ self.core.config.end_y)
+		  self.ui.tableWidget_infoTable.setItem(3,0,newItem)
+		  newItem = QtGui.QTableWidgetItem('OK')
+		  self.ui.tableWidget_infoTable.setItem(3,1,newItem)
+		else:
+		  newItem = QtGui.QTableWidgetItem('Error')
+		  self.ui.tableWidget_infoTable.setItem(3,1,newItem)
+            elif (src == 'usb'):
+		 self.videosrc = 'usb'
+		 newItem = QtGui.QTableWidgetItem('OK')
+		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+            elif (src == 'firewire'):
+		 self.videosrc = 'fireware'
+		 newItem = QtGui.QTableWidgetItem('OK')
+		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	    else:
+		 newItem = QtGui.QTableWidgetItem('Error')
+		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+		 
+	    dev = self.core.config.videodev
+	    viddevs = self.core.get_video_devices(self.videosrc)
+    
+	    newItem = QtGui.QTableWidgetItem(self.videosrc)
+	    self.ui.tableWidget_infoTable.setItem(1,0,newItem)
+	    
+	    if dev in viddevs:
+		self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+		newItem = QtGui.QTableWidgetItem(dev)
+		self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+	    else:
+	        self.core.logger.log.debug('Can NOT find video device: '+ dev)
+		newItem = QtGui.QTableWidgetItem('Error')
+		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	  else:
+	    newItem = QtGui.QTableWidgetItem('Error')
+	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
+	    self.core.logger.log.debug('Can NOT find video source: '+ dev)
+	
+	
+	#load audio setting
+	newItem = QtGui.QTableWidgetItem(self.core.config.enable_audio_recoding)
+	self.ui.tableWidget_infoTable.setItem(5,0,newItem)
+	if self.core.config.enable_audio_recoding == 'False':
+	  self.core.set_audio_mode(False)
+	else:
+	  self.core.set_audio_mode(True)
+	  sndsrcs = self.core.get_audio_sources()
+	  src = self.core.config.audiosrc
+	  if src in sndsrcs:
+	    self.core.change_soundsrc(src)
+	    newItem = QtGui.QTableWidgetItem(src)
+	    self.ui.tableWidget_infoTable.setItem(6,0,newItem)
+	    newItem = QtGui.QTableWidgetItem('OK')
+	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
+	  else:
+	    newItem = QtGui.QTableWidgetItem('Error')
+	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
+	    self.core.logger.log.debug('Can NOT find audio source: '+ src)
+	  
+	newItem = QtGui.QTableWidgetItem(self.core.config.enable_streaming)
+	self.ui.tableWidget_infoTable.setItem(7,0,newItem)
+	if self.core.config.enable_streaming == 'True':
+	  pass
+	else:
+	  pass  
+	
+
+
+	
+	# load resolution
+        self.resolution =  self.core.config.resolution
+        self.change_output_resolution()
+        
+        newItem = QtGui.QTableWidgetItem(self.resolution)
+	self.ui.tableWidget_infoTable.setItem(4,0,newItem)
+	
+        #load streaming resoltion
+        self.streaming_resolution =  self.core.config.streaming
+        self.change_streaming_resolution()
+        
+        newItem = QtGui.QTableWidgetItem(self.streaming_resolution)
+	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
+	
+        #load auto hidden setting
+        self.auto_hidden=  self.core.config.auto_hidden
+	
+	newItem = QtGui.QTableWidgetItem(self.resolution)
+	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
+	
+	newItem = QtGui.QTableWidgetItem(self.core.config.videodir)
+	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
+	
+	newItem = QtGui.QTableWidgetItem(self.core.config.key_stop)
+	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
+	
+	newItem = QtGui.QTableWidgetItem(self.core.config.key_rec)
+	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
+
         
     def save_settings(self):
         self.core.config.videodir = str(self.ui.videoDirectoryLineEdit.text())
@@ -390,14 +494,18 @@ class MainApp(QtGui.QMainWindow):
         self.core.change_videosrc(src, dev)
         
     def change_output_resolution(self):
-        res = str(self.ui.resolutionComboBox.currentText())
-        if res == 'NONE':
-            s = '0x0'.split('x')
-        else:
-            s = res.split('x')
+        res = str(self.resolution)
+        s = res.split('x')
         width = s[0]
         height = s[1]
         self.core.change_output_resolution(width, height)
+    
+    def change_streaming_resolution(self):
+	res = str(self.streaming_resolution)
+        s = res.split('x')
+        width = s[0]
+        height = s[1]
+        
         
     def area_select(self):
         self.area_selector = QtAreaSelector(self)

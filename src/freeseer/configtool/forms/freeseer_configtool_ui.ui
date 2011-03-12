@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -192,6 +192,9 @@ Freeseer finds Firewire devices by scanning /dev/fwX starting from index 1.</str
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox_hardware">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -392,6 +395,9 @@ v4l2src does not work.</string>
         </property>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
         </property>
         <column>
          <property name="text">
@@ -667,7 +673,7 @@ v4l2src does not work.</string>
         <widget class="QComboBox" name="comboBox_streamingQualityList">
          <item>
           <property name="text">
-           <string>None</string>
+           <string>NONE</string>
           </property>
          </item>
          <item>

@@ -31,7 +31,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -469,8 +469,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>225</width>
-             <height>48</height>
+             <width>545</width>
+             <height>291</height>
             </rect>
            </property>
            <attribute name="label">
@@ -522,8 +522,8 @@ v4l2src does not work.</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>200</width>
-             <height>193</height>
+             <width>545</width>
+             <height>291</height>
             </rect>
            </property>
            <attribute name="label">
@@ -998,6 +998,117 @@ v4l2src does not work.</string>
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>info tab</string>
+       </attribute>
+       <widget class="QTableWidget" name="tableWidget_infoTable">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>10</y>
+          <width>521</width>
+          <height>411</height>
+         </rect>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="tabKeyNavigation">
+         <bool>true</bool>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropOverwriteMode">
+         <bool>true</bool>
+        </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::NoSelection</enum>
+        </property>
+        <property name="columnCount">
+         <number>2</number>
+        </property>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>20</number>
+        </attribute>
+        <row>
+         <property name="text">
+          <string>Video recoding</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Video source</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Video device</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Aera</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Resolution</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Audio recoding</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Audio source</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Streaming</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Streaming resolution</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Autohidden</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Video location</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Short stop key</string>
+         </property>
+        </row>
+        <row>
+         <property name="text">
+          <string>Short recod key</string>
+         </property>
+        </row>
+        <column>
+         <property name="text">
+          <string>info</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>status</string>
+         </property>
+        </column>
+       </widget>
       </widget>
      </widget>
     </item>

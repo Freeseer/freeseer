@@ -100,6 +100,9 @@ class Config:
             self.key_stop = config.get('lastrun', 'shortkey_stop')
 	    self.auto_hidden = config.get('lastrun', 'auto_hidden')
 	    self.enable_streaming = config.get('lastrun', 'enable_streaming')
+	    self.enable_video_recoding = config.get('lastrun','enable_video_recoding')
+	    self.enable_audio_recoding = config.get('lastrun','enable_audio_recoding')
+	    self.device = config.get('lastrun','device')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -128,6 +131,8 @@ class Config:
         config.set('lastrun', 'shortkey_stop', self.key_stop)
         config.set('lastrun', 'auto_hidden', self.auto_hidden)
         config.set('lastrun', 'enable_streaming', self.enable_streaming)
+        config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
+	config.set('lastrun','enable_audio_recoding',self.enable_audio_recoding)
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)

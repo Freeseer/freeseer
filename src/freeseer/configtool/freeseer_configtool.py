@@ -210,22 +210,22 @@ class ConfigTool(QtGui.QDialog):
 	self.ui.label_check_2.show()
 	
     def load_settings(self):
-      
+	#load enable video recoding setting
         if self.core.config.enable_video_recoding == 'False':
 	  self.ui.groupBox_videoSource.setChecked(False)
 	else:
 	  self.ui.groupBox_videoSource.setChecked(True)
-	  
+	#load enable audio recoding setting
 	if self.core.config.enable_audio_recoding == 'False':
 	  self.ui.groupBox_soundSource.setChecked(False)
 	else:
 	  self.ui.groupBox_soundSource.setChecked(True)
-	
+	#load enable streaming setting
 	if self.core.config.enable_streaming == 'True':
 	  self.ui.groupBox_enableStreaming.setChecked(True)
 	else:
 	  self.ui.groupBox_enableStreaming.setChecked(False)	  
-	
+	#load video source setting
         if (self.core.config.videosrc == 'desktop'):
             self.ui.radioButton_recordLocalDesktop.setChecked(True)
             if (self.core.config.videodev == 'local area'):
@@ -240,31 +240,31 @@ class ConfigTool(QtGui.QDialog):
             self.ui.radioButton_hardware.setChecked(True)
             self.ui.radioButton_firewiresrc.setChecked(True)
 	
+	# detect screen display & load resolution
 	screenres = self.primary_screen_size()
 	self.screen_size()
-	
         if self.core.config.resolution == '0x0':
             resolution = self.ui.comboBox_videoQualityList.findText(screenres)
         else:
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
-        
+        #load streaming resolution
         if self.core.config.streaming == '0x0':
 	    streaming_resolution = 0
 	else:
 	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming)
 	if not (streaming_resolution < 0):
 	    self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
-        
+        #load auto hidden setting
         if self.core.config.auto_hidden == 'True':
 	   self.ui.checkbox_autoHide.setChecked(True)
 	else:
 	    self.ui.groupBox_enableStreaming.setChecked(False)
-	
+	#load shortkey and video directory
 	self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
         self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
         self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
-        
+
     def screen_size(self):
 	self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
 	i = 0
