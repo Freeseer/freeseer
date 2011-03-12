@@ -102,10 +102,12 @@ class ConfigTool(QtGui.QDialog):
 	'''
         self.connect(self.ui.pushButton_testStreaming,QtCore.SIGNAL('clicked()'),self.test_streaming)
         
+        # connections for Extra setting -> auto hidden
+        self.connect(self.ui.checkbox_autoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
+        
         # connections for Extra Setting -> ShortKeys
         self.connect(self.ui.pushButton_recodrdKey, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
         self.connect(self.ui.pushButton_StopKey, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
-       
 	
         # connections for Extra Settings > File Locations
         self.connect(self.ui.pushButton_open, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
@@ -161,6 +163,7 @@ class ConfigTool(QtGui.QDialog):
             if (self.ui.radioButton_recordLocalDesktop.isChecked()):         
                 self.core.config.videodev = 'default'
                 self.videosrc = 'desktop'
+                
             elif (self.ui.radioButton_recordLocalArea.isChecked()):
                 self.core.config.videodev = 'local area'
 		self.videosrc = 'desktop'
@@ -183,12 +186,12 @@ class ConfigTool(QtGui.QDialog):
             for dev in viddevs:
                 self.ui.comboBox_videoDeviceList.addItem(dev)
             self.core.config.videodev = str(self.ui.comboBox_videoDeviceList.currentText())
-
+            
         # invalid selection (this should never happen)
         else: return
+	
+	self.core.logger.log.debug('Set video source  to ' + self.videosrc)
 
-        # finally load the changes into core
-        #self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 
     
     def toggle_streaming(self,state):
@@ -207,10 +210,7 @@ class ConfigTool(QtGui.QDialog):
 	self.ui.label_check_2.show()
 	
     def load_settings(self):
-        self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
-        self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
-        self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
-        
+      
         if self.core.config.enable_video_recoding == 'False':
 	  self.ui.groupBox_videoSource.setChecked(False)
 	else:
@@ -241,7 +241,8 @@ class ConfigTool(QtGui.QDialog):
             self.ui.radioButton_firewiresrc.setChecked(True)
 	
 	screenres = self.primary_screen_size()
-
+	self.screen_size()
+	
         if self.core.config.resolution == '0x0':
             resolution = self.ui.comboBox_videoQualityList.findText(screenres)
         else:
@@ -255,8 +256,16 @@ class ConfigTool(QtGui.QDialog):
 	if not (streaming_resolution < 0):
 	    self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
         
+        if self.core.config.auto_hidden == 'True':
+	   self.ui.checkbox_autoHide.setChecked(True)
+	else:
+	    self.ui.groupBox_enableStreaming.setChecked(False)
+	
+	self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
+        self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
+        self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
+        
     def screen_size(self):
-
 	self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
 	i = 0
 	while i < self.desktop.screenCount():
@@ -280,7 +289,7 @@ class ConfigTool(QtGui.QDialog):
             self.core.config.resolution = '0x0'
 	self.core.config.streaming = str(self.ui.comboBox_streamingQualityList.currentText())
 	if self.core.config.streaming == 'NONE':
-	    self.core.config.streaming == '0x0'
+	    self.core.config.streaming = '0x0'
 	
         self.core.config.writeConfig()
         
@@ -320,8 +329,14 @@ class ConfigTool(QtGui.QDialog):
         src = self.core.config.audiosrc = str(self.ui.comboBox_audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.config.audio_source = src
-   
-    
+
+    def toggle_auto_hide(self,state):
+        '''
+	when user toggle auto hidden, save it to conifg file
+	'''
+	self.core.config.auto_hidden = state
+	self.core.logger.log.debug('Set auto hidden to: ' + str(state))
+	
     def grab_rec_key(self):
         '''
         When the button is pressed, it will call the keygrabber widget and log keys
