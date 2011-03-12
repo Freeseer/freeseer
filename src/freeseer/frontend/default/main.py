@@ -160,10 +160,6 @@ class MainApp(QtGui.QMainWindow):
         # connections for configure > Extra Settings > Shortkeys
         self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
         self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
-        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
-        self.short_rec_key.setEnabled(True)
-        self.short_stop_key.setEnabled(True)
 
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
@@ -379,7 +375,11 @@ class MainApp(QtGui.QMainWindow):
 	newItem = QtGui.QTableWidgetItem(self.core.config.key_rec)
 	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
 
-
+	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+        self.short_rec_key.setEnabled(True)
+        self.short_stop_key.setEnabled(True)
+        
     def change_output_resolution(self):
         res = str(self.resolution)
         s = res.split('x')
