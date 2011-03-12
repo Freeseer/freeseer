@@ -285,14 +285,19 @@ class MainApp(QtGui.QMainWindow):
                 newItem = QtGui.QTableWidgetItem('OK')
 		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
                 if (self.core.config.videodev == 'local area'):
+		  newItem = QtGui.QTableWidgetItem(self.core.config.videodev)
+		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+		  
 		  self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
 		  newItem = QtGui.QTableWidgetItem(self.core.config.start_x +','+ self.core.config.start_y +','+ self.core.config.end_x +','+ self.core.config.end_y)
 		  self.ui.tableWidget_infoTable.setItem(3,0,newItem)
+
+		if (self.core.config.videodev == 'default'):
+		  newItem = QtGui.QTableWidgetItem(self.core.config.videodev)
+		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
 		  newItem = QtGui.QTableWidgetItem('OK')
-		  self.ui.tableWidget_infoTable.setItem(3,1,newItem)
-		else:
-		  newItem = QtGui.QTableWidgetItem('Error')
-		  self.ui.tableWidget_infoTable.setItem(3,1,newItem)
+		  self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+		  
             elif (src == 'usb'):
 		 self.videosrc = 'usb'
 		 newItem = QtGui.QTableWidgetItem('OK')
@@ -369,7 +374,7 @@ class MainApp(QtGui.QMainWindow):
         #load auto hidden setting
         self.auto_hidden=  self.core.config.auto_hidden
 	
-	newItem = QtGui.QTableWidgetItem(self.resolution)
+	newItem = QtGui.QTableWidgetItem(self.auto_hidden)
 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
 	
 	newItem = QtGui.QTableWidgetItem(self.core.config.videodir)
