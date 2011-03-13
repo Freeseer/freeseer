@@ -130,10 +130,6 @@ class MainApp(QtGui.QMainWindow):
 	QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
 	self.setupLanguageMenu();
 	    
-        self.load_talks()
-        self.load_events()
-        self.load_rooms()
-        self.load_settings()
         
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -177,6 +173,11 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
 	
 	self.connect(self.ui.pushButton_reload, QtCore.SIGNAL('clicked()'),self.load_settings)
+	
+	self.load_talks()
+        self.load_events()
+        self.load_rooms()
+        self.load_settings()
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
