@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -645,6 +645,9 @@ v4l2src does not work.</string>
         <height>28</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>Press this to test streaming setting</string>
+      </property>
       <property name="text">
        <string>&amp;Test</string>
       </property>
@@ -815,6 +818,9 @@ v4l2src does not work.</string>
        </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="pushButton_recodrdKey">
+         <property name="toolTip">
+          <string>Press this to set record shot key</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -822,6 +828,9 @@ v4l2src does not work.</string>
        </item>
        <item row="1" column="2">
         <widget class="QPushButton" name="pushButton_StopKey">
+         <property name="toolTip">
+          <string>Press this to set record stop key</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
