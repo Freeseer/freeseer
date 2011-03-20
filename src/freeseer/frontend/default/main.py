@@ -358,12 +358,12 @@ class MainApp(QtGui.QMainWindow):
 	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
 	
         #load auto hidden setting
-        self.auto_hide=  self.core.config.auto_hide
+        self.autoHide=  self.core.config.auto_hide
 	
-	newItem = QtGui.QTableWidgetItem(self.auto_hide)
+	newItem = QtGui.QTableWidgetItem(self.autoHide)
 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
 	
-	if self.auto_hide == 'True':
+	if self.autoHide == 'True':
             self.core.preview(False, self.ui.previewWidget.winId())
         else: 
 	    self.core.preview(True, self.ui.previewWidget.winId())
