@@ -359,26 +359,29 @@ class MainApp(QtGui.QMainWindow):
         newItem = QtGui.QTableWidgetItem(self.streaming_resolution)
 	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
 	
-        #load auto hidden setting
-        self.autoHide=  self.core.config.auto_hide
-	
+        #load auto hide setting
+        if self.core.config.auto_hide == 'True':
+	  self.autoHide =  True
+	else:
+	  self.autoHide =  False
+	  
+        self.core.preview(self.autoHide, self.ui.previewWidget.winId())
+  
 	newItem = QtGui.QTableWidgetItem(self.autoHide)
 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
 	
-	if self.autoHide == 'True':
-            self.core.preview(False, self.ui.previewWidget.winId())
-        else: 
-	    self.core.preview(True, self.ui.previewWidget.winId())
-	    
+	#display video directory	    
 	newItem = QtGui.QTableWidgetItem(self.core.config.videodir)
 	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
 	
+	#display short keys
 	newItem = QtGui.QTableWidgetItem(self.core.config.key_stop)
 	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
 	
 	newItem = QtGui.QTableWidgetItem(self.core.config.key_rec)
 	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
-
+	
+	#set short key
 	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
         self.short_rec_key.setEnabled(True)
