@@ -274,7 +274,7 @@ class MainApp(QtGui.QMainWindow):
 		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
 		  
 		  self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-		  newItem = QtGui.QTableWidgetItem(self.core.config.start_x +','+ self.core.config.start_y +','+ self.core.config.end_x +','+ self.core.config.end_y)
+		  newItem = QtGui.QTableWidgetItem(str(self.core.config.start_x) +','+str( self.core.config.start_y) +','+ str(self.core.config.end_x) +','+ str(self.core.config.end_y))
 		  self.ui.tableWidget_infoTable.setItem(3,0,newItem)
 
 		if (self.core.config.videodev == 'default'):

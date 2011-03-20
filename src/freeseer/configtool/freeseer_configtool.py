@@ -320,7 +320,6 @@ class ConfigTool(QtGui.QDialog):
         self.start_y = self.core.config.start_y = start_y
         self.end_x = self.core.config.end_x = end_x
         self.end_y = self.core.config.end_y = end_y
-        self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
 
