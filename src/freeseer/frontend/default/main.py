@@ -365,9 +365,9 @@ class MainApp(QtGui.QMainWindow):
 	else:
 	  self.autoHide =  False
 	  
-        self.core.preview(self.autoHide, self.ui.previewWidget.winId())
+        self.core.preview(not self.autoHide, self.ui.previewWidget.winId())
   
-	newItem = QtGui.QTableWidgetItem(self.autoHide)
+	newItem = QtGui.QTableWidgetItem(self.core.config.auto_hide)
 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
 	
 	#display video directory	    
