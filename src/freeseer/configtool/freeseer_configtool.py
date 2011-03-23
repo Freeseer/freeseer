@@ -94,7 +94,7 @@ class ConfigTool(QtGui.QDialog):
         
         #connections for Video Setting -> Enable Streaming
 
-        self.connect(self.ui.groupBox_enableStreaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
+        self.connect(self.ui.groupBox_streaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
         '''
         self.connect(self.ui.lineEdit_URL_IP,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
@@ -210,6 +210,8 @@ class ConfigTool(QtGui.QDialog):
 	self.ui.label_check_2.setPixmap(QtGui.QPixmap(":/streamingCheck/error.png"))
 	self.ui.label_check_2.show()
 	
+	
+	
     def load_settings(self):
 	#load enable video recoding setting
         if self.core.config.enable_video_recoding == 'False':
@@ -221,11 +223,7 @@ class ConfigTool(QtGui.QDialog):
 	  self.ui.groupBox_soundSource.setChecked(False)
 	else:
 	  self.ui.groupBox_soundSource.setChecked(True)
-	#load enable streaming setting
-	if self.core.config.enable_streaming == 'True':
-	  self.ui.groupBox_enableStreaming.setChecked(True)
-	else:
-	  self.ui.groupBox_enableStreaming.setChecked(False)	  
+	  
 	#load video source setting
         if (self.core.config.videosrc == 'desktop'):
             self.ui.radioButton_recordLocalDesktop.setChecked(True)
@@ -249,18 +247,30 @@ class ConfigTool(QtGui.QDialog):
         else:
             resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
+        
         #load streaming resolution
-        if self.core.config.streaming == '0x0':
+        if self.core.config.enable_streaming == 'False':
+	  self.ui.groupBox_streaming.setChecked(False)
+	else:
+	  self.ui.groupBox_streaming.setChecked(True)
+	 
+	self.ui.lineEdit_URL_IP.setText(self.core.config.streaming_url)
+        self.ui.lineEdit_port.setText(self.core.config.streaming_port)
+        self.ui.lineEdit_mountPoint.setText(self.core.config.streaming_mount)
+        self.ui.lineEdit_password.setText(self.core.config.streaming_password)
+        
+        if self.core.config.streaming_resolution == '0x0':
 	    streaming_resolution = 0
 	else:
-	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming)
+	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming_resolution)
 	if not (streaming_resolution < 0):
 	    self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
+	    
         #load auto hidden setting
         if self.core.config.auto_hide == 'True':
 	   self.ui.checkbox_autoHide.setChecked(True)
 	else:
-	    self.ui.groupBox_enableStreaming.setChecked(False)
+	    self.ui.checkbox_autoHide.setChecked(False)
 	    
 	#load shortkey and video directory
 	self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
@@ -282,6 +292,10 @@ class ConfigTool(QtGui.QDialog):
 	
 	  
     def save_settings(self):
+	self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
+	self.core.config.streaming_port = str(self.ui.lineEdit_port.text())
+	self.core.config.streaming_mount = str(self.ui.lineEdit_mountPoint.text())
+	self.core.config.streaming_password = str(self.ui.lineEdit_password.text())
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
         if self.core.config.resolution == 'NONE':

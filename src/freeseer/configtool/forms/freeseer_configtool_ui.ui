@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>2</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -413,7 +413,7 @@ v4l2src does not work.</string>
     <attribute name="title">
      <string>Steaming setting</string>
     </attribute>
-    <widget class="QGroupBox" name="groupBox_enableStreaming">
+    <widget class="QGroupBox" name="groupBox_streaming">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -1002,7 +1002,7 @@ v4l2src does not work.</string>
    </hints>
   </connection>
   <connection>
-   <sender>groupBox_enableStreaming</sender>
+   <sender>groupBox_streaming</sender>
    <signal>toggled(bool)</signal>
    <receiver>pushButton_testStreaming</receiver>
    <slot>setEnabled(bool)</slot>
