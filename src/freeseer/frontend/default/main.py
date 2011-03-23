@@ -353,11 +353,27 @@ class MainApp(QtGui.QMainWindow):
 	self.ui.tableWidget_infoTable.setItem(4,0,newItem)
 	
         #load streaming resoltion
-        self.streaming_resolution =  self.core.config.streaming
+        self.streaming_resolution =  self.core.config.streaming_resolution
         self.change_streaming_resolution()
-        
+                
         newItem = QtGui.QTableWidgetItem(self.streaming_resolution)
 	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
+	
+	self.streaming_url = self.core.config.streaming_url
+	newItem = QtGui.QTableWidgetItem(self.streaming_url)
+	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
+	
+        self.streaming_mount = self.core.config.streaming_mount
+        newItem = QtGui.QTableWidgetItem(self.streaming_mount)
+	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
+	
+        self.streaming_port = self.core.config.streaming_port
+        newItem = QtGui.QTableWidgetItem(self.streaming_port)
+	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
+	
+        self.streaming_password = self.core.config.streaming_password
+        newItem = QtGui.QTableWidgetItem(self.streaming_password)
+	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
 	
         #load auto hide setting
         if self.core.config.auto_hide == 'True':
@@ -368,18 +384,18 @@ class MainApp(QtGui.QMainWindow):
         self.core.preview(not self.autoHide, self.ui.previewWidget.winId())
   
 	newItem = QtGui.QTableWidgetItem(self.core.config.auto_hide)
-	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
+	self.ui.tableWidget_infoTable.setItem(13,0,newItem)
 	
 	#display video directory	    
 	newItem = QtGui.QTableWidgetItem(self.core.config.videodir)
-	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
+	self.ui.tableWidget_infoTable.setItem(14,0,newItem)
 	
 	#display short keys
 	newItem = QtGui.QTableWidgetItem(self.core.config.key_stop)
-	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
+	self.ui.tableWidget_infoTable.setItem(15,0,newItem)
 	
 	newItem = QtGui.QTableWidgetItem(self.core.config.key_rec)
-	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
+	self.ui.tableWidget_infoTable.setItem(16,0,newItem)
 	
 	#set short key
 	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
