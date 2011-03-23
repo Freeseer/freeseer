@@ -1,27 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-# freeseer - vga/presentation capture software
-#
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
-#  http://fosslc.org
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
-
 import ConfigParser
 import os
 
@@ -45,7 +21,7 @@ class Config:
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.resolution = '0x0' # no scaling for video
-        self.streaming = '0x0' #no scaling for streaming
+
         self.videosrc = 'desktop'
         self.videodev = 'none'
         self.start_x = 0
@@ -57,9 +33,16 @@ class Config:
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'
         self.auto_hide = 'True'
-        self.enable_streaming = 'False'
+
         self.enable_video_recoding = 'True'
         self.enable_audio_recoding = 'True'
+        
+        self.enable_streaming = 'False'
+        self.streaming_resolution = '0x0' #no scaling for streaming
+        self.streaming_mount = 'none'
+	self.streaming_port = 'none'
+	self.streaming_password = 'none'
+	self.streaming_url = 'none'
         # Read in the config file
         self.readConfig()
         
@@ -87,7 +70,6 @@ class Config:
         try:
             self.videodir = config.get('Global', 'video_directory')
             self.resolution = config.get('Global', 'resolution')
-            self.streaming = config.get('Global','streaming')
             self.videosrc = config.get('lastrun', 'video_source')
             self.videodev = config.get('lastrun', 'video_device')
             self.start_x = config.get('lastrun', 'area_start_x')
@@ -102,7 +84,12 @@ class Config:
 	    self.enable_streaming = config.get('lastrun', 'enable_streaming')
 	    self.enable_video_recoding = config.get('lastrun','enable_video_recoding')
 	    self.enable_audio_recoding = config.get('lastrun','enable_audio_recoding')
-	    self.device = config.get('lastrun','device')
+	    self.streaming_resolution = config.get('Global','streaming_resolution')
+	    self.streaming_mount = config.get('lastrun','streaming_mount')
+	    self.streaming_port = config.get('lastrun','streaming_port')
+	    self.streaming_password = config.get('lastrun','streaming_password')
+	    self.streaming_url = config.get('lastrun','streaming_url')
+	    
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -117,7 +104,7 @@ class Config:
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
-        config.set('Global','streaming',self.streaming)
+        config.set('Global','streaming_resolution',self.streaming_resolution)
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
         config.set('lastrun', 'video_device', self.videodev)
@@ -133,6 +120,10 @@ class Config:
         config.set('lastrun', 'enable_streaming', self.enable_streaming)
         config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
 	config.set('lastrun','enable_audio_recoding',self.enable_audio_recoding)
+	config.set('lastrun','streaming_mount',self.streaming_mount)
+	config.set('lastrun','streaming_port',self.streaming_port)
+	config.set('lastrun','streaming_password',self.streaming_password)
+	config.set('lastrun','streaming_url',self.streaming_url)
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
