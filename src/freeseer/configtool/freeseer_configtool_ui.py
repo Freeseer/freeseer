@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file './forms/freeseer_configtool_ui.ui'
 #
-# Created: Wed Mar 23 17:56:17 2011
+# Created: Wed Mar 23 18:44:58 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -129,6 +129,7 @@ class Ui_ConfigureTool(object):
         self.horizontalLayout_VideoQuality_2.addWidget(self.label_videoQuality)
         self.comboBox_videoQualityList = QtGui.QComboBox(self.horizontalLayoutWidget_3)
         self.comboBox_videoQualityList.setObjectName("comboBox_videoQualityList")
+        self.comboBox_videoQualityList.addItem("")
         self.comboBox_videoQualityList.addItem("")
         self.comboBox_videoQualityList.addItem("")
         self.comboBox_videoQualityList.addItem("")
@@ -335,7 +336,7 @@ class Ui_ConfigureTool(object):
         self.label_videoDirectory.setBuddy(self.lineEdit_videoDirectory)
 
         self.retranslateUi(ConfigureTool)
-        self.configureTab.setCurrentIndex(2)
+        self.configureTab.setCurrentIndex(1)
         QtCore.QObject.connect(self.radioButton_recordLocalArea, QtCore.SIGNAL("toggled(bool)"), self.pushButton_setArea.setEnabled)
         QtCore.QObject.connect(self.radioButton_localDesktop, QtCore.SIGNAL("toggled(bool)"), self.groupBox_localDesktopBox.setVisible)
         QtCore.QObject.connect(self.radioButton_hardware, QtCore.SIGNAL("toggled(bool)"), self.groupBox_hardware.setVisible)
@@ -405,11 +406,12 @@ class Ui_ConfigureTool(object):
         self.groupBox_videoQuality.setTitle(QtGui.QApplication.translate("ConfigureTool", "Video Quality", None, QtGui.QApplication.UnicodeUTF8))
         self.label_videoQuality.setText(QtGui.QApplication.translate("ConfigureTool", "Video Quality", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBox_videoQualityList.setItemText(0, QtGui.QApplication.translate("ConfigureTool", "NONE", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "800x600", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "1024x768", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1280x800", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox_videoQualityList.setItemText(5, QtGui.QApplication.translate("ConfigureTool", "1920x1080", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(1, QtGui.QApplication.translate("ConfigureTool", "320x240", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(2, QtGui.QApplication.translate("ConfigureTool", "640x480", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(3, QtGui.QApplication.translate("ConfigureTool", "800x600", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(4, QtGui.QApplication.translate("ConfigureTool", "1024x768", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(5, QtGui.QApplication.translate("ConfigureTool", "1280x800", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBox_videoQualityList.setItemText(6, QtGui.QApplication.translate("ConfigureTool", "1920x1080", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_derectScreenResoltion.setText(QtGui.QApplication.translate("ConfigureTool", "&Detect screen resolution", None, QtGui.QApplication.UnicodeUTF8))
         self.tableWidget_screenResolution.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("ConfigureTool", "Resolution", None, QtGui.QApplication.UnicodeUTF8))
         self.configureTab.setTabText(self.configureTab.indexOf(self.Videosetting), QtGui.QApplication.translate("ConfigureTool", "Video setting", None, QtGui.QApplication.UnicodeUTF8))

@@ -95,12 +95,12 @@ class ConfigTool(QtGui.QDialog):
         #connections for Video Setting -> Enable Streaming
 
         self.connect(self.ui.groupBox_streaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
-        '''
-        self.connect(self.ui.lineEdit_URL_IP,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
-        self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
-        self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
-        self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
-	'''
+        
+        self.connect(self.ui.lineEdit_URL_IP, QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_url)
+        self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_port)
+        self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_mount)
+        self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_password)
+
         self.connect(self.ui.pushButton_testStreaming,QtCore.SIGNAL('clicked()'),self.test_streaming)
         
         # connections for Extra setting -> auto hidden
@@ -210,7 +210,22 @@ class ConfigTool(QtGui.QDialog):
 	self.ui.label_check_2.setPixmap(QtGui.QPixmap(":/streamingCheck/error.png"))
 	self.ui.label_check_2.show()
 	
+    def change_streaming_url(self):
+	self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
+	#self.core.logger.log.debug('set streaming url to: ' + self.core.config.streaming_url)
 	
+    def change_streaming_port(self):	
+	self.core.config.streaming_port = str(self.ui.lineEdit_port.text())
+	#self.core.logger.log.debug('set streaming port to: ' + self.core.config.streaming_port)
+	
+    def change_streaming_mount(self):
+	self.core.config.streaming_mount = str(self.ui.lineEdit_mountPoint.text())
+	#self.core.logger.log.debug('set streaming mount point to: ' + self.core.config.streaming_mount)
+    
+    def change_streaming_password(self):
+	self.core.config.streaming_password = str(self.ui.lineEdit_password.text())
+	#passwd = '*' * len(self.core.config.streaming_password)
+	#self.core.logger.log.debug('set streaming password: ' + passwd)
 	
     def load_settings(self):
 	#load enable video recoding setting
@@ -292,10 +307,6 @@ class ConfigTool(QtGui.QDialog):
 	
 	  
     def save_settings(self):
-	self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
-	self.core.config.streaming_port = str(self.ui.lineEdit_port.text())
-	self.core.config.streaming_mount = str(self.ui.lineEdit_mountPoint.text())
-	self.core.config.streaming_password = str(self.ui.lineEdit_password.text())
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
         if self.core.config.resolution == 'NONE':

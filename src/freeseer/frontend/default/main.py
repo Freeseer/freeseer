@@ -372,7 +372,8 @@ class MainApp(QtGui.QMainWindow):
 	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
 	
         self.streaming_password = self.core.config.streaming_password
-        newItem = QtGui.QTableWidgetItem(self.streaming_password)
+        passwd = '*' * len(self.streaming_password)
+        newItem = QtGui.QTableWidgetItem(passwd)
 	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
 	
         #load auto hide setting

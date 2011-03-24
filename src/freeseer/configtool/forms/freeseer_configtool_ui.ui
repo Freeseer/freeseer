@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -340,6 +340,11 @@ v4l2src does not work.</string>
            <item>
             <property name="text">
              <string>NONE</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>320x240</string>
             </property>
            </item>
            <item>
