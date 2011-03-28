@@ -1,0 +1,15 @@
+These instructions are meant for using Freesseer
+to record a conference (in FOSSLC-typical configuration).
+
+1) Run Freeseer
+2) Click on the configure tab
+3) Click the Hardware radio button
+4) Click on the main tab
+5) Pick the right talk
+6) When the speaker is ready to go, click record, wave them to start
+once the video starts displaying under the Title dropdown.
+7) Click stop once the questions are wrapped up
+
+
+a) Please get the speaker to complete a release form. It's fine if they opt out, in those cases, we'll simply not record.
+b) Please ask the speaker to repeat the questions for the video.

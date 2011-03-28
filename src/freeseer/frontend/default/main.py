@@ -1,0 +1,695 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# freeseer - vga/presentation capture software
+#
+#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  http://fosslc.org
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# For support, questions, suggestions or any other inquiries, visit:
+# http://wiki.github.com/fosslc/freeseer/
+
+from PyQt4 import QtGui, QtCore
+from os import listdir;
+from freeseer.framework.core import *
+from freeseer.framework.qt_area_selector import *
+from freeseer.framework.qt_key_grabber import *
+from freeseer.framework.presentation import *
+
+from freeseer.configtool.freeseer_configtool import *
+
+from freeseer_ui_qt import *
+from freeseer_about import *
+import qxtglobalshortcut
+
+__version__=u'1.9.7'
+
+NAME=u'Freeseer'
+URL=u'http://github.com/fosslc/freeseer'
+RECORD_BUTTON_ARTIST=u'Sekkyumu'
+RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
+HEADPHONES_ARTIST=u'Ben Fleming'
+HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
+LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
+	
+
+class AboutDialog(QtGui.QDialog):
+    '''
+    About dialog class for displaying app information
+    '''
+
+    def __init__(self):
+        QtGui.QDialog.__init__(self)
+        self.ui = Ui_FreeseerAbout()
+        self.ui.setupUi(self)
+	self.translate();
+	
+	
+    def	translate(self):
+        '''
+	 Translates the about dialog. Calls the retranslateUi function of the about dialog itself
+        '''
+	DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
+	COPYRIGHT=self.tr('Copyright (C) 2010 The Free and Open Source Software Learning Centre')
+	LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
+	
+	ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
+	u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
+	u'<p>' + DESCRIPTION + u'</p>' + \
+	u'<p>' +  COPYRIGHT + u'</p>' + \
+	u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+	u'<p>' + LICENSE_TEXT + u'</p>' \
+	u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+	u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
+ 
+	self.ui.retranslateUi(self);
+	self.ui.aboutInfo.setText(ABOUT_INFO);
+	
+	
+class SystemLanguages:
+  '''
+    Language system class that is responsible for retrieving valid languages in the system 
+  '''
+  def __init__(self):
+    self.languages = []
+    self.languages = self.getAllLanguages();
+    
+  def getAllLanguages(self):
+    '''    
+    Returns all the valid languages that have existing qm files. In other words languages 
+    that can be loaded into the translator
+    ''' 
+    try:
+      files = listdir(LANGUAGE_DIR);
+      files = map(lambda x: x.split('.') , files);
+      qm_files = filter(lambda x:x[len(x)-1] == 'qm',files);
+      language_prefix = map(lambda x: x[0].split("tr_")[1],qm_files); 
+    except:
+      return [];
+    return language_prefix;    
+    
+ 
+ 
+class MainApp(QtGui.QMainWindow):
+    '''
+    Freeseer main gui class
+    '''
+    def __init__(self):
+        QtGui.QMainWindow.__init__(self)
+        self.ui = Ui_FreeseerMainWindow()
+        self.ui.setupUi(self)
+        self.statusBar().showMessage('ready')
+        self.aboutDialog = AboutDialog()
+        self.configTool = ConfigTool()
+        self.ui.editTable.setColumnHidden(3,True)
+        self.default_language = 'en';
+        self.talks_to_save = []
+        self.talks_to_delete = []
+
+        self.core = FreeseerCore(self)
+        
+        # get supported video sources and enable the UI for supported devices.
+        # self.configure_supported_video_sources()
+        
+        #Setup the translator and populate the language menu under options
+	self.uiTranslator = QtCore.QTranslator();
+	self.langActionGroup = QtGui.QActionGroup(self);
+	QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
+	self.setupLanguageMenu();
+	
+	self.load_talks()
+        self.load_events()
+        self.load_rooms()
+
+        
+        # setup systray
+        logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
+        sysIcon = QtGui.QIcon(logo)
+        self.systray = QtGui.QSystemTrayIcon(sysIcon)
+        self.systray.show()
+        self.systray.menu = QtGui.QMenu()
+        showWinCM = self.systray.menu.addAction("Hide/Show Main Window")
+        recordCM = self.systray.menu.addAction("Record")
+        stopCM = self.systray.menu.addAction("Stop")
+        self.systray.setContextMenu(self.systray.menu)
+        self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.showMainWin)
+        self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
+        self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
+        self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
+
+        #main tab connections
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_event)
+        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
+        self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
+        self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
+        
+        # connections for configure > Extra Settings > Shortkeys
+        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+	self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        # edit talks tab connections
+        self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
+        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
+        self.ui.addTalkGroupBox.setHidden(True)
+        
+        # Main Window Connections
+        self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
+        self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
+                
+        # editTable Connections
+        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
+	
+	self.connect(self.ui.pushButton_reload, QtCore.SIGNAL('clicked()'),self.load_settings)
+	
+        self.load_settings()
+        # setup default sources
+        if (self.configTool.core.config.audiofb == 'True'):
+            self.ui.audioFeedbackCheckbox.toggle()
+
+        # setup spacebar key
+        self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
+        self.ui.recordButton.setFocus()
+	
+    def setupLanguageMenu(self):
+	#Add Languages to the Menu Ensure only one is clicked 
+	self.langActionGroup.setExclusive(True)
+	system_ending = QtCore.QLocale.system().name();	#Retrieve Current Locale from the operating system         
+	active_button = None; #the current active menu item (menu item for default language)
+	current_lang_length = 0; #Used to determine the length of prefix that match for the current default language
+	default_ending = self.default_language;
+	'''
+	  Current Lang Length
+	    0 -  No Common Prefix
+	    1 -  Common Language 
+	    2 -  Common Language and Country
+	'''
+	language_table = SystemLanguages(); #Load all languages from the language folder 
+	
+	for language_name in language_table.languages:
+	  translator = QtCore.QTranslator(); #Create a translator to translate names
+	  data = translator.load(LANGUAGE_DIR+'tr_'+language_name);  
+	  #Create the button
+	  if(data == False):	
+	    continue;
+	  language_display_text = translator.translate("MainApp","language_name");
+	  if(language_display_text!=''):
+	    language_menu_button = QtGui.QAction(self);
+	    language_menu_button.setCheckable(True);
+	    #Dialect handling for locales from operating system. Use possible match
+	    if(language_name == system_ending): #direct match 
+	      active_button = language_menu_button;
+	      current_lang_length = 2; 
+	      self.default_language = system_ending;
+	    else:
+	      if(language_name.split("_")[0] == system_ending.split("_")[0]): #If language matches but not country 
+		if(current_lang_length < 1): #if there has been no direct match yet.
+		 active_button = language_menu_button;
+		 current_lang_length = 1;
+		 self.default_language = language_name
+	      if(language_name.split("_")[0] == default_ending): #default language hit and no other language has been set
+		if(current_lang_length == 0):
+		  active_button = language_menu_button;
+		  self.default_language = language_name;  
+	  #language_name is a holder for the language name in the translation file tr_*.ts   
+	    language_menu_button.setText(language_display_text);
+	    language_menu_button.setData(language_name);
+	    self.ui.menuLanguage.addAction(language_menu_button); 
+	    self.langActionGroup.addAction(language_menu_button);	 
+	if(active_button!=None):	
+	  active_button.setChecked(True);
+	  #print('There are no languages available in the system except english. Please check the language directory to ensure qm files exist');  
+	#Set up the event handling for each of the menu items  
+        self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
+	        
+    def load_settings(self): 
+	self.core.logger.log.info('loading setting...')
+	i = 0
+	while i < self.ui.tableWidget_infoTable.rowCount():
+	  newItem = QtGui.QTableWidgetItem('Unknow')
+	  self.ui.tableWidget_infoTable.setItem(i,0,newItem)
+	  newItem = QtGui.QTableWidgetItem('')
+	  self.ui.tableWidget_infoTable.setItem(i,1,newItem)
+	  i =  i + 1
+	
+	#load the config file
+	self.configTool.core.config.readConfig()
+	
+	#load enable_video_recoding setting
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_video_recoding)
+	self.ui.tableWidget_infoTable.setItem(0,0,newItem)
+	if self.configTool.core.config.enable_video_recoding == 'False':
+	  self.core.set_video_mode(False)
+	else:
+	  self.core.set_video_mode(True)
+	  # load video source setting
+	  vidsrcs = self.core.get_video_sources()
+	  src = self.configTool.core.config.videosrc
+	  if src in vidsrcs:
+	    newItem = QtGui.QTableWidgetItem('OK')
+	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
+
+	    if (src == 'desktop'):
+                self.videosrc = 'desktop'
+                newItem = QtGui.QTableWidgetItem('OK')
+		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+                if (self.configTool.core.config.videodev == 'local area'):
+		  newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodev)
+		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+		  
+		  self.desktopAreaEvent(int(self.configTool.core.config.start_x), int(self.configTool.core.config.start_y), int(self.configTool.core.config.end_x), int(self.configTool.core.config.end_y))
+		  newItem = QtGui.QTableWidgetItem(str(self.configTool.core.config.start_x) +','+str( self.configTool.core.config.start_y) +','+ str(self.configTool.core.config.end_x) +','+ str(self.configTool.core.config.end_y))
+		  self.ui.tableWidget_infoTable.setItem(3,0,newItem)
+
+		if (self.configTool.core.config.videodev == 'default'):
+		  newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodev)
+		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+		  newItem = QtGui.QTableWidgetItem('OK')
+		  self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+		self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+		  
+            elif (src == 'usb'):
+		 self.videosrc = 'usb'
+		 newItem = QtGui.QTableWidgetItem('OK')
+		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+            elif (src == 'firewire'):
+		 self.videosrc = 'fireware'
+		 newItem = QtGui.QTableWidgetItem('OK')
+		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	    else:
+		 newItem = QtGui.QTableWidgetItem('Error')
+	         self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	    
+	    newItem = QtGui.QTableWidgetItem(self.videosrc)
+	    self.ui.tableWidget_infoTable.setItem(1,0,newItem)
+	    
+	    if src == 'usb' or src == 'fireware':
+		dev = self.configTool.core.config.videodev
+		viddevs = self.core.get_video_devices(self.videosrc)
+		
+		if dev in viddevs:
+		    self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+		    newItem = QtGui.QTableWidgetItem(dev)
+		    self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+		else:
+		    self.core.logger.log.debug('Can NOT find video device: '+ dev)
+		    newItem = QtGui.QTableWidgetItem('Error')
+		    self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+	  else:
+	    newItem = QtGui.QTableWidgetItem('Error')
+	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
+	    self.core.logger.log.debug('Can NOT find video source: '+ dev)
+	
+	
+	#load audio setting
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_audio_recoding)
+	self.ui.tableWidget_infoTable.setItem(5,0,newItem)
+	if self.configTool.core.config.enable_audio_recoding == 'False':
+	  self.core.set_audio_mode(False)
+	else:
+	  self.core.set_audio_mode(True)
+	  sndsrcs = self.core.get_audio_sources()
+	  src = self.configTool.core.config.audiosrc
+	  if src in sndsrcs:
+	    self.core.change_soundsrc(src)
+	    newItem = QtGui.QTableWidgetItem(src)
+	    self.ui.tableWidget_infoTable.setItem(6,0,newItem)
+	    newItem = QtGui.QTableWidgetItem('OK')
+	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
+	  else:
+	    newItem = QtGui.QTableWidgetItem('Error ' + src)
+	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
+	    self.core.logger.log.debug('Can NOT find audio source: '+ src)
+	  
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_streaming)
+	self.ui.tableWidget_infoTable.setItem(7,0,newItem)
+	if self.configTool.core.config.enable_streaming == 'True':
+	  pass
+	else:
+	  pass  
+		
+	# load resolution
+        self.resolution =  self.configTool.core.config.resolution
+
+        self.change_output_resolution()
+        
+        newItem = QtGui.QTableWidgetItem(self.resolution)
+	self.ui.tableWidget_infoTable.setItem(4,0,newItem)
+	
+        #load streaming resoltion
+        self.streaming_resolution =  self.configTool.core.config.streaming_resolution
+        self.change_streaming_resolution()
+	if self.configTool.core.config.enable_streaming: # == True and self.configTool.core.config.streaming_resolution != "0x0":
+                url = str(self.configTool.core.config.streaming_url)
+                port = str(self.configTool.core.config.streaming_port)
+                mount = str(self.configTool.core.config.streaming_mount)
+                password = str(self.configTool.core.config.streaming_password)
+                resolution = str(self.configTool.core.config.streaming_resolution)
+                if ( url == "" or port == "" or password == "" or mount == ""):
+                        QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
+                else:
+                        self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
+        else:
+                self.core.backend.disable_icecast_streaming()
+
+        newItem = QtGui.QTableWidgetItem(self.streaming_resolution)
+	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
+	
+        #load auto hide setting
+        if self.configTool.core.config.auto_hide == 'True':
+	  self.autoHide =  True
+	else:
+	  self.autoHide =  False
+	  
+        self.core.preview(not self.autoHide, self.ui.previewWidget.winId())
+  
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.auto_hide)
+	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
+	
+	#display video directory	    
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodir)
+	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
+	
+	#display short keys
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.key_stop)
+	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
+	
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.key_rec)
+	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
+	
+	#set short key
+	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_rec))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_stop))
+        self.short_rec_key.setEnabled(True)
+        self.short_stop_key.setEnabled(True)
+        
+    def change_output_resolution(self):
+        res = str(self.resolution)
+        s = res.split('x')
+        width = s[0]
+        height = s[1]
+        self.core.change_output_resolution(width, height)
+    
+    def change_streaming_resolution(self):
+        res = str(self.streaming_resolution)
+        s = res.split('x')
+        width = s[0]
+        height = s[1]
+        self.core.change_stream_resolution(width, height)
+        
+        
+    def area_select(self):
+        self.area_selector = QtAreaSelector(self)
+        self.area_selector.show()
+        self.core.logger.log.info('Desktop area selector started.')
+        self.hide()
+    
+    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
+        self.start_x = self.configTool.core.config.start_x = start_x
+        self.start_y = self.configTool.core.config.start_y = start_y
+        self.end_x = self.configTool.core.config.end_x = end_x
+        self.end_y = self.configTool.core.config.end_y = end_y
+        self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
+        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+        self.show()
+
+    def toggle_audio_feedback(self):
+        if (self.ui.audioFeedbackCheckbox.isChecked()):
+            self.core.audioFeedback(True)
+            self.configTool.core.config.audiofb = 'True'
+            self.configTool.core.config.writeConfig()
+            return
+        self.configTool.core.config.audiofb = 'False'
+        self.core.audioFeedback(False)
+        self.configTool.core.config.writeConfig()
+
+    def current_presentation(self):
+	'''
+	Creates a presentation object from the currently selected title on the GUI
+	'''
+        title = str(self.ui.talkList.currentText().toUtf8())
+	p_id = self.core.get_presentation_id_by_selected_title(title)
+	return self.core.get_presentation(p_id)
+
+    def capture(self, state):
+        '''
+        Function for recording and stopping recording.
+        '''
+        if (state): # Start Recording.
+            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
+            sysIcon2 = QtGui.QIcon(logo_rec)
+            self.systray.setIcon(sysIcon2)
+
+            self.core.record(self.current_presentation())	
+            self.ui.recordButton.setText(self.tr('Stop'))
+
+            if (not self.autoHide):
+                self.statusBar().showMessage('recording...')
+            else:
+                self.hide()
+            #self.configTool.core.config.videosrc = self.videosrc
+            #self.configTool.core.config.writeConfig()
+            
+        else: # Stop Recording.
+            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
+            sysIcon = QtGui.QIcon(logo_rec)
+            self.systray.setIcon(sysIcon)
+            self.core.stop()
+            self.ui.recordButton.setText(self.tr('Record'))
+            self.ui.audioFeedbackSlider.setValue(0)
+            self.statusBar().showMessage('ready')
+
+    def test_sources(self, state):
+        # Test video and audio sources
+        if (self.ui.audioFeedbackCheckbox.isChecked()):
+            self.core.test_sources(state, True, True)
+        # Test only video source
+        else:
+            self.core.test_sources(state, True, False)
+
+    def add_talk(self):
+        presentation = Presentation(str(self.ui.titleEdit.text()),
+                                    str(self.ui.presenterEdit.text()),
+                                    "",         # description
+                                    "",         # level
+                                    str(self.ui.eventEdit.text()),
+                                    str(self.ui.dateTimeEdit),
+                                    str(self.ui.roomEdit.text()))
+                
+        # Do not add talks if they are empty strings
+        if (len(presentation.title) == 0): return
+        
+        self.core.add_talk(presentation)
+
+        # cleanup
+        self.ui.titleEdit.clear()
+        self.ui.presenterEdit.clear()
+        self.ui.eventEdit.clear()
+        self.ui.dateTimeEdit.clear()
+        self.ui.roomEdit.clear()
+        
+        self.update_talk_views()
+
+    def remove_talk(self): 
+        try:
+            row_clicked = self.ui.editTable.currentRow()
+        except:            
+            return
+        
+        id = self.ui.editTable.item(row_clicked, 3).text() 
+        self.core.delete_talk(str(id))
+        self.ui.editTable.removeRow(row_clicked)
+
+        self.update_talk_views()
+
+    # This method currently causing performance issues.
+    def edit_talk(self, row, col):
+        try:
+            speaker = self.ui.editTable.item(row, 0).text()
+            title = self.ui.editTable.item(row, 1).text()
+            room = self.ui.editTable.item(row, 2).text()
+            talk_id = self.ui.editTable.item(row, 3).text()
+        except:
+            return
+
+        self.core.update_talk(talk_id, speaker, title, room)
+
+        # Update the main tab
+        self.load_events()
+        self.load_rooms()
+        
+        event = str(self.ui.eventList.currentText())
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+   
+    def reset(self):
+        self.core.clear_database()
+        self.update_talk_views()
+
+    def get_talks_at_event(self, event):
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+        
+    def get_talks_at_room(self, room):
+        event = str(self.ui.eventList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+
+    def update_talk_list(self, talk_list):
+        self.ui.talkList.clear()
+        
+        for talk in talk_list:
+            self.ui.talkList.addItem(talk)
+                  
+    def load_talks(self):
+        '''
+        This method updates the GUI with the available presentation titles.
+        '''
+        
+        # Update the main tab
+        event = str(self.ui.eventList.currentText())
+        room = str(self.ui.roomList.currentText())
+        talk_list = self.core.filter_talks_by_event_room(event, room)
+        self.update_talk_list(talk_list)
+
+        # Update the Edit Talks Table
+        talklist = self.core.get_talk_titles()
+        
+        self.ui.editTable.clearContents()
+        self.ui.editTable.setRowCount(0)    
+       
+        for talk in talklist:          
+            index = self.ui.editTable.rowCount()
+            self.ui.editTable.insertRow(index)
+            
+            for i in range(len(talk)):                
+                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))                         
+        
+        self.ui.editTable.resizeRowsToContents()
+            
+    def load_events(self):
+        '''
+        This method updates the GUI with the available presentation events.
+        '''
+        event_list = self.core.get_talk_events()
+        self.ui.eventList.clear()
+        self.ui.eventList.addItem("All")
+        
+        for event in event_list:
+            if len(event)>0:
+                self.ui.eventList.addItem(event)   
+            
+    def load_rooms(self):
+        '''
+        This method updates the GUI with the available presentation rooms.
+        '''
+        room_list = self.core.get_talk_rooms()
+        self.ui.roomList.clear()
+        self.ui.roomList.addItem("All")
+        
+        for room in room_list:
+            if len(room)>0:
+                self.ui.roomList.addItem(room)
+
+    def add_talks_from_rss(self):
+        rss_url = str(self.ui.rssEdit.text())
+        self.core.add_talks_from_rss(rss_url)
+        self.update_talk_views()
+
+    def update_talk_views(self):
+        # disconnect the editTable signal before we refresh the views
+        self.disconnect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
+
+        # finish up
+        self.load_events()
+        self.load_rooms()
+        self.load_talks()
+
+        # lets not forget to reactivate the editTable signal
+        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
+        
+    def _icon_activated(self, reason):
+        if reason == QtGui.QSystemTrayIcon.Trigger:
+            if self.isHidden():
+                self.show()
+            else: self.hide()
+        if reason == QtGui.QSystemTrayIcon.DoubleClick:
+            self.ui.recordButton.toggle()
+
+    def showMainWin(self):
+        if self.isHidden():
+            self.show()
+        else: self.hide()
+
+    def recContextM(self):
+        if not self.ui.recordButton.isChecked():
+            self.ui.recordButton.toggle()
+
+    def stopContextM(self):
+        if self.ui.recordButton.isChecked():
+            self.ui.recordButton.toggle()
+
+
+    def coreEvent(self, event_type, value):
+        if event_type == 'audio_feedback':
+            self.ui.audioFeedbackSlider.setValue(value)
+
+    def closeEvent(self, event):
+        self.core.logger.log.info('Exiting freeseer...')
+        #self.core.stop()
+        event.accept()
+    
+    def translateAction(self ,action):
+     '''
+      When a language is selected from the language menu this function is called
+      The language to be changed to is retrieved
+     '''
+     language_prefix = action.data().toString();  
+     self.translateFile(language_prefix);
+      
+    def translateFile(self,file_ending):
+      '''
+      Actually perfoms the translation. This is called by the handler for the language menu
+      Note: If the language file can not be loaded then the default language is english 
+      '''
+      load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
+      loaded = self.uiTranslator.load(load_string);
+  
+      if(loaded == True):
+   
+       self.ui.retranslateUi(self); #Translate both the ui and the about page
+       self.aboutDialog.translate();
+      
+      else:
+       print("Invalid Locale Resorting to Default Language: English");
+      
+      self.configTool.translate(file_ending);
+      
+    def config_tool(self):
+        self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
+       	self.configTool.show()
+       	
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    main = MainApp()
+    main.show();
+    sys.exit(app.exec_())
