@@ -1,0 +1,429 @@
+Only in /home/alex/Desktop/feis/freeseer/src: config
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/backend/gstreamer.py /home/alex/Desktop/mine/freeseer/src/freeseer/backend/gstreamer.py
+76c76,80
+<         
+---
+>         self.icecast_video_codec = 'theoraenc'
+>         self.icecast_muxer = 'oggmux'
+>         self.icecast_audio_codec = 'vorbisenc'
+>         self.icecast_audio_src = 'alsasrc'
+> 
+162a167,168
+> 
+>             
+188a195,201
+>         
+>         if ( self.icecast ):
+>             # Add a "tee" component so that the icecast components can be built at the end
+>             self.src_tee = gst.element_factory_make('tee', 'src_tee')
+>             self.player.add( self.src_tee )
+>             video_src.link( self.src_tee )
+> 
+201,202c214,219
+<                             
+<             video_src.link(self.dv1394dvdemux)
+---
+>             
+>             if ( self.icecast ):
+>                 # The "src_tee" was added so link from it
+>                 self.src_tee.link(self.dv1394dvdemux)
+>             else:                
+>                 video_src.link(self.dv1394dvdemux)
+207c224,229
+<             video_src.link(video_rate)
+---
+>             if ( self.icecast ):
+>                 # The "src_tee" was added so link from it
+>                 self.src_tee.link(video_rate)
+>             else:
+>                 video_src.link(video_rate)
+> 
+215c237
+< 	
+---
+> 
+223a246,249
+>         
+>         if ( self.icecast ):
+>             # The "src_tee" was added so remove it
+>             self.player.remove(self.src_tee)
+373c399,402
+<         
+---
+> 
+>         # Need to add "ffmpegcolorspace" to the player again, after "src_tee"
+>         icecast_colorspace = gst.element_factory_make('ffmpegcolorspace', 'icecast_colorspace')
+> 
+377,381c406,421
+<         icecast_scale_cap.set_property('caps',
+<             gst.caps_from_string('video/x-raw-rgb,width=320,height=240'))
+<         icecast_encoder = gst.element_factory_make('theoraenc', 'icecast_encoder')
+<         icecast_mux = gst.element_factory_make('oggmux', 'icecast_mux')
+<         
+---
+>         icecast_gst_caps = gst.Caps('video/x-raw-yuv,width=320,height=240')
+>         icecast_scale_cap.set_property('caps', icecast_gst_caps)
+> 
+>         icecast_video_codec = gst.element_factory_make(self.icecast_video_codec, 'icecast_video_codec')
+>         icecast_video_codec.set_property('quality',16)
+> 
+>         icecast_muxer = gst.element_factory_make(self.icecast_muxer, 'icecast_muxer')
+> 
+>         icecast_audio_src = gst.element_factory_make(self.icecast_audio_src,'icecast_audio_src')
+>         icecast_queue2 = gst.element_factory_make('queue','icecast_queue2')
+>         icecast_audioconvert = gst.element_factory_make('audioconvert','icecast_audioconvert')
+>         icecast_audio_codec = gst.element_factory_make(self.icecast_audio_codec,'icecast_audio_codec')
+>         icecast_audio_codec.set_property('quality',0.2)
+>         icecast_queue3 = gst.element_factory_make('queue','icecast_queue3')
+>         icecast_queue4 = gst.element_factory_make('queue','icecast_queue4')
+> 
+384,385c424,432
+<                         icecast_encoder,
+<                         icecast_mux,
+---
+>                         icecast_queue2,
+>                         icecast_queue3,
+>                         icecast_queue4,
+>                         icecast_colorspace,
+>                         icecast_video_codec,
+>                         icecast_muxer,
+>                         icecast_audio_src,
+>                         icecast_audioconvert,
+>                         icecast_audio_codec,
+388,389c435,436
+<                         
+<         gst.element_link_many(self.video_tee,
+---
+> 
+>         gst.element_link_many(self.src_tee,
+390a438
+>                               icecast_colorspace,
+393,394c441,450
+<                               icecast_encoder,
+<                               icecast_mux,
+---
+>                               icecast_video_codec,
+>                               icecast_muxer)
+> 
+>         gst.element_link_many(icecast_audio_src,
+>                               icecast_queue2,
+>                               icecast_audioconvert,
+>                               icecast_audio_codec,
+>                               icecast_queue3,
+>                               icecast_muxer,
+>                               icecast_queue4,
+396c452
+<         
+---
+> 
+402a459,465
+>         icecast_queue2 = self.player.get_by_name('icecast_queue2')
+>         icecast_queue3 = self.player.get_by_name('icecast_queue3')
+>         icecast_queue4 = self.player.get_by_name('icecast_queue4')
+>         icecast_colorspace = self.player.get_by_name('icecast_colorspace')
+>         icecast_audio_src = self.player.get_by_name('icecast_audio_src')
+>         icecast_audioconvert = self.player.get_by_name('icecast_audioconvert')
+>         icecast_audio_codec = self.player.get_by_name('icecast_audio_codec')
+405,407c468,470
+<         icecast_encoder = self.player.get_by_name('icecast_encoder')
+<         icecast_mux = self.player.get_by_name('icecast_mux')
+<         
+---
+>         icecast_video_codec = self.player.get_by_name('icecast_video_codec')
+>         icecast_muxer = self.player.get_by_name('icecast_muxer')
+> 
+409,413c472,483
+<                            icecast_queue,
+<                            icecast_scale,
+<                            icecast_scale_cap,
+<                            icecast_encoder,
+<                            icecast_mux)
+---
+>                         icecast_queue,
+> 			icecast_queue2,
+> 			icecast_queue3,
+> 			icecast_queue4,
+>                         icecast_colorspace,
+>                         icecast_video_codec,
+>                         icecast_muxer,
+>                         icecast_audio_src,
+>                         icecast_audioconvert,
+>                         icecast_audio_codec,
+>                         icecast_scale,
+>                         icecast_scale_cap)
+669a740
+>         print "Icecast settings enabled"
+672a744
+>         print "Icecast settings disabled"
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/configtool/configtool_configloader.py /home/alex/Desktop/mine/freeseer/src/freeseer/configtool/configtool_configloader.py
+48c48
+< 
+---
+>         self.streaming = '0x0' #no scaling for streaming
+60c60
+< 
+---
+>         self.enable_streaming = 'False'
+63,69d62
+<         
+<         self.enable_streaming = 'False'
+<         self.streaming_resolution = '0x0' #no scaling for streaming
+<         self.streaming_mount = 'stream.ogv'
+<         self.streaming_port = '8000'
+<         self.streaming_password = 'hackme'
+<         self.streaming_url = '127.0.0.1'
+96a90
+>             self.streaming = config.get('Global','streaming')
+111,116c105
+< 	    self.streaming_resolution = config.get('Global','streaming_resolution')
+< 	    self.streaming_mount = config.get('lastrun','streaming_mount')
+< 	    self.streaming_port = config.get('lastrun','streaming_port')
+< 	    self.streaming_password = config.get('lastrun','streaming_password')
+< 	    self.streaming_url = config.get('lastrun','streaming_url')
+< 	    
+---
+> 	    self.device = config.get('lastrun','device')
+131c120
+<         config.set('Global','streaming_resolution',self.streaming_resolution)
+---
+>         config.set('Global','streaming',self.streaming)
+147,150d135
+< 	config.set('lastrun','streaming_mount',self.streaming_mount)
+< 	config.set('lastrun','streaming_port',self.streaming_port)
+< 	config.set('lastrun','streaming_password',self.streaming_password)
+< 	config.set('lastrun','streaming_url',self.streaming_url)
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/configtool/forms/freeseer_configtool_ui.ui /home/alex/Desktop/mine/freeseer/src/freeseer/configtool/forms/freeseer_configtool_ui.ui
+42c42
+<     <number>1</number>
+---
+>     <number>3</number>
+347,351d346
+<              <string>320x240</string>
+<             </property>
+<            </item>
+<            <item>
+<             <property name="text">
+421c416
+<     <widget class="QGroupBox" name="groupBox_streaming">
+---
+>     <widget class="QGroupBox" name="groupBox_enableStreaming">
+1010c1005
+<    <sender>groupBox_streaming</sender>
+---
+>    <sender>groupBox_enableStreaming</sender>
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/configtool/freeseer_configtool.py /home/alex/Desktop/mine/freeseer/src/freeseer/configtool/freeseer_configtool.py
+97,103c97,103
+<         self.connect(self.ui.groupBox_streaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
+<         
+<         self.connect(self.ui.lineEdit_URL_IP, QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_url)
+<         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_port)
+<         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_mount)
+<         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_password)
+< 
+---
+>         self.connect(self.ui.groupBox_enableStreaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
+>         '''
+>         self.connect(self.ui.lineEdit_URL_IP,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+>         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+>         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+>         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+> 	'''
+213,229d212
+<     def change_streaming_url(self):
+< 	self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
+< 	#self.core.logger.log.debug('set streaming url to: ' + self.core.config.streaming_url)
+< 	
+<     def change_streaming_port(self):	
+< 	self.core.config.streaming_port = str(self.ui.lineEdit_port.text())
+< 	#self.core.logger.log.debug('set streaming port to: ' + self.core.config.streaming_port)
+< 	
+<     def change_streaming_mount(self):
+< 	self.core.config.streaming_mount = str(self.ui.lineEdit_mountPoint.text())
+< 	#self.core.logger.log.debug('set streaming mount point to: ' + self.core.config.streaming_mount)
+<     
+<     def change_streaming_password(self):
+< 	self.core.config.streaming_password = str(self.ui.lineEdit_password.text())
+< 	#passwd = '*' * len(self.core.config.streaming_password)
+< 	#self.core.logger.log.debug('set streaming password: ' + passwd)
+< 	
+241c224,228
+< 	  
+---
+> 	#load enable streaming setting
+> 	if self.core.config.enable_streaming == 'True':
+> 	  self.ui.groupBox_enableStreaming.setChecked(True)
+> 	else:
+> 	  self.ui.groupBox_enableStreaming.setChecked(False)	  
+265d251
+<         
+267,277c253
+<         if self.core.config.enable_streaming == 'False':
+< 	  self.ui.groupBox_streaming.setChecked(False)
+< 	else:
+< 	  self.ui.groupBox_streaming.setChecked(True)
+< 	 
+< 	self.ui.lineEdit_URL_IP.setText(self.core.config.streaming_url)
+<         self.ui.lineEdit_port.setText(self.core.config.streaming_port)
+<         self.ui.lineEdit_mountPoint.setText(self.core.config.streaming_mount)
+<         self.ui.lineEdit_password.setText(self.core.config.streaming_password)
+<         
+<         if self.core.config.streaming_resolution == '0x0':
+---
+>         if self.core.config.streaming == '0x0':
+280c256
+< 	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming_resolution)
+---
+> 	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming)
+283d258
+< 	    
+288c263
+< 	    self.ui.checkbox_autoHide.setChecked(False)
+---
+> 	    self.ui.groupBox_enableStreaming.setChecked(False)
+Only in /home/alex/Desktop/mine/freeseer/src/freeseer/configtool: freeseer_configtool_ui.py
+Only in /home/alex/Desktop/feis/freeseer/src/freeseer/configtool: resource_rc.py
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/framework/config.py /home/alex/Desktop/mine/freeseer/src/freeseer/framework/config.py
+0a1,24
+> #!/usr/bin/python
+> # -*- coding: utf-8 -*-
+> 
+> # freeseer - vga/presentation capture software
+> #
+> #  Copyright (C) 2010  Free and Open Source Software Learning Centre
+> #  http://fosslc.org
+> #
+> #  This program is free software: you can redistribute it and/or modify
+> #  it under the terms of the GNU General Public License as published by
+> #  the Free Software Foundation, either version 3 of the License, or
+> #  (at your option) any later version.
+> #
+> #  This program is distributed in the hope that it will be useful,
+> #  but WITHOUT ANY WARRANTY; without even the implied warranty of
+> #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> #  GNU General Public License for more details.
+> #
+> #  You should have received a copy of the GNU General Public License
+> #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+> 
+> # For support, questions, suggestions or any other inquiries, visit:
+> # http://wiki.github.com/fosslc/freeseer/
+> 
+24c48
+< 
+---
+>         self.streaming = '0x0' #no scaling for streaming
+36c60
+< 
+---
+>         self.enable_streaming = 'False'
+39,45d62
+<         
+<         self.enable_streaming = 'False'
+<         self.streaming_resolution = '0x0' #no scaling for streaming
+<         self.streaming_mount = 'none'
+< 	self.streaming_port = 'none'
+< 	self.streaming_password = 'none'
+< 	self.streaming_url = 'none'
+72a90
+>             self.streaming = config.get('Global','streaming')
+87,92c105
+< 	    self.streaming_resolution = config.get('Global','streaming_resolution')
+< 	    self.streaming_mount = config.get('lastrun','streaming_mount')
+< 	    self.streaming_port = config.get('lastrun','streaming_port')
+< 	    self.streaming_password = config.get('lastrun','streaming_password')
+< 	    self.streaming_url = config.get('lastrun','streaming_url')
+< 	    
+---
+> 	    self.device = config.get('lastrun','device')
+107c120
+<         config.set('Global','streaming_resolution',self.streaming_resolution)
+---
+>         config.set('Global','streaming',self.streaming)
+123,126d135
+< 	config.set('lastrun','streaming_mount',self.streaming_mount)
+< 	config.set('lastrun','streaming_port',self.streaming_port)
+< 	config.set('lastrun','streaming_password',self.streaming_password)
+< 	config.set('lastrun','streaming_url',self.streaming_url)
+142c151
+<     print('Test complete!')
+\ No newline at end of file
+---
+>     print('Test complete!')
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/frontend/default/forms/freeseer_ui_qt.ui /home/alex/Desktop/mine/freeseer/src/freeseer/frontend/default/forms/freeseer_ui_qt.ui
+34c34
+<        <number>1</number>
+---
+>        <number>2</number>
+637,656d636
+<           <string>Streaming url/IP</string>
+<          </property>
+<         </row>
+<         <row>
+<          <property name="text">
+<           <string>Streaming port</string>
+<          </property>
+<         </row>
+<         <row>
+<          <property name="text">
+<           <string>Streaming mount point</string>
+<          </property>
+<         </row>
+<         <row>
+<          <property name="text">
+<           <string>Streaming password</string>
+<          </property>
+<         </row>
+<         <row>
+<          <property name="text">
+685,689d664
+<         <item row="12" column="1">
+<          <property name="text">
+<           <string/>
+<          </property>
+<         </item>
+Only in /home/alex/Desktop/feis/freeseer/src/freeseer/frontend/default: main_backup.py
+diff -r /home/alex/Desktop/feis/freeseer/src/freeseer/frontend/default/main.py /home/alex/Desktop/mine/freeseer/src/freeseer/frontend/default/main.py
+349a350
+> 
+356c357
+<         self.streaming_resolution =  self.core.config.streaming_resolution
+---
+>         self.streaming_resolution =  self.core.config.streaming
+358c359
+<                 
+---
+>         
+362,378d362
+< 	self.streaming_url = self.core.config.streaming_url
+< 	newItem = QtGui.QTableWidgetItem(self.streaming_url)
+< 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
+< 	
+<         self.streaming_mount = self.core.config.streaming_mount
+<         newItem = QtGui.QTableWidgetItem(self.streaming_mount)
+< 	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
+< 	
+<         self.streaming_port = self.core.config.streaming_port
+<         newItem = QtGui.QTableWidgetItem(self.streaming_port)
+< 	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
+< 	
+<         self.streaming_password = self.core.config.streaming_password
+<         passwd = '*' * len(self.streaming_password)
+<         newItem = QtGui.QTableWidgetItem(passwd)
+< 	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
+< 	
+388c372
+< 	self.ui.tableWidget_infoTable.setItem(13,0,newItem)
+---
+> 	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
+392c376
+< 	self.ui.tableWidget_infoTable.setItem(14,0,newItem)
+---
+> 	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
+396c380
+< 	self.ui.tableWidget_infoTable.setItem(15,0,newItem)
+---
+> 	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
+399c383
+< 	self.ui.tableWidget_infoTable.setItem(16,0,newItem)
+---
+> 	self.ui.tableWidget_infoTable.setItem(12,0,newItem)

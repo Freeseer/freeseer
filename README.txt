@@ -1,4 +1,4 @@
-TEST TEST TEST
+
 Freeseer is a video capture program capable of capturing desktop or vga
 input and mixing it with audio to create a video. It is optimized
 for capturing presentations and demonstrations at conferences.

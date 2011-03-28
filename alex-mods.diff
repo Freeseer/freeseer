@@ -1,0 +1,386 @@
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/backend/gstreamer.py /home/alex/Desktop/mine/m/freeseer/src/freeseer/backend/gstreamer.py
+79a80,82
+>         self.icecast_width = 0
+>         self.icecast_height = 0
+>         self.icecast_vidbitrate = 0
+672a676,707
+>         if self.icecast:
+>             self.change_stream_resolution(self.icecast_width, self.icecast_height, width, height)
+>     
+>     def change_stream_resolution(self, width, height, record_width, record_height):
+>         '''
+>         Sets the resolution of the streamed video, and chooses an appropriate bit rate for the video.
+>         '''
+> 	    # bitrate map here for known combinations
+>         # use a string of form <stream_width>,<record_width> (i.e., '320,640') to uniquely identify combinations
+>         bitmap = {  '320,640': 400, '320,800': 400, '320,1024': 400,    # bit rates for 320x240 stream
+>                     '480,640': 800, '480,800': 800, '480,1024': 350,    # bit rates for 480x360 stream
+>                     '640,640': 1250, '640,800': 1000, '640,1024': 500,  # bit rates for 640x480 stream
+>                     '800,640': 1250, '800,800': 1000, '800,1024': 750   # bit rates for 800x600 stream
+>                  }                  
+>         
+>         #default bitmap for unknown pairings
+>         default_bitmap = { 	320: 400, # resolution of 320x240 - 400 kbps
+> 			        480: 500, # resolution of 480x360 - 500 kbps
+> 			        640: 750, # resolution of 640x480 - 750 kbps
+> 			        800: 1000 # resolution of 800x600 - 1000 kbps
+>                 }
+> 
+>         stream_rec_pair = str(width) + ',' + str(record_width)
+> 
+>         self.icecast_width = width
+>         self.icecast_height = height
+>         if stream_rec_pair in bitmap:
+>             self.icecast_vidbitrate = bitmap[stream_rec_pair]
+>         elif self.icecast_width in default_bitmap:
+>             self.icecast_vidbitrate = default_bitmap[width]         # if the current res is in the map of bitrates, set it
+>         else:
+>             self.icecast_vidbitrate = 1000                          # Use a default value of 1000 otherwise
+734c769
+<                                        mount='freeseer.ogg'):
+---
+>                                        mount='freeseer.ogg', resolution='320x240'):
+739a775,776
+>         res = resolution.split('x')
+>         self.change_stream_resolution(res[0], res[1], self.recording_width, self.recording_height)
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/configtool/configtool_configloader.py /home/alex/Desktop/mine/m/freeseer/src/freeseer/configtool/configtool_configloader.py
+48c48
+<         self.streaming = '0x0' #no scaling for streaming
+---
+> 
+55c55
+<         self.audiosrc = 'none'
+---
+>         self.audiosrc = 'pulsesrc'
+60c60
+<         self.enable_streaming = 'False'
+---
+> 
+62a63,69
+>         
+>         self.enable_streaming = 'False'
+>         self.streaming_resolution = '0x0' #no scaling for streaming
+>         self.streaming_mount = 'stream.ogv'
+>         self.streaming_port = '8000'
+>         self.streaming_password = 'hackme'
+>         self.streaming_url = '127.0.0.1'
+90d96
+<             self.streaming = config.get('Global','streaming')
+105c111,116
+< 	    self.device = config.get('lastrun','device')
+---
+> 	    self.streaming_resolution = config.get('Global','streaming_resolution')
+> 	    self.streaming_mount = config.get('lastrun','streaming_mount')
+> 	    self.streaming_port = config.get('lastrun','streaming_port')
+> 	    self.streaming_password = config.get('lastrun','streaming_password')
+> 	    self.streaming_url = config.get('lastrun','streaming_url')
+> 	    
+120c131
+<         config.set('Global','streaming',self.streaming)
+---
+>         config.set('Global','streaming_resolution',self.streaming_resolution)
+135a147,150
+> 	config.set('lastrun','streaming_mount',self.streaming_mount)
+> 	config.set('lastrun','streaming_port',self.streaming_port)
+> 	config.set('lastrun','streaming_password',self.streaming_password)
+> 	config.set('lastrun','streaming_url',self.streaming_url)
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/configtool/forms/freeseer_configtool_ui.ui /home/alex/Desktop/mine/m/freeseer/src/freeseer/configtool/forms/freeseer_configtool_ui.ui
+42c42
+<     <number>3</number>
+---
+>     <number>2</number>
+346a347,351
+>              <string>320x240</string>
+>             </property>
+>            </item>
+>            <item>
+>             <property name="text">
+416c421
+<     <widget class="QGroupBox" name="groupBox_enableStreaming">
+---
+>     <widget class="QGroupBox" name="groupBox_streaming">
+684c689
+<            <string>480x360</string>
+---
+>            <string>320x240</string>
+689c694
+<            <string>640x480</string>
+---
+>            <string>480x360</string>
+694c699
+<            <string>1280x720</string>
+---
+>            <string>640x480</string>
+699c704
+<            <string>1920x1080</string>
+---
+>            <string>800x600</string>
+1005c1010
+<    <sender>groupBox_enableStreaming</sender>
+---
+>    <sender>groupBox_streaming</sender>
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/configtool/freeseer_configtool.py /home/alex/Desktop/mine/m/freeseer/src/freeseer/configtool/freeseer_configtool.py
+97,103c97,103
+<         self.connect(self.ui.groupBox_enableStreaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
+<         '''
+<         self.connect(self.ui.lineEdit_URL_IP,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+<         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+<         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+<         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textChanged(bool)'),self.change_enable_streaming)
+< 	'''
+---
+>         self.connect(self.ui.groupBox_streaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
+>         
+>         self.connect(self.ui.lineEdit_URL_IP, QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_url)
+>         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_port)
+>         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_mount)
+>         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_password)
+> 
+212a213,229
+>     def change_streaming_url(self):
+> 	self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
+> 	#self.core.logger.log.debug('set streaming url to: ' + self.core.config.streaming_url)
+> 	
+>     def change_streaming_port(self):	
+> 	self.core.config.streaming_port = str(self.ui.lineEdit_port.text())
+> 	#self.core.logger.log.debug('set streaming port to: ' + self.core.config.streaming_port)
+> 	
+>     def change_streaming_mount(self):
+> 	self.core.config.streaming_mount = str(self.ui.lineEdit_mountPoint.text())
+> 	#self.core.logger.log.debug('set streaming mount point to: ' + self.core.config.streaming_mount)
+>     
+>     def change_streaming_password(self):
+> 	self.core.config.streaming_password = str(self.ui.lineEdit_password.text())
+> 	#passwd = '*' * len(self.core.config.streaming_password)
+> 	#self.core.logger.log.debug('set streaming password: ' + passwd)
+> 	
+224,228c241
+< 	#load enable streaming setting
+< 	if self.core.config.enable_streaming == 'True':
+< 	  self.ui.groupBox_enableStreaming.setChecked(True)
+< 	else:
+< 	  self.ui.groupBox_enableStreaming.setChecked(False)	  
+---
+> 	  
+251a265
+>         
+253c267,277
+<         if self.core.config.streaming == '0x0':
+---
+>         if self.core.config.enable_streaming == 'False':
+> 	  self.ui.groupBox_streaming.setChecked(False)
+> 	else:
+> 	  self.ui.groupBox_streaming.setChecked(True)
+> 	 
+> 	self.ui.lineEdit_URL_IP.setText(self.core.config.streaming_url)
+>         self.ui.lineEdit_port.setText(self.core.config.streaming_port)
+>         self.ui.lineEdit_mountPoint.setText(self.core.config.streaming_mount)
+>         self.ui.lineEdit_password.setText(self.core.config.streaming_password)
+>         
+>         if self.core.config.streaming_resolution == '0x0':
+256c280
+< 	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming)
+---
+> 	    streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming_resolution)
+258a283
+> 	    
+263c288
+< 	    self.ui.groupBox_enableStreaming.setChecked(False)
+---
+> 	    self.ui.checkbox_autoHide.setChecked(False)
+289,291c314,316
+< 	self.core.config.streaming = str(self.ui.comboBox_streamingQualityList.currentText())
+< 	if self.core.config.streaming == 'NONE':
+< 	    self.core.config.streaming = '0x0'
+---
+> 	self.core.config.streaming_resolution = str(self.ui.comboBox_streamingQualityList.currentText())
+> 	if self.core.config.streaming_resolution == 'NONE':
+> 	    self.core.config.streaming_resolution = '0x0'
+395c420
+< 	
+\ No newline at end of file
+---
+> 	
+Only in /home/alex/Desktop/mine/freeseer/src/freeseer/configtool: freeseer_configtool_ui.py
+Only in /home/alex/Desktop/mine/m/freeseer/src/freeseer/configtool: resource_rc.py
+Only in /home/alex/Desktop/mine/freeseer/src/freeseer/framework: config.py
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/framework/core.py /home/alex/Desktop/mine/m/freeseer/src/freeseer/framework/core.py
+33a34
+> from freeseer.configtool.freeseer_configtool import Config
+35c36
+< from config import Config
+---
+> #from config import Config
+274a276,280
+> 
+>     def change_stream_resolution(self, width, height):
+>         rec_res = self.config.resolution.split('x')
+>         self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
+>         self.logger.log.debug('Video stream resolution changed to ' + str(width) + 'x' + str(height))
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/framework/db_connector.py /home/alex/Desktop/mine/m/freeseer/src/freeseer/framework/db_connector.py
+29c29,30
+< from config import Config
+---
+> from freeseer.configtool.freeseer_configtool import Config
+> #from config import Config
+diff -r /home/alex/Desktop/mine/freeseer/src/freeseer/frontend/default/main.py /home/alex/Desktop/mine/m/freeseer/src/freeseer/frontend/default/main.py
+184c184
+<         if (self.core.config.audiofb == 'True'):
+---
+>         if (self.configTool.core.config.audiofb == 'True'):
+253c253
+< 	self.core.config.readConfig()
+---
+> 	self.configTool.core.config.readConfig()
+256c256
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.enable_video_recoding)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_video_recoding)
+258c258
+< 	if self.core.config.enable_video_recoding == 'False':
+---
+> 	if self.configTool.core.config.enable_video_recoding == 'False':
+264c264
+< 	  src = self.core.config.videosrc
+---
+> 	  src = self.configTool.core.config.videosrc
+273,274c273,274
+<                 if (self.core.config.videodev == 'local area'):
+< 		  newItem = QtGui.QTableWidgetItem(self.core.config.videodev)
+---
+>                 if (self.configTool.core.config.videodev == 'local area'):
+> 		  newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodev)
+277,278c277,278
+< 		  self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+< 		  newItem = QtGui.QTableWidgetItem(str(self.core.config.start_x) +','+str( self.core.config.start_y) +','+ str(self.core.config.end_x) +','+ str(self.core.config.end_y))
+---
+> 		  self.desktopAreaEvent(int(self.configTool.core.config.start_x), int(self.configTool.core.config.start_y), int(self.configTool.core.config.end_x), int(self.configTool.core.config.end_y))
+> 		  newItem = QtGui.QTableWidgetItem(str(self.configTool.core.config.start_x) +','+str( self.configTool.core.config.start_y) +','+ str(self.configTool.core.config.end_x) +','+ str(self.configTool.core.config.end_y))
+281,282c281,282
+< 		if (self.core.config.videodev == 'default'):
+< 		  newItem = QtGui.QTableWidgetItem(self.core.config.videodev)
+---
+> 		if (self.configTool.core.config.videodev == 'default'):
+> 		  newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodev)
+286c286
+< 		self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+---
+> 		self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+304c304
+< 		dev = self.core.config.videodev
+---
+> 		dev = self.configTool.core.config.videodev
+308c308
+< 		    self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+---
+> 		    self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+322c322
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.enable_audio_recoding)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_audio_recoding)
+324c324
+< 	if self.core.config.enable_audio_recoding == 'False':
+---
+> 	if self.configTool.core.config.enable_audio_recoding == 'False':
+329c329
+< 	  src = self.core.config.audiosrc
+---
+> 	  src = self.configTool.core.config.audiosrc
+337c337
+< 	    newItem = QtGui.QTableWidgetItem('Error')
+---
+> 	    newItem = QtGui.QTableWidgetItem('Error ' + src)
+341c341
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.enable_streaming)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_streaming)
+343c343
+< 	if self.core.config.enable_streaming == 'True':
+---
+> 	if self.configTool.core.config.enable_streaming == 'True':
+349c349
+<         self.resolution =  self.core.config.resolution
+---
+>         self.resolution =  self.configTool.core.config.resolution
+357c357
+<         self.streaming_resolution =  self.core.config.streaming
+---
+>         self.streaming_resolution =  self.configTool.core.config.streaming_resolution
+359c359,371
+<         
+---
+> 	if self.configTool.core.config.enable_streaming: # == True and self.configTool.core.config.streaming_resolution != "0x0":
+>                 url = str(self.configTool.core.config.streaming_url)
+>                 port = str(self.configTool.core.config.streaming_port)
+>                 mount = str(self.configTool.core.config.streaming_mount)
+>                 password = str(self.configTool.core.config.streaming_password)
+>                 resolution = str(self.configTool.core.config.streaming_resolution)
+>                 if ( url == "" or port == "" or password == "" or mount == ""):
+>                         QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
+>                 else:
+>                         self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
+>         else:
+>                 self.core.backend.disable_icecast_streaming()
+> 
+364c376
+<         if self.core.config.auto_hide == 'True':
+---
+>         if self.configTool.core.config.auto_hide == 'True':
+371c383
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.auto_hide)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.auto_hide)
+375c387
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.videodir)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodir)
+379c391
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.key_stop)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.key_stop)
+382c394
+< 	newItem = QtGui.QTableWidgetItem(self.core.config.key_rec)
+---
+> 	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.key_rec)
+386,387c398,399
+< 	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+<         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+---
+> 	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_rec))
+>         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_stop))
+399c411
+< 	res = str(self.streaming_resolution)
+---
+>         res = str(self.streaming_resolution)
+402a415
+>         self.core.change_stream_resolution(width, height)
+412,415c425,428
+<         self.start_x = self.core.config.start_x = start_x
+<         self.start_y = self.core.config.start_y = start_y
+<         self.end_x = self.core.config.end_x = end_x
+<         self.end_y = self.core.config.end_y = end_y
+---
+>         self.start_x = self.configTool.core.config.start_x = start_x
+>         self.start_y = self.configTool.core.config.start_y = start_y
+>         self.end_x = self.configTool.core.config.end_x = end_x
+>         self.end_y = self.configTool.core.config.end_y = end_y
+423,424c436,437
+<             self.core.config.audiofb = 'True'
+<             self.core.config.writeConfig()
+---
+>             self.configTool.core.config.audiofb = 'True'
+>             self.configTool.core.config.writeConfig()
+426c439
+<         self.core.config.audiofb = 'False'
+---
+>         self.configTool.core.config.audiofb = 'False'
+428c441
+<         self.core.config.writeConfig()
+---
+>         self.configTool.core.config.writeConfig()
+454,455c467,468
+<             #self.core.config.videosrc = self.videosrc
+<             #self.core.config.writeConfig()
+---
+>             #self.configTool.core.config.videosrc = self.videosrc
+>             #self.configTool.core.config.writeConfig()
