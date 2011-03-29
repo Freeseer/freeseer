@@ -24,6 +24,7 @@
 
 import ConfigParser
 import os
+from PyQt4.QtGui import QMessageBox
 
 class Config:
     '''
@@ -48,7 +49,10 @@ class Config:
         
         # Read in the config file
         self.readConfig()
-        
+	
+	#checking whether video_directory is writable or not.
+	self.isWritable(self.videodir)
+	        
         # Make the recording directory
         try:
             os.makedirs(self.videodir)
@@ -90,6 +94,9 @@ class Config:
         config.set('Global', 'talks_file', self.talksfile)
         config.set('Global', 'resolution', self.resolution)
         
+	# Make sure the video directory is writable.
+	self.isWritable(self.videodir)
+
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
@@ -99,7 +106,19 @@ class Config:
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:
             config.write(configfile)
-            
+
+    def isWritable(self, path):
+	'''
+	Check whether the selected video directory is writable or not.
+	If not writable, show a messagebox.
+	'''
+	if not os.access(path, os.W_OK):
+	    msgBox = QMessageBox()
+	    msgBox.setWindowTitle("Error")
+	    msgBox.setText("Video directory is not writable. Please select another one.")
+	    msgBox.setIcon(QMessageBox.Critical)
+	    msgBox.exec_()
+
 # Config class test code
 if __name__ == "__main__":
     config = Config(os.path.abspath(os.path.expanduser('~/.freeseer/')))
