@@ -471,13 +471,13 @@ class MainApp(QtGui.QMainWindow):
             self.core.test_sources(state, True, False)
 
     def add_talk(self):
-        presentation = Presentation(str(self.ui.titleEdit.text()),
-                                    str(self.ui.presenterEdit.text()),
+        presentation = Presentation(unicode(self.ui.titleEdit.text()),
+                                    unicode(self.ui.presenterEdit.text()),
                                     "",         # description
                                     "",         # level
-                                    str(self.ui.eventEdit.text()),
-                                    str(self.ui.dateTimeEdit),
-                                    str(self.ui.roomEdit.text()))
+                                    unicode(self.ui.eventEdit.text()),
+                                    unicode(self.ui.dateTimeEdit),
+                                    unicode(self.ui.roomEdit.text()))
                 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return

@@ -150,15 +150,15 @@ class DB_Connector():
                 self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
             else:
                 self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Room=?''', [str(room)])
+                                       WHERE Room=?''', [unicode(room)])
             
         else:
             if (room == "All"):
                 self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Event=?''', [str(event)])
+                                       WHERE Event=?''', [unicode(event)])
             else:
                 self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Event=? and Room=?''', [str(event), str(room)])
+                                       WHERE Event=? and Room=?''', [unicode(event), unicode(room)])
 
         # Prepare list to be returned
         for row in self.cursor:
@@ -183,7 +183,7 @@ class DB_Connector():
             self.cursor.execute('''SELECT DISTINCT Room FROM presentations ORDER BY Id ASC''')
         
         else:
-            self.cursor.execute('''SELECT DISTINCT Room FROM presentations WHERE Event=?''', [str(event)])
+            self.cursor.execute('''SELECT DISTINCT Room FROM presentations WHERE Event=?''', [unicode(event)])
             
         rooms_matched.append("All")
         
@@ -204,7 +204,7 @@ class DB_Connector():
 				      Id, 
 				      FileNameId 
 				FROM presentations WHERE Id=?''',
-				[str(talk_id)])
+				[unicode(talk_id)])
 	for row in self.cursor:
             speaker 	 = row[0]
 	    title 	 = row[1]
@@ -221,7 +221,7 @@ class DB_Connector():
  
     def make_filename_id(self, event_name):
 	self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
-				[str(event_name)])
+				[unicode(event_name)])
 
         for row in self.cursor:
  	    id = row[0]
@@ -229,7 +229,7 @@ class DB_Connector():
    
     def get_filename_id(self, talk_id):
 	self.cursor.execute('''SELECT FileNameId FROM presentations WHERE Id=?''',
-			 	[str(talk_id)])
+			 	[unicode(talk_id)])
         for row in self.cursor:
             id = row[0]
 	    return id
@@ -239,7 +239,7 @@ class DB_Connector():
         Write current presentation data on database
         '''		
 	#create filename id (id's for each talk at an event)
-	filename_id = str(self.make_filename_id(presentation.event))
+	filename_id = unicode(self.make_filename_id(presentation.event))
 
         self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL,?)''',
                     [presentation.speaker,
@@ -253,7 +253,7 @@ class DB_Connector():
 
     def delete_talk(self, talk_id):
         self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
-                               [str(talk_id)])
+                               [unicode(talk_id)])
         self.db_connection.commit()
   
         self.cursor.close()
@@ -265,18 +265,18 @@ class DB_Connector():
         
     def update_talk(self, talk_id, new_speaker, new_title, new_room):        
         self.cursor.execute('''UPDATE presentations SET Speaker=?, Title=?, Room=? WHERE Id=?''',
-                            [str(new_speaker),
-                             str(new_title),
-                             str(new_room),
-                             str(talk_id)])
+                            [unicode(new_speaker),
+                             unicode(new_title),
+                             unicode(new_room),
+                             unicode(talk_id)])
         self.db_connection.commit()
         self.cursor.close()
         
     def get_presentation_id(self, presentation):
         self.cursor.execute('''SELECT Id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
-                            [str(presentation.speaker),
-                             str(presentation.title),
-                             str(presentation.event)])
+                            [unicode(presentation.speaker),
+                             unicode(presentation.title),
+                             unicode(presentation.event)])
         
         for row in self.cursor:
             id = row[0]
