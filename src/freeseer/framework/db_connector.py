@@ -108,6 +108,7 @@ class DB_Connector():
     def get_talk_events(self):
         talk_events = []
  
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT DISTINCT Event FROM presentations''')
         
         for row in self.cursor:
@@ -120,6 +121,7 @@ class DB_Connector():
     def get_talk_rooms(self):
         talk_rooms = []
  
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT DISTINCT Room FROM presentations''')
         
         for row in self.cursor:
