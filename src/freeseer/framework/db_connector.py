@@ -180,10 +180,10 @@ class DB_Connector():
         rooms_matched = []
         
         if(event == "All"):
-            self.cursor.execute('''SELECT Room FROM presentations ORDER BY Id ASC''')
+            self.cursor.execute('''SELECT DISTINCT Room FROM presentations ORDER BY Id ASC''')
         
         else:
-            self.cursor.execute('''SELECT Room FROM presentations WHERE Event=?''', [str(event)])
+            self.cursor.execute('''SELECT DISTINCT Room FROM presentations WHERE Event=?''', [str(event)])
             
         rooms_matched.append("All")
         
