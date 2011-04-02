@@ -24,7 +24,6 @@
 
 import ConfigParser
 import os
-from PyQt4.QtGui import QMessageBox
 
 class Config:
     '''
@@ -44,15 +43,22 @@ class Config:
         
         # Set default settings
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
-        self.talksfile = os.path.abspath('%s/talks.txt' % self.configdir)
-        self.resolution = '800x600'
+        self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
+        self.resolution = '0x0' # no scaling for video
+        self.videosrc = 'desktop'
+        self.videodev = 'none'
+        self.start_x = 0
+        self.start_y = 0
+        self.end_x = 0
+        self.end_y = 0
+        self.audiosrc = 'none'
+        self.audiofb = 'False'
+        self.key_rec = 'Ctrl+Shift+R'
+        self.key_stop = 'Ctrl+Shift+E'
         
         # Read in the config file
         self.readConfig()
-	
-	#checking whether video_directory is writable or not.
-	self.isWritable(self.videodir)
-	        
+        
         # Make the recording directory
         try:
             os.makedirs(self.videodir)
@@ -76,8 +82,17 @@ class Config:
         # Config file exists, read in the settings
         try:
             self.videodir = config.get('Global', 'video_directory')
-            self.talksfile = config.get('Global', 'talks_file')
             self.resolution = config.get('Global', 'resolution')
+            self.videosrc = config.get('lastrun', 'video_source')
+            self.videodev = config.get('lastrun', 'video_device')
+            self.start_x = config.get('lastrun', 'area_start_x')
+            self.start_y = config.get('lastrun', 'area_start_y')
+            self.end_x = config.get('lastrun', 'area_end_x')
+            self.end_y = config.get('lastrun', 'area_end_y')
+            self.audiosrc = config.get('lastrun', 'audio_source')
+            self.audiofb = config.get('lastrun', 'audio_feedback')
+            self.key_rec = config.get('lastrun', 'shortkey_rec')
+            self.key_stop = config.get('lastrun', 'shortkey_stop')
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -91,12 +106,19 @@ class Config:
         # Set config settings
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
-        config.set('Global', 'talks_file', self.talksfile)
         config.set('Global', 'resolution', self.resolution)
-        
-	# Make sure the video directory is writable.
-	self.isWritable(self.videodir)
-
+        config.add_section('lastrun')
+        config.set('lastrun', 'video_source', self.videosrc)
+        config.set('lastrun', 'video_device', self.videodev)
+        config.set('lastrun', 'area_start_x', self.start_x)
+        config.set('lastrun', 'area_start_y', self.start_y)
+        config.set('lastrun', 'area_end_x', self.end_x)
+        config.set('lastrun', 'area_end_y', self.end_y)
+        config.set('lastrun', 'audio_source', self.audiosrc)
+        config.set('lastrun', 'audio_feedback', self.audiofb)
+        config.set('lastrun', 'shortkey_rec', self.key_rec)
+        config.set('lastrun', 'shortkey_stop', self.key_stop)
+                
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
@@ -106,23 +128,10 @@ class Config:
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:
             config.write(configfile)
-
-    def isWritable(self, path):
-	'''
-	Check whether the selected video directory is writable or not.
-	If not writable, show a messagebox.
-	'''
-	if not os.access(path, os.W_OK):
-	    msgBox = QMessageBox()
-	    msgBox.setWindowTitle("Error")
-	    msgBox.setText("Video directory is not writable. Please select another one.")
-	    msgBox.setIcon(QMessageBox.Critical)
-	    msgBox.exec_()
-
+            
 # Config class test code
 if __name__ == "__main__":
     config = Config(os.path.abspath(os.path.expanduser('~/.freeseer/')))
     print('\nTesting freeseer config file')
     print('Video Directory at %s' % config.videodir)
-    print('Talks file at %s' % config.talksfile)
     print('Test complete!')

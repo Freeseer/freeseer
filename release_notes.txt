@@ -1,3 +1,8 @@
+Differences in 1.9.8
+- Enhancements to back end to enable streaming and support for icecast soon
+- Packaging for Arch linux
+- Added test-recording button to try-before-recording
+- Added an audio only mode
 
 Differences in 1.9.7 
 - removed dependency on alsa-audio

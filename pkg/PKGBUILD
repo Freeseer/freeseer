@@ -1,0 +1,39 @@
+# Contributor: Thanh Ha <thanh.ha@alumni.carleton.ca>
+pkgname=freeseer-git
+pkgver=20100531
+pkgrel=2
+pkgdesc="This project contains code for a video capture utility capable of capturing presentations. It captures vga output and audio and mixes them together to produce a video thus enabling you to capture great presentations, demos, or training material easily."
+arch=('i686' 'x86_64')
+url="http://wiki.github.com/fosslc/freeseer/"
+license=('GPLv3')
+groups=()
+depends=(python pyqt gstreamer0.10-python)
+makedepends=(git)
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+source=()
+noextract=()
+md5sums=() #generate with 'makepkg -g'
+
+_gitroot="git://github.com/fosslc/freeseer.git"
+
+build() {
+  git clone $_gitroot 
+  cd ${srcdir}/freeseer/
+  git checkout -b pkgbuild origin/development
+  cd src/
+
+  make || return 1
+  cd freeseer/
+
+  mkdir -p $pkgdir/usr/bin/
+  mkdir -p $pkgdir/usr/lib/python2.6/site-packages/freeseer/
+  cp ../run-freeseer $pkgdir/usr/bin/freeseer
+  cp *.py $pkgdir/usr/lib/python2.6/site-packages/freeseer/
+  cp -r backend framework $pkgdir/usr/lib/python2.6/site-packages/freeseer/
+}
