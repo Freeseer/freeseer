@@ -154,7 +154,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
-        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_event)
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_rooms_and_talks_at_event)
         self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
@@ -530,9 +530,13 @@ class MainApp(QtGui.QMainWindow):
         self.core.clear_database()
         self.update_talk_views()
 
-    def get_talks_at_event(self, event):
+    def get_rooms_and_talks_at_event(self, event):        
+        room_list = self.core.filter_rooms_by_event(self.ui.eventList.currentText())        
+        self.update_room_list(room_list)
+        
         room = str(self.ui.roomList.currentText())
         talk_list = self.core.filter_talks_by_event_room(event, room)
+        
         self.update_talk_list(talk_list)
         
     def get_talks_at_room(self, room):
@@ -545,6 +549,12 @@ class MainApp(QtGui.QMainWindow):
         
         for talk in talk_list:
             self.ui.talkList.addItem(talk)
+            
+    def update_room_list(self, room_list):
+        self.ui.roomList.clear()
+    
+        for room in room_list:
+            self.ui.roomList.addItem(room)
                   
     def load_talks(self):
         '''

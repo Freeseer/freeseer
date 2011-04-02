@@ -174,6 +174,24 @@ class DB_Connector():
             talks_matched.append(text)
 
         return talks_matched
+    
+    
+    def filter_rooms_by_event(self,event):
+        rooms_matched = []
+        
+        if(event == "All"):
+            self.cursor.execute('''SELECT Room FROM presentations ORDER BY Id ASC''')
+        
+        else:
+            self.cursor.execute('''SELECT Room FROM presentations WHERE Event=?''', [str(event)])
+            
+        rooms_matched.append("All")
+        
+        for row in self.cursor:
+            rooms_matched.append(row[0])
+        
+        return rooms_matched
+        
 
     def get_presentation(self, talk_id):
 	self.cursor.execute('''SELECT Speaker, 
