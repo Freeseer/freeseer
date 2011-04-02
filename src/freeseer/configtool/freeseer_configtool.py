@@ -26,7 +26,7 @@ from sys import *
 from PyQt4 import QtGui, QtCore
 from os import listdir;
 
-from freeseer.framework.core import *
+#from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 
