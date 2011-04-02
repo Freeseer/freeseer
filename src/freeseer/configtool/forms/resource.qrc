@@ -1,7 +1,0 @@
-<RCC>
-  <qresource prefix="streamingCheck">
-    <file>unknow.png</file>
-    <file>pass.png</file>
-    <file>error.png</file>
-  </qresource>
-</RCC>
