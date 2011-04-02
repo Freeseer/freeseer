@@ -337,35 +337,32 @@ class MainApp(QtGui.QMainWindow):
 	    newItem = QtGui.QTableWidgetItem('Error ' + src)
 	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
 	    self.core.logger.log.debug('Can NOT find audio source: '+ src)
-	  
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_streaming)
-	self.ui.tableWidget_infoTable.setItem(7,0,newItem)
-	if self.configTool.core.config.enable_streaming == 'True':
-	  pass
-	else:
-	  pass  
-		
-	# load resolution
+	    
+        # load resolution
         self.resolution =  self.configTool.core.config.resolution
 
         self.change_output_resolution()
         
         newItem = QtGui.QTableWidgetItem(self.resolution)
-	self.ui.tableWidget_infoTable.setItem(4,0,newItem)
+        self.ui.tableWidget_infoTable.setItem(4,0,newItem)  
+        
+	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_streaming)
+	self.ui.tableWidget_infoTable.setItem(7,0,newItem)
 	
+
         #load streaming resoltion
         self.streaming_resolution =  self.configTool.core.config.streaming_resolution
         self.change_streaming_resolution()
-	if self.configTool.core.config.enable_streaming: # == True and self.configTool.core.config.streaming_resolution != "0x0":
-                url = str(self.configTool.core.config.streaming_url)
-                port = str(self.configTool.core.config.streaming_port)
-                mount = str(self.configTool.core.config.streaming_mount)
-                password = str(self.configTool.core.config.streaming_password)
-                resolution = str(self.configTool.core.config.streaming_resolution)
-                if ( url == "" or port == "" or password == "" or mount == ""):
-                        QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
-                else:
-                        self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
+        if self.configTool.core.config.enable_streaming == 'True': # == True and self.configTool.core.config.streaming_resolution != "0x0":
+             url = str(self.configTool.core.config.streaming_url)
+             port = str(self.configTool.core.config.streaming_port)
+             mount = str(self.configTool.core.config.streaming_mount)
+             password = str(self.configTool.core.config.streaming_password)
+             resolution = str(self.configTool.core.config.streaming_resolution)
+             if ( url == "" or port == "" or password == "" or mount == ""):
+                QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
+             else:
+                self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
         else:
                 self.core.backend.disable_icecast_streaming()
 
