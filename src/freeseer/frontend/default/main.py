@@ -269,6 +269,7 @@ class MainApp(QtGui.QMainWindow):
 	    if (src == 'desktop'):
                 self.videosrc = 'desktop'
                 newItem = QtGui.QTableWidgetItem('OK')
+                
 		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
                 if (self.core.config.videodev == 'local area'):
 		  newItem = QtGui.QTableWidgetItem(self.core.config.videodev)
@@ -283,6 +284,7 @@ class MainApp(QtGui.QMainWindow):
 		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
 		  newItem = QtGui.QTableWidgetItem('OK')
 		  self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+		  
 		self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 		  
             elif (src == 'usb'):
