@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -328,7 +328,7 @@ v4l2src does not work.</string>
          <item>
           <widget class="QLabel" name="label_videoQuality">
            <property name="text">
-            <string>Video Quality</string>
+            <string>Video Resolution</string>
            </property>
            <property name="buddy">
             <cstring>comboBox_videoQualityList</cstring>
@@ -349,17 +349,12 @@ v4l2src does not work.</string>
            </item>
            <item>
             <property name="text">
+             <string>360x320</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>640x480</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>800x600</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1024x768</string>
             </property>
            </item>
            <item>
@@ -431,7 +426,7 @@ v4l2src does not work.</string>
       </rect>
      </property>
      <property name="title">
-      <string>&amp;Enable Streaming</string>
+      <string>&amp;Enable Streaming </string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -670,7 +665,7 @@ v4l2src does not work.</string>
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Streaming Quality</string>
+          <string>Streaming Resolution</string>
          </property>
          <property name="buddy">
           <cstring>comboBox_streamingQualityList</cstring>
@@ -701,7 +696,12 @@ v4l2src does not work.</string>
          </item>
          <item>
           <property name="text">
-           <string>800x600</string>
+           <string>1280x720</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>1920*1080</string>
           </property>
          </item>
         </widget>
