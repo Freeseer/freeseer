@@ -712,9 +712,15 @@
      </property>
     </widget>
     <addaction name="menuLanguage"/>
-    <addaction name="actionPrefercences"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuOptions"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -741,6 +747,11 @@
    </property>
   </action>
   <action name="actionPrefercences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
    </property>

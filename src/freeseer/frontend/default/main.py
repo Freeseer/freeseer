@@ -172,7 +172,7 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
+        self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.config_tool)
                 
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
