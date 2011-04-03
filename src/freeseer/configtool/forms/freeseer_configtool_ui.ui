@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -55,7 +55,7 @@
    </property>
    <widget class="QWidget" name="SourceSetting">
     <attribute name="title">
-     <string>Source Setting </string>
+     <string>Source Settings</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_videoSource">
      <property name="geometry">
@@ -307,7 +307,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="Videosetting">
     <attribute name="title">
-     <string>Video setting</string>
+     <string>Video settings</string>
     </attribute>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
@@ -416,7 +416,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Steaming setting</string>
+     <string>Steaming settings</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_streaming">
      <property name="enabled">
@@ -712,7 +712,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="Extrasetting">
     <attribute name="title">
-     <string>Extra setting</string>
+     <string>Extra settings</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_autoHide">
      <property name="geometry">
@@ -929,6 +929,8 @@ v4l2src does not work.</string>
     </item>
    </layout>
   </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>configureTab</zorder>
  </widget>
  <tabstops>
   <tabstop>configureTab</tabstop>

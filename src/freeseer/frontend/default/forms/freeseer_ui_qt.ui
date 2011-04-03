@@ -31,7 +31,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -552,130 +552,6 @@
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Info Tab</string>
-       </attribute>
-       <widget class="QTableWidget" name="tableWidget_infoTable">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>10</y>
-          <width>521</width>
-          <height>371</height>
-         </rect>
-        </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
-        </property>
-        <property name="tabKeyNavigation">
-         <bool>true</bool>
-        </property>
-        <property name="showDropIndicator" stdset="0">
-         <bool>true</bool>
-        </property>
-        <property name="dragDropOverwriteMode">
-         <bool>true</bool>
-        </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::NoSelection</enum>
-        </property>
-        <property name="columnCount">
-         <number>2</number>
-        </property>
-        <attribute name="horizontalHeaderMinimumSectionSize">
-         <number>20</number>
-        </attribute>
-        <row>
-         <property name="text">
-          <string>Video recoding</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Video source</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Video device</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Aera</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Resolution</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Audio recoding</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Audio source</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Streaming</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Streaming resolution</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Auto-Hide</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Video location</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Short stop key</string>
-         </property>
-        </row>
-        <row>
-         <property name="text">
-          <string>Short recod key</string>
-         </property>
-        </row>
-        <column>
-         <property name="text">
-          <string>info</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>status</string>
-         </property>
-        </column>
-       </widget>
-       <widget class="QPushButton" name="pushButton_reload">
-        <property name="geometry">
-         <rect>
-          <x>440</x>
-          <y>400</y>
-          <width>96</width>
-          <height>28</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>reload</string>
-        </property>
-       </widget>
       </widget>
      </widget>
     </item>
