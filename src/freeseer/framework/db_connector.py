@@ -22,11 +22,8 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import os
 from sqlite3 import connect
 
-from logger import Logger
-from config import Config
 from presentation import *
 
 class DB_Connector():
@@ -91,7 +88,8 @@ class DB_Connector():
         Returns the talk titles as listed in presentations.db
         '''
         talk_titles = []
- 
+        
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT Speaker, Title, Room, Id FROM presentations''')
 
         for row in self.cursor:
@@ -134,6 +132,7 @@ class DB_Connector():
         Check if database already contains such presentation. Two presentations
         are considered the same if they have same title, same event and same speaker.
         '''
+        self.cursor = self.db_connection.cursor()
         talk_titles = self.cursor.execute('''select distinct Title from presentations''')
         talk_events = self.cursor.execute('''select distinct Event from presentations''')
         talk_speakers = self.cursor.execute('''select distinct Speaker from presentations''')
@@ -145,6 +144,7 @@ class DB_Connector():
     def filter_talks_by_event_room(self, event, room):
         talks_matched = []
 
+        self.cursor = self.db_connection.cursor()
         if (event == "All"):
             if (room == "All"):
                 self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
@@ -179,6 +179,7 @@ class DB_Connector():
     def filter_rooms_by_event(self,event):
         rooms_matched = []
         
+        self.cursor = self.db_connection.cursor()
         if(event == "All"):
             self.cursor.execute('''SELECT DISTINCT Room FROM presentations ORDER BY Id ASC''')
         
@@ -194,7 +195,9 @@ class DB_Connector():
         
 
     def get_presentation(self, talk_id):
-	self.cursor.execute('''SELECT Speaker, 
+        
+        self.cursor = self.db_connection.cursor()
+        self.cursor.execute('''SELECT Speaker, 
 				      Title, 
 				      Description, 
 			              Level, 
@@ -205,41 +208,44 @@ class DB_Connector():
 				      FileNameId 
 				FROM presentations WHERE Id=?''',
 				[unicode(talk_id)])
-	for row in self.cursor:
+        for row in self.cursor:
             speaker 	 = row[0]
-	    title 	 = row[1]
-	    description  = row[2]
-	    level 	 = row[3]
-	    event 	 = row[4]
-	    time	 = row[5]
-	    room	 = row[6]
-	    talk_id 	 = row[7]
-	    filename_id  = row[8]
+            title 	 = row[1]
+            description  = row[2]
+            level 	 = row[3]
+            event 	 = row[4]
+            time	 = row[5]
+            room	 = row[6]
+            talk_id 	 = row[7]
+            filename_id  = row[8]
     
-	    return Presentation(title, speaker, description, level, event, time, room, talk_id, filename_id)	 
-	    
+            return Presentation(title, speaker, description, level, event, time, room, talk_id, filename_id)	 
  
     def make_filename_id(self, event_name):
-	self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
+        
+        self.cursor = self.db_connection.cursor()
+        self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
 				[unicode(event_name)])
 
         for row in self.cursor:
- 	    id = row[0]
-	    return id
+            id = row[0]
+            return id
    
     def get_filename_id(self, talk_id):
-	self.cursor.execute('''SELECT FileNameId FROM presentations WHERE Id=?''',
+        
+        self.cursor = self.db_connection.cursor()
+        self.cursor.execute('''SELECT FileNameId FROM presentations WHERE Id=?''',
 			 	[unicode(talk_id)])
         for row in self.cursor:
             id = row[0]
-	    return id
+            return id
  
     def add_talk(self, presentation):
         '''
         Write current presentation data on database
         '''		
-	#create filename id (id's for each talk at an event)
-	filename_id = unicode(self.make_filename_id(presentation.event))
+        #create filename id (id's for each talk at an event)
+        filename_id = unicode(self.make_filename_id(presentation.event))
 
         self.run_query('''INSERT INTO presentations VALUES (?,?,?,?,?,?,?,NULL,?)''',
                     [presentation.speaker,
@@ -252,6 +258,8 @@ class DB_Connector():
 		     filename_id])
 
     def delete_talk(self, talk_id):
+        
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''DELETE FROM presentations WHERE Id=?''',
                                [unicode(talk_id)])
         self.db_connection.commit()
@@ -259,11 +267,15 @@ class DB_Connector():
         self.cursor.close()
     
     def clear_database(self):
+        
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''DELETE FROM presentations''')
         self.db_connection.commit()
         self.cursor.close()
         
     def update_talk(self, talk_id, new_speaker, new_title, new_room):        
+        
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''UPDATE presentations SET Speaker=?, Title=?, Room=? WHERE Id=?''',
                             [unicode(new_speaker),
                              unicode(new_title),
@@ -273,6 +285,8 @@ class DB_Connector():
         self.cursor.close()
         
     def get_presentation_id(self, presentation):
+        
+        self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT Id FROM presentations WHERE Speaker=? AND Title=? AND Event=?''',
                             [unicode(presentation.speaker),
                              unicode(presentation.title),
