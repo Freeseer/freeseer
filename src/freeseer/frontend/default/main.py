@@ -602,11 +602,11 @@ class MainApp(QtGui.QMainWindow):
    
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
-      
+       
       else:
        print("Invalid Locale Resorting to Default Language: English");
       
-      self.configTool.translate(file_ending);
+      self.configTool.translateFile(file_ending);
       
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
