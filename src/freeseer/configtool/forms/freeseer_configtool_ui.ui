@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -701,7 +701,7 @@ v4l2src does not work.</string>
          </item>
          <item>
           <property name="text">
-           <string>1920*1080</string>
+           <string>1920x1080</string>
           </property>
          </item>
         </widget>
