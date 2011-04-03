@@ -43,5 +43,5 @@ clean_configtool:
 clean: clean_gui clean_configtool
 	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
 
-test: gui
+test: gui configtool
 	./$(exec)
