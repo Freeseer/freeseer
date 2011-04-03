@@ -61,7 +61,7 @@ class DB_Connector():
         if not os.path.isfile(self.presentations_file):
             self.db_connection = connect(self.presentations_file)            
             self.create_table() 
-            self.cursor = self.db_connection.cursor() 
+            self.cursor = self.db_connection.cursor()
             return
         
         self.db_connection = connect(self.presentations_file)
@@ -80,8 +80,8 @@ class DB_Connector():
         self.cursor = self.db_connection.cursor()
         self.cursor.execute(self._CREATE_QUERY)
         self.cursor.execute(self._DEFAULT_TALK)        
-        self.cursor.close()
         self.db_connection.commit()
+        self.cursor.close()
         
     def get_talk_titles(self):
         '''
@@ -125,6 +125,8 @@ class DB_Connector():
         for row in self.cursor:
             talk_rooms.append(row[0])
         
+        self.cursor.close()
+        
         return talk_rooms
     
     def db_contains(self, presentation):
@@ -136,6 +138,8 @@ class DB_Connector():
         talk_titles = self.cursor.execute('''select distinct Title from presentations''')
         talk_events = self.cursor.execute('''select distinct Event from presentations''')
         talk_speakers = self.cursor.execute('''select distinct Speaker from presentations''')
+
+        self.cursor.close()
         
         if (presentation.title in talk_titles and presentation.event in talk_events and presentation.speaker in talk_speakers):
             return True
@@ -173,6 +177,7 @@ class DB_Connector():
                 
             talks_matched.append(text)
 
+        self.cursor.close()
         return talks_matched
     
     
@@ -190,6 +195,8 @@ class DB_Connector():
         
         for row in self.cursor:
             rooms_matched.append(row[0])
+        
+        self.cursor.close()
         
         return rooms_matched
         
@@ -219,6 +226,7 @@ class DB_Connector():
             talk_id 	 = row[7]
             filename_id  = row[8]
     
+            self.cursor.close()                
             return Presentation(title, speaker, description, level, event, time, room, talk_id, filename_id)	 
  
     def make_filename_id(self, event_name):
@@ -229,6 +237,7 @@ class DB_Connector():
 
         for row in self.cursor:
             id = row[0]
+            self.cursor.close()
             return id
    
     def get_filename_id(self, talk_id):
@@ -238,6 +247,7 @@ class DB_Connector():
 			 	[unicode(talk_id)])
         for row in self.cursor:
             id = row[0]
+            self.cursor.close()
             return id
  
     def add_talk(self, presentation):
@@ -294,4 +304,5 @@ class DB_Connector():
         
         for row in self.cursor:
             id = row[0]
+            self.cursor.close()
             return id
