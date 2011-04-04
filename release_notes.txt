@@ -1,3 +1,11 @@
+Differences in 2.0.1
+- Encode unicode characters to ascii since gstreamer doesn't support unicode
+- Disable the talk/event/room drop down lists when recording
+- Selecting the event now filters the room choices for that event
+- We now check if the videos directory is writable beforehand
+- Fixed SQLite cursor error seen on Fedora 14
+- Refer to libQxt from path where it is installed during source build
+
 Differences in 1.9.8
 - Enhancements to back end to enable streaming and support for icecast soon
 - Packaging for Arch linux
