@@ -29,7 +29,7 @@ from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 
-from freeseer.configtool.freeseer_configtool import *
+from configtool.freeseer_configtool import *
 
 from freeseer_ui_qt import *
 from freeseer_about import *
