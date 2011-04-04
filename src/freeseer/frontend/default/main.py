@@ -32,6 +32,7 @@ from freeseer.framework.presentation import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 import qxtglobalshortcut
+import unicodedata
 
 __version__=u'2.0.0'
 
@@ -429,7 +430,8 @@ class MainApp(QtGui.QMainWindow):
 	'''
 	Creates a presentation object from the currently selected title on the GUI
 	'''
-        title = str(self.ui.talkList.currentText().toUtf8())
+        title = unicode(self.ui.talkList.currentText())
+        
 	p_id = self.core.get_presentation_id_by_selected_title(title)
 	return self.core.get_presentation(p_id)
 
@@ -471,13 +473,13 @@ class MainApp(QtGui.QMainWindow):
             self.core.test_sources(state, True, False)
 
     def add_talk(self):
-        presentation = Presentation(unicode(self.ui.titleEdit.text()),
-                                    unicode(self.ui.presenterEdit.text()),
+        presentation = Presentation(self._unicode_to_string(unicode(self.ui.titleEdit.text())),
+                                    self._unicode_to_string(unicode(self.ui.presenterEdit.text())),
                                     "",         # description
                                     "",         # level
-                                    unicode(self.ui.eventEdit.text()),
-                                    unicode(self.ui.dateTimeEdit),
-                                    unicode(self.ui.roomEdit.text()))
+                                    self._unicode_to_string(unicode(self.ui.eventEdit.text())),
+                                    self._unicode_to_string(unicode(self.ui.dateTimeEdit.text())),
+                                    self._unicode_to_string(unicode(self.ui.roomEdit.text())))
                 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
@@ -726,6 +728,10 @@ class MainApp(QtGui.QMainWindow):
        
       else:
        print("Invalid Locale Resorting to Default Language: English");
+       
+       
+    def _unicode_to_string(self, unicode_string):
+   	    return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
     
 
 if __name__ == "__main__":
