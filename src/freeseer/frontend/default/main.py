@@ -34,7 +34,7 @@ from freeseer_about import *
 import qxtglobalshortcut
 import unicodedata
 
-__version__=u'2.0.0'
+__version__=u'2.0.1'
 
 NAME=u'Freeseer'
 URL=u'http://github.com/fosslc/freeseer'

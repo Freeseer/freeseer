@@ -32,7 +32,7 @@ import gst
 
 from freeseer.framework.backend_interface import *
 
-__version__=u'2.0.0'
+__version__=u'2.0.1'
 
 class Freeseer_gstreamer(BackendInterface):
     '''

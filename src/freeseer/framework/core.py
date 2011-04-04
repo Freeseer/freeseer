@@ -38,7 +38,7 @@ from db_connector import *
 from rss_parser import *
 from presentation import *
 
-__version__=u'2.0.0'
+__version__=u'2.0.1'
 
 class FreeseerCore:
     '''
