@@ -67,6 +67,11 @@ class Config:
         self.streaming_port = '8000'
         self.streaming_password = 'hackme'
         self.streaming_url = '127.0.0.1'
+
+        # Map of resolution names to the actual resolution
+
+        self.resmap = { '240p':'320x240', '360p':'480x360', '480p':'640x480', '720p':'1280x720', '1080p':'1920x1080' }
+
         # Read in the config file
         self.readConfig()
         

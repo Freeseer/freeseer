@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -344,27 +344,27 @@ v4l2src does not work.</string>
            </item>
            <item>
             <property name="text">
-             <string extracomment="240P">320x240</string>
+             <string>240p</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string extracomment="360P">360x320</string>
+             <string>360p</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string extracomment="480P">640x480</string>
+             <string>480p</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string extracomment="720P">1280x720</string>
+             <string>720p</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string extracomment="1080P">1920x1080</string>
+             <string>1080p</string>
             </property>
            </item>
           </widget>
@@ -681,27 +681,17 @@ v4l2src does not work.</string>
          </item>
          <item>
           <property name="text">
-           <string extracomment="320P">320x240</string>
+           <string>240p</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string extracomment="480P">480x360</string>
+           <string>360p</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string extracomment="480P">640x480</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string extracomment="720P">1280x720</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string extracomment="1080P">1920x1080</string>
+           <string>480p</string>
           </property>
          </item>
         </widget>

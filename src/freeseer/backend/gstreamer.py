@@ -406,11 +406,17 @@ class Freeseer_gstreamer(BackendInterface):
         icecast_queue = gst.element_factory_make('queue', 'icecast_queue')
         icecast_scale = gst.element_factory_make('videoscale', 'icecast_scale')
         icecast_scale_cap = gst.element_factory_make('capsfilter', 'icecast_scale_cap')
-        icecast_gst_caps = gst.Caps('video/x-raw-yuv,width=320,height=240')
+        #icecast_gst_caps = gst.Caps('video/x-raw-yuv,width=320,height=240')
+        #icecast_scale_cap.set_property('caps', icecast_gst_caps)
+
+        #icecast_video_codec = gst.element_factory_make(self.icecast_video_codec, 'icecast_video_codec')
+        #icecast_video_codec.set_property('quality',16)
+
+        icecast_gst_caps = gst.Caps('video/x-raw-yuv,width=' + str(self.icecast_width) + ',height=' + str(self.icecast_height))
         icecast_scale_cap.set_property('caps', icecast_gst_caps)
 
         icecast_video_codec = gst.element_factory_make(self.icecast_video_codec, 'icecast_video_codec')
-        icecast_video_codec.set_property('quality',16)
+        icecast_video_codec.set_property('bitrate',self.icecast_vidbitrate)
 
         icecast_muxer = gst.element_factory_make(self.icecast_muxer, 'icecast_muxer')
 

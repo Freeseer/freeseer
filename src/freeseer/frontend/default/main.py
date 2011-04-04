@@ -107,6 +107,7 @@ class MainApp(QtGui.QMainWindow):
     '''
     Freeseer main gui class
     '''
+
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         self.ui = Ui_FreeseerMainWindow()
@@ -179,13 +180,19 @@ class MainApp(QtGui.QMainWindow):
 	
         self.load_settings()
         # setup default sources
-        if (self.configTool.core.config.audiofb == 'True'):
+        if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
 
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 	
+    def getResmap(self):
+        '''
+        Get the resolution map.
+        '''
+        return { '240p':'320x240', '360p':'480x360', '480p':'640x480', '720p':'1280x720', '1080p':'1920x1080' }
+
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
@@ -241,24 +248,24 @@ class MainApp(QtGui.QMainWindow):
 	self.core.logger.log.info('loading setting...')
 
 	#load the config file
-	self.configTool.core.config.readConfig()
+	self.core.config.readConfig()
 	
 	#load enable_video_recoding setting	
-	if self.configTool.core.config.enable_video_recoding == 'False':
+	if self.core.config.enable_video_recoding == 'False':
 	  self.core.set_video_mode(False)
         else:
           self.core.set_video_mode(True)
           # load video source setting
           vidsrcs = self.core.get_video_sources()
-          src = self.configTool.core.config.videosrc
+          src = self.core.config.videosrc
           if src in vidsrcs:
 	    if (src == 'desktop'):
                 self.videosrc = 'desktop'
 
-                if (self.configTool.core.config.videodev == 'local area'):  
-		  self.desktopAreaEvent(int(self.configTool.core.config.start_x), int(self.configTool.core.config.start_y), int(self.configTool.core.config.end_x), int(self.configTool.core.config.end_y))
+                if (self.core.config.videodev == 'local area'):  
+		  self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
 		
-                self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+                self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 		  
             elif (src == 'usb'):
 		 self.videosrc = 'usb'
@@ -267,11 +274,11 @@ class MainApp(QtGui.QMainWindow):
 		 self.videosrc = 'fireware'
 	    
 	    if src == 'usb' or src == 'fireware':
-		dev = self.configTool.core.config.videodev
+		dev = self.core.config.videodev
 		viddevs = self.core.get_video_devices(self.videosrc)
 		
 		if dev in viddevs:
-		    self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+		    self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 
 		else:
 		    self.core.logger.log.debug('Can NOT find video device: '+ dev)
@@ -280,60 +287,76 @@ class MainApp(QtGui.QMainWindow):
 	
 	
 	#load audio setting
-	if self.configTool.core.config.enable_audio_recoding == 'False':
+	if self.core.config.enable_audio_recoding == 'False':
 	  self.core.set_audio_mode(False)
 	else:
 	  self.core.set_audio_mode(True)
 	  sndsrcs = self.core.get_audio_sources()
-	  src = self.configTool.core.config.audiosrc
+	  src = self.core.config.audiosrc
 	  if src in sndsrcs:
 	    self.core.change_soundsrc(src)
 	  else:
 	    self.core.logger.log.debug('Can NOT find audio source: '+ src)
 	    
         # load resolution
-        self.resolution =  self.configTool.core.config.resolution
+        self.resolution =  self.core.config.resolution
         self.change_output_resolution()
         
         #load streaming resoltion
-        self.streaming_resolution =  self.configTool.core.config.streaming_resolution
+        self.streaming_resolution =  self.core.config.streaming_resolution
         self.change_streaming_resolution()
-        if self.configTool.core.config.enable_streaming == 'True': # == True and self.configTool.core.config.streaming_resolution != "0x0":
-             url = str(self.configTool.core.config.streaming_url)
-             port = str(self.configTool.core.config.streaming_port)
-             mount = str(self.configTool.core.config.streaming_mount)
-             password = str(self.configTool.core.config.streaming_password)
-             resolution = str(self.configTool.core.config.streaming_resolution)
+        if self.core.config.enable_streaming == 'True': # == True and self.core.config.streaming_resolution != "0x0":
+             url = str(self.core.config.streaming_url)
+             port = str(self.core.config.streaming_port)
+             mount = str(self.core.config.streaming_mount)
+             password = str(self.core.config.streaming_password)
+             resolution = str(self.core.config.streaming_resolution).strip(" ")
              if ( url == "" or port == "" or password == "" or mount == ""):
                 QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
              else:
-                self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
+                if resolution in self.getResmap():
+                    res = self.getResmap()[resolution]
+                else:
+                    res = resolution
+                self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
         else:
                 self.core.backend.disable_icecast_streaming()
 	
         #load auto hide setting
-        if self.configTool.core.config.auto_hide == 'True':
+        if self.core.config.auto_hide == 'True':
 	  self.autoHide =  True
 	else:
 	  self.autoHide =  False	  
         self.core.preview(not self.autoHide, self.ui.previewWidget.winId())
  	
 	#set short key
-	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_rec))
-        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_stop))
+	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
         self.short_rec_key.setEnabled(True)
         self.short_stop_key.setEnabled(True)
         
     def change_output_resolution(self):
         res = str(self.resolution)
-        s = res.split('x')
+        if res in self.getResmap():
+            res_temp = self.getResmap()[res]
+        else:
+            res_temp = res
+
+        #print "changing res to : ", res_temp
+        s = res_temp.split('x')
         width = s[0]
         height = s[1]
         self.core.change_output_resolution(width, height)
     
     def change_streaming_resolution(self):
         res = str(self.streaming_resolution)
-        s = res.split('x')
+        if res in self.getResmap():
+            res_temp = self.getResmap()[res]
+        else:
+            res_temp = res
+
+        #print "changing res to : ", res_temp
+        s = res_temp.split('x')
         width = s[0]
         height = s[1]
         self.core.change_stream_resolution(width, height)
@@ -346,10 +369,10 @@ class MainApp(QtGui.QMainWindow):
         self.hide()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-        self.start_x = self.configTool.core.config.start_x = start_x
-        self.start_y = self.configTool.core.config.start_y = start_y
-        self.end_x = self.configTool.core.config.end_x = end_x
-        self.end_y = self.configTool.core.config.end_y = end_y
+        self.start_x = self.core.config.start_x = start_x
+        self.start_y = self.core.config.start_y = start_y
+        self.end_x = self.core.config.end_x = end_x
+        self.end_y = self.core.config.end_y = end_y
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
@@ -357,12 +380,12 @@ class MainApp(QtGui.QMainWindow):
     def toggle_audio_feedback(self):
         if (self.ui.audioFeedbackCheckbox.isChecked()):
             self.core.audioFeedback(True)
-            self.configTool.core.config.audiofb = 'True'
-            self.configTool.core.config.writeConfig()
+            self.core.config.audiofb = 'True'
+            self.core.config.writeConfig()
             return
-        self.configTool.core.config.audiofb = 'False'
+        self.core.config.audiofb = 'False'
         self.core.audioFeedback(False)
-        self.configTool.core.config.writeConfig()
+        self.core.config.writeConfig()
 
     def current_presentation(self):
 	'''
@@ -388,8 +411,8 @@ class MainApp(QtGui.QMainWindow):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
-            #self.configTool.core.config.videosrc = self.videosrc
-            #self.configTool.core.config.writeConfig()
+            #self.core.config.videosrc = self.videosrc
+            #self.core.config.writeConfig()
             
         else: # Stop Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")

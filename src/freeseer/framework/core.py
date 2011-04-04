@@ -57,7 +57,14 @@ class FreeseerCore:
 
         # Start Freeseer Recording Backend
         self.backend = Freeseer_gstreamer(self)
-        resolution = self.config.resolution.split('x')
+
+        # Find corresponding pixel resolution to name selected
+        if self.config.resolution in self.config.resmap:
+            res_temp = self.config.resmap[self.config.resolution]
+        else:
+            res_temp = self.config.resolution
+
+        resolution = res_temp.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
 
         self.feedback = False
@@ -275,7 +282,12 @@ class FreeseerCore:
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
 
     def change_stream_resolution(self, width, height):
-        rec_res = self.config.resolution.split('x')
+        if self.config.resolution in self.config.resmap:
+            res_temp = self.config.resmap[self.config.resolution]
+        else:
+            res_temp = self.config.resolution
+
+        rec_res = res_temp.split('x')
         self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
         self.logger.log.debug('Video stream resolution changed to ' + str(width) + 'x' + str(height))
 
