@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>0</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -55,7 +55,7 @@
    </property>
    <widget class="QWidget" name="SourceSetting">
     <attribute name="title">
-     <string>Source Setting </string>
+     <string>Source Settings</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_videoSource">
      <property name="geometry">
@@ -307,7 +307,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="Videosetting">
     <attribute name="title">
-     <string>Video setting</string>
+     <string>Video settings</string>
     </attribute>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
@@ -328,7 +328,7 @@ v4l2src does not work.</string>
          <item>
           <widget class="QLabel" name="label_videoQuality">
            <property name="text">
-            <string>Video Quality</string>
+            <string>Video Resolution</string>
            </property>
            <property name="buddy">
             <cstring>comboBox_videoQualityList</cstring>
@@ -344,32 +344,27 @@ v4l2src does not work.</string>
            </item>
            <item>
             <property name="text">
-             <string>320x240</string>
+             <string extracomment="240P">320x240</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>640x480</string>
+             <string extracomment="360P">360x320</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>800x600</string>
+             <string extracomment="480P">640x480</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>1024x768</string>
+             <string extracomment="720P">1280x720</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>1280x800</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>1920x1080</string>
+             <string extracomment="1080P">1920x1080</string>
             </property>
            </item>
           </widget>
@@ -416,7 +411,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
-     <string>Steaming setting</string>
+     <string>Steaming settings</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_streaming">
      <property name="enabled">
@@ -431,7 +426,7 @@ v4l2src does not work.</string>
       </rect>
      </property>
      <property name="title">
-      <string>&amp;Enable Streaming</string>
+      <string>&amp;Enable Streaming </string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -670,7 +665,7 @@ v4l2src does not work.</string>
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Streaming Quality</string>
+          <string>Streaming Resolution</string>
          </property>
          <property name="buddy">
           <cstring>comboBox_streamingQualityList</cstring>
@@ -686,22 +681,27 @@ v4l2src does not work.</string>
          </item>
          <item>
           <property name="text">
-           <string>320x240</string>
+           <string extracomment="320P">320x240</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>480x360</string>
+           <string extracomment="480P">480x360</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>640x480</string>
+           <string extracomment="480P">640x480</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>800x600</string>
+           <string extracomment="720P">1280x720</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string extracomment="1080P">1920x1080</string>
           </property>
          </item>
         </widget>
@@ -712,7 +712,7 @@ v4l2src does not work.</string>
    </widget>
    <widget class="QWidget" name="Extrasetting">
     <attribute name="title">
-     <string>Extra setting</string>
+     <string>Extra settings</string>
     </attribute>
     <widget class="QGroupBox" name="groupBox_autoHide">
      <property name="geometry">
@@ -929,6 +929,8 @@ v4l2src does not work.</string>
     </item>
    </layout>
   </widget>
+  <zorder>layoutWidget</zorder>
+  <zorder>configureTab</zorder>
  </widget>
  <tabstops>
   <tabstop>configureTab</tabstop>

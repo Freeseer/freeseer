@@ -26,7 +26,7 @@ from sys import *
 from PyQt4 import QtGui, QtCore
 from os import listdir;
 
-from freeseer.framework.core import *
+#from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 
@@ -405,13 +405,14 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.writeConfig()
         self.show()
        
-    def translate(self,file_ending):
+    def translateFile(self,file_ending):
 	load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
 	loaded = self.uiTranslator.load(load_string);
 	if(loaded == True):
 	  self.ui.retranslateUi(self);
 	else:
-	  print("Invalid Locale Resorting to Default Language: English");
+	  print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
+	  
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = ConfigTool()

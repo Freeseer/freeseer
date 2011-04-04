@@ -172,12 +172,10 @@ class MainApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionPrefercences, QtCore.SIGNAL('triggered()'),self.config_tool)
+        self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.config_tool)
                 
         # editTable Connections
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
-	
-	self.connect(self.ui.pushButton_reload, QtCore.SIGNAL('clicked()'),self.load_settings)
 	
         self.load_settings()
         # setup default sources
@@ -241,64 +239,32 @@ class MainApp(QtGui.QMainWindow):
 	        
     def load_settings(self): 
 	self.core.logger.log.info('loading setting...')
-	i = 0
-	while i < self.ui.tableWidget_infoTable.rowCount():
-	  newItem = QtGui.QTableWidgetItem('Unknow')
-	  self.ui.tableWidget_infoTable.setItem(i,0,newItem)
-	  newItem = QtGui.QTableWidgetItem('')
-	  self.ui.tableWidget_infoTable.setItem(i,1,newItem)
-	  i =  i + 1
-	
+
 	#load the config file
 	self.configTool.core.config.readConfig()
 	
-	#load enable_video_recoding setting
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_video_recoding)
-	self.ui.tableWidget_infoTable.setItem(0,0,newItem)
+	#load enable_video_recoding setting	
 	if self.configTool.core.config.enable_video_recoding == 'False':
 	  self.core.set_video_mode(False)
-	else:
-	  self.core.set_video_mode(True)
-	  # load video source setting
-	  vidsrcs = self.core.get_video_sources()
-	  src = self.configTool.core.config.videosrc
-	  if src in vidsrcs:
-	    newItem = QtGui.QTableWidgetItem('OK')
-	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
-
+        else:
+          self.core.set_video_mode(True)
+          # load video source setting
+          vidsrcs = self.core.get_video_sources()
+          src = self.configTool.core.config.videosrc
+          if src in vidsrcs:
 	    if (src == 'desktop'):
                 self.videosrc = 'desktop'
-                newItem = QtGui.QTableWidgetItem('OK')
-		self.ui.tableWidget_infoTable.setItem(2,1,newItem)
-                if (self.configTool.core.config.videodev == 'local area'):
-		  newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodev)
-		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
-		  
-		  self.desktopAreaEvent(int(self.configTool.core.config.start_x), int(self.configTool.core.config.start_y), int(self.configTool.core.config.end_x), int(self.configTool.core.config.end_y))
-		  newItem = QtGui.QTableWidgetItem(str(self.configTool.core.config.start_x) +','+str( self.configTool.core.config.start_y) +','+ str(self.configTool.core.config.end_x) +','+ str(self.configTool.core.config.end_y))
-		  self.ui.tableWidget_infoTable.setItem(3,0,newItem)
 
-		if (self.configTool.core.config.videodev == 'default'):
-		  newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodev)
-		  self.ui.tableWidget_infoTable.setItem(2,0,newItem)
-		  newItem = QtGui.QTableWidgetItem('OK')
-		  self.ui.tableWidget_infoTable.setItem(2,1,newItem)
-		self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
+                if (self.configTool.core.config.videodev == 'local area'):  
+		  self.desktopAreaEvent(int(self.configTool.core.config.start_x), int(self.configTool.core.config.start_y), int(self.configTool.core.config.end_x), int(self.configTool.core.config.end_y))
+		
+                self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
 		  
             elif (src == 'usb'):
 		 self.videosrc = 'usb'
-		 newItem = QtGui.QTableWidgetItem('OK')
-		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
+		 
             elif (src == 'firewire'):
 		 self.videosrc = 'fireware'
-		 newItem = QtGui.QTableWidgetItem('OK')
-		 self.ui.tableWidget_infoTable.setItem(2,1,newItem)
-	    else:
-		 newItem = QtGui.QTableWidgetItem('Error')
-	         self.ui.tableWidget_infoTable.setItem(2,1,newItem)
-	    
-	    newItem = QtGui.QTableWidgetItem(self.videosrc)
-	    self.ui.tableWidget_infoTable.setItem(1,0,newItem)
 	    
 	    if src == 'usb' or src == 'fireware':
 		dev = self.configTool.core.config.videodev
@@ -306,21 +272,14 @@ class MainApp(QtGui.QMainWindow):
 		
 		if dev in viddevs:
 		    self.core.change_videosrc(self.videosrc, self.configTool.core.config.videodev)
-		    newItem = QtGui.QTableWidgetItem(dev)
-		    self.ui.tableWidget_infoTable.setItem(2,0,newItem)
+
 		else:
 		    self.core.logger.log.debug('Can NOT find video device: '+ dev)
-		    newItem = QtGui.QTableWidgetItem('Error')
-		    self.ui.tableWidget_infoTable.setItem(2,1,newItem)
 	  else:
-	    newItem = QtGui.QTableWidgetItem('Error')
-	    self.ui.tableWidget_infoTable.setItem(1,1,newItem)
 	    self.core.logger.log.debug('Can NOT find video source: '+ dev)
 	
 	
 	#load audio setting
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_audio_recoding)
-	self.ui.tableWidget_infoTable.setItem(5,0,newItem)
 	if self.configTool.core.config.enable_audio_recoding == 'False':
 	  self.core.set_audio_mode(False)
 	else:
@@ -329,71 +288,36 @@ class MainApp(QtGui.QMainWindow):
 	  src = self.configTool.core.config.audiosrc
 	  if src in sndsrcs:
 	    self.core.change_soundsrc(src)
-	    newItem = QtGui.QTableWidgetItem(src)
-	    self.ui.tableWidget_infoTable.setItem(6,0,newItem)
-	    newItem = QtGui.QTableWidgetItem('OK')
-	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
 	  else:
-	    newItem = QtGui.QTableWidgetItem('Error ' + src)
-	    self.ui.tableWidget_infoTable.setItem(6,1,newItem)
 	    self.core.logger.log.debug('Can NOT find audio source: '+ src)
-	  
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.enable_streaming)
-	self.ui.tableWidget_infoTable.setItem(7,0,newItem)
-	if self.configTool.core.config.enable_streaming == 'True':
-	  pass
-	else:
-	  pass  
-		
-	# load resolution
+	    
+        # load resolution
         self.resolution =  self.configTool.core.config.resolution
-
         self.change_output_resolution()
         
-        newItem = QtGui.QTableWidgetItem(self.resolution)
-	self.ui.tableWidget_infoTable.setItem(4,0,newItem)
-	
         #load streaming resoltion
         self.streaming_resolution =  self.configTool.core.config.streaming_resolution
         self.change_streaming_resolution()
-	if self.configTool.core.config.enable_streaming: # == True and self.configTool.core.config.streaming_resolution != "0x0":
-                url = str(self.configTool.core.config.streaming_url)
-                port = str(self.configTool.core.config.streaming_port)
-                mount = str(self.configTool.core.config.streaming_mount)
-                password = str(self.configTool.core.config.streaming_password)
-                resolution = str(self.configTool.core.config.streaming_resolution)
-                if ( url == "" or port == "" or password == "" or mount == ""):
-                        QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
-                else:
-                        self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
+        if self.configTool.core.config.enable_streaming == 'True': # == True and self.configTool.core.config.streaming_resolution != "0x0":
+             url = str(self.configTool.core.config.streaming_url)
+             port = str(self.configTool.core.config.streaming_port)
+             mount = str(self.configTool.core.config.streaming_mount)
+             password = str(self.configTool.core.config.streaming_password)
+             resolution = str(self.configTool.core.config.streaming_resolution)
+             if ( url == "" or port == "" or password == "" or mount == ""):
+                QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
+             else:
+                self.core.backend.enable_icecast_streaming(url, int(port), password, mount, resolution)
         else:
                 self.core.backend.disable_icecast_streaming()
-
-        newItem = QtGui.QTableWidgetItem(self.streaming_resolution)
-	self.ui.tableWidget_infoTable.setItem(8,0,newItem)
 	
         #load auto hide setting
         if self.configTool.core.config.auto_hide == 'True':
 	  self.autoHide =  True
 	else:
-	  self.autoHide =  False
-	  
+	  self.autoHide =  False	  
         self.core.preview(not self.autoHide, self.ui.previewWidget.winId())
-  
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.auto_hide)
-	self.ui.tableWidget_infoTable.setItem(9,0,newItem)
-	
-	#display video directory	    
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.videodir)
-	self.ui.tableWidget_infoTable.setItem(10,0,newItem)
-	
-	#display short keys
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.key_stop)
-	self.ui.tableWidget_infoTable.setItem(11,0,newItem)
-	
-	newItem = QtGui.QTableWidgetItem(self.configTool.core.config.key_rec)
-	self.ui.tableWidget_infoTable.setItem(12,0,newItem)
-	
+ 	
 	#set short key
 	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_rec))
         self.short_stop_key.setShortcut(QtGui.QKeySequence(self.configTool.core.config.key_stop))
@@ -678,11 +602,11 @@ class MainApp(QtGui.QMainWindow):
    
        self.ui.retranslateUi(self); #Translate both the ui and the about page
        self.aboutDialog.translate();
-      
+       
       else:
        print("Invalid Locale Resorting to Default Language: English");
       
-      self.configTool.translate(file_ending);
+      self.configTool.translateFile(file_ending);
       
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)

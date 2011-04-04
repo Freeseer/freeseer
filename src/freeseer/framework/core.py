@@ -31,9 +31,9 @@ import logging.config
 import os
 
 from freeseer.backend.gstreamer import *
-from freeseer.configtool.freeseer_configtool import Config
+#from freeseer.configtool.freeseer_configtool import Config
 
-#from config import Config
+from config import Config
 from logger import Logger
 from db_connector import *
 from rss_parser import *

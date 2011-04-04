@@ -32,7 +32,8 @@ import os
 
 from freeseer.backend.gstreamer import *
 
-from configtool_configloader import Config
+#from configtool_configloader import Config
+from freeseer.framework.config import Config
 from freeseer.framework.logger import Logger
 from freeseer.framework.presentation import *
 

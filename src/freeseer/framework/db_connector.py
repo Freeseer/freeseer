@@ -26,8 +26,8 @@ import os
 from sqlite3 import connect
 
 from logger import Logger
-from freeseer.configtool.freeseer_configtool import Config
-#from config import Config
+#from freeseer.configtool.freeseer_configtool import Config
+from config import Config
 from presentation import *
 
 class DB_Connector():
