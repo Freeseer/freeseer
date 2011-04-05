@@ -34,8 +34,9 @@ from configtool.freeseer_configtool import *
 from freeseer_ui_qt import *
 from freeseer_about import *
 import qxtglobalshortcut
+import unicodedata
 
-__version__=u'1.9.7'
+__version__=u'2.0.1'
 
 NAME=u'Freeseer'
 URL=u'http://github.com/fosslc/freeseer'
@@ -151,8 +152,8 @@ class MainApp(QtGui.QMainWindow):
         self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
-        #main tab connections
-        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_event)
+        # main tab connections
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_rooms_and_talks_at_event)
         self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
@@ -391,7 +392,8 @@ class MainApp(QtGui.QMainWindow):
 	'''
 	Creates a presentation object from the currently selected title on the GUI
 	'''
-        title = str(self.ui.talkList.currentText().toUtf8())
+        title = unicode(self.ui.talkList.currentText())
+        
 	p_id = self.core.get_presentation_id_by_selected_title(title)
 	return self.core.get_presentation(p_id)
 
@@ -406,6 +408,8 @@ class MainApp(QtGui.QMainWindow):
 
             self.core.record(self.current_presentation())	
             self.ui.recordButton.setText(self.tr('Stop'))
+            self.ui.eventList.setEnabled(False)
+            self.ui.roomList.setEnabled(False)
 
             if (not self.autoHide):
                 self.statusBar().showMessage('recording...')
@@ -421,6 +425,8 @@ class MainApp(QtGui.QMainWindow):
             self.core.stop()
             self.ui.recordButton.setText(self.tr('Record'))
             self.ui.audioFeedbackSlider.setValue(0)
+            self.ui.eventList.setEnabled(True)
+            self.ui.roomList.setEnabled(True)
             self.statusBar().showMessage('ready')
 
     def test_sources(self, state):
@@ -432,13 +438,13 @@ class MainApp(QtGui.QMainWindow):
             self.core.test_sources(state, True, False)
 
     def add_talk(self):
-        presentation = Presentation(str(self.ui.titleEdit.text()),
-                                    str(self.ui.presenterEdit.text()),
+        presentation = Presentation(self._unicode_to_string(unicode(self.ui.titleEdit.text())),
+                                    self._unicode_to_string(unicode(self.ui.presenterEdit.text())),
                                     "",         # description
                                     "",         # level
-                                    str(self.ui.eventEdit.text()),
-                                    str(self.ui.dateTimeEdit),
-                                    str(self.ui.roomEdit.text()))
+                                    self._unicode_to_string(unicode(self.ui.eventEdit.text())),
+                                    self._unicode_to_string(unicode(self.ui.dateTimeEdit.text())),
+                                    self._unicode_to_string(unicode(self.ui.roomEdit.text())))
                 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
@@ -491,9 +497,13 @@ class MainApp(QtGui.QMainWindow):
         self.core.clear_database()
         self.update_talk_views()
 
-    def get_talks_at_event(self, event):
+    def get_rooms_and_talks_at_event(self, event):        
+        room_list = self.core.filter_rooms_by_event(self.ui.eventList.currentText())        
+        self.update_room_list(room_list)
+        
         room = str(self.ui.roomList.currentText())
         talk_list = self.core.filter_talks_by_event_room(event, room)
+        
         self.update_talk_list(talk_list)
         
     def get_talks_at_room(self, room):
@@ -506,6 +516,12 @@ class MainApp(QtGui.QMainWindow):
         
         for talk in talk_list:
             self.ui.talkList.addItem(talk)
+            
+    def update_room_list(self, room_list):
+        self.ui.roomList.clear()
+    
+        for room in room_list:
+            self.ui.roomList.addItem(room)
                   
     def load_talks(self):
         '''
@@ -628,13 +644,16 @@ class MainApp(QtGui.QMainWindow):
        
       else:
        print("Invalid Locale Resorting to Default Language: English");
-      
+
       self.configTool.translateFile(file_ending);
       
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
        	self.configTool.show()
-       	
+       	     
+    def _unicode_to_string(self, unicode_string):
+   	    return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
