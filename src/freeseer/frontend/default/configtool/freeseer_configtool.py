@@ -28,8 +28,8 @@ from os import listdir;
 
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
-
-from configcore import *
+from freeseer.framework.core import *
+#from configcore import *
 from freeseer_configtool_ui import *
 
 LANGUAGE_DIR = 'freeseer/frontend/default/configtool/languages/'
@@ -46,7 +46,7 @@ class ConfigTool(QtGui.QDialog):
 	
 	self.ui.groupBox_hardware.hide()
 	
-	self.core = ConfigCore(self)
+	self.core = FreeseerCore(self)
 	# get QT desktop to get screen size
 	self.desktop = QtGui.QApplication.desktop()	
 	
@@ -183,8 +183,6 @@ class ConfigTool(QtGui.QDialog):
 	
 	self.core.logger.log.debug('Set video source  to ' + self.videosrc)
 
-
-    
     def toggle_streaming(self,state):
 	'''
 	Enable /Disables streaming if the user has checked the
@@ -268,7 +266,7 @@ class ConfigTool(QtGui.QDialog):
         if self.core.config.auto_hide == 'True':
 	   self.ui.checkbox_autoHide.setChecked(True)
 	else:
-	    self.ui.checkbox_autoHide.setChecked(False)
+	   self.ui.checkbox_autoHide.setChecked(False)
 	    
 	#load shortkey and video directory
 	self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
