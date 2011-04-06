@@ -285,9 +285,14 @@ class FreeseerCore:
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
 
     def change_stream_resolution(self, width, height):
+        '''
+        Change the stream resolution.
+        '''
+        # resolution should be text from list, i.e. 360p
+        # map this to the appropriate numeric resolution if possible (i.e. 480x360)
         if self.config.resolution in self.config.resmap:
             res_temp = self.config.resmap[self.config.resolution]
-        else:
+        else:       # if the text is not in resmap, assume it is already numeric
             res_temp = self.config.resolution
 
         rec_res = res_temp.split('x')

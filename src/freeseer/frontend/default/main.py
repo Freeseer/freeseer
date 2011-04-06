@@ -188,12 +188,6 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 	
-    def getResmap(self):
-        '''
-        Get the resolution map.
-        '''
-        return { '240p':'320x240', '360p':'480x360', '480p':'640x480', '720p':'1280x720', '1080p':'1920x1080' }
-
     def setupLanguageMenu(self):
 	#Add Languages to the Menu Ensure only one is clicked 
 	self.langActionGroup.setExclusive(True)
@@ -315,8 +309,8 @@ class MainApp(QtGui.QMainWindow):
              if ( url == "" or port == "" or password == "" or mount == ""):
                 QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
              else:
-                if resolution in self.getResmap():
-                    res = self.getResmap()[resolution]
+                if resolution in self.core.config.resmap:
+                    res = self.core.config.resmap[resolution]
                 else:
                     res = resolution
                 self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
@@ -338,8 +332,8 @@ class MainApp(QtGui.QMainWindow):
         
     def change_output_resolution(self):
         res = str(self.resolution)
-        if res in self.getResmap():
-            res_temp = self.getResmap()[res]
+        if res in self.core.config.resmap:
+            res_temp = self.core.config.resmap[res]
         else:
             res_temp = res
 
@@ -351,8 +345,8 @@ class MainApp(QtGui.QMainWindow):
     
     def change_streaming_resolution(self):
         res = str(self.streaming_resolution)
-        if res in self.getResmap():
-            res_temp = self.getResmap()[res]
+        if res in self.core.config.resmap:
+            res_temp = self.core.config.resmap[res]
         else:
             res_temp = res
 

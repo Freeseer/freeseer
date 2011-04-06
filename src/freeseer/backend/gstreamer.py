@@ -221,8 +221,8 @@ class Freeseer_gstreamer(BackendInterface):
             else:                
                 video_src.link(self.dv1394dvdemux)
             
-            self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
-            gst.element_link_many(self.dv1394q1, self.dv1394dvdec, video_rate)
+                self.dv1394dvdemux.connect('pad-added', self._dvdemux_padded)
+                gst.element_link_many(self.dv1394q1, self.dv1394dvdec, video_rate)
         else:
             if ( self.icecast ):
                 # The "src_tee" was added so link from it
@@ -679,38 +679,44 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         self.recording_width = width
         self.recording_height = height
+        # If streaming is being done, reset the bitrate according to the new resolution
         if self.icecast:
             self.change_stream_resolution(self.icecast_width, self.icecast_height, width, height)
     
     def change_stream_resolution(self, width, height, record_width, record_height):
         '''
-        Sets the resolution of the streamed video, and chooses an appropriate bit rate for the video.
+        Sets the resolution of the streamed video, and attempts to choose the ideal bitrate for the given resolutions.
         '''
-	    # bitrate map here for known combinations
-        # use a string of form <stream_width>,<record_width> (i.e., '320,640') to uniquely identify combinations
+	    # The dictionary bitmap contains a mapping from known pairing of stream resolution
+        # and recording resolution to the ideal bitrate as determined by testing.
+        # It uses a string of form <stream_width>,<record_width> (i.e., '320,640') to uniquely identify combinations
         bitmap = {  '320,640': 400, '320,800': 400, '320,1024': 400,    # bit rates for 320x240 stream
                     '480,640': 800, '480,800': 800, '480,1024': 350,    # bit rates for 480x360 stream
                     '640,640': 1250, '640,800': 1000, '640,1024': 500,  # bit rates for 640x480 stream
                     '800,640': 1250, '800,800': 1000, '800,1024': 750   # bit rates for 800x600 stream
                  }                  
         
-        #default bitmap for unknown pairings
+        # If the pairing cannot be found, we back off to the average best bitrate at each resolution
         default_bitmap = { 	320: 400, # resolution of 320x240 - 400 kbps
 			        480: 500, # resolution of 480x360 - 500 kbps
 			        640: 750, # resolution of 640x480 - 750 kbps
 			        800: 1000 # resolution of 800x600 - 1000 kbps
                 }
 
+        # Creates the string of the pairing <stream width>,<record width>
         stream_rec_pair = str(width) + ',' + str(record_width)
 
+        # Sets the width & height of streaming
         self.icecast_width = width
         self.icecast_height = height
-        if stream_rec_pair in bitmap:
+
+        # If the pairing is found in bitmap, use the given bitrate
+        if stream_rec_pair in bitmap:         
             self.icecast_vidbitrate = bitmap[stream_rec_pair]
-        elif self.icecast_width in default_bitmap:
-            self.icecast_vidbitrate = default_bitmap[width]         # if the current res is in the map of bitrates, set it
-        else:
-            self.icecast_vidbitrate = 1000                          # Use a default value of 1000 otherwise
+        elif self.icecast_width in default_bitmap:              # Else, if the stream resolution is in default_bitmap, use that bitrate
+            self.icecast_vidbitrate = default_bitmap[width]
+        else:                                                   # If pairing not in default_bitmap, use default value of 1000
+            self.icecast_vidbitrate = 1000                      
 
     def change_audio_source(self, new_source):
         '''
@@ -780,8 +786,8 @@ class Freeseer_gstreamer(BackendInterface):
         self.icecast_mount = mount
         res = resolution.split('x')
         self.change_stream_resolution(res[0], res[1], self.recording_width, self.recording_height)
-        print "Icecast settings enabled"
+        self.core.logger.log.debug(u"Icecast streaming enabled")
 
     def disable_icecast_streaming(self):
         self.icecast = False
-        print "Icecast settings disabled"
+        self.core.logger.log.debug(u"Icecast streaming disabled")
