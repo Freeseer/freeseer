@@ -39,7 +39,7 @@ from db_connector import *
 from rss_parser import *
 from presentation import *
 
-__version__=u'1.9.7'
+__version__=u'2.0.1'
 
 class FreeseerCore:
     '''
@@ -153,6 +153,9 @@ class FreeseerCore:
 
     def filter_talks_by_event_room(self, event, room):
         return self.db.filter_talks_by_event_room(event, room)
+    
+    def filter_rooms_by_event(self,evento):
+        return self.db.filter_rooms_by_event(evento)
 
     def get_presentation_id_by_selected_title(self, title):
     	'''

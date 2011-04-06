@@ -26,14 +26,12 @@ from sys import *
 from PyQt4 import QtGui, QtCore
 from os import listdir;
 
-#from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
-
-from configcore import *
+from freeseer.framework.core import *
 from freeseer_configtool_ui import *
 
-LANGUAGE_DIR = 'freeseer/configtool/languages/'
+LANGUAGE_DIR = 'freeseer/frontend/default/configtool/languages/'
 
 class ConfigTool(QtGui.QDialog):
     '''
@@ -44,20 +42,13 @@ class ConfigTool(QtGui.QDialog):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_ConfigureTool()
         self.ui.setupUi(self)
-	self.default_language = 'en';
 	
 	self.ui.groupBox_hardware.hide()
 	
-	self.ui.label_check_1.setVisible(False)
-        self.ui.label_check_2.setVisible(False)
-        self.ui.label_check_3.setVisible(False)
-        self.ui.label_check_4.setVisible(False)
- 
-        
-	#self.ui.pushButton_testStreaming.setEnabled(False)
-	
-	self.core = ConfigCore(self)
+	self.core = FreeseerCore(self)
+	# get QT desktop to get screen size
 	self.desktop = QtGui.QApplication.desktop()	
+	
 	# get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
         
@@ -100,8 +91,6 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_port)
         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_mount)
         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_password)
-
-        self.connect(self.ui.pushButton_testStreaming,QtCore.SIGNAL('clicked()'),self.test_streaming)
         
         # connections for Extra setting -> auto hidden
         self.connect(self.ui.checkbox_autoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
@@ -193,8 +182,6 @@ class ConfigTool(QtGui.QDialog):
 	
 	self.core.logger.log.debug('Set video source  to ' + self.videosrc)
 
-
-    
     def toggle_streaming(self,state):
 	'''
 	Enable /Disables streaming if the user has checked the
@@ -202,13 +189,6 @@ class ConfigTool(QtGui.QDialog):
 	'''
 	self.core.logger.log.debug('Enable streaming: ' + str(state))
         self.core.config.enable_streaming = state
-
-	
-    def test_streaming(self):
-	self.ui.label_check_1.setPixmap(QtGui.QPixmap(":/streamingCheck/pass.png"))
-	self.ui.label_check_1.show()
-	self.ui.label_check_2.setPixmap(QtGui.QPixmap(":/streamingCheck/error.png"))
-	self.ui.label_check_2.show()
 	
     def change_streaming_url(self):
 	self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
@@ -285,7 +265,7 @@ class ConfigTool(QtGui.QDialog):
         if self.core.config.auto_hide == 'True':
 	   self.ui.checkbox_autoHide.setChecked(True)
 	else:
-	    self.ui.checkbox_autoHide.setChecked(False)
+	   self.ui.checkbox_autoHide.setChecked(False)
 	    
 	#load shortkey and video directory
 	self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)

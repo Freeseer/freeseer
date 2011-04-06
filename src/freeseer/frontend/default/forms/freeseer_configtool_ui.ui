@@ -14,7 +14,7 @@
    <string>Freeseer Config Tool</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="resource.qrc">
     <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <widget class="QTabWidget" name="configureTab">
@@ -39,7 +39,7 @@
     <enum>QTabWidget::North</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideNone</enum>
@@ -447,7 +447,7 @@ v4l2src does not work.</string>
        <property name="topMargin">
         <number>0</number>
        </property>
-       <item row="3" column="1">
+       <item row="3" column="1" colspan="2">
         <widget class="QLineEdit" name="lineEdit_password">
          <property name="echoMode">
           <enum>QLineEdit::Password</enum>
@@ -464,7 +464,7 @@ v4l2src does not work.</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="1" colspan="2">
         <widget class="QLineEdit" name="lineEdit_mountPoint"/>
        </item>
        <item row="1" column="0">
@@ -477,7 +477,7 @@ v4l2src does not work.</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="1" colspan="2">
         <widget class="QLineEdit" name="lineEdit_port">
          <property name="inputMethodHints">
           <set>Qt::ImhNone</set>
@@ -504,153 +504,14 @@ v4l2src does not work.</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="label_check_4">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="label_check_3">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-         </property>
-         <property name="scaledContents">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="label_check_2">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_check_1">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="resource.qrc">:/streamingCheck/unknow.png</pixmap>
-         </property>
-         <property name="scaledContents">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
+       <item row="0" column="1" colspan="2">
         <widget class="QLineEdit" name="lineEdit_URL_IP">
          <property name="text">
           <string/>
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>32</width>
-           <height>0</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="3">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::MinimumExpanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>1</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="3">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>1</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="3">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>1</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="3">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>1</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
-     </widget>
-     <widget class="QPushButton" name="pushButton_testStreaming">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>430</x>
-        <y>320</y>
-        <width>96</width>
-        <height>28</height>
-       </rect>
-      </property>
-      <property name="toolTip">
-       <string>Press this to test streaming setting</string>
-      </property>
-      <property name="text">
-       <string>&amp;Test</string>
-      </property>
      </widget>
      <widget class="QWidget" name="horizontalLayoutWidget_2">
       <property name="geometry">
@@ -995,86 +856,6 @@ v4l2src does not work.</string>
     <hint type="destinationlabel">
      <x>425</x>
      <y>79</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>groupBox_streaming</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>pushButton_testStreaming</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>63</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>470</x>
-     <y>379</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_URL_IP</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_1</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>484</x>
-     <y>107</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>513</x>
-     <y>103</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_port</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_2</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>470</x>
-     <y>150</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>146</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_mountPoint</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_3</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>494</x>
-     <y>195</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>510</x>
-     <y>196</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lineEdit_password</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>label_check_4</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>494</x>
-     <y>245</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>509</x>
-     <y>243</y>
     </hint>
    </hints>
   </connection>

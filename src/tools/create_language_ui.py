@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'add_language.ui'
 #
-# Created: Sat Jan 22 15:07:13 2011
+# Created: Mon Apr  4 18:38:26 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
