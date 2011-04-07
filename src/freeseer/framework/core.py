@@ -209,16 +209,21 @@ class FreeseerCore:
         '''
         Obtains a presentation ID given a title string from the GUI
         '''
-        # Run a database query as if we have selected "All" Events "All" Rooms,
-        # and check the index of the title string in this list, this corresponds
-        # to the presentation id in the database. (If we add 1 to this index)
-        # NOTE: This method of obtaining the presentation id relies on the GUI
-        # using the method: filter_talks_by_event_room() to populate it's
-        # talk list, since we are comparing strings created by this method.
-        talkTitles = self.db.filter_talks_by_event_room("All", "All")
-        return talkTitles.index(title) + 1
+	     # Run a database query as if we have selected "All" Events "All" Rooms,
+        # and then run a database query to retrieve the talk IDs for the list of
+        # "All" Events "All" Rooms. 
+        # Locate the index of the talk using the talk title, and get the 
+        # corresponding talk ID from the list of talk IDs.
+	     # NOTE: This method of obtaining the presentation id relies on the GUI
+	     #	using the method: filter_talks_by_event_room() to populate it's 
+	     #	talk list, since we are comparing strings created by this method.
+	     talkTitles = self.db.filter_talks_by_event_room("All", "All")
 
+        talksIds = self.db.get_talks_ids()
+        talkIndex = talkTitles.index(title)
 
+	     return talksIds[talkIndex]
+	
     def get_presentation(self, presentation_id):
         return self.db.get_presentation(presentation_id)
 

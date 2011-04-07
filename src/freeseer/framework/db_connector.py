@@ -148,6 +148,19 @@ class DB_Connector():
             return True
         return False
 
+    def get_talks_ids(self):
+        talks_ids = []
+
+        self.cursor = self.db_connection.cursor()
+        self.cursor.execute('''SELECT Id FROM presentations ORDER BY Id ASC''')
+
+        for row in self.cursor:
+            talks_ids.append(row[0])
+
+        self.cursor.close()
+        
+        return talks_ids
+
     def filter_talks_by_event_room(self, event, room):
         talks_matched = []
 
