@@ -632,7 +632,7 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         Returns the supported audio sources by this backend.
         '''
-        snd_sources_list = ['pulsesrc', 'alsasrc']
+        snd_sources_list = ['pulsesrc', 'alsasrc', 'autoaudiosrc']
 
         snd_sources = []
         for src in snd_sources_list:
