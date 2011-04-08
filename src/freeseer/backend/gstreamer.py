@@ -652,7 +652,10 @@ class Freeseer_gstreamer(BackendInterface):
         self.video_device = source_device
 
         if (source_type == 'desktop'):
-            self.video_source = 'ximagesrc'
+            if os.name == 'posix':
+                self.video_source = 'ximagesrc'
+            elif os.name == 'nt':
+                self.video_source = 'dx9screencapsrc'
         elif (source_type == 'usb'):
             self.video_source = 'v4l2src'
         elif (source_type == 'usb_fallback'):
