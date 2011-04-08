@@ -36,6 +36,7 @@ from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
+if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
 import unicodedata
 
