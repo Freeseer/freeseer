@@ -31,6 +31,7 @@ import logging.config
 import os
 
 from freeseer.backend.gstreamer import *
+#from freeseer.configtool.freeseer_configtool import Config
 
 from config import Config
 from logger import Logger
@@ -56,7 +57,14 @@ class FreeseerCore:
 
         # Start Freeseer Recording Backend
         self.backend = Freeseer_gstreamer(self)
-        resolution = self.config.resolution.split('x')
+
+        # Find corresponding pixel resolution to name selected
+        if self.config.resolution in self.config.resmap:
+            res_temp = self.config.resmap[self.config.resolution]
+        else:
+            res_temp = self.config.resolution
+
+        resolution = res_temp.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
 
         self.feedback = False
@@ -275,6 +283,21 @@ class FreeseerCore:
     def change_output_resolution(self, width, height):
         self.backend.change_output_resolution(width, height)
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
+
+    def change_stream_resolution(self, width, height):
+        '''
+        Change the stream resolution.
+        '''
+        # resolution should be text from list, i.e. 360p
+        # map this to the appropriate numeric resolution if possible (i.e. 480x360)
+        if self.config.resolution in self.config.resmap:
+            res_temp = self.config.resmap[self.config.resolution]
+        else:       # if the text is not in resmap, assume it is already numeric
+            res_temp = self.config.resolution
+
+        rec_res = res_temp.split('x')
+        self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
+        self.logger.log.debug('Video stream resolution changed to ' + str(width) + 'x' + str(height))
 
     def set_audio_mode(self, mode):
         '''

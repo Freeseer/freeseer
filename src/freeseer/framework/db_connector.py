@@ -23,7 +23,6 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 from sqlite3 import connect
-
 from presentation import *
 
 class DB_Connector():

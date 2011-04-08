@@ -1,3 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# freeseer - vga/presentation capture software
+#
+#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  http://fosslc.org
+#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -14,31 +22,16 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-# This makefile generates the python code for the gui
-# from an XML definition file
+import sys
 
-# Set the name of the executable here
-exec = run-freeseer
+from PyQt4 import QtGui
 
+from freeseer.frontend.default.configtool.freeseer_configtool import *
 
-ALL: gui configtool
-	@echo "You can now run $(exec)"
-
-gui: 
-	cd freeseer/frontend/default; make
-	@echo "Re-generated GUI"
-
-configtool:
-	cd freeseer/frontend/default/configtool; make
-	@echo "Re-Generated configtool"
-
-clean_gui:
-	cd freeseer/frontend/default; make clean
-	cd freeseer/frontend/default/configtool; make clean
-	@echo "GUI files cleaned up"
-
-clean: clean_gui
-	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
-
-test: gui configtool
-	./$(exec)
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    main = ConfigTool()
+    #app.installTranslator(main.uiTranslator);
+    #main.translateFile(main.default_language);
+    main.show()
+    sys.exit(app.exec_())
