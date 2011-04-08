@@ -29,6 +29,7 @@ from freeseer_about import *
 
 from PyQt4 import QtGui, QtCore
 from os import listdir;
+from os import name;
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
@@ -181,6 +182,8 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
     
         self.load_settings()
+        if os.name == 'posix': # preview only supported on linux currently
+            self.core.preview(True, self.ui.previewWidget.winId())
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
