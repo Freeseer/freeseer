@@ -165,7 +165,9 @@ class Freeseer_gstreamer(BackendInterface):
     def _set_video_source(self):
         video_src = gst.element_factory_make(self.video_source, 'video_src')
         if (self.video_source_type.startswith('usb')):
-            video_src.set_property('device', self.video_device)
+            # not sure about device format on windows. for now lets just use the default
+            if os.name == 'posix': # only set device for linux systems.
+                video_src.set_property('device', self.video_device)
             
 
             
@@ -658,7 +660,10 @@ class Freeseer_gstreamer(BackendInterface):
             elif os.name == 'nt':
                 self.video_source = 'dx9screencapsrc'
         elif (source_type == 'usb'):
-            self.video_source = 'v4l2src'
+            if os.name == 'posix':
+                self.video_source = 'v4l2src'
+            elif os.name == 'nt':
+                self.video_source = 'dshowvideosrc'
         elif (source_type == 'usb_fallback'):
             self.video_source = 'v4lsrc'
         elif (source_type == 'firewire'):
