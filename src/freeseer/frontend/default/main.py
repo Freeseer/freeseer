@@ -35,7 +35,8 @@ from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from configtool.freeseer_configtool import *
-import qxtglobalshortcut
+if os.name == 'posix': # Currently we only support LibQxt on linux
+    import qxtglobalshortcut
 import unicodedata
 
 
@@ -162,10 +163,17 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
         
         # connections for configure > Extra Settings > Shortkeys
-        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        if os.name == 'posix': # Currently we only support LibQxt on linux
+            self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+            self.short_rec_key.setEnabled(True)
+            self.short_stop_key.setEnabled(True)
+            self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+            self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+            self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+            self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
