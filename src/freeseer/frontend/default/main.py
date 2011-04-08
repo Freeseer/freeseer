@@ -34,7 +34,8 @@ from configtool.freeseer_configtool import *
 
 from freeseer_ui_qt import *
 from freeseer_about import *
-import qxtglobalshortcut
+if os.name == 'posix': # Currently we only support LibQxt on linux
+    import qxtglobalshortcut
 import unicodedata
 
 __version__=u'2.0.1'
@@ -161,10 +162,11 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
         
         # connections for configure > Extra Settings > Shortkeys
-        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+        if os.name == 'posix': # Currently we only support LibQxt on linux
+            self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
 	self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+            self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
