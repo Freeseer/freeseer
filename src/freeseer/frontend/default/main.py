@@ -322,7 +322,7 @@ class MainApp(QtGui.QMainWindow):
 	  self.autoHide =  True
 	else:
 	  self.autoHide =  False	  
-        self.core.preview(not self.autoHide, self.ui.previewWidget.winId())
+        self.core.preview(True, self.ui.previewWidget.winId())
  	
 	#set short key
 	self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
