@@ -32,7 +32,8 @@ from freeseer.framework.presentation import *
 
 from freeseer_ui_qt import *
 from freeseer_about import *
-import qxtglobalshortcut
+if os.name == 'posix': # Currently we only support LibQxt on linux
+    import qxtglobalshortcut
 import unicodedata
 
 __version__=u'2.0.1'
@@ -180,16 +181,17 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.applySettingsButton, QtCore.SIGNAL('clicked()'), self.save_settings)
         
         # connections for configure > Extra Settings > Shortkeys
-        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
-        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
-        self.short_rec_key.setEnabled(True)
-        self.short_stop_key.setEnabled(True)
-        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
-        self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
-        self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
+        if os.name == 'posix': # Currently we only support LibQxt on linux
+            self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+            self.short_rec_key.setEnabled(True)
+            self.short_stop_key.setEnabled(True)
+            self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+            self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+            self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+            self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
         
         # connections for configure > Extra Settings > File Locations
         self.connect(self.ui.videoDirectoryButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
