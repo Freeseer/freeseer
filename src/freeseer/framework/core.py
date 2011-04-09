@@ -98,6 +98,7 @@ class FreeseerCore:
         # check if this record name already exists in this directory and add "-NN" ending if so.
         while(self.duplicate_exists(tempname + ".ogg")):
             tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+            print("Checking: ") + tempname + ".ogg"
             count+=1
             
         recordname = tempname + ".ogg"
@@ -112,7 +113,7 @@ class FreeseerCore:
         '''	
         event = self.make_shortname(presentation.event)
         title = self.make_shortname(presentation.title)
-        unique = self.make_id_from_string(presentation.filename_id)
+        unique = self.make_shortname(presentation.speaker)
         
         if(event == ""):
             return title+"-"+unique
