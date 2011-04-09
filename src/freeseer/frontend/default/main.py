@@ -341,10 +341,11 @@ class MainApp(QtGui.QMainWindow):
             self.autoHide =  False
  
         #set short key
-        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
-        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
-        self.short_rec_key.setEnabled(True)
-        self.short_stop_key.setEnabled(True)
+        if os.name == 'posix': # globalshortcuts are only supported on linux atm
+            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+            self.short_rec_key.setEnabled(True)
+            self.short_stop_key.setEnabled(True)
         
     def change_output_resolution(self):
         res = str(self.resolution)
