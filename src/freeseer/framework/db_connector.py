@@ -24,6 +24,8 @@
 
 from sqlite3 import connect
 from presentation import *
+import os
+
 
 class DB_Connector():
     '''
