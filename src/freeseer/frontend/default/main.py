@@ -391,7 +391,7 @@ class MainApp(QtGui.QMainWindow):
         Creates a presentation object from the currently selected title on the GUI
         '''
         
-        unicode(self.ui.talkList.currentText())
+        title=unicode(self.ui.talkList.currentText())
         
         p_id = self.core.get_presentation_id_by_selected_title(title)
         return self.core.get_presentation(p_id)
@@ -630,12 +630,12 @@ class MainApp(QtGui.QMainWindow):
       
     def translateFile(self,file_ending):
         '''
-        Actually perfoms the translation. This is called by the handler for the language menu
-        Note: If the language file can not be loaded then the default language is english 
+        Actually performs the translation. This is called by the handler for the language menu
+        Note: If the language file can not be loaded then the default language is English 
         '''
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
         
-        self.uiTranslator.load(load_string);
+        loaded=self.uiTranslator.load(load_string);
   
         if(loaded == True):
    
