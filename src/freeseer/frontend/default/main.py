@@ -252,6 +252,8 @@ class MainApp(QtGui.QMainWindow):
             self.core.set_video_mode(False)
         else:
             self.core.set_video_mode(True)
+            self.core.preview(True, self.ui.previewWidget.winId())
+                        
             # load video source setting
             vidsrcs = self.core.get_video_sources()
             src = self.core.config.videosrc
@@ -318,21 +320,13 @@ class MainApp(QtGui.QMainWindow):
                         res = resolution
                         self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
             
-            
-    
-                    #TODO autohide and preview is broken at the moment.
-                    #load auto hide setting
-                    if self.core.config.auto_hide == 'True':
-                        self.autoHide =  True
-                    else:
-                        self.autoHide =  False      
-                        self.core.preview(True, self.ui.previewWidget.winId())
-                        # TODO: we're getting rid of hotkeys anyhow - comment them out for now
-                        #        #set short key
-                        #        self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
-                        #        self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
-                        #        self.short_rec_key.setEnabled(True)
-                        #        self.short_stop_key.setEnabled(True)
+            #load auto hide setting and enable preview
+            if self.core.config.auto_hide == 'True':
+                self.autoHide =  True
+            else:
+                self.autoHide =  False      
+                
+                        
         
     def change_output_resolution(self):
         res = str(self.resolution)
