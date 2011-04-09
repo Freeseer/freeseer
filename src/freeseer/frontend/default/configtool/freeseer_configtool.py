@@ -208,73 +208,70 @@ class ConfigTool(QtGui.QDialog):
         #self.core.logger.log.debug('set streaming password: ' + passwd)
 
     def load_settings(self):
-        # TODO: take a close look here to make sure indentation is right.
-        #load enable video recoding setting
+    
+        # Set up Video
         if self.core.config.enable_video_recoding == 'False':
             self.ui.groupBox_videoSource.setChecked(False)
-        else:
+        else: # Only if we're doing video do we need to worry about screen resolution
             self.ui.groupBox_videoSource.setChecked(True)
-            #load enable audio recoding setting
-            
-            if self.core.config.enable_audio_recoding == 'False':
-                self.ui.groupBox_soundSource.setChecked(False)
-            else:
-                self.ui.groupBox_soundSource.setChecked(True)
-
-            #load video source setting
-            if (self.core.config.videosrc == 'desktop'):
-                self.ui.radioButton_recordLocalDesktop.setChecked(True)
-            
-            if (self.core.config.videodev == 'local area'):
-                self.ui.radioButton_recordLocalArea.setChecked(True)
-                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-                
-            elif (self.core.config.videosrc == 'usb'):
-                self.ui.radioButton_hardware.setChecked(True)
-                self.ui.radioButton_USBsrc.setChecked(True)
-            
-            elif (self.core.config.videosrc == 'firewire'):
-                self.ui.radioButton_hardware.setChecked(True)
-                self.ui.radioButton_firewiresrc.setChecked(True)
             
             # detect screen display & load resolution
             screenres = self.primary_screen_size()
             self.screen_size()
-        if self.core.config.resolution == '0x0':
-            resolution = self.ui.comboBox_videoQualityList.findText(screenres)
-        else:
-            resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
-        if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
         
-        #load streaming resolution
+            if self.core.config.resolution == '0x0':
+                resolution = self.ui.comboBox_videoQualityList.findText(screenres)
+            else:
+                resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
+            
+            if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
+
+            #load video source setting
+            if (self.core.config.videosrc == 'desktop'):
+                self.ui.radioButton_recordLocalDesktop.setChecked(True)
+           
+            if (self.core.config.videodev == 'local area'):
+                self.ui.radioButton_recordLocalArea.setChecked(True)
+                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+            
+            elif (self.core.config.videosrc == 'usb'):
+                self.ui.radioButton_hardware.setChecked(True)
+                self.ui.radioButton_USBsrc.setChecked(True)
+         
+            elif (self.core.config.videosrc == 'firewire'):
+                self.ui.radioButton_hardware.setChecked(True)
+                self.ui.radioButton_firewiresrc.setChecked(True)
+         
+        # Set up Audio
+        if self.core.config.enable_audio_recoding == 'False':
+            self.ui.groupBox_soundSource.setChecked(False)
+        else:
+            self.ui.groupBox_soundSource.setChecked(True)
+        
+        
+        # Set up streaming - could be audio/video/both
         if self.core.config.enable_streaming == 'False':
             self.ui.groupBox_streaming.setChecked(False)
         else:
             self.ui.groupBox_streaming.setChecked(True)
-
-        self.ui.lineEdit_URL_IP.setText(self.core.config.streaming_url)
-        self.ui.lineEdit_port.setText(self.core.config.streaming_port)
-        self.ui.lineEdit_mountPoint.setText(self.core.config.streaming_mount)
-        self.ui.lineEdit_password.setText(self.core.config.streaming_password)
+            self.ui.lineEdit_URL_IP.setText(self.core.config.streaming_url)
+            self.ui.lineEdit_port.setText(self.core.config.streaming_port)
+            self.ui.lineEdit_mountPoint.setText(self.core.config.streaming_mount)
+            self.ui.lineEdit_password.setText(self.core.config.streaming_password)
         
-        if self.core.config.streaming_resolution == '0x0':
-            streaming_resolution = 0
-        else:
-            streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming_resolution)
+            if self.core.config.streaming_resolution == '0x0':
+                streaming_resolution = 0
+            else:
+                streaming_resolution = self.ui.comboBox_streamingQualityList.findText(self.core.config.streaming_resolution)
         
-        if not (streaming_resolution < 0):
-            self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
+            if not (streaming_resolution < 0):
+                self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
 
-        #load auto hidden setting
+        #load auto hide setting
         if self.core.config.auto_hide == 'True':
             self.ui.checkbox_autoHide.setChecked(True)
         else:
             self.ui.checkbox_autoHide.setChecked(False)
-
-        #load shortkey and video directory
-        self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
-        self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
-        self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
 
     def screen_size(self):
         self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
