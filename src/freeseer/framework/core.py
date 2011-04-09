@@ -28,7 +28,7 @@ import datetime
 import time
 import logging
 import logging.config
-import os
+
 
 from freeseer.backend.gstreamer import *
 #from freeseer.configtool.freeseer_configtool import Config

@@ -390,8 +390,8 @@ class MainApp(QtGui.QMainWindow):
         '''
         Creates a presentation object from the currently selected title on the GUI
         '''
-        # TODO: is this even used anywhere?
-        title = unicode(self.ui.talkList.currentText())
+        
+        unicode(self.ui.talkList.currentText())
         
         p_id = self.core.get_presentation_id_by_selected_title(title)
         return self.core.get_presentation(p_id)
@@ -635,8 +635,7 @@ class MainApp(QtGui.QMainWindow):
         '''
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
         
-        # TODO: is this used anywhere?
-        loaded = self.uiTranslator.load(load_string);
+        self.uiTranslator.load(load_string);
   
         if(loaded == True):
    

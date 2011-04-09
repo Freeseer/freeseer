@@ -725,8 +725,7 @@ class Freeseer_gstreamer(BackendInterface):
         # Ensure the new sound source is valid
         try:
             self.core.logger.log.debug('loading ' + new_source)
-            #TODO: Do we ever use this?
-            src = gst.element_factory_make(new_source, 'test_src')
+            gst.element_factory_make(new_source, 'test_src')
         except:
             self.core.logger.log.debug('Failed to load ' + new_source + '.')
             return False
