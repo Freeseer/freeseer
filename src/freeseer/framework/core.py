@@ -89,7 +89,6 @@ class FreeseerCore:
         '''
         Returns the filename to use when recording.
         '''
-        # TODO: fix recordname
         recordname = self.make_record_name(presentation)
         
         count = 0
