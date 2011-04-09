@@ -165,7 +165,7 @@ class MainApp(QtGui.QMainWindow):
         if os.name == 'posix': # Currently we only support LibQxt on linux
             self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
             self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-	self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+            self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
             self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
