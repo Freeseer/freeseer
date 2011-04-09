@@ -89,6 +89,7 @@ class FreeseerCore:
         '''
         Returns the filename to use when recording.
         '''
+        # TODO: fix recordname
         recordname = self.make_record_name(presentation)
         
         count = 0
@@ -98,8 +99,9 @@ class FreeseerCore:
         while(self.duplicate_exists(tempname + ".ogg")):
             tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
             count+=1
-            recordname = tempname + ".ogg"
-            self.logger.log.debug('Set record name to ' + recordname)        
+            
+        recordname = tempname + ".ogg"
+        self.logger.log.debug('Set record name to ' + recordname)        
         
         return recordname
 

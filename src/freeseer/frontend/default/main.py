@@ -314,7 +314,6 @@ class MainApp(QtGui.QMainWindow):
                     
                     if resolution in self.core.config.resmap:
                         res = self.core.config.resmap[resolution]
-                        # TODO: Andrew moved this here, come back and double check.
                         self.core.backend.disable_icecast_streaming()
                     else:
                         res = resolution
