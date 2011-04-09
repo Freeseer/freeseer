@@ -480,9 +480,9 @@ class Freeseer_gstreamer(BackendInterface):
 
         self.player.remove(icecast,
                         icecast_queue,
-			icecast_queue2,
-			icecast_queue3,
-			icecast_queue4,
+                        icecast_queue2,
+                        icecast_queue3,
+                        icecast_queue4,
                         icecast_colorspace,
                         icecast_video_codec,
                         icecast_muxer,
