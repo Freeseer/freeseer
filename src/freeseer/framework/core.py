@@ -97,7 +97,6 @@ class FreeseerCore:
         # check if this record name already exists in this directory and add "-NN" ending if so.
         while(self.duplicate_exists(tempname + ".ogg")):
             tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
-            print("Checking: ") + tempname + ".ogg"
             count+=1
             
         recordname = tempname + ".ogg"
@@ -108,16 +107,47 @@ class FreeseerCore:
 
     def make_record_name(self, presentation):
         '''
-        Create an 'EVENT-TITLE-UNIQUE' record name
+        Create an 'EVENT-ROOM-SPEAKER-TITLE' record name
+        If any information is missing, we blank it out intelligently
+        And if we have nothing for some reason, we use "default"
         '''	
         event = self.make_shortname(presentation.event)
         title = self.make_shortname(presentation.title)
-        unique = self.make_shortname(presentation.speaker)
+        speaker = self.make_shortname(presentation.speaker)
+        room = self.make_shortname(presentation.room)
         
-        if(event == ""):
-            return title+"-"+unique
+        recordname=""
         
-        return event+"-"+title+"-"+unique
+                
+        if(event!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+event
+            else:
+                recordname=event
+        
+        if(room!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+room
+            else:
+                recordname=room
+        
+        if(speaker!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+speaker
+            else:
+                recordname=speaker
+                
+        if(title!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+title
+            else:
+                recordname=title
+           
+                
+        if(recordname!=""):
+            return recordname
+                    
+        return "default"
 
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
@@ -145,7 +175,7 @@ class FreeseerCore:
         Returns the first four characters of a string, excluding spaces.
         '''
         string = string.replace(" ", "")
-        return string[0:4].upper()
+        return string[0:6].upper()
 
     ##
     ## Database Functions
