@@ -704,11 +704,11 @@ class Freeseer_gstreamer(BackendInterface):
                  }                  
         
         # If the pairing cannot be found, we back off to the average best bitrate at each resolution
-        default_bitmap = { 	320: 400, # resolution of 320x240 - 400 kbps
-			        480: 500, # resolution of 480x360 - 500 kbps
-			        640: 750, # resolution of 640x480 - 750 kbps
-			        800: 1000 # resolution of 800x600 - 1000 kbps
-                }
+        default_bitmap = { 320: 400, # resolution of 320x240 - 400 kbps
+                            480: 500, # resolution of 480x360 - 500 kbps
+                            640: 750, # resolution of 640x480 - 750 kbps
+                            800: 1000 # resolution of 800x600 - 1000 kbps
+        }
 
         # Creates the string of the pairing <stream width>,<record width>
         stream_rec_pair = str(width) + ',' + str(record_width)
