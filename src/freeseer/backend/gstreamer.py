@@ -276,21 +276,24 @@ class Freeseer_gstreamer(BackendInterface):
         print 'success'
 
     def _set_video_encoder(self):
+        videoenc_cspace = gst.element_factory_make('ffmpegcolorspace', 'videoenc_cspace')
         videoenc_queue = gst.element_factory_make('queue', 'videoenc_queue')
         videoenc_codec = gst.element_factory_make(self.recording_video_codec,
                                                     'videoenc_codec')
         videoenc_codec.set_property('bitrate', self.recording_video_bitrate)
 
-        self.player.add(videoenc_queue, videoenc_codec)
+        self.player.add(videoenc_cspace, videoenc_queue, videoenc_codec)
         gst.element_link_many(self.video_tee,
+                              videoenc_cspace,
                               videoenc_queue,
                               videoenc_codec,
                               self.mux)
 
     def _clear_video_encoder(self):
+        videoenc_cspace = self.player.get_by_name('videoenc_cspace')
         videoenc_queue = self.player.get_by_name('videoenc_queue')
         videoenc_codec = self.player.get_by_name('videoenc_codec')
-        self.player.remove(videoenc_queue, videoenc_codec)
+        self.player.remove(videoenc_cspace, videoenc_queue, videoenc_codec)
 
     def _set_video_feedback(self):
         vpqueue = gst.element_factory_make('queue', 'vpqueue')
