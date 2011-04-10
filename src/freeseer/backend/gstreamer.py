@@ -134,7 +134,7 @@ class Freeseer_gstreamer(BackendInterface):
         if message_name == 'prepare-xwindow-id':
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
-            imagesink.set_xwindow_id(self.window_id)
+            imagesink.set_xwindow_id(int(self.window_id))
 
     ###
     ### Muxer Functions
@@ -165,7 +165,9 @@ class Freeseer_gstreamer(BackendInterface):
     def _set_video_source(self):
         video_src = gst.element_factory_make(self.video_source, 'video_src')
         if (self.video_source_type.startswith('usb')):
-            video_src.set_property('device', self.video_device)
+            # not sure about device format on windows. for now lets just use the default
+            if os.name == 'posix': # only set device for linux systems.
+                video_src.set_property('device', self.video_device)
             
 
             
@@ -274,21 +276,24 @@ class Freeseer_gstreamer(BackendInterface):
         print 'success'
 
     def _set_video_encoder(self):
+        videoenc_cspace = gst.element_factory_make('ffmpegcolorspace', 'videoenc_cspace')
         videoenc_queue = gst.element_factory_make('queue', 'videoenc_queue')
         videoenc_codec = gst.element_factory_make(self.recording_video_codec,
                                                     'videoenc_codec')
         videoenc_codec.set_property('bitrate', self.recording_video_bitrate)
 
-        self.player.add(videoenc_queue, videoenc_codec)
+        self.player.add(videoenc_cspace, videoenc_queue, videoenc_codec)
         gst.element_link_many(self.video_tee,
+                              videoenc_cspace,
                               videoenc_queue,
                               videoenc_codec,
                               self.mux)
 
     def _clear_video_encoder(self):
+        videoenc_cspace = self.player.get_by_name('videoenc_cspace')
         videoenc_queue = self.player.get_by_name('videoenc_queue')
         videoenc_codec = self.player.get_by_name('videoenc_codec')
-        self.player.remove(videoenc_queue, videoenc_codec)
+        self.player.remove(videoenc_cspace, videoenc_queue, videoenc_codec)
 
     def _set_video_feedback(self):
         vpqueue = gst.element_factory_make('queue', 'vpqueue')
@@ -478,9 +483,9 @@ class Freeseer_gstreamer(BackendInterface):
 
         self.player.remove(icecast,
                         icecast_queue,
-			icecast_queue2,
-			icecast_queue3,
-			icecast_queue4,
+                        icecast_queue2,
+                        icecast_queue3,
+                        icecast_queue4,
                         icecast_colorspace,
                         icecast_video_codec,
                         icecast_muxer,
@@ -631,7 +636,7 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         Returns the supported audio sources by this backend.
         '''
-        snd_sources_list = ['pulsesrc', 'alsasrc']
+        snd_sources_list = ['pulsesrc', 'alsasrc', 'autoaudiosrc']
 
         snd_sources = []
         for src in snd_sources_list:
@@ -652,9 +657,15 @@ class Freeseer_gstreamer(BackendInterface):
         self.video_device = source_device
 
         if (source_type == 'desktop'):
-            self.video_source = 'ximagesrc'
+            if os.name == 'posix':
+                self.video_source = 'ximagesrc'
+            elif os.name == 'nt':
+                self.video_source = 'dx9screencapsrc'
         elif (source_type == 'usb'):
-            self.video_source = 'v4l2src'
+            if os.name == 'posix':
+                self.video_source = 'v4l2src'
+            elif os.name == 'nt':
+                self.video_source = 'dshowvideosrc'
         elif (source_type == 'usb_fallback'):
             self.video_source = 'v4lsrc'
         elif (source_type == 'firewire'):
@@ -696,11 +707,11 @@ class Freeseer_gstreamer(BackendInterface):
                  }                  
         
         # If the pairing cannot be found, we back off to the average best bitrate at each resolution
-        default_bitmap = { 	320: 400, # resolution of 320x240 - 400 kbps
-			        480: 500, # resolution of 480x360 - 500 kbps
-			        640: 750, # resolution of 640x480 - 750 kbps
-			        800: 1000 # resolution of 800x600 - 1000 kbps
-                }
+        default_bitmap = { 320: 400, # resolution of 320x240 - 400 kbps
+                            480: 500, # resolution of 480x360 - 500 kbps
+                            640: 750, # resolution of 640x480 - 750 kbps
+                            800: 1000 # resolution of 800x600 - 1000 kbps
+        }
 
         # Creates the string of the pairing <stream width>,<record width>
         stream_rec_pair = str(width) + ',' + str(record_width)

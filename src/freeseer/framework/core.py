@@ -79,7 +79,7 @@ class FreeseerCore:
         '''
         filename = self.config.videodir + '/' + recordname
         try:
-            open(filename, 'r')
+            result = open(filename, 'r')
         except IOError:
             return False
         return True
@@ -98,7 +98,7 @@ class FreeseerCore:
         while(self.duplicate_exists(tempname + ".ogg")):
             tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
             count+=1
-            
+
         recordname = tempname + ".ogg"
         self.logger.log.debug('Set record name to ' + recordname)        
         
@@ -113,11 +113,11 @@ class FreeseerCore:
         '''	
         event = self.make_shortname(presentation.event)
         title = self.make_shortname(presentation.title)
-        speaker = self.make_shortname(presentation.speaker)
+        unique = self.make_id_from_string(presentation.filename_id)
         room = self.make_shortname(presentation.room)
-        
-        recordname=""
-        
+
+        if(event == ""):
+            return title+"-"+unique
                 
         if(event!=""):
             if(recordname!=""):
@@ -149,12 +149,13 @@ class FreeseerCore:
                     
         return "default"
 
+        return event+"-"+title+"-"+unique
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
         '''
-	    Returns an "NN" id given an integer and a string of valid characters for the id
+        Returns an "NN" id given an integer and a string of valid characters for the id
         ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
-	    '''	
+        '''
         index1 = position % string.__len__()
         index0 = int( position / string.__len__() )
 
@@ -175,7 +176,7 @@ class FreeseerCore:
         Returns the first four characters of a string, excluding spaces.
         '''
         string = string.replace(" ", "")
-        return string[0:6].upper()
+        return string[0:4].upper()
 
     ##
     ## Database Functions
@@ -202,14 +203,14 @@ class FreeseerCore:
 
     def get_presentation_id_by_selected_title(self, title):
         '''
-    	Obtains a presentation ID given a title string from the GUI
-    	'''
+        Obtains a presentation ID given a title string from the GUI
+        '''
         # Run a database query as if we have selected "All" Events "All" Rooms,
         # and check the index of the title string in this list, this corresponds
         # to the presentation id in the database. (If we add 1 to this index)
         # NOTE: This method of obtaining the presentation id relies on the GUI
-        #	using the method: filter_talks_by_event_room() to populate it's 
-        #	talk list, since we are comparing strings created by this method.
+        # using the method: filter_talks_by_event_room() to populate it's
+        # talk list, since we are comparing strings created by this method.
         talkTitles = self.db.filter_talks_by_event_room("All", "All")
         return talkTitles.index(title) + 1
 
@@ -392,19 +393,18 @@ class FreeseerCore:
         to populate the current recording's file metadata.
         '''
         return { "title" : presentation.title,
-                "artist" : presentation.speaker,
-                "performer" : presentation.speaker,
-                "album" : presentation.event,
-                "location" : presentation.room,
-                "date" : str(datetime.date.today()),
-                "comment" : presentation.description}
+                 "artist" : presentation.speaker,
+                 "performer" : presentation.speaker,
+                 "album" : presentation.event,
+                 "location" : presentation.room,
+                 "date" : str(datetime.date.today()),
+                 "comment" : presentation.description}
 
 
     def record(self, presentation):
         '''
         Informs backend to begin recording presentation.
         '''
-        
         #create a filename to record to
         record_name = self.get_record_name(presentation)
 

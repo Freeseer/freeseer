@@ -29,12 +29,14 @@ from freeseer_about import *
 
 from PyQt4 import QtGui, QtCore
 from os import listdir;
+from os import name;
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from configtool.freeseer_configtool import *
-import qxtglobalshortcut
+if os.name == 'posix': # Currently we only support LibQxt on linux
+    import qxtglobalshortcut
 import unicodedata
 
 
@@ -161,10 +163,15 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
         
         # connections for configure > Extra Settings > Shortkeys
-        self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-        self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-        self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
+        if os.name == 'posix': # Currently we only support LibQxt on linux
+            self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
+            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+            self.short_rec_key.setEnabled(True)
+            self.short_stop_key.setEnabled(True)
+            self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
+            self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
@@ -181,6 +188,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
     
         self.load_settings()
+        self.core.preview(True, self.ui.previewWidget.winId())
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
@@ -214,45 +222,44 @@ class MainApp(QtGui.QMainWindow):
             if(language_display_text!=''):
                 language_menu_button = QtGui.QAction(self);
                 language_menu_button.setCheckable(True);
-                #Dialect handling for locales from operating system. Use possible match
-            if(language_name == system_ending): #direct match 
+            #Dialect handling for locales from operating system. Use possible match
+            if(language_name == system_ending): #direct match
                 active_button = language_menu_button;
-                current_lang_length = 2; 
+                current_lang_length = 2;
                 self.default_language = system_ending;
             else:
-                if(language_name.split("_")[0] == system_ending.split("_")[0]): #If language matches but not country 
+                if(language_name.split("_")[0] == system_ending.split("_")[0]): #If language matches but not country
                     if(current_lang_length < 1): #if there has been no direct match yet.
                         active_button = language_menu_button;
                         current_lang_length = 1;
                         self.default_language = language_name
-                        if(language_name.split("_")[0] == default_ending): #default language hit and no other language has been set
-                            if(current_lang_length == 0):
-                                active_button = language_menu_button;
-                                self.default_language = language_name;  
-                                #language_name is a holder for the language name in the translation file tr_*.ts   
-                                language_menu_button.setText(language_display_text);
-                                language_menu_button.setData(language_name);
-                                self.ui.menuLanguage.addAction(language_menu_button); 
-                                self.langActionGroup.addAction(language_menu_button);     
-                                if(active_button!=None):    
-                                    active_button.setChecked(True);
-                                    
+                if(language_name.split("_")[0] == default_ending): #default language hit and no other language has been set
+                    if(current_lang_length == 0):
+                        active_button = language_menu_button;
+                        self.default_language = language_name;
+            #language_name is a holder for the language name in the translation file tr_*.ts
+            language_menu_button.setText(language_display_text);
+            language_menu_button.setData(language_name);
+            self.ui.menuLanguage.addAction(language_menu_button);
+            self.langActionGroup.addAction(language_menu_button);
+        if(active_button!=None):
+            active_button.setChecked(True);
+            #print('There are no languages available in the system except english. Please check the language directory to ensure qm files exist');
         
-                                #Set up the event handling for each of the menu items  
-                                self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
-            
+        #Set up the event handling for each of the menu items
+        self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
+        
     def load_settings(self): 
         self.core.logger.log.info('loading setting...')
 
         #load the config file
         self.core.config.readConfig()
-    
-        #load enable_video_recoding setting    
+
+        #load enable_video_recoding setting
         if self.core.config.enable_video_recoding == 'False':
             self.core.set_video_mode(False)
         else:
             self.core.set_video_mode(True)
-            self.core.preview(True, self.ui.previewWidget.winId())
                         
             # load video source setting
             vidsrcs = self.core.get_video_sources()
@@ -261,39 +268,41 @@ class MainApp(QtGui.QMainWindow):
                 if (src == 'desktop'):
                     self.videosrc = 'desktop'
 
-                if (self.core.config.videodev == 'local area'):  
-                    self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-        
-                self.core.change_videosrc(self.videosrc, self.core.config.videodev)
-          
-            elif (src == 'usb'):
-                self.videosrc = 'usb'
-         
-            elif (src == 'firewire'):
-                self.videosrc = 'fireware'
-         
-        if src == 'usb' or src == 'fireware':
-            dev = self.core.config.videodev
-            viddevs = self.core.get_video_devices(self.videosrc)
-        
-            if dev in viddevs:
-                self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+                    if (self.core.config.videodev == 'local area'):
+                        self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
 
+                    self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+
+                elif (src == 'usb'):
+                    self.videosrc = 'usb'
+
+                elif (src == 'firewire'):
+                    self.videosrc = 'fireware'
+                else:
+                    self.core.logger.log.debug('Can NOT find video source: '+ src)
+    
+                if src == 'usb' or src == 'fireware':
+                    dev = self.core.config.videodev
+                    viddevs = self.core.get_video_devices(self.videosrc)
+
+                    if dev in viddevs:
+                        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+
+                    else:
+                        self.core.logger.log.debug('Can NOT find video device: '+ dev)
+
+            #load audio setting
+            if self.core.config.enable_audio_recoding == 'False':
+                self.core.set_audio_mode(False)
             else:
-                self.core.logger.log.debug('Can NOT find video device: '+ dev)
-            
-        #load audio setting
-        if self.core.config.enable_audio_recoding == 'False':
-            self.core.set_audio_mode(False)
-        else:
-            self.core.set_audio_mode(True)
-            sndsrcs = self.core.get_audio_sources()
-            src = self.core.config.audiosrc
-            if src in sndsrcs:
-                self.core.change_soundsrc(src)
-            else:
-                self.core.logger.log.debug('Can NOT find audio source: '+ src)
-        
+                self.core.set_audio_mode(True)
+                sndsrcs = self.core.get_audio_sources()
+                src = self.core.config.audiosrc
+                if src in sndsrcs:
+                    self.core.change_soundsrc(src)
+                else:
+                    self.core.logger.log.debug('Can NOT find audio source: '+ src)
+ 
             # load resolution
             self.resolution =  self.core.config.resolution
             self.change_output_resolution()
@@ -318,14 +327,20 @@ class MainApp(QtGui.QMainWindow):
                     else:
                         res = resolution
                         self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
-            
-            #load auto hide setting and enable preview
-            if self.core.config.auto_hide == 'True':
-                self.autoHide =  True
-            else:
-                self.autoHide =  False      
-                
-                        
+            self.core.backend.disable_icecast_streaming()
+
+        #load auto hide setting and enable preview
+        if self.core.config.auto_hide == 'True':
+            self.autoHide =  True
+        else:
+            self.autoHide =  False
+ 
+        #set short key
+        if os.name == 'posix': # globalshortcuts are only supported on linux atm
+            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
+            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
+            self.short_rec_key.setEnabled(True)
+            self.short_stop_key.setEnabled(True)
         
     def change_output_resolution(self):
         res = str(self.resolution)
@@ -618,7 +633,7 @@ class MainApp(QtGui.QMainWindow):
         When a language is selected from the language menu this function is called
         The language to be changed to is retrieved
         '''
-        language_prefix = action.data().toString();  
+        language_prefix = action.data().toString();
         self.translateFile(language_prefix);
       
     def translateFile(self,file_ending):
@@ -628,8 +643,8 @@ class MainApp(QtGui.QMainWindow):
         '''
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
         
-        loaded=self.uiTranslator.load(load_string);
-  
+        loaded = self.uiTranslator.load(load_string);
+
         if(loaded == True):
    
             self.ui.retranslateUi(self); #Translate both the ui and the about page
@@ -638,12 +653,12 @@ class MainApp(QtGui.QMainWindow):
         else:
             print("Invalid Locale Resorting to Default Language: English");
 
-            self.configTool.translateFile(file_ending);
+        self.configTool.translateFile(file_ending);
       
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
-                
+          
     def _unicode_to_string(self, unicode_string):
         return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
 
