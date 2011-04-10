@@ -134,7 +134,7 @@ class Freeseer_gstreamer(BackendInterface):
         if message_name == 'prepare-xwindow-id':
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
-            imagesink.set_xwindow_id(self.window_id)
+            imagesink.set_xwindow_id(int(self.window_id))
 
     ###
     ### Muxer Functions
