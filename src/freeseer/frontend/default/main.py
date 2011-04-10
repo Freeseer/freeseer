@@ -663,7 +663,7 @@ class MainApp(QtGui.QMainWindow):
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
-                
+          
     def _unicode_to_string(self, unicode_string):
         return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
 
