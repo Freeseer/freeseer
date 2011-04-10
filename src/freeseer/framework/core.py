@@ -165,13 +165,13 @@ class FreeseerCore:
         # and check the index of the title string in this list, this corresponds
         # to the presentation id in the database. (If we add 1 to this index)
         # NOTE: This method of obtaining the presentation id relies on the GUI
-        #	using the method: filter_talks_by_event_room() to populate it's
-        #	talk list, since we are comparing strings created by this method.
+        # using the method: filter_talks_by_event_room() to populate it's
+        # talk list, since we are comparing strings created by this method.
         talkTitles = self.db.filter_talks_by_event_room("All", "All")
         return talkTitles.index(title) + 1
-	
+
     def get_presentation(self, presentation_id):
-	return self.db.get_presentation(presentation_id)
+        return self.db.get_presentation(presentation_id)
 
     def add_talks_from_rss(self, rss):
         entry = str(rss)
