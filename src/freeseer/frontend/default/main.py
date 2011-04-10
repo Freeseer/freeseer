@@ -36,7 +36,6 @@ from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
-if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
 import unicodedata
 
@@ -173,8 +172,6 @@ class MainApp(QtGui.QMainWindow):
             self.short_stop_key.setEnabled(True)
             self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
             self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
-            self.connect(self.ui.shortRecordButton, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
-            self.connect(self.ui.shortStopButton, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
         # edit talks tab connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
@@ -264,37 +261,36 @@ class MainApp(QtGui.QMainWindow):
             self.core.set_video_mode(False)
         else:
             self.core.set_video_mode(True)
-            self.core.preview(True, self.ui.previewWidget.winId())
                         
             # load video source setting
             vidsrcs = self.core.get_video_sources()
             src = self.core.config.videosrc
             if src in vidsrcs:
-            if (src == 'desktop'):
+                if (src == 'desktop'):
                     self.videosrc = 'desktop'
 
-                if (self.core.config.videodev == 'local area'):  
-                    self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-                    
-                self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+                    if (self.core.config.videodev == 'local area'):
+                        self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
 
-            elif (src == 'usb'):
-                self.videosrc = 'usb'
-
-            elif (src == 'firewire'):
-                self.videosrc = 'fireware'
-            else:
-                self.core.logger.log.debug('Can NOT find video source: '+ src)
-    
-            if src == 'usb' or src == 'fireware':
-                dev = self.core.config.videodev
-                viddevs = self.core.get_video_devices(self.videosrc)
-
-                if dev in viddevs:
                     self.core.change_videosrc(self.videosrc, self.core.config.videodev)
 
+                elif (src == 'usb'):
+                    self.videosrc = 'usb'
+
+                elif (src == 'firewire'):
+                    self.videosrc = 'fireware'
                 else:
-                    self.core.logger.log.debug('Can NOT find video device: '+ dev)
+                    self.core.logger.log.debug('Can NOT find video source: '+ src)
+    
+                if src == 'usb' or src == 'fireware':
+                    dev = self.core.config.videodev
+                    viddevs = self.core.get_video_devices(self.videosrc)
+
+                    if dev in viddevs:
+                        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
+
+                    else:
+                        self.core.logger.log.debug('Can NOT find video device: '+ dev)
 
             #load audio setting
             if self.core.config.enable_audio_recoding == 'False':
@@ -334,8 +330,8 @@ class MainApp(QtGui.QMainWindow):
                         self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
             self.core.backend.disable_icecast_streaming()
 
-            #load auto hide setting and enable preview
-            if self.core.config.auto_hide == 'True':
+        #load auto hide setting and enable preview
+        if self.core.config.auto_hide == 'True':
             self.autoHide =  True
         else:
             self.autoHide =  False
