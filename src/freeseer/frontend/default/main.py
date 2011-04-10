@@ -638,7 +638,7 @@ class MainApp(QtGui.QMainWindow):
         When a language is selected from the language menu this function is called
         The language to be changed to is retrieved
         '''
-        language_prefix = action.data().toString();  
+        language_prefix = action.data().toString();
         self.translateFile(language_prefix);
       
     def translateFile(self,file_ending):
@@ -648,8 +648,8 @@ class MainApp(QtGui.QMainWindow):
         '''
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
         
-        loaded=self.uiTranslator.load(load_string);
-  
+        loaded = self.uiTranslator.load(load_string);
+
         if(loaded == True):
    
             self.ui.retranslateUi(self); #Translate both the ui and the about page
