@@ -695,7 +695,7 @@ class Freeseer_gstreamer(BackendInterface):
         '''
         Sets the resolution of the streamed video, and attempts to choose the ideal bitrate for the given resolutions.
         '''
-	    # The dictionary bitmap contains a mapping from known pairing of stream resolution
+        # The dictionary bitmap contains a mapping from known pairing of stream resolution
         # and recording resolution to the ideal bitrate as determined by testing.
         # It uses a string of form <stream_width>,<record_width> (i.e., '320,640') to uniquely identify combinations
         bitmap = {  '320,640': 400, '320,800': 400, '320,1024': 400,    # bit rates for 320x240 stream
@@ -705,11 +705,11 @@ class Freeseer_gstreamer(BackendInterface):
                  }                  
         
         # If the pairing cannot be found, we back off to the average best bitrate at each resolution
-        default_bitmap = { 	320: 400, # resolution of 320x240 - 400 kbps
-			        480: 500, # resolution of 480x360 - 500 kbps
-			        640: 750, # resolution of 640x480 - 750 kbps
-			        800: 1000 # resolution of 800x600 - 1000 kbps
-                }
+        default_bitmap = { 320: 400, # resolution of 320x240 - 400 kbps
+                            480: 500, # resolution of 480x360 - 500 kbps
+                            640: 750, # resolution of 640x480 - 750 kbps
+                            800: 1000 # resolution of 800x600 - 1000 kbps
+        }
 
         # Creates the string of the pairing <stream width>,<record width>
         stream_rec_pair = str(width) + ',' + str(record_width)
