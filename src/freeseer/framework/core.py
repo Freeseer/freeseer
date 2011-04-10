@@ -71,17 +71,17 @@ class FreeseerCore:
         self.spaces = False
       
         self.logger.log.info(u"Core initialized")   
-	
+
     def duplicate_exists(self, recordname):
-	'''
-	Checks to see if a record name already exists in the directory.
-	'''
-	filename = self.config.videodir + '/' + recordname
-	try:
-		result = open(filename, 'r')
-	except IOError:
-		return False
-	return True
+        '''
+        Checks to see if a record name already exists in the directory.
+        '''
+        filename = self.config.videodir + '/' + recordname
+        try:
+            result = open(filename, 'r')
+        except IOError:
+            return False
+        return True
 
     def get_record_name(self, presentation):
         '''
@@ -89,55 +89,55 @@ class FreeseerCore:
         '''
         recordname = self.make_record_name(presentation)
 
-	count = 0
-	tempname = recordname
-	# check if this record name already exists in this directory and add "-NN" ending if so.
-	while(self.duplicate_exists(tempname + ".ogg")):
-	    tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
-	    count+=1
-	
-	recordname = tempname + ".ogg"
+        count = 0
+        tempname = recordname
+        # check if this record name already exists in this directory and add "-NN" ending if so.
+        while(self.duplicate_exists(tempname + ".ogg")):
+            tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+            count+=1
+
+        recordname = tempname + ".ogg"
         self.logger.log.debug('Set record name to ' + recordname)        
-	return recordname
+        return recordname
 
     def make_record_name(self, presentation):
         '''
         Create an 'EVENT-TITLE-UNIQUE' record name
         '''	
-	event = self.make_shortname(presentation.event)
-	title = self.make_shortname(presentation.title)
-	unique = self.make_id_from_string(presentation.filename_id)
- 
-	if(event == ""):
-		return title+"-"+unique
+        event = self.make_shortname(presentation.event)
+        title = self.make_shortname(presentation.title)
+        unique = self.make_id_from_string(presentation.filename_id)
 
-	return event+"-"+title+"-"+unique
+        if(event == ""):
+            return title+"-"+unique
+
+        return event+"-"+title+"-"+unique
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
-       	'''
-	Returns an "NN" id given an integer and a string of valid characters for the id
-	('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
-	'''	
-	index1 = position % string.__len__()
-	index0 = int( position / string.__len__() )
+        '''
+        Returns an "NN" id given an integer and a string of valid characters for the id
+        ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
+        '''
+        index1 = position % string.__len__()
+        index0 = int( position / string.__len__() )
 
-	if(index0 >= string.__len__() ):
-		self.logger.log.debug('WARNING: Unable to generate unique filename.')
-		# Return a unique 2 character string which will not overwrite previous files.
-		# There is a possibility of infinite looping on testing duplicates once
-		# all possible UNIQUE's and NN's are exhausted if all the files are kept 
-		# in the same directory.
-		# (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
-		return "##" 
+        if(index0 >= string.__len__() ):
+                        self.logger.log.debug('WARNING: Unable to generate unique filename.')
+                        # Return a unique 2 character string which will not overwrite previous files.
+                        # There is a possibility of infinite looping on testing duplicates once
+                        # all possible UNIQUE's and NN's are exhausted if all the files are kept
+                        # in the same directory.
+                        # (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
+                        return "##"
 
-	return string[index0]+string[index1]
+        return string[index0]+string[index1]
 
     def make_shortname(self, string):
-	'''
-	Returns the first four characters of a string, excluding spaces.
-	'''
-	string = string.replace(" ", "")
-	return string[0:4].upper()
+        '''
+        Returns the first four characters of a string, excluding spaces.
+        '''
+        string = string.replace(" ", "")
+        return string[0:4].upper()
 
     ##
     ## Database Functions
@@ -158,17 +158,17 @@ class FreeseerCore:
         return self.db.filter_rooms_by_event(evento)
 
     def get_presentation_id_by_selected_title(self, title):
-    	'''
-    	Obtains a presentation ID given a title string from the GUI
-    	'''
-	# Run a database query as if we have selected "All" Events "All" Rooms,
+        '''
+        Obtains a presentation ID given a title string from the GUI
+        '''
+        # Run a database query as if we have selected "All" Events "All" Rooms,
         # and check the index of the title string in this list, this corresponds
-	# to the presentation id in the database. (If we add 1 to this index)
-	# NOTE: This method of obtaining the presentation id relies on the GUI
-	#	using the method: filter_talks_by_event_room() to populate it's 
-	#	talk list, since we are comparing strings created by this method.
-	talkTitles = self.db.filter_talks_by_event_room("All", "All")
-	return talkTitles.index(title) + 1
+        # to the presentation id in the database. (If we add 1 to this index)
+        # NOTE: This method of obtaining the presentation id relies on the GUI
+        #	using the method: filter_talks_by_event_room() to populate it's
+        #	talk list, since we are comparing strings created by this method.
+        talkTitles = self.db.filter_talks_by_event_room("All", "All")
+        return talkTitles.index(title) + 1
 	
     def get_presentation(self, presentation_id):
 	return self.db.get_presentation(presentation_id)
@@ -324,29 +324,28 @@ class FreeseerCore:
             self.backend.test_feedback_stop()
 
     def prepare_metadata(self, presentation):
-	'''
-	Returns a dictionary of tags and tag values to be used
-	to populate the current recording's file metadata.
-	'''
-	return { "title" : presentation.title,
-		 "artist" : presentation.speaker,
-		 "performer" : presentation.speaker,
-		 "album" : presentation.event,
-		 "location" : presentation.room,
-		 "date" : str(datetime.date.today()),
-		 "comment" : presentation.description}
+        '''
+        Returns a dictionary of tags and tag values to be used
+        to populate the current recording's file metadata.
+        '''
+        return { "title" : presentation.title,
+                 "artist" : presentation.speaker,
+                 "performer" : presentation.speaker,
+                 "album" : presentation.event,
+                 "location" : presentation.room,
+                 "date" : str(datetime.date.today()),
+                 "comment" : presentation.description}
 
     def record(self, presentation):
         '''
         Informs backend to begin recording presentation.
         '''
-	
-	#create a filename to record to
+        #create a filename to record to
         record_name = self.get_record_name(presentation)
 
-	#prepare metadata
-	data = self.prepare_metadata(presentation)
-	self.backend.populate_metadata(data)
+        #prepare metadata
+        data = self.prepare_metadata(presentation)
+        self.backend.populate_metadata(data)
 
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)
@@ -385,7 +384,7 @@ class FreeseerCore:
         if enable == True:
             self.backend.enable_audio_feedback()
             self.logger.log.info('Audio Feedback Activated')
-	else:
+        else:
             self.backend.disable_audio_feedback()
             self.logger.log.info('Audio Feedback Deactivated')
 
