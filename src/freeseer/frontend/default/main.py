@@ -326,7 +326,6 @@ class MainApp(QtGui.QMainWindow):
             self.autoHide =  True
         else:
             self.autoHide =  False
-        self.core.preview(True, self.ui.previewWidget.winId())
  
         #set short key
         if os.name == 'posix': # globalshortcuts are only supported on linux atm
@@ -648,10 +647,10 @@ class MainApp(QtGui.QMainWindow):
       
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
-       	self.configTool.show()
-       	     
+        self.configTool.show()
+          
     def _unicode_to_string(self, unicode_string):
-   	    return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
+        return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
