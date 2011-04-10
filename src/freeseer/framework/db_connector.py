@@ -42,7 +42,7 @@ class DB_Connector():
                                 Time timestamp,
                                 Room varchar(25),
                                 Id INTEGER PRIMARY KEY,
-				FileNameId INTEGER)'''
+                                FileNameId INTEGER)'''
                                 
         self._DEFAULT_TALK = '''INSERT INTO presentations VALUES
                                 ("Thanh Ha",
@@ -53,7 +53,7 @@ class DB_Connector():
                                  "",
                                  "T105",
                                  NULL,
-				 0)'''
+                                 0)'''
 
         self.configdir = configdir
         self.presentations_file = os.path.abspath("%s/presentations.db" % self.configdir)
@@ -206,16 +206,16 @@ class DB_Connector():
         
         self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT Speaker, 
-				      Title, 
-				      Description, 
-			              Level, 
-				      Event, 
-				      Time, 
-				      Room, 
-				      Id, 
-				      FileNameId 
-				FROM presentations WHERE Id=?''',
-				[unicode(talk_id)])
+                            Title,
+                            Description,
+                            Level,
+                            Event,
+                            Time,
+                            Room,
+                            Id,
+                            FileNameId
+                            FROM presentations WHERE Id=?''',
+                            [unicode(talk_id)])
         for row in self.cursor:
             speaker 	 = row[0]
             title 	 = row[1]
@@ -234,7 +234,7 @@ class DB_Connector():
         
         self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT COUNT(*) FROM presentations WHERE Event=?''',
-				[unicode(event_name)])
+                                                            [unicode(event_name)])
 
         for row in self.cursor:
             id = row[0]
@@ -245,7 +245,7 @@ class DB_Connector():
         
         self.cursor = self.db_connection.cursor()
         self.cursor.execute('''SELECT FileNameId FROM presentations WHERE Id=?''',
-			 	[unicode(talk_id)])
+                                        [unicode(talk_id)])
         for row in self.cursor:
             id = row[0]
             self.cursor.close()
@@ -266,7 +266,7 @@ class DB_Connector():
                      presentation.event,
                      presentation.time,
                      presentation.room,
-		     filename_id])
+                     filename_id])
 
     def delete_talk(self, talk_id):
         
