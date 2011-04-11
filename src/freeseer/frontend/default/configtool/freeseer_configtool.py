@@ -267,11 +267,13 @@ class ConfigTool(QtGui.QDialog):
             if not (streaming_resolution < 0):
                 self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
 
-        #load auto hide setting
+        # Load Extra Settings Tab Infos
         if self.core.config.auto_hide == 'True':
             self.ui.checkbox_autoHide.setChecked(True)
         else:
             self.ui.checkbox_autoHide.setChecked(False)
+
+        self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
 
     def screen_size(self):
         self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
