@@ -28,6 +28,8 @@ import datetime
 import time
 import logging
 import logging.config
+import unicodedata
+
 
 from freeseer.backend.gstreamer import *
 
@@ -98,6 +100,7 @@ class FreeseerCore:
             count+=1
 
         recordname = tempname + ".ogg"
+             
         self.logger.log.debug('Set record name to ' + recordname)        
         
         return recordname
@@ -111,15 +114,11 @@ class FreeseerCore:
         '''	
         event = self.make_shortname(presentation.event)
         title = self.make_shortname(presentation.title)
-        unique = self.make_id_from_string(presentation.filename_id)
         room = self.make_shortname(presentation.room)
         speaker = self.make_shortname(presentation.speaker)
 
         recordname=""
-
-        if(event == ""):
-            return title+"-"+unique
-                
+            
         if(event!=""):
             if(recordname!=""):
                 recordname=recordname+"-"+event
@@ -144,13 +143,14 @@ class FreeseerCore:
             else:
                 recordname=title
            
+        # Convert unicode filenames to their equivalent ascii so that
+        # we don't run into issues with gstreamer or filesystems
+        unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
                 
         if(recordname!=""):
             return recordname
                     
         return "default"
-
-        return event+"-"+title+"-"+unique
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
         '''
@@ -172,12 +172,15 @@ class FreeseerCore:
         return string[index0]+string[index1]
 
 
-    def make_shortname(self, string):
+    def make_shortname(self, providedString):
         '''
-        Returns the first four characters of a string, excluding spaces.
+        Returns the first 6 characters of a string.
+        Strip out non alpha-numeric characters, spaces, and most punctuation
         '''
-        string = string.replace(" ", "")
-        return string[0:4].upper()
+                
+        bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
+        providedString="".join(ch for ch in providedString if ch not in bad_chars)
+        return providedString[0:6].upper()
 
     ##
     ## Database Functions
