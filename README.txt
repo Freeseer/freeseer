@@ -61,7 +61,7 @@ C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
 -------------------------------------------------------------------------
 
 Once you have the prerequisite componets, build freeseer by changing
-directory into the src directory, and run:
+directory into the freeseer directory (above src directory), and run:
     "mkdir build; cd build; cmake .."
 
     NOTE: If you are running on windows you will need an additional option

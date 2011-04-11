@@ -2,7 +2,7 @@
 
 from distutils.core import setup
 setup(name='freeseer',
-      version='2.0',
+      version='2.0.1',
       description='video studio in a backpack',
       author='fosslc',
       author_email='fosslc@gmail.com',
