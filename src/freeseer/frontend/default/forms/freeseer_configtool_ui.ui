@@ -673,7 +673,7 @@ v4l2src does not work.</string>
         <widget class="QLineEdit" name="lineEdit_stopKey"/>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="pushButton_recodrdKey">
+        <widget class="QPushButton" name="pushButton_recordKey">
          <property name="toolTip">
           <string>Press this to set record shot key</string>
          </property>
@@ -801,7 +801,7 @@ v4l2src does not work.</string>
   <tabstop>comboBox_audioSourceList</tabstop>
   <tabstop>checkbox_autoHide</tabstop>
   <tabstop>lineEdit_recordKey</tabstop>
-  <tabstop>pushButton_recodrdKey</tabstop>
+  <tabstop>pushButton_recordKey</tabstop>
   <tabstop>lineEdit_stopKey</tabstop>
   <tabstop>pushButton_StopKey</tabstop>
   <tabstop>lineEdit_videoDirectory</tabstop>

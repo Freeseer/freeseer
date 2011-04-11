@@ -97,7 +97,7 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.checkbox_autoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
         
         # connections for Extra Setting -> ShortKeys
-        self.connect(self.ui.pushButton_recodrdKey, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
+        self.connect(self.ui.pushButton_recordKey, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
         self.connect(self.ui.pushButton_StopKey, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
 
         # connections for Extra Settings > File Locations
