@@ -22,9 +22,10 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-from sys import *
-from PyQt4 import QtGui, QtCore
 from os import listdir;
+from sys import *
+
+from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
@@ -369,7 +370,6 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.ui.lineEdit_recordKey.setText(key)
         self.core.config.key_rec = key
-        #self.core.config.writeConfig()
         self.show()
             
     
@@ -390,7 +390,6 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.ui.lineEdit_stopKey.setText(key)
         self.core.config.key_stop = key
-        #self.core.config.writeConfig()
         self.show()
 
        
