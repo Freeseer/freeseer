@@ -357,7 +357,6 @@ class ConfigTool(QtGui.QDialog):
         When the button is pressed, it will call the keygrabber widget and log keys
         '''
         self.core.config.key_rec = 'Ctrl+Shift+R'
-        self.core.config.writeConfig()
         self.key_grabber = QtKeyGrabber(self)
         self.hide()
         self.core.logger.log.info('Storing keys.')
@@ -379,7 +378,6 @@ class ConfigTool(QtGui.QDialog):
         When the button is pressed, it will call the keygrabber widget and log keys
         '''
         self.core.config.key_stop = 'Ctrl+Shift+E'
-        self.core.config.writeConfig()
         self.key_grabber = QtKeyGrabber(self)
         self.hide()
         self.core.logger.log.info('Storing keys.')
