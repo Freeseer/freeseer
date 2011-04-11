@@ -303,7 +303,7 @@ class ConfigTool(QtGui.QDialog):
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()
-        videodir = QtGui.QFileDialog.getExistingDirectory(self, 'Select Video Directory', directory) + '/'
+        videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, 'Select Video Directory', directory)))
         self.ui.lineEdit_videoDirectory.setText(videodir)
 
 
