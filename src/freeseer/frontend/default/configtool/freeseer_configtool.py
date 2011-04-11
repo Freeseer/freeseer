@@ -273,6 +273,8 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.ui.checkbox_autoHide.setChecked(False)
 
+        self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
+        self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
 
     def screen_size(self):
