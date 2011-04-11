@@ -90,7 +90,7 @@ class FreeseerCore:
         Returns the filename to use when recording.
         '''
         recordname = self.make_record_name(presentation)
-        
+                
         count = 0
         tempname = recordname
         
@@ -100,7 +100,7 @@ class FreeseerCore:
             count+=1
 
         recordname = tempname + ".ogg"
-             
+                     
         self.logger.log.debug('Set record name to ' + recordname)        
         
         return recordname
@@ -145,7 +145,7 @@ class FreeseerCore:
            
         # Convert unicode filenames to their equivalent ascii so that
         # we don't run into issues with gstreamer or filesystems
-        unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
+        recordname=unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
                 
         if(recordname!=""):
             return recordname

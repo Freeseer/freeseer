@@ -37,7 +37,7 @@ from freeseer.framework.presentation import *
 from configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
-import unicodedata
+
 
 
 __version__=u'2.0.1'
@@ -445,13 +445,14 @@ class MainApp(QtGui.QMainWindow):
             self.core.test_sources(state, True, False)
 
     def add_talk(self):
-        presentation = Presentation(self._unicode_to_string(unicode(self.ui.titleEdit.text())),
-                                    self._unicode_to_string(unicode(self.ui.presenterEdit.text())),
+        presentation = Presentation(unicode(self.ui.titleEdit.text()),
+                                    unicode(self.ui.presenterEdit.text()),
                                     "",         # description
                                     "",         # level
-                                    self._unicode_to_string(unicode(self.ui.eventEdit.text())),
-                                    self._unicode_to_string(unicode(self.ui.dateTimeEdit.text())),
-                                    self._unicode_to_string(unicode(self.ui.roomEdit.text())))
+                                    unicode(self.ui.eventEdit.text()),
+                                    unicode(self.ui.dateTimeEdit),
+                                    unicode(self.ui.roomEdit.text()))
+
                 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
@@ -659,9 +660,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
           
-    def _unicode_to_string(self, unicode_string):
-        return unicodedata.normalize('NFKD', unicode_string).encode('ascii','ignore')
-
+    
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
