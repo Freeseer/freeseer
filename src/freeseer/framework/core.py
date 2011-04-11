@@ -113,6 +113,9 @@ class FreeseerCore:
         title = self.make_shortname(presentation.title)
         unique = self.make_id_from_string(presentation.filename_id)
         room = self.make_shortname(presentation.room)
+        speaker = self.make_shortname(presentation.speaker)
+
+        recordname=""
 
         if(event == ""):
             return title+"-"+unique
