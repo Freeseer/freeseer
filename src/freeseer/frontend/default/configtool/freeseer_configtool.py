@@ -369,7 +369,7 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.ui.lineEdit_recordKey.setText(key)
         self.core.config.key_rec = key
-        self.core.config.writeConfig()
+        #self.core.config.writeConfig()
         self.show()
             
     
@@ -390,7 +390,7 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.ui.lineEdit_stopKey.setText(key)
         self.core.config.key_stop = key
-        self.core.config.writeConfig()
+        #self.core.config.writeConfig()
         self.show()
 
        
