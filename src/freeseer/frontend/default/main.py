@@ -35,7 +35,7 @@ from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from freeseer.frontend.talkeditor.frontend.default.main import *
-from configtool.freeseer_configtool import *
+from freeseer.frontend.configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
 
