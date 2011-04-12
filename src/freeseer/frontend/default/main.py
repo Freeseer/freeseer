@@ -119,7 +119,6 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
-        self.configTool = ConfigTool()
         self.default_language = 'en';
         self.talks_to_save = []
         self.talks_to_delete = []
@@ -189,6 +188,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 
+        self.configTool = ConfigTool(self.core)
         self.talkEditor = TalkEditorMainApp()
 	
     def setupLanguageMenu(self):
