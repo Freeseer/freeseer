@@ -347,8 +347,8 @@ class ConfigTool(QtGui.QDialog):
 
     def toggle_auto_hide(self,state):
         '''
-	    when user toggle auto hidden, save it to conifg file
-	    '''
+        when user toggle auto hidden, save it to conifg file
+        '''
         self.core.config.auto_hide = state
         self.core.logger.log.debug('Set auto hidden to: ' + str(state))
 
