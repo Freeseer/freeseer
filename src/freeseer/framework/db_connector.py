@@ -91,7 +91,7 @@ class DB_Connector():
         talk_titles = []
         
         self.cursor = self.db_connection.cursor()
-        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations''')
+        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations ORDER BY Time''')
 
         for row in self.cursor:
             speaker = row[0]
