@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/rss_logo">
+        <file>rss_logo.png</file>
+    </qresource>
+    <qresource prefix="/freeseer">
+        <file>freeseer_logo.png</file>
+    </qresource>
+</RCC>

@@ -17,35 +17,22 @@
 # This makefile generates the python code for the gui
 # from an XML definition file
 
-# Set the name of the executable here
-exec = run-freeseer
 
-ALL: gui talkEditor configtool
-	@echo "You can now run $(exec)"
+ALL: gui
 
-gui: 
-	cd freeseer/frontend/default; make
+gui: talkeditor_ui_qt.py talkeditor_about.py resource_rc.py
 	@echo "Re-generated GUI"
 
-talkEditor:
-	cd freeseer/frontend/talkeditor; make
-	@echo "Re-generated talk editor"
+talkeditor_ui_qt.py: forms/talkeditor_ui_qt.ui
+	pyuic4 forms/talkeditor_ui_qt.ui -o talkeditor_ui_qt.py
 
-configtool:
-	cd freeseer/frontend/default/configtool; make
-	@echo "Re-Generated configtool"
+talkeditor_about.py: forms/talkeditor_about.ui
+	pyuic4 forms/talkeditor_about.ui -o talkeditor_about.py
 
-clean_gui:
-	cd freeseer/frontend/default; make clean
-	cd freeseer/frontend/default/configtool; make clean
-	@echo "GUI files cleaned up"
+resource_rc.py: forms/resource.qrc
+	pyrcc4 forms/resource.qrc -o resource_rc.py
 
-clean_talkEditor:
-	cd freeseer/frontend/talkeditor; make clean
-	@echo "talk editor cleaned up"
+clean: 
+	rm -f resource_rc.py talkeditor_about.py talkeditor_ui_qt.py *.pyc
 
-clean: clean_gui clean_talkEditor
-	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
 
-test: gui configtool talkEditor
-	./$(exec)

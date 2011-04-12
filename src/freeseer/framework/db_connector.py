@@ -91,14 +91,16 @@ class DB_Connector():
         talk_titles = []
         
         self.cursor = self.db_connection.cursor()
-        self.cursor.execute('''SELECT Speaker, Title, Room, Id FROM presentations''')
+        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations''')
 
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
             room = row[2]
-            talk_id = row[3]
-            talk_titles.append([speaker, title, room, talk_id])
+            event = row[3]
+            time = row[4]
+            talk_id = row[5]
+            talk_titles.append([speaker, title, room, event, time, talk_id])
             
         self.cursor.close()
             
@@ -284,13 +286,15 @@ class DB_Connector():
         self.db_connection.commit()
         self.cursor.close()
         
-    def update_talk(self, talk_id, new_speaker, new_title, new_room):        
+    def update_talk(self, talk_id, new_speaker, new_title, new_room, new_event, new_time):
         
         self.cursor = self.db_connection.cursor()
-        self.cursor.execute('''UPDATE presentations SET Speaker=?, Title=?, Room=? WHERE Id=?''',
+        self.cursor.execute('''UPDATE presentations SET Speaker=?, Title=?, Room=?, Event=?, Time=?  WHERE Id=?''',
                             [unicode(new_speaker),
                              unicode(new_title),
                              unicode(new_room),
+                             unicode(new_event),
+                             unicode(new_time),
                              unicode(talk_id)])
         self.db_connection.commit()
         self.cursor.close()

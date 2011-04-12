@@ -18,34 +18,21 @@
 # from an XML definition file
 
 # Set the name of the executable here
-exec = run-freeseer
+exec = freeseer-talks
 
-ALL: gui talkEditor configtool
+ALL: gui
 	@echo "You can now run $(exec)"
 
-gui: 
-	cd freeseer/frontend/default; make
+gui:
+	cd frontend/default; make
 	@echo "Re-generated GUI"
 
-talkEditor:
-	cd freeseer/frontend/talkeditor; make
-	@echo "Re-generated talk editor"
-
-configtool:
-	cd freeseer/frontend/default/configtool; make
-	@echo "Re-Generated configtool"
-
 clean_gui:
-	cd freeseer/frontend/default; make clean
-	cd freeseer/frontend/default/configtool; make clean
+	cd frontend/default; make clean
 	@echo "GUI files cleaned up"
 
-clean_talkEditor:
-	cd freeseer/frontend/talkeditor; make clean
-	@echo "talk editor cleaned up"
+clean: clean_gui
+	rm -f *.pyc */*.pyc */*~
 
-clean: clean_gui clean_talkEditor
-	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
-
-test: gui configtool talkEditor
+test: ALL
 	./$(exec)

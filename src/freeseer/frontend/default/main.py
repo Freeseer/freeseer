@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -34,10 +34,10 @@ from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
+from freeseer.frontend.talkeditor.frontend.default.main import *
 from configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
-
 
 
 __version__=u'2.0.1'
@@ -67,22 +67,23 @@ class AboutDialog(QtGui.QDialog):
         '''
         Translates the about dialog. Calls the retranslateUi function of the about dialog itself
         '''
-        DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
-        COPYRIGHT=self.tr('Copyright (C) 2010 The Free and Open Source Software Learning Centre')
-        LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
-    
-        ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-        u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
-        u'<p>' + DESCRIPTION + u'</p>' + \
-        u'<p>' +  COPYRIGHT + u'</p>' + \
-        u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-        u'<p>' + LICENSE_TEXT + u'</p>' \
-        u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-        u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
-        self.ui.retranslateUi(self);
-        self.ui.aboutInfo.setText(ABOUT_INFO);
-    
-    
+	DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
+	COPYRIGHT=self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
+	LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
+	
+	ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
+	u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
+	u'<p>' + DESCRIPTION + u'</p>' + \
+	u'<p>' +  COPYRIGHT + u'</p>' + \
+	u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+	u'<p>' + LICENSE_TEXT + u'</p>' \
+	u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+	u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
+ 
+	self.ui.retranslateUi(self);
+	self.ui.aboutInfo.setText(ABOUT_INFO);
+	
+	
 class SystemLanguages:
     '''
     Language system class that is responsible for retrieving valid languages in the system 
@@ -119,7 +120,6 @@ class MainApp(QtGui.QMainWindow):
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
         self.configTool = ConfigTool()
-        self.ui.editTable.setColumnHidden(3,True)
         self.default_language = 'en';
         self.talks_to_save = []
         self.talks_to_delete = []
@@ -172,21 +172,13 @@ class MainApp(QtGui.QMainWindow):
             self.short_stop_key.setEnabled(True)
             self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
             self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
-        # edit talks tab connections
-        self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
-        self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
-        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
-        self.ui.addTalkGroupBox.setHidden(True)
-        
+
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.ui.actionEdit_talks, QtCore.SIGNAL('triggered()'), self.run_talk_editor)
         self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.config_tool)
                 
-        # editTable Connections
-        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
-    
         self.load_settings()
         self.core.preview(True, self.ui.previewWidget.winId())
         # setup default sources
@@ -196,7 +188,9 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
-    
+
+        self.talkEditor = TalkEditorMainApp()
+	
     def setupLanguageMenu(self):
         #Add Languages to the Menu Ensure only one is clicked 
         self.langActionGroup.setExclusive(True)
@@ -444,67 +438,6 @@ class MainApp(QtGui.QMainWindow):
         else:
             self.core.test_sources(state, True, False)
 
-    def add_talk(self):
-        presentation = Presentation(unicode(self.ui.titleEdit.text()),
-                                    unicode(self.ui.presenterEdit.text()),
-                                    "",         # description
-                                    "",         # level
-                                    unicode(self.ui.eventEdit.text()),
-                                    unicode(self.ui.dateTimeEdit),
-                                    unicode(self.ui.roomEdit.text()))
-
-                
-        # Do not add talks if they are empty strings
-        if (len(presentation.title) == 0): return
-        
-        self.core.add_talk(presentation)
-
-        # cleanup
-        self.ui.titleEdit.clear()
-        self.ui.presenterEdit.clear()
-        self.ui.eventEdit.clear()
-        self.ui.dateTimeEdit.clear()
-        self.ui.roomEdit.clear()
-        
-        self.update_talk_views()
-
-    def remove_talk(self): 
-        try:
-            row_clicked = self.ui.editTable.currentRow()
-        except:            
-            return
-        
-        id = self.ui.editTable.item(row_clicked, 3).text() 
-        self.core.delete_talk(str(id))
-        self.ui.editTable.removeRow(row_clicked)
-
-        self.update_talk_views()
-
-    # This method currently causing performance issues.
-    def edit_talk(self, row, col):
-        try:
-            speaker = self.ui.editTable.item(row, 0).text()
-            title = self.ui.editTable.item(row, 1).text()
-            room = self.ui.editTable.item(row, 2).text()
-            talk_id = self.ui.editTable.item(row, 3).text()
-        except:
-            return
-
-        self.core.update_talk(talk_id, speaker, title, room)
-
-        # Update the main tab
-        self.load_events()
-        self.load_rooms()
-        
-        event = str(self.ui.eventList.currentText())
-        room = str(self.ui.roomList.currentText())
-        talk_list = self.core.filter_talks_by_event_room(event, room)
-        self.update_talk_list(talk_list)
-   
-    def reset(self):
-        self.core.clear_database()
-        self.update_talk_views()
-
     def get_rooms_and_talks_at_event(self, event):        
         room_list = self.core.filter_rooms_by_event(self.ui.eventList.currentText())        
         self.update_room_list(room_list)
@@ -544,18 +477,6 @@ class MainApp(QtGui.QMainWindow):
 
         # Update the Edit Talks Table
         talklist = self.core.get_talk_titles()
-        
-        self.ui.editTable.clearContents()
-        self.ui.editTable.setRowCount(0)    
-       
-        for talk in talklist:          
-            index = self.ui.editTable.rowCount()
-            self.ui.editTable.insertRow(index)
-            
-            for i in range(len(talk)):                
-                self.ui.editTable.setItem(index,i,QtGui.QTableWidgetItem(unicode(talk[i])))                         
-        
-        self.ui.editTable.resizeRowsToContents()
             
     def load_events(self):
         '''
@@ -581,23 +502,14 @@ class MainApp(QtGui.QMainWindow):
             if len(room)>0:
                 self.ui.roomList.addItem(room)
 
-    def add_talks_from_rss(self):
-        rss_url = str(self.ui.rssEdit.text())
-        self.core.add_talks_from_rss(rss_url)
-        self.update_talk_views()
-
     def update_talk_views(self):
-        # disconnect the editTable signal before we refresh the views
-        self.disconnect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
+      '''
+      This function reloads the lists of events, rooms and talks.
+      '''
+      self.load_events()
+      self.load_rooms()
+      self.load_talks()
 
-        # finish up
-        self.load_events()
-        self.load_rooms()
-        self.load_talks()
-
-        # lets not forget to reactivate the editTable signal
-        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
-        
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             if self.isHidden():
@@ -628,6 +540,10 @@ class MainApp(QtGui.QMainWindow):
         self.core.logger.log.info('Exiting freeseer...')
         #self.core.stop()
         event.accept()
+
+    def run_talk_editor(self):
+      self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
+      self.talkEditor.show()
     
     def translateAction(self ,action):
         '''
@@ -660,7 +576,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
           
-    
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = MainApp()
