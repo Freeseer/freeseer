@@ -67,23 +67,23 @@ class AboutDialog(QtGui.QDialog):
         '''
         Translates the about dialog. Calls the retranslateUi function of the about dialog itself
         '''
-	DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
-	COPYRIGHT=self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
-	LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
-	
-	ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-	u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
-	u'<p>' + DESCRIPTION + u'</p>' + \
-	u'<p>' +  COPYRIGHT + u'</p>' + \
-	u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-	u'<p>' + LICENSE_TEXT + u'</p>' \
-	u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-	u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
+        DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
+        COPYRIGHT=self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
+        LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
+    
+        ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
+	    u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
+	    u'<p>' + DESCRIPTION + u'</p>' + \
+	    u'<p>' +  COPYRIGHT + u'</p>' + \
+	    u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+	    u'<p>' + LICENSE_TEXT + u'</p>' \
+	    u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+	    u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
  
-	self.ui.retranslateUi(self);
-	self.ui.aboutInfo.setText(ABOUT_INFO);
-	
-	
+        self.ui.retranslateUi(self);
+        self.ui.aboutInfo.setText(ABOUT_INFO);
+
+
 class SystemLanguages:
     '''
     Language system class that is responsible for retrieving valid languages in the system 
@@ -189,8 +189,9 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 
-        self.talkEditor = TalkEditorMainApp()
-	
+        # TODO: uncomment this and fix the issue with setupLanguageMenu
+        #self.talkEditor = TalkEditorMainApp()
+
     def setupLanguageMenu(self):
         #Add Languages to the Menu Ensure only one is clicked 
         self.langActionGroup.setExclusive(True)
@@ -503,12 +504,12 @@ class MainApp(QtGui.QMainWindow):
                 self.ui.roomList.addItem(room)
 
     def update_talk_views(self):
-      '''
-      This function reloads the lists of events, rooms and talks.
-      '''
-      self.load_events()
-      self.load_rooms()
-      self.load_talks()
+        '''
+        This function reloads the lists of events, rooms and talks.
+        '''
+        self.load_events()
+        self.load_rooms()
+        self.load_talks()
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
@@ -542,8 +543,8 @@ class MainApp(QtGui.QMainWindow):
         event.accept()
 
     def run_talk_editor(self):
-      self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
-      self.talkEditor.show()
+        self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
+        self.talkEditor.show()
     
     def translateAction(self ,action):
         '''
