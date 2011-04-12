@@ -189,7 +189,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setFocus()
 
         # TODO: uncomment this and fix the issue with setupLanguageMenu
-        self.talkEditor = TalkEditorMainApp()
+        self.talkEditor = TalkEditorMainApp(self.core)
         self.configTool = ConfigTool(self.core)
 	
     def setupLanguageMenu(self):

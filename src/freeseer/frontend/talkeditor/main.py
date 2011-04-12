@@ -98,7 +98,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
     '''
     Freeseer talk database editor main gui class
     '''
-    def __init__(self):
+    def __init__(self, core=None):
         QtGui.QMainWindow.__init__(self)
         self.ui = Ui_TalkEditorMainWindow()
         self.ui.setupUi(self)
@@ -106,7 +106,11 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.ui.editTable.setColumnHidden(5, True)
         self.default_language = 'en';
 
-        self.core = FreeseerCore(self)
+        # Only instantiate a new Core if we need to
+        if core is not None:
+            self.core = core
+        else:
+            self.core = FreeseerCore(self)
         
         #Setup the translator and populate the language menu under options
         self.uiTranslator = QtCore.QTranslator();
