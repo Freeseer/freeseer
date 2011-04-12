@@ -420,7 +420,6 @@ class FreeseerCore:
         self.backend.record(record_location)
         self.logger.log.info('Recording started')
 
-
     def stop(self):
         '''
         Informs backend to stop recording.

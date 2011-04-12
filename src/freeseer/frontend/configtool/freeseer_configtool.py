@@ -39,14 +39,17 @@ class ConfigTool(QtGui.QDialog):
     ConfigTool is the window to change the program performace
     '''
 
-    def __init__(self):
+    def __init__(self, core=None):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_ConfigureTool()
         self.ui.setupUi(self)
         
         self.ui.groupBox_hardware.hide()
 
-        self.core = FreeseerCore(self)
+        if core is not None:
+            self.core = core
+        else:
+            self.core = FreeseerCore(self)
         # get QT desktop to get screen size
         self.desktop = QtGui.QApplication.desktop()	
 
@@ -347,8 +350,8 @@ class ConfigTool(QtGui.QDialog):
 
     def toggle_auto_hide(self,state):
         '''
-	    when user toggle auto hidden, save it to conifg file
-	    '''
+        when user toggle auto hidden, save it to conifg file
+        '''
         self.core.config.auto_hide = state
         self.core.logger.log.debug('Set auto hidden to: ' + str(state))
 

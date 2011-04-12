@@ -35,7 +35,7 @@ from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from freeseer.frontend.talkeditor.frontend.default.main import *
-from configtool.freeseer_configtool import *
+from freeseer.frontend.configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
 
@@ -119,7 +119,6 @@ class MainApp(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
-        self.configTool = ConfigTool()
         self.default_language = 'en';
         self.talks_to_save = []
         self.talks_to_delete = []
@@ -191,7 +190,8 @@ class MainApp(QtGui.QMainWindow):
 
         # TODO: uncomment this and fix the issue with setupLanguageMenu
         #self.talkEditor = TalkEditorMainApp()
-
+        self.configTool = ConfigTool(self.core)
+	
     def setupLanguageMenu(self):
         #Add Languages to the Menu Ensure only one is clicked 
         self.langActionGroup.setExclusive(True)
