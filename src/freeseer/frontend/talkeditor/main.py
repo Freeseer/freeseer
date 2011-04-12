@@ -22,11 +22,12 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-from PyQt4 import QtGui, QtCore
 from os import listdir;
+
+from PyQt4 import QtGui, QtCore
+
 from freeseer.framework.presentation import *
 from freeseer.framework.core import *
-
 from talkeditor_ui_qt import *
 from talkeditor_about import *
 

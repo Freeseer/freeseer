@@ -22,20 +22,20 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-
-from freeseer_ui_qt import *
-from freeseer_about import *
-
-
-from PyQt4 import QtGui, QtCore
 from os import listdir;
 from os import name;
+
+from PyQt4 import QtGui, QtCore
+
 from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from freeseer.frontend.talkeditor.main import *
 from freeseer.frontend.configtool.freeseer_configtool import *
+
+from freeseer_ui_qt import *
+from freeseer_about import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
 
