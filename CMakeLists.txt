@@ -5,3 +5,4 @@ project(Freeseer)
 
 include(${FREESEER_SRC}/freeseer/frontend/default/CMakeLists.txt)
 include(${FREESEER_SRC}/freeseer/frontend/configtool/CMakeLists.txt)
+include(${FREESEER_SRC}/freeseer/frontend/talkeditor/CMakeLists.txt)
