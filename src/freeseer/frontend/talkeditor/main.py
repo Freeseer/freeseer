@@ -34,7 +34,7 @@ __version__ = u'1.9.7'
 
 NAME = u'Freeseer Talk Database Editor'
 URL = u'http://github.com/fosslc/freeseer'
-LANGUAGE_DIR = 'freeseer/frontend/talkeditor/frontend/default/languages/'
+LANGUAGE_DIR = 'freeseer/frontend/talkeditor/languages/'
 
 
 class AboutDialog(QtGui.QDialog):
