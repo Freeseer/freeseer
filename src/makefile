@@ -32,12 +32,12 @@ talkEditor:
 	@echo "Re-generated talk editor"
 
 configtool:
-	cd freeseer/frontend/default/configtool; make
+	cd freeseer/frontend/configtool; make
 	@echo "Re-Generated configtool"
 
 clean_gui:
 	cd freeseer/frontend/default; make clean
-	cd freeseer/frontend/default/configtool; make clean
+	cd freeseer/frontend/configtool; make clean
 	@echo "GUI files cleaned up"
 
 clean_talkEditor:
