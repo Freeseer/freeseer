@@ -34,7 +34,7 @@ from freeseer.framework.core import *
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
-from freeseer.frontend.talkeditor.frontend.default.main import *
+from freeseer.frontend.talkeditor.main import *
 from freeseer.frontend.configtool.freeseer_configtool import *
 if os.name == 'posix': # Currently we only support LibQxt on linux
     import qxtglobalshortcut
@@ -188,6 +188,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 
+        # TODO: uncomment this and fix the issue with setupLanguageMenu
         self.talkEditor = TalkEditorMainApp()
         self.configTool = ConfigTool(self.core)
 	
