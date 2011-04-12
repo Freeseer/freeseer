@@ -258,8 +258,8 @@ class FreeseerCore:
         self.logger.log.debug('Talk added: %s - %s', presentation.speaker, presentation.title)
 
         
-    def update_talk(self, talk_id, speaker, title, room):
-        self.db.update_talk(talk_id, speaker, title, room)
+    def update_talk(self, talk_id, speaker, title, room, event, dateTime):
+        self.db.update_talk(talk_id, speaker, title, room, event, dateTime)
         self.logger.log.debug('Talk updated: %s - %s', speaker, title)
 
         
