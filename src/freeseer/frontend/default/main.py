@@ -56,9 +56,8 @@ class AboutDialog(QtGui.QDialog):
         self.ui = Ui_FreeseerAbout()
         self.ui.setupUi(self)
         self.translate();
-    
-    
-    def    translate(self):
+
+    def translate(self):
         '''
         Translates the about dialog. Calls the retranslateUi function of the about dialog itself
         '''
