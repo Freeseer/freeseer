@@ -63,8 +63,6 @@ class ConfigTool(QtGui.QDialog):
         self.langActionGroup = QtGui.QActionGroup(self);
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
 
-
-
         # configure tab connections
         self.connect(self.ui.groupBox_videoSource, QtCore.SIGNAL('toggled(bool)'), self.toggle_video_recording)
         self.connect(self.ui.groupBox_soundSource, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_recording)
@@ -120,8 +118,7 @@ class ConfigTool(QtGui.QDialog):
             elif (src == 'firewire'):
                 self.ui.radioButton_hardware.setEnabled(True)
                 self.ui.radioButton_firewiresrc.setEnabled(True)
-                
-            
+
     def toggle_video_recording(self, state):
         '''
         Enables / Disables video recording depending on if the user has
@@ -244,8 +241,7 @@ class ConfigTool(QtGui.QDialog):
             self.ui.groupBox_soundSource.setChecked(False)
         else:
             self.ui.groupBox_soundSource.setChecked(True)
-        
-        
+
         # Set up streaming - could be audio/video/both
         if self.core.config.enable_streaming == 'False':
             self.ui.groupBox_streaming.setChecked(False)
@@ -285,7 +281,6 @@ class ConfigTool(QtGui.QDialog):
         height = self.desktop.screenGeometry(self.desktop.primaryScreen ()).height()
         return str(width) + 'x' + str(height)
 
-
     def save_settings(self):
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
@@ -298,13 +293,11 @@ class ConfigTool(QtGui.QDialog):
 
         self.core.config.writeConfig()
         self.emit(QtCore.SIGNAL("changed"))
-
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()
         videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, 'Select Video Directory', directory)))
         self.ui.lineEdit_videoDirectory.setText(videodir)
-
 
     def change_video_device(self):
         '''
@@ -315,7 +308,6 @@ class ConfigTool(QtGui.QDialog):
         src = self.videosrc
         self.core.logger.log.debug('Changing video device to ' + dev)
         self.core.config.video_device = src
-    
 
     def area_select(self):
         self.area_selector = QtAreaSelector(self)
@@ -323,7 +315,6 @@ class ConfigTool(QtGui.QDialog):
         self.core.logger.log.info('Desktop area selector started.')
         self.hide()
 
-    
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
         self.start_x = self.core.config.start_x = start_x
         self.start_y = self.core.config.start_y = start_y
@@ -332,12 +323,10 @@ class ConfigTool(QtGui.QDialog):
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
 
-
     def change_audio_device(self):
         src = self.core.config.audiosrc = str(self.ui.comboBox_audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
         self.core.config.audio_source = src
-
 
     def toggle_auto_hide(self,state):
         '''
@@ -353,7 +342,6 @@ class ConfigTool(QtGui.QDialog):
             self.ui.retranslateUi(self);
         else:
             print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
-
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
