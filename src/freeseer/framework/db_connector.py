@@ -91,7 +91,7 @@ class DB_Connector():
         talk_titles = []
         
         self.cursor = self.db_connection.cursor()
-        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations''')
+        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations ORDER BY Time''')
 
         for row in self.cursor:
             speaker = row[0]
@@ -157,15 +157,15 @@ class DB_Connector():
                 self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
             else:
                 self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Room=?''', [unicode(room)])
+                                       WHERE Room=? ORDER BY Time''', [unicode(room)])
             
         else:
             if (room == "All"):
                 self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Event=?''', [unicode(event)])
+                                       WHERE Event=? ORDER BY Time''', [unicode(event)])
             else:
                 self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Event=? and Room=?''', [unicode(event), unicode(room)])
+                                       WHERE Event=? and Room=? ORDER BY Time''', [unicode(event), unicode(room)])
 
         # Prepare list to be returned
         for row in self.cursor:
