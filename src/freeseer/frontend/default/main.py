@@ -28,8 +28,6 @@ from os import name;
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.core import *
-from freeseer.framework.qt_area_selector import *
-from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.presentation import *
 from freeseer.frontend.talkeditor.main import *
 from freeseer.frontend.configtool.freeseer_configtool import *
