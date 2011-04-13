@@ -97,10 +97,8 @@ class SystemLanguages:
             language_prefix = map(lambda x: x[0].split("tr_")[1],qm_files); 
         except:
             return [];
-        return language_prefix;    
-    
- 
- 
+        return language_prefix;
+
 class MainApp(QtGui.QMainWindow):
     '''
     Freeseer main gui class
@@ -131,7 +129,6 @@ class MainApp(QtGui.QMainWindow):
         self.load_events()
         self.load_rooms()
 
-        
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
         sysIcon = QtGui.QIcon(logo)
@@ -450,9 +447,6 @@ class MainApp(QtGui.QMainWindow):
         room = str(self.ui.roomList.currentText())
         talk_list = self.core.filter_talks_by_event_room(event, room)
         self.update_talk_list(talk_list)
-
-        # Update the Edit Talks Table
-        talklist = self.core.get_talk_titles()
             
     def load_events(self):
         '''
