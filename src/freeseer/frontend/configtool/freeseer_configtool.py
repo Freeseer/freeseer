@@ -31,7 +31,7 @@ from freeseer.framework.qt_area_selector import *
 from freeseer.framework.core import *
 from freeseer_configtool_ui import *
 
-LANGUAGE_DIR = 'freeseer/frontend/default/configtool/languages/'
+LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
 
 class ConfigTool(QtGui.QDialog):
     '''
