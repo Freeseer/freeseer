@@ -23,14 +23,14 @@ ALL: gui
 gui: talkeditor_ui_qt.py talkeditor_about.py resource_rc.py
 	@echo "Re-generated GUI"
 
-talkeditor_ui_qt.py: forms/talkeditor_ui_qt.ui
+talkeditor_ui_qt.py: 
 	pyuic4 forms/talkeditor_ui_qt.ui -o talkeditor_ui_qt.py
 
-talkeditor_about.py: forms/talkeditor_about.ui
+talkeditor_about.py: 
 	pyuic4 forms/talkeditor_about.ui -o talkeditor_about.py
 
-resource_rc.py: forms/resource.qrc
-	pyrcc4 forms/resource.qrc -o resource_rc.py
+resource_rc.py: 
+	pyrcc4 ../../framework/resources/resource.qrc -o resource_rc.py
 
 clean: 
 	rm -f resource_rc.py talkeditor_about.py talkeditor_ui_qt.py *.pyc

@@ -14,7 +14,7 @@
    <string>talk database editor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../development/freeseer/src/freeseer/frontend/default/forms/resource.qrc">
+   <iconset resource="../../../framework/resources/resource.qrc">
     <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -212,7 +212,7 @@
             <string>Load talks from rss</string>
            </property>
            <property name="icon">
-            <iconset resource="../../development/freeseer/src/freeseer/frontend/default/forms/resource.qrc">
+            <iconset resource="../../../framework/resources/resource.qrc">
              <normaloff>:/rss_logo/rss_logo.png</normaloff>:/rss_logo/rss_logo.png</iconset>
            </property>
           </widget>
@@ -354,7 +354,7 @@
      <x>0</x>
      <y>0</y>
      <width>884</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -400,8 +400,8 @@
   </action>
  </widget>
  <resources>
-  <include location="../../development/freeseer/src/freeseer/frontend/default/forms/resource.qrc"/>
-  <include location="resource.qrc"/>
+  <include location="../../../framework/resources/resource.qrc"/>
+  <include location="../../../framework/resources/resource.qrc"/>
  </resources>
  <connections>
   <connection>

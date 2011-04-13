@@ -14,7 +14,7 @@
    <string>freeseer - portable presentation recording station</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset resource="../../../framework/resources/resource.qrc">
     <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -40,7 +40,7 @@
           <string>Record</string>
          </property>
          <property name="icon">
-          <iconset resource="resource.qrc">
+          <iconset resource="../../../framework/resources/resource.qrc">
            <normaloff>:/recordButton/record_red_button.png</normaloff>
            <normalon>:/recordButton/stop_red_button.png</normalon>:/recordButton/record_red_button.png</iconset>
          </property>
@@ -195,7 +195,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset resource="../../../framework/resources/resource.qrc">
              <normaloff>:/headphones/headphones.png</normaloff>:/headphones/headphones.png</iconset>
            </property>
           </widget>
@@ -291,7 +291,7 @@
   <tabstop>audioFeedbackSlider</tabstop>
  </tabstops>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../../../framework/resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

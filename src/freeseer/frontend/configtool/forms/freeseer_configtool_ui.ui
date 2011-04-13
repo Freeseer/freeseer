@@ -14,7 +14,7 @@
    <string>Freeseer Config Tool</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset resource="../../../framework/resources/resource.qrc">
     <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -718,8 +718,6 @@ v4l2src does not work.</string>
     </layout>
    </item>
   </layout>
-  <zorder>layoutWidget</zorder>
-  <zorder>configureTab</zorder>
  </widget>
  <tabstops>
   <tabstop>configureTab</tabstop>
@@ -741,7 +739,7 @@ v4l2src does not work.</string>
   <tabstop>pushButton_open</tabstop>
  </tabstops>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../../../framework/resources/resource.qrc"/>
  </resources>
  <connections>
   <connection>
