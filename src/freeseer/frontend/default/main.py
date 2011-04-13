@@ -34,9 +34,6 @@ from freeseer.frontend.configtool.freeseer_configtool import *
 
 from freeseer_ui_qt import *
 from freeseer_about import *
-if os.name == 'posix': # Currently we only support LibQxt on linux
-    import qxtglobalshortcut
-
 
 __version__=u'2.0.1'
 
@@ -81,11 +78,10 @@ class AboutDialog(QtGui.QDialog):
         self.ui.retranslateUi(self);
         self.ui.aboutInfo.setText(ABOUT_INFO);
 
-
 class SystemLanguages:
     '''
     Language system class that is responsible for retrieving valid languages in the system 
-  '''
+    '''
     def __init__(self):
         self.languages = []
         self.languages = self.getAllLanguages();
@@ -158,17 +154,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
         self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
-        
-        # connections for configure > Extra Settings > Shortkeys
-        if os.name == 'posix': # Currently we only support LibQxt on linux
-            self.short_rec_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-            self.short_stop_key = qxtglobalshortcut.QxtGlobalShortcut(self)
-            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
-            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
-            self.short_rec_key.setEnabled(True)
-            self.short_stop_key.setEnabled(True)
-            self.connect(self.short_rec_key, QtCore.SIGNAL('activated()'), self.recContextM)
-            self.connect(self.short_stop_key, QtCore.SIGNAL('activated()'), self.stopContextM)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
@@ -327,13 +312,6 @@ class MainApp(QtGui.QMainWindow):
             self.autoHide =  True
         else:
             self.autoHide =  False
- 
-        #set short key
-        if os.name == 'posix': # globalshortcuts are only supported on linux atm
-            self.short_rec_key.setShortcut(QtGui.QKeySequence(self.core.config.key_rec))
-            self.short_stop_key.setShortcut(QtGui.QKeySequence(self.core.config.key_stop))
-            self.short_rec_key.setEnabled(True)
-            self.short_stop_key.setEnabled(True)
         
     def change_output_resolution(self):
         res = str(self.resolution)
@@ -574,7 +552,6 @@ class MainApp(QtGui.QMainWindow):
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
-          
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

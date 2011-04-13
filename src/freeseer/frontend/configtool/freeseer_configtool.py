@@ -28,7 +28,6 @@ from sys import *
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.qt_area_selector import *
-from freeseer.framework.qt_key_grabber import *
 from freeseer.framework.core import *
 from freeseer_configtool_ui import *
 
@@ -98,15 +97,9 @@ class ConfigTool(QtGui.QDialog):
         
         # connections for Extra setting -> auto hidden
         self.connect(self.ui.checkbox_autoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
-        
-        # connections for Extra Setting -> ShortKeys
-        self.connect(self.ui.pushButton_recordKey, QtCore.SIGNAL('clicked()'), self.grab_rec_key)
-        self.connect(self.ui.pushButton_StopKey, QtCore.SIGNAL('clicked()'), self.grab_stop_key)
 
         # connections for Extra Settings > File Locations
         self.connect(self.ui.pushButton_open, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
-        
- 
         
         # get available audio sources
         sndsrcs = self.core.get_audio_sources()
@@ -277,8 +270,6 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.ui.checkbox_autoHide.setChecked(False)
 
-        self.ui.lineEdit_recordKey.setText(self.core.config.key_rec)
-        self.ui.lineEdit_stopKey.setText(self.core.config.key_stop)
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
 
     def screen_size(self):
@@ -354,47 +345,6 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.core.config.auto_hide = state
         self.core.logger.log.debug('Set auto hidden to: ' + str(state))
-
-
-    def grab_rec_key(self):
-        '''
-        When the button is pressed, it will call the keygrabber widget and log keys
-        '''
-        self.core.config.key_rec = 'Ctrl+Shift+R'
-        self.key_grabber = QtKeyGrabber(self)
-        self.hide()
-        self.core.logger.log.info('Storing keys.')
-        self.key_grabber.show()
-      
-    
-    def grab_rec_set(self, key):
-        '''
-        Keygrabber widget calls this function to set and store the hotkey.
-        '''
-        self.ui.lineEdit_recordKey.setText(key)
-        self.core.config.key_rec = key
-        self.show()
-            
-    
-    def grab_stop_key(self):
-        '''
-        When the button is pressed, it will call the keygrabber widget and log keys
-        '''
-        self.core.config.key_stop = 'Ctrl+Shift+E'
-        self.key_grabber = QtKeyGrabber(self)
-        self.hide()
-        self.core.logger.log.info('Storing keys.')
-        self.key_grabber.show()
-        
-        
-    def grab_stop_set(self, key):
-        '''
-        Keygrabber widget calls this function to set and store the hotkey.
-        '''
-        self.ui.lineEdit_stopKey.setText(key)
-        self.core.config.key_stop = key
-        self.show()
-
        
     def translateFile(self,file_ending):
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
