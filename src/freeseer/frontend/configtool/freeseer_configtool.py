@@ -150,6 +150,7 @@ class ConfigTool(QtGui.QDialog):
             elif (self.ui.radioButton_recordLocalArea.isChecked()):
                 self.core.config.videodev = 'local area'
                 self.videosrc = 'desktop'
+                self.core.set_record_area(True)
 
         # recording from hardware such as usb or fireware device
         elif (self.ui.radioButton_hardware.isChecked()):
