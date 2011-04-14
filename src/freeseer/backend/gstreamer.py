@@ -273,7 +273,6 @@ class Freeseer_gstreamer(BackendInterface):
         video_src.set_property('starty', self.record_desktop_area_start_y)
         video_src.set_property('endx', self.record_desktop_area_end_x)
         video_src.set_property('endy', self.record_desktop_area_end_y)
-        print 'success'
 
     def _set_video_encoder(self):
         videoenc_cspace = gst.element_factory_make('ffmpegcolorspace', 'videoenc_cspace')
