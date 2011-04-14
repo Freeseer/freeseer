@@ -281,7 +281,7 @@ class MainApp(QtGui.QMainWindow):
             self.resolution =  self.core.config.resolution
             self.change_output_resolution()
         
-            #load streaming resolution
+            # load streaming resolution
             self.streaming_resolution =  self.core.config.streaming_resolution
             self.change_streaming_resolution()
             if self.core.config.enable_streaming == 'True': # == True and self.core.config.streaming_resolution != "0x0":
@@ -303,7 +303,7 @@ class MainApp(QtGui.QMainWindow):
                         self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
             self.core.backend.disable_icecast_streaming()
 
-        #load auto hide setting and enable preview
+        # load auto hide setting and enable preview
         if self.core.config.auto_hide == 'True':
             self.autoHide =  True
         else:
