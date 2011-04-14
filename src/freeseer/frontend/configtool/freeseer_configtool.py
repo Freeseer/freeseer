@@ -203,35 +203,35 @@ class ConfigTool(QtGui.QDialog):
         # Set up Video
         if self.core.config.enable_video_recoding == 'False':
             self.ui.groupBox_videoSource.setChecked(False)
-        else: # Only if we're doing video do we need to worry about screen resolution
+        else:
             self.ui.groupBox_videoSource.setChecked(True)
             
-            # detect screen display & load resolution
-            screenres = self.primary_screen_size()
-            self.screen_size()
+        # detect screen display & load resolution
+        screenres = self.primary_screen_size()
+        self.screen_size()
+    
+        if self.core.config.resolution == '0x0':
+            resolution = self.ui.comboBox_videoQualityList.findText(screenres)
+        else:
+            resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
         
-            if self.core.config.resolution == '0x0':
-                resolution = self.ui.comboBox_videoQualityList.findText(screenres)
-            else:
-                resolution = self.ui.comboBox_videoQualityList.findText(self.core.config.resolution)
-            
-            if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
+        if not (resolution < 0): self.ui.comboBox_videoQualityList.setCurrentIndex(resolution)
 
-            #load video source setting
-            if (self.core.config.videosrc == 'desktop'):
-                self.ui.radioButton_recordLocalDesktop.setChecked(True)
-           
-            if (self.core.config.videodev == 'local area'):
-                self.ui.radioButton_recordLocalArea.setChecked(True)
-                self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-            
-            elif (self.core.config.videosrc == 'usb'):
-                self.ui.radioButton_hardware.setChecked(True)
-                self.ui.radioButton_USBsrc.setChecked(True)
-         
-            elif (self.core.config.videosrc == 'firewire'):
-                self.ui.radioButton_hardware.setChecked(True)
-                self.ui.radioButton_firewiresrc.setChecked(True)
+        #load video source setting
+        if (self.core.config.videosrc == 'desktop'):
+            self.ui.radioButton_recordLocalDesktop.setChecked(True)
+       
+        if (self.core.config.videodev == 'local area'):
+            self.ui.radioButton_recordLocalArea.setChecked(True)
+            self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
+        
+        elif (self.core.config.videosrc == 'usb'):
+            self.ui.radioButton_hardware.setChecked(True)
+            self.ui.radioButton_USBsrc.setChecked(True)
+     
+        elif (self.core.config.videosrc == 'firewire'):
+            self.ui.radioButton_hardware.setChecked(True)
+            self.ui.radioButton_firewiresrc.setChecked(True)
          
         # Set up Audio
         if self.core.config.enable_audio_recoding == 'False':
