@@ -141,8 +141,7 @@ class ConfigTool(QtGui.QDialog):
         configures core with new video source information
         '''
         # recording the local desktop
-        if (self.ui.radioButton_localDesktop.isChecked()): 
-            self.ui.checkbox_autoHide.setChecked(True)
+        if (self.ui.radioButton_localDesktop.isChecked()):
             self.core.config.videosrc = 'desktop'
             if (self.ui.radioButton_recordLocalDesktop.isChecked()):         
                 self.core.config.videodev = 'default'
@@ -154,8 +153,6 @@ class ConfigTool(QtGui.QDialog):
 
             # recording from hardware such as usb or fireware device
             elif (self.ui.radioButton_hardware.isChecked()):
-
-                self.ui.checkbox_autoHide.setChecked(False)
                 if (self.ui.radioButton_USBsrc.isChecked()): 
                     self.videosrc = 'usb'
                     self.core.config.videosrc = 'usb'
