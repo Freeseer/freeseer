@@ -323,7 +323,7 @@ class ConfigTool(QtGui.QDialog):
     def change_audio_device(self):
         src = self.core.config.audiosrc = str(self.ui.comboBox_audioSourceList.currentText())
         self.core.logger.log.debug('Changing audio device to ' + src)
-        self.core.config.audio_source = src
+        self.core.change_soundsrc(src)
 
     def toggle_auto_hide(self,state):
         '''
