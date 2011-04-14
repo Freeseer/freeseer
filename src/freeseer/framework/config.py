@@ -162,7 +162,7 @@ class Config:
         try:
             os.makedirs(self.configdir)
         except OSError:
-            print('freeseer directory exists.')
+            pass # directory exists.
         
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:
