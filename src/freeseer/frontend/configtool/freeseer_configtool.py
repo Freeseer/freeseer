@@ -151,15 +151,15 @@ class ConfigTool(QtGui.QDialog):
                 self.core.config.videodev = 'local area'
                 self.videosrc = 'desktop'
 
-            # recording from hardware such as usb or fireware device
-            elif (self.ui.radioButton_hardware.isChecked()):
-                if (self.ui.radioButton_USBsrc.isChecked()): 
-                    self.videosrc = 'usb'
-                    self.core.config.videosrc = 'usb'
-                elif (self.ui.radioButton_firewiresrc.isChecked()): 
-                    self.videosrc = 'firewire'
-                    self.core.config.videosrc = 'firewire'
-                else: return
+        # recording from hardware such as usb or fireware device
+        elif (self.ui.radioButton_hardware.isChecked()):
+            if (self.ui.radioButton_USBsrc.isChecked()): 
+                self.videosrc = 'usb'
+                self.core.config.videosrc = 'usb'
+            elif (self.ui.radioButton_firewiresrc.isChecked()): 
+                self.videosrc = 'firewire'
+                self.core.config.videosrc = 'firewire'
+            else: return
 
             # add available video devices for selected source
             viddevs = self.core.get_video_devices(self.videosrc)
