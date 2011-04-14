@@ -390,8 +390,8 @@ class MainApp(QtGui.QMainWindow):
                 self.statusBar().showMessage('recording...')
             else:
                 self.hide()
-            #self.core.config.videosrc = self.videosrc
-            #self.core.config.writeConfig()
+            self.core.config.videosrc = self.videosrc
+            self.core.config.writeConfig()
             
         else: # Stop Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
