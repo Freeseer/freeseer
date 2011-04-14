@@ -290,6 +290,7 @@ class ConfigTool(QtGui.QDialog):
             self.core.config.streaming_resolution = '0x0'
 
         self.core.config.writeConfig()
+        self.emit(QtCore.SIGNAL("Changed"))
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()
