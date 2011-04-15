@@ -222,7 +222,7 @@ class FreeseerCore:
         talksIds = self.db.get_talks_ids()
         talkIndex = talkTitles.index(title)
 
-	     return talksIds[talkIndex]
+        return talksIds[talkIndex]
 	
     def get_presentation(self, presentation_id):
         return self.db.get_presentation(presentation_id)
