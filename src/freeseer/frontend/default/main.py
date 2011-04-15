@@ -116,9 +116,6 @@ class MainApp(QtGui.QMainWindow):
 
         self.core = FreeseerCore(self)
         
-        # get supported video sources and enable the UI for supported devices.
-        # self.configure_supported_video_sources()
-        
         #Setup the translator and populate the language menu under options
         self.uiTranslator = QtCore.QTranslator();
         self.langActionGroup = QtGui.QActionGroup(self);
@@ -159,6 +156,7 @@ class MainApp(QtGui.QMainWindow):
                 
         self.load_settings()
         self.core.preview(True, self.ui.previewWidget.winId())
+
         # setup default sources
         if (self.core.config.audiofb == 'True'):
             self.ui.audioFeedbackCheckbox.toggle()
@@ -335,22 +333,6 @@ class MainApp(QtGui.QMainWindow):
         width = s[0]
         height = s[1]
         self.core.change_stream_resolution(width, height)
-        
-        
-    def area_select(self):
-        self.area_selector = QtAreaSelector(self)
-        self.area_selector.show()
-        self.core.logger.log.info('Desktop area selector started.')
-        self.hide()
-    
-    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-        self.start_x = self.core.config.start_x = start_x
-        self.start_y = self.core.config.start_y = start_y
-        self.end_x = self.core.config.end_x = end_x
-        self.end_y = self.core.config.end_y = end_y
-        self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
-        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
-        self.show()
 
     def toggle_audio_feedback(self):
         if (self.ui.audioFeedbackCheckbox.isChecked()):
@@ -411,6 +393,10 @@ class MainApp(QtGui.QMainWindow):
         # Test only video source
         else:
             self.core.test_sources(state, True, False)
+
+    ###
+    ### Talk Related
+    ###
 
     def get_rooms_and_talks_at_event(self, event):        
         room_list = self.core.filter_rooms_by_event(self.ui.eventList.currentText())        
@@ -489,6 +475,25 @@ class MainApp(QtGui.QMainWindow):
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.ui.recordButton.toggle()
 
+    ###
+    ### Misc
+    ###
+    
+    def area_select(self):
+        self.area_selector = QtAreaSelector(self)
+        self.area_selector.show()
+        self.core.logger.log.info('Desktop area selector started.')
+        self.hide()
+    
+    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
+        self.start_x = self.core.config.start_x = start_x
+        self.start_y = self.core.config.start_y = start_y
+        self.end_x = self.core.config.end_x = end_x
+        self.end_y = self.core.config.end_y = end_y
+        self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
+        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+        self.show()
+
     def showMainWin(self):
         if self.isHidden():
             self.show()
@@ -502,7 +507,6 @@ class MainApp(QtGui.QMainWindow):
         if self.ui.recordButton.isChecked():
             self.ui.recordButton.toggle()
 
-
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
             self.ui.audioFeedbackSlider.setValue(value)
@@ -512,10 +516,6 @@ class MainApp(QtGui.QMainWindow):
         #self.core.stop()
         event.accept()
 
-    def run_talk_editor(self):
-        self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
-        self.talkEditor.show()
-    
     def translateAction(self ,action):
         '''
         When a language is selected from the language menu this function is called
@@ -546,6 +546,10 @@ class MainApp(QtGui.QMainWindow):
     def config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
+        
+    def run_talk_editor(self):
+        self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
+        self.talkEditor.show()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
