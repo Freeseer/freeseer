@@ -69,7 +69,6 @@ class AboutDialog(QtGui.QDialog):
         self.ui.retranslateUi(self);
         self.ui.aboutInfo.setText(ABOUT_INFO);
 
-
 class SystemLanguages:
     '''
     Language system class that is responsible for retrieving valid languages in the system 
@@ -93,8 +92,6 @@ class SystemLanguages:
             return [];
         return language_prefix;
         
- 
- 
 class TalkEditorMainApp(QtGui.QMainWindow):
     '''
     Freeseer talk database editor main gui class
