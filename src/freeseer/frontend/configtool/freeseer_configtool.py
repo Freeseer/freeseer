@@ -55,6 +55,11 @@ class ConfigTool(QtGui.QDialog):
         # get supported video sources and enable the UI for supported devices.
         self.configure_supported_video_sources()
         
+        # get available audio sources
+        sndsrcs = self.core.get_audio_sources()
+        for src in sndsrcs:
+            self.ui.comboBox_audioSourceList.addItem(src)
+        
         #load setting for the config data
         self.load_settings()
 
@@ -98,11 +103,6 @@ class ConfigTool(QtGui.QDialog):
 
         # connections for Extra Settings > File Locations
         self.connect(self.ui.pushButton_open, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
-        
-        # get available audio sources
-        sndsrcs = self.core.get_audio_sources()
-        for src in sndsrcs:
-            self.ui.comboBox_audioSourceList.addItem(src)
         
         # set default source
         self.toggle_video_source()
@@ -239,6 +239,12 @@ class ConfigTool(QtGui.QDialog):
             self.ui.groupBox_soundSource.setChecked(False)
         else:
             self.ui.groupBox_soundSource.setChecked(True)
+            
+        # Get the index for the saved audio setting and load it as the current
+        # selection in the audio source list 
+        i = self.ui.comboBox_audioSourceList.findText(self.core.config.audiosrc)
+        print self.core.config.audiosrc
+        if not (i < 0): self.ui.comboBox_audioSourceList.setCurrentIndex(i)
 
         # Set up streaming - could be audio/video/both
         if self.core.config.enable_streaming == 'False':
