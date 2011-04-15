@@ -152,7 +152,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.ui.actionEdit_talks, QtCore.SIGNAL('triggered()'), self.run_talk_editor)
-        self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.config_tool)
+        self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.run_config_tool)
                 
         self.load_settings()
         self.core.preview(True, self.ui.previewWidget.winId())
@@ -533,7 +533,7 @@ class MainApp(QtGui.QMainWindow):
 
         self.configTool.translateFile(file_ending);
       
-    def config_tool(self):
+    def run_config_tool(self):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
         
