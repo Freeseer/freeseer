@@ -109,7 +109,28 @@ class ConfigTool(QtGui.QDialog):
         if (self.core.config.audiosrc == 'none'):
             self.core.change_soundsrc(str(self.ui.comboBox_audioSourceList.currentText()))
         else: self.core.change_soundsrc(self.core.config.audiosrc)
-                    
+
+    ###
+    ### Audio
+    ###
+
+    def toggle_audio_recording(self,state):
+        '''
+        Enables / Disables audio recording depending on if the user has
+        checked the audio box in configuration mode.
+        '''
+        self.core.config.enable_audio_recoding = state
+        self.core.logger.log.debug('Enable audio recoding: ' + str(state))
+
+    def change_audio_device(self):
+        src = self.core.config.audiosrc = str(self.ui.comboBox_audioSourceList.currentText())
+        self.core.logger.log.debug('Changing audio device to ' + src)
+        self.core.change_soundsrc(src)
+
+    ###
+    ### Video
+    ###
+
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
         for src in vidsrcs:
@@ -129,14 +150,6 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.core.config.enable_video_recoding = state
         self.core.logger.log.debug('Enable video recoding: ' + str(state))
-
-    def toggle_audio_recording(self,state):
-        '''
-        Enables / Disables audio recording depending on if the user has
-        checked the audio box in configuration mode.
-        '''
-        self.core.config.enable_audio_recoding = state
-        self.core.logger.log.debug('Enable audio recoding: ' + str(state))
 
     def toggle_video_source(self):
         '''
@@ -177,6 +190,20 @@ class ConfigTool(QtGui.QDialog):
         
         self.core.logger.log.debug('Set video source  to ' + self.videosrc)
 
+    def change_video_device(self):
+        '''
+        Function for changing video device
+        eg. /dev/video1
+        '''
+        dev = self.core.config.videodev = str(self.ui.comboBox_videoDeviceList.currentText())
+        src = self.videosrc
+        self.core.logger.log.debug('Changing video device to ' + dev)
+        self.core.config.video_device = src
+
+    ###
+    ### Streaming
+    ###
+
     def toggle_streaming(self,state):
         '''
         Enable /Disables streaming if the user has checked the
@@ -201,6 +228,10 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.streaming_password = str(self.ui.lineEdit_password.text())
         #passwd = '*' * len(self.core.config.streaming_password)
         #self.core.logger.log.debug('set streaming password: ' + passwd)
+
+    ###
+    ### Misc
+    ###
 
     def load_settings(self):
     
@@ -274,19 +305,6 @@ class ConfigTool(QtGui.QDialog):
 
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
 
-    def screen_size(self):
-        self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
-        i = 0
-        while i < self.desktop.screenCount():
-            newItem = QtGui.QTableWidgetItem(str(self.desktop.screenGeometry(i).width()) + 'x' + str(self.desktop.screenGeometry(i).height()))
-            self.ui.tableWidget_screenResolution.setItem(i,0,newItem)
-            i = i + 1
-
-    def primary_screen_size(self):
-        width = self.desktop.screenGeometry(self.desktop.primaryScreen ()).width()
-        height = self.desktop.screenGeometry(self.desktop.primaryScreen ()).height()
-        return str(width) + 'x' + str(height)
-
     def save_settings(self):
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
@@ -299,21 +317,24 @@ class ConfigTool(QtGui.QDialog):
 
         self.core.config.writeConfig()
         self.emit(QtCore.SIGNAL("changed"))
+
+    def screen_size(self):
+        self.ui.tableWidget_screenResolution.setRowCount(self.desktop.screenCount())
+        i = 0
+        while i < self.desktop.screenCount():
+            newItem = QtGui.QTableWidgetItem(str(self.desktop.screenGeometry(i).width()) + 'x' + str(self.desktop.screenGeometry(i).height()))
+            self.ui.tableWidget_screenResolution.setItem(i,0,newItem)
+            i = i + 1
+
+    def primary_screen_size(self):
+        width = self.desktop.screenGeometry(self.desktop.primaryScreen ()).width()
+        height = self.desktop.screenGeometry(self.desktop.primaryScreen ()).height()
+        return str(width) + 'x' + str(height)
         
     def browse_video_directory(self):
         directory = self.ui.lineEdit_videoDirectory.text()
         videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, 'Select Video Directory', directory)))
         self.ui.lineEdit_videoDirectory.setText(videodir)
-
-    def change_video_device(self):
-        '''
-        Function for changing video device
-        eg. /dev/video1
-        '''
-        dev = self.core.config.videodev = str(self.ui.comboBox_videoDeviceList.currentText())
-        src = self.videosrc
-        self.core.logger.log.debug('Changing video device to ' + dev)
-        self.core.config.video_device = src
 
     def area_select(self):
         self.area_selector = QtAreaSelector(self)
@@ -328,11 +349,6 @@ class ConfigTool(QtGui.QDialog):
         self.end_y = self.core.config.end_y = end_y
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
-
-    def change_audio_device(self):
-        src = self.core.config.audiosrc = str(self.ui.comboBox_audioSourceList.currentText())
-        self.core.logger.log.debug('Changing audio device to ' + src)
-        self.core.change_soundsrc(src)
 
     def toggle_auto_hide(self,state):
         '''
