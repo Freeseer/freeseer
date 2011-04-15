@@ -456,12 +456,6 @@ class MainApp(QtGui.QMainWindow):
         self.load_rooms()
         self.load_talks()
 
-    def _icon_activated(self, reason):
-        if reason == QtGui.QSystemTrayIcon.Trigger:
-            self.showMainWin()
-        if reason == QtGui.QSystemTrayIcon.DoubleClick:
-            self.ui.recordButton.toggle()
-
     ###
     ### Misc
     ###
@@ -480,6 +474,12 @@ class MainApp(QtGui.QMainWindow):
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show()
+
+    def _icon_activated(self, reason):
+        if reason == QtGui.QSystemTrayIcon.Trigger:
+            self.showMainWin()
+        if reason == QtGui.QSystemTrayIcon.DoubleClick:
+            self.ui.recordButton.toggle()
 
     def showMainWin(self):
         if self.isHidden():
