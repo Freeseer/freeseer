@@ -154,29 +154,31 @@ class DB_Connector():
         self.cursor = self.db_connection.cursor()
         if (event == "All"):
             if (room == "All"):
-                self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
+                self.cursor.execute('''SELECT Speaker, Title FROM presentations ORDER BY Id ASC''')
+                
             else:
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title FROM presentations \
                                        WHERE Room=? ORDER BY Time''', [unicode(room)])
             
         else:
             if (room == "All"):
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title FROM presentations \
                                        WHERE Event=? ORDER BY Time''', [unicode(event)])
             else:
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title FROM presentations \
                                        WHERE Event=? and Room=? ORDER BY Time''', [unicode(event), unicode(room)])
 
         # Prepare list to be returned
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
-            room = row[2]
-
-            if (room == 'None'):
-                text = "%s - %s" % (speaker, title)	
-            else:
-                text = "%s - %s - %s" % (room, speaker, title)
+                 
+            if (speaker == ""):
+                text = "%s" % (title)
+            
+            else: 
+                text = "%s - %s" % (speaker, title)
+            
                 
             talks_matched.append(text)
 
