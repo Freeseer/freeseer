@@ -106,6 +106,9 @@ class ConfigTool(QtGui.QDialog):
         
         # set default source
         self.toggle_video_source()
+        if (self.core.config.audiosrc == 'none'):
+            self.core.change_soundsrc(str(self.ui.comboBox_audioSourceList.currentText()))
+        else: self.core.change_soundsrc(self.core.config.audiosrc)
                     
     def configure_supported_video_sources(self):
         vidsrcs = self.core.get_video_sources()
@@ -243,7 +246,6 @@ class ConfigTool(QtGui.QDialog):
         # Get the index for the saved audio setting and load it as the current
         # selection in the audio source list 
         i = self.ui.comboBox_audioSourceList.findText(self.core.config.audiosrc)
-        print self.core.config.audiosrc
         if not (i < 0): self.ui.comboBox_audioSourceList.setCurrentIndex(i)
 
         # Set up streaming - could be audio/video/both
