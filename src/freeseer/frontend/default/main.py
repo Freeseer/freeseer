@@ -458,9 +458,7 @@ class MainApp(QtGui.QMainWindow):
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
-            if self.isHidden():
-                self.show()
-            else: self.hide()
+            self.showMainWin()
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.ui.recordButton.toggle()
 
@@ -486,7 +484,10 @@ class MainApp(QtGui.QMainWindow):
     def showMainWin(self):
         if self.isHidden():
             self.show()
-        else: self.hide()
+            self.restoreGeometry(self.geometry)
+        else:
+            self.geometry = self.saveGeometry()
+            self.hide()
 
     def recContextM(self):
         if not self.ui.recordButton.isChecked():
