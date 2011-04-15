@@ -165,11 +165,10 @@ class MainApp(QtGui.QMainWindow):
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
         self.ui.recordButton.setFocus()
 
-        # TODO: uncomment this and fix the issue with setupLanguageMenu
         self.talkEditor = TalkEditorMainApp(self.core)
         self.configTool = ConfigTool(self.core)
         self.configTool.hide()
-	
+
     def setupLanguageMenu(self):
         #Add Languages to the Menu Ensure only one is clicked 
         self.langActionGroup.setExclusive(True)

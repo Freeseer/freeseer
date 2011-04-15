@@ -91,7 +91,7 @@ class DB_Connector():
         talk_titles = []
         
         self.cursor = self.db_connection.cursor()
-        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations ORDER BY Time''')
+        self.cursor.execute('''SELECT Speaker, Title, Room, Event, Time, Id FROM presentations ORDER BY Time ASC''')
 
         for row in self.cursor:
             speaker = row[0]
@@ -154,29 +154,31 @@ class DB_Connector():
         self.cursor = self.db_connection.cursor()
         if (event == "All"):
             if (room == "All"):
-                self.cursor.execute('''SELECT Speaker, Title, Room FROM presentations ORDER BY Id ASC''')
+                self.cursor.execute('''SELECT Speaker, Title FROM presentations ORDER BY Time ASC''')
+                
             else:
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Room=? ORDER BY Time''', [unicode(room)])
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title FROM presentations \
+                                       WHERE Room=? ORDER BY Time ASC''', [unicode(room)])
             
         else:
             if (room == "All"):
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Event=? ORDER BY Time''', [unicode(event)])
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title FROM presentations \
+                                       WHERE Event=? ORDER BY Time ASC''', [unicode(event)])
             else:
-                self.cursor.execute('''SELECT DISTINCT Speaker, Title, Room FROM presentations \
-                                       WHERE Event=? and Room=? ORDER BY Time''', [unicode(event), unicode(room)])
+                self.cursor.execute('''SELECT DISTINCT Speaker, Title FROM presentations \
+                                       WHERE Event=? and Room=? ORDER BY Time ASC''', [unicode(event), unicode(room)])
 
         # Prepare list to be returned
         for row in self.cursor:
             speaker = row[0]
             title = row[1]
-            room = row[2]
-
-            if (room == 'None'):
-                text = "%s - %s" % (speaker, title)	
-            else:
-                text = "%s - %s - %s" % (room, speaker, title)
+                 
+            if (speaker == ""):
+                text = "%s" % (title)
+            
+            else: 
+                text = "%s - %s" % (speaker, title)
+            
                 
             talks_matched.append(text)
 
@@ -189,10 +191,10 @@ class DB_Connector():
         
         self.cursor = self.db_connection.cursor()
         if(event == "All"):
-            self.cursor.execute('''SELECT DISTINCT Room FROM presentations ORDER BY Id ASC''')
+            self.cursor.execute('''SELECT DISTINCT Room FROM presentations ORDER BY Time ASC''')
         
         else:
-            self.cursor.execute('''SELECT DISTINCT Room FROM presentations WHERE Event=?''', [unicode(event)])
+            self.cursor.execute('''SELECT DISTINCT Room FROM presentations WHERE Event=? ORDER BY TIME ASC''', [unicode(event)])
             
         rooms_matched.append("All")
         
