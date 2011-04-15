@@ -301,12 +301,6 @@ class MainApp(QtGui.QMainWindow):
                         res = resolution
                         self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
             self.core.backend.disable_icecast_streaming()
-
-        # load auto hide setting and enable preview
-        if self.core.config.auto_hide == 'True':
-            self.autoHide =  True
-        else:
-            self.autoHide =  False
         
     def change_output_resolution(self):
         res = str(self.resolution)
@@ -366,10 +360,10 @@ class MainApp(QtGui.QMainWindow):
             self.core.record(self.current_presentation())    
             self.ui.recordButton.setText(self.tr('Stop'))
 
-            if (not self.autoHide):
-                self.statusBar().showMessage('recording...')
-            else:
+            if (self.core.config.auto_hide == True):
                 self.hide()
+                
+            self.statusBar().showMessage('recording...')
             self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
             

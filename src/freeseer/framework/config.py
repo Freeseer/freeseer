@@ -114,7 +114,7 @@ class Config:
             self.audiofb = config.get('lastrun', 'audio_feedback')
             self.key_rec = config.get('lastrun', 'shortkey_rec')
             self.key_stop = config.get('lastrun', 'shortkey_stop')
-            self.auto_hide = config.get('lastrun', 'auto_hide')
+            self.auto_hide = config.getboolean('lastrun', 'auto_hide')
             self.enable_streaming = config.get('lastrun', 'enable_streaming')
             self.enable_video_recoding = config.get('lastrun','enable_video_recoding')
             self.enable_audio_recoding = config.get('lastrun','enable_audio_recoding')
