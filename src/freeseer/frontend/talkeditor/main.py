@@ -289,11 +289,6 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         # send the changed signal to Freeseer
         self.emit(QtCore.SIGNAL('changed'))
         
-    def showMainWin(self):
-        if self.isHidden():
-            self.show()
-        else: self.hide()
-
     def closeEvent(self, event):
         self.core.logger.log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
