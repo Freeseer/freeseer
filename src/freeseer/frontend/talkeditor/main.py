@@ -106,6 +106,9 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.aboutDialog = AboutDialog()    
         self.ui.editTable.setColumnHidden(5, True)
         self.default_language = 'en';
+        
+        # Initialize geometry, to be used for restoring window positioning.
+        self.geometry = None
 
         # Only instantiate a new Core if we need to
         if core is not None:
@@ -293,6 +296,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         self.core.logger.log.info('Exiting talk database editor...')
+        self.geometry = self.saveGeometry()
         event.accept()
     
     def translateAction(self , action):

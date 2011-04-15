@@ -113,6 +113,9 @@ class MainApp(QtGui.QMainWindow):
         self.default_language = 'en';
         self.talks_to_save = []
         self.talks_to_delete = []
+        
+        # Initialize geometry, to be used for restoring window positioning.
+        self.geometry = None
 
         self.core = FreeseerCore(self)
         
@@ -537,9 +540,17 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.configTool, QtCore.SIGNAL("changed"),self.load_settings)
         self.configTool.show()
         
+        # Restore window positioning if one was saved.
+        if (self.configTool.geometry is not None):
+            self.configTool.restoreGeometry(self.configTool.geometry)
+        
     def run_talk_editor(self):
         self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
         self.talkEditor.show()
+        
+        # Restore window positioning if one was saved.
+        if (self.talkEditor.geometry is not None):
+            self.talkEditor.restoreGeometry(self.talkEditor.geometry)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

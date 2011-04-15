@@ -44,11 +44,15 @@ class ConfigTool(QtGui.QDialog):
         self.ui.setupUi(self)
         
         self.ui.groupBox_hardware.hide()
+        
+        # Initialize geometry, to be used for restoring window positioning.
+        self.geometry = None
 
         if core is not None:
             self.core = core
         else:
             self.core = FreeseerCore(self)
+            
         # get QT desktop to get screen size
         self.desktop = QtGui.QApplication.desktop()	
 
@@ -356,6 +360,10 @@ class ConfigTool(QtGui.QDialog):
         '''
         self.core.config.auto_hide = state
         self.core.logger.log.debug('Set auto hidden to: ' + str(state))
+    
+    ###
+    ### Widget Functions
+    ###
        
     def translateFile(self,file_ending):
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
@@ -364,6 +372,11 @@ class ConfigTool(QtGui.QDialog):
             self.ui.retranslateUi(self);
         else:
             print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
+
+    def closeEvent(self, event):
+        self.core.logger.log.info('Exiting config tool...')
+        self.geometry = self.saveGeometry()
+        event.accept()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
