@@ -293,5 +293,118 @@
  <resources>
   <include location="../../../framework/resources/resource.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>testButton</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>129</x>
+     <y>503</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>audioFeedbackCheckbox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>415</x>
+     <y>67</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>544</x>
+     <y>504</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>eventList</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>224</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>210</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>roomList</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>436</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>talkList</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>301</x>
+     <y>53</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>300</x>
+     <y>130</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>recordButton</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>505</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>56</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>testButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>audioFeedbackCheckbox</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>507</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>327</x>
+     <y>507</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

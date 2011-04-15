@@ -365,8 +365,6 @@ class MainApp(QtGui.QMainWindow):
 
             self.core.record(self.current_presentation())    
             self.ui.recordButton.setText(self.tr('Stop'))
-            self.ui.eventList.setEnabled(False)
-            self.ui.roomList.setEnabled(False)
 
             if (not self.autoHide):
                 self.statusBar().showMessage('recording...')
@@ -382,8 +380,6 @@ class MainApp(QtGui.QMainWindow):
             self.core.stop()
             self.ui.recordButton.setText(self.tr('Record'))
             self.ui.audioFeedbackSlider.setValue(0)
-            self.ui.eventList.setEnabled(True)
-            self.ui.roomList.setEnabled(True)
             self.statusBar().showMessage('ready')
 
     def test_sources(self, state):
