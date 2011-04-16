@@ -10,8 +10,8 @@
     </message>
     <message>
         <location filename="../freeseer/frontend/default/main.py" line="65"/>
-        <source>Copyright (C) 2010 The Free and Open Source Software Learning Centre</source>
-        <translation>Copyright (C) 2010 The Free and Open Source Software Learning Centre</translation>
+        <source>Copyright (C) 2011 The Free and Open Source Software Learning Centre</source>
+        <translation>Copyright (C) 2011 The Free and Open Source Software Learning Centre</translation>
     </message>
     <message>
         <location filename="../freeseer/frontend/default/main.py" line="66"/>

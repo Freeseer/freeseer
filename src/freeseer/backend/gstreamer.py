@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ import gst
 
 from freeseer.framework.backend_interface import *
 
-__version__=u'2.0.1'
+__version__=u'2.5.0'
 
 class Freeseer_gstreamer(BackendInterface):
     '''
