@@ -20,16 +20,15 @@
 
 ALL: gui
 
-gui: talkeditor_ui_qt.py resource_rc.py
+gui: freeseer_about.py resource_rc.py
 	@echo "Re-generated GUI"
 
-talkeditor_ui_qt.py: 
-	pyuic4 forms/talkeditor_ui_qt.ui -o talkeditor_ui_qt.py
+freeseer_about.py: 
+	pyuic4 forms/freeseer_about.ui -o freeseer_about.py
 
 resource_rc.py: 
-	pyrcc4 ../../framework/resources/resource.qrc -o resource_rc.py
+	pyrcc4 resources/resource.qrc -o resource_rc.py
 
-clean: 
-	rm -f resource_rc.py talkeditor_ui_qt.py *.pyc
-
+clean:
+	rm -f resource_rc.py freeseer_about.py *.pyc *~
 

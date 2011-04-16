@@ -27,18 +27,19 @@ from os import name;
 
 from PyQt4 import QtGui, QtCore
 
+from freeseer import project_info
 from freeseer.framework.core import *
 from freeseer.framework.presentation import *
+from freeseer.framework.freeseer_about import *
 from freeseer.frontend.talkeditor.main import *
 from freeseer.frontend.configtool.freeseer_configtool import *
 
 from freeseer_ui_qt import *
-from freeseer_about import *
 
-__version__=u'2.0.1'
+__version__= project_info.VERSION
 
-NAME=u'Freeseer'
-URL=u'http://github.com/fosslc/freeseer'
+NAME = project_info.NAME
+URL = project_info.URL
 RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
