@@ -30,7 +30,7 @@ import logging
 import logging.config
 import unicodedata
 
-
+from freeseer import project_info
 from freeseer.backend.gstreamer import *
 
 from config import Config
@@ -39,7 +39,7 @@ from db_connector import *
 from rss_parser import *
 from presentation import *
 
-__version__=u'2.5.0'
+__version__= project_info.VERSION
 
 class FreeseerCore:
     '''
