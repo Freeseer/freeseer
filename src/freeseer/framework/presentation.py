@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import os
+
 
 class Presentation():	
     '''
@@ -43,5 +43,5 @@ class Presentation():
         self.time = time
         self.room = room
         self.talk_id = talk_id
-	self.filename_id = filename_id
+        self.filename_id = filename_id
 

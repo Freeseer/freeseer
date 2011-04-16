@@ -20,19 +20,32 @@
 # Set the name of the executable here
 exec = run-freeseer
 
-ALL: gui
+ALL: gui talkEditor configtool
 	@echo "You can now run $(exec)"
 
 gui: 
 	cd freeseer/frontend/default; make
 	@echo "Re-generated GUI"
 
+talkEditor:
+	cd freeseer/frontend/talkeditor; make
+	@echo "Re-generated talk editor"
+
+configtool:
+	cd freeseer/frontend/configtool; make
+	@echo "Re-Generated configtool"
+
 clean_gui:
 	cd freeseer/frontend/default; make clean
+	cd freeseer/frontend/configtool; make clean
 	@echo "GUI files cleaned up"
 
-clean: clean_gui
+clean_talkEditor:
+	cd freeseer/frontend/talkeditor; make clean
+	@echo "talk editor cleaned up"
+
+clean: clean_gui clean_talkEditor
 	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
 
-test: ALL
+test: gui configtool talkEditor
 	./$(exec)

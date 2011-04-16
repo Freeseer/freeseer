@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -45,17 +45,38 @@ class Config:
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.resolution = '0x0' # no scaling for video
+
         self.videosrc = 'desktop'
         self.videodev = 'none'
         self.start_x = 0
         self.start_y = 0
         self.end_x = 0
         self.end_y = 0
-        self.audiosrc = 'none'
+        self.audiosrc = 'pulsesrc'
         self.audiofb = 'False'
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'
+        self.auto_hide = 'True'
+
+        self.enable_video_recoding = 'True'
+        self.enable_audio_recoding = 'True'
         
+        self.enable_streaming = 'False'
+        self.streaming_resolution = '0x0' #no scaling for streaming
+        self.streaming_mount = 'stream.ogv'
+        self.streaming_port = '8000'
+        self.streaming_password = 'hackme'
+        self.streaming_url = '127.0.0.1'
+
+        # Map of resolution names to the actual resolution (both stream and record)
+        # Names should include all options available in the GUI
+
+        self.resmap = { '240p':'320x240', 
+                        '360p':'480x360', 
+                        '480p':'640x480', 
+                        '720p':'1280x720', 
+                        '1080p':'1920x1080' }
+
         # Read in the config file
         self.readConfig()
         
@@ -93,6 +114,16 @@ class Config:
             self.audiofb = config.get('lastrun', 'audio_feedback')
             self.key_rec = config.get('lastrun', 'shortkey_rec')
             self.key_stop = config.get('lastrun', 'shortkey_stop')
+            self.auto_hide = config.getboolean('lastrun', 'auto_hide')
+            self.enable_streaming = config.get('lastrun', 'enable_streaming')
+            self.enable_video_recoding = config.get('lastrun','enable_video_recoding')
+            self.enable_audio_recoding = config.get('lastrun','enable_audio_recoding')
+            self.streaming_resolution = config.get('Global','streaming_resolution')
+            self.streaming_mount = config.get('lastrun','streaming_mount')
+            self.streaming_port = config.get('lastrun','streaming_port')
+            self.streaming_password = config.get('lastrun','streaming_password')
+            self.streaming_url = config.get('lastrun','streaming_url')
+
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -107,6 +138,7 @@ class Config:
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
+        config.set('Global','streaming_resolution',self.streaming_resolution)
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
         config.set('lastrun', 'video_device', self.videodev)
@@ -118,12 +150,19 @@ class Config:
         config.set('lastrun', 'audio_feedback', self.audiofb)
         config.set('lastrun', 'shortkey_rec', self.key_rec)
         config.set('lastrun', 'shortkey_stop', self.key_stop)
-                
+        config.set('lastrun', 'auto_hide', self.auto_hide)
+        config.set('lastrun', 'enable_streaming', self.enable_streaming)
+        config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
+        config.set('lastrun','enable_audio_recoding',self.enable_audio_recoding)
+        config.set('lastrun','streaming_mount',self.streaming_mount)
+        config.set('lastrun','streaming_port',self.streaming_port)
+        config.set('lastrun','streaming_password',self.streaming_password)
+        config.set('lastrun','streaming_url',self.streaming_url)
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
         except OSError:
-            print('freeseer directory exists.')
+            pass # directory exists.
         
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:

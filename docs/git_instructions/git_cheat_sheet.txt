@@ -55,3 +55,16 @@ To tell git you want to include a change for commit, use "git add <filename>". O
 You can always un-do a change at any time so commits are cheap and best practice to avoid losing work. To ensure your changes are backed up, be sure to commit often, and push.
 
 Everything you do is in your private sandbox (your fork) unless someone pulls it and pushes it elsewhere. Pull often to avoid big/many conflicts down the road.
+
+
+When you commit:
+
+To make our issue tracker more useful, and automatically update it when we fix something, please use the following in your commit messages:
+
+Closes #NN.
+
+Where NN is the number of the issue you fixed. This will automatically close the issue, and add a link to the commit that fixed it.
+
+For example:
+
+git commit -m "Fixed recording issue with vga2usb on Fedora 17 Linux. Closes #721"

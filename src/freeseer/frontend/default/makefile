@@ -18,34 +18,21 @@
 # from an XML definition file
 
 
-ALL: gui lib
+ALL: gui
 
 gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
 	@echo "Re-generated GUI"
 
-freeseer_ui_qt.py: forms/freeseer_ui_qt.ui
+freeseer_ui_qt.py: 
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
 
-freeseer_about.py: forms/freeseer_about.ui
+freeseer_about.py: 
 	pyuic4 forms/freeseer_about.ui -o freeseer_about.py
 
-resource_rc.py: forms/resource.qrc
-	pyrcc4 forms/resource.qrc -o resource_rc.py
+resource_rc.py: 
+	pyrcc4 ../../framework/resources/resource.qrc -o resource_rc.py
 
-lib: sipqxtglobalshortcutQxtGlobalShortcut.cpp sipqxtglobalshortcutQxtGlobalShortcut.o clean_globalshortcuts
-	@echo "Re-generated libraries"
-
-sipqxtglobalshortcutQxtGlobalShortcut.cpp: lib/qxtglobalshortcut.sip
-	sip -t Qt_4_4_1 -I /usr/share/sip/PyQt4 -t WS_X11 -c lib/. lib/qxtglobalshortcut.sip
-
-sipqxtglobalshortcutQxtGlobalShortcut.o: lib/config.py
-	cd lib; python config.py; make
-	mv lib/*.so .
-
-clean_globalshortcuts:
-	rm -f lib/Makefile lib/qxtglobalshortcutconfig.py lib/*.exp lib/*.sbf lib/sip*
-
-clean: clean_globalshortcuts
-	rm -f resource_rc.py freeseer_about.py freeseer_ui_qt.py qxtglobalshortcut.so *.pyc *~
+clean:
+	rm -f resource_rc.py freeseer_about.py freeseer_ui_qt.py *.pyc *~
 
 

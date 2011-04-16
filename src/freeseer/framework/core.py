@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,8 @@ import datetime
 import time
 import logging
 import logging.config
-import os
+import unicodedata
+
 
 from freeseer.backend.gstreamer import *
 
@@ -38,7 +39,7 @@ from db_connector import *
 from rss_parser import *
 from presentation import *
 
-__version__=u'2.0.0'
+__version__=u'2.5.0'
 
 class FreeseerCore:
     '''
@@ -56,111 +57,176 @@ class FreeseerCore:
 
         # Start Freeseer Recording Backend
         self.backend = Freeseer_gstreamer(self)
-        resolution = self.config.resolution.split('x')
+
+        # Find corresponding pixel resolution to name selected
+        if self.config.resolution in self.config.resmap:
+            res_temp = self.config.resmap[self.config.resolution]
+        else:
+            res_temp = self.config.resolution
+
+        resolution = res_temp.split('x')
         self.change_output_resolution(resolution[0], resolution[1])
 
         self.feedback = False
         self.spaces = False
       
         self.logger.log.info(u"Core initialized")   
-	
+
+
     def duplicate_exists(self, recordname):
-	'''
-	Checks to see if a record name already exists in the directory.
-	'''
-	filename = self.config.videodir + '/' + recordname
-	try:
-		result = open(filename, 'r')
-	except IOError:
-		return False
-	return True
+        '''
+        Checks to see if a record name already exists in the directory.
+        '''
+        filename = self.config.videodir + '/' + recordname
+        try:
+            result = open(filename, 'r')
+        except IOError:
+            return False
+        return True
+
 
     def get_record_name(self, presentation):
         '''
         Returns the filename to use when recording.
         '''
         recordname = self.make_record_name(presentation)
+                
+        count = 0
+        tempname = recordname
+        
+        # check if this record name already exists in this directory and add "-NN" ending if so.
+        while(self.duplicate_exists(tempname + ".ogg")):
+            tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+            count+=1
 
-	count = 0
-	tempname = recordname
-	# check if this record name already exists in this directory and add "-NN" ending if so.
-	while(self.duplicate_exists(tempname + ".ogg")):
-	    tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
-	    count+=1
-	
-	recordname = tempname + ".ogg"
+        recordname = tempname + ".ogg"
+                     
         self.logger.log.debug('Set record name to ' + recordname)        
-	return recordname
+        
+        return recordname
+
 
     def make_record_name(self, presentation):
         '''
-        Create an 'EVENT-TITLE-UNIQUE' record name
+        Create an 'EVENT-ROOM-SPEAKER-TITLE' record name
+        If any information is missing, we blank it out intelligently
+        And if we have nothing for some reason, we use "default"
         '''	
-	event = self.make_shortname(presentation.event)
-	title = self.make_shortname(presentation.title)
-	unique = self.make_id_from_string(presentation.filename_id)
- 
-	if(event == ""):
-		return title+"-"+unique
+        event = self.make_shortname(presentation.event)
+        title = self.make_shortname(presentation.title)
+        room = self.make_shortname(presentation.room)
+        speaker = self.make_shortname(presentation.speaker)
 
-	return event+"-"+title+"-"+unique
+        recordname=""
+            
+        if(event!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+event
+            else:
+                recordname=event
+        
+        if(room!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+room
+            else:
+                recordname=room
+        
+        if(speaker!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+speaker
+            else:
+                recordname=speaker
+                
+        if(title!=""):
+            if(recordname!=""):
+                recordname=recordname+"-"+title
+            else:
+                recordname=title
+           
+        # Convert unicode filenames to their equivalent ascii so that
+        # we don't run into issues with gstreamer or filesystems
+        recordname=unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
+                
+        if(recordname!=""):
+            return recordname
+                    
+        return "default"
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
-       	'''
-	Returns an "NN" id given an integer and a string of valid characters for the id
-	('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
-	'''	
-	index1 = position % string.__len__()
-	index0 = int( position / string.__len__() )
+        '''
+        Returns an "NN" id given an integer and a string of valid characters for the id
+        ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
+        '''
+        index1 = position % string.__len__()
+        index0 = int( position / string.__len__() )
 
-	if(index0 >= string.__len__() ):
-		self.logger.log.debug('WARNING: Unable to generate unique filename.')
-		# Return a unique 2 character string which will not overwrite previous files.
-		# There is a possibility of infinite looping on testing duplicates once
-		# all possible UNIQUE's and NN's are exhausted if all the files are kept 
-		# in the same directory.
-		# (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
-		return "##" 
+        if(index0 >= string.__len__() ):
+            self.logger.log.debug('WARNING: Unable to generate unique filename.')
+            # Return a unique 2 character string which will not overwrite previous files.
+            # There is a possibility of infinite looping on testing duplicates once
+            # all possible UNIQUE's and NN's are exhausted if all the files are kept 
+            # in the same directory.
+            # (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
+            return "##" 
 
-	return string[index0]+string[index1]
+        return string[index0]+string[index1]
 
-    def make_shortname(self, string):
-	'''
-	Returns the first four characters of a string, excluding spaces.
-	'''
-	string = string.replace(" ", "")
-	return string[0:4].upper()
+
+    def make_shortname(self, providedString):
+        '''
+        Returns the first 6 characters of a string.
+        Strip out non alpha-numeric characters, spaces, and most punctuation
+        '''
+                
+        bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
+        providedString="".join(ch for ch in providedString if ch not in bad_chars)
+        return providedString[0:6].upper()
 
     ##
     ## Database Functions
     ##
     def get_talk_titles(self):
         return self.db.get_talk_titles()
+
         
     def get_talk_rooms(self):
         return self.db.get_talk_rooms()
+
     
     def get_talk_events(self):
         return self.db.get_talk_events()
 
+
     def filter_talks_by_event_room(self, event, room):
         return self.db.filter_talks_by_event_room(event, room)
 
+    
+    def filter_rooms_by_event(self,evento):
+        return self.db.filter_rooms_by_event(evento)
+
+
     def get_presentation_id_by_selected_title(self, title):
-    	'''
-    	Obtains a presentation ID given a title string from the GUI
-    	'''
-	# Run a database query as if we have selected "All" Events "All" Rooms,
-        # and check the index of the title string in this list, this corresponds
-	# to the presentation id in the database. (If we add 1 to this index)
-	# NOTE: This method of obtaining the presentation id relies on the GUI
-	#	using the method: filter_talks_by_event_room() to populate it's 
-	#	talk list, since we are comparing strings created by this method.
-	talkTitles = self.db.filter_talks_by_event_room("All", "All")
-	return talkTitles.index(title) + 1
-	
+        '''
+        Obtains a presentation ID given a title string from the GUI
+        '''
+        # Run a database query as if we have selected "All" Events "All" Rooms,
+        # and then run a database query to retrieve the talk IDs for the list of
+        # "All" Events "All" Rooms.
+        # Locate the index of the talk using the talk title, and get the
+        # corresponding talk ID from the list of talk IDs.
+        # NOTE: This method of obtaining the presentation id relies on the GUI
+        #	using the method: filter_talks_by_event_room() to populate it's 
+        #	talk list, since we are comparing strings created by this method.
+        talkTitles = self.db.filter_talks_by_event_room("All", "All")
+
+        talksIds = self.db.get_talks_ids()
+        talkIndex = talkTitles.index(title)
+
+        return talksIds[talkIndex]
+
     def get_presentation(self, presentation_id):
-	return self.db.get_presentation(presentation_id)
+        return self.db.get_presentation(presentation_id)
+
 
     def add_talks_from_rss(self, rss):
         entry = str(rss)
@@ -182,6 +248,7 @@ class FreeseerCore:
                 if not self.db.db_contains(talk):
                     self.add_talk(talk)
 
+
     def get_presentation_id(self, presentation):
         talk_id = self.db.get_presentation_id(presentation)
         self.logger.log.debug('Found presentation id for %s - %s. ID: %s',
@@ -190,21 +257,26 @@ class FreeseerCore:
                                 talk_id)
         return talk_id
 
+
     def add_talk(self, presentation):
         self.db.add_talk(presentation)
         self.logger.log.debug('Talk added: %s - %s', presentation.speaker, presentation.title)
+
         
-    def update_talk(self, talk_id, speaker, title, room):
-        self.db.update_talk(talk_id, speaker, title, room)
+    def update_talk(self, talk_id, speaker, title, room, event, dateTime):
+        self.db.update_talk(talk_id, speaker, title, room, event, dateTime)
         self.logger.log.debug('Talk updated: %s - %s', speaker, title)
+
         
     def delete_talk(self, talk_id):
         self.db.delete_talk(talk_id)
         self.logger.log.debug('Talk deleted: %s', talk_id)
 
+
     def clear_database(self):
         self.db.clear_database()
         self.logger.log.debug('Database cleared!')
+
 
     ##
     ## Backend Functions
@@ -216,6 +288,7 @@ class FreeseerCore:
         vidsrcs = self.backend.get_video_sources()
         self.logger.log.debug('Available video sources: ' + str(vidsrcs))
         return vidsrcs
+
         
     def get_video_devices(self, device_type):
         '''
@@ -224,6 +297,7 @@ class FreeseerCore:
         viddevs = self.backend.get_video_devices(device_type)
         self.logger.log.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
         return viddevs
+
     
     def get_audio_sources(self):
         '''
@@ -232,6 +306,7 @@ class FreeseerCore:
         sndsrcs = self.backend.get_audio_sources()
         self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
         return sndsrcs
+
 
     def set_video_mode(self, mode):
         '''
@@ -244,6 +319,7 @@ class FreeseerCore:
             self.logger.log.info('Video recording: DISABLED')
             
         self.backend.set_video_mode(mode)
+
         
     def change_videosrc(self, vid_source, vid_device):
         '''
@@ -252,8 +328,10 @@ class FreeseerCore:
         self.backend.change_video_source(vid_source, vid_device)
         self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
 
+
     def set_record_area(self, enabled):
         self.backend.set_record_area(enabled)
+
 
     def set_recording_area(self, x1, y1, x2, y2):
         # gstreamer backend needs to have the lower x/y coordinates
@@ -269,9 +347,27 @@ class FreeseerCore:
             else:
                 self.backend.set_recording_area(x1, y1, x2, y2)
 
+
     def change_output_resolution(self, width, height):
         self.backend.change_output_resolution(width, height)
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
+
+
+    def change_stream_resolution(self, width, height):
+        '''
+        Change the stream resolution.
+        '''
+        # resolution should be text from list, i.e. 360p
+        # map this to the appropriate numeric resolution if possible (i.e. 480x360)
+        if self.config.resolution in self.config.resmap:
+            res_temp = self.config.resmap[self.config.resolution]
+        else:       # if the text is not in resmap, assume it is already numeric
+            res_temp = self.config.resolution
+
+        rec_res = res_temp.split('x')
+        self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
+        self.logger.log.debug('Video stream resolution changed to ' + str(width) + 'x' + str(height))
+
 
     def set_audio_mode(self, mode):
         '''
@@ -285,11 +381,13 @@ class FreeseerCore:
 
         self.backend.set_audio_mode(mode)
 
+
     def change_soundsrc(self, snd_source):
         '''
         Informs backend of new audio source to use when recording.
         '''
         return self.backend.change_audio_source(snd_source)
+
 
     def test_sources(self, state, video=False, audio=False):
         if state == True:
@@ -297,30 +395,31 @@ class FreeseerCore:
         else:
             self.backend.test_feedback_stop()
 
+
     def prepare_metadata(self, presentation):
-	'''
-	Returns a dictionary of tags and tag values to be used
-	to populate the current recording's file metadata.
-	'''
-	return { "title" : presentation.title,
-		 "artist" : presentation.speaker,
-		 "performer" : presentation.speaker,
-		 "album" : presentation.event,
-		 "location" : presentation.room,
-		 "date" : str(datetime.date.today()),
-		 "comment" : presentation.description}
+        '''
+        Returns a dictionary of tags and tag values to be used
+        to populate the current recording's file metadata.
+        '''
+        return { "title" : presentation.title,
+                 "artist" : presentation.speaker,
+                 "performer" : presentation.speaker,
+                 "album" : presentation.event,
+                 "location" : presentation.room,
+                 "date" : str(datetime.date.today()),
+                 "comment" : presentation.description}
+
 
     def record(self, presentation):
         '''
         Informs backend to begin recording presentation.
         '''
-	
-	#create a filename to record to
+        #create a filename to record to
         record_name = self.get_record_name(presentation)
 
-	#prepare metadata
-	data = self.prepare_metadata(presentation)
-	self.backend.populate_metadata(data)
+        #prepare metadata
+        data = self.prepare_metadata(presentation)
+        self.backend.populate_metadata(data)
 
         record_location = os.path.abspath(self.config.videodir + '/' + record_name)
         self.backend.record(record_location)
@@ -333,6 +432,7 @@ class FreeseerCore:
         self.backend.stop()
         self.logger.log.info('Recording stopped')
 
+
     def test_feedback(self, video, audio):
         if self.feedback:
             self.feedback = False
@@ -340,6 +440,7 @@ class FreeseerCore:
         else:
             self.feedback = True
             self.backend.test_feedback_start(video, audio)
+
             
     def preview(self, enable=False, window_id=None):
         '''
@@ -352,6 +453,7 @@ class FreeseerCore:
             self.backend.disable_video_feedback()
             self.logger.log.info('Video Preview Deactivated')
 
+
     def audioFeedback(self, enable=False):
         '''
         Enable/Disable the audio preview.
@@ -359,9 +461,10 @@ class FreeseerCore:
         if enable == True:
             self.backend.enable_audio_feedback()
             self.logger.log.info('Audio Feedback Activated')
-	else:
+        else:
             self.backend.disable_audio_feedback()
             self.logger.log.info('Audio Feedback Deactivated')
+
 
     def audioFeedbackEvent(self, percent):
         event_type = 'audio_feedback'

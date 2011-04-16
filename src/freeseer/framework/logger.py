@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2010  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -73,10 +73,17 @@ class Logger():
         config.set('handler_consoleHandler', 'args', '(sys.stdout,)')
         
         config.add_section('handler_syslogHandler')
-        config.set('handler_syslogHandler', 'class', 'handlers.SysLogHandler')
         config.set('handler_syslogHandler', 'level', 'NOTSET')
-        config.set('handler_syslogHandler', 'formatter', 'nix')
-        config.set('handler_syslogHandler', 'args', "(('/dev/log'), handlers.SysLogHandler.LOG_USER)")
+        if os.name == 'posix':
+            config.set('handler_syslogHandler', 'class', 'handlers.SysLogHandler')
+            config.set('handler_syslogHandler', 'formatter', 'nix')
+            config.set('handler_syslogHandler', 'args', "(('/dev/log'), handlers.SysLogHandler.LOG_USER)")
+        elif os.name == 'nt':
+            config.set('handler_syslogHandler', 'class', 'handlers.NTEventLogHandler')
+            config.set('handler_syslogHandler', 'formatter', 'nix')
+            config.set('handler_syslogHandler', 'args', "('Freeseer', '', 'Application')")
+        else:
+            pass # Unsupported
         
         config.add_section('formatter_basic')
         config.set('formatter_basic', 'format', '%(asctime)s freeseer: <%(levelname)s> %(message)s')

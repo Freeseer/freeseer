@@ -1,3 +1,4 @@
+
 Freeseer is a video capture program capable of capturing desktop or vga
 input and mixing it with audio to create a video. It is optimized
 for capturing presentations and demonstrations at conferences.
@@ -41,12 +42,33 @@ Distros with no libQxt:
 
 -------------------------------------------------------------------------
 
+Windows Support
+
+To run on windows you will require the following packages:
+
+Python: python-2.6.6
+Gstreamer: GStreamer-WinBuilds-GPL-x86 and GStreamer-WinBuilds-SDK-GPL-x86
+PyQt: PyQt-Py2.6-x86-gpl-4.8.3-1
+PyGTK: pygtk-all-in-one-2.22.6.win32-py2.6
+Feedparser: feedparser-5.0.1
+cmake: cmake-2.8.4-win32-x86
+
+NOTE: While most of the version numbers are recommendations. Python does need to be the 2.6 version.
+
+You will also want to add the following paths to your PATH variable:
+C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+
+-------------------------------------------------------------------------
+
 Once you have the prerequisite componets, build freeseer by changing
-directory into the src directory, and run:
-    "make"
+directory into the freeseer directory (above src directory), and run:
+    "mkdir build; cd build; cmake .."
+
+    NOTE: If you are running on windows you will need an additional option
+          for cmake to work. You can run 'cmake -G "MinGW Makefiles" ..'
 
 This will compile the gui files. Once this completes, you can run:
-    "./freeseer"
+    "./run-freeseer"
 
 This starts up the Freeseer GUI.
 
