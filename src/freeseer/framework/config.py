@@ -146,8 +146,6 @@ class Config:
         config.set('lastrun', 'area_end_y', self.end_y)
         config.set('lastrun', 'audio_source', self.audiosrc)
         config.set('lastrun', 'audio_feedback', self.audiofb)
-        config.set('lastrun', 'shortkey_rec', self.key_rec)
-        config.set('lastrun', 'shortkey_stop', self.key_stop)
         config.set('lastrun', 'auto_hide', self.auto_hide)
         config.set('lastrun', 'enable_streaming', self.enable_streaming)
         config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
