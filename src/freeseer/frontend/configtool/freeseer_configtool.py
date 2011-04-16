@@ -243,7 +243,7 @@ class ConfigTool(QtGui.QDialog):
     def load_settings(self):
     
         # Set up Video
-        if self.core.config.enable_video_recoding == 'False':
+        if self.core.config.enable_video_recoding == False:
             self.ui.groupBox_videoSource.setChecked(False)
         else:
             self.ui.groupBox_videoSource.setChecked(True)
@@ -275,7 +275,7 @@ class ConfigTool(QtGui.QDialog):
             self.ui.radioButton_firewiresrc.setChecked(True)
          
         # Set up Audio
-        if self.core.config.enable_audio_recoding == 'False':
+        if self.core.config.enable_audio_recoding == False:
             self.ui.groupBox_soundSource.setChecked(False)
         else:
             self.ui.groupBox_soundSource.setChecked(True)
@@ -286,7 +286,7 @@ class ConfigTool(QtGui.QDialog):
         if not (i < 0): self.ui.comboBox_audioSourceList.setCurrentIndex(i)
 
         # Set up streaming - could be audio/video/both
-        if self.core.config.enable_streaming == 'False':
+        if self.core.config.enable_streaming == False:
             self.ui.groupBox_streaming.setChecked(False)
         else:
             self.ui.groupBox_streaming.setChecked(True)
