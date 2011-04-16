@@ -161,7 +161,7 @@ class MainApp(QtGui.QMainWindow):
         self.core.preview(True, self.ui.previewWidget.winId())
 
         # setup default sources
-        if (self.core.config.audiofb == 'True'):
+        if (self.core.config.audiofb == True):
             self.ui.audioFeedbackCheckbox.toggle()
 
         # setup spacebar key
@@ -285,7 +285,7 @@ class MainApp(QtGui.QMainWindow):
             # load streaming resolution
             self.streaming_resolution =  self.core.config.streaming_resolution
             self.change_streaming_resolution()
-            if self.core.config.enable_streaming == 'True': # == True and self.core.config.streaming_resolution != "0x0":
+            if self.core.config.enable_streaming == True: # == True and self.core.config.streaming_resolution != "0x0":
                 url = str(self.core.config.streaming_url)
                 port = str(self.core.config.streaming_port)
                 mount = str(self.core.config.streaming_mount)
@@ -333,7 +333,7 @@ class MainApp(QtGui.QMainWindow):
     def toggle_audio_feedback(self):
         if (self.ui.audioFeedbackCheckbox.isChecked()):
             self.core.audioFeedback(True)
-            self.core.config.audiofb = 'True'
+            self.core.config.audiofb = True
             self.core.config.writeConfig()
             return
         self.core.config.audiofb = 'False'
