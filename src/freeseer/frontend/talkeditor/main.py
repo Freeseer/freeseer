@@ -28,8 +28,9 @@ from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.presentation import *
 from freeseer.framework.core import *
+from freeseer.framework.freeseer_about import *
+
 from talkeditor_ui_qt import *
-from talkeditor_about import *
 
 __version__ = u'1.9.7'
 
@@ -45,7 +46,7 @@ class AboutDialog(QtGui.QDialog):
 
     def __init__(self):
         QtGui.QDialog.__init__(self)
-        self.ui = Ui_TalkEditorAbout()
+        self.ui = Ui_FreeseerAbout()
         self.ui.setupUi(self)
         self.translate();
 

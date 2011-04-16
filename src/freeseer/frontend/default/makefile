@@ -20,19 +20,16 @@
 
 ALL: gui
 
-gui: freeseer_ui_qt.py freeseer_about.py resource_rc.py
+gui: freeseer_ui_qt.py resource_rc.py
 	@echo "Re-generated GUI"
 
 freeseer_ui_qt.py: 
 	pyuic4 forms/freeseer_ui_qt.ui -o freeseer_ui_qt.py
 
-freeseer_about.py: 
-	pyuic4 forms/freeseer_about.ui -o freeseer_about.py
-
 resource_rc.py: 
 	pyrcc4 ../../framework/resources/resource.qrc -o resource_rc.py
 
 clean:
-	rm -f resource_rc.py freeseer_about.py freeseer_ui_qt.py *.pyc *~
+	rm -f resource_rc.py freeseer_ui_qt.py *.pyc *~
 
 
