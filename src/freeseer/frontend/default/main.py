@@ -362,7 +362,7 @@ class MainApp(QtGui.QMainWindow):
             self.core.record(self.current_presentation())    
             self.ui.recordButton.setText(self.tr('Stop'))
             # check if auto-hide is set and if so hide
-            if(self.core.config.auto_hide == 'True'):
+            if(self.core.config.auto_hide == True):
                 self.hide_window()
             self.statusBar().showMessage('recording...')
             self.core.config.videosrc = self.videosrc
