@@ -1,3 +1,19 @@
+Differences in 2.5.0
+- Added streaming support to icecast!!
+- We now support Windows!
+- setup functionality updated to enable packaging for Linux/Windows
+- Windows now remember their position.
+- Config tool is now a separate tool from the recording tool.
+- Talk editor is now a separate tool from the recording tool.
+- Talks are now sorted by time.
+- A shortened version of Event, Room, Speaker, Title is now used to calculate filenames.
+- Test button is disabled during recording.
+- Talk/Event/Room drop downs are disabled during recording.
+- Fixed quite a few indendation problems.
+- Added support for cmake in addition to make to compile GUI screens.
+- Removed hotkey code and dependency on libqxt.
+
+
 Differences in 2.0.1
 - Encode unicode characters to ascii since gstreamer doesn't support unicode
 - Disable the talk/event/room drop down lists when recording
