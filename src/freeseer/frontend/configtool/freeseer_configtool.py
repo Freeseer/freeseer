@@ -302,7 +302,7 @@ class ConfigTool(QtGui.QDialog):
                 self.ui.comboBox_streamingQualityList.setCurrentIndex(streaming_resolution)
 
         # Load Extra Settings Tab Infos
-        if self.core.config.auto_hide == 'True':
+        if self.core.config.auto_hide == True:
             self.ui.checkbox_autoHide.setChecked(True)
         else:
             self.ui.checkbox_autoHide.setChecked(False)
