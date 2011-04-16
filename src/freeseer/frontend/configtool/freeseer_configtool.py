@@ -265,7 +265,6 @@ class ConfigTool(QtGui.QDialog):
        
         if (self.core.config.videodev == 'local area'):
             self.ui.radioButton_recordLocalArea.setChecked(True)
-            self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
         
         elif (self.core.config.videosrc == 'usb'):
             self.ui.radioButton_hardware.setChecked(True)

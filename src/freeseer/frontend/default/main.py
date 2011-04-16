@@ -495,7 +495,8 @@ class MainApp(QtGui.QMainWindow):
 
 
     def show_window(self):
-        self.restoreGeometry(self.geometry)
+        if (self.geometry is not None):
+            self.restoreGeometry(self.geometry)
         self.show()  
         
         
