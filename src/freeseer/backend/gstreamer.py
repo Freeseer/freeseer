@@ -30,9 +30,10 @@ import pygst
 pygst.require("0.10")
 import gst
 
+from freeseer import project_info
 from freeseer.framework.backend_interface import *
 
-__version__=u'2.5.0'
+__version__= project_info.VERSION
 
 class Freeseer_gstreamer(BackendInterface):
     '''

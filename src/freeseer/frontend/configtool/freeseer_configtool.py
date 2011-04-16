@@ -27,9 +27,12 @@ from sys import *
 
 from PyQt4 import QtGui, QtCore
 
+from freeseer import project_info
 from freeseer.framework.qt_area_selector import *
 from freeseer.framework.core import *
 from freeseer_configtool_ui import *
+
+__version__ = project_info.VERSION
 
 LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
 
