@@ -139,7 +139,7 @@ class MainApp(QtGui.QMainWindow):
         recordCM = self.systray.menu.addAction("Record")
         stopCM = self.systray.menu.addAction("Stop")
         self.systray.setContextMenu(self.systray.menu)
-        self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.showMainWin)
+        self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.toggle_window_visibility)
         self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
         self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
@@ -361,10 +361,7 @@ class MainApp(QtGui.QMainWindow):
 
             self.core.record(self.current_presentation())    
             self.ui.recordButton.setText(self.tr('Stop'))
-
-            if (self.core.config.auto_hide == True):
-                self.hide()
-                
+            self.toggle_window_visibility() 
             self.statusBar().showMessage('recording...')
             self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
@@ -377,6 +374,7 @@ class MainApp(QtGui.QMainWindow):
             self.ui.recordButton.setText(self.tr('Record'))
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
+            self.toggle_window_visibility()
 
     def test_sources(self, state):
         # Test video and audio sources
@@ -467,7 +465,7 @@ class MainApp(QtGui.QMainWindow):
         self.area_selector = QtAreaSelector(self)
         self.area_selector.show()
         self.core.logger.log.info('Desktop area selector started.')
-        self.hide()
+        self.toggle_window_visibility()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
         self.start_x = self.core.config.start_x = start_x
@@ -480,17 +478,19 @@ class MainApp(QtGui.QMainWindow):
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
-            self.showMainWin()
+            self.toggle_window_visibility()
+            
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.ui.recordButton.toggle()
 
-    def showMainWin(self):
+    def toggle_window_visibility(self):
         if self.isHidden():
             self.show()
             self.restoreGeometry(self.geometry)
         else:
             self.geometry = self.saveGeometry()
-            self.hide()
+            if (self.core.config.auto_hide == True):
+                self.hide()
 
     def recContextM(self):
         if not self.ui.recordButton.isChecked():

@@ -223,7 +223,7 @@ class FreeseerCore:
         talkIndex = talkTitles.index(title)
 
         return talksIds[talkIndex]
-	
+
     def get_presentation(self, presentation_id):
         return self.db.get_presentation(presentation_id)
 
