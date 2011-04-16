@@ -26,16 +26,17 @@ from os import listdir;
 
 from PyQt4 import QtGui, QtCore
 
+from freeseer import project_info
 from freeseer.framework.presentation import *
 from freeseer.framework.core import *
 from freeseer.framework.freeseer_about import *
 
 from talkeditor_ui_qt import *
 
-__version__ = u'1.9.7'
+__version__ = project_info.VERSION
 
-NAME = u'Freeseer Talk Database Editor'
-URL = u'http://github.com/fosslc/freeseer'
+NAME = project_info.NAME
+URL = project_info.VERSION
 LANGUAGE_DIR = 'freeseer/frontend/talkeditor/languages/'
 
 
