@@ -361,7 +361,9 @@ class MainApp(QtGui.QMainWindow):
 
             self.core.record(self.current_presentation())    
             self.ui.recordButton.setText(self.tr('Stop'))
-            self.toggle_window_visibility() 
+            # check if auto-hide is set and if so hide
+            if(self.core.config.auto_hide == True):
+                self.hide_window()
             self.statusBar().showMessage('recording...')
             self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
@@ -374,7 +376,9 @@ class MainApp(QtGui.QMainWindow):
             self.ui.recordButton.setText(self.tr('Record'))
             self.ui.audioFeedbackSlider.setValue(0)
             self.statusBar().showMessage('ready')
-            self.toggle_window_visibility()
+            # for stop recording, we'll keep whatever window state
+            # we have - hidden or showing
+            
 
     def test_sources(self, state):
         # Test video and audio sources
@@ -465,7 +469,7 @@ class MainApp(QtGui.QMainWindow):
         self.area_selector = QtAreaSelector(self)
         self.area_selector.show()
         self.core.logger.log.info('Desktop area selector started.')
-        self.toggle_window_visibility()
+        self.hide_window()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
         self.start_x = self.core.config.start_x = start_x
@@ -474,23 +478,31 @@ class MainApp(QtGui.QMainWindow):
         self.end_y = self.core.config.end_y = end_y
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
         self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
-        self.show()
+        self.show_window()
 
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
-            self.toggle_window_visibility()
+            self.hide_window() 
+            
             
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.ui.recordButton.toggle()
 
+    def hide_window(self):
+        self.geometry = self.saveGeometry()
+        self.hide()
+
+
+    def show_window(self):
+        self.restoreGeometry(self.geometry)
+        self.show()  
+        
+        
     def toggle_window_visibility(self):
         if self.isHidden():
-            self.show()
-            self.restoreGeometry(self.geometry)
+            self.show_window()
         else:
-            self.geometry = self.saveGeometry()
-            if (self.core.config.auto_hide == True):
-                self.hide()
+            self.hide_window()
 
     def recContextM(self):
         if not self.ui.recordButton.isChecked():
@@ -506,8 +518,8 @@ class MainApp(QtGui.QMainWindow):
 
     def closeEvent(self, event):
         self.core.logger.log.info('Exiting freeseer...')
-        #self.core.stop()
         event.accept()
+        
 
     def translateAction(self ,action):
         '''
