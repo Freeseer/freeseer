@@ -52,7 +52,7 @@ class Config:
         self.start_y = 0
         self.end_x = 0
         self.end_y = 0
-        self.audiosrc = 'pulsesrc'
+        self.audiosrc = 'none'
         self.audiofb = 'False'
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'

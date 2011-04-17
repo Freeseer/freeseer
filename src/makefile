@@ -51,5 +51,5 @@ clean_talkEditor:
 clean: clean_gui clean_talkEditor
 	rm -f freeseer/*.pyc freeseer/*/*.pyc freeseer/*/*~
 
-test: gui configtool talkEditor
+test: ALL
 	./$(exec)

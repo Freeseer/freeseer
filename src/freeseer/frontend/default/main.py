@@ -232,7 +232,7 @@ class MainApp(QtGui.QMainWindow):
         self.core.config.readConfig()
 
         #load enable_video_recoding setting
-        if self.core.config.enable_video_recoding == 'False':
+        if self.core.config.enable_video_recoding == False:
             self.core.set_video_mode(False)
         else:
             self.core.set_video_mode(True)
@@ -268,7 +268,7 @@ class MainApp(QtGui.QMainWindow):
                         self.core.logger.log.debug('Can NOT find video device: '+ dev)
 
             #load audio setting
-            if self.core.config.enable_audio_recoding == 'False':
+            if self.core.config.enable_audio_recoding == False:
                 self.core.set_audio_mode(False)
             else:
                 self.core.set_audio_mode(True)
@@ -337,7 +337,7 @@ class MainApp(QtGui.QMainWindow):
             self.core.config.audiofb = True
             self.core.config.writeConfig()
             return
-        self.core.config.audiofb = 'False'
+        self.core.config.audiofb = False
         self.core.audioFeedback(False)
         self.core.config.writeConfig()
 
@@ -495,7 +495,8 @@ class MainApp(QtGui.QMainWindow):
 
 
     def show_window(self):
-        self.restoreGeometry(self.geometry)
+        if (self.geometry is not None):
+            self.restoreGeometry(self.geometry)
         self.show()  
         
         
