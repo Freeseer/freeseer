@@ -316,7 +316,8 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
         if self.core.config.resolution == 'NONE':
             self.core.config.resolution = '0x0'
-            self.core.config.streaming_resolution = str(self.ui.comboBox_streamingQualityList.currentText())
+        
+        self.core.config.streaming_resolution = str(self.ui.comboBox_streamingQualityList.currentText())
         
         if self.core.config.streaming_resolution == 'NONE':
             self.core.config.streaming_resolution = '0x0'

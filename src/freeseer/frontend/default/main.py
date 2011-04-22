@@ -299,11 +299,12 @@ class MainApp(QtGui.QMainWindow):
                     
                     if resolution in self.core.config.resmap:
                         res = self.core.config.resmap[resolution]
-                        self.core.backend.disable_icecast_streaming()
+                        #self.core.backend.disable_icecast_streaming()
                     else:
                         res = resolution
-                        self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
-            self.core.backend.disable_icecast_streaming()
+                    self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
+            else:
+                self.core.backend.disable_icecast_streaming()
         
     def change_output_resolution(self):
         res = str(self.resolution)
