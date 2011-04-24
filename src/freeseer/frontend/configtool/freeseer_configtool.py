@@ -105,8 +105,9 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_mount)
         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_password)
         
-        # connections for Extra setting -> auto hidden
+        # connections for Extra setting -> auto hidden and delay recording
         self.connect(self.ui.checkbox_autoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
+        self.connect(self.ui.lineEdit_delayRecording, QtCore.SIGNAL('toggled(bool)'), self.change_delay_recording)
 
         # connections for Extra Settings > File Locations
         self.connect(self.ui.pushButton_open, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
@@ -223,6 +224,11 @@ class ConfigTool(QtGui.QDialog):
         self.core.config.streaming_url = str(self.ui.lineEdit_URL_IP.text())
         #self.core.logger.log.debug('set streaming url to: ' + self.core.config.streaming_url)
 
+    def change_delay_recording(self):	
+        # TODO: add input validation to make sure the value is actually numeric
+        # it also might make sense to cast to float here
+        self.core.config.delay_recording = str(self.ui.lineEdit_delayRecording.text())
+
     def change_streaming_port(self):	
         self.core.config.streaming_port = str(self.ui.lineEdit_port.text())
         #self.core.logger.log.debug('set streaming port to: ' + self.core.config.streaming_port)
@@ -309,11 +315,16 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.ui.checkbox_autoHide.setChecked(False)
 
+        self.ui.lineEdit_delayRecording.setText(self.core.config.delay_recording)
+
         self.ui.lineEdit_videoDirectory.setText(self.core.config.videodir)
 
     def save_settings(self):
+        # Read the values from the GUI so they save to disk
         self.core.config.videodir = str(self.ui.lineEdit_videoDirectory.text())
         self.core.config.resolution = str(self.ui.comboBox_videoQualityList.currentText())
+        self.core.config.delay_recording = str(self.ui.lineEdit_delayRecording.text())
+
         if self.core.config.resolution == 'NONE':
             self.core.config.resolution = '0x0'
         

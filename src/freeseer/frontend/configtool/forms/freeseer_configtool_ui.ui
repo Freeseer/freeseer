@@ -33,7 +33,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -598,65 +598,94 @@ v4l2src does not work.</string>
            <bool>true</bool>
           </property>
          </widget>
+         <widget class="QGroupBox" name="groupBox_location">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>90</y>
+            <width>571</width>
+            <height>246</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Location</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <layout class="QGridLayout" name="gridLayout_Location">
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_videoDirectory">
+               <property name="text">
+                <string>&amp;Video Directory</string>
+               </property>
+               <property name="indent">
+                <number>15</number>
+               </property>
+               <property name="buddy">
+                <cstring>lineEdit_videoDirectory</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLineEdit" name="lineEdit_videoDirectory"/>
+             </item>
+             <item row="0" column="4">
+              <widget class="QToolButton" name="pushButton_open">
+               <property name="text">
+                <string>Browse</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>340</y>
+            <width>571</width>
+            <height>151</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Delay Recording</string>
+          </property>
+          <widget class="QLineEdit" name="lineEdit_delayRecording">
+           <property name="geometry">
+            <rect>
+             <x>260</x>
+             <y>50</y>
+             <width>91</width>
+             <height>25</height>
+            </rect>
+           </property>
+          </widget>
+          <widget class="QLabel" name="label_2">
+           <property name="geometry">
+            <rect>
+             <x>120</x>
+             <y>50</y>
+             <width>131</width>
+             <height>21</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Seconds to delay</string>
+           </property>
+          </widget>
+         </widget>
         </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_location">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Location</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
-          <item>
-           <layout class="QGridLayout" name="gridLayout_Location">
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <item row="0" column="2">
-             <widget class="QToolButton" name="pushButton_open">
-              <property name="text">
-               <string>&amp;Open</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_videoDirectory">
-              <property name="text">
-               <string>&amp;Video Directory</string>
-              </property>
-              <property name="indent">
-               <number>15</number>
-              </property>
-              <property name="buddy">
-               <cstring>lineEdit_videoDirectory</cstring>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLineEdit" name="lineEdit_videoDirectory"/>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>
@@ -736,7 +765,6 @@ v4l2src does not work.</string>
   <tabstop>comboBox_audioSourceList</tabstop>
   <tabstop>checkbox_autoHide</tabstop>
   <tabstop>lineEdit_videoDirectory</tabstop>
-  <tabstop>pushButton_open</tabstop>
  </tabstops>
  <resources>
   <include location="../../../framework/resources/resource.qrc"/>

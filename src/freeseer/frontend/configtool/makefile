@@ -20,10 +20,10 @@ ALL: gui
 
 gui: freeseer_configtool_ui.py resource_rc.py
 
-freeseer_configtool_ui.py:
+freeseer_configtool_ui.py: forms/freeseer_configtool_ui.ui
 	pyuic4 forms/freeseer_configtool_ui.ui -o freeseer_configtool_ui.py
 
-resource_rc.py:
+resource_rc.py: ../../framework/resources/resource.qrc
 	pyrcc4 ../../framework/resources/resource.qrc -o resource_rc.py
 
 clean: 
