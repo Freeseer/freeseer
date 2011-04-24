@@ -356,6 +356,8 @@ class MainApp(QtGui.QMainWindow):
         '''
         Function for recording and stopping recording.
         '''
+
+
         if (state): # Start Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
@@ -366,6 +368,12 @@ class MainApp(QtGui.QMainWindow):
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
+
+
+            if (self.core.config.delay_recording>0):
+                time.sleep(float(self.core.config.delay_recording))
+
+
             self.statusBar().showMessage('recording...')
             self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()

@@ -57,6 +57,7 @@ class Config:
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'
         self.auto_hide = True
+        self.delay_recording = 0
 
         self.enable_video_recoding = True
         self.enable_audio_recoding = True
@@ -113,6 +114,7 @@ class Config:
             self.audiosrc = config.get('lastrun', 'audio_source')
             self.audiofb = config.get('lastrun', 'audio_feedback')
             self.auto_hide = config.getboolean('lastrun', 'auto_hide')
+            self.delay_recording = config.get('lastrun', 'delay_recording')
             self.enable_streaming = config.getboolean('lastrun', 'enable_streaming')
             self.enable_video_recoding = config.getboolean('lastrun','enable_video_recoding')
             self.enable_audio_recoding = config.getboolean('lastrun','enable_audio_recoding')
@@ -147,6 +149,7 @@ class Config:
         config.set('lastrun', 'audio_source', self.audiosrc)
         config.set('lastrun', 'audio_feedback', self.audiofb)
         config.set('lastrun', 'auto_hide', self.auto_hide)
+        config.set('lastrun', 'delay_recording', self.delay_recording)
         config.set('lastrun', 'enable_streaming', self.enable_streaming)
         config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
         config.set('lastrun','enable_audio_recoding',self.enable_audio_recoding)
