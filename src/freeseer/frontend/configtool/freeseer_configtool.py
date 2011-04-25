@@ -101,12 +101,21 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.groupBox_streaming, QtCore.SIGNAL('toggled(bool)'), self.toggle_streaming)
         
         self.connect(self.ui.lineEdit_URL_IP, QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_url)
+        
+        # Use Qt to prevent invalid values for port
+        self.ui.lineEdit_port.setInputMask("00009")
+        self.ui.lineEdit_port.setMaxLength(6)
         self.connect(self.ui.lineEdit_port,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_port)
+        
         self.connect(self.ui.lineEdit_mountPoint,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_mount)
         self.connect(self.ui.lineEdit_password,QtCore.SIGNAL('textEdited(QString)'),self.change_streaming_password)
         
         # connections for Extra setting -> auto hidden and delay recording
         self.connect(self.ui.checkbox_autoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_auto_hide)
+
+        # Use Qt to prevent invalid values for the recording delay
+        self.ui.lineEdit_delayRecording.setInputMask("009")
+        self.ui.lineEdit_delayRecording.setMaxLength(3)
         self.connect(self.ui.lineEdit_delayRecording, QtCore.SIGNAL('toggled(bool)'), self.change_delay_recording)
 
         # connections for Extra Settings > File Locations
