@@ -1,0 +1,39 @@
+====================================================================
+Freeseer supports native packaging for various operating systems.
+The following information describes how to create packages for each.
+
+--------------------------------------------------------------------
+1) Fedora/RedHat/CentOS/OpenSUSE Linux
+
+  a) Build Freeseer using the instructions in the README.txt file
+  b) Create an RPM package by typing:
+
+  python setup.py bdist_rpm
+
+--------------------------------------------------------------------
+2) Ubuntu/Debian Linux
+
+  Instructions coming soon.
+
+--------------------------------------------------------------------
+3) Arch Linux
+
+  Instructions coming soon.
+
+--------------------------------------------------------------------
+4) Windows
+
+In order to package for Windows, you require setuptools.
+Be sure to install the right version for your version of python.
+i.e. 2.6 for Python 2.6
+
+  a) Build Freeseer using the instructions in the README.txt file
+  b) Create an RPM package by typing:
+
+  python setup.py bdist_wininst
+
+--------------------------------------------------------------------
+5) MacOS
+
+  Sorry, we don't support MacOS just yet. We hope to soon.
+====================================================================
