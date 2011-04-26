@@ -1,3 +1,8 @@
+Differences in 2.5.2
+- Added delay recording option
+- Added validation to some fields in the config tool
+- Fixes for streaming to icecast. Seems to be working well now
+
 Differences in 2.5.0
 - Added streaming support to icecast!!
 - We now support Windows!
