@@ -30,10 +30,14 @@ clean:
 test: ALL
 	cd src; make test
 
-#rpm - placeholder for setuptools bdist_rpm
+# create RPM package
+rpm: setup.py
+	python setup.py bdist_rpm
 
 #deb - placeholder for debian packaging
 
-#win - placeholder for windows installer
+# create windows installer
+win: setup.py
+	python setup.py bdist_wininst
 
 #src - placeholder for source archive
