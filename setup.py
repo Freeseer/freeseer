@@ -12,7 +12,7 @@ shutil.copyfile('src/run-talkeditor', '%s/freeseer-talkeditor' % scriptdir)
 from setuptools import setup
 setup(name='freeseer',
       version='2.5.2',
-      description='video studio in a backpack',
+      description='video recording and streaming tool',
       author='fosslc',
       author_email='fosslc@gmail.com',
       url='http://wiki.github.com/fosslc/freeseer/',
