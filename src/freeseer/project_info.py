@@ -23,5 +23,5 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 NAME = 'Freeseer'
-VERSION = '2.5.0'
+VERSION = '2.5.2'
 URL = 'http://github.com/fosslc/freeseer'
