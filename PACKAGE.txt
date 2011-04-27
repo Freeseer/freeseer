@@ -8,9 +8,12 @@ The following information describes how to create packages for each.
   a) Build Freeseer using the instructions in the README.txt file
   b) Create an RPM package by typing:
 
-  python setup.py bdist_rpm
+  python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,
+  python-sqlite2,gstreamer,gstreamer-python,PyQt4
 
-  We have a handy "make rpm" target from the top level makefile.
+  OR alternatively,
+
+  We have a handy "make rpm" target from the top level makefile that does both steps a and b
 
 --------------------------------------------------------------------
 2) Ubuntu/Debian Linux

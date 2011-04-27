@@ -31,13 +31,14 @@ test: ALL
 	cd src; make test
 
 # create RPM package
-rpm: setup.py
+rpm: setup.py ALL
 	python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,python-sqlite2,gstreamer,gstreamer-python,PyQt4
 
 #deb - placeholder for debian packaging
 
 # create windows installer
-win: setup.py
+win: setup.py ALL
 	python setup.py bdist_wininst
 
-#src - placeholder for source archive
+src: setup.py ALL
+	python setup.py sdist
