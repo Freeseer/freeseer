@@ -10,6 +10,8 @@ The following information describes how to create packages for each.
 
   python setup.py bdist_rpm
 
+  We have a handy "make rpm" target from the top level makefile.
+
 --------------------------------------------------------------------
 2) Ubuntu/Debian Linux
 
