@@ -7,6 +7,16 @@ setup(name='freeseer',
       author='fosslc',
       author_email='fosslc@gmail.com',
       url='http://wiki.github.com/fosslc/freeseer/',
+      #requires=['python-feedparser','python-sqlite2','gstreamer','gstreamer-python','PyQt4'],
+      long_description='Freeseer is a tool for capturing or streaming video.\n\n\
+It enables you to capture great presentations, demos, training material,\n\
+and other videos. It handles desktop screen-casting with ease.\n\n\
+Freeseer is one of a few such tools that can also record vga output \n\
+or video from external sources such as firewire, usb, s-video, or rca.\n\n\
+It is particularly good at handling very large conferences with hundreds \n\
+of talks and speakers using varied hardware and operating systems.\n\n\
+Freeseer itself can run on commodity hardware such as a laptop or desktop.',
+      group='Sound and Video',
       license='GPLv3',
       package_dir={'freeseer': 'src/freeseer'},
       packages=['freeseer', 'freeseer.backend',
