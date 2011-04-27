@@ -55,7 +55,7 @@ directory into the freeseer directory (above src directory), and run:
 
 This will compile the gui files. Once this completes, you can then:
     "cd ../src"
-    "./run-freeseer"
+    "./freeseer-record"
 
 This starts up the Freeseer recording tool GUI.
 

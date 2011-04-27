@@ -3,12 +3,6 @@
 import shutil
 import tempfile
 
-# copy startup scripts to be installed
-scriptdir = tempfile.mkdtemp('scripts')
-shutil.copyfile('src/run-freeseer', '%s/freeseer' % scriptdir)
-shutil.copyfile('src/run-configtool', '%s/freeseer-configtool' % scriptdir)
-shutil.copyfile('src/run-talkeditor', '%s/freeseer-talkeditor' % scriptdir)
-
 from setuptools import setup
 setup(name='freeseer',
       version='2.5.2',
@@ -24,9 +18,5 @@ setup(name='freeseer',
                             'freeseer.frontend.configtool',
                             'freeseer.frontend.talkeditor',
                             'freeseer.frontend.default'],
-      scripts=['%s/freeseer' % scriptdir, '%s/freeseer-configtool' % scriptdir, '%s/freeseer-talkeditor' % scriptdir]
-      )
-
-# cleanup
-shutil.rmtree(scriptdir)
+      scripts=['src/freeseer-record', 'src/freeseer-config', 'src/freeseer-talkeditor'])
 

@@ -18,7 +18,7 @@
 # from an XML definition file
 
 # Set the name of the executable here
-exec = src/run-freeseer
+exec = src/freeseer-record
 
 ALL: 
 	cd src; make ALL
