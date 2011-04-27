@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-import shutil
-import tempfile
-
 from setuptools import setup
 setup(name='freeseer',
       version='2.5.2',
