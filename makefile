@@ -40,5 +40,6 @@ rpm: setup.py ALL
 win: setup.py ALL
 	python setup.py bdist_wininst
 
+# create a source tarfile
 src: setup.py ALL
 	python setup.py sdist

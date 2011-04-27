@@ -2,7 +2,7 @@
 
 from setuptools import setup
 setup(name='freeseer',
-      version='2.5.2',
+      version='2.5.3',
       description='video recording and streaming tool',
       author='fosslc',
       author_email='fosslc@gmail.com',
