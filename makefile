@@ -32,7 +32,7 @@ test: ALL
 
 # create RPM package
 rpm: setup.py
-	python setup.py bdist_rpm
+	python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,python-sqlite2,gstreamer,gstreamer-python,PyQt4
 
 #deb - placeholder for debian packaging
 
