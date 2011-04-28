@@ -18,7 +18,7 @@
 # from an XML definition file
 
 # Set the name of the executable here
-exec = run-freeseer
+exec = freeseer-record
 
 ALL: gui framework talkEditor configtool
 	@echo "You can now run $(exec)"

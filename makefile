@@ -1,11 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-# freeseer - vga/presentation capture software
-#
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
-#  http://fosslc.org
-#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -22,6 +14,32 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-NAME = 'Freeseer'
-VERSION = '2.5.3'
-URL = 'http://github.com/fosslc/freeseer'
+# This makefile generates the python code for the gui
+# from an XML definition file
+
+# Set the name of the executable here
+exec = src/freeseer-record
+
+ALL: 
+	cd src; make ALL
+	@echo "You can now run $(exec)"
+
+clean:
+	cd src; make clean
+
+test: ALL
+	cd src; make test
+
+# create RPM package
+rpm: setup.py ALL
+	python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,python-sqlite2,gstreamer,gstreamer-python,PyQt4
+
+#deb - placeholder for debian packaging
+
+# create windows installer
+win: setup.py ALL
+	python setup.py bdist_wininst
+
+# create a source tarfile
+src: setup.py ALL
+	python setup.py sdist

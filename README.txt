@@ -25,6 +25,15 @@ Freeseer supports free (royalty free) audio and video codecs.
 
 -------------------------------------------------------------------------
 
+Download the latest installers: https://github.com/fosslc/freeseer/downloads
+
+Download the latest source code: https://github.com/fosslc/freeseer
+
+-------------------------------------------------------------------------
+
+You can install Freeseer from binary packages. Visit our download site
+if you would like to do so.
+
 To develop and run freeseer, you require:
     Make, Git, Python 2.6, PyQT development tools
 
@@ -55,9 +64,11 @@ directory into the freeseer directory (above src directory), and run:
 
 This will compile the gui files. Once this completes, you can then:
     "cd ../src"
-    "./run-freeseer"
+    "./freeseer-record"
 
 This starts up the Freeseer recording tool GUI.
+
+If you would like to create packages, read PACKAGE.txt for instructions.
 
 --------------------------------------------------------------------------
 
