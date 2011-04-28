@@ -25,6 +25,12 @@ Freeseer supports free (royalty free) audio and video codecs.
 
 -------------------------------------------------------------------------
 
+Download the latest installers: https://github.com/fosslc/freeseer/downloads
+
+Download the latest source code: https://github.com/fosslc/freeseer
+
+-------------------------------------------------------------------------
+
 You can install Freeseer from binary packages. Visit our download site
 if you would like to do so.
 
