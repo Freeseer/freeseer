@@ -39,8 +39,8 @@ egg: setup.py ALL
 	python setup.py bdist_egg
 
 # create deb package
-deb: 
-	dpkg --build pkg/deb freeseer_2.5.3_all.deb
+deb: ALL
+	pkg_deb.sh
 
 # create windows installer
 win: setup.py ALL
