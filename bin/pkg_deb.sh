@@ -1,7 +1,10 @@
 #!/bin/sh -x
 
-if [-f README.txt ] then
+if [-f README.txt ] 
+then
     cwd=`pwd`
+else
+    echo "Please run the deb packaging tool from the freeseer root directory."
 fi
 
 PKGROOT="${cwd}/freeseer}"
