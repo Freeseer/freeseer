@@ -2,6 +2,7 @@
 *.pyc
 *.ogg
 *.mkv
+*.deb
 *~
 .project
 .pydevproject

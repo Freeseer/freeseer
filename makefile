@@ -38,7 +38,9 @@ rpm: setup.py ALL
 egg: setup.py ALL
 	python setup.py bdist_egg
 
-#deb - placeholder for debian packaging
+# create deb package
+deb: 
+	dpkg --build pkg/deb freeseer_2.5.3_all.deb
 
 # create windows installer
 win: setup.py ALL
