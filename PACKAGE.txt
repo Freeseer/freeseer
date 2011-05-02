@@ -14,11 +14,16 @@ The following information describes how to create packages for each.
   OR alternatively,
 
   We have a handy "make rpm" target from the top level makefile that does both steps a and b
+  the "make rpm" target has a dependency on building the source
+  so this should happen automatically
 
 --------------------------------------------------------------------
 2) Ubuntu/Debian Linux
 
-  Instructions coming soon.
+  a) run "make deb" from the top level makefile
+
+  the "make deb" target has a dependency on building the source
+  so this should happen automatically
 
 --------------------------------------------------------------------
 3) Arch Linux
