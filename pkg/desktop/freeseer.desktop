@@ -2,7 +2,7 @@
 Name=Freeseer
 Comment=Record video from desktop or hardware
 Exec=freeseer-record
-Icon=freeseer
+Icon=freeseer_logo
 Terminal=false
 Type=Application
 StartupNotify=true

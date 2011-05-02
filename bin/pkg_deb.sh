@@ -23,45 +23,66 @@ else
     exit 1
 fi
 
+WAROOT="${cwd}"
 PKGROOT="${cwd}/freeseer"
 SRCROOT="${cwd}/src"
 PKGTEMPLATE="${cwd}/pkg/deb"
 
-FREESEER_PATH="/usr/shared/pyshared"
+PYTHON_PATH="/usr/shared/pyshared"
 BIN_PATH="/usr/bin"
+PIXMAPS_PATH="/usr/share/pixmaps"
+DESKTOP_PATH="/usr/share/applications"
 
-FREESEER_PYTHON_PATH="${PKGROOT}${FREESEER_PATH}"
-FREESEER_BIN_PATH="${PKGROOT}${BIN_PATH}"
+PKGROOT_PYTHON_PATH="${PKGROOT}${PYTHON_PATH}"
+PKGROOT_BIN_PATH="${PKGROOT}${BIN_PATH}"
+PKGROOT_PIXMAPS_PATH="${PKGROOT}${PIXMAPS_PATH}"
+PKGROOT_DESKTOP_PATH="${PKGROOT}${DESKTOP_PATH}"
 
-echo "Creating packaging directories packaging root: ${PKGROOT}"
-mkdir -p ${FREESEER_PYTHON_PATH}
-if [ $? -ne 0 ]
-then
-    echo "Could not create directory: ${FREESEER_PYTHON_PATH}"
-    exit 1 
-fi
+for NEW_PATH in "${PKGROOT_PYTHON_PATH}" "${PKGROOT_BIN_PATH}" "${PKGROOT_PIXMAPS_PATH}" "${PKGROOT_DESKTOP_PATH}"
+do
+    echo "Creating packaging directories packaging root: ${NEW_PATH}"
+    mkdir -p ${NEW_PATH}
+    if [ $? -ne 0 ]
+    then
+        echo "Could not create directory: ${NEW_PATH}"
+        exit 1 
+    fi
+done
 
-
-mkdir -p ${FREESEER_BIN_PATH}
-if [ $? -ne 0 ]
-then
-    echo "Could not create directory: ${FREESEER_BIN_PATH}"
-    exit 1 
-fi
-
-# TODO: add the direrctory for the icon file too
+# set up a simple script in the bin directory
+# this calls the actual executable
+for exec in "freeseer-record" "freeseer-config" "freeseer-talkeditor"
+do
+  echo "#!/bin/sh\n${PYTHON_PATH}/${exec}" > "${PKGROOT_BIN_PATH}/${exec}"
+  chmod 755 "${PKGROOT_BIN_PATH}/${exec}"
+done
 
 echo "Copying files to our packaging root."
 
-# TODO, make this copy better... leave out the stuff we don't want
-cp -R ${SRCROOT}/* ${FREESEER_PYTHON_PATH}
+# copy the desktop entry
+cp -R ${WAROOT}/pkg/desktop/freeseer.desktop ${PKGROOT_DESKTOP_PATH}
 if [ $? -ne 0 ]
 then
-    echo "Could not copy the files from ${SRCROOT} to ${FREESEER_PYTHON_PATH}"
+    echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
     exit 1 
 fi
 
-# TODO: copy the executables to the bin directory
+# Copy the icon
+cp -R ${SRCROOT}/freeseer/framework/resources/freeseer_logo.png ${PKGROOT_PIXMAPS_PATH}
+if [ $? -ne 0 ]
+then
+    echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    exit 1 
+fi
+
+
+# TODO, make this copy better... leave out the stuff we don't want
+cp -R ${SRCROOT}/* ${PKGROOT_PYTHON_PATH}
+if [ $? -ne 0 ]
+then
+    echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    exit 1 
+fi
 
 # Copy our deb packaging control file templates
 cp -R ${PKGTEMPLATE}/* ${PKGROOT}
