@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Freeseer
+Comment=Record video from desktop or hardware
+Exec=freeseer-record
+Icon=freeseer
+Terminal=false
+Type=Application
+StartupNotify=true
