@@ -6,8 +6,6 @@ Maintainer: Andrew Ross <fosslc@gmail.com>
 Architecture: all
 Homepage: https://github.com/fosslc/freeseer/wiki
 Description: Recording and streaming tool
- Terminator is a little project to produce an efficient way of filling a large 
- area of screen space with terminals.
- .
- The user can have multiple terminals in one window and use keybindings to 
- switch between them.  See the manpage for details.
+ Freeseer is a video recording and streaming tool. It captures
+ audio and video from a variety of sources and makes them available
+ as recordings and/or a live video stream.
