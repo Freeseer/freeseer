@@ -1,0 +1,11 @@
+Package: freeseer
+Version: 2.5.3
+Section: video
+Priority: optional
+Maintainer: Andrew Ross <fosslc@gmail.com>
+Architecture: all
+Homepage: https://github.com/fosslc/freeseer/wiki
+Description: Recording and streaming tool
+ Freeseer is a video recording and streaming tool. It captures
+ audio and video from a variety of sources and makes them available
+ as recordings and/or a live video stream.

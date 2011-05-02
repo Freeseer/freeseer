@@ -34,7 +34,13 @@ test: ALL
 rpm: setup.py ALL
 	python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,python-sqlite2,gstreamer,gstreamer-python,PyQt4
 
-#deb - placeholder for debian packaging
+# create python egg
+egg: setup.py ALL
+	python setup.py bdist_egg
+
+# create deb package
+deb: ALL
+	bin/pkg_deb.sh
 
 # create windows installer
 win: setup.py ALL
