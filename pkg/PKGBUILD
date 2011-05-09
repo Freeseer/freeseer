@@ -33,9 +33,9 @@ build() {
 
   mkdir -p $pkgdir/usr/bin/
   mkdir -p $pkgdir/usr/lib/python2.7/site-packages/freeseer/
-  cp ../freeseer-record $pkgdir/usr/bin/freeseer-record
-  cp ../freeseer-talkeditor $pkgdir/usr/bin/freeseer-talkeditor
-  cp ../freeseer-config $pkgdir/usr/bin/freeseer-config
+  sed "s/python/python2/g" ../freeseer-record > $pkgdir/usr/bin/freeseer-record
+  sed "s/python/python2/g" ../freeseer-talkeditor > $pkgdir/usr/bin/freeseer-talkeditor
+  sed "s/python/python2/g" ../freeseer-config > $pkgdir/usr/bin/freeseer-config
   cp *.py $pkgdir/usr/lib/python2.7/site-packages/freeseer/
   cp -r backend framework frontend $pkgdir/usr/lib/python2.7/site-packages/freeseer/
 }
