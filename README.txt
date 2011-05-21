@@ -38,20 +38,23 @@ To develop and run freeseer, you require:
     Make, Git, Python 2.6, PyQT development tools
 
 For Fedora Linux, install:
+--------------------------
     “sudo yum install git make PyQt4-devel python-feedparser.noarch”    
 
 For Ubuntu Linux, install:
+--------------------------
     “sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools 
     libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser”
 
 For Windows, install: 
+---------------------
     python-2.6.6, GStreamer-WinBuilds-GPL-x86, GStreamer-WinBuilds-SDK-GPL-x86, PyQt-Py2.6-x86-gpl-4.8.3-1, 
-    pygtk-all-in-one-2.22.6.win32-py2.6, feedparser-5.0.1, cmake: cmake-2.8.4-win32-x86
+    pygtk-all-in-one-2.22.6.win32-py2.6, feedparser-5.0.1, cmake: cmake-2.8.4-win32-x86 mingw-get-inst-20110316
     
-NOTE: Python does need to be version 2.6.*
+    NOTES: The above software versions are known to work well. Python does need to be version 2.6.*
 
-On windows, add the following paths to your PATH variable:
-C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+          On windows, add the following paths to your PATH variable:
+          C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin;C:\MinGW\bin
 
 -------------------------------------------------------------------------
 
