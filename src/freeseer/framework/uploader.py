@@ -32,3 +32,9 @@ def uploadFile(host, user, password, sourcePath, destinationPath):
     
     client = scp.Client(host=host, user=user, password=password)
     client.transfer(sourcePath, destinationPath)
+
+if __name__ == "__main__":
+    host = input("Please enter a host:")
+    user = input("Please enter a username:")
+    password = input("Please enter a password:")
+    uploadFile (host, user, password, './new.txt', '/home/mathieu/')
