@@ -25,11 +25,10 @@
 import scp
 
 def uploadFile(host, user, password, sourcePath, destinationPath):
-    #client = scp.Client(host=host, user=user, keyfile=keyfile)
-    # or
-    #client = scp.Client(host=host, user=user)
+    #client = scp.Client(host, user, keyfile)
+    
+    #client = scp.Client(host, user)
     #client.use_system_keys()
-    # or
+    
     client = scp.Client(host=host, user=user, password=password)
-    # and then
     client.transfer(sourcePath, destinationPath)
