@@ -22,19 +22,14 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import scp
+import pexpect
+import os
 
-def uploadFile(host, user, password, sourcePath, destinationPath):
-    #client = scp.Client(host, user, keyfile)
+class VideoUploader:
+    def __init__(self):
+        child = pexpect.spawn('scp "%s" "%s:%s"' % (localfile, remotehost, remotefile))
+        child.expect ('Password:')
+        child.sendline (mypassword)
     
-    #client = scp.Client(host, user)
-    #client.use_system_keys()
-    
-    client = scp.Client(host=host, user=user, password=password)
-    client.transfer(sourcePath, destinationPath)
-
-if __name__ == "__main__":
-    host = input("Please enter a host:")
-    user = input("Please enter a username:")
-    password = input("Please enter a password:")
-    uploadFile (host, user, password, './new.txt', '/home/mathieu/')
+if __name__ == __main__:
+    uploader = VideoUploader()
