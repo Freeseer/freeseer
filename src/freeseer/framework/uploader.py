@@ -26,10 +26,11 @@ import pexpect
 import os
 
 class VideoUploader:
-    def __init__(self):
+    def __init__(self, localfile, remotehost, remotefile):
         child = pexpect.spawn('scp "%s" "%s:%s"' % (localfile, remotehost, remotefile))
         child.expect ('Password:')
-        child.sendline (mypassword)
+        password = raw_input("Password: ")
+        child.sendline (password)
     
 if __name__ == __main__:
     uploader = VideoUploader()
