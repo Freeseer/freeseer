@@ -39,7 +39,7 @@ To develop and run freeseer, you require:
 
 For Fedora Linux, install:
 --------------------------
-    “sudo yum install git make PyQt4-devel python-feedparser.noarch”    
+    “sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools”    
 
 For Ubuntu Linux, install:
 --------------------------
