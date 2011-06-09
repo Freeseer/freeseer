@@ -23,7 +23,6 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 from twisted.conch.ssh import transport, userauth, connection, channel, keys, common
-from twisted.conch.ssh.common import NS
 from twisted.internet import defer, protocol, reactor
 import sys, os, getpass
 
@@ -85,7 +84,7 @@ class TransferChannelBase(channel.SSHChannel):
         self.welcome = data
 
         # Call our handler
-        d = self.conn.sendRequest(self, 'exec', NS('scp'), wantReply=1)
+        d = self.conn.sendRequest(self, 'exec', common.NS('scp'), wantReply=1)
         d.addCallbacks(self.channelOpened)
         
     def closed(self):
