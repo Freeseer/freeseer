@@ -1,0 +1,9 @@
+[Core]
+Name = USB Source
+Module = usbsrc
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Basic USB Source uses v4l2src
