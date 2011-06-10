@@ -38,6 +38,7 @@ from logger import Logger
 from db_connector import *
 from rss_parser import *
 from presentation import *
+from plugin import PluginManager
 
 __version__= project_info.VERSION
 
@@ -54,6 +55,7 @@ class FreeseerCore:
         self.config = Config(configdir)
         self.logger = Logger(configdir)
         self.db = DB_Connector(configdir)
+        self.plugman = PluginManager()
 
         # Start Freeseer Recording Backend
         self.backend = Freeseer_gstreamer(self)
