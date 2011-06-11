@@ -304,7 +304,8 @@ class MainApp(QtGui.QMainWindow):
                         res = resolution
                     self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
             else:
-                self.core.backend.disable_icecast_streaming()
+                #self.core.backend.disable_icecast_streaming()
+                pass
         
     def change_output_resolution(self):
         res = str(self.resolution)
@@ -375,7 +376,7 @@ class MainApp(QtGui.QMainWindow):
 
 
             self.statusBar().showMessage('recording...')
-            self.core.config.videosrc = self.videosrc
+            #self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
             
         else: # Stop Recording.
