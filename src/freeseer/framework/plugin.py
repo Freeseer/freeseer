@@ -14,14 +14,15 @@ class PluginManager:
         self.plugmanc.setPluginPlaces(["freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
             "AudioInput" : IAudioInput,
-            "AudioOutput" : IAudioOutput,
             "AudioMixer" : IAudioMixer,
             "VideoInput" : IVideoInput,
-            "VideoOutput" : IVideoOutput,
             "VideoMixer" : IVideoMixer,
+            "Output" : IOutput,
             })
         self.plugmanc.collectPlugins()
         self.plugmanc.activatePluginByName("Video Test Source", "VideoInput", False)
+        self.plugmanc.activatePluginByName("Video Preview", "Output", False)
+        self.plugmanc.activatePluginByName("Audio Feedback", "Output", False)
 
 class IAudioInput(IPlugin):
     
@@ -43,12 +44,15 @@ class IVideoInput(IPlugin):
     def get_source(self):
         pass
     
-class IVideoOutput(IPlugin):
-    
-    def get_source(self):
-        pass
-    
 class IVideoMixer(IPlugin):
     
     def get_source(self):
+        pass
+
+class IOutput(IPlugin):
+    
+    def get_input(self):
+        pass
+    
+    def get_bin(self):
         pass

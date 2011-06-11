@@ -1,0 +1,9 @@
+[Core]
+Name = Video Preview
+Module = videopreview
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Video Preview window using autovideosink
