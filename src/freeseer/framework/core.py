@@ -31,7 +31,7 @@ import logging.config
 import unicodedata
 
 from freeseer import project_info
-from freeseer.backend.gstreamer import *
+import gstreamer
 
 from config import Config
 from logger import Logger
@@ -58,7 +58,7 @@ class FreeseerCore:
         self.plugman = PluginManager()
 
         # Start Freeseer Recording Backend
-        self.backend = Freeseer_gstreamer(self)
+        self.backend = gstreamer.Gstreamer()
 
         # Find corresponding pixel resolution to name selected
         if self.config.resolution in self.config.resmap:
@@ -287,9 +287,10 @@ class FreeseerCore:
         '''
         Returns supported video sources.
         '''
-        vidsrcs = self.backend.get_video_sources()
-        self.logger.log.debug('Available video sources: ' + str(vidsrcs))
-        return vidsrcs
+        #vidsrcs = self.backend.get_video_sources()
+        #self.logger.log.debug('Available video sources: ' + str(vidsrcs))
+        #return vidsrcs
+        return ['abc', 'def']
 
         
     def get_video_devices(self, device_type):
@@ -305,10 +306,11 @@ class FreeseerCore:
         '''
         Returns supported audio sources.
         '''
-        sndsrcs = self.backend.get_audio_sources()
-        self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
-        return sndsrcs
+#        sndsrcs = self.backend.get_audio_sources()
+#        self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
+#        return sndsrcs
 
+        return ['abc', 'def']
 
     def set_video_mode(self, mode):
         '''
@@ -320,7 +322,7 @@ class FreeseerCore:
         else:
             self.logger.log.info('Video recording: DISABLED')
             
-        self.backend.set_video_mode(mode)
+        #self.backend.set_video_mode(mode)
 
         
     def change_videosrc(self, vid_source, vid_device):
@@ -332,7 +334,8 @@ class FreeseerCore:
 
 
     def set_record_area(self, enabled):
-        self.backend.set_record_area(enabled)
+        #self.backend.set_record_area(enabled)
+        pass
 
 
     def set_recording_area(self, x1, y1, x2, y2):
@@ -351,7 +354,7 @@ class FreeseerCore:
 
 
     def change_output_resolution(self, width, height):
-        self.backend.change_output_resolution(width, height)
+        #self.backend.change_output_resolution(width, height)
         self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
 
 
@@ -367,7 +370,7 @@ class FreeseerCore:
             res_temp = self.config.resolution
 
         rec_res = res_temp.split('x')
-        self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
+        #self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
         self.logger.log.debug('Video stream resolution changed to ' + str(width) + 'x' + str(height))
 
 
@@ -381,14 +384,15 @@ class FreeseerCore:
         else:
             self.logger.log.info('Audio recording: DISABLED')
 
-        self.backend.set_audio_mode(mode)
+        #self.backend.set_audio_mode(mode)
 
 
     def change_soundsrc(self, snd_source):
         '''
         Informs backend of new audio source to use when recording.
         '''
-        return self.backend.change_audio_source(snd_source)
+        #return self.backend.change_audio_source(snd_source)
+        return False
 
 
     def test_sources(self, state, video=False, audio=False):
@@ -416,16 +420,24 @@ class FreeseerCore:
         '''
         Informs backend to begin recording presentation.
         '''
-        #create a filename to record to
-        record_name = self.get_record_name(presentation)
+#        #create a filename to record to
+#        record_name = self.get_record_name(presentation)
+#
+#        #prepare metadata
+#        data = self.prepare_metadata(presentation)
+#        self.backend.populate_metadata(data)
+#
+#        record_location = os.path.abspath(self.config.videodir + '/' + record_name)
+#        self.backend.record()
+#        self.logger.log.info('Recording started')
 
-        #prepare metadata
-        data = self.prepare_metadata(presentation)
-        self.backend.populate_metadata(data)
+        plugins = []
+        for plugin in self.plugman.plugmanc.getPluginsOfCategory('Output'):
+            if plugin.is_activated:
+                print plugin.plugin_object.get_name()
+                plugins.append(plugin.plugin_object)
 
-        record_location = os.path.abspath(self.config.videodir + '/' + record_name)
-        self.backend.record(record_location)
-        self.logger.log.info('Recording started')
+        self.backend.load_plugins_output(plugins)
 
     def stop(self):
         '''
@@ -449,10 +461,10 @@ class FreeseerCore:
         Enable/Disable the video preview window.
         '''
         if enable == True:
-            self.backend.enable_video_feedback(window_id)
+            #self.backend.enable_video_feedback(window_id)
             self.logger.log.info('Video Preview Activated')
         else:
-            self.backend.disable_video_feedback()
+            #self.backend.disable_video_feedback()
             self.logger.log.info('Video Preview Deactivated')
 
 
