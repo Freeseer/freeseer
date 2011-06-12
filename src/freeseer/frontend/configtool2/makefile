@@ -1,11 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-# freeseer - vga/presentation capture software
-#
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
-#  http://fosslc.org
-#
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -22,14 +14,18 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import sys
+# This makefile generates the python code for the gui
+# from an XML definition file
+ALL: gui 
 
-from PyQt4 import QtGui
+gui: configtoolui.py pluginloader.py
 
-from freeseer.frontend.configtool2.configtool import *
+configtoolui.py: forms/configtoolui.ui
+	pyuic4 forms/configtoolui.ui -o configtoolui.py
 
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    main = ConfigTool()
-    main.show()
-    sys.exit(app.exec_())
+pluginloader.py: forms/pluginloader.ui
+	pyuic4 forms/pluginloader.ui -o pluginloader.py
+
+clean: 
+	rm -f  configtoolui.py *.pyc *~
+

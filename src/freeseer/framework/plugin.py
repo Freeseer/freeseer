@@ -23,6 +23,10 @@ class PluginManager:
         self.plugmanc.activatePluginByName("Video Test Source", "VideoInput", False)
         self.plugmanc.activatePluginByName("Video Preview", "Output", False)
         self.plugmanc.activatePluginByName("Audio Feedback", "Output", False)
+        
+    def get_output_plugins(self):
+        
+        return None
 
 class IAudioInput(IPlugin):
     
