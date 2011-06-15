@@ -24,10 +24,16 @@
 
 from twisted.conch.ssh import transport, userauth, connection, channel, keys, common
 from twisted.internet import defer, protocol, reactor
+from twisted.python import log
 import sys, os, getpass
 
 USER = 'mhubbard'
+PASS = None
 HOST = 'localhost'
+SRC = './test.txt'
+DST = '.'
+PROTOCOL = 'scp'
+EXCODE = 1
 
 #This class handles the encryption details with the server
 class Transport(transport.SSHClientTransport):
@@ -69,6 +75,10 @@ class UserAuth(userauth.SSHUserAuthClient):
 class ClientConnection(connection.SSHConnection):
 
     def serviceStarted(self):
+        if PROTOCOL == 'scp':
+            self.openChannel(ScpChannel(2**16, 2**15, self))
+        else:
+            self.openChannel(SftpChannel(2**16, 2**15, self))
         self.openChannel(ScpChannel(2**16, 2**15, self))
 
 #This class sets up a channel to be used by the SCPchannel
@@ -77,15 +87,18 @@ class TransferChannelBase(channel.SSHChannel):
     name = 'session'
     state = None
     todo = 0
-    buf = ''
+    buffer = ''
         
     def channelOpen(self, data):
         # Might display/process welcome screen
         self.welcome = data
-
+        if PROTOCOL == 'scp':
+            type = 'exec'
+        else:
+            type = 'subsystem'
         # Call our handler
-        d = self.conn.sendRequest(self, 'exec', common.NS('scp'), wantReply=1)
-        d.addCallbacks(self.channelOpened)
+        d = self.conn.sendRequest(self, type, common.NS(PROTOCOL), wantReply=1)
+        d.addCallbacks(self.channelOpened, log.err)
         
     def closed(self):
         self.loseConnection()
@@ -103,11 +116,11 @@ class ScpChannel(TransferChannelBase):
         if self.state=='waiting':
             # we've started the transfer, and are expecting response
             # might not get it all at once, buffer
-            self.buf += data
-            if not self.buf.endswith('\n'):
+            self.buffer += data
+            if not self.buffer.endswith('\n'):
                 return
-            b = self.buf
-            self.buf = ''
+            b = self.buffer
+            self.buffer = ''
 
             if not b.startswith('C'):
                 self.loseConnection()
@@ -133,6 +146,38 @@ class ScpChannel(TransferChannelBase):
             
             if self.todo<=0:
                 self.loseConnection()
+                
+class SftpChannel(TransferChannelBase):
+    def channelOpened(self, data):
+        self.client = filetransfer.FileTransferClient()
+        self.client.makeConnection(self)
+        self.dataReceived = self.client.dataReceived
+        d = self.client.openFile(SRC, filetransfer.FXF_READ, {})
+        d.addCallbacks(self.fileOpened, log.err)
+
+    def fileOpened(self, rfile):
+        rfile.getAttrs().addCallbacks(self.fileStatted, log.err, (rfile,))
+
+    def fileStatted(self, attributes, rfile):
+        rfile.readChunk(0, 4096).addCallbacks(self.did_read, self.failed_read,
+                                              (rfile, 0, attributes['size']), {},  # did_read position/keyword args
+                                              (rfile, 0), {}                  # failed_read position/keyword args
+                                              )
+
+    def did_read(self, data, file, position, todo):
+        DST.write(data)
+        todo -= len(data)
+        position += len(data)
+        if todo<=0:
+            return self.done(position)
+        file.readChunk(position, 4096).addCallbacks(self.did_read, log.err, (file, position, todo))
+
+    def failed_read(self, failure, file, position):
+        file.check(EOFError)
+
+    def done(self, l):
+        global EXCODE
+        EXCODE = 0
             
 if __name__ == '__main__':
     protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
