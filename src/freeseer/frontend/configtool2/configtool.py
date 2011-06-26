@@ -54,7 +54,9 @@ class ConfigTool(QtGui.QDialog):
         self.pluginloader = Ui_PluginLoader()
         self.pluginloader.setupUi(self.pluginloaderWidget)
 
+        # connections
         self.connect(self.ui.optionsWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
+        self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
 
         # load core
         self.core = FreeseerCore()
@@ -70,9 +72,9 @@ class ConfigTool(QtGui.QDialog):
             
         if option == "Output":
             self.load_option_output_plugins()
-        elif option == "Input":
+        elif option == "VideoInput":
             self.load_option_input_plugins()
-        elif option == "Mixer":
+        elif option == "VideoMixer":
             self.load_option_mixer_plugins()
         else:
             self.currentWidget = None
@@ -80,7 +82,7 @@ class ConfigTool(QtGui.QDialog):
         
     def load_plugin_list(self, plugin_type):
         self.pluginloader.listWidget.clear()
-        for plugin in self.plugman.getPluginsOfCategory(plugin_type):
+        for plugin in self.plugman.plugmanc.getPluginsOfCategory(plugin_type):
             item = QtGui.QListWidgetItem()
             item.setText(plugin.plugin_object.get_name())
             
@@ -115,4 +117,16 @@ class ConfigTool(QtGui.QDialog):
 
         self.load_plugin_list("VideoMixer")
             
+    def set_plugin_state(self, plugin):
+        
+        plugin_name = str(plugin.text())
+        plugin_category = str(self.ui.optionsWidget.currentItem().text(0))
+        
+        if plugin.checkState() == 2:
+            self.plugman.activate_plugin(plugin_name, plugin_category)
+        else:
+            self.plugman.deactivate_plugin(plugin_name, plugin_category)
+
+        print plugin_name
+        print plugin_category
             

@@ -41,12 +41,12 @@
     </property>
     <item>
      <property name="text">
-      <string>Input</string>
+      <string>VideoInput</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>Mixer</string>
+      <string>VideoMixer</string>
      </property>
     </item>
     <item>

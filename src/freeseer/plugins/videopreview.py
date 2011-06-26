@@ -5,7 +5,7 @@ import gst
 from freeseer.framework.plugin import IOutput
 
 class VideoPreview(IOutput):
-    name = "video_preview"
+    name = "Video Preview"
     type = "video"
     
     def get_name(self):
