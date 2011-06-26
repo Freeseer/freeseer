@@ -1,0 +1,9 @@
+[Core]
+Name = Input Selector
+Module = inputselector
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Simple Input Selector currently supports 1 input.
