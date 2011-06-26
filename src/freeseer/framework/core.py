@@ -54,7 +54,7 @@ class FreeseerCore:
         self.config = Config(configdir)
         self.logger = Logger(configdir)
         self.db = DB_Connector(configdir)
-        self.plugman = PluginManager()
+        self.plugman = PluginManager(configdir)
 
         # Start Freeseer Recording Backend
         self.backend = gstreamer.Gstreamer()
@@ -74,7 +74,7 @@ class FreeseerCore:
         self.logger.log.info(u"Core initialized")   
 
     def get_plugin_manager(self):
-        return self.plugman.plugmanc
+        return self.plugman
 
     def duplicate_exists(self, recordname):
         '''
