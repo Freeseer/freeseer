@@ -77,13 +77,24 @@ class IVideoInput(IPlugin):
     def get_name(self):
         return self.name
     
-    # This needs to be overrided when creating a plugin
     def get_input_bin(self):
+        """
+        Returns the Gstreamer Bin for the video input plugin.
+        MUST be overridded when creating a video input plugin.
+        """
         pass
     
 class IVideoMixer(IPlugin):
+    name = None
     
-    def get_source(self):
+    def get_name(self):
+        return self.name
+    
+    def get_videomixer_bin(self):
+        """
+        Returns the Gstreamer Bin for the video mixer plugin.
+        MUST be overridded when creating a video mixer plugin.
+        """
         pass
 
 class IOutput(IPlugin):
