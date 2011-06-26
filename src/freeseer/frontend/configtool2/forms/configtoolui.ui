@@ -41,6 +41,16 @@
     </property>
     <item>
      <property name="text">
+      <string>AudioInput</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>AudioMixer</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>VideoInput</string>
      </property>
     </item>
