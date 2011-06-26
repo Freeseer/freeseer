@@ -4,7 +4,7 @@ import gst
 
 from freeseer.framework.plugin import IOutput
 
-class VideoPreview(IOutput):
+class WebMOutput(IOutput):
     name = "WebM Output"
     type = "both"
     
