@@ -82,9 +82,14 @@ class IVideoMixer(IPlugin):
         pass
 
 class IOutput(IPlugin):
+    name = None
+    type = None # Types: audio, video, both
     
-    def get_input(self):
-        pass
+    def get_name(self):
+        return self.name
     
-    def get_bin(self):
+    def get_type(self):
+        return self.type
+    
+    def get_output_bin(self):
         pass
