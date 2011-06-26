@@ -8,12 +8,6 @@ class VideoPreview(IOutput):
     name = "Video Preview"
     type = "video"
     
-    def get_name(self):
-        return self.name
-    
-    def get_type(self):
-        return self.type
-    
     def get_output_bin(self):
         bin = gst.Bin(self.name)
         
