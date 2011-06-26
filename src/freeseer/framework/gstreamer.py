@@ -62,14 +62,18 @@ class Gstreamer:
             gst.element_unlink_many(self.video_tee, plugin)
             self.player.remove(plugin)
     
-    def load_plugins_output(self, plugins):
+    def load_output_plugins(self, plugins):
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
-            bin = plugin.get_output_bin()
+            bin = plugin.get_output_bin('test-filename')
             self.output_plugins.append(bin)
             
             if type == "video":
                 self.player.add(bin)
                 gst.element_link_many(self.video_tee, bin)
-                
+    
+    def load_videomixer(self, mixer):
+        videomixer = mixer.get_videomixer_bin()
+        self.player.add(videomixer)
+        gst.element_link_many(videomixer, self.video_tee)

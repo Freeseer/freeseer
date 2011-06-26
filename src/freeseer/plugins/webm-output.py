@@ -15,7 +15,7 @@ class WebMOutput(IOutput):
         
         # Setup Audio Pipeline
         audioqueue = gst.element_factory_make("queue", "audioqueue")
-        bin.add(videoqueue)
+        bin.add(audioqueue)
         
         audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
         bin.add(audioconvert)
@@ -39,7 +39,7 @@ class WebMOutput(IOutput):
         bin.add(filesink)
         
         # Setup ghost pads
-        audiopad = audioqueue.get_pas("sink")
+        audiopad = audioqueue.get_pad("sink")
         audio_ghostpad = gst.GhostPad("audiosink", audiopad)
         bin.add_pad(audio_ghostpad)
         
@@ -47,8 +47,8 @@ class WebMOutput(IOutput):
         video_ghostpad = gst.GhostPad("videosink", videopad)
         bin.add_pad(video_ghostpad)
         
-        gst.element_link_man(audioqueue, audioconvert, audiocodec, muxer)
+        gst.element_link_many(audioqueue, audioconvert, audiocodec, muxer)
         gst.element_link_many(videoqueue, videocodec, muxer)
-        gst.element_linK_many(muxer, filesink)
+        gst.element_link_many(muxer, filesink)
         
         return bin
