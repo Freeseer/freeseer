@@ -17,19 +17,17 @@ class VideoPreview(IOutput):
     def get_output_bin(self):
         bin = gst.Bin(self.name)
         
-        videocspace = gst.element_factory_make("ffmpegcolorspace", "videocspace")
-        bin.add(videocspace) 
-           
-        pad = videocspace.get_pad("sink")
-        ghostpad = gst.GhostPad("sink", pad)
-        bin.add_pad(ghostpad)
-        
         videoqueue = gst.element_factory_make("queue", "videoqueue")
-        bin.add(videoqueue) 
+        bin.add(videoqueue)
         
         videosink = gst.element_factory_make("autovideosink", "videosink")
         bin.add(videosink)
         
-        gst.element_link_many(videocspace, videoqueue, videosink)
+        # Setup ghost pad
+        pad = videoqueue.get_pad("sink")
+        ghostpad = gst.GhostPad("sink", pad)
+        bin.add_pad(ghostpad)
+        
+        gst.element_link_many(videoqueue, videosink)
         
         return bin
