@@ -431,7 +431,16 @@ class FreeseerCore:
                 print plugin.plugin_object.get_name()
                 plugins.append(plugin.plugin_object)
 
-        self.backend.load_plugins_output(plugins)
+        self.backend.load_output_plugins(plugins)
+        
+        mixer = None
+        for plugin in self.plugman.plugmanc.getPluginsOfCategory('VideoMixer'):
+            if plugin.is_activated:
+                print plugin.plugin_object.get_name()
+                mixer = plugin.plugin_object
+                break
+            
+        self.backend.load_videomixer(mixer)
 
     def stop(self):
         '''
