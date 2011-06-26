@@ -1,0 +1,9 @@
+[Core]
+Name = WebM Output
+Module = webm-output
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = WebM Video Output plugin records WebM format to a file.
