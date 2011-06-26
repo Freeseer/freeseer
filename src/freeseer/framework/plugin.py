@@ -7,14 +7,14 @@ from yapsy.IPlugin import IPlugin
 
 class PluginManager:
     def __init__(self, configdir):
-        self.plugman = PluginManagerSingleton().get()
+        plugman = PluginManagerSingleton().get()
         
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/plugin.conf" % self.configdir)
         
         self.config = ConfigParser.ConfigParser()
         self.load()
-        self.plugmanc = ConfigurablePluginManager(self.config, self, self.plugman)
+        self.plugmanc = ConfigurablePluginManager(self.config, self, plugman)
         
         self.plugmanc.setPluginPlaces(["freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
