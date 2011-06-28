@@ -187,7 +187,7 @@ class SftpChannel(TransferChannelBase):
         global EXCODE
         EXCODE = 0
 
-#This class retrieves the metadata from a video file
+#This class retrieves the meta-data from a video file
 class VideoData:
     def __init__(self, file):
         self.file = file
@@ -198,7 +198,7 @@ class VideoData:
         gobject.idle_add(self.checkIfValid)
         self.mainloop.run()
 
-    #Currently this just prints the metadata
+    #Currently this just prints the meta-data
     #Will have to get specific tags from discoverer object to store them
     def retrieveData(self, discoverer, ismedia):
         discoverer.print_info()
