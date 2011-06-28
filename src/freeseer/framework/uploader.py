@@ -25,12 +25,12 @@
 from twisted.conch.ssh import transport, userauth, connection, channel, keys, common
 from twisted.internet import defer, protocol, reactor
 from twisted.python import log
-from gst.extend.discoverer import Discoverer
 import sys, os, getpass
 import gobject
 gobject.threads_init()
 import pygst
 pygst.require('0.10')
+from gst.extend.discoverer import Discoverer
 
 USER = 'mhubbard'
 PASS = None
@@ -39,7 +39,7 @@ SRC = 'test.txt'
 DST = '.'
 PROTOCOL = 'scp'
 EXCODE = 1
-VIDEO = '~/2011-05-28_-_2230_-_Hey.ogg'
+VIDEO = '/home/mathieu/2011-05-28_-_2230_-_Hey.ogg'
 
 #This class handles the encryption details with the server
 class Transport(transport.SSHClientTransport):
@@ -188,33 +188,32 @@ class SftpChannel(TransferChannelBase):
         EXCODE = 0
 
 #This class retrieves the metadata from a video file
-class GstFile:
+class VideoData:
     def __init__(self, file):
         self.file = file
         self.mainloop = gobject.MainLoop()
         self.current = None
 
     def run(self):
-        gobject.idle_add(self._discover_one)
+        gobject.idle_add(self.checkIfValid)
         self.mainloop.run()
 
     #Currently this just prints the metadata
     #Will have to get specific tags from discoverer object to store them
-    def _discovered(self, discoverer, ismedia):
+    def retrieveData(self, discoverer, ismedia):
         discoverer.print_info()
         self.current = None
-        gobject.idle_add(self._discover_one)
     
     #checks to make sure the file exists then creates Discoverer
     #object using the file path    
-    def _discover_one(self):
+    def checkIfValid(self):
         if not os.path.isfile(self.file):
             gobject.idle_add(self._discover_one)
             return False
         print "Running on", self.file
         self.current = Discoverer(self.file)
         # connect a callback on the 'discovered' signal
-        self.current.connect('discovered', self._discovered)
+        self.current.connect('discovered', self.retrieveData)
         self.current.discover()
         return False
             
@@ -224,5 +223,5 @@ if __name__ == '__main__':
     #reactor.run()
     
     #Test GstFile
-    gstfile = GstFile(VIDEO)
-    gstfile.run()  
+    video = VideoData(VIDEO)
+    video.run()  
