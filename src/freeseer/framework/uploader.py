@@ -25,15 +25,21 @@
 from twisted.conch.ssh import transport, userauth, connection, channel, keys, common
 from twisted.internet import defer, protocol, reactor
 from twisted.python import log
+from gst.extend.discoverer import Discoverer
 import sys, os, getpass
+import gobject
+gobject.threads_init()
+import pygst
+pygst.require('0.10')
 
 USER = 'mhubbard'
 PASS = None
 HOST = 'localhost'
-SRC = './test.txt'
+SRC = 'test.txt'
 DST = '.'
 PROTOCOL = 'scp'
 EXCODE = 1
+VIDEO = '~/2011-05-28_-_2230_-_Hey.ogg'
 
 #This class handles the encryption details with the server
 class Transport(transport.SSHClientTransport):
@@ -104,7 +110,7 @@ class TransferChannelBase(channel.SSHChannel):
         self.loseConnection()
         reactor.stop()
 
-#This class handles the actual SCP transferring
+#This class handles transferring via SCP
 class ScpChannel(TransferChannelBase):
     #start SCP transfer
     def channelOpened(self, data):
@@ -146,8 +152,10 @@ class ScpChannel(TransferChannelBase):
             
             if self.todo<=0:
                 self.loseConnection()
-                
+ 
+#This class handles transferring via SFTP           
 class SftpChannel(TransferChannelBase):
+    #start SFTP transfer 
     def channelOpened(self, data):
         self.client = filetransfer.FileTransferClient()
         self.client.makeConnection(self)
@@ -161,7 +169,7 @@ class SftpChannel(TransferChannelBase):
     def fileStatted(self, attributes, rfile):
         rfile.readChunk(0, 4096).addCallbacks(self.did_read, self.failed_read,
                                               (rfile, 0, attributes['size']), {},  # did_read position/keyword args
-                                              (rfile, 0), {}                  # failed_read position/keyword args
+                                              (rfile, 0), {}                       # failed_read position/keyword args
                                               )
 
     def did_read(self, data, file, position, todo):
@@ -178,7 +186,43 @@ class SftpChannel(TransferChannelBase):
     def done(self, l):
         global EXCODE
         EXCODE = 0
+
+#This class retrieves the metadata from a video file
+class GstFile:
+    def __init__(self, file):
+        self.file = file
+        self.mainloop = gobject.MainLoop()
+        self.current = None
+
+    def run(self):
+        gobject.idle_add(self._discover_one)
+        self.mainloop.run()
+
+    #Currently this just prints the metadata
+    #Will have to get specific tags from discoverer object to store them
+    def _discovered(self, discoverer, ismedia):
+        discoverer.print_info()
+        self.current = None
+        gobject.idle_add(self._discover_one)
+    
+    #checks to make sure the file exists then creates Discoverer
+    #object using the file path    
+    def _discover_one(self):
+        if not os.path.isfile(self.file):
+            gobject.idle_add(self._discover_one)
+            return False
+        print "Running on", self.file
+        self.current = Discoverer(self.file)
+        # connect a callback on the 'discovered' signal
+        self.current.connect('discovered', self._discovered)
+        self.current.discover()
+        return False
             
 if __name__ == '__main__':
-    protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
-    reactor.run()
+    #Test scp/sftp upload
+    #protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+    #reactor.run()
+    
+    #Test GstFile
+    gstfile = GstFile(VIDEO)
+    gstfile.run()  
