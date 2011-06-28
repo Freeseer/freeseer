@@ -39,7 +39,7 @@ SRC = 'test.txt'
 DST = '.'
 PROTOCOL = 'scp'
 EXCODE = 1
-VIDEO = '/home/mathieu/2011-05-28_-_2230_-_Hey.ogg'
+VIDEO = '/home/mathieu/Videos/2011-04-06_-_1459_-_T103_-_Thanh_Ha_-_Intro_to_Freeseer.ogg'
 
 #This class handles the encryption details with the server
 class Transport(transport.SSHClientTransport):
@@ -210,7 +210,7 @@ class VideoData:
         if not os.path.isfile(self.file):
             gobject.idle_add(self._discover_one)
             return False
-        print "Running on", self.file
+        print "File Path: ", self.file
         self.current = Discoverer(self.file)
         # connect a callback on the 'discovered' signal
         self.current.connect('discovered', self.retrieveData)
