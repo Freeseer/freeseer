@@ -21,7 +21,7 @@ class InputSelector(IVideoMixer):
         sink_ghostpad = gst.GhostPad("sink", sinkpad)
         bin.add_pad(sink_ghostpad)
         
-        srcpad = videomixer.get_pad("src")
+        srcpad = colorspace.get_pad("src")
         src_ghostpad = gst.GhostPad("src", srcpad)
         bin.add_pad(src_ghostpad)
         
