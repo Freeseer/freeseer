@@ -29,8 +29,7 @@ class Gstreamer:
         t = message.type
       
         if t == gst.MESSAGE_EOS:
-            #self.player.set_state(gst.STATE_NULL)
-            #self.stop()
+            self.stop()
             pass
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
@@ -58,6 +57,15 @@ class Gstreamer:
         self.player.set_state(gst.STATE_PLAYING)
     
     def stop(self):
+        self.player.set_state(gst.STATE_NULL)
+        
+        for plugin in self.video_input_plugins:
+            gst.element_unlink_many(self.video_tee, plugin)
+            self.player.remove(plugin)
+        
+        gst.element_unlink_many(self.videomixer, self.video_tee)
+        self.player.remove(self.videomixer)
+            
         for plugin in self.output_plugins:
             gst.element_unlink_many(self.video_tee, plugin)
             self.player.remove(plugin)
@@ -79,9 +87,11 @@ class Gstreamer:
                 self.video_tee.link(bin)
     
     def load_videomixer(self, mixer, inputs):
+        self.video_input_plugins = []
+        
         self.videomixer = mixer.get_videomixer_bin()
         self.player.add(self.videomixer)
         gst.element_link_many(self.videomixer, self.video_tee)
         
         mixer.set_input("USB Source")
-        mixer.load_inputs(self.player, self.videomixer, inputs)
+        self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)
