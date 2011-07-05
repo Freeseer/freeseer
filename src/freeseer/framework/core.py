@@ -426,7 +426,7 @@ class FreeseerCore:
 #        self.logger.log.info('Recording started')
 
         plugins = []
-        for plugin in self.plugman.plugmanc.getPluginsOfCategory('Output'):
+        for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
             if plugin.is_activated:
                 print plugin.plugin_object.get_name()
                 plugins.append(plugin.plugin_object)
@@ -434,13 +434,15 @@ class FreeseerCore:
         self.backend.load_output_plugins(plugins)
         
         mixer = None
-        for plugin in self.plugman.plugmanc.getPluginsOfCategory('VideoMixer'):
+        for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
             if plugin.is_activated:
                 print plugin.plugin_object.get_name()
                 mixer = plugin.plugin_object
                 break
             
-        self.backend.load_videomixer(mixer)
+        inputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+        self.backend.load_videomixer(mixer, inputs)
+        self.backend.record()
 
     def stop(self):
         '''
