@@ -34,7 +34,7 @@ class Gstreamer:
             pass
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
-            self.core.logger.log.debug('Error: ' + str(err) + str(debug))
+            #self.core.logger.log.debug('Error: ' + str(err) + str(debug))
             #self.player.set_state(gst.STATE_NULL)
             #self.stop()
 
@@ -55,7 +55,7 @@ class Gstreamer:
     ## Recording functions
     ##
     def record(self):
-        pass
+        self.player.set_state(gst.STATE_PLAYING)
     
     def stop(self):
         for plugin in self.output_plugins:
@@ -66,14 +66,22 @@ class Gstreamer:
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
-            bin = plugin.get_output_bin('test-filename')
+            bin = plugin.get_output_bin("test-filename")
             self.output_plugins.append(bin)
             
-            if type == "video":
+            if type == "audio":
+                pass
+            elif type == "video":
                 self.player.add(bin)
-                gst.element_link_many(self.video_tee, bin)
+                self.video_tee.link(bin)
+            elif type == "both":
+                self.player.add(bin)
+                self.video_tee.link(bin)
     
-    def load_videomixer(self, mixer):
-        videomixer = mixer.get_videomixer_bin()
-        self.player.add(videomixer)
-        gst.element_link_many(videomixer, self.video_tee)
+    def load_videomixer(self, mixer, inputs):
+        self.videomixer = mixer.get_videomixer_bin()
+        self.player.add(self.videomixer)
+        gst.element_link_many(self.videomixer, self.video_tee)
+        
+        mixer.set_input("USB Source")
+        mixer.load_inputs(self.player, self.videomixer, inputs)
