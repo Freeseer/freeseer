@@ -2,9 +2,9 @@ import pygst
 pygst.require("0.10")
 import gst
 
-from freeseer.framework.plugin import IVideoInput
+from freeseer.framework.plugin import IAudioInput
 
-class USBSrc(IVideoInput):
+class USBSrc(IAudioInput):
     name = "ALSA Source"
     
     def get_videoinput_bin(self):
