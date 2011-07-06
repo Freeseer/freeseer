@@ -454,11 +454,13 @@ class FreeseerCore:
                 videomixer = plugin.plugin_object
                 break
         
-        audioinputs = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
-        self.backend.load_audiomixer(audiomixer, audioinputs)
+        if audiomixer is not None:
+            audioinputs = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
+            self.backend.load_audiomixer(audiomixer, audioinputs)
         
-        videoinputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
-        self.backend.load_videomixer(videomixer, videoinputs)
+        if videomixer is not None:
+            videoinputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+            self.backend.load_videomixer(videomixer, videoinputs)
         
         self.backend.record()
 
