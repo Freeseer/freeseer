@@ -7,7 +7,7 @@ from freeseer.framework.plugin import IAudioInput
 class ALSASrc(IAudioInput):
     name = "ALSA Source"
     
-    def get_videoinput_bin(self):
+    def get_audioinput_bin(self):
         bin = gst.Bin(self.name)
         
         audiosrc = gst.element_factory_make("alsasrc", "audiosrc")
