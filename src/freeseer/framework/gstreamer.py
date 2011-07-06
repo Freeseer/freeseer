@@ -87,14 +87,14 @@ class Gstreamer:
                 self.video_tee.link(bin)
     
     def load_audiomixer(self, mixer, inputs):
-        self.video_input_plugins = []
+        self.audio_input_plugins = []
         
-        self.videomixer = mixer.get_audiomixer_bin()
-        self.player.add(self.videomixer)
-        gst.element_link_many(self.videomixer, self.video_tee)
+        self.audiomixer = mixer.get_audiomixer_bin()
+        self.player.add(self.audiomixer)
+        gst.element_link_many(self.audiomixer, self.audio_tee)
         
-        mixer.set_input("USB Source")
-        self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)
+        mixer.set_input("ALSA Source")
+        self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
 
     def load_videomixer(self, mixer, inputs):
         self.video_input_plugins = []
