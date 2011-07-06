@@ -4,7 +4,7 @@ import gst
 
 from freeseer.framework.plugin import IAudioInput
 
-class USBSrc(IAudioInput):
+class ALSASrc(IAudioInput):
     name = "ALSA Source"
     
     def get_videoinput_bin(self):
