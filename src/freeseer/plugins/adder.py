@@ -8,7 +8,7 @@ class InputSelector(IAudioMixer):
     name = "Adder"
     input1 = None
     
-    def get_videomixer_bin(self):
+    def get_audiomixer_bin(self):
         bin = gst.Bin(self.name)
         
         audiomixer = gst.element_factory_make("adder", "audiomixer")
