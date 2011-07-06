@@ -4,7 +4,7 @@ import gst
 
 from freeseer.framework.plugin import IAudioMixer
 
-class InputSelector(IAudioMixer):
+class Adder(IAudioMixer):
     name = "Adder"
     input1 = None
     
