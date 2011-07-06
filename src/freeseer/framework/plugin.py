@@ -57,18 +57,21 @@ class PluginManager:
         return None
 
 class IAudioInput(IPlugin):
+    name = None
     
-    def get_source(self):
-        pass
+    def get_name(self):
+        return self.name
     
-class IAudioOutput(IPlugin):
-    
-    def get_source(self):
+    def get_audioinput_bin(self):
         pass
     
 class IAudioMixer(IPlugin):
+    name = None
     
-    def get_source(self):
+    def get_name(self):
+        return self.name
+    
+    def get_audiomixer_bin(self):
         pass
     
 class IVideoInput(IPlugin):
@@ -77,7 +80,7 @@ class IVideoInput(IPlugin):
     def get_name(self):
         return self.name
     
-    def get_input_bin(self):
+    def get_videoinput_bin(self):
         """
         Returns the Gstreamer Bin for the video input plugin.
         MUST be overridded when creating a video input plugin.

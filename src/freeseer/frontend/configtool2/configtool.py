@@ -70,12 +70,16 @@ class ConfigTool(QtGui.QDialog):
             self.mainWidgetLayout.removeWidget(self.currentWidget)
             self.currentWidget.hide()
             
-        if option == "Output":
-            self.load_option_output_plugins()
+        if option == "AudioInput":
+            self.load_option_audioinput_plugins()
+        elif option == "AudioMixer":
+            self.load_option_audiomixer_plugins()
         elif option == "VideoInput":
-            self.load_option_input_plugins()
+            self.load_option_videoinput_plugins()
         elif option == "VideoMixer":
-            self.load_option_mixer_plugins()
+            self.load_option_videomixer_plugins()
+        elif option == "Output":
+            self.load_option_output_plugins()
         else:
             self.currentWidget = None
         
@@ -95,14 +99,35 @@ class ConfigTool(QtGui.QDialog):
                 item.setCheckState(QtCore.Qt.Unchecked)
             
             self.pluginloader.listWidget.addItem(item)
+
+    def load_option_audioinput_plugins(self):
+        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
+        self.currentWidget = self.pluginloaderWidget
+        self.currentWidget.show()
+
+        self.load_plugin_list("AudioInput")
+            
+    def load_option_audiomixer_plugins(self):
+        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
+        self.currentWidget = self.pluginloaderWidget
+        self.currentWidget.show()
+
+        self.load_plugin_list("AudioMixer")
         
-    def load_option_input_plugins(self):
+    def load_option_videoinput_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
         self.currentWidget = self.pluginloaderWidget
         self.currentWidget.show()
 
         self.load_plugin_list("VideoInput")
             
+    def load_option_videomixer_plugins(self):
+        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
+        self.currentWidget = self.pluginloaderWidget
+        self.currentWidget.show()
+
+        self.load_plugin_list("VideoMixer")
+    
     def load_option_output_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
         self.currentWidget = self.pluginloaderWidget
@@ -110,13 +135,6 @@ class ConfigTool(QtGui.QDialog):
         
         self.load_plugin_list("Output")
 
-    def load_option_mixer_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-
-        self.load_plugin_list("VideoMixer")
-            
     def set_plugin_state(self, plugin):
         
         plugin_name = str(plugin.text())
