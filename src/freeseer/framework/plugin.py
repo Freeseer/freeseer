@@ -89,6 +89,7 @@ class IVideoInput(IPlugin):
     
 class IVideoMixer(IPlugin):
     name = None
+    widget = None
     
     def get_name(self):
         return self.name

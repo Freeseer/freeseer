@@ -81,7 +81,11 @@ class ConfigTool(QtGui.QDialog):
         elif option == "Output":
             self.load_option_output_plugins()
         else:
-            self.currentWidget = None
+            #self.currentWidget = None
+            plugin = self.core.get_plugin_manager().plugmanc.getPluginByName("Input Selector", "VideoMixer")
+            self.currentWidget = plugin.plugin_object.widget
+            self.mainWidgetLayout.addWidget(self.currentWidget)
+            self.currentWidget.show()
         
         
     def load_plugin_list(self, plugin_type):
@@ -142,6 +146,11 @@ class ConfigTool(QtGui.QDialog):
         
         if plugin.checkState() == 2:
             self.plugman.activate_plugin(plugin_name, plugin_category)
+            
+            # Add plugin to options list
+            item = QtGui.QTreeWidgetItem()
+            item.setText(0, plugin_name)
+            self.ui.optionsWidget.addTopLevelItem(item)
         else:
             self.plugman.deactivate_plugin(plugin_name, plugin_category)
 
