@@ -2,11 +2,26 @@ import pygst
 pygst.require("0.10")
 import gst
 
+from PyQt4 import QtGui, QtCore
+
 from freeseer.framework.plugin import IVideoMixer
 
 class InputSelector(IVideoMixer):
     name = "Input Selector"
     input1 = None
+    widget = None
+    
+    def __init__(self):
+        self.widget = QtGui.QWidget()
+        
+        layout = QtGui.QFormLayout()
+        self.widget.setLayout(layout)
+        
+        label = QtGui.QLabel("Input 1")
+        layout.addWidget(label)
+        
+        combobox = QtGui.QComboBox()
+        layout.addWidget(combobox)
     
     def get_videomixer_bin(self):
         bin = gst.Bin(self.name)
