@@ -153,6 +153,12 @@ class ConfigTool(QtGui.QDialog):
             self.ui.optionsWidget.addTopLevelItem(item)
         else:
             self.plugman.deactivate_plugin(plugin_name, plugin_category)
+            
+            # Remove plugin from options list
+            items = self.ui.optionsWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
+            item = items[0]
+            index = self.ui.optionsWidget.indexOfTopLevelItem(item)
+            self.ui.optionsWidget.takeTopLevelItem(index)
 
         print plugin_name
         print plugin_category
