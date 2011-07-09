@@ -18,10 +18,13 @@
 # from an XML definition file
 ALL: gui 
 
-gui: configtoolui.py pluginloader.py
+gui: configtoolui.py generalui.py pluginloader.py
 
 configtoolui.py: forms/configtoolui.ui
 	pyuic4 forms/configtoolui.ui -o configtoolui.py
+
+generalui.py: forms/generalui.ui
+	pyuic4 forms/generalui.ui -o generalui.py
 
 pluginloader.py: forms/pluginloader.ui
 	pyuic4 forms/pluginloader.ui -o pluginloader.py
