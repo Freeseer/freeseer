@@ -83,7 +83,7 @@ class ConfigTool(QtGui.QDialog):
         else:
             #self.currentWidget = None
             plugin = self.core.get_plugin_manager().plugmanc.getPluginByName("Input Selector", "VideoMixer")
-            self.currentWidget = plugin.plugin_object.widget
+            self.currentWidget = plugin.plugin_object.get_widget()
             self.mainWidgetLayout.addWidget(self.currentWidget)
             self.currentWidget.show()
         
