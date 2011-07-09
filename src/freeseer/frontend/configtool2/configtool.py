@@ -69,8 +69,12 @@ class ConfigTool(QtGui.QDialog):
         if self.currentWidget is not None:
             self.mainWidgetLayout.removeWidget(self.currentWidget)
             self.currentWidget.hide()
-            
-        if option == "AudioInput":
+          
+        if option == "General":
+            pass
+        elif option == "Plugins":
+            pass  
+        elif option == "AudioInput":
             self.load_option_audioinput_plugins()
         elif option == "AudioMixer":
             self.load_option_audiomixer_plugins()
@@ -81,11 +85,11 @@ class ConfigTool(QtGui.QDialog):
         elif option == "Output":
             self.load_option_output_plugins()
         else:
-            #self.currentWidget = None
-            plugin = self.core.get_plugin_manager().plugmanc.getPluginByName("Input Selector", "VideoMixer")
-            self.currentWidget = plugin.plugin_object.get_widget()
-            self.mainWidgetLayout.addWidget(self.currentWidget)
-            self.currentWidget.show()
+            plugin_name = str(self.ui.optionsWidget.currentItem().text(0))
+            plugin_category = str(self.ui.optionsWidget.currentItem().text(1))
+            
+            plugin = self.core.get_plugin_manager().plugmanc.getPluginByName(plugin_name, plugin_category)
+            self.show_plugin_widget(plugin)
         
         
     def load_plugin_list(self, plugin_type):
@@ -146,20 +150,28 @@ class ConfigTool(QtGui.QDialog):
         
         if plugin.checkState() == 2:
             self.plugman.activate_plugin(plugin_name, plugin_category)
-            
-            # Add plugin to options list
-            item = QtGui.QTreeWidgetItem()
-            item.setText(0, plugin_name)
-            self.ui.optionsWidget.addTopLevelItem(item)
+            self.add_plugin_widget(plugin_name, plugin_category)
         else:
             self.plugman.deactivate_plugin(plugin_name, plugin_category)
+            self.del_plugin_widget(plugin_name)
             
-            # Remove plugin from options list
-            items = self.ui.optionsWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
-            item = items[0]
-            index = self.ui.optionsWidget.indexOfTopLevelItem(item)
-            self.ui.optionsWidget.takeTopLevelItem(index)
-
         print plugin_name
         print plugin_category
             
+    def add_plugin_widget(self, plugin_name, plugin_category):
+        item = QtGui.QTreeWidgetItem()
+        item.setText(0, plugin_name)
+        item.setText(1, plugin_category)
+        self.ui.optionsWidget.addTopLevelItem(item)
+    
+    def del_plugin_widget(self, plugin_name):
+        items = self.ui.optionsWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
+        item = items[0]
+        index = self.ui.optionsWidget.indexOfTopLevelItem(item)
+        self.ui.optionsWidget.takeTopLevelItem(index)
+        
+    def show_plugin_widget(self, plugin):
+        
+        self.currentWidget = plugin.plugin_object.get_widget()
+        self.mainWidgetLayout.addWidget(self.currentWidget)
+        self.currentWidget.show()
