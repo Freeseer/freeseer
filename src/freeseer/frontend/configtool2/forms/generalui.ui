@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>521</width>
+    <height>514</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QGroupBox" name="gridGroupBoxAudioVideo">
+     <property name="title">
+      <string>Audio / Video Settings</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="checkBoxAudioMixer">
+        <property name="text">
+         <string>Audio Mixer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="comboBoxAudioMixer">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pushButtonAudioMixer">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Configure AudioMixer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkBoxVideoMixer">
+        <property name="text">
+         <string>Video Mixer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboBoxVideoMixer">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pushButtonVideoMixer">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Configure VideoMixer</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxMiscellaneous">
+     <property name="title">
+      <string>Miscellaneous</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayoutRecordDirectory">
+        <item>
+         <widget class="QLabel" name="labelRecordDirectory">
+          <property name="text">
+           <string>Record Directory</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEditRecordDirectory</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEditRecordDirectory"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="toolButtonRecordDirectory">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayoutMiscellaneous">
+        <item>
+         <widget class="QCheckBox" name="checkBoxAutoHide">
+          <property name="text">
+           <string>Enable Auto-Hide</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>checkBoxAudioMixer</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBoxAudioMixer</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxAudioMixer</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pushButtonAudioMixer</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>46</x>
+     <y>97</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>383</x>
+     <y>104</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxVideoMixer</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBoxVideoMixer</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>90</x>
+     <y>178</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>190</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBoxVideoMixer</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pushButtonVideoMixer</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>47</x>
+     <y>183</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>357</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
