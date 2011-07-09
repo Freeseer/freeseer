@@ -55,29 +55,31 @@ class PluginManager:
     def get_output_plugins(self):
         return None
 
-class IAudioInput(IPlugin):
+class IBackendPlugin(IPlugin):
     name = None
+    widget = None
     
     def get_name(self):
         return self.name
+    
+    def get_widget(self):
+        """
+        Implement this method to return the settings widget (Qt based).
+        Used by Freeseer configtool 
+        """
+        return None
+
+class IAudioInput(IBackendPlugin):
     
     def get_audioinput_bin(self):
         pass
     
-class IAudioMixer(IPlugin):
-    name = None
-    
-    def get_name(self):
-        return self.name
+class IAudioMixer(IBackendPlugin):
     
     def get_audiomixer_bin(self):
         pass
     
-class IVideoInput(IPlugin):
-    name = None
-    
-    def get_name(self):
-        return self.name
+class IVideoInput(IBackendPlugin):
     
     def get_videoinput_bin(self):
         """
@@ -87,11 +89,6 @@ class IVideoInput(IPlugin):
         pass
     
 class IVideoMixer(IPlugin):
-    name = None
-    widget = None
-    
-    def get_name(self):
-        return self.name
     
     def get_videomixer_bin(self):
         """
@@ -101,11 +98,7 @@ class IVideoMixer(IPlugin):
         pass
 
 class IOutput(IPlugin):
-    name = None
     type = None # Types: audio, video, both
-    
-    def get_name(self):
-        return self.name
     
     def get_type(self):
         return self.type
