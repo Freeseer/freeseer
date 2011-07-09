@@ -166,9 +166,10 @@ class ConfigTool(QtGui.QDialog):
     
     def del_plugin_widget(self, plugin_name):
         items = self.ui.optionsWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
-        item = items[0]
-        index = self.ui.optionsWidget.indexOfTopLevelItem(item)
-        self.ui.optionsWidget.takeTopLevelItem(index)
+        if len(items) > 0:
+            item = items[0]
+            index = self.ui.optionsWidget.indexOfTopLevelItem(item)
+            self.ui.optionsWidget.takeTopLevelItem(index)
         
     def show_plugin_widget(self, plugin):
         
