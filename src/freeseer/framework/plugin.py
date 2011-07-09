@@ -47,7 +47,6 @@ class PluginManager:
     def activate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
         self.save()
-        print 'here'
         
     def deactivate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
