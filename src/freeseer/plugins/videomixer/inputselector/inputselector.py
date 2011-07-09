@@ -11,18 +11,6 @@ class InputSelector(IVideoMixer):
     input1 = None
     widget = None
     
-    def __init__(self):
-        self.widget = QtGui.QWidget()
-        
-        layout = QtGui.QFormLayout()
-        self.widget.setLayout(layout)
-        
-        label = QtGui.QLabel("Input 1")
-        layout.addWidget(label)
-        
-        combobox = QtGui.QComboBox()
-        layout.addWidget(combobox)
-    
     def get_videomixer_bin(self):
         bin = gst.Bin(self.name)
         
@@ -60,3 +48,18 @@ class InputSelector(IVideoMixer):
                 break
             
         return loaded
+    
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            
+            label = QtGui.QLabel("Input 1")
+            layout.addWidget(label)
+            
+            combobox = QtGui.QComboBox()
+            layout.addWidget(combobox)
+            
+        return self.widget
