@@ -36,6 +36,8 @@ from pluginloader import *
 
 __version__ = project_info.VERSION
 
+LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
+
 class ConfigTool(QtGui.QDialog):
     '''
     ConfigTool is used to tune settings used by the Freeseer Application
@@ -45,6 +47,9 @@ class ConfigTool(QtGui.QDialog):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_ConfigTool()
         self.ui.setupUi(self)
+        
+        # Initialize geometry, to be used for restoring window positioning.
+        self.geometry = None
 
         self.currentWidget = None
         self.mainWidgetLayout = QtGui.QVBoxLayout()
@@ -294,3 +299,17 @@ class ConfigTool(QtGui.QDialog):
             self.mainWidgetLayout.addWidget(self.currentWidget)
             self.currentWidget.show()
 
+    # Override
+    
+    def translateFile(self,file_ending):
+        load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
+        loaded = self.uiTranslator.load(load_string);
+        if(loaded == True):
+            self.ui.retranslateUi(self);
+        else:
+            print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
+
+    def closeEvent(self, event):
+        self.core.logger.log.info('Exiting configtool...')
+        self.geometry = self.saveGeometry()
+        event.accept()
