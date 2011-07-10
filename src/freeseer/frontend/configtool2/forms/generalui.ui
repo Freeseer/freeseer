@@ -20,21 +20,14 @@
       <string>Audio / Video Settings</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBoxAudioMixer">
-        <property name="text">
-         <string>Audio Mixer</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
+      <item row="2" column="2">
        <widget class="QComboBox" name="comboBoxAudioMixer">
         <property name="enabled">
          <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="2" column="3">
        <widget class="QPushButton" name="pushButtonAudioMixer">
         <property name="enabled">
          <bool>false</bool>
@@ -44,27 +37,54 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBoxVideoMixer">
-        <property name="text">
-         <string>Video Mixer</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
+      <item row="5" column="2">
        <widget class="QComboBox" name="comboBoxVideoMixer">
         <property name="enabled">
          <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="5" column="3">
        <widget class="QPushButton" name="pushButtonVideoMixer">
         <property name="enabled">
          <bool>false</bool>
         </property>
         <property name="text">
          <string>Setup</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="checkBoxAudioMixer">
+        <property name="text">
+         <string>Record Audio</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="checkBoxVideoMixer">
+        <property name="text">
+         <string>Record Video</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="labelVideoMixer">
+        <property name="text">
+         <string>Video Mixer</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboBoxVideoMixer</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="labelAudioMixer">
+        <property name="text">
+         <string>Audio Mixer</string>
+        </property>
+        <property name="buddy">
+         <cstring>comboBoxAudioMixer</cstring>
         </property>
        </widget>
       </item>
@@ -126,8 +146,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>65</x>
-     <y>99</y>
+     <x>76</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>253</x>
@@ -142,8 +162,8 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>46</x>
-     <y>97</y>
+     <x>57</x>
+     <y>78</y>
     </hint>
     <hint type="destinationlabel">
      <x>383</x>
@@ -158,12 +178,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>90</x>
-     <y>178</y>
+     <x>101</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>231</x>
-     <y>190</y>
+     <x>341</x>
+     <y>226</y>
     </hint>
    </hints>
   </connection>
@@ -174,12 +194,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>47</x>
-     <y>183</y>
+     <x>58</x>
+     <y>174</y>
     </hint>
     <hint type="destinationlabel">
-     <x>357</x>
-     <y>178</y>
+     <x>509</x>
+     <y>226</y>
     </hint>
    </hints>
   </connection>

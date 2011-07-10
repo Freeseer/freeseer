@@ -62,6 +62,10 @@ class ConfigTool(QtGui.QDialog):
 
         # connections
         self.connect(self.ui.optionsWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
+        # general tab connections
+        self.connect(self.generalui.pushButtonAudioMixer, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
+        self.connect(self.generalui.pushButtonVideoMixer, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        # plugin loader connections
         self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
 
         # load core
@@ -80,6 +84,10 @@ class ConfigTool(QtGui.QDialog):
         if len(items) > 0:
             item = items[0]
             self.ui.optionsWidget.setCurrentItem(item)
+        
+    ###
+    ### General
+    ###
         
     def change_option(self):
         option = self.ui.optionsWidget.currentItem().text(0)
@@ -146,6 +154,24 @@ class ConfigTool(QtGui.QDialog):
             self.generalui.checkBoxAutoHide.setChecked(True)
         else:
             self.generalui.checkBoxAutoHide.setChecked(False)
+
+    def setup_audio_mixer(self):
+        mixer = str(self.generalui.comboBoxAudioMixer.currentText())
+        items = self.ui.optionsWidget.findItems(mixer, QtCore.Qt.MatchExactly)
+        if len(items) > 0:
+            item = items[0]
+            self.ui.optionsWidget.setCurrentItem(item)
+    
+    def setup_video_mixer(self):
+        mixer = str(self.generalui.comboBoxVideoMixer.currentText())
+        items = self.ui.optionsWidget.findItems(mixer, QtCore.Qt.MatchExactly)
+        if len(items) > 0:
+            item = items[0]
+            self.ui.optionsWidget.setCurrentItem(item)
+
+    ###
+    ### Plugin Loader Related
+    ###
         
     def load_plugin_list(self, plugin_type):
         self.pluginloader.listWidget.clear()
@@ -240,3 +266,4 @@ class ConfigTool(QtGui.QDialog):
         if self.currentWidget is not None:
             self.mainWidgetLayout.addWidget(self.currentWidget)
             self.currentWidget.show()
+
