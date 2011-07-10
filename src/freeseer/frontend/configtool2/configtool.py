@@ -301,6 +301,20 @@ class ConfigTool(QtGui.QDialog):
 
     # Override
     
+#    def area_select(self):
+#        self.area_selector = QtAreaSelector(self)
+#        self.area_selector.show()
+#        self.core.logger.log.info('Desktop area selector started.')
+#        self.hide()
+#
+#    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
+#        self.start_x = self.core.config.start_x = start_x
+#        self.start_y = self.core.config.start_y = start_y
+#        self.end_x = self.core.config.end_x = end_x
+#        self.end_y = self.core.config.end_y = end_y
+#        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+#        self.show()
+    
     def translateFile(self,file_ending):
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
         loaded = self.uiTranslator.load(load_string);
