@@ -54,7 +54,7 @@ class ConfigTool(QtGui.QDialog):
         if core is not None:
             self.core = core
         else:
-            self.core = FreeseerCore(self)
+            self.core = FreeseerCore()
             
         # get QT desktop to get screen size
         self.desktop = QtGui.QApplication.desktop()	

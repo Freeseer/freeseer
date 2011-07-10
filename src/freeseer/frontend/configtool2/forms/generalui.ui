@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
+ <class>General</class>
+ <widget class="QWidget" name="General">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -40,7 +40,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Configure AudioMixer</string>
+         <string>Setup</string>
         </property>
        </widget>
       </item>
@@ -64,7 +64,7 @@
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Configure VideoMixer</string>
+         <string>Setup</string>
         </property>
        </widget>
       </item>
