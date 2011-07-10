@@ -88,7 +88,7 @@ class IVideoInput(IBackendPlugin):
         """
         pass
     
-class IVideoMixer(IPlugin):
+class IVideoMixer(IBackendPlugin):
     
     def get_videomixer_bin(self):
         """
@@ -97,7 +97,7 @@ class IVideoMixer(IPlugin):
         """
         pass
 
-class IOutput(IPlugin):
+class IOutput(IBackendPlugin):
     type = None # Types: audio, video, both
     
     def get_type(self):

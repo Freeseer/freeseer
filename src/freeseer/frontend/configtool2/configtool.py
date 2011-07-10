@@ -31,6 +31,7 @@ from freeseer import project_info
 from freeseer.framework.core import *
 
 from configtoolui import *
+from generalui import *
 from pluginloader import *
 
 __version__ = project_info.VERSION
@@ -49,6 +50,11 @@ class ConfigTool(QtGui.QDialog):
         self.mainWidgetLayout = QtGui.QVBoxLayout()
         self.ui.mainWidget.setLayout(self.mainWidgetLayout)
         
+        # Load the General UI Widget
+        self.generalWidget = QtGui.QWidget()
+        self.generalui = Ui_General()
+        self.generalui.setupUi(self.generalWidget)
+        
         # Load Plugin Loader UI components
         self.pluginloaderWidget = QtGui.QWidget()
         self.pluginloader = Ui_PluginLoader()
@@ -60,8 +66,20 @@ class ConfigTool(QtGui.QDialog):
 
         # load core
         self.core = FreeseerCore()
+        
+        # get the config
+        self.config = self.core.get_config()
         # get the plugin manager
         self.plugman = self.core.get_plugin_manager()
+        
+        # load active plugin widgets
+        self.load_plugin_widgets()
+        
+        # Start off with displaying the General Settings
+        items = self.ui.optionsWidget.findItems("General", QtCore.Qt.MatchExactly)
+        if len(items) > 0:
+            item = items[0]
+            self.ui.optionsWidget.setCurrentItem(item)
         
     def change_option(self):
         option = self.ui.optionsWidget.currentItem().text(0)
@@ -71,7 +89,7 @@ class ConfigTool(QtGui.QDialog):
             self.currentWidget.hide()
           
         if option == "General":
-            pass
+            self.load_general_widget()
         elif option == "Plugins":
             pass  
         elif option == "AudioInput":
@@ -88,9 +106,46 @@ class ConfigTool(QtGui.QDialog):
             plugin_name = str(self.ui.optionsWidget.currentItem().text(0))
             plugin_category = str(self.ui.optionsWidget.currentItem().text(1))
             
-            plugin = self.core.get_plugin_manager().plugmanc.getPluginByName(plugin_name, plugin_category)
+            plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
             self.show_plugin_widget(plugin)
         
+    def load_general_widget(self):
+        self.mainWidgetLayout.addWidget(self.generalWidget)
+        self.currentWidget = self.generalWidget
+        self.currentWidget.show()
+        
+        # Set up Audio
+        if self.config.enable_audio_recoding == True:
+            self.generalui.checkBoxAudioMixer.setChecked(True)
+        else:
+            self.generalui.checkBoxAudioMixer.setChecked(False)
+            
+        self.generalui.comboBoxAudioMixer.clear()
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
+        for plugin in plugins:
+            if plugin.is_activated:
+                self.generalui.comboBoxAudioMixer.addItem(plugin.plugin_object.get_name())
+        
+        # Set up Video
+        if self.config.enable_video_recoding == True:
+            self.generalui.checkBoxVideoMixer.setChecked(True)
+        else:
+            self.generalui.checkBoxVideoMixer.setChecked(False)
+            
+        self.generalui.comboBoxVideoMixer.clear()
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
+        for plugin in plugins:
+            if plugin.is_activated:
+                self.generalui.comboBoxVideoMixer.addItem(plugin.plugin_object.get_name())
+        
+        # Recording Directory Settings
+        self.generalui.lineEditRecordDirectory.setText(self.config.videodir)
+        
+        # Load Auto Hide Settings
+        if self.config.auto_hide == True:
+            self.generalui.checkBoxAutoHide.setChecked(True)
+        else:
+            self.generalui.checkBoxAutoHide.setChecked(False)
         
     def load_plugin_list(self, plugin_type):
         self.pluginloader.listWidget.clear()
@@ -154,10 +209,16 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.plugman.deactivate_plugin(plugin_name, plugin_category)
             self.del_plugin_widget(plugin_name)
-            
-        print plugin_name
-        print plugin_category
-            
+    
+    def load_plugin_widgets(self):
+        categories = self.plugman.plugmanc.getCategories()
+        for category in categories:
+            plugins = self.plugman.plugmanc.getPluginsOfCategory(category)
+            for plugin in plugins:
+                if plugin.is_activated:
+                    plugin_name = plugin.plugin_object.get_name()
+                    self.add_plugin_widget(plugin_name, category)
+    
     def add_plugin_widget(self, plugin_name, plugin_category):
         item = QtGui.QTreeWidgetItem()
         item.setText(0, plugin_name)
