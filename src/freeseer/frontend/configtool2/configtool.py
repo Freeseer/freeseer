@@ -67,6 +67,7 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.generalui.pushButtonAudioMixer, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
         self.connect(self.generalui.checkBoxVideoMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
         self.connect(self.generalui.pushButtonVideoMixer, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.generalui.pushButtonRecordDirectory, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.generalui.lineEditRecordDirectory, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalui.checkBoxAutoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
         # plugin loader connections
@@ -181,10 +182,15 @@ class ConfigTool(QtGui.QDialog):
             item = items[0]
             self.ui.optionsWidget.setCurrentItem(item)
 
+    def browse_video_directory(self):
+        directory = self.generalui.lineEditRecordDirectory.text()
+        videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)))
+        self.generalui.lineEditRecordDirectory.setText(videodir)
+        self.generalui.lineEditRecordDirectory.emit(QtCore.SIGNAL("editingFinished()"))
+
     def update_record_directory(self):
         self.config.videodir = str(self.generalui.lineEditRecordDirectory.text())
         self.config.writeConfig()
-        print 'saved'
 
     def toggle_autohide(self, state):
         self.config.auto_hide = state

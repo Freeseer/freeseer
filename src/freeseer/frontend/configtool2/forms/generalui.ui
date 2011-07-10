@@ -113,9 +113,9 @@
          <widget class="QLineEdit" name="lineEditRecordDirectory"/>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButtonRecordDirectory">
+         <widget class="QPushButton" name="pushButtonRecordDirectory">
           <property name="text">
-           <string>...</string>
+           <string>....</string>
           </property>
          </widget>
         </item>
