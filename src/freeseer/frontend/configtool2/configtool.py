@@ -67,6 +67,7 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.generalui.pushButtonAudioMixer, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
         self.connect(self.generalui.checkBoxVideoMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
         self.connect(self.generalui.pushButtonVideoMixer, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.generalui.lineEditRecordDirectory, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalui.checkBoxAutoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
         # plugin loader connections
         self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
@@ -179,6 +180,11 @@ class ConfigTool(QtGui.QDialog):
         if len(items) > 0:
             item = items[0]
             self.ui.optionsWidget.setCurrentItem(item)
+
+    def update_record_directory(self):
+        self.config.videodir = str(self.generalui.lineEditRecordDirectory.text())
+        self.config.writeConfig()
+        print 'saved'
 
     def toggle_autohide(self, state):
         self.config.auto_hide = state
