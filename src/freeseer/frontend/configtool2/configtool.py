@@ -220,10 +220,12 @@ class ConfigTool(QtGui.QDialog):
                     self.add_plugin_widget(plugin_name, category)
     
     def add_plugin_widget(self, plugin_name, plugin_category):
-        item = QtGui.QTreeWidgetItem()
-        item.setText(0, plugin_name)
-        item.setText(1, plugin_category)
-        self.ui.optionsWidget.addTopLevelItem(item)
+        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
+        if plugin.plugin_object.get_widget() is not None:
+            item = QtGui.QTreeWidgetItem()
+            item.setText(0, plugin_name)
+            item.setText(1, plugin_category)
+            self.ui.optionsWidget.addTopLevelItem(item)
     
     def del_plugin_widget(self, plugin_name):
         items = self.ui.optionsWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
