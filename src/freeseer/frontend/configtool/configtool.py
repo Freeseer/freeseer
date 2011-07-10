@@ -47,6 +47,7 @@ class ConfigTool(QtGui.QDialog):
         QtGui.QDialog.__init__(self)
         self.ui = Ui_ConfigTool()
         self.ui.setupUi(self)
+        self.uiTranslator = QtCore.QTranslator();
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
@@ -79,7 +80,10 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
 
         # load core
-        self.core = FreeseerCore()
+        if core is None:
+            self.core = FreeseerCore()
+        else:
+            self.core = core
         
         # get the config
         self.config = self.core.get_config()
