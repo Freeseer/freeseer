@@ -63,8 +63,11 @@ class ConfigTool(QtGui.QDialog):
         # connections
         self.connect(self.ui.optionsWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         # general tab connections
+        self.connect(self.generalui.checkBoxAudioMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
         self.connect(self.generalui.pushButtonAudioMixer, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
+        self.connect(self.generalui.checkBoxVideoMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
         self.connect(self.generalui.pushButtonVideoMixer, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.generalui.checkBoxAutoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
         # plugin loader connections
         self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
 
@@ -155,12 +158,20 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.generalui.checkBoxAutoHide.setChecked(False)
 
+    def toggle_audiomixer_state(self, state):
+        self.config.enable_audio_recoding = state
+        self.config.writeConfig()
+
     def setup_audio_mixer(self):
         mixer = str(self.generalui.comboBoxAudioMixer.currentText())
         items = self.ui.optionsWidget.findItems(mixer, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
             self.ui.optionsWidget.setCurrentItem(item)
+            
+    def toggle_videomixer_state(self, state):
+        self.config.enable_video_recoding = state
+        self.config.writeConfig()
     
     def setup_video_mixer(self):
         mixer = str(self.generalui.comboBoxVideoMixer.currentText())
@@ -168,6 +179,10 @@ class ConfigTool(QtGui.QDialog):
         if len(items) > 0:
             item = items[0]
             self.ui.optionsWidget.setCurrentItem(item)
+
+    def toggle_autohide(self, state):
+        self.config.auto_hide = state
+        self.config.writeConfig()
 
     ###
     ### Plugin Loader Related
