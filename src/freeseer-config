@@ -26,7 +26,7 @@ import sys
 
 from PyQt4 import QtGui
 
-from freeseer.frontend.configtool2.configtool import *
+from freeseer.frontend.configtool.configtool import *
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
