@@ -73,6 +73,9 @@ class FreeseerCore:
       
         self.logger.log.info(u"Core initialized")   
 
+    def get_config(self):
+        return self.config
+
     def get_plugin_manager(self):
         return self.plugman
 
