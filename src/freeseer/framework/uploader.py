@@ -25,6 +25,7 @@
 from twisted.conch.ssh import transport, userauth, connection, channel, keys, common
 from twisted.internet import defer, protocol, reactor
 from twisted.python import log
+from twisted.conch import error
 import sys, os, getpass
 import gobject
 gobject.threads_init()
@@ -32,10 +33,10 @@ import pygst
 pygst.require('0.10')
 from gst.extend.discoverer import Discoverer
 
-USER = 'mhubbard'
-PASS = None
-HOST = 'localhost'
-SRC = 'test.txt'
+USER = 'mrjhubba'
+PASS = 'Sasasa22'
+HOST = '134.117.29.70'
+SRC = 'C:\Users\Mathieu\Documents\Resume.doc'
 DST = '.'
 PROTOCOL = 'scp'
 EXCODE = 1
@@ -46,17 +47,20 @@ class Transport(transport.SSHClientTransport):
     
     #Checks to see that the fingerprint key match's up with the server's
     def verifyHostKey(self, hostKey, fingerprint):
-        if fingerprint != 'b1:94:6a:c9:24:92:d2:34:7c:62:35:b4:d2:61:11:84':
-            return defer.fail(error.ConchError('bad key'))
-        else:
-            return defer.succeed(1)
+        print ('verifyHostKey')
+#        if fingerprint != 'b1:94:6a:c9:24:92:d2:34:7c:62:35:b4:d2:61:11:84':
+#            return defer.fail(error.ConchError('bad key'))
+#        else:
+        return defer.succeed(1)
 
     #Once secure create a new connection with the user's authentication
     def connectionSecure(self):
-        self.requestService(UserAuth(USER, Connection()))
+        print ('connectionSecure')
+        self.requestService(ClientUserAuth(USER, ClientConnection()))
         
     #Stops the connection   
     def connectionLost(self, reason):
+        print ('connectionLost')
         reactor.stop()
 
 
@@ -64,29 +68,35 @@ class Transport(transport.SSHClientTransport):
 class UserAuth(userauth.SSHUserAuthClient):
     
     def getPassword(self):
-        return defer.succeed(getpass.getpass("%s@%s's password: " % (USER, HOST)))
+        try:
+            passwd = defer.succeed(getpass.getpass("%s@%s's password: " % (USER, HOST)))
+        except GetPassWarning:
+            print "Ooop that was not a valid password, %s" % passwd
+        return passwd
             
     def getPublicKey(self):
-        path = os.path.expanduser('~/.ssh/id_rsa') 
-        if not os.path.exists(path) or self.lastPublicKey:
+        print ('getPublicKey')
+#        path = os.path.expanduser('~/.ssh/id_rsa') 
+#        if not os.path.exists(path) or self.lastPublicKey:
             #if the file doesn't exist, or we've tried a public key
-            return
-        return keys.Key.fromFile(filename=path+'.pub').blob()
+        return
+#        return keys.Key.fromFile(filename=path+'.pub').blob()
 
     def getPrivateKey(self):
-        path = os.path.expanduser('~/.ssh/id_rsa')
-        return defer.succeed(keys.Key.fromFile(path).keyObject)
+        print ('getPrivateKey')
+#        path = os.path.expanduser('~/.ssh/id_rsa')
+        return #defer.succeed(keys.Key.fromFile(path).keyObject)
 
 #This class opens the connection channels
 class ClientConnection(connection.SSHConnection):
 
     def serviceStarted(self):
+        print ('servicesStarted')
         if PROTOCOL == 'scp':
             self.openChannel(ScpChannel(2**16, 2**15, self))
         else:
             self.openChannel(SftpChannel(2**16, 2**15, self))
-        self.openChannel(ScpChannel(2**16, 2**15, self))
-
+#        self.openChannel(ScpChannel(2**16, 2**15, self))
 #This class sets up a channel to be used by the SCPchannel
 class TransferChannelBase(channel.SSHChannel):
     
@@ -96,17 +106,19 @@ class TransferChannelBase(channel.SSHChannel):
     buffer = ''
         
     def channelOpen(self, data):
+        print ('channelOpen')
         # Might display/process welcome screen
         self.welcome = data
         if PROTOCOL == 'scp':
             type = 'exec'
         else:
             type = 'subsystem'
-        # Call our handler
+        # Call the handler
         d = self.conn.sendRequest(self, type, common.NS(PROTOCOL), wantReply=1)
         d.addCallbacks(self.channelOpened, log.err)
         
     def closed(self):
+        print ('closed')
         self.loseConnection()
         reactor.stop()
 
