@@ -22,7 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-from twisted.conch.ssh import transport, userauth, connection, channel, keys, common
+from twisted.conch.ssh import transport, userauth, connection, channel, keys, common, filetransfer
 from twisted.internet import defer, protocol, reactor
 from twisted.python import log
 from twisted.conch import error
@@ -34,10 +34,10 @@ pygst.require('0.10')
 from gst.extend.discoverer import Discoverer
 
 USER = 'mrjhubba'
-PASS = 'Sasasa22'
+PASS = None
 HOST = '134.117.29.70'
-SRC = 'C:\Users\Mathieu\Documents\Resume.doc'
-DST = '.'
+SRC = 'new-file'
+DST = 'test/'
 PROTOCOL = 'scp'
 EXCODE = 1
 VIDEO = '/home/mathieu/Videos/2011-04-06_-_1459_-_T103_-_Thanh_Ha_-_Intro_to_Freeseer.ogg'
@@ -48,20 +48,17 @@ class Transport(transport.SSHClientTransport):
     #Checks to see that the fingerprint key match's up with the server's
     def verifyHostKey(self, hostKey, fingerprint):
         print ('verifyHostKey')
-#        if fingerprint != 'b1:94:6a:c9:24:92:d2:34:7c:62:35:b4:d2:61:11:84':
-#            return defer.fail(error.ConchError('bad key'))
-#        else:
         return defer.succeed(1)
 
     #Once secure create a new connection with the user's authentication
     def connectionSecure(self):
         print ('connectionSecure')
-        self.requestService(ClientUserAuth(USER, ClientConnection()))
+        self.requestService(UserAuth(USER, ClientConnection()))
         
     #Stops the connection   
     def connectionLost(self, reason):
         print ('connectionLost')
-        reactor.stop()
+#        reactor.stop()
 
 
 #This class handles the SSH Authentication with either ssh keys or a user input password
@@ -126,10 +123,12 @@ class TransferChannelBase(channel.SSHChannel):
 class ScpChannel(TransferChannelBase):
     #start SCP transfer
     def channelOpened(self, data):
+        print ('scpChannelOpened')
         self.write('\0')
         self.state = 'waiting'
 
     def dataReceived(self, data):
+        print ('dateReceived')
         # What we do with the data depends on where we are
         if self.state=='waiting':
             # we've started the transfer, and are expecting response
@@ -213,8 +212,10 @@ class VideoData:
     #Currently this just prints the meta-data
     #Will have to get specific tags from discoverer object to store them
     def retrieveData(self, discoverer, ismedia):
+        tags = discoverer.tags
         discoverer.print_info()
         self.current = None
+        return tags
     
     #checks to make sure the file exists then creates Discoverer
     #object using the file path    
@@ -231,9 +232,9 @@ class VideoData:
             
 if __name__ == '__main__':
     #Test scp/sftp upload
-    #protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
-    #reactor.run()
+    protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+    reactor.run()
     
     #Test GstFile
-    video = VideoData(VIDEO)
-    video.run()  
+    #video = VideoData(VIDEO)
+    #video.run()  
