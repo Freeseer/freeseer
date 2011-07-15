@@ -38,7 +38,7 @@ PASS = None
 HOST = '134.117.29.70'
 SRC = 'new-file'
 DST = 'test/'
-PROTOCOL = 'scp'
+PROTOCOL = 'sftp'
 EXCODE = 1
 VIDEO = '/home/mathieu/Videos/2011-04-06_-_1459_-_T103_-_Thanh_Ha_-_Intro_to_Freeseer.ogg'
 
