@@ -1,3 +1,5 @@
+import ConfigParser
+
 import pygst
 pygst.require("0.10")
 import gst
@@ -48,6 +50,10 @@ class InputSelector(IVideoMixer):
                 break
             
         return loaded
+   
+    def load_config(self, plugman):
+        self.plugman = plugman
+        self.input1 = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Input 1")
     
     def get_widget(self):
         if self.widget is None:
@@ -56,10 +62,35 @@ class InputSelector(IVideoMixer):
             layout = QtGui.QFormLayout()
             self.widget.setLayout(layout)
             
-            label = QtGui.QLabel("Input 1")
-            layout.addWidget(label)
+            self.label = QtGui.QLabel("Input 1")
+            self.combobox = QtGui.QComboBox()
+            layout.addRow(self.label, self.combobox)
             
-            combobox = QtGui.QComboBox()
-            layout.addWidget(combobox)
+            self.widget.connect(self.combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
             
         return self.widget
+
+    def widget_load_sources(self, plugman):
+        self.plugman = plugman
+        
+        try:
+            self.input1 = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Input 1")
+        except ConfigParser.NoSectionError:
+            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Input 1", None)
+        
+        sources = []
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+        for plugin in plugins:
+            if plugin.is_activated:
+                sources.append(plugin.plugin_object.get_name())
+                
+        n = 0
+        for i in sources:
+            self.combobox.addItem(i)
+            if i == self.input1:
+                self.combobox.setCurrentIndex(n)
+            n = n +1
+
+    def set_input1(self, input):
+        self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Input 1", input)
+        self.plugman.save()
