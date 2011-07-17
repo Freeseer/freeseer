@@ -118,7 +118,7 @@ class MainApp(QtGui.QMainWindow):
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
-        self.core = FreeseerCore()
+        self.core = FreeseerCore(self.ui.previewWidget.winId())
         
         #Setup the translator and populate the language menu under options
         self.uiTranslator = QtCore.QTranslator();

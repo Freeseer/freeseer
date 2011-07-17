@@ -6,8 +6,8 @@ import gst
 
 
 class Gstreamer:
-    def __init__(self):
-        self.window_id = None
+    def __init__(self, window_id=None):
+        self.window_id = window_id
         
         # Initialize Player
         self.player = gst.Pipeline('player')
