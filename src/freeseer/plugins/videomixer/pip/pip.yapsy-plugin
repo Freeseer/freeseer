@@ -1,0 +1,9 @@
+[Core]
+Name = Picture-In-Picture
+Module = pip
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Picture-In-Picture video mixer.
