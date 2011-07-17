@@ -103,6 +103,8 @@ class IVideoMixer(IBackendPlugin):
 
 class IOutput(IBackendPlugin):
     type = None # Types: audio, video, both
+    extension = None
+    location = None
     
     def get_type(self):
         return self.type
@@ -113,3 +115,9 @@ class IOutput(IBackendPlugin):
         MUST be overridded when creating an output plugin.
         """
         pass
+    
+    def get_extension(self):
+        return self.extension
+    
+    def set_recording_location(self, location):
+        self.location = location
