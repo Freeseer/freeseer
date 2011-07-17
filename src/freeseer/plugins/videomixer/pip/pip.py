@@ -59,7 +59,6 @@ class PictureInPicture(IVideoMixer):
         
         # Load main source
         for plugin in inputs:
-            print self.input1, plugin.plugin_object.get_name()
             if plugin.is_activated and plugin.plugin_object.get_name() == self.input1:
                 input1 = plugin.plugin_object.get_videoinput_bin()
                 player.add(input1)
@@ -70,7 +69,6 @@ class PictureInPicture(IVideoMixer):
             
         # Load pip source
         for plugin in inputs:
-            print self.input2, plugin.plugin_object.get_name()
             if plugin.is_activated and plugin.plugin_object.get_name() == self.input2:
                 input2 = plugin.plugin_object.get_videoinput_bin()
                 player.add(input2)
