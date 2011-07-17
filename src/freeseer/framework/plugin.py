@@ -25,9 +25,6 @@ class PluginManager:
             "Output" : IOutput,
             })
         self.plugmanc.collectPlugins()
-#        self.plugmanc.activatePluginByName("Video Test Source", "VideoInput", False)
-#        self.plugmanc.activatePluginByName("Video Preview", "Output", False)
-#        self.plugmanc.activatePluginByName("Audio Feedback", "Output", False)
         
     def __call__(self):
         pass
@@ -51,9 +48,6 @@ class PluginManager:
     def deactivate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
         self.save()
-        
-    def get_output_plugins(self):
-        return None
 
 class IBackendPlugin(IPlugin):
     name = None
@@ -62,12 +56,22 @@ class IBackendPlugin(IPlugin):
     def get_name(self):
         return self.name
     
+    def load_config(self, plugman):
+        pass
+    
     def get_widget(self):
         """
         Implement this method to return the settings widget (Qt based).
         Used by Freeseer configtool 
         """
         return None
+    
+    def widget_load_sources(self, plugman):
+        """
+        Implement this when using a plugin widget. Available sources will be
+        passed through this function.
+        """
+        pass
 
 class IAudioInput(IBackendPlugin):
     
