@@ -74,7 +74,7 @@ class Gstreamer:
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
-            bin = plugin.get_output_bin("test-filename")
+            bin = plugin.get_output_bin()
             self.output_plugins.append(bin)
             
             if type == "audio":

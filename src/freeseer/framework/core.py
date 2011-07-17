@@ -91,7 +91,7 @@ class FreeseerCore:
         return True
 
 
-    def get_record_name(self, presentation):
+    def get_record_name(self, presentation, extension):
         '''
         Returns the filename to use when recording.
         '''
@@ -101,11 +101,11 @@ class FreeseerCore:
         tempname = recordname
         
         # check if this record name already exists in this directory and add "-NN" ending if so.
-        while(self.duplicate_exists(tempname + ".ogg")):
+        while(self.duplicate_exists("%s.%s" % (tempname, extension))):
             tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
             count+=1
 
-        recordname = tempname + ".ogg"
+        recordname = "%s.%s" % (tempname, extension)
                      
         self.logger.log.debug('Set record name to ' + recordname)        
         
@@ -417,21 +417,24 @@ class FreeseerCore:
         '''
         Informs backend to begin recording presentation.
         '''
-#        #create a filename to record to
-#        record_name = self.get_record_name(presentation)
-#
-#        #prepare metadata
-#        data = self.prepare_metadata(presentation)
-#        self.backend.populate_metadata(data)
-#
-#        record_location = os.path.abspath(self.config.videodir + '/' + record_name)
-#        self.backend.record()
-#        self.logger.log.info('Recording started')
 
         plugins = []
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
             if plugin.is_activated:
                 self.logger.log.debug("Loading Output: %s" % plugin.plugin_object.get_name())
+                
+                extension = plugin.plugin_object.get_extension()
+
+                #create a filename to record to
+                record_name = self.get_record_name(presentation, extension)
+        
+                #prepare metadata
+                #data = self.prepare_metadata(presentation)
+                #self.backend.populate_metadata(data)
+        
+                record_location = os.path.abspath(self.config.videodir + '/' + record_name)                
+                plugin.plugin_object.set_recording_location(record_location)
+                
                 plugins.append(plugin.plugin_object)
 
         self.backend.load_output_plugins(plugins)
@@ -460,6 +463,7 @@ class FreeseerCore:
             self.backend.load_videomixer(videomixer, videoinputs)
         
         self.backend.record()
+        self.logger.log.info('Recording started')
 
     def stop(self):
         '''
