@@ -7,10 +7,9 @@ from freeseer.framework.plugin import IOutput
 class WebMOutput(IOutput):
     name = "WebM Output"
     type = "both"
+    extension = "webm"
     
-    def get_output_bin(self, filename):
-        filename = filename + '.webm'
-        
+    def get_output_bin(self):
         bin = gst.Bin(self.name)
         
         # Setup Audio Pipeline
@@ -35,7 +34,7 @@ class WebMOutput(IOutput):
         bin.add(muxer)
         
         filesink = gst.element_factory_make('filesink', 'filesink')
-        filesink.set_property('location', filename)
+        filesink.set_property('location', self.location)
         bin.add(filesink)
         
         # Setup ghost pads
