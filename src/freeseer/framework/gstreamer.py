@@ -105,5 +105,4 @@ class Gstreamer:
         self.player.add(self.videomixer)
         self.videomixer.link(self.video_tee)
         
-        mixer.set_input("USB Source")
         self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)

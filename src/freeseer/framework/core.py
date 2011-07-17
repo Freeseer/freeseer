@@ -463,6 +463,7 @@ class FreeseerCore:
         
         if videomixer is not None:
             videoinputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+            videomixer.load_config(self.plugman)
             self.backend.load_videomixer(videomixer, videoinputs)
         
         self.backend.record()
