@@ -438,7 +438,7 @@ class FreeseerCore:
         plugins = []
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
             if plugin.is_activated:
-                print plugin.plugin_object.get_name()
+                self.logger.log.debug("Loading Output: %s" % plugin.plugin_object.get_name())
                 plugins.append(plugin.plugin_object)
 
         self.backend.load_output_plugins(plugins)
@@ -446,14 +446,14 @@ class FreeseerCore:
         audiomixer = None
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
             if plugin.is_activated:
-                print plugin.plugin_object.get_name()
+                self.logger.log.debug("Loading AudioMixer: %s" % plugin.plugin_object.get_name())
                 audiomixer = plugin.plugin_object
                 break
         
         videomixer = None
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
             if plugin.is_activated:
-                print plugin.plugin_object.get_name()
+                self.logger.log.debug("Loading VideoMixer: %s" % plugin.plugin_object.get_name())
                 videomixer = plugin.plugin_object
                 break
         
