@@ -168,33 +168,66 @@ class ScpChannel(TransferChannelBase):
 class SftpChannel(TransferChannelBase):
     #start SFTP transfer 
     def channelOpened(self, data):
+        print ('SFTP Opened')
         self.client = filetransfer.FileTransferClient()
         self.client.makeConnection(self)
-        self.dataReceived = self.client.dataReceived
-        d = self.client.openFile(SRC, filetransfer.FXF_READ, {})
-        d.addCallbacks(self.fileOpened, log.err)
+        #self.dataReceived = self.client.dataReceived
+        #d = self.client.openFile(SRC, filetransfer.FXF_READ, {})
+        #d.addCallbacks(self.fileOpened, log.err)
 
-    def fileOpened(self, rfile):
-        rfile.getAttrs().addCallbacks(self.fileStatted, log.err, (rfile,))
+    def getDirectoryContents(self, path):
+        return self._remoteGlob(path)
 
-    def fileStatted(self, attributes, rfile):
-        rfile.readChunk(0, 4096).addCallbacks(self.did_read, self.failed_read,
-                                              (rfile, 0, attributes['size']), {},  # did_read position/keyword args
-                                              (rfile, 0), {}                       # failed_read position/keyword args
-                                              )
+        
+    # Following methods are
+    # copied from twisted.conch.scripts.cftp.py
+    # which is a *nix only class
+    def _remoteGlob(self, fullPath):
+        logging.debug('looking up %s' % fullPath)
+        head, tail = os.path.split(fullPath)
+        if '*' in tail or '?' in tail:
+            glob = 1
+        else:
+            glob = 0
+        if tail and not glob: # could be file or directory
+            # try directory first
+            logging.debug("Opening dir")
+            d = self.client.openDirectory(fullPath)
+            d.addCallback(self._cbOpenList, '')
+            d.addErrback(self._ebNotADirectory, head, tail)
+        else:
+            d = self.client.openDirectory(head)
+            d.addCallback(self._cbOpenList, tail)
+        return d
 
-    def did_read(self, data, file, position, todo):
-        DST.write(data)
-        todo -= len(data)
-        position += len(data)
-        if todo<=0:
-            return self.done(position)
-        file.readChunk(position, 4096).addCallbacks(self.did_read, log.err, (file, position, todo))
+    def _cbOpenList(self, directory, glob):
+        logging.debug("Got dir")
+        files = []
+        d = directory.read()
+        d.addBoth(self._cbReadFile, files, directory, glob)
+        return d
 
-    def failed_read(self, failure, file, position):
-        file.check(EOFError)
+    def _ebNotADirectory(self, reason, path, glob):
+        logging.debug("Not a dir")
+        d = self.client.openDirectory(path)
+        d.addCallback(self._cbOpenList, glob)
+        return d
+
+    def _cbReadFile(self, files, l, directory, glob):
+        logging.debug("Reading file")
+        if not isinstance(files, failure.Failure):
+            l.extend(files)
+            d = directory.read()
+            d.addBoth(self._cbReadFile, l, directory, glob)
+            return d
+        else:
+            reason = files
+            reason.trap(EOFError)
+            directory.close()
+            return l
 
     def done(self, l):
+        print ('done')
         global EXCODE
         EXCODE = 0
 
