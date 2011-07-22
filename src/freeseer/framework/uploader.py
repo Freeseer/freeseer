@@ -189,8 +189,8 @@ class SftpChannel(TransferChannelBase):
             glob = 1
         else:
             glob = 0
-        if tail and not glob: # could be file or directory
-            # try directory first
+        #Check if file or directory
+        if tail and not glob:
             logging.debug("Opening dir")
             d = self.client.openDirectory(fullPath)
             d.addCallback(self._cbOpenList, '')
