@@ -418,6 +418,7 @@ class FreeseerCore:
         Informs backend to begin recording presentation.
         '''
 
+        self.logger.log.debug("Loading Output plugins...")
         plugins = []
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
             if plugin.is_activated:
@@ -440,12 +441,14 @@ class FreeseerCore:
         self.backend.load_output_plugins(plugins, metadata)
         
         if self.config.enable_audio_recoding:
+            self.logger.log.debug("Loading Audio recording plugins...")
             audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
             if audiomixer is not None:
                 audioinputs = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
                 self.backend.load_audiomixer(audiomixer, audioinputs)
         
         if self.config.enable_video_recoding:
+            self.logger.log.debug("Loading Video recording plugins...")
             videomixer = self.plugman.plugmanc.getPluginByName(self.config.videomixer, "VideoMixer").plugin_object
             if videomixer is not None:
                 videoinputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
