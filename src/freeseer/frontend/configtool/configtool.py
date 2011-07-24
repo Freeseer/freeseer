@@ -70,10 +70,10 @@ class ConfigTool(QtGui.QDialog):
         self.connect(self.ui.optionsWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         # general tab connections
         self.connect(self.generalui.checkBoxAudioMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
-        self.connect(self.generalui.comboBoxAudioMixer, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.change_audiomixer)
+        self.connect(self.generalui.comboBoxAudioMixer, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
         self.connect(self.generalui.pushButtonAudioMixer, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
         self.connect(self.generalui.checkBoxVideoMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
-        self.connect(self.generalui.comboBoxVideoMixer, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.change_videomixer)
+        self.connect(self.generalui.comboBoxVideoMixer, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
         self.connect(self.generalui.pushButtonVideoMixer, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
         self.connect(self.generalui.pushButtonRecordDirectory, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.generalui.lineEditRecordDirectory, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
@@ -144,17 +144,15 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.generalui.checkBoxAudioMixer.setChecked(False)
             
-        n = -1 # Counter for finding Audio Mixer to set as current.
-        i = 0 # Index to set Audio Mixer that will be set to current.
+        n = 0 # Counter for finding Audio Mixer to set as current.
         self.generalui.comboBoxAudioMixer.clear()
         plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
         for plugin in plugins:
             if plugin.is_activated:
                 self.generalui.comboBoxAudioMixer.addItem(plugin.plugin_object.get_name())
+                if plugin.plugin_object.get_name() == self.config.audiomixer:
+                    self.generalui.comboBoxAudioMixer.setCurrentIndex(n)
                 n += 1
-                if not plugin.plugin_object.get_name() == self.config.videomixer:
-                    i = n
-        self.generalui.comboBoxAudioMixer.setCurrentIndex(i)
         
         # Set up Video
         if self.config.enable_video_recoding == True:
@@ -162,17 +160,15 @@ class ConfigTool(QtGui.QDialog):
         else:
             self.generalui.checkBoxVideoMixer.setChecked(False)
             
-        n = -1 # Counter for finding Video Mixer to set as current.
-        i = 0 # Index to set Video Mixer that will be set to current.
+        n = 0 # Counter for finding Video Mixer to set as current.
         self.generalui.comboBoxVideoMixer.clear()
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
         for plugin in plugins:
             if plugin.is_activated:
                 self.generalui.comboBoxVideoMixer.addItem(plugin.plugin_object.get_name())
+                if plugin.plugin_object.get_name() == self.config.videomixer:
+                    self.generalui.comboBoxVideoMixer.setCurrentIndex(n)
                 n += 1
-                if not plugin.plugin_object.get_name() == self.config.videomixer: 
-                    i = n
-        self.generalui.comboBoxVideoMixer.setCurrentIndex(i)
         
         # Recording Directory Settings
         self.generalui.lineEditRecordDirectory.setText(self.config.videodir)
