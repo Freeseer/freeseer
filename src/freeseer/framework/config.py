@@ -41,11 +41,20 @@ class Config:
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
         
+        #
         # Set default settings
+        #
+        
+        # Global
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.resolution = '0x0' # no scaling for video
+        self.enable_video_recoding = True
+        self.enable_audio_recoding = True
+        self.videomixer = 'None'
+        self.audiomixer = 'None'
 
+        # Lastrun
         self.videosrc = 'desktop'
         self.videodev = 'none'
         self.start_x = 0
@@ -59,9 +68,6 @@ class Config:
         self.auto_hide = True
         self.delay_recording = 0
 
-        self.enable_video_recoding = True
-        self.enable_audio_recoding = True
-        
         self.enable_streaming = 'False'
         self.streaming_resolution = '0x0' #no scaling for streaming
         self.streaming_mount = 'stream.ogv'
@@ -109,6 +115,8 @@ class Config:
             self.streaming_resolution = config.get('Global','streaming_resolution')
             self.enable_video_recoding = config.getboolean('Global','enable_video_recoding')
             self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
+            self.videomixer = config.getboolean('Global', 'videomixer')
+            self.audiomixer = config.getboolean('Global', 'audiomixer')
             
             # LastRun Section
             self.videosrc = config.get('lastrun', 'video_source')
@@ -144,6 +152,8 @@ class Config:
         config.set('Global','streaming_resolution',self.streaming_resolution)
         config.set('Global','enable_video_recoding',self.enable_video_recoding)
         config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
+        config.set('Global','videomixer',self.videomixer)
+        config.set('Global','audiomixer',self.audiomixer)
         
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
