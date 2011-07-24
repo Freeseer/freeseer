@@ -59,15 +59,6 @@ class FreeseerCore:
         # Start Freeseer Recording Backend
         self.backend = gstreamer.Gstreamer(window_id)
 
-        # Find corresponding pixel resolution to name selected
-        if self.config.resolution in self.config.resmap:
-            res_temp = self.config.resmap[self.config.resolution]
-        else:
-            res_temp = self.config.resolution
-
-        resolution = res_temp.split('x')
-        self.change_output_resolution(resolution[0], resolution[1])
-
         self.feedback = False
         self.spaces = False
       
@@ -287,60 +278,6 @@ class FreeseerCore:
     ##
     ## Backend Functions
     ##
-    def get_video_sources(self):
-        '''
-        Returns supported video sources.
-        '''
-        #vidsrcs = self.backend.get_video_sources()
-        #self.logger.log.debug('Available video sources: ' + str(vidsrcs))
-        #return vidsrcs
-        return ['abc', 'def']
-
-        
-    def get_video_devices(self, device_type):
-        '''
-        Returns available video devices.
-        '''
-        viddevs = self.backend.get_video_devices(device_type)
-        self.logger.log.debug('Available video devices for ' + device_type + ': ' + str(viddevs))
-        return viddevs
-
-    
-    def get_audio_sources(self):
-        '''
-        Returns supported audio sources.
-        '''
-#        sndsrcs = self.backend.get_audio_sources()
-#        self.logger.log.debug('Available audio sources: ' + str(sndsrcs))
-#        return sndsrcs
-
-        return ['abc', 'def']
-
-    def set_video_mode(self, mode):
-        '''
-        Enables video recording when mode is set to True
-        Disables video recording when mode is set to False
-        '''
-        if mode == True:
-            self.logger.log.info('Video recording: ENABLED')
-        else:
-            self.logger.log.info('Video recording: DISABLED')
-            
-        #self.backend.set_video_mode(mode)
-
-        
-    def change_videosrc(self, vid_source, vid_device):
-        '''
-        Informs backend of new video source to use when recording.
-        '''
-        self.backend.change_video_source(vid_source, vid_device)
-        self.logger.log.debug('Video source changed to ' + vid_source + ' using ' + vid_device)
-
-
-    def set_record_area(self, enabled):
-        #self.backend.set_record_area(enabled)
-        pass
-
 
     def set_recording_area(self, x1, y1, x2, y2):
         # gstreamer backend needs to have the lower x/y coordinates
@@ -355,56 +292,6 @@ class FreeseerCore:
                 self.backend.set_recording_area(x1, y2, x2, y1)
             else:
                 self.backend.set_recording_area(x1, y1, x2, y2)
-
-
-    def change_output_resolution(self, width, height):
-        #self.backend.change_output_resolution(width, height)
-        self.logger.log.debug('Video output resolution changed to ' + width + 'x' + height)
-
-
-    def change_stream_resolution(self, width, height):
-        '''
-        Change the stream resolution.
-        '''
-        # resolution should be text from list, i.e. 360p
-        # map this to the appropriate numeric resolution if possible (i.e. 480x360)
-        if self.config.resolution in self.config.resmap:
-            res_temp = self.config.resmap[self.config.resolution]
-        else:       # if the text is not in resmap, assume it is already numeric
-            res_temp = self.config.resolution
-
-        rec_res = res_temp.split('x')
-        #self.backend.change_stream_resolution(width, height, rec_res[0], rec_res[1])
-        self.logger.log.debug('Video stream resolution changed to ' + str(width) + 'x' + str(height))
-
-
-    def set_audio_mode(self, mode):
-        '''
-        Enables video recording when mode is set to True
-        Disables video recording when mode is set to False
-        '''
-        if mode == True:
-            self.logger.log.info('Audio recording: ENABLED')
-        else:
-            self.logger.log.info('Audio recording: DISABLED')
-
-        #self.backend.set_audio_mode(mode)
-
-
-    def change_soundsrc(self, snd_source):
-        '''
-        Informs backend of new audio source to use when recording.
-        '''
-        #return self.backend.change_audio_source(snd_source)
-        return False
-
-
-    def test_sources(self, state, video=False, audio=False):
-        if state == True:
-            self.backend.test_feedback_start(video, audio)
-        else:
-            self.backend.test_feedback_stop()
-
 
     def prepare_metadata(self, presentation):
         '''
@@ -471,37 +358,3 @@ class FreeseerCore:
         '''
         self.backend.stop()
         self.logger.log.info('Recording stopped')
-
-
-    def test_feedback(self, video, audio):
-        if self.feedback:
-            self.feedback = False
-            self.backend.test_feedback_stop()
-        else:
-            self.feedback = True
-            self.backend.test_feedback_start(video, audio)
-
-            
-    def preview(self, enable=False, window_id=None):
-        '''
-        Enable/Disable the video preview window.
-        '''
-        if enable == True:
-            #self.backend.enable_video_feedback(window_id)
-            self.logger.log.info('Video Preview Activated')
-        else:
-            #self.backend.disable_video_feedback()
-            self.logger.log.info('Video Preview Deactivated')
-
-
-    def audioFeedback(self, enable=False):
-        '''
-        Enable/Disable the audio preview.
-        '''
-        if enable == True:
-            self.backend.enable_audio_feedback()
-            self.logger.log.info('Audio Feedback Activated')
-        else:
-            self.backend.disable_audio_feedback()
-            self.logger.log.info('Audio Feedback Deactivated')
-

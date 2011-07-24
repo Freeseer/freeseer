@@ -149,8 +149,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_rooms_and_talks_at_event)
         self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
-        self.connect(self.ui.testButton, QtCore.SIGNAL('toggled(bool)'), self.test_sources)
-        self.connect(self.ui.audioFeedbackCheckbox, QtCore.SIGNAL('stateChanged(int)'), self.toggle_audio_feedback)
 
         # Main Window Connections
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
@@ -159,7 +157,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.run_config_tool)
                 
         self.load_settings()
-        self.core.preview(True, self.ui.previewWidget.winId())
 
         # setup default sources
         if (self.core.config.audiofb == True):
@@ -226,122 +223,10 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
         
     def load_settings(self): 
-        self.core.logger.log.info('loading setting...')
+        self.core.logger.log.info('Loading settings...')
 
         #load the config file
         self.core.config.readConfig()
-
-        #load enable_video_recoding setting
-        if self.core.config.enable_video_recoding == False:
-            self.core.set_video_mode(False)
-        else:
-            self.core.set_video_mode(True)
-                        
-            # load video source setting
-            vidsrcs = self.core.get_video_sources()
-            src = self.core.config.videosrc
-            if src in vidsrcs:
-                if (src == 'desktop'):
-                    self.videosrc = 'desktop'
-
-                    if (self.core.config.videodev == 'local area'):
-                        self.desktopAreaEvent(int(self.core.config.start_x), int(self.core.config.start_y), int(self.core.config.end_x), int(self.core.config.end_y))
-
-                    self.core.change_videosrc(self.videosrc, self.core.config.videodev)
-
-                elif (src == 'usb'):
-                    self.videosrc = 'usb'
-
-                elif (src == 'firewire'):
-                    self.videosrc = 'fireware'
-                else:
-                    self.core.logger.log.debug('Can NOT find video source: '+ src)
-    
-                if src == 'usb' or src == 'fireware':
-                    dev = self.core.config.videodev
-                    viddevs = self.core.get_video_devices(self.videosrc)
-
-                    if dev in viddevs:
-                        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
-
-                    else:
-                        self.core.logger.log.debug('Can NOT find video device: '+ dev)
-
-            #load audio setting
-            if self.core.config.enable_audio_recoding == False:
-                self.core.set_audio_mode(False)
-            else:
-                self.core.set_audio_mode(True)
-                sndsrcs = self.core.get_audio_sources()
-                src = self.core.config.audiosrc
-                if src in sndsrcs:
-                    self.core.change_soundsrc(src)
-                else:
-                    self.core.logger.log.debug('Can NOT find audio source: '+ src)
- 
-            # load resolution
-            self.resolution =  self.core.config.resolution
-            self.change_output_resolution()
-        
-            # load streaming resolution
-            self.streaming_resolution =  self.core.config.streaming_resolution
-            self.change_streaming_resolution()
-            if self.core.config.enable_streaming == True: # == True and self.core.config.streaming_resolution != "0x0":
-                url = str(self.core.config.streaming_url)
-                port = str(self.core.config.streaming_port)
-                mount = str(self.core.config.streaming_mount)
-                password = str(self.core.config.streaming_password)
-                resolution = str(self.core.config.streaming_resolution).strip(" ")
-                
-                if ( url == "" or port == "" or password == "" or mount == ""):
-                    QtGui.QMessageBox.warning(self, self.tr("Incomplete Streaming Settings"), self.tr("Please ensure that all the input fields for streaming are complete or disable the streaming option") , QtGui.QMessageBox.Ok);
-                else:
-                    
-                    if resolution in self.core.config.resmap:
-                        res = self.core.config.resmap[resolution]
-                        #self.core.backend.disable_icecast_streaming()
-                    else:
-                        res = resolution
-                    self.core.backend.enable_icecast_streaming(url, int(port), password, mount, res)
-            else:
-                #self.core.backend.disable_icecast_streaming()
-                pass
-        
-    def change_output_resolution(self):
-        res = str(self.resolution)
-        if res in self.core.config.resmap:
-            res_temp = self.core.config.resmap[res]
-        else:
-            res_temp = res
-
-        #print "changing res to : ", res_temp
-        s = res_temp.split('x')
-        width = s[0]
-        height = s[1]
-        self.core.change_output_resolution(width, height)
-    
-    def change_streaming_resolution(self):
-        res = str(self.streaming_resolution)
-        if res in self.core.config.resmap:
-            res_temp = self.core.config.resmap[res]
-        else:
-            res_temp = res
-
-        #print "changing res to : ", res_temp
-        s = res_temp.split('x')
-        width = s[0]
-        height = s[1]
-        self.core.change_stream_resolution(width, height)
-
-    def toggle_audio_feedback(self):
-        if (self.ui.audioFeedbackCheckbox.isChecked()):
-            self.core.audioFeedback(True)
-            self.core.config.audiofb = True
-            self.core.config.writeConfig()
-            return
-        self.core.config.audiofb = False
-        self.core.audioFeedback(False)
-        self.core.config.writeConfig()
 
     def current_presentation(self):
         '''
@@ -376,7 +261,6 @@ class MainApp(QtGui.QMainWindow):
 
 
             self.statusBar().showMessage('recording...')
-            #self.core.config.videosrc = self.videosrc
             self.core.config.writeConfig()
             
         else: # Stop Recording.
@@ -390,14 +274,6 @@ class MainApp(QtGui.QMainWindow):
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
-
-    def test_sources(self, state):
-        # Test video and audio sources
-        if (self.ui.audioFeedbackCheckbox.isChecked()):
-            self.core.test_sources(state, True, True)
-        # Test only video source
-        else:
-            self.core.test_sources(state, True, False)
 
     ###
     ### Talk Related
