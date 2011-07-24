@@ -9,6 +9,9 @@ class Gstreamer:
     def __init__(self, window_id=None):
         self.window_id = window_id
         
+        self.record_audio = False
+        self.record_video = False
+        
         # Initialize Player
         self.player = gst.Pipeline('player')
         bus = self.player.get_bus()
@@ -59,12 +62,23 @@ class Gstreamer:
     def stop(self):
         self.player.set_state(gst.STATE_NULL)
         
-        for plugin in self.video_input_plugins:
-            gst.element_unlink_many(self.video_tee, plugin)
-            self.player.remove(plugin)
+        # Unlink Audio plugins
+        if self.record_audio is True:
+            for plugin in self.audio_input_plugins:
+                gst.element_unlink_many(self.audio_tee, plugin)
+                self.player.remove(plugin)
         
-        gst.element_unlink_many(self.videomixer, self.video_tee)
-        self.player.remove(self.videomixer)
+            gst.element_unlink_many(self.audiomixer, self.audio_tee)
+            self.player.remove(self.audiomixer)
+        
+        # Unlink Video plugins
+        if self.record_video is True:
+            for plugin in self.video_input_plugins:
+                gst.element_unlink_many(self.video_tee, plugin)
+                self.player.remove(plugin)
+            
+            gst.element_unlink_many(self.videomixer, self.video_tee)
+            self.player.remove(self.videomixer)
             
         for plugin in self.output_plugins:
             gst.element_unlink_many(self.video_tee, plugin)
@@ -89,6 +103,7 @@ class Gstreamer:
                 self.video_tee.link_pads("src%d", bin, "videosink")
     
     def load_audiomixer(self, mixer, inputs):
+        self.record_audio = True
         self.audio_input_plugins = []
         
         self.audiomixer = mixer.get_audiomixer_bin()
@@ -99,6 +114,7 @@ class Gstreamer:
         self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
 
     def load_videomixer(self, mixer, inputs):
+        self.record_video = True
         self.video_input_plugins = []
         
         self.videomixer = mixer.get_videomixer_bin()
