@@ -87,11 +87,11 @@ class Gstreamer:
             gst.element_unlink_many(self.video_tee, plugin)
             self.player.remove(plugin)
     
-    def load_output_plugins(self, plugins):
+    def load_output_plugins(self, plugins, metadata):
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
-            bin = plugin.get_output_bin()
+            bin = plugin.get_output_bin(metadata)
             self.output_plugins.append(bin)
             
             if type == "audio":
