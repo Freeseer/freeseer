@@ -115,8 +115,8 @@ class Config:
             self.streaming_resolution = config.get('Global','streaming_resolution')
             self.enable_video_recoding = config.getboolean('Global','enable_video_recoding')
             self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
-            self.videomixer = config.getboolean('Global', 'videomixer')
-            self.audiomixer = config.getboolean('Global', 'audiomixer')
+            self.videomixer = config.get('Global', 'videomixer')
+            self.audiomixer = config.get('Global', 'audiomixer')
             
             # LastRun Section
             self.videosrc = config.get('lastrun', 'video_source')
