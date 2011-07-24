@@ -1,0 +1,9 @@
+[Core]
+Name = Ogg Output
+Module = ogg-output
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Ogg Video Output plugin records theora/vorbis to a file.
