@@ -103,8 +103,12 @@ class Config:
                 
         # Config file exists, read in the settings
         try:
+            # Global Section
             self.videodir = config.get('Global', 'video_directory')
             self.resolution = config.get('Global', 'resolution')
+            self.streaming_resolution = config.get('Global','streaming_resolution')
+            
+            # LastRun Section
             self.videosrc = config.get('lastrun', 'video_source')
             self.videodev = config.get('lastrun', 'video_device')
             self.start_x = config.get('lastrun', 'area_start_x')
@@ -118,7 +122,6 @@ class Config:
             self.enable_streaming = config.getboolean('lastrun', 'enable_streaming')
             self.enable_video_recoding = config.getboolean('lastrun','enable_video_recoding')
             self.enable_audio_recoding = config.getboolean('lastrun','enable_audio_recoding')
-            self.streaming_resolution = config.get('Global','streaming_resolution')
             self.streaming_mount = config.get('lastrun','streaming_mount')
             self.streaming_port = config.get('lastrun','streaming_port')
             self.streaming_password = config.get('lastrun','streaming_password')
@@ -139,6 +142,7 @@ class Config:
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
         config.set('Global','streaming_resolution',self.streaming_resolution)
+        
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
         config.set('lastrun', 'video_device', self.videodev)
