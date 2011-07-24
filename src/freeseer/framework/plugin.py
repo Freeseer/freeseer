@@ -109,7 +109,7 @@ class IOutput(IBackendPlugin):
     def get_type(self):
         return self.type
     
-    def get_output_bin(self):
+    def get_output_bin(self, metadata=None):
         """
         Returns the Gstreamer Bin for the output plugin.
         MUST be overridded when creating an output plugin.
@@ -121,3 +121,9 @@ class IOutput(IBackendPlugin):
     
     def set_recording_location(self, location):
         self.location = location
+
+    def set_metadata(self, data):
+        """
+        Set the metadata if supported by Output plugin. 
+        """
+        pass

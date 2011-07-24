@@ -429,7 +429,7 @@ class FreeseerCore:
                 record_name = self.get_record_name(presentation, extension)
         
                 #prepare metadata
-                #data = self.prepare_metadata(presentation)
+                metadata = self.prepare_metadata(presentation)
                 #self.backend.populate_metadata(data)
         
                 record_location = os.path.abspath(self.config.videodir + '/' + record_name)                
@@ -437,7 +437,7 @@ class FreeseerCore:
                 
                 plugins.append(plugin.plugin_object)
 
-        self.backend.load_output_plugins(plugins)
+        self.backend.load_output_plugins(plugins, metadata)
         
         if self.config.enable_audio_recoding:
             audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
