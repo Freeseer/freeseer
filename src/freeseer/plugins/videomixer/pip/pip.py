@@ -145,16 +145,21 @@ class PictureInPicture(IVideoMixer):
             if plugin.is_activated:
                 sources.append(plugin.plugin_object.get_name())
         
+        # Load the main combobox with inputs
+        self.combobox_maininput.clear()
         n = 0
         for i in sources:
             self.combobox_maininput.addItem(i)
-            if i == mainsrc:
+            if i == mainsrc: # Find the current main input source and set it
                 self.combobox_maininput.setCurrentIndex(n)
             n = n +1
+        
+        # Load the pip combobox with inputs
+        self.combobox_pipinput.clear()
         n = 0
         for i in sources:
             self.combobox_pipinput.addItem(i)
-            if i == pipsrc:
+            if i == pipsrc: # Find the current pip input source and set it
                 self.combobox_pipinput.setCurrentIndex(n)
             n = n +1
         
