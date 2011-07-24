@@ -26,19 +26,26 @@ class PictureInPicture(IVideoMixer):
         videobox = gst.element_factory_make("videobox", "videobox")
         bin.add(videobox)
         
-        videobox_capsfilter = gst.element_factory_make("capsfilter", "videobox_capsfilter")
-        videobox_capsfilter.set_property('caps',
-                        gst.caps_from_string('alpha=0.6 top=-20 left=-25'))
-        bin.add(videobox_capsfilter)
+        videobox.link(videomixer)
         
-        gst.element_link_many(videobox, videobox_capsfilter, videomixer)
+        
+        videobox2 = gst.element_factory_make("videobox", "videobox2")
+        bin.add(videobox2)
+        
+        videobox2.set_property("alpha", 0.6)
+        videobox2.set_property("border-alpha", 0)
+        videobox2.set_property("top", -20)
+        videobox2.set_property("left", -25)
+        
+        videobox2.link(videomixer) 
+        
         
         # Setup ghost pad
-        sinkpad = videomixer.get_pad("sink_%d")
-        sink_ghostpad = gst.GhostPad("sink", sinkpad)
+        sinkpad = videobox.get_pad("sink")
+        sink_ghostpad = gst.GhostPad("sink_main", sinkpad)
         bin.add_pad(sink_ghostpad)
         
-        pip_sinkpad = videobox.get_pad("sink")
+        pip_sinkpad = videobox2.get_pad("sink")
         pip_ghostpad = gst.GhostPad("sink_pip", pip_sinkpad)
         bin.add_pad(pip_ghostpad)
         
@@ -63,8 +70,18 @@ class PictureInPicture(IVideoMixer):
                 input1 = plugin.plugin_object.get_videoinput_bin()
                 player.add(input1)
                 
-                gst.element_link_many(input1, mixer)
+                mainsrc_capsfilter = gst.element_factory_make("capsfilter", "mainsrc_capsfilter")
+                mainsrc_capsfilter.set_property('caps',
+                                gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
+                player.add(mainsrc_capsfilter)
+                
+                input1.link(mainsrc_capsfilter)
+                srcpad = mainsrc_capsfilter.get_pad("src")
+                sinkpad = mixer.get_pad("sink_main")
+                srcpad.link(sinkpad)
+                
                 loaded.append(input1)
+                loaded.append(mainsrc_capsfilter)
                 break
             
         # Load pip source
@@ -75,10 +92,15 @@ class PictureInPicture(IVideoMixer):
                 
                 pipsrc_capsfilter = gst.element_factory_make("capsfilter", "pipsrc_capsfilter")
                 pipsrc_capsfilter.set_property('caps',
-                                gst.caps_from_string('video/x-raw-rgb, framerate=10/1, width=200, height=150'))
+                                gst.caps_from_string('video/x-raw-rgb, width=200, height=150'))
                 player.add(pipsrc_capsfilter)
                 
-                gst.element_link_many(input2, pipsrc_capsfilter, mixer)
+                input2.link(pipsrc_capsfilter)
+                srcpad = pipsrc_capsfilter.get_pad("src")
+                sinkpad = mixer.get_pad("sink_pip")
+                srcpad.link(sinkpad)
+                print sinkpad
+                
                 loaded.append(input2)
                 loaded.append(pipsrc_capsfilter)
                 break
