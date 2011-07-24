@@ -65,7 +65,7 @@ class Config:
         self.audiofb = 'False'
         self.key_rec = 'Ctrl+Shift+R'
         self.key_stop = 'Ctrl+Shift+E'
-        self.auto_hide = True
+        self.auto_hide = False
         self.delay_recording = 0
 
         self.enable_streaming = 'False'
