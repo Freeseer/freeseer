@@ -53,6 +53,9 @@ class Gstreamer:
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(int(self.window_id))
             
+    def keyboard_event(self, key):
+        pass
+            
     ##
     ## Recording functions
     ##

@@ -532,6 +532,9 @@ class MainApp(QtGui.QMainWindow):
         self.core.logger.log.info('Exiting freeseer...')
         event.accept()
         
+    def keyPressEvent(self, event):
+        self.core.logger.log.debug("Keypressed: %s" % event.key())
+        self.core.backend.keyboard_event(event.key())
 
     def translateAction(self ,action):
         '''
