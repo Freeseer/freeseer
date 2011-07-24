@@ -24,7 +24,7 @@ ALL: gui framework talkEditor configtool
 	@echo "You can now run $(exec)"
 
 gui: 
-	cd freeseer/frontend/default; make
+	cd freeseer/frontend/record; make
 	@echo "Re-generated GUI"
 
 framework:
@@ -40,7 +40,7 @@ configtool:
 	@echo "Re-Generated configtool"
 
 clean_gui:
-	cd freeseer/frontend/default; make clean
+	cd freeseer/frontend/record; make clean
 	cd freeseer/frontend/configtool; make clean
 	@echo "GUI files cleaned up"
 
