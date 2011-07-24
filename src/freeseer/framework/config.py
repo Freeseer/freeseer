@@ -107,6 +107,8 @@ class Config:
             self.videodir = config.get('Global', 'video_directory')
             self.resolution = config.get('Global', 'resolution')
             self.streaming_resolution = config.get('Global','streaming_resolution')
+            self.enable_video_recoding = config.getboolean('Global','enable_video_recoding')
+            self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
             
             # LastRun Section
             self.videosrc = config.get('lastrun', 'video_source')
@@ -120,8 +122,6 @@ class Config:
             self.auto_hide = config.getboolean('lastrun', 'auto_hide')
             self.delay_recording = config.get('lastrun', 'delay_recording')
             self.enable_streaming = config.getboolean('lastrun', 'enable_streaming')
-            self.enable_video_recoding = config.getboolean('lastrun','enable_video_recoding')
-            self.enable_audio_recoding = config.getboolean('lastrun','enable_audio_recoding')
             self.streaming_mount = config.get('lastrun','streaming_mount')
             self.streaming_port = config.get('lastrun','streaming_port')
             self.streaming_password = config.get('lastrun','streaming_password')
@@ -142,6 +142,8 @@ class Config:
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
         config.set('Global','streaming_resolution',self.streaming_resolution)
+        config.set('Global','enable_video_recoding',self.enable_video_recoding)
+        config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
         
         config.add_section('lastrun')
         config.set('lastrun', 'video_source', self.videosrc)
@@ -155,8 +157,6 @@ class Config:
         config.set('lastrun', 'auto_hide', self.auto_hide)
         config.set('lastrun', 'delay_recording', self.delay_recording)
         config.set('lastrun', 'enable_streaming', self.enable_streaming)
-        config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
-        config.set('lastrun','enable_audio_recoding',self.enable_audio_recoding)
         config.set('lastrun','streaming_mount',self.streaming_mount)
         config.set('lastrun','streaming_port',self.streaming_port)
         config.set('lastrun','streaming_password',self.streaming_password)
