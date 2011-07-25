@@ -286,6 +286,10 @@ class ConfigTool(QtGui.QDialog):
         if plugin.checkState() == 2:
             self.plugman.activate_plugin(plugin_name, plugin_category)
             self.add_plugin_widget(plugin_name, plugin_category)
+            if plugin_category == "AudioMixer" and self.config.audiomixer == "None":
+                self.change_audiomixer(plugin_name)
+            elif plugin_category == "VideoMixer" and self.config.videomixer == "None":
+                self.change_videomixer(plugin_name)
         else:
             self.plugman.deactivate_plugin(plugin_name, plugin_category)
             self.del_plugin_widget(plugin_name)
