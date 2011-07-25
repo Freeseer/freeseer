@@ -1,0 +1,9 @@
+[Core]
+Name = Pulse Audio Source
+Module = pulsesrc
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Pulse Audio Sound Source
