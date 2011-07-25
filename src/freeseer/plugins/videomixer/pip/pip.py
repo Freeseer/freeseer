@@ -1,3 +1,5 @@
+import ConfigParser
+
 import pygst
 pygst.require("0.10")
 import gst
@@ -136,8 +138,13 @@ class PictureInPicture(IVideoMixer):
     def widget_load_sources(self, plugman):
         self.plugman = plugman
         
-        mainsrc = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Main Source")
-        pipsrc = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "PIP Source")
+        try:
+            mainsrc = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Main Source")
+            pipsrc = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "PIP Source")
+        except ConfigParser.NoSectionError:
+            # Likely first run.
+            mainsrc = self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Main Source", None)
+            pipsrc = self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "PIP Source", None)
         
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
