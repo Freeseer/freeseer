@@ -27,6 +27,7 @@ from twisted.internet import defer, protocol, reactor
 from twisted.python import log
 from twisted.conch import error
 import sys, os, getpass
+import xmlrpclib, time
 import gobject
 gobject.threads_init()
 import pygst
@@ -262,12 +263,34 @@ class VideoData:
         self.current.connect('discovered', self.retrieveData)
         self.current.discover()
         return False
+    
+class DrupalNode:
+    def __init__(self, title, body, path, ntype, uid, username, site):
+        self.title = title
+        self.body = body
+        self.path = path
+        self.type = ntype
+        self.uid = uid
+        self.name = username
+        self.promote = False
+        self.site = site
+    
+    def connect(self):
+        sessid, user = self.site.system.connect()
+    
+    def save (self):
+        self.site.node.save(sessid, self)
             
 if __name__ == '__main__':
     #Test scp/sftp upload
-    protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
-    reactor.run()
+    #protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+    #reactor.run()
     
     #Test GstFile
     #video = VideoData(VIDEO)
-    #video.run()  
+    #video.run()
+    
+    #Test DrupalNode
+    node = DrupalNode ('Title', 'body', '.', 'page', 1, 'drupal', xmlrpclib.ServerProxy('http://localhost/xmlrpc'))
+    node.connect()
+    node.save()
