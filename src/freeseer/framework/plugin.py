@@ -103,10 +103,10 @@ class IBackendPlugin(IPlugin):
         """
         return None
     
-    def widget_load_sources(self, plugman):
+    def widget_load_config(self, plugman):
         """
-        Implement this when using a plugin widget. Available sources will be
-        passed through this function.
+        Implement this when using a plugin widget. This function should be used
+        to load any required configurations for the plugin widget.
         """
         pass
 

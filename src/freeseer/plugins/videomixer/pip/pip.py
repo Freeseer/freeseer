@@ -129,7 +129,7 @@ class PictureInPicture(IVideoMixer):
             
         return self.widget
     
-    def widget_load_sources(self, plugman):
+    def widget_load_config(self, plugman):
         self.plugman = plugman
         
         try:

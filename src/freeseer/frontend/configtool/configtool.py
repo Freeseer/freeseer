@@ -322,7 +322,7 @@ class ConfigTool(QtGui.QDialog):
         
         self.currentWidget = plugin.plugin_object.get_widget()
         self.currentWidgetPlugin = plugin.plugin_object
-        self.currentWidgetPlugin.widget_load_sources(self.plugman)
+        self.currentWidgetPlugin.widget_load_config(self.plugman)
         if self.currentWidget is not None:
             self.mainWidgetLayout.addWidget(self.currentWidget)
             self.currentWidget.show()
