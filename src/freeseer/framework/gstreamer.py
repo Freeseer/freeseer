@@ -113,7 +113,6 @@ class Gstreamer:
         self.player.add(self.audiomixer)
         self.audiomixer.link(self.audio_tee)
         
-        mixer.set_input("ALSA Source")
         self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
 
     def load_videomixer(self, mixer, inputs):
