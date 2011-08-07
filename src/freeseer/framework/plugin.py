@@ -21,7 +21,13 @@ class PluginManager:
         self.load()
         self.plugmanc = ConfigurablePluginManager(self.config, self, plugman)
         
-        self.plugmanc.setPluginPlaces(["freeseer/plugins"])
+        # Get the path where the installed plugins are located on systems where
+        # freeseer is installed.
+        pluginpath = "%s/../plugins" % os.path.dirname(os.path.abspath(__file__))
+        
+        self.plugmanc.setPluginPlaces([pluginpath, 
+                                       "~/.freeseer/plugins", 
+                                       "freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
             "AudioInput" : IAudioInput,
             "AudioMixer" : IAudioMixer,
