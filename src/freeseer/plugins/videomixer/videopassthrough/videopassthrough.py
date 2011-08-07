@@ -8,7 +8,7 @@ from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IVideoMixer
 
-class InputSelector(IVideoMixer):
+class VideoPassthrough(IVideoMixer):
     name = "Video Passthrough"
     input1 = None
     widget = None

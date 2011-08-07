@@ -8,7 +8,7 @@ from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IAudioMixer
 
-class Adder(IAudioMixer):
+class AudioPassthrough(IAudioMixer):
     name = "Audio Passthrough"
     input1 = None
     widget = None
