@@ -1,6 +1,10 @@
+import ConfigParser
+
 import pygst
 pygst.require("0.10")
 import gst
+
+from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IOutput
 
@@ -14,7 +18,7 @@ class OggIcecast(IOutput):
     ip = "127.0.0.1"
     port = "8000"
     password = "hackme"
-    mount = "/stream.ogg"
+    mount = "stream.ogg"
     
     def get_output_bin(self, metadata=None):
         bin = gst.Bin(self.name)
@@ -88,3 +92,78 @@ class OggIcecast(IOutput):
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
 
+    def load_config(self, plugman):
+        self.plugman = plugman
+        self.ip = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "IP")
+        self.port = int(self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Port"))
+        self.password = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Password")
+        self.mount = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Mount")
+    
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            
+            self.label_ip = QtGui.QLabel("IP")
+            self.lineedit_ip = QtGui.QLineEdit()
+            layout.addRow(self.label_ip, self.lineedit_ip)
+            
+            self.label_port = QtGui.QLabel("Port")
+            self.lineedit_port = QtGui.QLineEdit()
+            layout.addRow(self.label_port, self.lineedit_port)
+            
+            self.label_password = QtGui.QLabel("Password")
+            self.lineedit_password = QtGui.QLineEdit()
+            layout.addRow(self.label_password, self.lineedit_password)
+            
+            self.label_mount = QtGui.QLabel("Mount")
+            self.lineedit_mount = QtGui.QLineEdit()
+            layout.addRow(self.label_mount, self.lineedit_mount)
+            
+            self.widget.connect(self.lineedit_ip, QtCore.SIGNAL('editingFinished()'), self.set_ip)
+            self.widget.connect(self.lineedit_port, QtCore.SIGNAL('editingFinished()'), self.set_port)
+            self.widget.connect(self.lineedit_password, QtCore.SIGNAL('editingFinished()'), self.set_password)
+            self.widget.connect(self.lineedit_mount, QtCore.SIGNAL('editingFinished()'), self.set_mount)
+            
+        return self.widget
+
+    def widget_load_sources(self, plugman):
+        self.plugman = plugman
+        
+        try:
+            self.ip = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "IP")
+            self.port = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Port")
+            self.password = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Password")
+            self.mount = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Mount")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "IP", self.ip)
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Port", self.port)
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Password", self.password)
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Mount", self.mount)
+            
+        self.lineedit_ip.setText(self.ip)
+        self.lineedit_port.setText(self.port)
+        self.lineedit_password.setText(self.password)
+        self.lineedit_mount.setText(self.mount)
+
+    def set_ip(self):
+        ip = str(self.lineedit_ip.text())
+        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "IP", ip)
+        self.plugman.save()
+        
+    def set_port(self):
+        port = str(self.lineedit_port.text())
+        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Port", port)
+        self.plugman.save()
+        
+    def set_password(self):
+        password = str(self.lineedit_password.text())
+        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Password", password)
+        self.plugman.save()
+        
+    def set_mount(self):
+        mount = str(self.lineedit_mount.text())
+        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Mount", mount)
+        self.plugman.save()
