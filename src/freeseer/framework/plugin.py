@@ -47,8 +47,10 @@ class PluginManager:
         # Default the passthrough mixer and ogg output.
         self.activate_plugin("ALSA Source", "AudioInput")
         self.activate_plugin("USB Source", "VideoInput")
-        self.activate_plugin("AudioPassthrough", "AudioMixer")
-        self.activate_plugin("VideoPassthrough", "VideoMixer")
+        self.activate_plugin("Audio Passthrough", "AudioMixer")
+        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "ALSA Source")
+        self.activate_plugin("Video Passthrough", "VideoMixer")
+        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "USB Source")
         self.activate_plugin("Ogg Output", "Output")
         
     def save(self):
