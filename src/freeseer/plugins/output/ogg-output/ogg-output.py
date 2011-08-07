@@ -4,7 +4,7 @@ import gst
 
 from freeseer.framework.plugin import IOutput
 
-class WebMOutput(IOutput):
+class OggOutput(IOutput):
     name = "Ogg Output"
     type = "both"
     extension = "ogg"
