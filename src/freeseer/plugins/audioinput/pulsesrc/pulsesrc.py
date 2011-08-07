@@ -4,7 +4,7 @@ import gst
 
 from freeseer.framework.plugin import IAudioInput
 
-class ALSASrc(IAudioInput):
+class PulseSrc(IAudioInput):
     name = "Pulse Audio Source"
     
     def get_audioinput_bin(self):
