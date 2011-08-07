@@ -3,7 +3,7 @@ import os
 
 from setuptools import setup
 setup(name='freeseer',
-      version='2.6',
+      version='3.0.0',
       description='video recording and streaming tool',
       author='fosslc',
       author_email='fosslc@gmail.com',
@@ -18,13 +18,11 @@ of talks and speakers using varied hardware and operating systems.\n\n\
 Freeseer itself can run on commodity hardware such as a laptop or desktop.',
       license='GPLv3',
       package_dir={'freeseer': 'src/freeseer'},
-      packages=['freeseer', 'freeseer.backend',
-                            'freeseer.framework',
+      package_data={'freeseer': ['plugins/*/*/*']},
+      packages=['freeseer', 'freeseer.framework',
                             'freeseer.frontend',
                             'freeseer.frontend.configtool',
                             'freeseer.frontend.talkeditor',
-                            'freeseer.frontend.default'],
-      scripts=['src/freeseer-record', 'src/freeseer-config', 'src/freeseer-talkeditor'],
-      data_files=[('share/applications', ['data/freeseer.desktop']),
-                  ('share/applications', ['data/48x48-freeseer.png'])]
-)
+                            'freeseer.frontend.record'],
+      scripts=['src/freeseer-record', 'src/freeseer-config', 'src/freeseer-talkeditor'])
+
