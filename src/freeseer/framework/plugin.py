@@ -1,6 +1,10 @@
 import ConfigParser
 import os
 
+import pygst
+pygst.require("0.10")
+import gst
+
 from yapsy.PluginManager import PluginManagerSingleton
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
@@ -44,12 +48,23 @@ class PluginManager:
             return
         
     def set_default_plugins(self):
-        # Default the passthrough mixer and ogg output.
-        self.activate_plugin("ALSA Source", "AudioInput")
-        self.activate_plugin("USB Source", "VideoInput")
+        """
+        Default the passthrough mixers and ogg output plugins.
+        """
+        
         self.activate_plugin("Audio Passthrough", "AudioMixer")
-        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "ALSA Source")
+        
+        # Set Pulse Source as default if available. Else default to ALSA.
+        try:
+            gst.element_factory_make('pulsesrc', 'testsrc')
+            self.activate_plugin("Pulse Audio Source", "AudioInput")
+            self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "Pulse Audio Source")
+        except:
+            self.activate_plugin("ALSA Source", "AudioInput")
+            self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "ALSA Source")
+            
         self.activate_plugin("Video Passthrough", "VideoMixer")
+        self.activate_plugin("USB Source", "VideoInput")
         self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "USB Source")
         self.activate_plugin("Ogg Output", "Output")
         
