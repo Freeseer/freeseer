@@ -7,6 +7,7 @@ from yapsy.IPlugin import IPlugin
 
 class PluginManager:
     def __init__(self, configdir):
+        self.firstrun = False
         plugman = PluginManagerSingleton().get()
         
         self.configdir = configdir
@@ -26,6 +27,10 @@ class PluginManager:
             })
         self.plugmanc.collectPlugins()
         
+        # If config was corrupt or did not exist, reset default plugins.
+        if self.firstrun == True:
+            self.set_default_plugins()
+        
     def __call__(self):
         pass
     
@@ -34,8 +39,17 @@ class PluginManager:
             self.config.readfp(open(self.configfile))
         # Config file does not exist, create a default
         except IOError:
+            self.firstrun = True # If config was corrupt or did not exist, reset defaults.
             self.save()
             return
+        
+    def set_default_plugins(self):
+        # Default the passthrough mixer and ogg output.
+        self.activate_plugin("ALSA Source", "AudioInput")
+        self.activate_plugin("USB Source", "VideoInput")
+        self.activate_plugin("AudioPassthrough", "AudioMixer")
+        self.activate_plugin("VideoPassthrough", "VideoMixer")
+        self.activate_plugin("Ogg Output", "Output")
         
     def save(self):
         with open(self.configfile, 'w') as configfile:
