@@ -51,8 +51,8 @@ class Config:
         self.resolution = '0x0' # no scaling for video
         self.enable_video_recoding = True
         self.enable_audio_recoding = True
-        self.videomixer = 'None'
-        self.audiomixer = 'None'
+        self.videomixer = 'Video Passthrough'
+        self.audiomixer = 'Audio Passthrough'
 
         # Lastrun
         self.videosrc = 'desktop'
