@@ -1,0 +1,9 @@
+[Core]
+Name = Passthrough
+Module = passthrough
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Simple passthrough mixer for video. Takes a single video source and sends it through with only ffmpegcolorspace filtering.
