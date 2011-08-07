@@ -1,6 +1,6 @@
 [Core]
-Name = Passthrough
-Module = passthrough
+Name = VideoPassthrough
+Module = videopassthrough
 
 [Documentation]
 Author = Thanh Ha
