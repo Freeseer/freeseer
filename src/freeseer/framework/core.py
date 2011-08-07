@@ -339,6 +339,7 @@ class FreeseerCore:
             audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
             if audiomixer is not None:
                 audioinputs = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
+                audiomixer.load_config(self.plugman)
                 self.backend.load_audiomixer(audiomixer, audioinputs)
         
         if self.config.enable_video_recoding:
