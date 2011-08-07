@@ -10,8 +10,8 @@ from freeseer.framework.plugin import IVideoMixer
 
 class PictureInPicture(IVideoMixer):
     name = "Picture-In-Picture"
-    input1 = None
-    input2 = None
+    input1 = None # Main Source
+    input2 = None # PIP Source
     widget = None
     
     def get_videomixer_bin(self):
@@ -56,12 +56,6 @@ class PictureInPicture(IVideoMixer):
         bin.add_pad(src_ghostpad)
         
         return bin
-    
-    def set_input_main(self, input1):
-        self.input1 = input1
-        
-    def set_input_pip(self, input2):
-        self.input2 = input2
         
     def load_inputs(self, player, mixer, inputs):
         loaded = []
