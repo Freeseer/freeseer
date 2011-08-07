@@ -323,6 +323,7 @@ class FreeseerCore:
                 record_location = os.path.abspath(self.config.videodir + '/' + record_name)                
                 plugin.plugin_object.set_recording_location(record_location)
                 
+                plugin.plugin_object.load_config(self.plugman)
                 plugins.append(plugin.plugin_object)
 
         self.backend.load_output_plugins(plugins, metadata)
