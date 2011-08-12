@@ -236,6 +236,7 @@ class SftpChannel(TransferChannelBase):
 class VideoData:
     def __init__(self, file):
         self.file = file
+        self.tags = {}
         self.mainloop = gobject.MainLoop()
         self.current = None
 
@@ -246,10 +247,8 @@ class VideoData:
     #Currently this just prints the meta-data
     #Will have to get specific tags from discoverer object to store them
     def retrieveData(self, discoverer, ismedia):
-        tags = discoverer.tags
-        discoverer.print_info()
+        self.tags = discoverer.tags
         self.current = None
-        return tags
     
     #checks to make sure the file exists then creates Discoverer
     #object using the file path    
@@ -265,21 +264,26 @@ class VideoData:
         return False
     
 class DrupalNode:
-    def __init__(self, title, body, path, ntype, uid, username, site):
+    def __init__(self, title, body, path, ntype, uid, username, password, api, site):
         self.title = title
         self.body = body
         self.path = path
         self.type = ntype
         self.uid = uid
         self.name = username
+        self.password = password
+        self.api = api
         self.promote = False
         self.site = site
     
     def connect(self):
         sessid, user = self.site.system.connect()
+        
+    def userAuth (self):
+        self.login = drupal.user.login(api,user['sessid'],username,password)
     
     def save (self):
-        self.site.node.save(sessid, self)
+        self.site.node.save(login['sessid'], self)
             
 if __name__ == '__main__':
     #Test scp/sftp upload
@@ -289,8 +293,10 @@ if __name__ == '__main__':
     #Test GstFile
     #video = VideoData(VIDEO)
     #video.run()
+    #print video.tags
+    
     
     #Test DrupalNode
-    node = DrupalNode ('Title', 'body', '.', 'page', 1, 'drupal', xmlrpclib.ServerProxy('http://localhost/xmlrpc'))
+    node = DrupalNode ('Title', 'body', '.', 'page', 1, 'drupal', 'drupal', '13894a48c4e071fca0e68602106df97e', xmlrpclib.ServerProxy('http://localhost/xmlrpc'))
     node.connect()
     node.save()
