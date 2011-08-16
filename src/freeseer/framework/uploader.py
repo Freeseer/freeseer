@@ -264,26 +264,35 @@ class VideoData:
         return False
     
 class DrupalNode:
-    def __init__(self, title, body, path, ntype, uid, username, password, api, site):
+    def __init__(self, title, body, path, ntype, uid, username, password, site):
         self.title = title
         self.body = body
         self.path = path
         self.type = ntype
         self.uid = uid
-        self.name = username
+        self.uname = username
         self.password = password
-        self.api = api
         self.promote = False
-        self.site = site
-    
-    def connect(self):
-        sessid, user = self.site.system.connect()
-        
-    def userAuth (self):
-        self.login = drupal.user.login(api,user['sessid'],username,password)
+        self.server = xmlrpclib.ServerProxy(site, allow_none=True)
+        try:
+            connection = self.server.system.connect()
+        except xmlrpclib.ProtocolError:
+            try: 
+                self.server = xmlrpclib.ServerProxy(site+'/xmlrpc', allow_none=True)
+                connection = self.server.system.connect()
+            except xmlrpclib.ProtocolError:
+                self.server = xmlrpclib.ServerProxy(site+'/services/xmlrpc', allow_none=True)
+                connection = self.server.system.connect()
+        session = self.server.user.login(connection['sessid'], self.uname, self.password)
+        if 'Wrong username or password.' in session:
+            print session
+            sys.exit()
+        else:
+            self.sessid = session['sessid']
+            self.user = self.sessid['user']
     
     def save (self):
-        self.site.node.save(login['sessid'], self)
+        self.server.node.save(self.sessid, self)
             
 if __name__ == '__main__':
     #Test scp/sftp upload
@@ -297,6 +306,5 @@ if __name__ == '__main__':
     
     
     #Test DrupalNode
-    node = DrupalNode ('Title', 'body', '.', 'page', 1, 'drupal', 'drupal', '13894a48c4e071fca0e68602106df97e', xmlrpclib.ServerProxy('http://localhost/xmlrpc'))
-    node.connect()
-    node.save()
+    node = DrupalNode ('Title', 'body', '.', 'page', 1, 'drupal', 'drupal', 'http://localhost')
+#    node.save()
