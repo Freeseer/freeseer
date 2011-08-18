@@ -264,15 +264,12 @@ class VideoData:
         return False
     
 class DrupalNode:
-    def __init__(self, title, body, path, ntype, uid, username, password, site):
+    def __init__(self, title, body, ntype, username, password, site):
         self.title = title
         self.body = body
-        self.path = path
         self.type = ntype
-        self.uid = uid
-        self.uname = username
         self.password = password
-        self.promote = False
+        self.promote = 1
         self.server = xmlrpclib.ServerProxy(site, allow_none=True)
         try:
             connection = self.server.system.connect()
@@ -281,18 +278,24 @@ class DrupalNode:
                 self.server = xmlrpclib.ServerProxy(site+'/xmlrpc', allow_none=True)
                 connection = self.server.system.connect()
             except xmlrpclib.ProtocolError:
-                self.server = xmlrpclib.ServerProxy(site+'/services/xmlrpc', allow_none=True)
-                connection = self.server.system.connect()
-        session = self.server.user.login(connection['sessid'], self.uname, self.password)
+                try:
+                    self.server = xmlrpclib.ServerProxy(site+'/services/xmlrpc', allow_none=True)
+                    connection = self.server.system.connect()
+                except xmlrpclb.ProtocolError:
+                    print 'XMLRPC server not found'
+                    sys.exit()
+        session = self.server.user.login(username, self.password)
         if 'Wrong username or password.' in session:
             print session
             sys.exit()
-        else:
-            self.sessid = session['sessid']
-            self.user = self.sessid['user']
+        self.sessid = session['sessid']
+        self.user = session['user']
+        self.uid = self.user['uid']
     
     def save (self):
-        self.server.node.save(self.sessid, self)
+        save = self.server.node.save (self)
+        if 'Access denied' in save:
+            save = self.server.node.save (self.sessid, self)
             
 if __name__ == '__main__':
     #Test scp/sftp upload
@@ -306,5 +309,5 @@ if __name__ == '__main__':
     
     
     #Test DrupalNode
-    node = DrupalNode ('Title', 'body', '.', 'page', 1, 'drupal', 'drupal', 'http://localhost')
-#    node.save()
+    node = DrupalNode ('Title', 'body', 'story', 'druapl', 'drupal', 'http://localhost')
+    node.save()
