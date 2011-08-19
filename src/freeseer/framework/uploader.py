@@ -247,8 +247,12 @@ class VideoData:
     #Currently this just prints the meta-data
     #Will have to get specific tags from discoverer object to store them
     def retrieveData(self, discoverer, ismedia):
-        self.tags = discoverer.tags
+        self.tags= discoverer.tags
+        print self.tags
         self.current = None
+        
+    def getTags (self):
+        return self.tags
     
     #checks to make sure the file exists then creates Discoverer
     #object using the file path    
@@ -264,12 +268,16 @@ class VideoData:
         return False
     
 class DrupalNode:
-    def __init__(self, title, body, ntype, username, password, site):
-        self.title = title
-        self.body = body
-        self.type = ntype
+    def __init__(self, title, body, username, password, site):
+        self.node = {
+                     'title': title,
+                     'body': body,
+                     'type': 'story',
+                     'promote': False,
+                     'name': username,
+                     'language': 'en'
+                     }
         self.password = password
-        self.promote = 1
         self.server = xmlrpclib.ServerProxy(site, allow_none=True)
         try:
             connection = self.server.system.connect()
@@ -284,18 +292,18 @@ class DrupalNode:
                 except xmlrpclb.ProtocolError:
                     print 'XMLRPC server not found'
                     sys.exit()
-        session = self.server.user.login(username, self.password)
+        session = self.server.user.login(connection['sessid'], username, self.password)
         if 'Wrong username or password.' in session:
             print session
             sys.exit()
         self.sessid = session['sessid']
         self.user = session['user']
-        self.uid = self.user['uid']
+        self.node['uid'] = self.user['uid']
     
     def save (self):
-        save = self.server.node.save (self)
-        if 'Access denied' in save:
-            save = self.server.node.save (self.sessid, self)
+        save = self.server.node.save (self.node)
+        if 'Access denied' or 'Missing required arguments' in save:
+            save = self.server.node.save (self.sessid, self.node)
             
 if __name__ == '__main__':
     #Test scp/sftp upload
@@ -303,11 +311,11 @@ if __name__ == '__main__':
     #reactor.run()
     
     #Test GstFile
-    #video = VideoData(VIDEO)
-    #video.run()
-    #print video.tags
+#    video = VideoData(VIDEO)
+#    video.run()
+#    print video.getTags(video)
     
     
     #Test DrupalNode
-    node = DrupalNode ('Title', 'body', 'story', 'druapl', 'drupal', 'http://localhost')
+    node = DrupalNode ('Title', 'body', 'druapl', 'drupal', 'http://localhost')
     node.save()
