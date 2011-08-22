@@ -327,7 +327,7 @@ class DrupalNode:
             
 if __name__ == '__main__':
     drupal = False
-    print sys.argv
+    
     if '-u' in sys.argv:
         USER = sys.argv[sys.argv.index('-u')+1]
     if '-p' in sys.argv:
