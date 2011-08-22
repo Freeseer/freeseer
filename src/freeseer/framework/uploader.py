@@ -26,7 +26,7 @@ from twisted.conch.ssh import transport, userauth, connection, channel, keys, co
 from twisted.internet import defer, protocol, reactor
 from twisted.python import log
 from twisted.conch import error
-import sys, os, getpass
+import sys, os, getpass, mimetypes, base64
 import xmlrpclib, time
 import gobject
 gobject.threads_init()
@@ -73,7 +73,6 @@ class UserAuth(userauth.SSHUserAuthClient):
         return passwd
             
     def getPublicKey(self):
-        print ('getPublicKey')
 #        path = os.path.expanduser('~/.ssh/id_rsa') 
 #        if not os.path.exists(path) or self.lastPublicKey:
             #if the file doesn't exist, or we've tried a public key
@@ -81,7 +80,6 @@ class UserAuth(userauth.SSHUserAuthClient):
 #        return keys.Key.fromFile(filename=path+'.pub').blob()
 
     def getPrivateKey(self):
-        print ('getPrivateKey')
 #        path = os.path.expanduser('~/.ssh/id_rsa')
         return #defer.succeed(keys.Key.fromFile(path).keyObject)
 
@@ -89,12 +87,12 @@ class UserAuth(userauth.SSHUserAuthClient):
 class ClientConnection(connection.SSHConnection):
 
     def serviceStarted(self):
-        print ('servicesStarted')
         if PROTOCOL == 'scp':
             self.openChannel(ScpChannel(2**16, 2**15, self))
         else:
             self.openChannel(SftpChannel(2**16, 2**15, self))
 #        self.openChannel(ScpChannel(2**16, 2**15, self))
+
 #This class sets up a channel to be used by the SCPchannel
 class TransferChannelBase(channel.SSHChannel):
     
@@ -104,7 +102,6 @@ class TransferChannelBase(channel.SSHChannel):
     buffer = ''
         
     def channelOpen(self, data):
-        print ('channelOpen')
         # Might display/process welcome screen
         self.welcome = data
         if PROTOCOL == 'scp':
@@ -116,7 +113,6 @@ class TransferChannelBase(channel.SSHChannel):
         d.addCallbacks(self.channelOpened, log.err)
         
     def closed(self):
-        print ('closed')
         self.loseConnection()
         reactor.stop()
 
@@ -169,7 +165,6 @@ class ScpChannel(TransferChannelBase):
 class SftpChannel(TransferChannelBase):
     #start SFTP transfer 
     def channelOpened(self, data):
-        print ('SFTP Opened')
         self.client = filetransfer.FileTransferClient()
         self.client.makeConnection(self)
         #self.dataReceived = self.client.dataReceived
@@ -280,7 +275,6 @@ class VideoData:
         if not os.path.isfile(self.file):
             gobject.idle_add(self._discover_one)
             return False
-        print "File Path: ", self.file
         self.current = Discoverer(self.file)
         # connect a callback on the 'discovered' signal
         self.current.connect('discovered', self.retrieveData)
@@ -288,16 +282,21 @@ class VideoData:
         return False
     
 class DrupalNode:
-    def __init__(self, title, body, username, password, site):
+    def __init__(self, title, body, username, password, site, filepath):
         self.node = {
                      'title': title,
                      'body': body,
                      'type': 'story',
                      'promote': False,
                      'name': username,
-                     'language': 'en'
+                     'language': 'en',
+                     'status': 1,
+                     'files': {}
                      }
         self.password = password
+        self.timestamp = str(int(time.time()))
+        if os.path.exists(filepath):
+           self.file = filepath 
         self.server = xmlrpclib.ServerProxy(site, allow_none=True)
         try:
             connection = self.server.system.connect()
@@ -319,11 +318,62 @@ class DrupalNode:
         self.sessid = session['sessid']
         self.user = session['user']
         self.node['uid'] = self.user['uid']
+        self.setupFile()
     
+    def setupFile(self):
+        fileName = os.path.basename(self.file)
+        fileSize = os.path.getsize(self.file)
+        fileMime = mimetypes.guess_type(self.file, False)
+        rb = open(self.file, 'rb')
+        file = rb.read()
+        rb.close()
+        self.fileNode = {
+                'file': base64.b64encode(file),
+                'filename': fileName,
+                'filepath': 'sites/default/files/' + fileName,
+                'filesize': fileSize,
+                'timestamp': self.timestamp,
+                'uid': self.user['uid'],
+                'filemime': fileMime,
+                }
+    
+    def saveFile (self):
+        try:
+            self.file = self.server.file.save (self.file)
+            if 'Access denied' or 'Missing required arguments' in self.file:
+                self.file = self.server.file.save (self.sessid, self.fileNode)
+        except xmlrpclib.Fault:
+            print 'Error saving file to server'
+            sys.exit()
+            
+    def getDrupalFile (self):
+        try:
+            drupalFile = self.server.file.get (self.sessid, self.file)
+        except xmlrpclib.Fault:
+            print 'Error getting file info from server'
+            sys.exit()
+        nodeFile = {
+                    'new': 1,
+                    'fid': drupalFile['fid'],
+                    'list': 0,
+                    'weight': 0
+                    }
+        self.node['files'][self.file] = nodeFile
+        
+    
+    def saveNode (self):
+        try:
+            save = self.server.node.save (self.node)
+            if 'Access denied' or 'Missing required arguments' in save:
+                save = self.server.node.save (self.sessid, self.node)
+        except xmlrpclib.Fault:
+            print 'Error saving file to server'
+            sys.exit()
+            
     def save (self):
-        save = self.server.node.save (self.node)
-        if 'Access denied' or 'Missing required arguments' in save:
-            save = self.server.node.save (self.sessid, self.node)
+        self.saveFile()
+        self.getDrupalFile()
+        self.saveNode()
             
 if __name__ == '__main__':
     drupal = False
@@ -344,7 +394,7 @@ if __name__ == '__main__':
         if drupal:
             video = VideoData(VIDEO)
             video.run()
-            node = DrupalNode (video.title, video.body, USER, PASS, HOST)
+            node = DrupalNode (video.title, video.body, USER, PASS, HOST, VIDEO)
             node.save()
         else:
             protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
