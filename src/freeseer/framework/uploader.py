@@ -34,14 +34,14 @@ import pygst
 pygst.require('0.10')
 from gst.extend.discoverer import Discoverer
 
-USER = 'mrjhubba'
+USER = None
 PASS = None
-HOST = '134.117.29.70'
+HOST = None
 SRC = 'new-file'
-DST = 'test/'
+DST = '.'
 PROTOCOL = 'sftp'
 EXCODE = 1
-VIDEO = '/home/mathieu/Videos/2011-04-06_-_1459_-_T103_-_Thanh_Ha_-_Intro_to_Freeseer.ogg'
+VIDEO = None
 
 #This class handles the encryption details with the server
 class Transport(transport.SSHClientTransport):
@@ -236,6 +236,13 @@ class SftpChannel(TransferChannelBase):
 class VideoData:
     def __init__(self, file):
         self.file = file
+        self.title = ''
+        self.artist = ''
+        self.album = ''
+        self.location = ''
+        self.date = ''
+        self.comment = ''
+        self.duration = ''
         self.tags = {}
         self.mainloop = gobject.MainLoop()
         self.current = None
@@ -247,12 +254,25 @@ class VideoData:
     #Currently this just prints the meta-data
     #Will have to get specific tags from discoverer object to store them
     def retrieveData(self, discoverer, ismedia):
-        self.tags= discoverer.tags
-        print self.tags
+        tags = discoverer.tags
+        if 'title' in tags:
+            self.title = tags['title']
+        if 'artist' in tags:
+            self.artist = tags['artist']
+        if 'album' in tags:
+            self.album = tags['album']
+        if 'location' in tags:
+            self.location = tags['location']
+        if 'date' in tags:
+            self.date = tags['date']
+        if 'comment' in tags:
+            self.comment = tags['comment']
+        self.duration = discoverer._time_to_string(max(discoverer.audiolength, discoverer.videolength))
+        self.body = 'Speaker: '+self.artist+'\nEvent: '+self.album+'\nDate:'+self.date+'\nRoom: '+self.location+'\n\n'+self.comment
         self.current = None
         
-    def getTags (self):
-        return self.tags
+    def getBody (self):
+        return self.body
     
     #checks to make sure the file exists then creates Discoverer
     #object using the file path    
@@ -306,16 +326,40 @@ class DrupalNode:
             save = self.server.node.save (self.sessid, self.node)
             
 if __name__ == '__main__':
+    drupal = False
+    print sys.argv
+    if '-u' in sys.argv:
+        USER = sys.argv[sys.argv.index('-u')+1]
+    if '-p' in sys.argv:
+        PASS = sys.argv[sys.argv.index('-p')+1]
+    if '--host' in sys.argv:
+        HOST = sys.argv[sys.argv.index('--host')+1]
+    if '-d' in sys.argv:
+        VIDEO = sys.argv[sys.argv.index('-d')+1]
+        SRC = VIDEO
+    if '-drupal' in sys.argv:
+        drupal = True
+    
+    if not (USER is None or PASS is None or HOST is None or VIDEO is None):
+        if drupal:
+            video = VideoData(VIDEO)
+            video.run()
+            node = DrupalNode (video.title, video.body, USER, PASS, HOST)
+            node.save()
+        else:
+            protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+            reactor.run()
+    
+#    if not USER is None:
     #Test scp/sftp upload
-    #protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
-    #reactor.run()
+#        protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+#        reactor.run()
     
     #Test GstFile
 #    video = VideoData(VIDEO)
 #    video.run()
-#    print video.getTags(video)
     
     
     #Test DrupalNode
-    node = DrupalNode ('Title', 'body', 'druapl', 'drupal', 'http://localhost')
-    node.save()
+#    node = DrupalNode ('Title', 'body', 'druapl', 'drupal', 'http://localhost')
+#    node.save()
