@@ -349,6 +349,9 @@ if __name__ == '__main__':
         else:
             protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
             reactor.run()
+    else:
+        print 'Please enter a username, password, host, and filepath'
+        sys.exit()
     
 #    if not USER is None:
     #Test scp/sftp upload
