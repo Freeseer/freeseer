@@ -31,7 +31,7 @@ from freeseer import project_info
 from freeseer.framework.core import *
 from freeseer.framework.presentation import *
 from freeseer.framework.freeseer_about import *
-from freeseer.frontend.talkeditor.main import *
+from freeseer.frontend.talkeditor.talkeditor import *
 from freeseer.frontend.configtool.configtool import *
 
 from freeseer_ui_qt import *
