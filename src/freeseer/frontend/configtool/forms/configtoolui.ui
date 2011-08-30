@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Freeseer - Configuration Tool</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../framework/resources/resource.qrc">
+    <normaloff>:/freeseer/freeseer_logo.png</normaloff>:/freeseer/freeseer_logo.png</iconset>
   </property>
   <widget class="QTreeWidget" name="optionsWidget">
    <property name="geometry">
@@ -77,6 +81,8 @@
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../framework/resources/resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
