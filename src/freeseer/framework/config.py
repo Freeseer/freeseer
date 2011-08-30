@@ -40,6 +40,7 @@ class Config:
         # Config location
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
+        self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         
         #
         # Set default settings
@@ -47,7 +48,6 @@ class Config:
         
         # Global
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
-        self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         self.auto_hide = False
         self.resolution = '0x0' # no scaling for video
         self.enable_video_recoding = True
