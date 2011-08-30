@@ -39,22 +39,42 @@ To develop and run freeseer, you require:
 
 For Fedora Linux, install:
 --------------------------
-    “sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools”    
+    "sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools"    
 
 For Ubuntu Linux, install:
 --------------------------
-    “sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools cmake \
-    libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser”
+    "sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools 
+    libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser"
 
 For Windows, install: 
 ---------------------
-    python-2.6.6, GStreamer-WinBuilds-GPL-x86, GStreamer-WinBuilds-SDK-GPL-x86, PyQt-Py2.6-x86-gpl-4.8.3-1, 
-    pygtk-all-in-one-2.22.6.win32-py2.6, feedparser-5.0.1, cmake: cmake-2.8.4-win32-x86 mingw-get-inst-20110316
+    - python-2.7.2
+    - GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
+    - GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 
+    - PyQt-Py2.7-x86-gpl-4.8.5-1
+    - pygtk-all-in-one-2.24.0.win32-py2.7 
+    - feedparser-5.0.1 
+    - cmake-2.8.5-win32-x86
+    - mingw-get-inst-20110802
+    - setuptools-0.6c11.win32-py2.7
+    - yapsy
     
-    NOTES: The above software versions are known to work well. Python does need to be version 2.6.*
+    Yapsy can be installed using easy_install that comes with setuptools using the command below.
+    
+    Run: C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
+    
+    NOTES:
+    	- Windows 32-bit packages are recommended when installing the above packages.
+    	  This is because pygtk-all-in-one package at the time of this writing does
+    	  not have a 64bit installer.
+    	- The above software versions are known to work well. Python does need to be version 2.7.*
 
           On windows, add the following paths to your PATH variable:
           C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin;C:\MinGW\bin
+          
+    Troubleshooting:
+    	If you have issues running freeseer with cannot import gst error this link may help:
+    	http://stackoverflow.com/questions/6907473/cannot-import-gst-in-python
 
 -------------------------------------------------------------------------
 
