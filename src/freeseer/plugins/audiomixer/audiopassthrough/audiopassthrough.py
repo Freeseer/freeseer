@@ -33,7 +33,6 @@ class AudioPassthrough(IAudioMixer):
     def load_inputs(self, player, mixer, inputs):
         loaded = []
         for plugin in inputs:
-            print self.input1, plugin.plugin_object.get_name()
             if plugin.is_activated and plugin.plugin_object.get_name() == self.input1:
                 input = plugin.plugin_object.get_audioinput_bin()
                 player.add(input)
