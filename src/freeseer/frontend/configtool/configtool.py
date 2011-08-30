@@ -67,6 +67,7 @@ class ConfigTool(QtGui.QDialog):
         self.pluginloader.setupUi(self.pluginloaderWidget)
 
         # connections
+        self.connect(self.ui.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.ui.optionsWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         # general tab connections
         self.connect(self.generalui.checkBoxAudioMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
