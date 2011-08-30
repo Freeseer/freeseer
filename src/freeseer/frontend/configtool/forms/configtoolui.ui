@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>ConfigTool</class>
  <widget class="QWidget" name="ConfigTool">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>592</width>
-    <height>526</height>
+    <width>586</width>
+    <height>524</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,9 +24,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>20</y>
+     <y>30</y>
      <width>171</width>
-     <height>491</height>
+     <height>421</height>
     </rect>
    </property>
    <property name="headerHidden">
@@ -73,11 +76,24 @@
   <widget class="QWidget" name="mainWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>200</x>
      <y>20</y>
-     <width>361</width>
+     <width>371</width>
      <height>491</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closePushButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>460</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
    </property>
   </widget>
  </widget>
