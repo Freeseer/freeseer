@@ -158,9 +158,8 @@ class MainApp(QtGui.QMainWindow):
                 
         self.load_settings()
 
-        # setup default sources
-        if (self.core.config.audiofb == True):
-            self.ui.audioFeedbackCheckbox.toggle()
+        #if (self.core.config.audiofb == True):
+        #    self.ui.audioFeedbackCheckbox.toggle()
 
         # setup spacebar key
         self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
