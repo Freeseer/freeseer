@@ -24,7 +24,7 @@
 
 from os import listdir;
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QtSql
 
 from freeseer import project_info
 from freeseer.framework.presentation import *
@@ -121,7 +121,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
         self.setupLanguageMenu();
 
-        self.load_talks()
+        #self.load_talks()
         
         # edit talks connections
         self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
@@ -134,8 +134,9 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
-        # editTable Connections
-        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
+        
+        self.load_talks_db()
+        self.load_presentations_model()
 
     # TODO fix this
     def setupLanguageMenu(self):
@@ -197,6 +198,19 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         #Set up the event handling for each of the menu items
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
 
+    def load_talks_db(self):
+        # Open the database
+        self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
+        self.db.setDatabaseName(self.core.config.presentations_file)
+        self.db.open()
+        
+    def load_presentations_model(self):
+        # Load Presentation Model
+        self.presentationModel = QtSql.QSqlTableModel()
+        self.presentationModel.setTable("presentations")
+        self.presentationModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
+        self.presentationModel.select()
+        self.ui.editTable.setModel(self.presentationModel)
     
     def add_talk(self):
         presentation = Presentation(str(self.ui.titleEdit.text()),
@@ -223,71 +237,26 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.ui.checkBox_3.setChecked(False)
         self.ui.checkBox_4.setChecked(False)
 
-        self.update_talk_views()
+        self.presentationModel.select()
 
-    def remove_talk(self): 
+    def remove_talk(self):
         try:
-            row_clicked = self.ui.editTable.currentRow()
-        except:            
-            return
-        
-        id = self.ui.editTable.item(row_clicked, 5).text() 
-        self.core.delete_talk(str(id))
-        self.ui.editTable.removeRow(row_clicked)
-        self.update_talk_views()
-
-    # This method currently causing performance issues.
-    def edit_talk(self, row, col):
-        try:
-            speaker = self.ui.editTable.item(row, 0).text()
-            title = self.ui.editTable.item(row, 1).text()
-            room = self.ui.editTable.item(row, 2).text()
-            event = self.ui.editTable.item(row, 3).text()
-            dateTime = self.ui.editTable.item(row, 4).text()
-            talk_id = self.ui.editTable.item(row, 5).text()
+            row_clicked = self.ui.editTable.currentIndex().row()
         except:
             return
-
-        self.core.update_talk(talk_id, speaker, title, room, event, dateTime)
-        self.emit(QtCore.SIGNAL('changed'))
+        
+        self.presentationModel.removeRow(row_clicked)
+        self.presentationModel.select()
 
     def reset(self):
         self.core.clear_database()
-        self.update_talk_views()
-
-    def load_talks(self):
-        talklist = self.core.get_talk_titles()
-        
-        self.ui.editTable.clearContents()
-        self.ui.editTable.setRowCount(0)    
-       
-        for talk in talklist:          
-            index = self.ui.editTable.rowCount()
-            self.ui.editTable.insertRow(index)
-            
-            for i in range(len(talk)):                
-                self.ui.editTable.setItem(index, i, QtGui.QTableWidgetItem(unicode(talk[i])))                         
-        
-        self.ui.editTable.resizeRowsToContents()
+        self.presentationModel.select()
             
     def add_talks_from_rss(self):
         rss_url = str(self.ui.rssEdit.text())
         self.core.add_talks_from_rss(rss_url)
-        self.update_talk_views()
+        self.presentationModel.select()
 
-    def update_talk_views(self):
-        # disconnect the editTable signal before we refresh the views
-        self.disconnect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
-
-        # finish up
-        self.load_talks()
-
-        # lets not forget to reactivate the editTable signal
-        self.connect(self.ui.editTable, QtCore.SIGNAL('cellChanged(int, int)'), self.edit_talk)
-
-        # send the changed signal to Freeseer
-        self.emit(QtCore.SIGNAL('changed'))
-        
     def closeEvent(self, event):
         self.core.logger.log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
