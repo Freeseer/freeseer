@@ -413,7 +413,6 @@ class MainApp(QtGui.QMainWindow):
             self.configTool.restoreGeometry(self.configTool.geometry)
         
     def run_talk_editor(self):
-        self.connect(self.talkEditor, QtCore.SIGNAL('changed'), self.update_talk_views)
         self.talkEditor.show()
         
         # Restore window positioning if one was saved.
