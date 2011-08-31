@@ -301,7 +301,7 @@ class MainApp(QtGui.QMainWindow):
         self.ui.roomList.setModel(self.roomsModel)
         
         room = str(self.ui.roomList.currentText())
-        self.get_talks_at_room(room)
+        self.load_talks_from_room(room)
         
     def load_talks_from_room(self, room):
         self.current_room = room
