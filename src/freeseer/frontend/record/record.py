@@ -25,7 +25,7 @@
 from os import listdir;
 from os import name;
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QtSql
 
 from freeseer import project_info
 from freeseer.framework.core import *
@@ -125,10 +125,6 @@ class MainApp(QtGui.QMainWindow):
         self.langActionGroup = QtGui.QActionGroup(self);
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
         self.setupLanguageMenu();
-    
-        self.load_talks()
-        self.load_events()
-        self.load_rooms()
 
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -146,8 +142,8 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
-        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_rooms_and_talks_at_event)
-        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.get_talks_at_room)
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_and_talks_from_event)
+        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
         # Main Window Connections
@@ -226,6 +222,12 @@ class MainApp(QtGui.QMainWindow):
 
         #load the config file
         self.core.config.readConfig()
+        
+        
+        # Load Talks as a SQL Data Model
+        self.load_talks_db()
+        self.load_event_list()
+        
 
     def current_presentation(self):
         '''
@@ -277,75 +279,39 @@ class MainApp(QtGui.QMainWindow):
     ###
     ### Talk Related
     ###
-
-    def get_rooms_and_talks_at_event(self, event):        
-        room_list = self.core.filter_rooms_by_event(self.ui.eventList.currentText())        
-        self.update_room_list(room_list)
-        
-        room = str(self.ui.roomList.currentText())
-        talk_list = self.core.filter_talks_by_event_room(event, room)
-        
-        self.update_talk_list(talk_list)
-        
-    def get_talks_at_room(self, room):
-        event = str(self.ui.eventList.currentText())
-        talk_list = self.core.filter_talks_by_event_room(event, room)
-        self.update_talk_list(talk_list)
-
-    def update_talk_list(self, talk_list):
-        self.ui.talkList.clear()
-        
-        for talk in talk_list:
-            self.ui.talkList.addItem(talk)
-            
-    def update_room_list(self, room_list):
-        self.ui.roomList.clear()
     
-        for room in room_list:
-            self.ui.roomList.addItem(room)
-                  
-    def load_talks(self):
-        '''
-        This method updates the GUI with the available presentation titles.
-        '''
+    def load_talks_db(self):
+        # Open the database
+        self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
+        self.db.setDatabaseName(self.core.config.presentations_file)
+        self.db.open()
         
-        # Update the main tab
-        event = str(self.ui.eventList.currentText())
-        room = str(self.ui.roomList.currentText())
-        talk_list = self.core.filter_talks_by_event_room(event, room)
-        self.update_talk_list(talk_list)
-            
-    def load_events(self):
-        '''
-        This method updates the GUI with the available presentation events.
-        '''
-        event_list = self.core.get_talk_events()
-        self.ui.eventList.clear()
-        self.ui.eventList.addItem("All")
-        
-        for event in event_list:
-            if len(event)>0:
-                self.ui.eventList.addItem(event)   
-            
-    def load_rooms(self):
-        '''
-        This method updates the GUI with the available presentation rooms.
-        '''
-        room_list = self.core.get_talk_rooms()
-        self.ui.roomList.clear()
-        self.ui.roomList.addItem("All")
-        
-        for room in room_list:
-            if len(room)>0:
-                self.ui.roomList.addItem(room)
+    def load_event_list(self):
+        # Set the Events Data Model
+        self.eventsModel = QtSql.QSqlQueryModel()
+        self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations")
+        self.ui.eventList.setModel(self.eventsModel)
 
-    def update_talk_views(self):
-        '''
-        This function reloads the lists of events, rooms and talks.
-        '''
-        self.load_events()
-        self.load_rooms()
-        self.load_talks()
+    def load_rooms_and_talks_from_event(self, event):
+        self.current_event = event
+
+        # Set the Room Data Model
+        self.roomsModel = QtSql.QSqlQueryModel()
+        self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations WHERE Event='%s' ORDER BY TIME ASC" % event)
+        self.ui.roomList.setModel(self.roomsModel)
+        
+        room = str(self.ui.roomList.currentText())
+        self.get_talks_at_room(room)
+        
+    def load_talks_from_room(self, room):
+        self.current_room = room
+        
+        # Load the Talks Data Model
+        self.talksModel = QtSql.QSqlQueryModel()
+        self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title) FROM presentations \
+                                       WHERE Event='%s' and Room='%s' ORDER BY Time ASC" % (self.current_event, self.current_room))
+        self.ui.talkList.setModel(self.talksModel)
+
 
     ###
     ### Misc
