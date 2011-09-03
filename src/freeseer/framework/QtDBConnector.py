@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import logging
 import os
 
 from PyQt4 import QtSql
@@ -123,6 +124,7 @@ class QtDBConnector():
                                      presentation.event,
                                      presentation.room,
                                      presentation.time))
+        logging.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
         
     def update_presentation(self, talk_id, presentation):
         query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
