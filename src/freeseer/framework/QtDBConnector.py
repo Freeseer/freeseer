@@ -26,6 +26,8 @@ import os
 
 from PyQt4 import QtSql
 
+from freeseer.framework.presentation import *
+
 class QtDBConnector():
     presentationsModel = None
     
@@ -49,7 +51,7 @@ class QtDBConnector():
             # check if presentations table exists and if not create it.
             if not self.talkdb.tables().contains("presentations"):
                 self.__create_table()
-                self.__insert_default_talk()
+            self.__insert_default_talk()
             
         else:
             print "Unable to create talkdb file."
@@ -64,27 +66,27 @@ class QtDBConnector():
         """
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS presentations
                                        (Id INTEGER PRIMARY KEY,
+                                        Title varchar(255),
                                         Speaker varchar(100),
-                                        Title varchar(255) UNIQUE,
                                         Description text,
                                         Level varchar(25),
                                         Event varchar(100),
-                                        Room varchar(25)),
-                                        Time timestamp''')
+                                        Room varchar(25),
+                                        Time timestamp,
+                                        UNIQUE (Speaker, Title) ON CONFLICT REPLACE)''')
         
     def __insert_default_talk(self):
         """
         Insert the default talk data into the database.
         """
-        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES
-                                (NULL,
-                                 "Thanh Ha",
-                                 "Intro to Freeseer",
-                                 "",
-                                 "",
-                                 "SC2011",
-                                 "",
-                                 "T105")''')
+        presentation = Presentation("Intro to Freeseer",
+                                    "Thanh Ha",
+                                    "",
+                                    "",
+                                    "SC2011",
+                                    "T105",
+                                    "")
+        self.insert_presentation(presentation)
         
     def get_talks(self):
         """
@@ -92,6 +94,56 @@ class QtDBConnector():
         """
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
         return result
+    
+    def get_presentation(self, talk_id):
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
+        while(result.next()):
+            p = Presentation(unicode(result.value(1).toString()),    # title
+                             unicode(result.value(2).toString()),    # speaker
+                             unicode(result.value(3).toString()),    # description
+                             unicode(result.value(4).toString()),    # level
+                             unicode(result.value(5).toString()),    # event
+                             unicode(result.value(6).toString()),    # room
+                             unicode(result.value(7).toString()))    # time
+            
+            return p
+    
+    #
+    # Create, Update, Delete
+    #
+    def insert_presentation(self, presentation):
+        """
+        Inserts a Presentation from the database
+        """
+        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
+                                    (presentation.title,
+                                     presentation.speaker,
+                                     presentation.description,
+                                     presentation.level,
+                                     presentation.event,
+                                     presentation.room,
+                                     presentation.time))
+        
+    def update_presentation(self, talk_id, presentation):
+        query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
+                            (presentation.title,
+                             presentation.speaker,
+                             presentation.event,
+                             presentation.room,
+                             presentation.time,
+                             talk_id))
+        
+    def delete_presentation(self, talk_id):
+        """
+        Removes a Presentation from the database
+        """
+        query = QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
+        
+    def clear_database(self):
+        """
+        Clears the presentations table
+        """
+        query = QtSql.QSqlQuery('''DELETE FROM presentations''')
     
     #
     # Data Model Retrieval 
@@ -115,7 +167,7 @@ class QtDBConnector():
         Useful for Qt GUI based Frontends to load the Model into Views.
         """
         self.eventsModel = QtSql.QSqlQueryModel()
-        self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations")
+        self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations ORDER BY Event ASC")
             
         return self.eventsModel
     
@@ -125,7 +177,7 @@ class QtDBConnector():
         Useful for Qt GUI based Frontends to load the Model into Views.
         """
         self.roomsModel = QtSql.QSqlQueryModel()
-        self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations WHERE Event='%s' ORDER BY TIME ASC" % event)
+        self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations WHERE Event='%s' ORDER BY Room ASC" % event)
             
         return self.roomsModel
     
@@ -135,7 +187,7 @@ class QtDBConnector():
         Useful for Qt GUI based Frontends to load the Model into Views.
         """
         self.talksModel = QtSql.QSqlQueryModel()
-        self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title) FROM presentations \
+        self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
                                    WHERE Event='%s' and Room='%s' ORDER BY Time ASC" % (event, room))
             
         return self.talksModel

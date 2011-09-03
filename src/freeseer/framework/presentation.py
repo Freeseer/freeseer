@@ -35,8 +35,8 @@ class Presentation():
         '''
         Initialize a presentation instance
         '''
-        self.speaker = speaker
         self.title = title
+        self.speaker = speaker
         self.description = description
         self.level = level
         self.event = event
