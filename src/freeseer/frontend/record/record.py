@@ -31,6 +31,7 @@ from freeseer import project_info
 from freeseer.framework.core import *
 from freeseer.framework.presentation import *
 from freeseer.framework.freeseer_about import *
+from freeseer.framework.QtDBConnector import *
 from freeseer.frontend.talkeditor.talkeditor import *
 from freeseer.frontend.configtool.configtool import *
 
@@ -142,7 +143,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
-        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_and_talks_from_event)
+        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
         self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
@@ -225,7 +226,7 @@ class MainApp(QtGui.QMainWindow):
         
         
         # Load Talks as a SQL Data Model
-        self.load_talks_db()
+        #self.load_talks_db()
         self.load_event_list()
         
 
@@ -233,11 +234,8 @@ class MainApp(QtGui.QMainWindow):
         '''
         Creates a presentation object from the currently selected title on the GUI
         '''
-        
-        title=unicode(self.ui.talkList.currentText())
-        
-        p_id = self.core.get_presentation_id_by_selected_title(title)
-        return self.core.get_presentation(p_id)
+        p_id = self.ui.talkList.model().index(0, 1).data(QtCore.Qt.DisplayRole).toString()
+        return self.core.db.get_presentation(p_id)
 
     def capture(self, state):
         '''
@@ -280,37 +278,21 @@ class MainApp(QtGui.QMainWindow):
     ### Talk Related
     ###
     
-    def load_talks_db(self):
-        # Open the database
-        self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
-        self.db.setDatabaseName(self.core.config.presentations_file)
-        self.db.open()
-        
     def load_event_list(self):
-        # Set the Events Data Model
-        self.eventsModel = QtSql.QSqlQueryModel()
-        self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations")
-        self.ui.eventList.setModel(self.eventsModel)
+        model = self.core.db.get_events_model()
+        self.ui.eventList.setModel(model)
 
-    def load_rooms_and_talks_from_event(self, event):
+    def load_rooms_from_event(self, event):
         self.current_event = event
 
-        # Set the Room Data Model
-        self.roomsModel = QtSql.QSqlQueryModel()
-        self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations WHERE Event='%s' ORDER BY TIME ASC" % event)
-        self.ui.roomList.setModel(self.roomsModel)
-        
-        room = str(self.ui.roomList.currentText())
-        self.load_talks_from_room(room)
+        model = self.core.db.get_rooms_model(self.current_event)
+        self.ui.roomList.setModel(model)
         
     def load_talks_from_room(self, room):
         self.current_room = room
-        
-        # Load the Talks Data Model
-        self.talksModel = QtSql.QSqlQueryModel()
-        self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title) FROM presentations \
-                                       WHERE Event='%s' and Room='%s' ORDER BY Time ASC" % (self.current_event, self.current_room))
-        self.ui.talkList.setModel(self.talksModel)
+
+        model = self.core.db.get_talks_model(self.current_event, self.current_room)
+        self.ui.talkList.setModel(model)
 
 
     ###

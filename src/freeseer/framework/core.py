@@ -35,7 +35,7 @@ import gstreamer
 
 from config import Config
 from logger import Logger
-from db_connector import *
+from QtDBConnector import *
 from rss_parser import *
 from presentation import *
 from plugin import PluginManager
@@ -53,7 +53,7 @@ class FreeseerCore:
         configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
         self.config = Config(configdir)
         self.logger = Logger(configdir)
-        self.db = DB_Connector(configdir)
+        self.db = QtDBConnector(configdir)
         self.plugman = PluginManager(configdir)
 
         # Start Freeseer Recording Backend
@@ -182,42 +182,6 @@ class FreeseerCore:
     ##
     ## Database Functions
     ##
-    def get_talk_titles(self):
-        return self.db.get_talk_titles()
-
-        
-    def get_talk_rooms(self):
-        return self.db.get_talk_rooms()
-
-    
-    def get_talk_events(self):
-        return self.db.get_talk_events()
-
-
-    def filter_talks_by_event_room(self, event, room):
-        return self.db.filter_talks_by_event_room(event, room)
-
-    
-    def filter_rooms_by_event(self,evento):
-        return self.db.filter_rooms_by_event(evento)
-
-
-    def get_presentation_id_by_selected_title(self, talk):
-        '''
-        Obtains a presentation ID given a title string from the GUI
-        '''
-        
-        speaker = talk.split(' - ', 1)[0].strip()
-        title = talk.split(' - ', 1)[1].strip()
-        
-        talk_id = self.db.get_presentation_id_from_talk(speaker, title)
-        
-        return talk_id
-
-    def get_presentation(self, presentation_id):
-        return self.db.get_presentation(presentation_id)
-
-
     def add_talks_from_rss(self, rss):
         entry = str(rss)
         feedparser = FeedParser(entry)
@@ -232,36 +196,21 @@ class FreeseerCore:
                                     presentation["Abstract"],  # Description
                                     presentation["Level"],
                                     presentation["Event"],
-                                    presentation["Time"],
-                                    presentation["Room"])
-                                    
-                if not self.db.db_contains(talk):
-                    self.add_talk(talk)
-
-
-    def get_presentation_id(self, presentation):
-        talk_id = self.db.get_presentation_id(presentation)
-        self.logger.log.debug('Found presentation id for %s - %s. ID: %s',
-                                presentation.speaker,
-                                presentation.title,
-                                talk_id)
-        return talk_id
-
+                                    presentation["Room"],
+                                    presentation["Time"])
+                self.add_talk(talk)
 
     def add_talk(self, presentation):
-        self.db.add_talk(presentation)
+        self.db.insert_presentation(presentation)
         self.logger.log.debug('Talk added: %s - %s', presentation.speaker, presentation.title)
 
-        
     def update_talk(self, talk_id, speaker, title, room, event, dateTime):
         self.db.update_talk(talk_id, speaker, title, room, event, dateTime)
         self.logger.log.debug('Talk updated: %s - %s', speaker, title)
 
-        
     def delete_talk(self, talk_id):
         self.db.delete_talk(talk_id)
         self.logger.log.debug('Talk deleted: %s', talk_id)
-
 
     def clear_database(self):
         self.db.clear_database()
