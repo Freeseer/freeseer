@@ -194,7 +194,7 @@ class FreeseerCore:
             for presentation in feedparser.build_data_dictionary():
                 talk = Presentation(presentation["Title"],
                                     presentation["Speaker"],
-                                    "",
+                                    presentation["Abstract"],  # Description
                                     presentation["Level"],
                                     presentation["Event"],
                                     presentation["Room"],
