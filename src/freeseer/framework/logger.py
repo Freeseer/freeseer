@@ -94,6 +94,7 @@ class Logger():
         # Save default settings to new config file
         with open(self.logconf, 'w') as configfile:
             config.write(configfile)
+            logging.DEBUG("Configuration written to %s." % configfile)
         
 if __name__ == "__main__":
     logger = Logger(os.path.abspath(os.path.expanduser('~/.freeseer/')))
