@@ -199,24 +199,7 @@ class FreeseerCore:
                                     presentation["Event"],
                                     presentation["Room"],
                                     presentation["Time"])
-                self.add_talk(talk)
-
-    def add_talk(self, presentation):
-        self.db.insert_presentation(presentation)
-        self.logger.log.debug('Talk added: %s - %s', presentation.speaker, presentation.title)
-
-    def update_talk(self, talk_id, speaker, title, room, event, dateTime):
-        self.db.update_talk(talk_id, speaker, title, room, event, dateTime)
-        self.logger.log.debug('Talk updated: %s - %s', speaker, title)
-
-    def delete_talk(self, talk_id):
-        self.db.delete_talk(talk_id)
-        self.logger.log.debug('Talk deleted: %s', talk_id)
-
-    def clear_database(self):
-        self.db.clear_database()
-        self.logger.log.debug('Database cleared!')
-
+                self.db.insert_presentation(talk)
 
     ##
     ## Backend Functions
