@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import logging
 from os import listdir;
 
 from PyQt4 import QtGui, QtCore, QtSql
@@ -247,7 +248,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.presentationModel.select()
 
     def closeEvent(self, event):
-        self.core.logger.log.info('Exiting talk database editor...')
+        logging.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
         event.accept()
     
