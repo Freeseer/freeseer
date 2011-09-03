@@ -33,6 +33,9 @@ class QtDBConnector():
     presentationsModel = None
     
     def __init__(self, configdir, talkdb_file="presentations.db"):
+        """
+        Initialize the QtDBConnector
+        """
         self.configdir = configdir
         self.talkdb_file = os.path.abspath("%s/%s" % (self.configdir, talkdb_file))
         
@@ -44,6 +47,9 @@ class QtDBConnector():
         self.__open_table()
     
     def __open_table(self):
+        """
+        This function options a connection to the database. Used by the init function.
+        """
         self.talkdb = QtSql.QSqlDatabase.addDatabase("QSQLITE")
         self.talkdb.setDatabaseName(self.talkdb_file)
         
@@ -58,6 +64,9 @@ class QtDBConnector():
             print "Unable to create talkdb file."
             
     def __close_table(self):
+        """
+        This function is used to close the connection the the database.
+        """
         self.talkdb.close()
             
     def __create_table(self):
@@ -97,6 +106,9 @@ class QtDBConnector():
         return result
     
     def get_presentation(self, talk_id):
+        """
+        Return a Presentation object associated to a talk_id.
+        """
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
         while(result.next()):
             p = Presentation(unicode(result.value(1).toString()),    # title
@@ -114,7 +126,7 @@ class QtDBConnector():
     #
     def insert_presentation(self, presentation):
         """
-        Inserts a Presentation from the database
+        Insert a Presentation into the database.
         """
         query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
                                     (presentation.title,
@@ -127,6 +139,9 @@ class QtDBConnector():
         logging.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
         
     def update_presentation(self, talk_id, presentation):
+        """
+        Update an existing Presentation in the database.
+        """
         query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
                             (presentation.title,
                              presentation.speaker,
@@ -134,18 +149,21 @@ class QtDBConnector():
                              presentation.room,
                              presentation.time,
                              talk_id))
+        logging.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
         
     def delete_presentation(self, talk_id):
         """
         Removes a Presentation from the database
         """
         query = QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
+        logging.info("Talk %s deleted." % talk_id)
         
     def clear_database(self):
         """
         Clears the presentations table
         """
         query = QtSql.QSqlQuery('''DELETE FROM presentations''')
+        logging.info("Database cleared.")
     
     #
     # Data Model Retrieval 
