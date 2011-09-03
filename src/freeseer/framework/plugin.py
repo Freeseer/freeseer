@@ -42,7 +42,7 @@ class PluginManager:
         if self.firstrun == True:
             self.set_default_plugins()
             
-        logging.DEBUG("Plugin manager initialized.")
+        logging.debug("Plugin manager initialized.")
         
     def __call__(self):
         pass
@@ -82,7 +82,6 @@ class PluginManager:
     def save(self):
         with open(self.configfile, 'w') as configfile:
             self.config.write(configfile)
-            logging.debug("Plugin config saved.")
         
     def activate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
