@@ -45,8 +45,7 @@ class Logger():
             self.writeConfig()
             
         logging.config.fileConfig(self.logconf)
-        self.log = logging.getLogger('root')
-        self.log.info('Logger initialized.')
+        logging.info('Logger initialized.')
         
     def writeConfig(self):
         '''

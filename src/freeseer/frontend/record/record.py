@@ -22,8 +22,8 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-from os import listdir;
-from os import name;
+import logging
+from os import listdir, name
 
 from PyQt4 import QtGui, QtCore, QtSql
 
@@ -219,7 +219,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
         
     def load_settings(self): 
-        self.core.logger.log.info('Loading settings...')
+        logging.info('Loading settings...')
 
         #load the config file
         self.core.config.readConfig()
@@ -302,7 +302,7 @@ class MainApp(QtGui.QMainWindow):
     def area_select(self):
         self.area_selector = QtAreaSelector(self)
         self.area_selector.show()
-        self.core.logger.log.info('Desktop area selector started.')
+        logging.info('Desktop area selector started.')
         self.hide_window()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
@@ -311,7 +311,7 @@ class MainApp(QtGui.QMainWindow):
         self.end_x = self.core.config.end_x = end_x
         self.end_y = self.core.config.end_y = end_y
         self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
-        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+        logging.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
         self.show_window()
 
     def _icon_activated(self, reason):
@@ -352,11 +352,11 @@ class MainApp(QtGui.QMainWindow):
             self.ui.audioFeedbackSlider.setValue(value)
 
     def closeEvent(self, event):
-        self.core.logger.log.info('Exiting freeseer...')
+        logging.info('Exiting freeseer...')
         event.accept()
         
     def keyPressEvent(self, event):
-        self.core.logger.log.debug("Keypressed: %s" % event.key())
+        logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
 
     def translateAction(self ,action):

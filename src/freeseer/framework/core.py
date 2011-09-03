@@ -62,7 +62,7 @@ class FreeseerCore:
         self.feedback = False
         self.spaces = False
       
-        self.logger.log.info(u"Core initialized")   
+        logging.info(u"Core initialized")   
 
     def get_config(self):
         return self.config
@@ -98,7 +98,7 @@ class FreeseerCore:
 
         recordname = "%s.%s" % (tempname, extension)
                      
-        self.logger.log.debug('Set record name to ' + recordname)        
+        logging.debug('Set record name to ' + recordname)        
         
         return recordname
 
@@ -158,7 +158,7 @@ class FreeseerCore:
         index0 = int( position / string.__len__() )
 
         if(index0 >= string.__len__() ):
-            self.logger.log.debug('WARNING: Unable to generate unique filename.')
+            logging.debug('WARNING: Unable to generate unique filename.')
             # Return a unique 2 character string which will not overwrite previous files.
             # There is a possibility of infinite looping on testing duplicates once
             # all possible UNIQUE's and NN's are exhausted if all the files are kept 
@@ -187,7 +187,7 @@ class FreeseerCore:
         feedparser = FeedParser(entry)
 
         if len(feedparser.build_data_dictionary()) == 0:
-            self.logger.log.info("RSS: No data found.")
+            logging.info("RSS: No data found.")
 
         else:
             for presentation in feedparser.build_data_dictionary():
@@ -237,11 +237,11 @@ class FreeseerCore:
         Informs backend to begin recording presentation.
         '''
 
-        self.logger.log.debug("Loading Output plugins...")
+        logging.debug("Loading Output plugins...")
         plugins = []
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
             if plugin.is_activated:
-                self.logger.log.debug("Loading Output: %s" % plugin.plugin_object.get_name())
+                logging.debug("Loading Output: %s" % plugin.plugin_object.get_name())
                 
                 extension = plugin.plugin_object.get_extension()
 
@@ -261,7 +261,7 @@ class FreeseerCore:
         self.backend.load_output_plugins(plugins, metadata)
         
         if self.config.enable_audio_recoding:
-            self.logger.log.debug("Loading Audio recording plugins...")
+            logging.debug("Loading Audio recording plugins...")
             audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
             if audiomixer is not None:
                 audioinputs = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
@@ -269,7 +269,7 @@ class FreeseerCore:
                 self.backend.load_audiomixer(audiomixer, audioinputs)
         
         if self.config.enable_video_recoding:
-            self.logger.log.debug("Loading Video recording plugins...")
+            logging.debug("Loading Video recording plugins...")
             videomixer = self.plugman.plugmanc.getPluginByName(self.config.videomixer, "VideoMixer").plugin_object
             if videomixer is not None:
                 videoinputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
@@ -277,11 +277,11 @@ class FreeseerCore:
                 self.backend.load_videomixer(videomixer, videoinputs)
         
         self.backend.record()
-        self.logger.log.info('Recording started')
+        logging.info('Recording started')
 
     def stop(self):
         '''
         Informs backend to stop recording.
         '''
         self.backend.stop()
-        self.logger.log.info('Recording stopped')
+        logging.info('Recording stopped')
