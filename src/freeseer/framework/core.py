@@ -278,11 +278,9 @@ class FreeseerCore:
                 self.backend.load_videomixer(videomixer, videoinputs)
         
         self.backend.record()
-        logging.info('Recording started')
 
     def stop(self):
         '''
         Informs backend to stop recording.
         '''
         self.backend.stop()
-        logging.info('Recording stopped')
