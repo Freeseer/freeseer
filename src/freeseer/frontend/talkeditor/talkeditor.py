@@ -134,8 +134,6 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
-        
-        self.load_talks_db()
         self.load_presentations_model()
 
     # TODO fix this
@@ -197,19 +195,10 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         
         #Set up the event handling for each of the menu items
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
-
-    def load_talks_db(self):
-        # Open the database
-        self.db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
-        self.db.setDatabaseName(self.core.config.presentations_file)
-        self.db.open()
         
     def load_presentations_model(self):
         # Load Presentation Model
-        self.presentationModel = QtSql.QSqlTableModel()
-        self.presentationModel.setTable("presentations")
-        self.presentationModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
-        self.presentationModel.select()
+        self.presentationModel = self.core.db.get_presentations_model()
         self.ui.editTable.setModel(self.presentationModel)
     
     def add_talk(self):
@@ -224,7 +213,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
         
-        self.core.add_talk(presentation)
+        self.core.db.insert_presentation(presentation)
 
         # cleanup
         self.ui.titleEdit.clear()
@@ -249,7 +238,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.presentationModel.select()
 
     def reset(self):
-        self.core.clear_database()
+        self.core.db.clear_database()
         self.presentationModel.select()
             
     def add_talks_from_rss(self):
