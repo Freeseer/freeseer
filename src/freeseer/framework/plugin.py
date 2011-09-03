@@ -1,4 +1,5 @@
 import ConfigParser
+import logging
 import os
 
 import pygst
@@ -40,6 +41,8 @@ class PluginManager:
         # If config was corrupt or did not exist, reset default plugins.
         if self.firstrun == True:
             self.set_default_plugins()
+            
+        logging.DEBUG("Plugin manager initialized.")
         
     def __call__(self):
         pass
@@ -49,6 +52,7 @@ class PluginManager:
             self.config.readfp(open(self.configfile))
         # Config file does not exist, create a default
         except IOError:
+            logging.DEBUG("First run scenario detected. Creating new configuration files.")
             self.firstrun = True # If config was corrupt or did not exist, reset defaults.
             self.save()
             return
@@ -73,18 +77,22 @@ class PluginManager:
         self.activate_plugin("USB Source", "VideoInput")
         self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "USB Source")
         self.activate_plugin("Ogg Output", "Output")
+        logging.debug("Default plugins activated.")
         
     def save(self):
         with open(self.configfile, 'w') as configfile:
             self.config.write(configfile)
+            logging.debug("Plugin config saved.")
         
     def activate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
         self.save()
+        logging.debug("Plugin %s activated." % plugin_name)
         
     def deactivate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
         self.save()
+        logging.debug("Plugin %s deactivated." % plugin_name)
 
 class IBackendPlugin(IPlugin):
     name = None
