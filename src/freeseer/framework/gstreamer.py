@@ -1,3 +1,29 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# freeseer - vga/presentation capture software
+#
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  http://fosslc.org
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# For support, questions, suggestions or any other inquiries, visit:
+# http://wiki.github.com/fosslc/freeseer/
+
+import logging
+
 import gobject
 gobject.threads_init()
 import pygst
@@ -24,6 +50,8 @@ class Gstreamer:
         self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
         self.video_tee = gst.element_factory_make('tee', 'video_tee')
         self.player.add(self.audio_tee, self.video_tee)
+        
+        logging.debug("Gstreamer initialized.")
 
     ##
     ## GST Player Functions
@@ -52,17 +80,28 @@ class Gstreamer:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(int(self.window_id))
+            logging.debug("Preview loaded into window.")
             
     def keyboard_event(self, key):
+        """
+        Keyboard event handler.
+        """
         pass
             
     ##
     ## Recording functions
     ##
     def record(self):
+        """
+        Start recording.
+        """
         self.player.set_state(gst.STATE_PLAYING)
+        logging.debug("Recording started.")
     
     def stop(self):
+        """
+        Stop recording.
+        """
         self.player.set_state(gst.STATE_NULL)
         
         # Unlink Audio plugins
@@ -86,6 +125,8 @@ class Gstreamer:
         for plugin in self.output_plugins:
             gst.element_unlink_many(self.video_tee, plugin)
             self.player.remove(plugin)
+        
+        logging.debug("Recording stopped.")
     
     def load_output_plugins(self, plugins, metadata):
         self.output_plugins = []
