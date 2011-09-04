@@ -87,11 +87,3 @@ class AboutDialog(QtGui.QWidget):
         self.closeButton = self.buttonBox.addButton(self.tr("Close"), QtGui.QDialogButtonBox.AcceptRole)
         self.layout.addWidget(self.buttonBox, 1, 1)
         self.connect(self.closeButton, QtCore.SIGNAL("clicked()"), self.close)
-        
-if __name__ == "__main__":
-    import sys
-    
-    app = QtGui.QApplication(sys.argv)
-    main = AboutDialog()
-    main.show();
-    sys.exit(app.exec_())
