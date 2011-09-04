@@ -24,12 +24,14 @@
 
 from PyQt4 import QtCore, QtGui
 
+from freeseer import project_info
+
 import resource_rc
 
-__version__= '3.0'
+__version__= project_info.VERSION
 
-NAME = 'freeseer'
-URL = 'blah'
+NAME = project_info.NAME
+URL = project_info.URL
 RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
