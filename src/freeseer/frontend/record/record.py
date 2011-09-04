@@ -30,54 +30,16 @@ from PyQt4 import QtGui, QtCore, QtSql
 from freeseer import project_info
 from freeseer.framework.core import *
 from freeseer.framework.presentation import *
-from freeseer.framework.freeseer_about import *
 from freeseer.framework.QtDBConnector import *
 from freeseer.frontend.talkeditor.talkeditor import *
 from freeseer.frontend.configtool.configtool import *
+from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 
 from freeseer_ui_qt import *
 
 __version__= project_info.VERSION
 
-NAME = project_info.NAME
-URL = project_info.URL
-RECORD_BUTTON_ARTIST=u'Sekkyumu'
-RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
-HEADPHONES_ARTIST=u'Ben Fleming'
-HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
 LANGUAGE_DIR = 'freeseer/frontend/default/languages/'
-    
-
-class AboutDialog(QtGui.QDialog):
-    '''
-    About dialog class for displaying app information
-    '''
-
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
-        self.ui = Ui_FreeseerAbout()
-        self.ui.setupUi(self)
-        self.translate();
-
-    def translate(self):
-        '''
-        Translates the about dialog. Calls the retranslateUi function of the about dialog itself
-        '''
-        DESCRIPTION = self.tr('AboutDialog','Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.')
-        COPYRIGHT=self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
-        LICENSE_TEXT=self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
-    
-        ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-	    u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
-	    u'<p>' + DESCRIPTION + u'</p>' + \
-	    u'<p>' +  COPYRIGHT + u'</p>' + \
-	    u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-	    u'<p>' + LICENSE_TEXT + u'</p>' \
-	    u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-	    u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
- 
-        self.ui.retranslateUi(self);
-        self.ui.aboutInfo.setText(ABOUT_INFO);
 
 class SystemLanguages:
     '''

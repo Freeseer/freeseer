@@ -30,47 +30,13 @@ from PyQt4 import QtGui, QtCore, QtSql
 from freeseer import project_info
 from freeseer.framework.presentation import *
 from freeseer.framework.core import *
-from freeseer.framework.freeseer_about import *
+from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 
 from talkeditor_ui_qt import *
 
 __version__ = project_info.VERSION
 
-NAME = project_info.NAME
-URL = project_info.VERSION
 LANGUAGE_DIR = 'freeseer/frontend/talkeditor/languages/'
-
-
-class AboutDialog(QtGui.QDialog):
-    '''
-    About dialog class for displaying app information
-    '''
-
-    def __init__(self):
-        QtGui.QDialog.__init__(self)
-        self.ui = Ui_FreeseerAbout()
-        self.ui.setupUi(self)
-        self.translate();
-
-
-    def	translate(self):
-        '''
-        Translates the about dialog. Calls the retranslateUi function of the about dialog itself
-        '''
-
-        DESCRIPTION = self.tr('AboutDialog', 'Freeseer Talk Database Editor is a  database utility capable of editing the presentation database. It allows users to add, remove and edit all the data fields of a presentation, and download a list of presentations from a RSS feed.')
-        COPYRIGHT = self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
-        LICENSE_TEXT = self.tr("Freeseer Talk Database Editor is licensed under the GPL version 3. This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.")
-
-        ABOUT_INFO = u'<h1>' + NAME + u'</h1>' + \
-        u'<br><b>' + self.tr("Version") + ":" + __version__ + u'</b>' + \
-        u'<p>' + DESCRIPTION + u'</p>' + \
-        u'<p>' + COPYRIGHT + u'</p>' + \
-        u'<p><a href="' + URL + u'">' + URL + u'</a></p>' \
-        u'<p>' + LICENSE_TEXT + u'</p>'
- 
-        self.ui.retranslateUi(self);
-        self.ui.aboutInfo.setText(ABOUT_INFO);
 
 class SystemLanguages:
     '''
