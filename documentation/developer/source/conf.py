@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Freeseer'
+project = u'Freeseer Developer Documentation'
 copyright = u'2011, Thanh Ha'
 
 # The version info for the project you're documenting, acts as replacement for
