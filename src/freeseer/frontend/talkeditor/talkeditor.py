@@ -163,6 +163,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.connect(self.editorWidget.addButton, QtCore.SIGNAL('clicked()'), self.show_add_talk_widget)
         self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.reset)
+        self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         
         # Main Window Connections
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
