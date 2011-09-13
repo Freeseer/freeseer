@@ -51,6 +51,11 @@ class AboutDialog(QtGui.QWidget):
     """
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
+        self.setWindowTitle(QtGui.QApplication.translate("AboutDialog", 
+                                                         "Freeseer About", 
+                                                         None, 
+                                                         QtGui.QApplication.UnicodeUTF8))
+        
         self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
         
