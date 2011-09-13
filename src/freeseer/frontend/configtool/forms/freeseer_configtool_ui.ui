@@ -33,7 +33,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -413,7 +413,7 @@ v4l2src does not work.</string>
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Steaming settings</string>
+       <string>Streaming settings</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
