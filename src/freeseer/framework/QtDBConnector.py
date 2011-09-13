@@ -58,7 +58,7 @@ class QtDBConnector():
             # check if presentations table exists and if not create it.
             if not self.talkdb.tables().contains("presentations"):
                 self.__create_table()
-            self.__insert_default_talk()
+                self.__insert_default_talk()
             
         else:
             print "Unable to create talkdb file."
