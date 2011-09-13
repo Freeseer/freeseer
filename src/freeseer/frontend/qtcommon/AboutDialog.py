@@ -24,6 +24,11 @@
 
 from PyQt4 import QtCore, QtGui
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
 from freeseer import project_info
 
 import resource_rc
@@ -55,13 +60,16 @@ class AboutDialog(QtGui.QWidget):
                                                          "Freeseer About", 
                                                          None, 
                                                          QtGui.QApplication.UnicodeUTF8))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         
         self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
         
         # Left Top corner of grid, Logo
         self.logo = QtGui.QLabel("Logo")
-        self.logo.setPixmap(QtGui.QPixmap(":/freeseer/freeseer_logo.png"))
+        self.logo.setPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")))
         self.layout.addWidget(self.logo, 0, 0)
         
         # Right Top corner of grid, Infos
