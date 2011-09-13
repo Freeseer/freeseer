@@ -27,12 +27,18 @@ from os import listdir;
 
 from PyQt4 import QtGui, QtCore, QtSql
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
 from freeseer import project_info
 from freeseer.framework.presentation import *
 from freeseer.framework.core import *
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 
-from talkeditor_ui_qt import *
+from EditorWidget import *
+from AddTalkWidget import *
 
 __version__ = project_info.VERSION
 
@@ -67,10 +73,63 @@ class TalkEditorMainApp(QtGui.QMainWindow):
     '''
     def __init__(self, core=None):
         QtGui.QMainWindow.__init__(self)
-        self.ui = Ui_TalkEditorMainWindow()
-        self.ui.setupUi(self)
-        self.aboutDialog = AboutDialog()    
-        self.ui.editTable.setColumnHidden(5, True)
+        self.setWindowTitle(QtGui.QApplication.translate("TalkEditorMainWindow", 
+                                                         "Freeseer Talk Editor", 
+                                                         None, 
+                                                         QtGui.QApplication.UnicodeUTF8))
+        self.resize(960, 400)
+        
+        self.mainWidget = QtGui.QWidget()
+        self.mainLayout = QtGui.QHBoxLayout()
+        self.mainWidget.setLayout(self.mainLayout)
+        self.setCentralWidget(self.mainWidget)
+        
+        self.editorWidget = EditorWidget()
+        self.addTalkWidget = AddTalkWidget()
+        self.aboutDialog = AboutDialog()
+        
+        self.mainLayout.addWidget(self.editorWidget)
+        self.mainLayout.addWidget(self.addTalkWidget)
+        
+        #
+        # Setup Menubar
+        #
+        self.menubar = QtGui.QMenuBar()
+        self.setMenuBar(self.menubar)
+        
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 884, 21))
+        self.menubar.setObjectName(_fromUtf8("menubar"))
+        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile.setTitle(QtGui.QApplication.translate("TalkEditorMainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuOptions = QtGui.QMenu(self.menubar)
+        self.menuOptions.setTitle(QtGui.QApplication.translate("TalkEditorMainWindow", "Options", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
+        self.menuLanguage = QtGui.QMenu(self.menuOptions)
+        self.menuLanguage.setTitle(QtGui.QApplication.translate("TalkEditorMainWindow", "Language", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setTitle(QtGui.QApplication.translate("TalkEditorMainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
+        
+        self.actionExit = QtGui.QAction(self)
+        self.actionExit.setText(QtGui.QApplication.translate("TalkEditorMainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setShortcut(QtGui.QApplication.translate("TalkEditorMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        
+        self.actionAbout = QtGui.QAction(self)
+        self.actionAbout.setText(QtGui.QApplication.translate("TalkEditorMainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        
+        # Actions
+        self.menuFile.addAction(self.actionExit)
+        self.menuOptions.addAction(self.menuLanguage.menuAction())
+        self.menuHelp.addAction(self.actionAbout)
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())    
+        
+        self.editorWidget.editor.setColumnHidden(5, True)
         self.default_language = 'en';
         
         # Initialize geometry, to be used for restoring window positioning.
@@ -88,18 +147,23 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
         self.setupLanguageMenu();
 
-        #self.load_talks()
+        #
+        # Talk Editor Connections
+        #
+        # Add Talk Widget
+        self.connect(self.addTalkWidget.addButton, QtCore.SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.addTalkWidget.cancelButton, QtCore.SIGNAL('clicked()'), self.hide_add_talk_widget)
+        self.addTalkWidget.setHidden(True)
         
-        # edit talks connections
-        self.connect(self.ui.confirmAddTalkButton, QtCore.SIGNAL('clicked()'), self.add_talk)
-        self.connect(self.ui.rssButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
-        self.connect(self.ui.removeTalkButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.ui.resetButton, QtCore.SIGNAL('clicked()'), self.reset)
-        self.ui.addTalkGroupBox.setHidden(True)
+        # Editor Widget
+        self.connect(self.editorWidget.rssPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
+        self.connect(self.editorWidget.addButton, QtCore.SIGNAL('clicked()'), self.show_add_talk_widget)
+        self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.reset)
         
         # Main Window Connections
-        self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
+        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
         self.load_presentations_model()
 
@@ -153,7 +217,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
             #language_name is a holder for the language name in the translation file tr_*.ts
             language_menu_button.setText(language_display_text);
             language_menu_button.setData(language_name);
-            self.ui.menuLanguage.addAction(language_menu_button);
+            self.menuLanguage.addAction(language_menu_button);
             self.langActionGroup.addAction(language_menu_button);
             
         if(active_button!=None):
@@ -166,34 +230,40 @@ class TalkEditorMainApp(QtGui.QMainWindow):
     def load_presentations_model(self):
         # Load Presentation Model
         self.presentationModel = self.core.db.get_presentations_model()
-        self.ui.editTable.setModel(self.presentationModel)
+        self.editorWidget.editor.setModel(self.presentationModel)
+    
+    def show_add_talk_widget(self):
+        self.editorWidget.setHidden(True)
+        self.addTalkWidget.setHidden(False)
+        
+    def hide_add_talk_widget(self):
+        self.editorWidget.setHidden(False)
+        self.addTalkWidget.setHidden(True)
     
     def add_talk(self):
-        presentation = Presentation(str(self.ui.titleEdit.text()),
-                                    str(self.ui.presenterEdit.text()),
+        date = self.addTalkWidget.dateEdit.date()
+        time = self.addTalkWidget.timeEdit.time()
+        datetime = QtCore.QDateTime(date, time)
+        presentation = Presentation(unicode(self.addTalkWidget.titleLineEdit.text()),
+                                    unicode(self.addTalkWidget.presenterLineEdit.text()),
                                     "", # description
                                     "", # level
-                                    str(self.ui.eventEdit.text()),
-                                    str(self.ui.dateTimeEdit.text()),
-                                    str(self.ui.roomEdit.text()))
-                
+                                    unicode(self.addTalkWidget.eventLineEdit.text()),
+                                    unicode(self.addTalkWidget.roomLineEdit.text()),
+                                    unicode(datetime.toString()))
+        
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
-        
+
         self.core.db.insert_presentation(presentation)
 
         # cleanup
-        self.ui.titleEdit.clear()
-        self.ui.presenterEdit.clear()
-        self.ui.eventEdit.clear()
-        self.ui.dateTimeEdit.clear()
-        self.ui.roomEdit.clear()
-        self.ui.checkBox.setChecked(False)
-        self.ui.checkBox_2.setChecked(False)
-        self.ui.checkBox_3.setChecked(False)
-        self.ui.checkBox_4.setChecked(False)
+        self.addTalkWidget.titleLineEdit.clear()
+        self.addTalkWidget.presenterLineEdit.clear()
 
         self.presentationModel.select()
+        
+        self.hide_add_talk_widget()
 
     def remove_talk(self):
         try:
@@ -203,13 +273,13 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         
         self.presentationModel.removeRow(row_clicked)
         self.presentationModel.select()
-
+        
     def reset(self):
         self.core.db.clear_database()
         self.presentationModel.select()
             
     def add_talks_from_rss(self):
-        rss_url = str(self.ui.rssEdit.text())
+        rss_url = unicode(self.editorWidget.rssLineEdit.text())
         self.core.add_talks_from_rss(rss_url)
         self.presentationModel.select()
 
@@ -236,7 +306,8 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         loaded = self.uiTranslator.load(load_string);
 
         if(loaded == True):
-            self.ui.retranslateUi(self); #Translate both the ui and the about page
+            #self.ui.retranslateUi(self); #Translate both the ui and the about page
+            pass
         else:
             print("Invalid Locale Resorting to Default Language: English");
     
