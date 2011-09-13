@@ -20,16 +20,12 @@
 # Set the name of the executable here
 exec = freeseer-record
 
-ALL: gui talkEditor configtool
+ALL: gui configtool
 	@echo "You can now run $(exec)"
 
 gui: 
 	cd freeseer/frontend/record; make
 	@echo "Re-generated GUI"
-
-talkEditor:
-	cd freeseer/frontend/talkeditor; make
-	@echo "Re-generated talk editor"
 
 configtool:
 	cd freeseer/frontend/configtool; make
