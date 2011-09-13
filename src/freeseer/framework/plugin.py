@@ -76,7 +76,7 @@ class PluginManager:
             self.config.readfp(open(self.configfile))
         # Config file does not exist, create a default
         except IOError:
-            logging.DEBUG("First run scenario detected. Creating new configuration files.")
+            logging.debug("First run scenario detected. Creating new configuration files.")
             self.firstrun = True # If config was corrupt or did not exist, reset defaults.
             self.save()
             return
