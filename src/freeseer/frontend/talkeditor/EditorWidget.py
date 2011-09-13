@@ -68,21 +68,21 @@ class EditorWidget(QtGui.QWidget):
         self.editorLayout = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.editorLayout)
         
-        self.editor = QtGui.QTableView()
-        self.editorLayout.addWidget(self.editor)
-        
-        
         self.buttonsLayout = QtGui.QVBoxLayout()
         self.editorLayout.addLayout(self.buttonsLayout)
         
         self.addButton = QtGui.QPushButton(self.tr("Add"))
         self.removeButton = QtGui.QPushButton(self.tr("Remove"))
         self.clearButton = QtGui.QPushButton(self.tr("Clear"))
+        self.closeButton = QtGui.QPushButton(self.tr("Close"))
         self.buttonsLayout.addWidget(self.addButton)
         self.buttonsLayout.addWidget(self.removeButton)
         self.buttonsLayout.addWidget(self.clearButton)
         self.buttonsLayout.addStretch(0)
+        self.buttonsLayout.addWidget(self.closeButton)
         
+        self.editor = QtGui.QTableView()
+        self.editorLayout.addWidget(self.editor)
 
 if __name__ == "__main__":
     import sys
