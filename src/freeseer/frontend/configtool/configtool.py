@@ -31,7 +31,7 @@ from freeseer import project_info
 from freeseer.framework.core import *
 
 from ConfigToolWidget import ConfigToolWidget
-from generalui import *
+from GeneralWidget import GeneralWidget
 from pluginloader import *
 
 __version__ = project_info.VERSION
@@ -54,9 +54,7 @@ class ConfigTool(ConfigToolWidget):
         self.rightPanelWidget.setLayout(self.mainWidgetLayout)
         
         # Load the General UI Widget
-        self.generalWidget = QtGui.QWidget()
-        self.generalui = Ui_General()
-        self.generalui.setupUi(self.generalWidget)
+        self.generalWidget = GeneralWidget()
         
         # Load Plugin Loader UI components
         self.pluginloaderWidget = QtGui.QWidget()
@@ -67,15 +65,15 @@ class ConfigTool(ConfigToolWidget):
         self.connect(self.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         # general tab connections
-        self.connect(self.generalui.checkBoxAudioMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
-        self.connect(self.generalui.comboBoxAudioMixer, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
-        self.connect(self.generalui.pushButtonAudioMixer, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
-        self.connect(self.generalui.checkBoxVideoMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
-        self.connect(self.generalui.comboBoxVideoMixer, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
-        self.connect(self.generalui.pushButtonVideoMixer, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
-        self.connect(self.generalui.pushButtonRecordDirectory, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
-        self.connect(self.generalui.lineEditRecordDirectory, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
-        self.connect(self.generalui.checkBoxAutoHide, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
+        self.connect(self.generalWidget.recordAudioCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
+        self.connect(self.generalWidget.audioMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
+        self.connect(self.generalWidget.audioMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
+        self.connect(self.generalWidget.recordVideoCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
+        self.connect(self.generalWidget.videoMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
+        self.connect(self.generalWidget.videoMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.generalWidget.recordDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
+        self.connect(self.generalWidget.recordDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
+        self.connect(self.generalWidget.autoHideCheckBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
         # plugin loader connections
         self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
 
@@ -138,44 +136,44 @@ class ConfigTool(ConfigToolWidget):
         
         # Set up Audio
         if self.config.enable_audio_recoding == True:
-            self.generalui.checkBoxAudioMixer.setChecked(True)
+            self.generalWidget.recordAudioCheckbox.setChecked(True)
         else:
-            self.generalui.checkBoxAudioMixer.setChecked(False)
+            self.generalWidget.recordAudioCheckbox.setChecked(False)
             
         n = 0 # Counter for finding Audio Mixer to set as current.
-        self.generalui.comboBoxAudioMixer.clear()
+        self.generalWidget.audioMixerComboBox.clear()
         plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
         for plugin in plugins:
             if plugin.is_activated:
-                self.generalui.comboBoxAudioMixer.addItem(plugin.plugin_object.get_name())
+                self.generalWidget.audioMixerComboBox.addItem(plugin.plugin_object.get_name())
                 if plugin.plugin_object.get_name() == self.config.audiomixer:
-                    self.generalui.comboBoxAudioMixer.setCurrentIndex(n)
+                    self.generalWidget.audioMixerComboBox.setCurrentIndex(n)
                 n += 1
         
         # Set up Video
         if self.config.enable_video_recoding == True:
-            self.generalui.checkBoxVideoMixer.setChecked(True)
+            self.generalWidget.recordVideoCheckbox.setChecked(True)
         else:
-            self.generalui.checkBoxVideoMixer.setChecked(False)
+            self.generalWidget.recordVideoCheckbox.setChecked(False)
             
         n = 0 # Counter for finding Video Mixer to set as current.
-        self.generalui.comboBoxVideoMixer.clear()
+        self.generalWidget.videoMixerComboBox.clear()
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
         for plugin in plugins:
             if plugin.is_activated:
-                self.generalui.comboBoxVideoMixer.addItem(plugin.plugin_object.get_name())
+                self.generalWidget.videoMixerComboBox.addItem(plugin.plugin_object.get_name())
                 if plugin.plugin_object.get_name() == self.config.videomixer:
-                    self.generalui.comboBoxVideoMixer.setCurrentIndex(n)
+                    self.generalWidget.videoMixerComboBox.setCurrentIndex(n)
                 n += 1
         
         # Recording Directory Settings
-        self.generalui.lineEditRecordDirectory.setText(self.config.videodir)
+        self.generalWidget.recordDirLineEdit.setText(self.config.videodir)
         
         # Load Auto Hide Settings
         if self.config.auto_hide == True:
-            self.generalui.checkBoxAutoHide.setChecked(True)
+            self.generalWidget.autoHideCheckBox.setChecked(True)
         else:
-            self.generalui.checkBoxAutoHide.setChecked(False)
+            self.generalWidget.autoHideCheckBox.setChecked(False)
 
     def toggle_audiomixer_state(self, state):
         self.config.enable_audio_recoding = state
@@ -186,7 +184,7 @@ class ConfigTool(ConfigToolWidget):
         self.config.writeConfig()
 
     def setup_audio_mixer(self):
-        mixer = str(self.generalui.comboBoxAudioMixer.currentText())
+        mixer = str(self.generalWidget.audioMixerComboBox.currentText())
         items = self.optionsTreeWidget.findItems(mixer, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
@@ -201,20 +199,20 @@ class ConfigTool(ConfigToolWidget):
         self.config.writeConfig()
     
     def setup_video_mixer(self):
-        mixer = str(self.generalui.comboBoxVideoMixer.currentText())
+        mixer = str(self.generalWidget.videoMixerComboBox.currentText())
         items = self.optionsTreeWidget.findItems(mixer, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
             self.optionsTreeWidget.setCurrentItem(item)
 
     def browse_video_directory(self):
-        directory = self.generalui.lineEditRecordDirectory.text()
+        directory = self.generalWidget.recordDirLineEdit.text()
         videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)))
-        self.generalui.lineEditRecordDirectory.setText(videodir)
-        self.generalui.lineEditRecordDirectory.emit(QtCore.SIGNAL("editingFinished()"))
+        self.generalWidget.recordDirLineEdit.setText(videodir)
+        self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
 
     def update_record_directory(self):
-        self.config.videodir = str(self.generalui.lineEditRecordDirectory.text())
+        self.config.videodir = str(self.generalWidget.recordDirLineEdit.text())
         self.config.writeConfig()
 
     def toggle_autohide(self, state):
