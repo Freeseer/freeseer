@@ -4,4 +4,3 @@ cmake_minimum_required (VERSION 2.8)
 project(Freeseer)
 
 include(${FREESEER_SRC}/freeseer/frontend/record/CMakeLists.txt)
-include(${FREESEER_SRC}/freeseer/frontend/configtool/CMakeLists.txt)
