@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import logging
 from os import listdir;
 from sys import *
 
@@ -350,6 +351,6 @@ class ConfigTool(ConfigToolWidget):
             print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
 
     def closeEvent(self, event):
-        self.core.logger.log.info('Exiting configtool...')
+        logging.info('Exiting configtool...')
         self.geometry = self.saveGeometry()
         event.accept()
