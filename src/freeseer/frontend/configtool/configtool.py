@@ -33,7 +33,7 @@ from freeseer.framework.core import *
 
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
-from pluginloader import *
+from PluginLoaderWidget import PluginLoaderWidget
 
 __version__ = project_info.VERSION
 
@@ -58,9 +58,7 @@ class ConfigTool(ConfigToolWidget):
         self.generalWidget = GeneralWidget()
         
         # Load Plugin Loader UI components
-        self.pluginloaderWidget = QtGui.QWidget()
-        self.pluginloader = Ui_PluginLoader()
-        self.pluginloader.setupUi(self.pluginloaderWidget)
+        self.pluginloaderWidget = PluginLoaderWidget()
 
         # connections
         self.connect(self.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
@@ -89,7 +87,7 @@ class ConfigTool(ConfigToolWidget):
         #
         # plugin loader connections
         #
-        self.connect(self.pluginloader.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
+        self.connect(self.pluginloaderWidget.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
 
         # load core
         if core is None:
@@ -238,7 +236,7 @@ class ConfigTool(ConfigToolWidget):
     ###
         
     def load_plugin_list(self, plugin_type):
-        self.pluginloader.listWidget.clear()
+        self.pluginloaderWidget.listWidget.clear()
         for plugin in self.plugman.plugmanc.getPluginsOfCategory(plugin_type):
             item = QtGui.QListWidgetItem()
             item.setText(plugin.plugin_object.get_name())
@@ -251,7 +249,7 @@ class ConfigTool(ConfigToolWidget):
             else:
                 item.setCheckState(QtCore.Qt.Unchecked)
             
-            self.pluginloader.listWidget.addItem(item)
+            self.pluginloaderWidget.listWidget.addItem(item)
 
     def load_option_audioinput_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
