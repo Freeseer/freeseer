@@ -1,16 +1,2 @@
 freeseer_ui_qt.py
-resource_rc.py
-freeseer_about.py
-qxtglobalshortcut.so
-
-# lib stuff
-lib/Makefile
-lib/qxtglobalshortcut.exp
-lib/qxtglobalshortcut.sbf
-lib/qxtglobalshortcutconfig.py
-lib/sipAPIqxtglobalshortcut.h
-lib/sipqxtglobalshortcutQxtGlobalShortcut.cpp
-lib/sipqxtglobalshortcutQxtGlobalShortcut.o
-lib/sipqxtglobalshortcutcmodule.cpp
-lib/sipqxtglobalshortcutcmodule.o
 
