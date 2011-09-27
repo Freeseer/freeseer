@@ -30,7 +30,7 @@ from PyQt4 import QtGui, QtCore
 from freeseer import project_info
 from freeseer.framework.core import *
 
-from configtoolui import *
+from ConfigToolWidget import ConfigToolWidget
 from generalui import *
 from pluginloader import *
 
@@ -38,23 +38,20 @@ __version__ = project_info.VERSION
 
 LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
 
-class ConfigTool(QtGui.QDialog):
+class ConfigTool(ConfigToolWidget):
     '''
     ConfigTool is used to tune settings used by the Freeseer Application
     '''
 
     def __init__(self, core=None):
-        QtGui.QDialog.__init__(self)
-        self.ui = Ui_ConfigTool()
-        self.ui.setupUi(self)
-        self.uiTranslator = QtCore.QTranslator();
+        ConfigToolWidget.__init__(self)
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
         self.currentWidget = None
         self.mainWidgetLayout = QtGui.QVBoxLayout()
-        self.ui.mainWidget.setLayout(self.mainWidgetLayout)
+        self.rightPanelWidget.setLayout(self.mainWidgetLayout)
         
         # Load the General UI Widget
         self.generalWidget = QtGui.QWidget()
@@ -67,8 +64,8 @@ class ConfigTool(QtGui.QDialog):
         self.pluginloader.setupUi(self.pluginloaderWidget)
 
         # connections
-        self.connect(self.ui.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
-        self.connect(self.ui.optionsWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
+        self.connect(self.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
+        self.connect(self.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         # general tab connections
         self.connect(self.generalui.checkBoxAudioMixer, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
         self.connect(self.generalui.comboBoxAudioMixer, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
@@ -97,17 +94,17 @@ class ConfigTool(QtGui.QDialog):
         self.load_plugin_widgets()
         
         # Start off with displaying the General Settings
-        items = self.ui.optionsWidget.findItems("General", QtCore.Qt.MatchExactly)
+        items = self.optionsTreeWidget.findItems("General", QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
-            self.ui.optionsWidget.setCurrentItem(item)
+            self.optionsTreeWidget.setCurrentItem(item)
         
     ###
     ### General
     ###
         
     def change_option(self):
-        option = self.ui.optionsWidget.currentItem().text(0)
+        option = self.optionsTreeWidget.currentItem().text(0)
         
         if self.currentWidget is not None:
             self.mainWidgetLayout.removeWidget(self.currentWidget)
@@ -128,8 +125,8 @@ class ConfigTool(QtGui.QDialog):
         elif option == "Output":
             self.load_option_output_plugins()
         else:
-            plugin_name = str(self.ui.optionsWidget.currentItem().text(0))
-            plugin_category = str(self.ui.optionsWidget.currentItem().text(1))
+            plugin_name = str(self.optionsTreeWidget.currentItem().text(0))
+            plugin_category = str(self.optionsTreeWidget.currentItem().text(1))
             
             plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
             self.show_plugin_widget(plugin)
@@ -190,10 +187,10 @@ class ConfigTool(QtGui.QDialog):
 
     def setup_audio_mixer(self):
         mixer = str(self.generalui.comboBoxAudioMixer.currentText())
-        items = self.ui.optionsWidget.findItems(mixer, QtCore.Qt.MatchExactly)
+        items = self.optionsTreeWidget.findItems(mixer, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
-            self.ui.optionsWidget.setCurrentItem(item)
+            self.optionsTreeWidget.setCurrentItem(item)
             
     def toggle_videomixer_state(self, state):
         self.config.enable_video_recoding = state
@@ -205,10 +202,10 @@ class ConfigTool(QtGui.QDialog):
     
     def setup_video_mixer(self):
         mixer = str(self.generalui.comboBoxVideoMixer.currentText())
-        items = self.ui.optionsWidget.findItems(mixer, QtCore.Qt.MatchExactly)
+        items = self.optionsTreeWidget.findItems(mixer, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
-            self.ui.optionsWidget.setCurrentItem(item)
+            self.optionsTreeWidget.setCurrentItem(item)
 
     def browse_video_directory(self):
         directory = self.generalui.lineEditRecordDirectory.text()
@@ -282,7 +279,7 @@ class ConfigTool(QtGui.QDialog):
     def set_plugin_state(self, plugin):
         
         plugin_name = str(plugin.text())
-        plugin_category = str(self.ui.optionsWidget.currentItem().text(0))
+        plugin_category = str(self.optionsTreeWidget.currentItem().text(0))
         
         if plugin.checkState() == 2:
             self.plugman.activate_plugin(plugin_name, plugin_category)
@@ -310,14 +307,14 @@ class ConfigTool(QtGui.QDialog):
             item = QtGui.QTreeWidgetItem()
             item.setText(0, plugin_name)
             item.setText(1, plugin_category)
-            self.ui.optionsWidget.addTopLevelItem(item)
+            self.optionsTreeWidget.addTopLevelItem(item)
     
     def del_plugin_widget(self, plugin_name):
-        items = self.ui.optionsWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
+        items = self.optionsTreeWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
-            index = self.ui.optionsWidget.indexOfTopLevelItem(item)
-            self.ui.optionsWidget.takeTopLevelItem(index)
+            index = self.optionsTreeWidget.indexOfTopLevelItem(item)
+            self.optionsTreeWidget.takeTopLevelItem(index)
         
     def show_plugin_widget(self, plugin):
         
@@ -343,12 +340,14 @@ class ConfigTool(QtGui.QDialog):
 #        self.end_y = self.core.config.end_y = end_y
 #        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
 #        self.show()
-    
+#    
     def translateFile(self,file_ending):
         load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
-        loaded = self.uiTranslator.load(load_string);
-        if(loaded == True):
-            self.ui.retranslateUi(self);
+        #loaded = self.uiTranslator.load(load_string);
+        # Temporary place holder until we fix translations for configtool
+        loaded = False
+        if (loaded == True):
+            self.retranslateUi(self);
         else:
             print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
 
