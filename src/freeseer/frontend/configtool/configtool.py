@@ -151,6 +151,8 @@ class ConfigTool(ConfigToolWidget):
             self.generalWidget.recordAudioCheckbox.setChecked(True)
         else:
             self.generalWidget.recordAudioCheckbox.setChecked(False)
+            self.generalWidget.audioMixerComboBox.setEnabled(False)
+            self.generalWidget.audioMixerSetupPushButton.setEnabled(False)
             
         n = 0 # Counter for finding Audio Mixer to set as current.
         self.generalWidget.audioMixerComboBox.clear()
@@ -167,6 +169,8 @@ class ConfigTool(ConfigToolWidget):
             self.generalWidget.recordVideoCheckbox.setChecked(True)
         else:
             self.generalWidget.recordVideoCheckbox.setChecked(False)
+            self.generalWidget.videoMixerComboBox.setEnabled(False)
+            self.generalWidget.videoMixerSetupPushButton.setEnabled(False)
             
         n = 0 # Counter for finding Video Mixer to set as current.
         self.generalWidget.videoMixerComboBox.clear()
