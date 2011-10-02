@@ -37,4 +37,3 @@ if __name__ == "__main__":
     main.translateFile(main.default_language);
     main.show()
     sys.exit(app.exec_())
-
