@@ -318,11 +318,11 @@ class MainApp(QtGui.QMainWindow):
     ### Misc
     ###
     
-    def area_select(self):
-        self.area_selector = QtAreaSelector(self)
-        self.area_selector.show()
-        logging.info('Desktop area selector started.')
-        self.hide_window()
+#    def area_select(self):
+#        self.area_selector = QtAreaSelector(self)
+#        self.area_selector.show()
+#        logging.info('Desktop area selector started.')
+#        self.hide_window()
     
     def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
         self.start_x = self.core.config.start_x = start_x
