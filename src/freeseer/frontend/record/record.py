@@ -75,6 +75,15 @@ class MainApp(QtGui.QMainWindow):
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
+        self.setWindowTitle(QtGui.QApplication.translate("FreeseerMainWindow", 
+                                                         "Freeseer - portable presentation recording station", 
+                                                         None, 
+                                                         QtGui.QApplication.UnicodeUTF8))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
+        self.resize(400, 400)
+        
         
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
