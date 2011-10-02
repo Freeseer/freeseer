@@ -27,6 +27,11 @@ from os import listdir, name
 
 from PyQt4 import QtGui, QtCore, QtSql
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
 from freeseer import project_info
 from freeseer.framework.core import *
 from freeseer.framework.presentation import *
@@ -35,7 +40,7 @@ from freeseer.frontend.talkeditor.talkeditor import *
 from freeseer.frontend.configtool.configtool import *
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 
-from freeseer_ui_qt import *
+from RecordingWidget import RecordingWidget
 
 __version__= project_info.VERSION
 
@@ -70,24 +75,64 @@ class MainApp(QtGui.QMainWindow):
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-        self.ui = Ui_FreeseerMainWindow()
-        self.ui.setupUi(self)
+        
         self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
         self.default_language = 'en';
         self.talks_to_save = []
         self.talks_to_delete = []
         
+        self.mainWidget = RecordingWidget()
+        self.setCentralWidget(self.mainWidget)
+        
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
-        self.core = FreeseerCore(self.ui.previewWidget.winId())
+        self.core = FreeseerCore(self.mainWidget.previewWidget.winId())
         
         #Setup the translator and populate the language menu under options
         self.uiTranslator = QtCore.QTranslator();
         self.langActionGroup = QtGui.QActionGroup(self);
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'));
         self.setupLanguageMenu();
+        
+        #
+        # Setup Menubar
+        #
+        self.menubar = QtGui.QMenuBar()
+        self.setMenuBar(self.menubar)
+        
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
+        self.menubar.setObjectName(_fromUtf8("menubar"))
+        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuOptions = QtGui.QMenu(self.menubar)
+        self.menuOptions.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Options", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
+        self.menuLanguage = QtGui.QMenu(self.menuOptions)
+        self.menuLanguage.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Language", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
+        
+        self.actionExit = QtGui.QAction(self)
+        self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        
+        self.actionAbout = QtGui.QAction(self)
+        self.actionAbout.setText(QtGui.QApplication.translate("FreeseerMainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        
+        # Actions
+        self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionAbout)
+        self.menuOptions.addAction(self.menuLanguage.menuAction())
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         # setup systray
         logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
@@ -105,15 +150,13 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
 
         # main tab connections
-        self.connect(self.ui.eventList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
-        self.connect(self.ui.roomList, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
-        self.connect(self.ui.recordButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
+        self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
+        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
         # Main Window Connections
-        self.connect(self.ui.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.ui.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.ui.actionEdit_talks, QtCore.SIGNAL('triggered()'), self.run_talk_editor)
-        self.connect(self.ui.actionPreferences, QtCore.SIGNAL('triggered()'),self.run_config_tool)
+        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
+        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
                 
         self.load_settings()
 
@@ -121,8 +164,8 @@ class MainApp(QtGui.QMainWindow):
         #    self.ui.audioFeedbackCheckbox.toggle()
 
         # setup spacebar key
-        self.ui.recordButton.setShortcut(QtCore.Qt.Key_Space)
-        self.ui.recordButton.setFocus()
+        self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
+        self.mainWidget.recordPushButton.setFocus()
 
         self.talkEditor = TalkEditorMainApp(self.core)
         self.configTool = ConfigTool(self.core)
@@ -171,7 +214,7 @@ class MainApp(QtGui.QMainWindow):
             #language_name is a holder for the language name in the translation file tr_*.ts
             language_menu_button.setText(language_display_text);
             language_menu_button.setData(language_name);
-            self.ui.menuLanguage.addAction(language_menu_button);
+            self.menuLanguage.addAction(language_menu_button);
             self.langActionGroup.addAction(language_menu_button);
         if(active_button!=None):
             active_button.setChecked(True);
@@ -196,7 +239,7 @@ class MainApp(QtGui.QMainWindow):
         '''
         Creates a presentation object from the currently selected title on the GUI
         '''
-        p_id = self.ui.talkList.model().index(0, 1).data(QtCore.Qt.DisplayRole).toString()
+        p_id = self.mainWidget.talkComboBox.model().index(0, 1).data(QtCore.Qt.DisplayRole).toString()
         return self.core.db.get_presentation(p_id)
 
     def capture(self, state):
@@ -211,7 +254,7 @@ class MainApp(QtGui.QMainWindow):
             self.systray.setIcon(sysIcon2)
 
             self.core.record(self.current_presentation())    
-            self.ui.recordButton.setText(self.tr('Stop'))
+            self.mainWidget.recordPushButton.setText(self.tr('Stop'))
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
@@ -229,8 +272,8 @@ class MainApp(QtGui.QMainWindow):
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.core.stop()
-            self.ui.recordButton.setText(self.tr('Record'))
-            self.ui.audioFeedbackSlider.setValue(0)
+            self.mainWidget.recordPushButton.setText(self.tr('Record'))
+            self.mainWidget.audioSlider.setValue(0)
             self.statusBar().showMessage('ready')
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
@@ -242,19 +285,19 @@ class MainApp(QtGui.QMainWindow):
     
     def load_event_list(self):
         model = self.core.db.get_events_model()
-        self.ui.eventList.setModel(model)
+        self.mainWidget.eventComboBox.setModel(model)
 
     def load_rooms_from_event(self, event):
         self.current_event = event
 
         model = self.core.db.get_rooms_model(self.current_event)
-        self.ui.roomList.setModel(model)
+        self.mainWidget.roomComboBox.setModel(model)
         
     def load_talks_from_room(self, room):
         self.current_room = room
 
         model = self.core.db.get_talks_model(self.current_event, self.current_room)
-        self.ui.talkList.setModel(model)
+        self.mainWidget.talkComboBox.setModel(model)
 
 
     ###
@@ -282,7 +325,7 @@ class MainApp(QtGui.QMainWindow):
             
             
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
-            self.ui.recordButton.toggle()
+            self.mainWidget.recordPushButton.toggle()
 
     def hide_window(self):
         self.geometry = self.saveGeometry()
@@ -302,16 +345,16 @@ class MainApp(QtGui.QMainWindow):
             self.hide_window()
 
     def recContextM(self):
-        if not self.ui.recordButton.isChecked():
-            self.ui.recordButton.toggle()
+        if not self.mainWidget.recordPushButton.isChecked():
+            self.mainWidget.recordPushButton.toggle()
 
     def stopContextM(self):
-        if self.ui.recordButton.isChecked():
-            self.ui.recordButton.toggle()
+        if self.mainWidget.recordPushButton.isChecked():
+            self.mainWidget.recordPushButton.toggle()
 
     def coreEvent(self, event_type, value):
         if event_type == 'audio_feedback':
-            self.ui.audioFeedbackSlider.setValue(value)
+            self.mainWidget.audioSlider.setValue(value)
 
     def closeEvent(self, event):
         logging.info('Exiting freeseer...')
@@ -340,8 +383,9 @@ class MainApp(QtGui.QMainWindow):
 
         if(loaded == True):
    
-            self.ui.retranslateUi(self); #Translate both the ui and the about page
-            self.aboutDialog.translate();
+            #self.ui.retranslateUi(self); #Translate both the ui and the about page
+            #self.aboutDialog.translate();
+            pass
        
         else:
             print("Invalid Locale Resorting to Default Language: English");
