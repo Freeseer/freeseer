@@ -20,15 +20,10 @@
 # Set the name of the executable here
 exec = freeseer-record
 
-ALL: gui
+ALL:
 	@echo "You can now run $(exec)"
 
-gui: 
-	cd freeseer/frontend/record; make
-	@echo "Re-generated GUI"
-
 clean_gui:
-	cd freeseer/frontend/record; make clean
 	@echo "GUI files cleaned up"
 
 clean: clean_gui
