@@ -80,11 +80,11 @@ class RecordingWidget(QtGui.QWidget):
         
         self.filterBarLayoutRow_2 = QtGui.QHBoxLayout()
         self.filterBarLayout.addLayout(self.filterBarLayoutRow_2)
-        self.titleLabel = QtGui.QLabel(self.tr("Title "))
-        self.titleLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-        self.titleComboBox = QtGui.QComboBox()
-        self.filterBarLayoutRow_2.addWidget(self.titleLabel)
-        self.filterBarLayoutRow_2.addWidget(self.titleComboBox)
+        self.talkLabel = QtGui.QLabel(self.tr("Talk "))
+        self.talkLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+        self.talkComboBox = QtGui.QComboBox()
+        self.filterBarLayoutRow_2.addWidget(self.talkLabel)
+        self.filterBarLayoutRow_2.addWidget(self.talkComboBox)
         
         # Preview Layout
         self.previewLayout = QtGui.QHBoxLayout()
