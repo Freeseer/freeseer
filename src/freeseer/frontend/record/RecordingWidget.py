@@ -83,6 +83,8 @@ class RecordingWidget(QtGui.QWidget):
         self.talkLabel = QtGui.QLabel(self.tr("Talk "))
         self.talkLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
         self.talkComboBox = QtGui.QComboBox()
+        self.talkComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+        self.talkComboBox.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToMinimumContentsLength)
         self.filterBarLayoutRow_2.addWidget(self.talkLabel)
         self.filterBarLayoutRow_2.addWidget(self.talkComboBox)
         
