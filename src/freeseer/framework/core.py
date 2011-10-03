@@ -47,7 +47,7 @@ class FreeseerCore:
     Freeseer core logic code.  Used to link a GUI frontend with a recording
     backend such as backend.gstreamer
     '''
-    def __init__(self, window_id=None):
+    def __init__(self, window_id=None, audio_feedback=None):
         
         # Read in config information
         configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
@@ -57,7 +57,7 @@ class FreeseerCore:
         self.plugman = PluginManager(configdir)
 
         # Start Freeseer Recording Backend
-        self.backend = gstreamer.Gstreamer(window_id)
+        self.backend = gstreamer.Gstreamer(window_id, audio_feedback)
 
         self.feedback = False
         self.spaces = False
