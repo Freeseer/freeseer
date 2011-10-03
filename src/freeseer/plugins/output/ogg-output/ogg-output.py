@@ -23,6 +23,10 @@ class OggOutput(IOutput):
         audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
         bin.add(audioconvert)
         
+        audiolevel = gst.element_factory_make('level', 'audiolevel')
+        audiolevel.set_property('interval', 20000000)
+        bin.add(audiolevel)
+        
         audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
         bin.add(audiocodec)
         
@@ -59,7 +63,7 @@ class OggOutput(IOutput):
         video_ghostpad = gst.GhostPad("videosink", videopad)
         bin.add_pad(video_ghostpad)
         
-        gst.element_link_many(audioqueue, audioconvert, audiocodec, vorbistag, muxer)
+        gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, vorbistag, muxer)
         gst.element_link_many(videoqueue, videocodec, muxer)
         gst.element_link_many(muxer, filesink)
         
