@@ -32,8 +32,9 @@ import gst
 
 
 class Gstreamer:
-    def __init__(self, window_id=None):
+    def __init__(self, window_id=None, audio_feedback=None):
         self.window_id = window_id
+        self.audio_feedback_event = audio_feedback
         
         self.record_audio = False
         self.record_video = False
@@ -71,6 +72,17 @@ class Gstreamer:
         elif message.structure is not None:
             s = message.structure.get_name()
 
+            if s == 'level':
+                msg = message.structure.to_string()
+                rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
+                
+                # This is an inaccurate representation of decibels into percent
+                # conversion, this code should be revisited.
+                try:
+                    percent = (int(round(rms_dB)) + 50) * 2
+                except OverflowError:
+                    percent = 0
+                self.audio_feedback_event(percent)
             
     def on_sync_message(self, bus, message):
         if message.structure is None:

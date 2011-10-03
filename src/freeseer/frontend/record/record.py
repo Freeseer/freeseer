@@ -97,7 +97,7 @@ class MainApp(QtGui.QMainWindow):
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
-        self.core = FreeseerCore(self.mainWidget.previewWidget.winId())
+        self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
         
         #Setup the translator and populate the language menu under options
         self.uiTranslator = QtCore.QTranslator();
@@ -366,9 +366,8 @@ class MainApp(QtGui.QMainWindow):
         if self.mainWidget.recordPushButton.isChecked():
             self.mainWidget.recordPushButton.toggle()
 
-    def coreEvent(self, event_type, value):
-        if event_type == 'audio_feedback':
-            self.mainWidget.audioSlider.setValue(value)
+    def audio_feedback(self, value):
+        self.mainWidget.audioSlider.setValue(value)
 
     def closeEvent(self, event):
         logging.info('Exiting freeseer...')
