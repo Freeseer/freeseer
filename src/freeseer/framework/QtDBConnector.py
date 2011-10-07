@@ -211,14 +211,19 @@ class QtDBConnector():
             
         return self.roomsModel
     
-    def get_talks_model(self, event, room):
+    def get_talks_model(self, event, room, date=None):
         """
         Gets the Talks Model. A talk is defined as "<presenter> - <talk_title>"
         Useful for Qt GUI based Frontends to load the Model into Views.
         """
+        
         self.talksModel = QtSql.QSqlQueryModel()
-        self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
+        if date == "":
+            self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
                                    WHERE Event='%s' and Room='%s' ORDER BY Time ASC" % (event, room))
+        else:
+            self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
+                                   WHERE Event='%s' and Room='%s' and date(Time) LIKE '%s' ORDER BY Time ASC" % (event, room, date))
             
         return self.talksModel
     
