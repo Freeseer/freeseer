@@ -191,6 +191,16 @@ class QtDBConnector():
             
         return self.eventsModel
     
+    def get_dates_model(self):
+        """
+        Gets the Rooms Model.
+        Useful for Qt GUI based Frontends to load the Model into Views.
+        """
+        self.datesModel = QtSql.QSqlQueryModel()
+        self.datesModel.setQuery("SELECT DISTINCT date(Time) FROM presentations ORDER BY Time ASC")
+        
+        return self.datesModel
+    
     def get_rooms_model(self, event):
         """
         Gets the Rooms Model.
