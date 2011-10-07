@@ -40,6 +40,8 @@ class USBSrc(IVideoInput):
     device_list = []
     
     def __init__(self):
+        IVideoInput.__init__(self)
+        
         #
         # Detect available devices
         #
