@@ -161,6 +161,7 @@ class MainApp(QtGui.QMainWindow):
         # main tab connections
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
+        self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
         # Main Window Connections
@@ -247,7 +248,7 @@ class MainApp(QtGui.QMainWindow):
         # Load Talks as a SQL Data Model
         #self.load_talks_db()
         self.load_event_list()
-        
+        self.load_date_list()
 
     def current_presentation(self):
         '''
@@ -297,6 +298,10 @@ class MainApp(QtGui.QMainWindow):
     ### Talk Related
     ###
     
+    def load_date_list(self):
+        model = self.core.db.get_dates_model()
+        self.mainWidget.dateComboBox.setModel(model)
+    
     def load_event_list(self):
         model = self.core.db.get_events_model()
         self.mainWidget.eventComboBox.setModel(model)
@@ -309,10 +314,16 @@ class MainApp(QtGui.QMainWindow):
         
     def load_talks_from_room(self, room):
         self.current_room = room
+        self.current_date = str(self.mainWidget.dateComboBox.currentText())
 
-        model = self.core.db.get_talks_model(self.current_event, self.current_room)
+        model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
         self.mainWidget.talkComboBox.setModel(model)
-
+        
+    def load_talks_from_date(self, date):
+        self.current_date = date
+        
+        model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
+        self.mainWidget.talkComboBox.setModel(model)
 
     ###
     ### Misc
