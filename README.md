@@ -1,5 +1,7 @@
-Freeseer by Free and Open Source Software Learning Centre (FOSSLC)
+Freeseer 
 =========
+#### by Free and Open Source Software Learning Centre (FOSSLC)
+
 
 ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
 
@@ -22,12 +24,6 @@ Freeseer is written in Python. It uses Qt4 for its GUI and Gstreamer for video/a
 Freeseer supports free (royalty free) audio and video codecs.
 
 -------------------------------------------------------------------------
-
-
-
-For Fedora Linux, install:
---------------------------
-    "sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools"    
 
 
 For Windows, install: 
@@ -100,14 +96,17 @@ Developers
 ----------
 Download the latest source code: https://github.com/fosslc/freeseer
 
-### Build Requirements
+### Build requirements
 To develop and run freeseer, you require:
+
     Make, Git, Python 2.7, sqlite3, PyQT development tools
 
-### Ubuntu Linux
-install:
-    "sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools 
-    libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser"
+### Ubuntu Linux:
+`$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser`
+
+### Fedora Linux:
+`$ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools`
+
 
 Bug tracker
 -----------
