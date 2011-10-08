@@ -1,5 +1,6 @@
-FOSSLC Freeseer
-===============
+Freeseer by Free and Open Source Software Learning Centre (FOSSLC)
+=========
+
 ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
 
 The Freeseer project is a powerful software suite for capturing or streaming video. 
@@ -20,21 +21,14 @@ Freeseer is written in Python. It uses Qt4 for its GUI and Gstreamer for video/a
 
 Freeseer supports free (royalty free) audio and video codecs.
 
-<--- TODO: Make intro more concise. Too much info right now. --->
 -------------------------------------------------------------------------
 
 
-To develop and run freeseer, you require:
-    Make, Git, Python 2.7, sqlite3, PyQT development tools
 
 For Fedora Linux, install:
 --------------------------
     "sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools"    
 
-For Ubuntu Linux, install:
---------------------------
-    "sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools 
-    libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser"
 
 For Windows, install: 
 ---------------------
@@ -94,17 +88,26 @@ For support, questions, suggestions or any other inquiries, visit:
 
 Usage
 -----
-Download the latest installers: https://github.com/fosslc/freeseer/downloads
+Visit our download section for the latest installers:
 
-Download the latest source code: https://github.com/fosslc/freeseer
+https://github.com/fosslc/freeseer/downloads
 
-Visit our [download section](https://github.com/fosslc/freeseer/downloads) if you wish to install from binary package.
+For the cutting edge version, you have to build from the experimental source.
+Note that code in the experimental branch is not guaranteed to be stable.
 
 
 Developers
 ----------
-TODO
+Download the latest source code: https://github.com/fosslc/freeseer
 
+### Build Requirements
+To develop and run freeseer, you require:
+    Make, Git, Python 2.7, sqlite3, PyQT development tools
+
+### Ubuntu Linux
+install:
+    "sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools 
+    libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser"
 
 Bug tracker
 -----------
@@ -146,19 +149,6 @@ you may not use this work except in compliance with the GPLv3. You may obtain a 
 
 http://www.fsf.org/licensing/licenses/gpl.html
 
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [rca-wiki]: http://en.wikipedia.org/wiki/RCA_connector
 [svideo-wiki]: http://en.wikipedia.org/wiki/S-Video
