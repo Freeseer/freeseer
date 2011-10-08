@@ -197,10 +197,8 @@ class ConfigTool(ConfigToolWidget):
 
     def setup_audio_mixer(self):
         mixer = str(self.generalWidget.audioMixerComboBox.currentText())
-        items = self.optionsTreeWidget.findItems(mixer, QtCore.Qt.MatchExactly)
-        if len(items) > 0:
-            item = items[0]
-            self.optionsTreeWidget.setCurrentItem(item)
+        plugin = self.plugman.plugmanc.getPluginByName(mixer, "AudioMixer")
+        plugin.plugin_object.get_dialog()
             
     def toggle_videomixer_state(self, state):
         self.config.enable_video_recoding = state
@@ -212,10 +210,8 @@ class ConfigTool(ConfigToolWidget):
     
     def setup_video_mixer(self):
         mixer = str(self.generalWidget.videoMixerComboBox.currentText())
-        items = self.optionsTreeWidget.findItems(mixer, QtCore.Qt.MatchExactly)
-        if len(items) > 0:
-            item = items[0]
-            self.optionsTreeWidget.setCurrentItem(item)
+        plugin = self.plugman.plugmanc.getPluginByName(mixer, "VideoMixer")
+        plugin.plugin_object.get_dialog()
 
     def browse_video_directory(self):
         directory = self.generalWidget.recordDirLineEdit.text()
