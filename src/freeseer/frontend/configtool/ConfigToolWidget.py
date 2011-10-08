@@ -28,6 +28,13 @@ http://wiki.github.com/fosslc/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+    
+import resource_rc
+
 class ConfigToolWidget(QtGui.QWidget):
     '''
     classdocs
@@ -38,6 +45,13 @@ class ConfigToolWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
+        self.setWindowTitle(QtGui.QApplication.translate("ConfigTool", 
+                                                         "Freeseer ConfigTool", 
+                                                         None, 
+                                                         QtGui.QApplication.UnicodeUTF8))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         
         self.mainLayout = QtGui.QHBoxLayout()
         self.setLayout(self.mainLayout)
