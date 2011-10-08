@@ -66,6 +66,9 @@ class PluginManager:
         if self.firstrun == True:
             self.set_default_plugins()
             
+        for plugin in self.plugmanc.getAllPlugins():
+            plugin.plugin_object.set_plugman(self)
+            
         logging.debug("Plugin manager initialized.")
         
     def __call__(self):
@@ -129,6 +132,18 @@ class IBackendPlugin(IPlugin):
     
     def load_config(self, plugman):
         pass
+    
+    def set_plugman(self, plugman):
+        self.plugman = plugman
+        
+    def set_gui(self, gui):
+        self.gui = gui
+    
+    def get_dialog(self):
+        widget = self.get_widget()
+        if widget is not None:
+            self.gui.show_plugin_widget_dialog(widget)
+            self.widget_load_config(self.plugman)
     
     def get_widget(self):
         """
