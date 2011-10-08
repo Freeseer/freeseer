@@ -123,7 +123,7 @@ class ConfigTool(ConfigToolWidget):
         if option == "General":
             self.load_general_widget()
         elif option == "Plugins":
-            pass  
+            pass
         elif option == "AudioInput":
             self.load_option_audioinput_plugins()
         elif option == "AudioMixer":
@@ -253,7 +253,13 @@ class ConfigTool(ConfigToolWidget):
             else:
                 item.setCheckState(QtCore.Qt.Unchecked)
             
+            size = QtCore.QSize(64, 64)
+            item.setSizeHint(size)
             self.pluginloaderWidget.listWidget.addItem(item)
+            
+            # The list item will be a fancy widget.
+            widget = self.pluginloaderWidget.getListWidgetPlugin(item.text())
+            self.pluginloaderWidget.listWidget.setItemWidget(item, widget)
 
     def load_option_audioinput_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
