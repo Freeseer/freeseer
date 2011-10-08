@@ -45,6 +45,19 @@ class PluginLoaderWidget(QtGui.QWidget):
         self.listWidget = QtGui.QListWidget()
         self.mainLayout.addWidget(self.listWidget)
         
+    def getListWidgetPlugin(self, name):
+        widget = QtGui.QWidget()
+        layout = QtGui.QHBoxLayout()
+        widget.setLayout(layout)
+        
+        pluginLabel = QtGui.QLabel(name)
+        pluginConfigPushButton = QtGui.QPushButton("...")
+        pluginConfigPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        layout.addWidget(pluginLabel)
+        layout.addWidget(pluginConfigPushButton)
+        
+        return widget
+        
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
