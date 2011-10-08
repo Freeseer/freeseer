@@ -162,7 +162,7 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.connect(self.editorWidget.rssPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
         self.connect(self.editorWidget.addButton, QtCore.SIGNAL('clicked()'), self.show_add_talk_widget)
         self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.reset)
+        self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         
         # Main Window Connections
@@ -281,6 +281,23 @@ class TalkEditorMainApp(QtGui.QMainWindow):
     def reset(self):
         self.core.db.clear_database()
         self.presentationModel.select()
+        
+    def confirm_reset(self):
+        """
+        Presents a confirmation dialog to ask the user if they are sure they
+        wish to remove the talk database.
+        
+        If Yes call the reset() function.
+        """
+        confirm = QtGui.QMessageBox.question(self,
+                    "Clear Database",
+                    "Are you sure you want to clear the DB?",
+                    QtGui.QMessageBox.Yes | 
+                    QtGui.QMessageBox.No,
+                    QtGui.QMessageBox.No)
+        
+        if confirm == QtGui.QMessageBox.Yes:
+            self.reset()
             
     def add_talks_from_rss(self):
         rss_url = unicode(self.editorWidget.rssLineEdit.text())
