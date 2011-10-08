@@ -70,6 +70,8 @@ class ConfigToolWidget(QtGui.QWidget):
         self.leftPanelLayout.addWidget(self.optionsTreeWidget)
         self.leftPanelLayout.addWidget(self.closePushButton)
         
+        self.optionsTreeWidget.expandAll()
+        
         #
         # Right panel
         #
