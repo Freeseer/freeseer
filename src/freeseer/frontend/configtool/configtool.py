@@ -135,11 +135,7 @@ class ConfigTool(ConfigToolWidget):
         elif option == "Output":
             self.load_option_output_plugins()
         else:
-            plugin_name = str(self.optionsTreeWidget.currentItem().text(0))
-            plugin_category = str(self.optionsTreeWidget.currentItem().text(1))
-            
-            plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
-            self.show_plugin_widget(plugin)
+            pass
         
     def load_general_widget(self):
         self.mainWidgetLayout.addWidget(self.generalWidget)
@@ -243,22 +239,15 @@ class ConfigTool(ConfigToolWidget):
         self.pluginloaderWidget.listWidget.clear()
         for plugin in self.plugman.plugmanc.getPluginsOfCategory(plugin_type):
             item = QtGui.QListWidgetItem()
-            item.setText(plugin.plugin_object.get_name())
-            
-            flags = QtCore.Qt.ItemFlags(item.flags() | QtCore.Qt.ItemIsUserCheckable)
-            item.setFlags(flags)
-            
-            if plugin.is_activated:
-                item.setCheckState(QtCore.Qt.Checked)
-            else:
-                item.setCheckState(QtCore.Qt.Unchecked)
             
             size = QtCore.QSize(64, 64)
             item.setSizeHint(size)
             self.pluginloaderWidget.listWidget.addItem(item)
             
             # The list item will be a fancy widget.
-            widget = self.pluginloaderWidget.getListWidgetPlugin(item.text())
+            widget = self.pluginloaderWidget.getListWidgetPlugin(plugin,
+                                                                 plugin_type,
+                                                                 self.plugman)
             self.pluginloaderWidget.listWidget.setItemWidget(item, widget)
 
     def load_option_audioinput_plugins(self):
@@ -310,40 +299,22 @@ class ConfigTool(ConfigToolWidget):
                 self.change_videomixer(plugin_name)
         else:
             self.plugman.deactivate_plugin(plugin_name, plugin_category)
-            self.del_plugin_widget(plugin_name)
     
     def load_plugin_widgets(self):
-        categories = self.plugman.plugmanc.getCategories()
-        for category in categories:
-            plugins = self.plugman.plugmanc.getPluginsOfCategory(category)
-            for plugin in plugins:
-                if plugin.is_activated:
-                    plugin_name = plugin.plugin_object.get_name()
-                    self.add_plugin_widget(plugin_name, category)
+        for plugin in self.plugman.plugmanc.getAllPlugins():
+            plugin.plugin_object.set_gui(self)
+
+    def show_plugin_widget_dialog(self, widget):
+        self.dialog = QtGui.QDialog(self)
     
-    def add_plugin_widget(self, plugin_name, plugin_category):
-        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
-        if plugin.plugin_object.get_widget() is not None:
-            item = QtGui.QTreeWidgetItem()
-            item.setText(0, plugin_name)
-            item.setText(1, plugin_category)
-            self.optionsTreeWidget.addTopLevelItem(item)
-    
-    def del_plugin_widget(self, plugin_name):
-        items = self.optionsTreeWidget.findItems(plugin_name, QtCore.Qt.MatchExactly)
-        if len(items) > 0:
-            item = items[0]
-            index = self.optionsTreeWidget.indexOfTopLevelItem(item)
-            self.optionsTreeWidget.takeTopLevelItem(index)
-        
-    def show_plugin_widget(self, plugin):
-        
-        self.currentWidget = plugin.plugin_object.get_widget()
-        self.currentWidgetPlugin = plugin.plugin_object
-        self.currentWidgetPlugin.widget_load_config(self.plugman)
-        if self.currentWidget is not None:
-            self.mainWidgetLayout.addWidget(self.currentWidget)
-            self.currentWidget.show()
+        self.dialog_layout = QtGui.QHBoxLayout()
+        self.dialog.setLayout(self.dialog_layout)
+        self.dialog_layout.addWidget(widget)
+        self.dialog.show()
+            
+    def get_plugin_settings_widget(self, plugin):
+        widget = plugin.plugin_object.get_widget()
+        return widget
 
     # Override
     
