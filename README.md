@@ -59,7 +59,6 @@ Download the latest source code: https://github.com/fosslc/freeseer
 To develop and run freeseer, you require:
 
     Make, Git, Python 2.7, sqlite3, PyQT development tools
--------------------------------------------------------------------------
 
 ### Ubuntu Linux:
 `$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev
@@ -80,27 +79,24 @@ Install
     - setuptools-0.6c11.win32-py2.7
     - yapsy
 
+To install Yapsy, run:
     
-    Yapsy can be installed using easy_install that comes with setuptools using the command below.
+    C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
     
-    Run: C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
-    
-    NOTES:
-    	- Windows 32-bit packages are recommended when installing the above packages.
-    	  This is because pygtk-all-in-one package at the time of this writing does
-    	  not have a 64bit installer.
-    	- The above software versions are known to work well. Python does need to be version 2.7.*
+NOTES:
+- Windows 32-bit packages are recommended
+  (pygtk-all-in-one package does not have a 64-bit installer yet)
+- Python needs to be version 2.7.\*
 
-          On windows, add the following paths to your PATH variable:
-          C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+On Windows, add the following paths to your PATH variable:
+    C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
           
-    Troubleshooting:
-    	If you have issues running freeseer with cannot import gst error this link may help:
-    	http://stackoverflow.com/questions/6907473/cannot-import-gst-in-python
-
-
+Troubleshooting:
+Cannot import gst module? Check	http://stackoverflow.com/questions/6907473/cannot-import-gst-in-python
+---------------------------------------------
 
 Once you have the prerequisite components you can run Freeseer using the following commands:
+
     $ ./freeseer-record  # Recording tool
     $ ./freeseer-config  # Configuration tool
     $ ./freeseer-talkeditor  # Talk-list editor
@@ -120,9 +116,9 @@ https://github.com/fosslc/freeseer/issues
 
 IRC channel
 -----------
-Drop by our [#freeseer](irc://irc.freenode.net/#freeseer) channel on irc.freenode.net
+Drop by our [#freeseer](irc://irc.freenode.net/#freeseer) channel on irc.freenode.net to get an instant response.
 
-[Join via your browser](http://webchat.freenode.net/?channels=#freeseer)
+http://webchat.freenode.net/?channels=#freeseer
 
 
 Mailing list
