@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import ConfigParser
 import logging
 from os import listdir;
 from sys import *
@@ -88,6 +89,16 @@ class ConfigTool(ConfigToolWidget):
         # plugin loader connections
         #
         self.connect(self.pluginloaderWidget.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
+        
+        #
+        # Logger Widget Connections
+        #
+        self.connect(self.loggerWidget.consoleLoggerGroupBox,
+                     QtCore.SIGNAL('toggled(bool)'),
+                     self.toggle_console_logger)
+        self.connect(self.loggerWidget.consoleLoggerLevelComboBox,
+                     QtCore.SIGNAL('activated(const QString&)'),
+                     self.change_console_loglevel)
 
         # load core
         if core is None:
@@ -321,6 +332,68 @@ class ConfigTool(ConfigToolWidget):
         self.mainWidgetLayout.addWidget(self.loggerWidget)
         self.currentWidget = self.loggerWidget
         self.currentWidget.show()
+        
+        # Get the config details
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.core.logger.logconf))
+        handlers = config.get('logger_root', 'handlers')
+        handler_list = handlers.split(',')
+        
+        consoleLogger = False
+        syslogLogger = False
+        for handler in handler_list:
+            if handler == "consoleHandler":
+                consoleLogger = True
+            elif handler == "syslogHandler":
+                syslogLogger = True
+                
+        consoleLoggerLevel = config.get('handler_consoleHandler', 'level')
+        # --- End Get config details
+        
+        
+        # Set the Widget with the details gathered from config
+        if consoleLogger is True:
+            self.loggerWidget.consoleLoggerGroupBox.setChecked(True)
+        else:
+            self.loggerWidget.consoleLoggerGroupBox.setChecked(False)
+            
+        log_levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        
+        n = 0
+        for level in log_levels:
+            self.loggerWidget.consoleLoggerLevelComboBox.addItem(level)
+        
+            if level == consoleLoggerLevel:
+                self.loggerWidget.consoleLoggerLevelComboBox.setCurrentIndex(n)
+            n += 1
+    
+    def toggle_console_logger(self, state):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.core.logger.logconf))
+        handlers = config.get("logger_root", "handlers")
+        handler_list = handlers.split(',')
+        
+        if self.loggerWidget.consoleLoggerGroupBox.isChecked():
+            new_list = "consoleHandler,"
+        else:
+            new_list = ""
+        
+        for handler in handler_list:
+            if handler == "consoleHandler": continue
+            new_list += handler + ","
+        new_list = new_list.rstrip(',')
+        
+        config.set("logger_root", "handlers", new_list)
+        
+        with open(self.core.logger.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    def change_console_loglevel(self, level):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.core.logger.logconf))
+        config.set("handler_consoleHandler", "level", level)
+        with open(self.core.logger.logconf, 'w') as configfile:
+            config.write(configfile)
 
     # Override
     
