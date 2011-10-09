@@ -41,8 +41,10 @@ For support, questions, suggestions or any other inquiries, visit:
   
 ==========================================================================
 
-Usage
------
+Installation
+------------
+
+## End users
 Visit our download section for the latest installers:
 
 https://github.com/fosslc/freeseer/downloads
@@ -51,14 +53,13 @@ For the cutting edge version, you have to build from the experimental source.
 Note that code in the experimental branch is not guaranteed to be stable.
 
 
-Developers
-----------
-Download the latest source code: https://github.com/fosslc/freeseer
-
-### Build requirements
-To develop and run freeseer, you require:
-
-    Make, Git, Python 2.7, sqlite3, PyQT development tools
+## Developers
+1. Install dependencies
+ + Make
+ + Git
+ + Python 2.7
+ + sqlite3
+ + PyQT development tools
 
 ### Ubuntu Linux:
 `$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev
@@ -91,12 +92,19 @@ NOTES:
 On Windows, add the following paths to your PATH variable:
     C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
           
-Troubleshooting:
-Cannot import gst module? Check	http://stackoverflow.com/questions/6907473/cannot-import-gst-in-python
----------------------------------------------
+2. Download
+Get the latest source code from https://github.com/fosslc/freeseer
+
+3. Build
+
+    $ cd freeseer
+    $ make
+
+4. Run
 
 Once you have the prerequisite components you can run Freeseer using the following commands:
 
+    $ cd src
     $ ./freeseer-record  # Recording tool
     $ ./freeseer-config  # Configuration tool
     $ ./freeseer-talkeditor  # Talk-list editor
@@ -135,7 +143,7 @@ Authors
 - [Andrew Ross](https://github.com/fosslc)
 - [Thanh Ha](https://github.com/zxiiro)
 
-And many various contributors.
+And many various contributors from Google Summer of Code (GSoC) and Undergraduate Capstone Open Source Projects (UCOSP).
 
 
 Copyright and license
