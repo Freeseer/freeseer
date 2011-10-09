@@ -25,45 +25,6 @@ Freeseer supports free (royalty free) audio and video codecs.
 
 -------------------------------------------------------------------------
 
-
-For Windows, install: 
----------------------
-    - python-2.7.2
-    - GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
-    - GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 
-    - PyQt-Py2.7-x86-gpl-4.8.5-1
-    - pygtk-all-in-one-2.24.0.win32-py2.7 
-    - feedparser-5.0.1 
-    - setuptools-0.6c11.win32-py2.7
-    - yapsy
-    
-    Yapsy can be installed using easy_install that comes with setuptools using the command below.
-    
-    Run: C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
-    
-    NOTES:
-    	- Windows 32-bit packages are recommended when installing the above packages.
-    	  This is because pygtk-all-in-one package at the time of this writing does
-    	  not have a 64bit installer.
-    	- The above software versions are known to work well. Python does need to be version 2.7.*
-
-          On windows, add the following paths to your PATH variable:
-          C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
-          
-    Troubleshooting:
-    	If you have issues running freeseer with cannot import gst error this link may help:
-    	http://stackoverflow.com/questions/6907473/cannot-import-gst-in-python
-
--------------------------------------------------------------------------
-
-Once you have the prerequisite components you can run Freeseer using the
-following commands:
-        "./freeseer-record"         This is the Freeseer mainapp
-        "./freeseer-config"         This is the Configuration tool
-        "./freeseer-talkeditor"     This is the Talk List editor
-
-If you would like to create packages, read PACKAGE.txt for instructions.
-
 --------------------------------------------------------------------------
 
 Read more about hardware capture options here: 
@@ -102,11 +63,53 @@ To develop and run freeseer, you require:
     Make, Git, Python 2.7, sqlite3, PyQT development tools
 
 ### Ubuntu Linux:
-`$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev python-qt4 python-qt4-dev python2.6-dev python-feedparser`
+`$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev
+python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
+$ sudo easy_install yapsy`
 
 ### Fedora Linux:
 `$ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools`
 
+### Windows:
+Install
+    - python-2.7.2
+    - GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
+    - GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 
+    - PyQt-Py2.7-x86-gpl-4.8.5-1
+    - pygtk-all-in-one-2.24.0.win32-py2.7 
+    - feedparser-5.0.1 
+    - setuptools-0.6c11.win32-py2.7
+    - yapsy
+
+    
+    Yapsy can be installed using easy_install that comes with setuptools using the command below.
+    
+    Run: C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
+    
+    NOTES:
+    	- Windows 32-bit packages are recommended when installing the above packages.
+    	  This is because pygtk-all-in-one package at the time of this writing does
+    	  not have a 64bit installer.
+    	- The above software versions are known to work well. Python does need to be version 2.7.*
+
+          On windows, add the following paths to your PATH variable:
+          C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+          
+    Troubleshooting:
+    	If you have issues running freeseer with cannot import gst error this link may help:
+    	http://stackoverflow.com/questions/6907473/cannot-import-gst-in-python
+
+
+
+Once you have the prerequisite components you can run Freeseer using the
+following commands:
+        "./freeseer-record"         This is the Freeseer mainapp
+        "./freeseer-config"         This is the Configuration tool
+        "./freeseer-talkeditor"     This is the Talk List editor
+
+If you would like to create packages, read PACKAGE.txt for instructions.
+
+-------------------------------------------------------------------------
 
 Bug tracker
 -----------
