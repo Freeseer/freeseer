@@ -1,6 +1,6 @@
 Freeseer 
 =========
-#### by Free and Open Source Software Learning Centre (FOSSLC)
+#### by the Free and Open Source Software Learning Centre (FOSSLC)
 
 
 ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
@@ -41,10 +41,8 @@ For support, questions, suggestions or any other inquiries, visit:
   
 ==========================================================================
 
-Installation
-------------
-
-## End users
+Installation for end-users
+--------------------------
 Visit our download section for the latest installers:
 
 https://github.com/fosslc/freeseer/downloads
@@ -53,7 +51,8 @@ For the cutting edge version, you have to build from the experimental source.
 Note that code in the experimental branch is not guaranteed to be stable.
 
 
-## Developers
+Installation for developers
+---------------------------
 1. Install dependencies
  + Make
  + Git
@@ -62,12 +61,14 @@ Note that code in the experimental branch is not guaranteed to be stable.
  + PyQT development tools
 
 ### Ubuntu Linux:
-`$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev
-python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
-$ sudo easy_install yapsy`
+
+    $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev \
+    python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
+    $ sudo easy_install yapsy`
 
 ### Fedora Linux:
-`$ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools`
+
+    $ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools
 
 ### Windows:
 Install
