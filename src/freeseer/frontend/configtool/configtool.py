@@ -99,6 +99,12 @@ class ConfigTool(ConfigToolWidget):
         self.connect(self.loggerWidget.consoleLoggerLevelComboBox,
                      QtCore.SIGNAL('activated(const QString&)'),
                      self.change_console_loglevel)
+        self.connect(self.loggerWidget.syslogLoggerGroupBox,
+                     QtCore.SIGNAL('toggled(bool)'),
+                     self.toggle_syslog_logger)
+        self.connect(self.loggerWidget.syslogLoggerLevelComboBox,
+                     QtCore.SIGNAL('activated(const QString&)'),
+                     self.change_syslog_loglevel)
 
         # load core
         if core is None:
@@ -348,16 +354,19 @@ class ConfigTool(ConfigToolWidget):
                 syslogLogger = True
                 
         consoleLoggerLevel = config.get('handler_consoleHandler', 'level')
+        syslogLoggerLevel = config.get('handler_syslogHandler', 'level')
         # --- End Get config details
         
-        
+        #
         # Set the Widget with the details gathered from config
+        #
+        log_levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        
+        # Console Logger
         if consoleLogger is True:
             self.loggerWidget.consoleLoggerGroupBox.setChecked(True)
         else:
             self.loggerWidget.consoleLoggerGroupBox.setChecked(False)
-            
-        log_levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         
         n = 0
         for level in log_levels:
@@ -366,6 +375,22 @@ class ConfigTool(ConfigToolWidget):
             if level == consoleLoggerLevel:
                 self.loggerWidget.consoleLoggerLevelComboBox.setCurrentIndex(n)
             n += 1
+        # --- End Console Logger
+        
+        # Syslogger
+        if syslogLogger is True:
+            self.loggerWidget.syslogLoggerGroupBox.setChecked(True)
+        else:
+            self.loggerWidget.syslogLoggerGroupBox.setChecked(False)
+            
+        n = 0
+        for level in log_levels:
+            self.loggerWidget.syslogLoggerLevelComboBox.addItem(level)
+        
+            if level == syslogLoggerLevel:
+                self.loggerWidget.syslogLoggerLevelComboBox.setCurrentIndex(n)
+            n += 1
+        # --- End Syslogger
     
     def toggle_console_logger(self, state):
         config = ConfigParser.ConfigParser()
@@ -392,6 +417,34 @@ class ConfigTool(ConfigToolWidget):
         config = ConfigParser.ConfigParser()
         config.readfp(open(self.core.logger.logconf))
         config.set("handler_consoleHandler", "level", level)
+        with open(self.core.logger.logconf, 'w') as configfile:
+            config.write(configfile)
+            
+    def toggle_syslog_logger(self, state):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.core.logger.logconf))
+        handlers = config.get("logger_root", "handlers")
+        handler_list = handlers.split(',')
+        
+        if self.loggerWidget.syslogLoggerGroupBox.isChecked():
+            new_list = "syslogHandler,"
+        else:
+            new_list = ""
+        
+        for handler in handler_list:
+            if handler == "syslogHandler": continue
+            new_list += handler + ","
+        new_list = new_list.rstrip(',')
+        
+        config.set("logger_root", "handlers", new_list)
+        
+        with open(self.core.logger.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    def change_syslog_loglevel(self, level):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.core.logger.logconf))
+        config.set("handler_syslogHandler", "level", level)
         with open(self.core.logger.logconf, 'w') as configfile:
             config.write(configfile)
 
