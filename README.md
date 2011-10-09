@@ -23,8 +23,6 @@ Freeseer is written in Python. It uses Qt4 for its GUI and Gstreamer for video/a
 
 Freeseer supports free (royalty free) audio and video codecs.
 
--------------------------------------------------------------------------
-
 --------------------------------------------------------------------------
 
 Read more about hardware capture options here: 
@@ -61,6 +59,7 @@ Download the latest source code: https://github.com/fosslc/freeseer
 To develop and run freeseer, you require:
 
     Make, Git, Python 2.7, sqlite3, PyQT development tools
+-------------------------------------------------------------------------
 
 ### Ubuntu Linux:
 `$ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev
@@ -101,17 +100,16 @@ Install
 
 
 
-Once you have the prerequisite components you can run Freeseer using the
-following commands:
-        "./freeseer-record"         This is the Freeseer mainapp
-        "./freeseer-config"         This is the Configuration tool
-        "./freeseer-talkeditor"     This is the Talk List editor
+Once you have the prerequisite components you can run Freeseer using the following commands:
+    $ ./freeseer-record  # Recording tool
+    $ ./freeseer-config  # Configuration tool
+    $ ./freeseer-talkeditor  # Talk-list editor
+
 
 Packaging
 ---------
-See [PACKAGE.txt](#PACKAGE.txt) for instructions.
+See [PACKAGE.txt](https://github.com/fosslc/freeseer/blob/master/PACKAGE.txt) for instructions.
 
--------------------------------------------------------------------------
 
 Bug tracker
 -----------
@@ -149,7 +147,8 @@ Copyright and license
 © 2011 FOSSLC
 
 Licensed under the GNU General Public License, version 3 (GPLv3);
-you may not use this work except in compliance with the GPLv3. You may obtain a copy of the GPLv3 in the LICENSE file, or at:
+you may not use this work except in compliance with the GPLv3.
+You may obtain a copy of the GPLv3 in the LICENSE file, or at:
 
 http://www.fsf.org/licensing/licenses/gpl.html
 
