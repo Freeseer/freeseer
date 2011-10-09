@@ -34,6 +34,7 @@ from freeseer.framework.core import *
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
 from PluginLoaderWidget import PluginLoaderWidget
+from LoggerWidget import LoggerWidget
 
 __version__ = project_info.VERSION
 
@@ -54,11 +55,10 @@ class ConfigTool(ConfigToolWidget):
         self.mainWidgetLayout = QtGui.QVBoxLayout()
         self.rightPanelWidget.setLayout(self.mainWidgetLayout)
         
-        # Load the General UI Widget
+        # Load all ConfigTool Widgets
         self.generalWidget = GeneralWidget()
-        
-        # Load Plugin Loader UI components
         self.pluginloaderWidget = PluginLoaderWidget()
+        self.loggerWidget = LoggerWidget()
 
         # connections
         self.connect(self.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
@@ -134,6 +134,8 @@ class ConfigTool(ConfigToolWidget):
             self.load_option_videomixer_plugins()
         elif option == "Output":
             self.load_option_output_plugins()
+        elif option == "Logger":
+            self.load_logger_widget()
         else:
             pass
         
@@ -311,6 +313,14 @@ class ConfigTool(ConfigToolWidget):
     def get_plugin_settings_widget(self, plugin):
         widget = plugin.plugin_object.get_widget()
         return widget
+    
+    #
+    # Logger Widget Related
+    # 
+    def load_logger_widget(self):
+        self.mainWidgetLayout.addWidget(self.loggerWidget)
+        self.currentWidget = self.loggerWidget
+        self.currentWidget.show()
 
     # Override
     

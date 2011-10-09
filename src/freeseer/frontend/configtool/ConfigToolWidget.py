@@ -63,11 +63,14 @@ class ConfigToolWidget(QtGui.QWidget):
         self.leftPanelLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.leftPanelLayout)
         
+        # General
         self.optionsTreeWidget = QtGui.QTreeWidget()
         self.optionsTreeWidget.setHeaderHidden(True)
         self.optionsTreeWidget.headerItem().setText(0, QtGui.QApplication.translate("ConfigTool", "1", None, QtGui.QApplication.UnicodeUTF8))
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(0).setText(0, QtGui.QApplication.translate("ConfigTool", "General", None, QtGui.QApplication.UnicodeUTF8))
+        
+        # Plugins
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(1).setText(0, QtGui.QApplication.translate("ConfigTool", "Plugins", None, QtGui.QApplication.UnicodeUTF8))
         item_1 = QtGui.QTreeWidgetItem(item_0)
@@ -80,6 +83,12 @@ class ConfigToolWidget(QtGui.QWidget):
         self.optionsTreeWidget.topLevelItem(1).child(3).setText(0, QtGui.QApplication.translate("ConfigTool", "VideoMixer", None, QtGui.QApplication.UnicodeUTF8))
         item_1 = QtGui.QTreeWidgetItem(item_0)
         self.optionsTreeWidget.topLevelItem(1).child(4).setText(0, QtGui.QApplication.translate("ConfigTool", "Output", None, QtGui.QApplication.UnicodeUTF8))
+        
+        # Logger
+        item_2 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
+        self.optionsTreeWidget.topLevelItem(2).setText(0, QtGui.QApplication.translate("ConfigTool", "Logger", None, QtGui.QApplication.UnicodeUTF8))
+        
+        
         self.closePushButton = QtGui.QPushButton(self.tr("Close"))
         self.leftPanelLayout.addWidget(self.optionsTreeWidget)
         self.leftPanelLayout.addWidget(self.closePushButton)
