@@ -54,7 +54,7 @@ class PluginLoaderWidget(QtGui.QWidget):
         
         # Checkbox, set the proper state on load
         pluginCheckBox = QtGui.QCheckBox()
-        pluginCheckBox.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        pluginCheckBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Maximum)
         
         if plugin.is_activated:
             pluginCheckBox.setCheckState(QtCore.Qt.Checked)
@@ -63,8 +63,27 @@ class PluginLoaderWidget(QtGui.QWidget):
         
         layout.addWidget(pluginCheckBox)
 
+        # Plugin Label / Description
+        textLayout = QtGui.QVBoxLayout()
+        layout.addLayout(textLayout)
+        
         pluginLabel = QtGui.QLabel(plugin_name)
-        layout.addWidget(pluginLabel)
+        pluginLabel.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+        pluginLabelFont = QtGui.QFont()
+        pluginLabelFont.setPointSize(11)
+        pluginLabelFont.setBold(True)
+        pluginLabel.setFont(pluginLabelFont)
+        
+        pluginDescLabel = QtGui.QLabel(plugin.description)
+        pluginDescLabel.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+        pluginDescLabelFont = QtGui.QFont()
+        pluginDescLabelFont.setPointSize(10)
+        pluginDescLabelFont.setItalic(True)
+        pluginDescLabel.setFont(pluginDescLabelFont)
+        
+        textLayout.addWidget(pluginLabel)
+        textLayout.addWidget(pluginDescLabel)
+        # --- End Label / Description
         
         # Signal to activate/deactivate a plugin.
         def set_plugin_state():
