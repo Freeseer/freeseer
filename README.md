@@ -154,7 +154,8 @@ Copyright and license
 
 Licensed under the GNU General Public License, version 3 (GPLv3);
 you may not use this work except in compliance with the GPLv3.
-You may obtain a copy of the GPLv3 in the LICENSE file, or at:
+
+You may obtain a copy of the GPLv3 in the [LICENSE file][license], or at:
 
 http://www.fsf.org/licensing/licenses/gpl.html
 
@@ -164,3 +165,4 @@ http://www.fsf.org/licensing/licenses/gpl.html
 [firewire-wiki]: http://en.wikipedia.org/wiki/FireWire_camera
 [vga-wiki]: http://en.wikipedia.org/wiki/VGA_connector
 [usb-wiki]: http://en.wikipedia.org/wiki/USB_video_device_class
+[license]: https://raw.github.com/fosslc/freeseer/a0497fabdc5a548d0dea4f6fb4925aa41a6d62e8/src/LICENSE
