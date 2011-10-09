@@ -96,10 +96,15 @@ class PluginLoaderWidget(QtGui.QWidget):
         
         # If plugin supports configuration, show a configuration button.
         if plugin.plugin_object.get_widget() is not None:
-            pluginConfigPushButton = QtGui.QPushButton("...")
-            pluginConfigPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-            layout.addWidget(pluginConfigPushButton)
-            self.connect(pluginConfigPushButton, QtCore.SIGNAL('clicked()'), plugin.plugin_object.get_dialog)
+            pluginConfigToolButton = QtGui.QToolButton()
+            pluginConfigToolButton.setText("Settings")
+            configIcon = QtGui.QIcon.fromTheme("preferences-other")
+            pluginConfigToolButton.setIcon(configIcon)
+            pluginConfigToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+            pluginConfigToolButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+            
+            layout.addWidget(pluginConfigToolButton)
+            self.connect(pluginConfigToolButton, QtCore.SIGNAL('clicked()'), plugin.plugin_object.get_dialog)
         
         return widget
 
