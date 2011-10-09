@@ -29,17 +29,16 @@ Read more about hardware capture options here:
     http://wiki.github.com/fosslc/freeseer/capture-hardware
 
 If you wish to capture vga input using epiphan's vga2usb device:
-    first, copy the vga2usb.ko driver to /lib/modules/<kernel version>
-    for the kernel you're running. Epiphan provides a list of pre-compiled
-    drivers at http://epiphan.com
 
-    Then, configure the driver:
-    "sudo cp vga2usb.conf /etc/modprobe.d/; depmod -a"
+1) Copy the vga2usb.ko driver to /lib/modules/<kernel version> for the kernel you're running.
+   Epiphan provides a list of pre-compiled drivers at http://epiphan.com
+
+2) Configure the driver:
+    `$ sudo cp vga2usb.conf /etc/modprobe.d/; depmod -a`
 
 For support, questions, suggestions or any other inquiries, visit:
-    http://wiki.github.com/fosslc/freeseer/
-  
-==========================================================================
+http://wiki.github.com/fosslc/freeseer/
+
 
 Installation for end-users
 --------------------------
@@ -53,55 +52,57 @@ Note that code in the experimental branch is not guaranteed to be stable.
 
 Installation for developers
 ---------------------------
-1. Install dependencies
+### 1. Install dependencies
  + Make
  + Git
  + Python 2.7
  + sqlite3
  + PyQT development tools
 
-### Ubuntu Linux:
+    ### Ubuntu Linux:
 
-    $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev \
-    python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
-    $ sudo easy_install yapsy`
+        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev \
+        python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
+        $ sudo easy_install yapsy`
 
-### Fedora Linux:
+    ### Fedora Linux:
 
-    $ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools
+        $ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools
 
-### Windows:
-Install
-    - python-2.7.2
-    - GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
-    - GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 
-    - PyQt-Py2.7-x86-gpl-4.8.5-1
-    - pygtk-all-in-one-2.24.0.win32-py2.7 
-    - feedparser-5.0.1 
-    - setuptools-0.6c11.win32-py2.7
-    - yapsy
+    ### Windows:
+    Install
 
-To install Yapsy, run:
+    + python-2.7.2
+    + GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
+    + GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 
+    + PyQt-Py2.7-x86-gpl-4.8.5-1
+    + pygtk-all-in-one-2.24.0.win32-py2.7 
+    + feedparser-5.0.1 
+    + setuptools-0.6c11.win32-py2.7
+    + yapsy
+
+    To install Yapsy, run:
     
-    C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
+        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
     
-NOTES:
-- Windows 32-bit packages are recommended
-  (pygtk-all-in-one package does not have a 64-bit installer yet)
-- Python needs to be version 2.7.\*
+    
+    + Windows 32-bit packages are recommended
+    (pygtk-all-in-one package does not have a 64-bit installer yet)
+    + Python needs to be version 2.7.\*
 
-On Windows, add the following paths to your PATH variable:
-    C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+    On Windows, add the following paths to your PATH variable:
+    
+        C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
           
-2. Download
+### 2. Download
 Get the latest source code from https://github.com/fosslc/freeseer
 
-3. Build
+### 3. Build
 
     $ cd freeseer
     $ make
 
-4. Run
+### 4. Run
 
 Once you have the prerequisite components you can run Freeseer using the following commands:
 
