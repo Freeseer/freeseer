@@ -107,7 +107,9 @@ following commands:
         "./freeseer-config"         This is the Configuration tool
         "./freeseer-talkeditor"     This is the Talk List editor
 
-If you would like to create packages, read PACKAGE.txt for instructions.
+Packaging
+---------
+See [PACKAGE.txt](#PACKAGE.txt) for instructions.
 
 -------------------------------------------------------------------------
 
