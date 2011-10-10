@@ -36,6 +36,9 @@ from freeseer.framework.plugin import IVideoInput
 
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop-Linux Source"
+    input_type = "video/x-raw-rgb"
+    framerate = 10
+    resolution = "NOSCALE"
     
     def get_videoinput_bin(self):
         """
@@ -46,21 +49,29 @@ class DesktopLinuxSrc(IVideoInput):
         videosrc = gst.element_factory_make("ximagesrc", "videosrc")
         bin.add(videosrc)
         
+        
+        # Video Rate
         videorate = gst.element_factory_make("videorate", "videorate")
         bin.add(videorate)
         videorate_cap = gst.element_factory_make("capsfilter",
                                                     "video_rate_cap")
         videorate_cap.set_property("caps",
-                        gst.caps_from_string("video/x-raw-rgb, framerate=30/1"))
+                        gst.caps_from_string("%s, framerate=%d/1" % (self.input_type, self.framerate)))
         bin.add(videorate_cap)
+        # --- End Video Rate
         
+        
+        # Video Scaler (Resolution)
         videoscale = gst.element_factory_make("videoscale", "videoscale")
         bin.add(videoscale)
         videoscale_cap = gst.element_factory_make("capsfilter",
                                                     "videoscale_cap")
-        videoscale_cap.set_property('caps',
-                gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
+        if self.resolution != "NOSCALE":
+            videoscale_cap.set_property('caps',
+                                        gst.caps_from_string('%s, width=640, height=480' % (self.input_type)))
         bin.add(videoscale_cap)
+        # --- End Video Scaler
+        
         
         # Setup ghost pad
         pad = videoscale_cap.get_pad("src")
@@ -73,6 +84,9 @@ class DesktopLinuxSrc(IVideoInput):
     
     def load_config(self, plugman):
         self.plugman = plugman
+        self.input_type = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Input Type")
+        self.framerate = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Framerate")
+        self.resolution = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Resolution")
         
     def get_widget(self):
         if self.widget is None:
@@ -92,13 +106,18 @@ class DesktopLinuxSrc(IVideoInput):
             self.framerateLayout = QtGui.QHBoxLayout()
             self.framerateSlider = QtGui.QSlider()
             self.framerateSlider.setOrientation(QtCore.Qt.Horizontal)
+            self.framerateSlider.setMinimum(0)
+            self.framerateSlider.setMaximum(60)
             self.framerateSpinBox = QtGui.QSpinBox()
+            self.framerateSpinBox.setMinimum(0)
+            self.framerateSpinBox.setMaximum(60)
             self.framerateLayout.addWidget(self.framerateSlider)
             self.framerateLayout.addWidget(self.framerateSpinBox)
             layout.addRow(self.framerateLabel, self.framerateLayout)
             
             self.videoscaleLabel = QtGui.QLabel("Video Scale")
             self.videoscaleComboBox = QtGui.QComboBox()
+            self.videoscaleComboBox.addItem("NOSCALE")
             self.videoscaleComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
             layout.addRow(self.videoscaleLabel, self.videoscaleComboBox)
             
@@ -106,6 +125,18 @@ class DesktopLinuxSrc(IVideoInput):
             self.widget.connect(self.framerateSlider,
                                 QtCore.SIGNAL("valueChanged(int)"),
                                 self.framerateSpinBox.setValue)
+            self.widget.connect(self.framerateSpinBox,
+                                QtCore.SIGNAL("valueChanged(int)"),
+                                self.framerateSlider.setValue)
+            self.widget.connect(self.videocolourComboBox,
+                                QtCore.SIGNAL("currentIndexChanged(const QString&)"),
+                                self.set_videocolour)
+            self.widget.connect(self.framerateSlider,
+                                QtCore.SIGNAL("valueChanged(int)"),
+                                self.set_framerate)
+            self.widget.connect(self.framerateSpinBox,
+                                QtCore.SIGNAL("valueChanged(int)"),
+                                self.set_framerate)
             
         return self.widget
 
@@ -113,6 +144,23 @@ class DesktopLinuxSrc(IVideoInput):
         self.plugman = plugman
         
         try:
-            pass
+            self.input_type = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Input Type")
+            self.framerate = int(self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Framerate"))
+            self.resolution = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Resolution")
         except ConfigParser.NoSectionError:
-            pass
+            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Input Type", self.input_type)
+            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Framerate", self.framerate)
+            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Resolution", self.resolution)
+        
+        vcolour_index = self.videocolourComboBox.findText(self.input_type)
+        self.videocolourComboBox.setCurrentIndex(vcolour_index)
+        
+        self.framerateSlider.setValue(self.framerate)
+        
+    def set_videocolour(self, input_type):
+        self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Input Type", input_type)
+        self.plugman.save()
+        
+    def set_framerate(self, framerate):
+        self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Framerate", framerate)
+        self.plugman.save()
