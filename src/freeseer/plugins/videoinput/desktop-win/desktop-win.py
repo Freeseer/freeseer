@@ -4,7 +4,7 @@ import gst
 
 from freeseer.framework.plugin import IVideoInput
 
-class USBSrc(IVideoInput):
+class DesktopWinSrc(IVideoInput):
     name = "Desktop-Windows Source"
     
     def get_videoinput_bin(self):
