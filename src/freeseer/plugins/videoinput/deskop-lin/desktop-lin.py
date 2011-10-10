@@ -78,6 +78,35 @@ class DesktopLinuxSrc(IVideoInput):
         if self.widget is None:
             self.widget = QtGui.QWidget()
             
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            
+            self.videocolourLabel = QtGui.QLabel(self.widget.tr("Colour Format"))
+            self.videocolourComboBox = QtGui.QComboBox()
+            self.videocolourComboBox.addItem("video/x-raw-rgb")
+            self.videocolourComboBox.addItem("video/x-raw-yuv")
+            self.videocolourComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+            layout.addRow(self.videocolourLabel, self.videocolourComboBox)
+            
+            self.framerateLabel = QtGui.QLabel("Framerate")
+            self.framerateLayout = QtGui.QHBoxLayout()
+            self.framerateSlider = QtGui.QSlider()
+            self.framerateSlider.setOrientation(QtCore.Qt.Horizontal)
+            self.framerateSpinBox = QtGui.QSpinBox()
+            self.framerateLayout.addWidget(self.framerateSlider)
+            self.framerateLayout.addWidget(self.framerateSpinBox)
+            layout.addRow(self.framerateLabel, self.framerateLayout)
+            
+            self.videoscaleLabel = QtGui.QLabel("Video Scale")
+            self.videoscaleComboBox = QtGui.QComboBox()
+            self.videoscaleComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+            layout.addRow(self.videoscaleLabel, self.videoscaleComboBox)
+            
+            # Connections
+            self.widget.connect(self.framerateSlider,
+                                QtCore.SIGNAL("valueChanged(int)"),
+                                self.framerateSpinBox.setValue)
+            
         return self.widget
 
     def widget_load_config(self, plugman):
