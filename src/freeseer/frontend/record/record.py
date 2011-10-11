@@ -126,6 +126,17 @@ class MainApp(QtGui.QMainWindow):
         self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
+        self.actionOpenVideoFolder = QtGui.QAction(self)
+        self.actionOpenVideoFolder.setText(QtGui.QApplication.translate("FreeseerMainWindow", 
+                                                                        "Open Video Directory", 
+                                                                        None, 
+                                                                        QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenVideoFolder.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", 
+                                                                            "Ctrl+O", 
+                                                                            None, 
+                                                                            QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
+        
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
@@ -136,6 +147,7 @@ class MainApp(QtGui.QMainWindow):
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         
         # Actions
+        self.menuFile.addAction(self.actionOpenVideoFolder)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
         self.menuOptions.addAction(self.menuLanguage.menuAction())
@@ -165,6 +177,7 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
         # Main Window Connections
+        self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
@@ -379,6 +392,12 @@ class MainApp(QtGui.QMainWindow):
 
     def audio_feedback(self, value):
         self.mainWidget.audioSlider.setValue(value)
+        
+    def open_video_directory(self):
+        if sys.platform.startswith("linux"):
+            os.system("xdg-open %s" % self.core.config.videodir)
+        else:
+            logging.INFO("Error: This command is not supported on the current OS.")
 
     def closeEvent(self, event):
         logging.info('Exiting freeseer...')
