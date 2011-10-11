@@ -113,21 +113,21 @@ class MainApp(QtGui.QMainWindow):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
         self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Options", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuOptions.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&Options", None, QtGui.QApplication.UnicodeUTF8))
         self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
         self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Language", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuLanguage.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&Language", None, QtGui.QApplication.UnicodeUTF8))
         self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
         self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&Help", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
         self.actionOpenVideoFolder = QtGui.QAction(self)
         self.actionOpenVideoFolder.setText(QtGui.QApplication.translate("FreeseerMainWindow", 
-                                                                        "Open Video Directory", 
+                                                                        "&Open Video Directory", 
                                                                         None, 
                                                                         QtGui.QApplication.UnicodeUTF8))
         self.actionOpenVideoFolder.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", 
@@ -137,12 +137,12 @@ class MainApp(QtGui.QMainWindow):
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         
         self.actionExit = QtGui.QAction(self)
-        self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "&Quit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         
         self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setText(QtGui.QApplication.translate("FreeseerMainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAbout.setText(QtGui.QApplication.translate("FreeseerMainWindow", "&About", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         
         # Actions
