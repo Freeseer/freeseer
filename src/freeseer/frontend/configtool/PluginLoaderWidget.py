@@ -43,6 +43,7 @@ class PluginLoaderWidget(QtGui.QWidget):
         self.setLayout(self.mainLayout)
         
         self.listWidget = QtGui.QListWidget()
+        self.listWidget.setAlternatingRowColors(True)
         self.mainLayout.addWidget(self.listWidget)
         
     def getListWidgetPlugin(self, plugin, plugin_category, plugman):
