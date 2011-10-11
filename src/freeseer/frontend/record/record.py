@@ -24,6 +24,7 @@
 
 import logging
 from os import listdir, name
+import sys
 
 from PyQt4 import QtGui, QtCore, QtSql
 
