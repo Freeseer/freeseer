@@ -171,7 +171,9 @@ class MainApp(QtGui.QMainWindow):
 
         # main tab connections
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
+        self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
+        self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
@@ -256,7 +258,6 @@ class MainApp(QtGui.QMainWindow):
         # Load Talks as a SQL Data Model
         #self.load_talks_db()
         self.load_event_list()
-        self.load_date_list()
 
     def current_presentation(self):
         '''
@@ -306,10 +307,6 @@ class MainApp(QtGui.QMainWindow):
     ### Talk Related
     ###
     
-    def load_date_list(self):
-        model = self.core.db.get_dates_model()
-        self.mainWidget.dateComboBox.setModel(model)
-    
     def load_event_list(self):
         model = self.core.db.get_events_model()
         self.mainWidget.eventComboBox.setModel(model)
@@ -319,6 +316,12 @@ class MainApp(QtGui.QMainWindow):
 
         model = self.core.db.get_rooms_model(self.current_event)
         self.mainWidget.roomComboBox.setModel(model)
+        
+    def load_dates_from_event_room(self, change):
+        event = str(self.mainWidget.eventComboBox.currentText())
+        room = str(self.mainWidget.roomComboBox.currentText())
+        model = self.core.db.get_dates_from_event_room_model(event, room)
+        self.mainWidget.dateComboBox.setModel(model)
         
     def load_talks_from_room(self, room):
         self.current_room = room
