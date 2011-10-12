@@ -46,7 +46,8 @@ class Logger():
         # If logger.conf does not exist then create it with some defaults.
         if not os.path.isfile(self.logconf):
             self.writeConfig()
-        try:    
+            
+        try:
             logging.config.fileConfig(self.logconf)
             logging.info('Logger initialized.')
         except socket.error:
@@ -81,7 +82,7 @@ class Logger():
         if sys.platform.startswith('linux'):
             config.set('handler_syslogHandler', 'class', 'handlers.SysLogHandler')
             config.set('handler_syslogHandler', 'formatter', 'nix')
-            config.set('handler_syslogHandler', 'args', "('"+self.getLogPath()+"', handlers.SysLogHandler.LOG_USER)")
+            config.set('handler_syslogHandler', 'args', "("+self.getLogPath()+", handlers.SysLogHandler.LOG_USER)")
         elif sys.platform == 'win32' or sys.platform == 'cygwin':
             config.set('handler_syslogHandler', 'class', 'handlers.NTEventLogHandler')
             config.set('handler_syslogHandler', 'formatter', 'nix')
@@ -104,6 +105,7 @@ class Logger():
         # Save default settings to new config file
         with open(self.logconf, 'w') as configfile:
             config.write(configfile)
+
     def getLogPath(self):
         logPath = ['/dev/log', '/var/run/syslog']
         for x in logPath:
