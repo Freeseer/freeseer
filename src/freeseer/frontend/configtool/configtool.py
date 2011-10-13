@@ -24,13 +24,13 @@
 
 import ConfigParser
 import logging
-from os import listdir;
-from sys import *
+import os
+import sys
 
 from PyQt4 import QtGui, QtCore
 
 from freeseer import project_info
-from freeseer.framework.core import *
+from freeseer.framework.core import FreeseerCore
 
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
