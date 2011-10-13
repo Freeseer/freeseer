@@ -23,10 +23,11 @@
 # http://wiki.github.com/fosslc/freeseer/
 
 import logging
-from os import listdir, name
+import os
 import sys
+import time
 
-from PyQt4 import QtGui, QtCore, QtSql
+from PyQt4 import QtGui, QtCore
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -34,9 +35,7 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-from freeseer.framework.core import *
-from freeseer.framework.presentation import *
-from freeseer.framework.QtDBConnector import *
+from freeseer.framework.core import FreeseerCore
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 
 from RecordingWidget import RecordingWidget
@@ -59,7 +58,7 @@ class SystemLanguages:
         that can be loaded into the translator
         ''' 
         try:
-            files = listdir(LANGUAGE_DIR)
+            files = os.listdir(LANGUAGE_DIR)
             files = map(lambda x: x.split('.') , files)
             qm_files = filter(lambda x:x[len(x)-1] == 'qm',files)
             language_prefix = map(lambda x: x[0].split("tr_")[1],qm_files)
