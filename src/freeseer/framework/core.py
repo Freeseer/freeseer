@@ -22,12 +22,9 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-
-import codecs
 import datetime
-import time
 import logging
-import logging.config
+import os
 import unicodedata
 
 from freeseer import project_info
@@ -35,9 +32,9 @@ import gstreamer
 
 from config import Config
 from logger import Logger
-from QtDBConnector import *
-from rss_parser import *
-from presentation import *
+from QtDBConnector import QtDBConnector
+from rss_parser import FeedParser
+from presentation import Presentation
 from plugin import PluginManager
 
 __version__= project_info.VERSION
