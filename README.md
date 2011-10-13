@@ -11,7 +11,7 @@ It can easily handle very large conferences with many talks using varied hardwar
 It is one of a few such tools that can also record [VGA][vga-wiki] output or video
 from external sources such as [FireWire][firewire-wiki], [USB][usb-wiki], [S-Video][svideo-wiki], or [RCA][rca-wiki].
 
-Freeseer is written in Python. It uses Qt4 for its GUI and Gstreamer for video/audio processing.
+Freeseer is written in Python, uses Qt4 for its GUI, and Gstreamer for video/audio processing.
 
 Freeseer is based on open standards and supports royalty free audio and video codecs.
 
