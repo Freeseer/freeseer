@@ -1,57 +1,33 @@
-Freeseer 
+Freeseer ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
 =========
 #### by the Free and Open Source Software Learning Centre (FOSSLC)
 
+Freeseer is a free and open source screencasting application.
+Its primary purpose is capturing or streaming video at conferences.
 
-![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
-
-The Freeseer project is a powerful software suite for capturing or streaming video. 
-
-It enables you to capture great presentations, demos, training material, and other videos.
-It handles desktop screen-casting with ease.
+It's been successfully used to capture presentations, demos, training material, and other videos.
+It can easily handle very large conferences with many talks using varied hardware and operating systems.
 
 It is one of a few such tools that can also record [VGA][vga-wiki] output or video
 from external sources such as [FireWire][firewire-wiki], [USB][usb-wiki], [S-Video][svideo-wiki], or [RCA][rca-wiki].
 
-It is particularly good at handling very large conferences with hundreds 
-of talks and speakers using varied hardware and operating systems.
-
-Freeseer itself can run on commodity hardware such as a laptop or desktop.
-It is supported on Windows, and Linux. MacOS will be supported very soon.
-
 Freeseer is written in Python. It uses Qt4 for its GUI and Gstreamer for video/audio processing.
 
-Freeseer supports free (royalty free) audio and video codecs.
+Freeseer is based on open standards and supports royalty free audio and video codecs.
 
---------------------------------------------------------------------------
-
-Read more about hardware capture options here: 
-    http://wiki.github.com/fosslc/freeseer/capture-hardware
-
-If you wish to capture vga input using epiphan's vga2usb device:
-
-1) Copy the vga2usb.ko driver to /lib/modules/<kernel version> for the kernel you're running.
-   Epiphan provides a list of pre-compiled drivers at http://epiphan.com
-
-2) Configure the driver:
-    `$ sudo cp vga2usb.conf /etc/modprobe.d/; depmod -a`
-
-For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+Curious why Freeseer exists? [Read our history!](http://fosslc.org/drupal/node/596)
 
 
-Installation for end-users
---------------------------
-Visit our download section for the latest installers:
+Users
+-----
+1. Download and install: https://github.com/fosslc/freeseer/downloads
+2. Quick Start Guide (coming soon)
 
-https://github.com/fosslc/freeseer/downloads
-
-For the cutting edge version, you have to build from the experimental source.
-Note that code in the experimental branch is not guaranteed to be stable.
+**Note:** For the very latest but unstable version, you have to build from the experimental source (see developers section).
 
 
-Installation for developers
----------------------------
+Developers
+----------
 ### 1. Install dependencies
  + Make
  + Git
@@ -61,9 +37,8 @@ Installation for developers
 
     ### Ubuntu Linux:
 
-        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev \
-        python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
-        $ sudo easy_install yapsy`
+        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
+        $ sudo easy_install yapsy
 
     ### Fedora Linux:
 
@@ -93,6 +68,9 @@ Installation for developers
     On Windows, add the following paths to your PATH variable:
     
         C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+
+    ### Mac OS X:
+    Coming soon!
           
 ### 2. Download
 Get the latest source code from https://github.com/fosslc/freeseer
