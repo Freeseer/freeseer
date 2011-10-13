@@ -160,7 +160,6 @@ class MainApp(QtGui.QMainWindow):
         #
         self.systray = QtGui.QSystemTrayIcon(icon)
         self.systray.show()
-        self.systray.menu
         self.systray.menu = QtGui.QMenu()
         self.systray.setContextMenu(self.systray.menu)
         
@@ -196,9 +195,6 @@ class MainApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
                 
         self.load_settings()
-
-        #if (self.core.config.audiofb == True):
-        #    self.ui.audioFeedbackCheckbox.toggle()
 
         # setup spacebar key
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
@@ -258,13 +254,8 @@ class MainApp(QtGui.QMainWindow):
         
     def load_settings(self): 
         logging.info('Loading settings...')
-
-        #load the config file
-        self.core.config.readConfig()
-        
         
         # Load Talks as a SQL Data Model
-        #self.load_talks_db()
         self.load_event_list()
 
     def current_presentation(self):
