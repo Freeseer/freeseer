@@ -153,21 +153,29 @@ class MainApp(QtGui.QMainWindow):
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
+        # --- End Menubar
 
-        # setup systray
-        logo = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
-        sysIcon = QtGui.QIcon(logo)
-        self.systray = QtGui.QSystemTrayIcon(sysIcon)
+        #
+        # Systray Setup
+        #
+        self.systray = QtGui.QSystemTrayIcon(icon)
         self.systray.show()
+        self.systray.menu
         self.systray.menu = QtGui.QMenu()
-        showWinCM = self.systray.menu.addAction("Hide/Show Main Window")
-        recordCM = self.systray.menu.addAction("Record")
-        stopCM = self.systray.menu.addAction("Stop")
         self.systray.setContextMenu(self.systray.menu)
-        self.connect(showWinCM, QtCore.SIGNAL('triggered()'), self.toggle_window_visibility)
-        self.connect(recordCM, QtCore.SIGNAL('triggered()'), self.recContextM)
-        self.connect(stopCM, QtCore.SIGNAL('triggered()'), self.stopContextM)
+        
+        self.visibilityAction = QtGui.QAction(self)
+        self.visibilityAction.setText(self.tr("Hide Main Window"))
+        self.recordAction = QtGui.QAction(self)
+        self.recordAction.setText(self.tr("Record"))
+        
+        self.systray.menu.addAction(self.visibilityAction)
+        self.systray.menu.addAction(self.recordAction)
+        
+        self.connect(self.visibilityAction, QtCore.SIGNAL('triggered()'), self.toggle_window_visibility)
+        self.connect(self.recordAction, QtCore.SIGNAL('triggered()'), self.toggle_record_button)
         self.connect(self.systray, QtCore.SIGNAL('activated(QSystemTrayIcon::ActivationReason)'), self._icon_activated)
+        # --- End Systray Setup
 
         # main tab connections
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
@@ -279,6 +287,7 @@ class MainApp(QtGui.QMainWindow):
 
             self.core.record(self.current_presentation())    
             self.mainWidget.recordPushButton.setText(self.tr('Stop'))
+            self.recordAction.setText(self.tr("Stop"))
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
@@ -297,6 +306,7 @@ class MainApp(QtGui.QMainWindow):
             self.systray.setIcon(sysIcon)
             self.core.stop()
             self.mainWidget.recordPushButton.setText(self.tr('Record'))
+            self.recordAction.setText(self.tr("Record"))
             self.mainWidget.audioSlider.setValue(0)
             self.statusBar().showMessage('ready')
             # for stop recording, we'll keep whatever window state
@@ -375,18 +385,19 @@ class MainApp(QtGui.QMainWindow):
         
         
     def toggle_window_visibility(self):
+        """
+        This function is used to toggle the visibility of the Recording
+        Main Window.
+        """
         if self.isHidden():
             self.show_window()
+            self.visibilityAction.setText(self.tr("Hide Main Window"))
         else:
             self.hide_window()
+            self.visibilityAction.setText(self.tr("Show Main Window"))
 
-    def recContextM(self):
-        if not self.mainWidget.recordPushButton.isChecked():
-            self.mainWidget.recordPushButton.toggle()
-
-    def stopContextM(self):
-        if self.mainWidget.recordPushButton.isChecked():
-            self.mainWidget.recordPushButton.toggle()
+    def toggle_record_button(self):
+        self.mainWidget.recordPushButton.toggle()
 
     def audio_feedback(self, value):
         self.mainWidget.audioSlider.setValue(value)
