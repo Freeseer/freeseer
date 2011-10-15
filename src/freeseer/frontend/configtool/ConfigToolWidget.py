@@ -45,10 +45,7 @@ class ConfigToolWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        self.setWindowTitle(QtGui.QApplication.translate("ConfigTool", 
-                                                         "Freeseer ConfigTool", 
-                                                         None, 
-                                                         QtGui.QApplication.UnicodeUTF8))
+        
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
@@ -66,30 +63,30 @@ class ConfigToolWidget(QtGui.QWidget):
         # General
         self.optionsTreeWidget = QtGui.QTreeWidget()
         self.optionsTreeWidget.setHeaderHidden(True)
-        self.optionsTreeWidget.headerItem().setText(0, QtGui.QApplication.translate("ConfigTool", "1", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.headerItem().setText(0, "1")
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(0).setText(0, QtGui.QApplication.translate("ConfigTool", "General", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(0).setText(0, "General")
         
         # Plugins
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(1).setText(0, QtGui.QApplication.translate("ConfigTool", "Plugins", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(1).setText(0, "Plugins")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(0).setText(0, QtGui.QApplication.translate("ConfigTool", "AudioInput", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(1).child(0).setText(0, "AudioInput")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(1).setText(0, QtGui.QApplication.translate("ConfigTool", "AudioMixer", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(1).child(1).setText(0, "AudioMixer")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(2).setText(0, QtGui.QApplication.translate("ConfigTool", "VideoInput", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(1).child(2).setText(0, "VideoInput")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(3).setText(0, QtGui.QApplication.translate("ConfigTool", "VideoMixer", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(1).child(3).setText(0, "VideoMixer")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(4).setText(0, QtGui.QApplication.translate("ConfigTool", "Output", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(1).child(4).setText(0, "Output")
         
         # Logger
         item_2 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(2).setText(0, QtGui.QApplication.translate("ConfigTool", "Logger", None, QtGui.QApplication.UnicodeUTF8))
+        self.optionsTreeWidget.topLevelItem(2).setText(0, "Logger")
         
         
-        self.closePushButton = QtGui.QPushButton(self.tr("Close"))
+        self.closePushButton = QtGui.QPushButton("Close")
         self.leftPanelLayout.addWidget(self.optionsTreeWidget)
         self.leftPanelLayout.addWidget(self.closePushButton)
         

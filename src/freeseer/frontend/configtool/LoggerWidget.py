@@ -44,28 +44,26 @@ class LoggerWidget(QtGui.QWidget):
         
         
         # Console Logger
-        self.consoleLoggerGroupBox = QtGui.QGroupBox()
-        self.consoleLoggerGroupBox.setTitle(self.tr("Console Logger"))
+        self.consoleLoggerGroupBox = QtGui.QGroupBox("Console Logger")
         self.consoleLoggerGroupBox.setCheckable(True)
         self.consoleLoggerFormLayout = QtGui.QFormLayout()
         self.consoleLoggerGroupBox.setLayout(self.consoleLoggerFormLayout)
         self.mainLayout.addWidget(self.consoleLoggerGroupBox)
         
-        self.consoleLoggerLevelLabel = QtGui.QLabel(self.tr("Log Level"))
+        self.consoleLoggerLevelLabel = QtGui.QLabel("Log Level")
         self.consoleLoggerLevelComboBox = QtGui.QComboBox()
         self.consoleLoggerFormLayout.addRow(self.consoleLoggerLevelLabel, 
                                             self.consoleLoggerLevelComboBox)
         # --- End Console Logger
         
         # Syslog Logger
-        self.syslogLoggerGroupBox = QtGui.QGroupBox()
-        self.syslogLoggerGroupBox.setTitle(self.tr("Syslog Logger"))
+        self.syslogLoggerGroupBox = QtGui.QGroupBox("Syslog Logger")
         self.syslogLoggerGroupBox.setCheckable(True)
         self.syslogLoggerFormLayout = QtGui.QFormLayout()
         self.syslogLoggerGroupBox.setLayout(self.syslogLoggerFormLayout)
         self.mainLayout.addWidget(self.syslogLoggerGroupBox)
         
-        self.syslogLoggerLevelLabel = QtGui.QLabel(self.tr("Log Level"))
+        self.syslogLoggerLevelLabel = QtGui.QLabel("Log Level")
         self.syslogLoggerLevelComboBox = QtGui.QComboBox()
         self.syslogLoggerFormLayout.addRow(self.syslogLoggerLevelLabel, 
                                             self.syslogLoggerLevelComboBox)
