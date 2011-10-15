@@ -78,7 +78,7 @@ class MainApp(QtGui.QMainWindow):
                                                          None, 
                                                          QtGui.QApplication.UnicodeUTF8))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.resize(400, 400)
         
@@ -271,7 +271,7 @@ class MainApp(QtGui.QMainWindow):
 
 
         if (state): # Start Recording.
-            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo_rec.png")
+            logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
 
@@ -291,7 +291,7 @@ class MainApp(QtGui.QMainWindow):
             self.core.config.writeConfig()
             
         else: # Stop Recording.
-            logo_rec = QtGui.QPixmap(":/freeseer/freeseer_logo.png")
+            logo_rec = QtGui.QPixmap(":/freeseer/logo.png")
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.core.stop()
