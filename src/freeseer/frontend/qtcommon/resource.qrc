@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="multimedia">
+    <file>images/record_red_button.png</file>
+    <file>images/stop_red_button.png</file>
+    <file>images/headphones.png</file>
+  </qresource>
+  <qresource prefix="rss_logo">
+    <file>images/rss_logo.png</file>
+  </qresource>
+  <qresource prefix="freeseer">
+    <file>images/freeseer_logo.png</file>
+    <file>images/freeseer_logo_rec.png</file>
+  </qresource>
+</RCC>
