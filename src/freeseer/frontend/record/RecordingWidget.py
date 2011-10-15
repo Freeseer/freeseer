@@ -42,7 +42,7 @@ class RecordingWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
         
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/freeseer/freeseer_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/freeseer/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.resize(400, 400)
         
@@ -52,8 +52,8 @@ class RecordingWidget(QtGui.QWidget):
         self.recordPushButton = QtGui.QPushButton(self.tr("Record"))
         self.recordPushButton.setMinimumSize(QtCore.QSize(0, 40))
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/recordButton/record_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon1.addPixmap(QtGui.QPixmap(":/recordButton/stop_red_button.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon1.addPixmap(QtGui.QPixmap(":/multimedia/record.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/multimedia/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.recordPushButton.setIcon(icon1)
         self.recordPushButton.setCheckable(True)
         self.recordPushButton.setObjectName("recordButton")
