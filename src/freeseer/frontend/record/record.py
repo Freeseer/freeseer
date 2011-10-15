@@ -218,7 +218,17 @@ class MainApp(QtGui.QMainWindow):
         #
         self.visibilityAction.setText(self.hideWindowString)
         self.recordAction.setText(self.recordString)
-        # --- End Systra
+        # --- End Systray
+        
+        #
+        # RecordingWidget
+        #
+        self.mainWidget.recordPushButton.setText(self.recordString)
+        self.mainWidget.eventLabel.setText(self.tr("Event"))
+        self.mainWidget.roomLabel.setText(self.tr("Room"))
+        self.mainWidget.dateLabel.setText(self.tr("Date"))
+        self.mainWidget.talkLabel.setText(self.tr("Talk"))
+        # --- End RecordingWidget
         
     def translateAction(self ,action):
         '''
