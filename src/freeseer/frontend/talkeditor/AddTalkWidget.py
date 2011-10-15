@@ -44,38 +44,38 @@ class AddTalkWidget(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
-        self.addTalkGroupBox = QtGui.QGroupBox(self.tr("Add Talk"))
+        self.addTalkGroupBox = QtGui.QGroupBox("Add Talk")
         self.mainLayout.addWidget(self.addTalkGroupBox)
         
         self.addTalkLayout = QtGui.QFormLayout()
         self.addTalkGroupBox.setLayout(self.addTalkLayout)
         
         # Title
-        self.titleLabel = QtGui.QLabel(self.tr("Title"))
+        self.titleLabel = QtGui.QLabel("Title")
         self.titleLineEdit = QtGui.QLineEdit()
         self.titleLabel.setBuddy(self.titleLineEdit)
         self.addTalkLayout.addRow(self.titleLabel, self.titleLineEdit)
         
         # Presenter
-        self.presenterLabel = QtGui.QLabel(self.tr("Presenter"))
+        self.presenterLabel = QtGui.QLabel("Presenter")
         self.presenterLineEdit = QtGui.QLineEdit()
         self.presenterLabel.setBuddy(self.presenterLineEdit)
         self.addTalkLayout.addRow(self.presenterLabel, self.presenterLineEdit)
         
         # Event
-        self.eventLabel = QtGui.QLabel(self.tr("Event"))
+        self.eventLabel = QtGui.QLabel("Event")
         self.eventLineEdit = QtGui.QLineEdit()
         self.eventLabel.setBuddy(self.eventLineEdit)
         self.addTalkLayout.addRow(self.eventLabel, self.eventLineEdit)
         
         # Room
-        self.roomLabel = QtGui.QLabel(self.tr("Room"))
+        self.roomLabel = QtGui.QLabel("Room")
         self.roomLineEdit = QtGui.QLineEdit()
         self.roomLabel.setBuddy(self.roomLineEdit)
         self.addTalkLayout.addRow(self.roomLabel, self.roomLineEdit)
         
         # Date 
-        self.dateLabel = QtGui.QLabel(self.tr("Date"))
+        self.dateLabel = QtGui.QLabel("Date")
         self.dateEdit = QtGui.QDateEdit()
         self.dateLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.dateLabel, self.dateEdit)
@@ -83,15 +83,15 @@ class AddTalkWidget(QtGui.QWidget):
         self.dateEdit.setCalendarPopup(True)
         
         # Time
-        self.timeLabel = QtGui.QLabel(self.tr("Time"))
+        self.timeLabel = QtGui.QLabel("Time")
         self.timeEdit = QtGui.QTimeEdit()
         self.timeLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.timeLabel, self.timeEdit)
         
         # Buttons
         self.buttonsWidget = QtGui.QHBoxLayout()
-        self.addButton = QtGui.QPushButton(self.tr("Add"))
-        self.cancelButton = QtGui.QPushButton(self.tr("Cancel"))
+        self.addButton = QtGui.QPushButton("Add")
+        self.cancelButton = QtGui.QPushButton("Cancel")
         self.buttonsWidget.addWidget(self.addButton)
         self.buttonsWidget.addWidget(self.cancelButton)
         self.addTalkLayout.addRow(None, self.buttonsWidget)
