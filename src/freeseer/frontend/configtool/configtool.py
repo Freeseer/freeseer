@@ -125,7 +125,56 @@ class ConfigTool(ConfigToolWidget):
         if len(items) > 0:
             item = items[0]
             self.optionsTreeWidget.setCurrentItem(item)
+            
+        self.retranslate()
         
+    ###
+    ### Translation
+    ###
+    
+    def retranslate(self):
+        self.setWindowTitle(self.tr("Freeseer ConfigTool"))
+        
+        #
+        # ConfigToolWidget
+        #
+        self.closePushButton.setText(self.tr("Close"))
+        # --- End ConfigToolWidget
+        
+        #
+        # GeneralWidget
+        #
+        self.generalWidget.AVGroupBox.setTitle(self.tr("Audio / Video Settings"))
+        self.generalWidget.recordAudioCheckbox.setText(self.tr("Record Audio"))
+        self.generalWidget.audioMixerLabel.setText(self.tr("Audio Mixer"))
+        self.generalWidget.audioMixerSetupPushButton.setText(self.tr("Setup"))
+        self.generalWidget.recordVideoCheckbox.setText(self.tr("Record Video"))
+        self.generalWidget.videoMixerLabel.setText(self.tr("Video Mixer"))
+        self.generalWidget.videoMixerSetupPushButton.setText(self.tr("Setup"))
+        self.generalWidget.MiscGroupBox.setTitle(self.tr("Miscellaneous"))
+        self.generalWidget.recordDirLabel.setText(self.tr("Record Directory"))
+        self.generalWidget.autoHideCheckBox.setText(self.tr("Enable Auto-Hide"))
+        # --- End GeneralWidget
+        
+        #
+        # Logger Widget
+        #
+        self.loggerWidget.consoleLoggerGroupBox.setTitle(self.tr("Console Logger"))
+        self.loggerWidget.consoleLoggerLevelLabel.setText(self.tr("Log Level"))
+        self.loggerWidget.syslogLoggerGroupBox.setTitle(self.tr("Syslog Logger"))
+        self.loggerWidget.syslogLoggerLevelLabel.setText(self.tr("Log Level"))
+        # --- End LoggerWidget
+    
+    def translateFile(self,file_ending):
+        load_string = LANGUAGE_DIR+'tr_'+ file_ending #create language file path
+        #loaded = self.uiTranslator.load(load_string)
+        # Temporary place holder until we fix translations for configtool
+        loaded = False
+        if (loaded == True):
+            self.retranslateUi(self)
+        else:
+            logging.info("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English")
+
     ###
     ### General
     ###
@@ -464,15 +513,6 @@ class ConfigTool(ConfigToolWidget):
 #        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
 #        self.show()
 #    
-    def translateFile(self,file_ending):
-        load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
-        #loaded = self.uiTranslator.load(load_string);
-        # Temporary place holder until we fix translations for configtool
-        loaded = False
-        if (loaded == True):
-            self.retranslateUi(self);
-        else:
-            print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
 
     def closeEvent(self, event):
         logging.info('Exiting configtool...')
