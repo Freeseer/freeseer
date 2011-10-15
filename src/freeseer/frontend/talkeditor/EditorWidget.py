@@ -55,7 +55,7 @@ class EditorWidget(QtGui.QWidget):
         self.rssLabel.setBuddy(self.rssLineEdit)
         self.rssPushButton = QtGui.QPushButton(self.tr("Load talks from RSS"))
         rss_icon = QtGui.QIcon()
-        rss_icon.addPixmap(QtGui.QPixmap(":/rss_logo/rss_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        rss_icon.addPixmap(QtGui.QPixmap(":/multimedia/rss.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.rssPushButton.setIcon(rss_icon)
         
         self.rssLayout.addWidget(self.rssLabel)
