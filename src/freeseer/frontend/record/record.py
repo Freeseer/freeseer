@@ -73,10 +73,6 @@ class MainApp(QtGui.QMainWindow):
 
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-        self.setWindowTitle(QtGui.QApplication.translate("FreeseerMainWindow", 
-                                                         "Freeseer - portable presentation recording station", 
-                                                         None, 
-                                                         QtGui.QApplication.UnicodeUTF8))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
@@ -97,11 +93,14 @@ class MainApp(QtGui.QMainWindow):
 
         self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
         
-        #Setup the translator and populate the language menu under options
+        #
+        # Translator
+        #
         self.uiTranslator = QtCore.QTranslator()
         self.langActionGroup = QtGui.QActionGroup(self)
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
         self.setupLanguageMenu()
+        # --- Translator
         
         #
         # Setup Menubar
@@ -112,36 +111,23 @@ class MainApp(QtGui.QMainWindow):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
         self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&Options", None, QtGui.QApplication.UnicodeUTF8))
         self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
         self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&Language", None, QtGui.QApplication.UnicodeUTF8))
         self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
         self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setTitle(QtGui.QApplication.translate("FreeseerMainWindow", "&Help", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
         self.actionOpenVideoFolder = QtGui.QAction(self)
-        self.actionOpenVideoFolder.setText(QtGui.QApplication.translate("FreeseerMainWindow", 
-                                                                        "&Open Video Directory", 
-                                                                        None, 
-                                                                        QtGui.QApplication.UnicodeUTF8))
-        self.actionOpenVideoFolder.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", 
-                                                                            "Ctrl+O", 
-                                                                            None, 
-                                                                            QtGui.QApplication.UnicodeUTF8))
+        self.actionOpenVideoFolder.setShortcut("Ctrl+O")
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         
         self.actionExit = QtGui.QAction(self)
-        self.actionExit.setText(QtGui.QApplication.translate("FreeseerMainWindow", "&Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionExit.setShortcut(QtGui.QApplication.translate("FreeseerMainWindow", "Ctrl+Q", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         
         self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setText(QtGui.QApplication.translate("FreeseerMainWindow", "&About", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         
         # Actions
@@ -163,9 +149,7 @@ class MainApp(QtGui.QMainWindow):
         self.systray.setContextMenu(self.systray.menu)
         
         self.visibilityAction = QtGui.QAction(self)
-        self.visibilityAction.setText(self.tr("Hide Main Window"))
         self.recordAction = QtGui.QAction(self)
-        self.recordAction.setText(self.tr("Record"))
         
         self.systray.menu.addAction(self.visibilityAction)
         self.systray.menu.addAction(self.recordAction)
@@ -198,6 +182,69 @@ class MainApp(QtGui.QMainWindow):
         # setup spacebar key
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
         self.mainWidget.recordPushButton.setFocus()
+        
+        self.retranslate()
+        
+        
+    ###
+    ### Translation Related
+    ###
+    def retranslate(self):
+        self.setWindowTitle(self.tr("Freeseer - portable presentation recording station"))
+        #
+        # Reusable Strings
+        #
+        self.recordString = self.tr("Record")
+        self.stopString = self.tr("Stop")
+        self.hideWindowString = self.tr("Hide Main Window")
+        self.showWindowString = self.tr("Show Main Window")
+        # --- End Reusable Strings
+        
+        #
+        # Menubar
+        #
+        self.menuFile.setTitle(self.tr("&File"))
+        self.menuOptions.setTitle(self.tr("&Options"))
+        self.menuLanguage.setTitle(self.tr("&Language"))
+        self.menuHelp.setTitle(self.tr("&Help"))
+        
+        self.actionOpenVideoFolder.setText(self.tr("&Open Video Directory"))
+        self.actionExit.setText(self.tr("&Quit"))
+        self.actionAbout.setText(self.tr("&About"))
+        # --- End Menubar
+        
+        #
+        # Systray
+        #
+        self.visibilityAction.setText(self.hideWindowString)
+        self.recordAction.setText(self.recordString)
+        # --- End Systra
+        
+    def translateAction(self ,action):
+        '''
+        When a language is selected from the language menu this function is called
+        The language to be changed to is retrieved
+        '''
+        language_prefix = action.data().toString()
+        self.translateFile(language_prefix)
+      
+    def translateFile(self,file_ending):
+        '''
+        Actually performs the translation. This is called by the handler for the language menu
+        Note: If the language file can not be loaded then the default language is English 
+        '''
+        load_string = LANGUAGE_DIR+'tr_'+ file_ending #create language file path
+        
+        loaded = self.uiTranslator.load(load_string)
+
+        if(loaded == True):
+   
+            #self.ui.retranslateUi(self) #Translate both the ui and the about page
+            #self.aboutDialog.translate()
+            pass
+       
+        else:
+            print("Invalid Locale Resorting to Default Language: English")
 
     def setupLanguageMenu(self):
         #Add Languages to the Menu Ensure only one is clicked 
@@ -251,6 +298,9 @@ class MainApp(QtGui.QMainWindow):
         #Set up the event handling for each of the menu items
         self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
         
+    ###
+    ### UI Logic
+    ###    
     def load_settings(self): 
         logging.info('Loading settings...')
         
@@ -276,8 +326,8 @@ class MainApp(QtGui.QMainWindow):
             self.systray.setIcon(sysIcon2)
 
             self.core.record(self.current_presentation())    
-            self.mainWidget.recordPushButton.setText(self.tr('Stop'))
-            self.recordAction.setText(self.tr("Stop"))
+            self.mainWidget.recordPushButton.setText(self.stopString)
+            self.recordAction.setText(self.stopString)
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
@@ -295,8 +345,8 @@ class MainApp(QtGui.QMainWindow):
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.core.stop()
-            self.mainWidget.recordPushButton.setText(self.tr('Record'))
-            self.recordAction.setText(self.tr("Record"))
+            self.mainWidget.recordPushButton.setText(self.recordString)
+            self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
             self.statusBar().showMessage('ready')
             # for stop recording, we'll keep whatever window state
@@ -381,10 +431,10 @@ class MainApp(QtGui.QMainWindow):
         """
         if self.isHidden():
             self.show_window()
-            self.visibilityAction.setText(self.tr("Hide Main Window"))
+            self.visibilityAction.setText(self.hideWindowString)
         else:
             self.hide_window()
-            self.visibilityAction.setText(self.tr("Show Main Window"))
+            self.visibilityAction.setText(self.showWindowString)
 
     def toggle_record_button(self):
         self.mainWidget.recordPushButton.toggle()
@@ -405,32 +455,6 @@ class MainApp(QtGui.QMainWindow):
     def keyPressEvent(self, event):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
-
-    def translateAction(self ,action):
-        '''
-        When a language is selected from the language menu this function is called
-        The language to be changed to is retrieved
-        '''
-        language_prefix = action.data().toString()
-        self.translateFile(language_prefix)
-      
-    def translateFile(self,file_ending):
-        '''
-        Actually performs the translation. This is called by the handler for the language menu
-        Note: If the language file can not be loaded then the default language is English 
-        '''
-        load_string = LANGUAGE_DIR+'tr_'+ file_ending #create language file path
-        
-        loaded = self.uiTranslator.load(load_string)
-
-        if(loaded == True):
-   
-            #self.ui.retranslateUi(self) #Translate both the ui and the about page
-            #self.aboutDialog.translate()
-            pass
-       
-        else:
-            print("Invalid Locale Resorting to Default Language: English")
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
