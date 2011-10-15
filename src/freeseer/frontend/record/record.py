@@ -231,6 +231,8 @@ class MainApp(QtGui.QMainWindow):
         self.mainWidget.talkLabel.setText(self.tr("Talk"))
         # --- End RecordingWidget
         
+        self.aboutDialog.retranslate()
+        
     def translateAction(self ,action):
         '''
         When a language is selected from the language menu this function is called

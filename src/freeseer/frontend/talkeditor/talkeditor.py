@@ -215,6 +215,8 @@ class TalkEditorMainApp(QtGui.QMainWindow):
         self.editorWidget.clearButton.setText(self.tr("Clear"))
         self.editorWidget.closeButton.setText(self.tr("Close"))
         # --- End EditorWidget
+        
+        self.aboutDialog.retranslate()
     
     def translateAction(self , action):
         '''
