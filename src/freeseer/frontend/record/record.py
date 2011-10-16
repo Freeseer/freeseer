@@ -74,6 +74,7 @@ class RecordApp(QtGui.QMainWindow):
         # Translator
         #
         self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
         self.langActionGroup = QtGui.QActionGroup(self)
         self.langActionGroup.setExclusive(True)
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
@@ -171,27 +172,27 @@ class RecordApp(QtGui.QMainWindow):
     ### Translation Related
     ###
     def retranslate(self):
-        self.setWindowTitle(self.tr("Freeseer - portable presentation recording station"))
+        self.setWindowTitle(self.uiTranslator.translate("RecordApp", "Freeseer - portable presentation recording station"))
         #
         # Reusable Strings
         #
-        self.recordString = self.tr("Record")
-        self.stopString = self.tr("Stop")
-        self.hideWindowString = self.tr("Hide Main Window")
-        self.showWindowString = self.tr("Show Main Window")
+        self.recordString = self.uiTranslator.translate("RecordApp", "Record")
+        self.stopString = self.uiTranslator.translate("RecordApp", "Stop")
+        self.hideWindowString = self.uiTranslator.translate("RecordApp", "Hide Main Window")
+        self.showWindowString = self.uiTranslator.translate("RecordApp", "Show Main Window")
         # --- End Reusable Strings
         
         #
         # Menubar
         #
-        self.menuFile.setTitle(self.tr("&File"))
-        self.menuOptions.setTitle(self.tr("&Options"))
-        self.menuLanguage.setTitle(self.tr("&Language"))
-        self.menuHelp.setTitle(self.tr("&Help"))
+        self.menuFile.setTitle(self.uiTranslator.translate("RecordApp", "&File"))
+        self.menuOptions.setTitle(self.uiTranslator.translate("RecordApp", "&Options"))
+        self.menuLanguage.setTitle(self.uiTranslator.translate("RecordApp", "&Language"))
+        self.menuHelp.setTitle(self.uiTranslator.translate("RecordApp", "&Help"))
         
-        self.actionOpenVideoFolder.setText(self.tr("&Open Video Directory"))
-        self.actionExit.setText(self.tr("&Quit"))
-        self.actionAbout.setText(self.tr("&About"))
+        self.actionOpenVideoFolder.setText(self.uiTranslator.translate("RecordApp", "&Open Video Directory"))
+        self.actionExit.setText(self.uiTranslator.translate("RecordApp", "&Quit"))
+        self.actionAbout.setText(self.uiTranslator.translate("RecordApp", "&About"))
         # --- End Menubar
         
         #
@@ -205,10 +206,10 @@ class RecordApp(QtGui.QMainWindow):
         # RecordingWidget
         #
         self.mainWidget.recordPushButton.setText(self.recordString)
-        self.mainWidget.eventLabel.setText(self.tr("Event"))
-        self.mainWidget.roomLabel.setText(self.tr("Room"))
-        self.mainWidget.dateLabel.setText(self.tr("Date"))
-        self.mainWidget.talkLabel.setText(self.tr("Talk"))
+        self.mainWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event"))
+        self.mainWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room"))
+        self.mainWidget.dateLabel.setText(self.uiTranslator.translate("RecordApp", "Date"))
+        self.mainWidget.talkLabel.setText(self.uiTranslator.translate("RecordApp", "Talk"))
         # --- End RecordingWidget
         
         self.aboutDialog.retranslate()

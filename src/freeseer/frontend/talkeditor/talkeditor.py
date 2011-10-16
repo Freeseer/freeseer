@@ -96,6 +96,7 @@ class TalkEditorApp(QtGui.QMainWindow):
         # Translator
         #
         self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
         self.langActionGroup = QtGui.QActionGroup(self)
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
         self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
@@ -175,49 +176,49 @@ class TalkEditorApp(QtGui.QMainWindow):
     ### Translation
     ###
     def retranslate(self):
-        self.setWindowTitle(self.tr("Freeseer Talk Editor"))
+        self.setWindowTitle(self.uiTranslator.translate("TalkEditorApp", "Freeseer Talk Editor"))
         
         #
         # Reusable Strings
         #
-        self.confirmDBClearTitleString = self.tr("Clear Database")
-        self.confirmDBClearQuestionString = self.tr("Are you sure you want to clear the DB?")
+        self.confirmDBClearTitleString = self.uiTranslator.translate("TalkEditorApp", "Clear Database")
+        self.confirmDBClearQuestionString = self.uiTranslator.translate("TalkEditorApp", "Are you sure you want to clear the DB?")
         # --- End Reusable Strings
         
         #
         # Menubar
         #
-        self.menuFile.setTitle(self.tr("&File"))
-        self.menuOptions.setTitle(self.tr("&Options"))
-        self.menuLanguage.setTitle(self.tr("&Language"))
-        self.menuHelp.setTitle(self.tr("&Help"))
-        self.actionExit.setText(self.tr("&Quit"))
-        self.actionAbout.setText(self.tr("&About"))
+        self.menuFile.setTitle(self.uiTranslator.translate("TalkEditorApp", "&File"))
+        self.menuOptions.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Options"))
+        self.menuLanguage.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Language"))
+        self.menuHelp.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Help"))
+        self.actionExit.setText(self.uiTranslator.translate("TalkEditorApp", "&Quit"))
+        self.actionAbout.setText(self.uiTranslator.translate("TalkEditorApp", "&About"))
         # --- End Menubar
         
         #
         # AddTalkWidget
         #
-        self.addTalkWidget.addTalkGroupBox.setTitle(self.tr("Add Talk"))
-        self.addTalkWidget.titleLabel.setText(self.tr("Title"))
-        self.addTalkWidget.presenterLabel.setText(self.tr("Presenter"))
-        self.addTalkWidget.eventLabel.setText(self.tr("Event"))
-        self.addTalkWidget.roomLabel.setText(self.tr("Room"))
-        self.addTalkWidget.dateLabel.setText(self.tr("Date"))
-        self.addTalkWidget.timeLabel.setText(self.tr("Time"))
-        self.addTalkWidget.addButton.setText(self.tr("Add"))
-        self.addTalkWidget.cancelButton.setText(self.tr("Cancel"))
+        self.addTalkWidget.addTalkGroupBox.setTitle(self.uiTranslator.translate("TalkEditorApp", "Add Talk"))
+        self.addTalkWidget.titleLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Title"))
+        self.addTalkWidget.presenterLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Presenter"))
+        self.addTalkWidget.eventLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Event"))
+        self.addTalkWidget.roomLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Room"))
+        self.addTalkWidget.dateLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Date"))
+        self.addTalkWidget.timeLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Time"))
+        self.addTalkWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
+        self.addTalkWidget.cancelButton.setText(self.uiTranslator.translate("TalkEditorApp", "Cancel"))
         # --- End AddTalkWidget
         
         #
         # EditorWidget
         #
-        self.editorWidget.rssLabel.setText(self.tr("URL"))
-        self.editorWidget.rssPushButton.setText(self.tr("Load talks from RSS"))
-        self.editorWidget.addButton.setText(self.tr("Add"))
-        self.editorWidget.removeButton.setText(self.tr("Remove"))
-        self.editorWidget.clearButton.setText(self.tr("Clear"))
-        self.editorWidget.closeButton.setText(self.tr("Close"))
+        self.editorWidget.rssLabel.setText(self.uiTranslator.translate("TalkEditorApp", "URL"))
+        self.editorWidget.rssPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from RSS"))
+        self.editorWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
+        self.editorWidget.removeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Remove"))
+        self.editorWidget.clearButton.setText(self.uiTranslator.translate("TalkEditorApp", "Clear"))
+        self.editorWidget.closeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Close"))
         # --- End EditorWidget
         
         self.aboutDialog.retranslate()
