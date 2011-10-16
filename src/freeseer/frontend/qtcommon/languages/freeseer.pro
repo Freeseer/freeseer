@@ -4,4 +4,5 @@ SOURCES = ../AboutDialog.py \
           ../../configtool/configtool.py \
           ../../talkeditor/talkeditor.py
 
-TRANSLATIONS = tr_en_US.ts
+TRANSLATIONS = tr_en_US.ts \
+               tr_zh_CN.ts
