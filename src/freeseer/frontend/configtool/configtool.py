@@ -41,7 +41,7 @@ __version__ = project_info.VERSION
 
 LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
 
-class ConfigTool(ConfigToolWidget):
+class ConfigToolApp(ConfigToolWidget):
     '''
     ConfigTool is used to tune settings used by the Freeseer Application
     '''

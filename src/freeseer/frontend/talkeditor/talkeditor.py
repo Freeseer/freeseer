@@ -68,7 +68,7 @@ class SystemLanguages:
             return []
         return language_prefix
         
-class TalkEditorMainApp(QtGui.QMainWindow):
+class TalkEditorApp(QtGui.QMainWindow):
     '''
     Freeseer talk database editor main gui class
     '''
@@ -380,6 +380,6 @@ class TalkEditorMainApp(QtGui.QMainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    main = TalkEditorMainApp()
+    main = TalkEditorApp()
     main.show()
     sys.exit(app.exec_())
