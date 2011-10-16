@@ -66,7 +66,7 @@ class SystemLanguages:
             return []
         return language_prefix
 
-class MainApp(QtGui.QMainWindow):
+class RecordApp(QtGui.QMainWindow):
     '''
     Freeseer main gui class
     '''
@@ -471,6 +471,6 @@ class MainApp(QtGui.QMainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    main = MainApp()
+    main = RecordApp()
     main.show()
     sys.exit(app.exec_())
