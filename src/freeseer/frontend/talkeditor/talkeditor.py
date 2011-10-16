@@ -93,6 +93,15 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.mainLayout.addWidget(self.addTalkWidget)
         
         #
+        # Translator
+        #
+        self.uiTranslator = QtCore.QTranslator()
+        self.langActionGroup = QtGui.QActionGroup(self)
+        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
+        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
+        # --- End Translator
+        
+        #
         # Setup Menubar
         #
         self.menubar = QtGui.QMenuBar()
@@ -122,11 +131,12 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.menuHelp.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())    
+        self.menubar.addAction(self.menuHelp.menuAction())
+        
+        self.setupLanguageMenu()
         # --- End Menubar
         
         self.editorWidget.editor.setColumnHidden(5, True)
-        self.default_language = 'en'
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
@@ -136,12 +146,6 @@ class TalkEditorApp(QtGui.QMainWindow):
             self.core = core
         else:
             self.core = FreeseerCore(self)
-        
-        #Setup the translator and populate the language menu under options
-        self.uiTranslator = QtCore.QTranslator()
-        self.langActionGroup = QtGui.QActionGroup(self)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.setupLanguageMenu()
 
         #
         # Talk Editor Connections
@@ -218,87 +222,35 @@ class TalkEditorApp(QtGui.QMainWindow):
         
         self.aboutDialog.retranslate()
     
-    def translateAction(self , action):
+    def translate(self , action):
         '''
         When a language is selected from the language menu this function is called
         The language to be changed to is retrieved
         '''
 
-        language_prefix = action.data().toString()  
-        self.translateFile(language_prefix)
-      
-    def translateFile(self, file_ending):
-        '''
-        Actually perfoms the translation. This is called by the handler for the language menu
-        Note: If the language file can not be loaded then the default language is english 
-        '''
-        load_string = LANGUAGE_DIR + 'tr_' + file_ending        #create language file path
-        loaded = self.uiTranslator.load(load_string)
-
-        if(loaded == True):
-            #self.ui.retranslateUi(self)    #Translate both the ui and the about page
-            pass
-        else:
-            logging.info("Invalid Locale Resorting to Default Language: English")
+        language = action.data().toString()
+        
+        logging.info("Switching language to: %s" % action.text())
+        self.uiTranslator.load(":/languages/%s" % language)
+        
+        self.retranslate()
     
     def setupLanguageMenu(self):
-
-        #Add Languages to the Menu Ensure only one is clicked 
-        self.langActionGroup.setExclusive(True)
-        system_ending = QtCore.QLocale.system().name()  #Retrieve Current Locale from the operating system         
-        active_button = None        #the current active menu item (menu item for default language)
-        current_lang_length = 0     #Used to determine the length of prefix that match for the current default language
-        default_ending = self.default_language
-        '''
-        Current Lang Length
-        0 -  No Common Prefix
-        1 -  Common Language 
-        2 -  Common Language and Country
-        '''
-        language_table = SystemLanguages()      #Load all languages from the language folder 
-             
-    
-        for language_name in language_table.languages:
-            translator = QtCore.QTranslator()   #Create a translator to translate names
-            data = translator.load(LANGUAGE_DIR+'tr_'+language_name)
-            #Create the button
-            if(data == False):    
-                continue
-            language_display_text = self.tr("language_name")
-            
-            if(language_display_text!=''):
-                language_menu_button = QtGui.QAction(self)
-                language_menu_button.setCheckable(True)
-                
-            #Dialect handling for locales from operating system. Use possible match
-            if(language_name == system_ending): #direct match
-                active_button = language_menu_button
-                current_lang_length = 2
-                self.default_language = system_ending
-            else:
-                
-                if(language_name.split("_")[0] == system_ending.split("_")[0]): #If language matches but not country
-                    if(current_lang_length < 1): #if there has been no direct match yet.
-                        active_button = language_menu_button
-                        current_lang_length = 1
-                        self.default_language = language_name
-                if(language_name.split("_")[0] == default_ending): #default language hit and no other language has been set
-                    if(current_lang_length == 0):
-                        active_button = language_menu_button
-                        self.default_language = language_name
-                        
-            #language_name is a holder for the language name in the translation file tr_*.ts
-            language_menu_button.setText(language_display_text)
-            language_menu_button.setData(language_name)
-            self.menuLanguage.addAction(language_menu_button)
-            self.langActionGroup.addAction(language_menu_button)
-            
-        if(active_button!=None):
-            active_button.setChecked(True)
-            #print('There are no languages available in the system except english. Please check the language directory to ensure qm files exist')
+        languages = QtCore.QDir(":/languages").entryList()
         
-        #Set up the event handling for each of the menu items
-        self.connect(self.langActionGroup,QtCore.SIGNAL('triggered(QAction *)'), self.translateAction)
+        user_locale = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
+        
+        for language in languages:
+            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
+            translator.load(":/languages/%s" % language)
+            language_display_text = translator.translate("Translation", "Language Display Text")
+            
+            languageAction = QtGui.QAction(self)
+            languageAction.setCheckable(True)
+            languageAction.setText(language_display_text)
+            languageAction.setData(language)
+            self.menuLanguage.addAction(languageAction)
+            self.langActionGroup.addAction(languageAction)
         
     def load_presentations_model(self):
         # Load Presentation Model
