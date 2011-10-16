@@ -57,6 +57,10 @@ class AboutDialog(QtGui.QWidget):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         
+        self.current_language = "tr_en_US.qm"
+        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
+        
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
@@ -82,19 +86,24 @@ class AboutDialog(QtGui.QWidget):
         
         self.retranslate()
         
-    def retranslate(self):
-        self.setWindowTitle(self.tr("Freeseer About"))
-        self.closeButton.setText(self.tr("Close"))
+    def retranslate(self, language=None):
+        if language is not None:
+            self.current_language = language
+        
+        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
+        
+        self.setWindowTitle(self.uiTranslator.translate("AboutDialog", "Freeseer About"))
+        self.closeButton.setText(self.uiTranslator.translate("AboutDialog", "Close"))
         
         #
         # Main Text
         #
-        self.descriptionString = self.tr("AboutDialog",
+        self.descriptionString = self.uiTranslator.translate("AboutDialog",
                     "Freeseer is a video capture utility capable of capturing presentations. It captures video "
                     "sources such as usb, firewire, or local desktop along with audio and mixes them together to "
                     "produce a video.")
-        self.copyrightString = self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
-        self.licenseTextString = self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is',"
+        self.copyrightString = self.uiTranslator.translate("AboutDialog", 'Copyright (C) 2011 The Free and Open Source Software Learning Centre')
+        self.licenseTextString = self.uiTranslator.translate("AboutDialog", "Freeseer is licensed under the GPL version 3. This software is provided 'as-is',"
                     "without any express or implied warranty. In no event will the authors be held liable for any "
                     "damages arising from the use of this software.")
         

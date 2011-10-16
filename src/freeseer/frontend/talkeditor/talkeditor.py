@@ -221,7 +221,7 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.editorWidget.closeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Close"))
         # --- End EditorWidget
         
-        self.aboutDialog.retranslate()
+        self.aboutDialog.retranslate(self.current_language)
     
     def translate(self , action):
         '''
