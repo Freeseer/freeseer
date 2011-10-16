@@ -163,6 +163,7 @@ class Ui_MainWindow(object):
         self.actionDuration.setObjectName("actionDuration")
         self.actionMetadata_Launch_Ex_Falso = QtGui.QAction(MainWindow)
         self.actionMetadata_Launch_Ex_Falso.setObjectName("actionMetadata_Launch_Ex_Falso")
+        
         self.menuFile.addAction(self.actionOpen_Directory)
         self.menuFile.addAction(self.actionUpload)
         self.menuFile.addSeparator()
