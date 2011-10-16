@@ -199,6 +199,17 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.setWindowTitle(self.uiTranslator.translate("ConfigToolApp", "Freeseer ConfigTool"))
         
         #
+        # Menubar
+        #
+        self.menuFile.setTitle(self.uiTranslator.translate("ConfigToolApp", "&File"))
+        self.menuOptions.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Options"))
+        self.menuLanguage.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Language"))
+        self.menuHelp.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Help"))
+        self.actionExit.setText(self.uiTranslator.translate("ConfigToolApp", "&Quit"))
+        self.actionAbout.setText(self.uiTranslator.translate("ConfigToolApp", "&About"))
+        # --- End Menubar
+        
+        #
         # ConfigToolWidget
         #
         self.mainWidget.closePushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Close"))
