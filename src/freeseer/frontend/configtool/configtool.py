@@ -73,6 +73,15 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.pluginloaderWidget = PluginLoaderWidget()
         self.loggerWidget = LoggerWidget()
         
+        # Only instantiate a new Core if we need to
+        if core is None:
+            self.core = FreeseerCore()
+        else:
+            self.core = core
+        
+        self.config = self.core.get_config()
+        self.plugman = self.core.get_plugin_manager()
+        
         #
         # Translator
         #
@@ -170,17 +179,6 @@ class ConfigToolApp(QtGui.QMainWindow):
                      QtCore.SIGNAL('activated(const QString&)'),
                      self.change_syslog_loglevel)
 
-        # load core
-        if core is None:
-            self.core = FreeseerCore()
-        else:
-            self.core = core
-        
-        # get the config
-        self.config = self.core.get_config()
-        # get the plugin manager
-        self.plugman = self.core.get_plugin_manager()
-        
         # load active plugin widgets
         self.load_plugin_widgets()
         

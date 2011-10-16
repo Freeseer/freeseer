@@ -86,11 +86,21 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.setCentralWidget(self.mainWidget)
         
         self.editorWidget = EditorWidget()
+        self.editorWidget.editor.setColumnHidden(5, True)
         self.addTalkWidget = AddTalkWidget()
         self.aboutDialog = AboutDialog()
         
         self.mainLayout.addWidget(self.editorWidget)
         self.mainLayout.addWidget(self.addTalkWidget)
+        
+        # Initialize geometry, to be used for restoring window positioning.
+        self.geometry = None
+
+        # Only instantiate a new Core if we need to
+        if core is not None:
+            self.core = core
+        else:
+            self.core = FreeseerCore(self)
         
         #
         # Translator
@@ -138,17 +148,6 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.setupLanguageMenu()
         # --- End Menubar
         
-        self.editorWidget.editor.setColumnHidden(5, True)
-        
-        # Initialize geometry, to be used for restoring window positioning.
-        self.geometry = None
-
-        # Only instantiate a new Core if we need to
-        if core is not None:
-            self.core = core
-        else:
-            self.core = FreeseerCore(self)
-
         #
         # Talk Editor Connections
         #
