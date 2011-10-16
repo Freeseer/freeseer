@@ -280,7 +280,7 @@ class RecordApp(QtGui.QMainWindow):
             #Create the button
             if(data == False):    
                 continue;
-            language_display_text = translator.translate("MainApp","language_name")
+            language_display_text = self.tr("language_name")
             if(language_display_text!=''):
                 language_menu_button = QtGui.QAction(self)
                 language_menu_button.setCheckable(True)
