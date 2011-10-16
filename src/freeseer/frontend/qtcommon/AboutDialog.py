@@ -108,13 +108,13 @@ class AboutDialog(QtGui.QWidget):
                     "damages arising from the use of this software.")
         
         self.aboutInfoString = u'<h1>'+NAME+u'</h1>' + \
-        u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
+        u'<br><b>'+ self.uiTranslator.translate("AboutDialog", "Version")+":" + __version__ + u'</b>' + \
         u'<p>' + self.descriptionString + u'</p>' + \
         u'<p>' + self.copyrightString + u'</p>' + \
         u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
         u'<p>' + self.licenseTextString + u'</p>' \
-        u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-        u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
+        u'<p>' +  self.uiTranslator.translate("AboutDialog", "Record button graphics by") + ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+        u'<p>'+ self.uiTranslator.translate("AboutDialog", "Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
         
         self.aboutInfo.setText(self.aboutInfoString)
         # --- End Main Text
