@@ -229,10 +229,10 @@ class TalkEditorApp(QtGui.QMainWindow):
         The language to be changed to is retrieved
         '''
 
-        language = action.data().toString()
+        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
         
         logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/%s" % language)
+        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
         
         self.retranslate()
     
