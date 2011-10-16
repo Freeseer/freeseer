@@ -8,5 +8,6 @@
     <file alias="freeseer/logo_rec.png">images/freeseer_logo_rec.png</file>
     
     <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>
+    <file alias="languages/tr_zh_CN.qm">languages/tr_zh_CN.qm</file>
   </qresource>
 </RCC>

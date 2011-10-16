@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en_US" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_CN" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../AboutDialog.py" line="95"/>
         <source>Freeseer About</source>
-        <translation>Freeseer About</translation>
+        <translation>关于 Freeseer</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="96"/>
         <source>Close</source>
-        <translation>Close</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="105"/>
@@ -20,27 +21,27 @@
     <message>
         <location filename="../AboutDialog.py" line="106"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;,without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
-        <translation>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;, without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</translation>
+        <translation>Freeseer授权于通用公共授权GPL3。此软件不提供任何明确的或隐含的担保或保证。作者在任何情况下均不就因用户使用本软件而发生的任何损失承担责任。</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="111"/>
         <source>Version</source>
-        <translation>Version</translation>
+        <translation>版本</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="116"/>
         <source>Record button graphics by</source>
-        <translation>Record button graphics by</translation>
+        <translation>录制按钮图形设计</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="117"/>
         <source>Headphones graphics by</source>
-        <translation>Headphones graphics by</translation>
+        <translation>耳机图形设计</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="101"/>
         <source>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</source>
-        <translation>Freeseer is a video capture utility capable of captureing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</translation>
+        <translation>Freeseer是一款视频录制工具，能够捕捉并记录演示。它能够捕捉来自USB，Firewire，本地桌面的视频源，并与音频混合，生成视频记录。</translation>
     </message>
 </context>
 <context>
@@ -48,72 +49,72 @@
     <message>
         <location filename="../../configtool/configtool.py" line="198"/>
         <source>Freeseer ConfigTool</source>
-        <translation>Freeseer Configuration Tool</translation>
+        <translation>Freeseer 配置工具</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="214"/>
         <source>Close</source>
-        <translation>Close</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="220"/>
         <source>Audio / Video Settings</source>
-        <translation>Audio / Video Settings</translation>
+        <translation>音频/视频 设置</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>Record Audio</source>
-        <translation>Record Audio</translation>
+        <translation>记录音频</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="222"/>
         <source>Audio Mixer</source>
-        <translation>Audio Mixer</translation>
+        <translation>音频混频器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="226"/>
         <source>Setup</source>
-        <translation>Setup</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="224"/>
         <source>Record Video</source>
-        <translation>Record Video</translation>
+        <translation>记录视频</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="225"/>
         <source>Video Mixer</source>
-        <translation>Video Mixer</translation>
+        <translation>视频混频器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="227"/>
         <source>Miscellaneous</source>
-        <translation>Miscellaneous</translation>
+        <translation>其他</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="228"/>
         <source>Record Directory</source>
-        <translation>Record Directory</translation>
+        <translation>保存目录</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="229"/>
         <source>Enable Auto-Hide</source>
-        <translation>Enable Auto Hide</translation>
+        <translation>启用自动隐藏</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="235"/>
         <source>Console Logger</source>
-        <translation>Console Logger</translation>
+        <translation>控制台日志记录器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="238"/>
         <source>Log Level</source>
-        <translation>Log Level</translation>
+        <translation>日志记录等级</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="237"/>
         <source>Syslog Logger</source>
-        <translation>Syslog Logger</translation>
+        <translation>系统日志记录器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="203"/>
@@ -151,27 +152,27 @@
     <message>
         <location filename="../../record/record.py" line="176"/>
         <source>Freeseer - portable presentation recording station</source>
-        <translation>Freeseer - The portable presentation recording station</translation>
+        <translation>Freeseer - 便携式演示录制站</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="180"/>
         <source>Record</source>
-        <translation>Record</translation>
+        <translation>记录</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="181"/>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="182"/>
         <source>Hide Main Window</source>
-        <translation>Hide Main Window</translation>
+        <translation>隐藏主窗口</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="183"/>
         <source>Show Main Window</source>
-        <translation>Show Main Window</translation>
+        <translation>显示主窗口</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="189"/>
@@ -211,22 +212,22 @@
     <message>
         <location filename="../../record/record.py" line="210"/>
         <source>Event</source>
-        <translation>Event</translation>
+        <translation>会议</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="211"/>
         <source>Room</source>
-        <translation>Room</translation>
+        <translation>会议室</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="212"/>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="213"/>
         <source>Talk</source>
-        <translation>Talk</translation>
+        <translation>演讲</translation>
     </message>
 </context>
 <context>
@@ -234,17 +235,17 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="179"/>
         <source>Freeseer Talk Editor</source>
-        <translation>Freeseer Talk Editor</translation>
+        <translation>Freeseer 会议演讲 事件编辑器</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="184"/>
         <source>Clear Database</source>
-        <translation>Clear Database</translation>
+        <translation>清除数据库</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="185"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation>Are you sure you want to clear the Database?</translation>
+        <translation>确实要清除数据库么?</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="191"/>
@@ -279,47 +280,47 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
         <source>Add Talk</source>
-        <translation>Add Talk</translation>
+        <translation>添加演讲记录</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
         <source>Title</source>
-        <translation>Title</translation>
+        <translation>标题</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="204"/>
         <source>Presenter</source>
-        <translation>Presenter</translation>
+        <translation>演讲者</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="205"/>
         <source>Event</source>
-        <translation>Event</translation>
+        <translation>会议</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="206"/>
         <source>Room</source>
-        <translation>Room</translation>
+        <translation>会议室</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="207"/>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="208"/>
         <source>Time</source>
-        <translation>Time</translation>
+        <translation>时间</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="218"/>
         <source>Add</source>
-        <translation>Add</translation>
+        <translation>添加</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="210"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="216"/>
@@ -329,22 +330,22 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="217"/>
         <source>Load talks from RSS</source>
-        <translation>Load talks from RSS</translation>
+        <translation>从RSS载入演讲</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="219"/>
         <source>Remove</source>
-        <translation>Remove</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="220"/>
         <source>Clear</source>
-        <translation>Clear</translation>
+        <translation>清除全部</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="221"/>
         <source>Close</source>
-        <translation>Close</translation>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -352,7 +353,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="249"/>
         <source>Language Display Text</source>
-        <translation>English</translation>
+        <translation>简体中文</translation>
     </message>
 </context>
 </TS>
