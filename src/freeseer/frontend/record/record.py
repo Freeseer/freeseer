@@ -172,7 +172,7 @@ class RecordApp(QtGui.QMainWindow):
     ###
     ### Translation Related
     ###
-    def retranslate(self):
+    def retranslate(self, language=None):
         self.setWindowTitle(self.uiTranslator.translate("RecordApp", "Freeseer - portable presentation recording station"))
         #
         # Reusable Strings
@@ -213,7 +213,7 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.talkLabel.setText(self.uiTranslator.translate("RecordApp", "Talk"))
         # --- End RecordingWidget
         
-        self.aboutDialog.retranslate()
+        self.aboutDialog.retranslate(self.current_language)
         
     def translate(self, action):
         '''
@@ -225,7 +225,7 @@ class RecordApp(QtGui.QMainWindow):
         logging.info("Switching language to: %s" % action.text())
         self.uiTranslator.load(":/languages/%s" % language)
         
-        self.retranslate()
+        self.retranslate(language)
 
     def setupLanguageMenu(self):
         languages = QtCore.QDir(":/languages").entryList()
