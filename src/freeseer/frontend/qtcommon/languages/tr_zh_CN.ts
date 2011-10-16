@@ -119,32 +119,32 @@
     <message>
         <location filename="../../configtool/configtool.py" line="203"/>
         <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="204"/>
         <source>&amp;Options</source>
-        <translation>&amp;Options</translation>
+        <translation>选项(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="205"/>
         <source>&amp;Language</source>
-        <translation>&amp;Language</translation>
+        <translation>语言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="206"/>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
+        <translation>帮助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="207"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Quit</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="208"/>
         <source>&amp;About</source>
-        <translation>&amp;About</translation>
+        <translation>关于(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -177,37 +177,37 @@
     <message>
         <location filename="../../record/record.py" line="189"/>
         <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="190"/>
         <source>&amp;Options</source>
-        <translation>&amp;Options</translation>
+        <translation>选项(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="191"/>
         <source>&amp;Language</source>
-        <translation>&amp;Language</translation>
+        <translation>语言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="192"/>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
+        <translation>帮助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="194"/>
         <source>&amp;Open Video Directory</source>
-        <translation>&amp;Open Video Directory</translation>
+        <translation>打开视频目录(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="195"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Quit</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="196"/>
         <source>&amp;About</source>
-        <translation>&amp;About</translation>
+        <translation>关于(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="210"/>
@@ -250,32 +250,32 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="191"/>
         <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="192"/>
         <source>&amp;Options</source>
-        <translation>&amp;Options</translation>
+        <translation>选项(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="193"/>
         <source>&amp;Language</source>
-        <translation>&amp;Language</translation>
+        <translation>语言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="194"/>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
+        <translation>帮助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="195"/>
         <source>&amp;Quit</source>
-        <translation>&amp;Quit</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="196"/>
         <source>&amp;About</source>
-        <translation>&amp;About</translation>
+        <translation>关于(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
