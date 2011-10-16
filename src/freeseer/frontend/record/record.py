@@ -73,6 +73,7 @@ class RecordApp(QtGui.QMainWindow):
         #
         # Translator
         #
+        self.current_language = None
         self.uiTranslator = QtCore.QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
         self.langActionGroup = QtGui.QActionGroup(self)
@@ -229,7 +230,9 @@ class RecordApp(QtGui.QMainWindow):
     def setupLanguageMenu(self):
         languages = QtCore.QDir(":/languages").entryList()
         
-        user_locale = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
+        if self.current_language is None:
+            self.current_language = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
+            logging.debug("Detected user's locale as %s" % self.current_language)
         
         for language in languages:
             translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
@@ -242,6 +245,9 @@ class RecordApp(QtGui.QMainWindow):
             languageAction.setData(language)
             self.menuLanguage.addAction(languageAction)
             self.langActionGroup.addAction(languageAction)
+            
+            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
+                languageAction.setChecked(True)
             
     ###
     ### UI Logic
