@@ -27,13 +27,11 @@ import sys
 
 from PyQt4 import QtGui
 
-from freeseer.frontend.talkeditor.talkeditor import *
+from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QtGui.QApplication(sys.argv)
-    main = TalkEditorMainApp()
-    app.installTranslator(main.uiTranslator);
-    main.translateFile(main.default_language);
+    main = TalkEditorApp()
     main.show()
     sys.exit(app.exec_())

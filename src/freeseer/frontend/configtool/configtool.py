@@ -29,6 +29,11 @@ import sys
 
 from PyQt4 import QtGui, QtCore
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 
@@ -41,29 +46,97 @@ __version__ = project_info.VERSION
 
 LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
 
-class ConfigTool(ConfigToolWidget):
+class ConfigToolApp(QtGui.QMainWindow):
     '''
     ConfigTool is used to tune settings used by the Freeseer Application
     '''
 
     def __init__(self, core=None):
-        ConfigToolWidget.__init__(self)
+        QtGui.QMainWindow.__init__(self)
+        
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
+        self.mainWidget = ConfigToolWidget()
+        self.setCentralWidget(self.mainWidget)
+        
         self.currentWidget = None
         self.mainWidgetLayout = QtGui.QVBoxLayout()
-        self.rightPanelWidget.setLayout(self.mainWidgetLayout)
+        self.mainWidget.rightPanelWidget.setLayout(self.mainWidgetLayout)
         
         # Load all ConfigTool Widgets
         self.generalWidget = GeneralWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
         self.loggerWidget = LoggerWidget()
+        
+        # Only instantiate a new Core if we need to
+        if core is None:
+            self.core = FreeseerCore()
+        else:
+            self.core = core
+        
+        self.config = self.core.get_config()
+        self.plugman = self.core.get_plugin_manager()
+        
+        #
+        # Translator
+        #
+        self.current_language = None
+        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
+        self.langActionGroup = QtGui.QActionGroup(self)
+        self.langActionGroup.setExclusive(True)
+        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
+        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
+        # --- Translator
+        
+        #
+        # Setup Menubar
+        #
+        self.menubar = QtGui.QMenuBar()
+        self.setMenuBar(self.menubar)
+        
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
+        self.menubar.setObjectName(_fromUtf8("menubar"))
+        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuOptions = QtGui.QMenu(self.menubar)
+        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
+        self.menuLanguage = QtGui.QMenu(self.menuOptions)
+        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
+        
+        self.actionOpenVideoFolder = QtGui.QAction(self)
+        self.actionOpenVideoFolder.setShortcut("Ctrl+O")
+        self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
+        
+        self.actionExit = QtGui.QAction(self)
+        self.actionExit.setShortcut("Ctrl+Q")
+        self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        
+        self.actionAbout = QtGui.QAction(self)
+        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        
+        # Actions
+        self.menuFile.addAction(self.actionOpenVideoFolder)
+        self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionAbout)
+        self.menuOptions.addAction(self.menuLanguage.menuAction())
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
+        
+        self.setupLanguageMenu()
+        # --- End Menubar
 
         # connections
-        self.connect(self.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
-        self.connect(self.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
+        self.connect(self.mainWidget.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
+        self.connect(self.mainWidget.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         
         #
         # general tab connections
@@ -106,32 +179,105 @@ class ConfigTool(ConfigToolWidget):
                      QtCore.SIGNAL('activated(const QString&)'),
                      self.change_syslog_loglevel)
 
-        # load core
-        if core is None:
-            self.core = FreeseerCore()
-        else:
-            self.core = core
-        
-        # get the config
-        self.config = self.core.get_config()
-        # get the plugin manager
-        self.plugman = self.core.get_plugin_manager()
-        
         # load active plugin widgets
         self.load_plugin_widgets()
         
         # Start off with displaying the General Settings
-        items = self.optionsTreeWidget.findItems("General", QtCore.Qt.MatchExactly)
+        items = self.mainWidget.optionsTreeWidget.findItems("General", QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
-            self.optionsTreeWidget.setCurrentItem(item)
+            self.mainWidget.optionsTreeWidget.setCurrentItem(item)
+            
+        self.retranslate()
         
+    ###
+    ### Translation
+    ###
+    
+    def retranslate(self):
+        self.setWindowTitle(self.uiTranslator.translate("ConfigToolApp", "Freeseer ConfigTool"))
+        
+        #
+        # Menubar
+        #
+        self.menuFile.setTitle(self.uiTranslator.translate("ConfigToolApp", "&File"))
+        self.menuOptions.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Options"))
+        self.menuLanguage.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Language"))
+        self.menuHelp.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Help"))
+        self.actionExit.setText(self.uiTranslator.translate("ConfigToolApp", "&Quit"))
+        self.actionAbout.setText(self.uiTranslator.translate("ConfigToolApp", "&About"))
+        # --- End Menubar
+        
+        #
+        # ConfigToolWidget
+        #
+        self.mainWidget.closePushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Close"))
+        # --- End ConfigToolWidget
+        
+        #
+        # GeneralWidget
+        #
+        self.generalWidget.AVGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Audio / Video Settings"))
+        self.generalWidget.recordAudioCheckbox.setText(self.uiTranslator.translate("ConfigToolApp", "Record Audio"))
+        self.generalWidget.audioMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Audio Mixer"))
+        self.generalWidget.audioMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
+        self.generalWidget.recordVideoCheckbox.setText(self.uiTranslator.translate("ConfigToolApp", "Record Video"))
+        self.generalWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
+        self.generalWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
+        self.generalWidget.MiscGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Miscellaneous"))
+        self.generalWidget.recordDirLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Record Directory"))
+        self.generalWidget.autoHideCheckBox.setText(self.uiTranslator.translate("ConfigToolApp", "Enable Auto-Hide"))
+        # --- End GeneralWidget
+        
+        #
+        # Logger Widget
+        #
+        self.loggerWidget.consoleLoggerGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Console Logger"))
+        self.loggerWidget.consoleLoggerLevelLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Log Level"))
+        self.loggerWidget.syslogLoggerGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Syslog Logger"))
+        self.loggerWidget.syslogLoggerLevelLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Log Level"))
+        # --- End LoggerWidget
+        
+    def translate(self, action):
+        '''
+        When a language is selected from the language menu this function is called
+        The language to be changed to is retrieved
+        '''
+        language = action.data().toString()
+        
+        logging.info("Switching language to: %s" % action.text())
+        self.uiTranslator.load(":/languages/%s" % language)
+        
+        self.retranslate()
+
+    def setupLanguageMenu(self):
+        languages = QtCore.QDir(":/languages").entryList()
+        
+        if self.current_language is None:
+            self.current_language = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
+            logging.debug("Detected user's locale as %s" % self.current_language)
+        
+        for language in languages:
+            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
+            translator.load(":/languages/%s" % language)
+            language_display_text = translator.translate("Translation", "Language Display Text")
+            
+            languageAction = QtGui.QAction(self)
+            languageAction.setCheckable(True)
+            languageAction.setText(language_display_text)
+            languageAction.setData(language)
+            self.menuLanguage.addAction(languageAction)
+            self.langActionGroup.addAction(languageAction)
+            
+            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
+                languageAction.setChecked(True)
+
     ###
     ### General
     ###
         
     def change_option(self):
-        option = self.optionsTreeWidget.currentItem().text(0)
+        option = self.mainWidget.optionsTreeWidget.currentItem().text(0)
         
         if self.currentWidget is not None:
             self.mainWidgetLayout.removeWidget(self.currentWidget)
@@ -464,15 +610,6 @@ class ConfigTool(ConfigToolWidget):
 #        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
 #        self.show()
 #    
-    def translateFile(self,file_ending):
-        load_string = LANGUAGE_DIR+'tr_'+ file_ending; #create language file path
-        #loaded = self.uiTranslator.load(load_string);
-        # Temporary place holder until we fix translations for configtool
-        loaded = False
-        if (loaded == True):
-            self.retranslateUi(self);
-        else:
-            print("Configtool Can Not Load language file, Invalid Locale Resorting to Default Language: English");
 
     def closeEvent(self, event):
         logging.info('Exiting configtool...')

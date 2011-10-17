@@ -56,12 +56,13 @@ class AboutDialog(QtGui.QWidget):
     """
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        self.setWindowTitle(QtGui.QApplication.translate("AboutDialog", 
-                                                         "Freeseer About", 
-                                                         None, 
-                                                         QtGui.QApplication.UnicodeUTF8))
+        
+        self.current_language = "tr_en_US.qm"
+        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
+        
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         
         self.layout = QtGui.QGridLayout()
@@ -69,34 +70,51 @@ class AboutDialog(QtGui.QWidget):
         
         # Left Top corner of grid, Logo
         self.logo = QtGui.QLabel("Logo")
-        self.logo.setPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/freeseer_logo.png")))
+        self.logo.setPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")))
         self.layout.addWidget(self.logo, 0, 0)
         
         # Right Top corner of grid, Infos
-        DESCRIPTION = self.tr("AboutDialog",
-                    "Freeseer is a video capture utility capable of capturing presentations. It captures video "
-                    "sources such as usb, firewire, or local desktop along with audio and mixes them together to "
-                    "produce a video.")
-        COPYRIGHT = self.tr('Copyright (C) 2011 The Free and Open Source Software Learning Centre')
-        LICENSE_TEXT = self.tr("Freeseer is licensed under the GPL version 3. This software is provided 'as-is'," 
-                    "without any express or implied warranty. In no event will the authors be held liable for any "
-                    "damages arising from the use of this software.")
-    
-        ABOUT_INFO = u'<h1>'+NAME+u'</h1>' + \
-        u'<br><b>'+ self.tr("Version")+":" + __version__ + u'</b>' + \
-        u'<p>' + DESCRIPTION + u'</p>' + \
-        u'<p>' +  COPYRIGHT + u'</p>' + \
-        u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
-        u'<p>' + LICENSE_TEXT + u'</p>' \
-        u'<p>' +  self.tr("Record button graphics by")+ ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-        u'<p>'+ self.tr("Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
-        
-        self.aboutInfo = QtGui.QLabel(ABOUT_INFO)
+        self.aboutInfo = QtGui.QLabel("About Info")
         self.aboutInfo.setWordWrap(True)
         self.layout.addWidget(self.aboutInfo, 0, 1)
         
         # Right Bottom corner of grid, Close Button
         self.buttonBox = QtGui.QDialogButtonBox()
-        self.closeButton = self.buttonBox.addButton(self.tr("Close"), QtGui.QDialogButtonBox.AcceptRole)
+        self.closeButton = self.buttonBox.addButton("Close", QtGui.QDialogButtonBox.AcceptRole)
         self.layout.addWidget(self.buttonBox, 1, 1)
         self.connect(self.closeButton, QtCore.SIGNAL("clicked()"), self.close)
+        
+        self.retranslate()
+        
+    def retranslate(self, language=None):
+        if language is not None:
+            self.current_language = language
+        
+        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
+        
+        self.setWindowTitle(self.uiTranslator.translate("AboutDialog", "Freeseer About"))
+        self.closeButton.setText(self.uiTranslator.translate("AboutDialog", "Close"))
+        
+        #
+        # Main Text
+        #
+        self.descriptionString = self.uiTranslator.translate("AboutDialog",
+                    "Freeseer is a video capture utility capable of capturing presentations. It captures video "
+                    "sources such as usb, firewire, or local desktop along with audio and mixes them together to "
+                    "produce a video.")
+        self.copyrightString = self.uiTranslator.translate("AboutDialog", 'Copyright (C) 2011 The Free and Open Source Software Learning Centre')
+        self.licenseTextString = self.uiTranslator.translate("AboutDialog", "Freeseer is licensed under the GPL version 3. This software is provided 'as-is',"
+                    "without any express or implied warranty. In no event will the authors be held liable for any "
+                    "damages arising from the use of this software.")
+        
+        self.aboutInfoString = u'<h1>'+NAME+u'</h1>' + \
+        u'<br><b>'+ self.uiTranslator.translate("AboutDialog", "Version")+":" + __version__ + u'</b>' + \
+        u'<p>' + self.descriptionString + u'</p>' + \
+        u'<p>' + self.copyrightString + u'</p>' + \
+        u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
+        u'<p>' + self.licenseTextString + u'</p>' \
+        u'<p>' +  self.uiTranslator.translate("AboutDialog", "Record button graphics by") + ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+        u'<p>'+ self.uiTranslator.translate("AboutDialog", "Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
+        
+        self.aboutInfo.setText(self.aboutInfoString)
+        # --- End Main Text
