@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_CN" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -171,7 +172,7 @@
     <message>
         <location filename="../../record/record.py" line="183"/>
         <source>Show Main Window</source>
-        <translation>顯示主窗口</translation>
+        <translation type="unfinished">顯示主窗口</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="189"/>
