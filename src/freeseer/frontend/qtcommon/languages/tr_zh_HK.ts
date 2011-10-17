@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ja_JP" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../AboutDialog.py" line="95"/>
         <source>Freeseer About</source>
-        <translation>Freeseer アバウト</translation>
+        <translation>Freeseer 關於</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="96"/>
         <source>Close</source>
-        <translation>閉じる</translation>
-    </message>
-    <message>
-        <location filename="../AboutDialog.py" line="101"/>
-        <source>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</source>
-        <translation>Freeseerは、プレゼンテーションをキャプチャすることが可能なビデオキャプチャソフトウェアです。Freeseerを使用して、USB、FireWire、ローカルデスクトップなどのビデオソースから捉えた映像とマイクからの音声を同時にキャプチャして映像を制作します。</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="105"/>
@@ -25,22 +21,27 @@
     <message>
         <location filename="../AboutDialog.py" line="106"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;,without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
-        <translation>Freeseerは、GPLバージョン3の下でライセンスされています。このソフトウェアは明示または黙示の保証なしに「現状のまま」提供されます。本ソフトウェアの使用によって生じたいかなる損害についても、著作者は一切の責任を負いません。</translation>
+        <translation>Freeseer授權許可於通用公共授權GPL v3。此軟件不提供任何明確的或隱含的擔保或保證。作者在任何情況下均不就因用戶使用本軟件而發生的任何損失承擔責任。</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="111"/>
         <source>Version</source>
-        <translation>バージョン</translation>
+        <translation>版本</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="116"/>
         <source>Record button graphics by</source>
-        <translation>録画 ボタン グラフィック</translation>
+        <translation>錄製按鈕圖形設計</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="117"/>
         <source>Headphones graphics by</source>
-        <translation>ヘッドフォン グラフィック</translation>
+        <translation>耳機圖形設計</translation>
+    </message>
+    <message>
+        <location filename="../AboutDialog.py" line="101"/>
+        <source>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</source>
+        <translation>Freeseer是一款視頻錄製工具，能夠捕捉並記錄演示。它能夠捕捉來自USB，FireWire，本地桌面的視頻源，並與音頻輸入混合，生成視頻記錄。</translation>
     </message>
 </context>
 <context>
@@ -48,102 +49,102 @@
     <message>
         <location filename="../../configtool/configtool.py" line="198"/>
         <source>Freeseer ConfigTool</source>
-        <translation>Freeseer 設定 ツール</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="203"/>
-        <source>&amp;File</source>
-        <translation>ファイル(&amp;F)</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="204"/>
-        <source>&amp;Options</source>
-        <translation>オプション(&amp;O)</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="205"/>
-        <source>&amp;Language</source>
-        <translation>言語(&amp;L)</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="206"/>
-        <source>&amp;Help</source>
-        <translation>ヘルプ(&amp;H)</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
-        <source>&amp;Quit</source>
-        <translation>終了(&amp;Q)</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
-        <source>&amp;About</source>
-        <translation>アバウト(&amp;A)</translation>
+        <translation>Freeseer 配置工具</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="214"/>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="220"/>
         <source>Audio / Video Settings</source>
-        <translation>オーディオ / ビデオ 設定</translation>
+        <translation>音頻 / 視頻 設置</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>Record Audio</source>
-        <translation>録音</translation>
+        <translation>記錄音頻</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="222"/>
         <source>Audio Mixer</source>
-        <translation>オーディオ ミキサー</translation>
+        <translation>音頻混頻器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="226"/>
         <source>Setup</source>
-        <translation>設定する</translation>
+        <translation>設置</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="224"/>
         <source>Record Video</source>
-        <translation>録画</translation>
+        <translation>記錄視頻</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="225"/>
         <source>Video Mixer</source>
-        <translation>ビデオ ミキサー</translation>
+        <translation>視頻混頻器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="227"/>
         <source>Miscellaneous</source>
-        <translation>その他</translation>
+        <translation>其他</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="228"/>
         <source>Record Directory</source>
-        <translation>記録 ディレクトリ</translation>
+        <translation>保存目錄</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="229"/>
         <source>Enable Auto-Hide</source>
-        <translation>自動的に隠す</translation>
+        <translation>啟用自動隱藏</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="235"/>
         <source>Console Logger</source>
-        <translation>コンソール ロガー</translation>
+        <translation>控制台日誌記錄器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="238"/>
         <source>Log Level</source>
-        <translation>ログ レベル</translation>
+        <translation>日誌記錄等級</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="237"/>
         <source>Syslog Logger</source>
-        <translation>システムログ ロガー</translation>
+        <translation>系統日誌記錄器</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="203"/>
+        <source>&amp;File</source>
+        <translation>文件(&amp;F)</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="204"/>
+        <source>&amp;Options</source>
+        <translation>選項(&amp;O)</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="205"/>
+        <source>&amp;Language</source>
+        <translation>語言(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="206"/>
+        <source>&amp;Help</source>
+        <translation>幫助(&amp;H)</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="207"/>
+        <source>&amp;Quit</source>
+        <translation>退出(&amp;Q)</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="208"/>
+        <source>&amp;About</source>
+        <translation>關於(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -151,12 +152,12 @@
     <message>
         <location filename="../../record/record.py" line="176"/>
         <source>Freeseer - portable presentation recording station</source>
-        <translation>Freeseer - ポータブル プレゼンテーションの記録ステーション</translation>
+        <translation>Freeseer - 便攜式演示錄製站</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="180"/>
         <source>Record</source>
-        <translation>記録する</translation>
+        <translation>記錄</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="181"/>
@@ -166,67 +167,67 @@
     <message>
         <location filename="../../record/record.py" line="182"/>
         <source>Hide Main Window</source>
-        <translation>メインウィンドウを非表示</translation>
+        <translation>隱藏主窗口</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="183"/>
         <source>Show Main Window</source>
-        <translation>メインウィンドウを表示する</translation>
+        <translation type="unfinished">顯示主窗口</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="189"/>
         <source>&amp;File</source>
-        <translation>ファイル(&amp;F)</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="190"/>
         <source>&amp;Options</source>
-        <translation>オプション(&amp;O)</translation>
+        <translation>選項(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="191"/>
         <source>&amp;Language</source>
-        <translation>言語(&amp;L)</translation>
+        <translation>語言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="192"/>
         <source>&amp;Help</source>
-        <translation>ヘルプ(&amp;H)</translation>
+        <translation>幫助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="194"/>
         <source>&amp;Open Video Directory</source>
-        <translation>ビデオ ディレクトリを開く(&amp;O)</translation>
+        <translation>打開視頻目錄(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="195"/>
         <source>&amp;Quit</source>
-        <translation>終了(&amp;Q)</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="196"/>
         <source>&amp;About</source>
-        <translation>アバウト(&amp;A)</translation>
+        <translation>關於(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="210"/>
         <source>Event</source>
-        <translation>イベント</translation>
+        <translation>會議</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="211"/>
         <source>Room</source>
-        <translation>会議室</translation>
+        <translation>會議室</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="212"/>
         <source>Date</source>
-        <translation>日付</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="213"/>
         <source>Talk</source>
-        <translation>トーク</translation>
+        <translation>演講</translation>
     </message>
 </context>
 <context>
@@ -234,92 +235,92 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="179"/>
         <source>Freeseer Talk Editor</source>
-        <translation>Freeseer トーク エディタ</translation>
+        <translation>Freeseer 會議演講列表編輯</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="184"/>
         <source>Clear Database</source>
-        <translation>データベースを削除する</translation>
+        <translation>清除數據庫</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="185"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation>データベースを削除しますか?</translation>
+        <translation>確實要清除數據庫麼?</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="191"/>
         <source>&amp;File</source>
-        <translation>ファイル(&amp;F)</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="192"/>
         <source>&amp;Options</source>
-        <translation>オプション(&amp;O)</translation>
+        <translation>選項(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="193"/>
         <source>&amp;Language</source>
-        <translation>言語(&amp;L)</translation>
+        <translation>語言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="194"/>
         <source>&amp;Help</source>
-        <translation>ヘルプ(&amp;H)</translation>
+        <translation>幫助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="195"/>
         <source>&amp;Quit</source>
-        <translation>終了(&amp;Q)</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="196"/>
         <source>&amp;About</source>
-        <translation>アバウト(&amp;A)</translation>
+        <translation>關於(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
         <source>Add Talk</source>
-        <translation>トーク追加</translation>
+        <translation>添加演講記錄</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
         <source>Title</source>
-        <translation>タイトル</translation>
+        <translation>標題</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="204"/>
         <source>Presenter</source>
-        <translation>プレゼンター</translation>
+        <translation>演講者</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="205"/>
         <source>Event</source>
-        <translation>イベント</translation>
+        <translation>會議</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="206"/>
         <source>Room</source>
-        <translation>会議室</translation>
+        <translation>會議室</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="207"/>
         <source>Date</source>
-        <translation>日付</translation>
+        <translation>日期</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="208"/>
         <source>Time</source>
-        <translation>時刻</translation>
+        <translation>時間</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="218"/>
         <source>Add</source>
-        <translation>追加する</translation>
+        <translation>添加</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="210"/>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="216"/>
@@ -329,22 +330,22 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="217"/>
         <source>Load talks from RSS</source>
-        <translation>RSSからトークを読み込む</translation>
+        <translation>從RSS載入演講</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="219"/>
         <source>Remove</source>
-        <translation>削除する</translation>
+        <translation>刪除</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="220"/>
         <source>Clear</source>
-        <translation>全削除する</translation>
+        <translation>清除全部</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="221"/>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="unfinished">關閉</translation>
     </message>
 </context>
 <context>
@@ -352,7 +353,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="249"/>
         <source>Language Display Text</source>
-        <translation>日本語</translation>
+        <translation>繁體中文</translation>
     </message>
 </context>
 </TS>
