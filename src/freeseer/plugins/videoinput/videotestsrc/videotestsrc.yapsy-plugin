@@ -1,0 +1,9 @@
+[Core]
+Name = Video Test Source
+Module = videotestsrc
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Basic Gstreamer videotestsrc

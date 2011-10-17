@@ -1,0 +1,14 @@
+<RCC>
+  <qresource>
+    <file alias="multimedia/record.png">images/record_red_button.png</file>
+    <file alias="multimedia/stop.png">images/stop_red_button.png</file>
+    <file alias="multimedia/headphones.png">images/headphones.png</file>
+    <file alias="multimedia/rss.png">images/rss_logo.png</file>
+    <file alias="freeseer/logo.png">images/freeseer_logo.png</file>
+    <file alias="freeseer/logo_rec.png">images/freeseer_logo_rec.png</file>
+    
+    <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>
+    <file alias="languages/tr_zh_CN.qm">languages/tr_zh_CN.qm</file>
+    <file alias="languages/tr_ja.qm">languages/tr_ja.qm</file>
+  </qresource>
+</RCC>

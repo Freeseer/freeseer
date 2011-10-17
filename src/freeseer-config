@@ -22,16 +22,17 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import signal
 import sys
 
 from PyQt4 import QtGui
 
-from freeseer.frontend.configtool.freeseer_configtool import *
+from freeseer.frontend.configtool.configtool import ConfigToolApp
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QtGui.QApplication(sys.argv)
-    main = ConfigTool()
-    #app.installTranslator(main.uiTranslator);
-    #main.translateFile(main.default_language);
+    main = ConfigToolApp()
     main.show()
     sys.exit(app.exec_())
+

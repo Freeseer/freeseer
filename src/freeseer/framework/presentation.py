@@ -30,18 +30,16 @@ class Presentation():
     and its database related operations
     '''
 
-    def __init__(self, title, speaker=None, description="", level="", event="", time="", room=None, talk_id=None, filename_id=None):
+    def __init__(self, title, speaker="", description="", level="", event="Default", room="Default", time=""):
         
         '''
         Initialize a presentation instance
         '''
-        self.speaker = speaker
         self.title = title
+        self.speaker = speaker
         self.description = description
         self.level = level
         self.event = event
-        self.time = time
         self.room = room
-        self.talk_id = talk_id
-        self.filename_id = filename_id
-
+        self.time = time
+        

@@ -1,0 +1,9 @@
+[Core]
+Name = Auto Audio Source
+Module = autoaudiosrc
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Auto Audio Source

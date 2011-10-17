@@ -141,11 +141,12 @@ class DB_Connector():
         talk_titles = self.cursor.execute('''select distinct Title from presentations''')
         talk_events = self.cursor.execute('''select distinct Event from presentations''')
         talk_speakers = self.cursor.execute('''select distinct Speaker from presentations''')
-
-        self.cursor.close()
         
         if (presentation.title in talk_titles and presentation.event in talk_events and presentation.speaker in talk_speakers):
+            self.cursor.close()
             return True
+        
+        self.cursor.close()
         return False
 
     def get_talks_ids(self):

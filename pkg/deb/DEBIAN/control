@@ -2,6 +2,7 @@ Package: freeseer
 Version: 2.5.3
 Section: video
 Priority: optional
+Depends: python-feedparser,python-qt4
 Maintainer: Andrew Ross <fosslc@gmail.com>
 Architecture: all
 Homepage: https://github.com/fosslc/freeseer/wiki

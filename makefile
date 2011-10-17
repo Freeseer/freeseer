@@ -32,7 +32,7 @@ test: ALL
 
 # create RPM package
 rpm: setup.py ALL
-	python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,python-sqlite2,gstreamer,gstreamer-python,PyQt4
+	python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,gstreamer,gstreamer-python,PyQt4
 
 # create python egg
 egg: setup.py ALL

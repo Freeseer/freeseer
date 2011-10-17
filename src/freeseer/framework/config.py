@@ -40,34 +40,28 @@ class Config:
         # Config location
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
-        
-        # Set default settings
-        self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
+        
+        #
+        # Set default settings
+        #
+        
+        # Global
+        self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
+        self.auto_hide = False
         self.resolution = '0x0' # no scaling for video
+        self.enable_video_recoding = True
+        self.enable_audio_recoding = True
+        self.videomixer = 'Video Passthrough'
+        self.audiomixer = 'Audio Passthrough'
 
-        self.videosrc = 'desktop'
-        self.videodev = 'none'
+        # Lastrun
         self.start_x = 0
         self.start_y = 0
         self.end_x = 0
         self.end_y = 0
-        self.audiosrc = 'none'
-        self.audiofb = 'False'
-        self.key_rec = 'Ctrl+Shift+R'
-        self.key_stop = 'Ctrl+Shift+E'
-        self.auto_hide = True
-        self.delay_recording = 0
-
-        self.enable_video_recoding = True
-        self.enable_audio_recoding = True
         
-        self.enable_streaming = 'False'
-        self.streaming_resolution = '0x0' #no scaling for streaming
-        self.streaming_mount = 'stream.ogv'
-        self.streaming_port = '8000'
-        self.streaming_password = 'hackme'
-        self.streaming_url = '127.0.0.1'
+        self.delay_recording = 0
 
         # Map of resolution names to the actual resolution (both stream and record)
         # Names should include all options available in the GUI
@@ -103,26 +97,21 @@ class Config:
                 
         # Config file exists, read in the settings
         try:
+            # Global Section
             self.videodir = config.get('Global', 'video_directory')
             self.resolution = config.get('Global', 'resolution')
-            self.videosrc = config.get('lastrun', 'video_source')
-            self.videodev = config.get('lastrun', 'video_device')
+            self.auto_hide = config.getboolean('Global', 'auto_hide')
+            self.enable_video_recoding = config.getboolean('Global','enable_video_recoding')
+            self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
+            self.videomixer = config.get('Global', 'videomixer')
+            self.audiomixer = config.get('Global', 'audiomixer')
+            
+            # LastRun Section
             self.start_x = config.get('lastrun', 'area_start_x')
             self.start_y = config.get('lastrun', 'area_start_y')
             self.end_x = config.get('lastrun', 'area_end_x')
             self.end_y = config.get('lastrun', 'area_end_y')
-            self.audiosrc = config.get('lastrun', 'audio_source')
-            self.audiofb = config.get('lastrun', 'audio_feedback')
-            self.auto_hide = config.getboolean('lastrun', 'auto_hide')
             self.delay_recording = config.get('lastrun', 'delay_recording')
-            self.enable_streaming = config.getboolean('lastrun', 'enable_streaming')
-            self.enable_video_recoding = config.getboolean('lastrun','enable_video_recoding')
-            self.enable_audio_recoding = config.getboolean('lastrun','enable_audio_recoding')
-            self.streaming_resolution = config.get('Global','streaming_resolution')
-            self.streaming_mount = config.get('lastrun','streaming_mount')
-            self.streaming_port = config.get('lastrun','streaming_port')
-            self.streaming_password = config.get('lastrun','streaming_password')
-            self.streaming_url = config.get('lastrun','streaming_url')
 
         except:
             print('Corrupt config found, creating a new one.')
@@ -138,25 +127,18 @@ class Config:
         config.add_section('Global')
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
-        config.set('Global','streaming_resolution',self.streaming_resolution)
+        config.set('Global', 'auto_hide', self.auto_hide)
+        config.set('Global','enable_video_recoding',self.enable_video_recoding)
+        config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
+        config.set('Global','videomixer',self.videomixer)
+        config.set('Global','audiomixer',self.audiomixer)
+        
         config.add_section('lastrun')
-        config.set('lastrun', 'video_source', self.videosrc)
-        config.set('lastrun', 'video_device', self.videodev)
         config.set('lastrun', 'area_start_x', self.start_x)
         config.set('lastrun', 'area_start_y', self.start_y)
         config.set('lastrun', 'area_end_x', self.end_x)
         config.set('lastrun', 'area_end_y', self.end_y)
-        config.set('lastrun', 'audio_source', self.audiosrc)
-        config.set('lastrun', 'audio_feedback', self.audiofb)
-        config.set('lastrun', 'auto_hide', self.auto_hide)
         config.set('lastrun', 'delay_recording', self.delay_recording)
-        config.set('lastrun', 'enable_streaming', self.enable_streaming)
-        config.set('lastrun','enable_video_recoding',self.enable_video_recoding)
-        config.set('lastrun','enable_audio_recoding',self.enable_audio_recoding)
-        config.set('lastrun','streaming_mount',self.streaming_mount)
-        config.set('lastrun','streaming_port',self.streaming_port)
-        config.set('lastrun','streaming_password',self.streaming_password)
-        config.set('lastrun','streaming_url',self.streaming_url)
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
