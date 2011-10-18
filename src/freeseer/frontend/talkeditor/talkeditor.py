@@ -42,31 +42,6 @@ from EditorWidget import EditorWidget
 from AddTalkWidget import AddTalkWidget
 
 __version__ = project_info.VERSION
-
-LANGUAGE_DIR = 'freeseer/frontend/talkeditor/languages/'
-
-class SystemLanguages:
-    '''
-    Language system class that is responsible for retrieving valid languages in the system 
-    '''
-
-    def __init__(self):
-        self.languages = []
-        self.languages = self.getAllLanguages()
-
-    def getAllLanguages(self):
-        '''
-        Returns all the valid languages that have existing qm files. In other words languages
-        that can be loaded into the translator
-        '''
-        try:
-            files = os.listdir(LANGUAGE_DIR)
-            files = map(lambda x: x.split('.') , files)
-            qm_files = filter(lambda x:x[len(x) - 1] == 'qm', files)
-            language_prefix = map(lambda x: x[0].split("tr_")[1], qm_files)
-        except:
-            return []
-        return language_prefix
         
 class TalkEditorApp(QtGui.QMainWindow):
     '''
