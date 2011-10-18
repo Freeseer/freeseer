@@ -28,7 +28,7 @@ http://wiki.github.com/fosslc/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
-import resource_rc
+from freeseer.frontend.qtcommon.Resource import resource_rc
 
 class EditorWidget(QtGui.QWidget):
     '''

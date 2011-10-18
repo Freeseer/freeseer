@@ -28,8 +28,6 @@ http://wiki.github.com/fosslc/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
-import resource_rc
-
 class AddTalkWidget(QtGui.QWidget):
     '''
     classdocs
