@@ -46,102 +46,102 @@
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="198"/>
+        <location filename="../../configtool/configtool.py" line="200"/>
         <source>Freeseer ConfigTool</source>
         <translation>Freeseer 配置工具</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="214"/>
+        <location filename="../../configtool/configtool.py" line="216"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="220"/>
+        <location filename="../../configtool/configtool.py" line="222"/>
         <source>Audio / Video Settings</source>
         <translation>音頻 / 視頻 設置</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="221"/>
+        <location filename="../../configtool/configtool.py" line="223"/>
         <source>Record Audio</source>
         <translation>記錄音頻</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="222"/>
+        <location filename="../../configtool/configtool.py" line="224"/>
         <source>Audio Mixer</source>
         <translation>音頻混頻器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="226"/>
+        <location filename="../../configtool/configtool.py" line="228"/>
         <source>Setup</source>
         <translation>設置</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="224"/>
+        <location filename="../../configtool/configtool.py" line="226"/>
         <source>Record Video</source>
         <translation>記錄視頻</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="225"/>
+        <location filename="../../configtool/configtool.py" line="227"/>
         <source>Video Mixer</source>
         <translation>視頻混頻器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="227"/>
+        <location filename="../../configtool/configtool.py" line="229"/>
         <source>Miscellaneous</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="228"/>
+        <location filename="../../configtool/configtool.py" line="230"/>
         <source>Record Directory</source>
         <translation>保存目錄</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="229"/>
+        <location filename="../../configtool/configtool.py" line="231"/>
         <source>Enable Auto-Hide</source>
         <translation>啟用自動隱藏</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="235"/>
+        <location filename="../../configtool/configtool.py" line="237"/>
         <source>Console Logger</source>
         <translation>控制台日誌記錄器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="238"/>
+        <location filename="../../configtool/configtool.py" line="240"/>
         <source>Log Level</source>
         <translation>日誌記錄等級</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="237"/>
+        <location filename="../../configtool/configtool.py" line="239"/>
         <source>Syslog Logger</source>
         <translation>系統日誌記錄器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="203"/>
+        <location filename="../../configtool/configtool.py" line="205"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="204"/>
+        <location filename="../../configtool/configtool.py" line="206"/>
         <source>&amp;Options</source>
         <translation>選項(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="205"/>
+        <location filename="../../configtool/configtool.py" line="207"/>
         <source>&amp;Language</source>
         <translation>語言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="206"/>
+        <location filename="../../configtool/configtool.py" line="208"/>
         <source>&amp;Help</source>
         <translation>幫助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
+        <location filename="../../configtool/configtool.py" line="209"/>
         <source>&amp;Quit</source>
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
+        <location filename="../../configtool/configtool.py" line="210"/>
         <source>&amp;About</source>
         <translation>關於(&amp;A)</translation>
     </message>
@@ -232,117 +232,117 @@
 <context>
     <name>TalkEditorApp</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="179"/>
+        <location filename="../../talkeditor/talkeditor.py" line="154"/>
         <source>Freeseer Talk Editor</source>
         <translation>Freeseer 會議演講列表編輯</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="184"/>
+        <location filename="../../talkeditor/talkeditor.py" line="159"/>
         <source>Clear Database</source>
         <translation>清除數據庫</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="185"/>
+        <location filename="../../talkeditor/talkeditor.py" line="160"/>
         <source>Are you sure you want to clear the DB?</source>
         <translation>確實要清除數據庫麼?</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="191"/>
+        <location filename="../../talkeditor/talkeditor.py" line="166"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="192"/>
+        <location filename="../../talkeditor/talkeditor.py" line="167"/>
         <source>&amp;Options</source>
         <translation>選項(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="193"/>
+        <location filename="../../talkeditor/talkeditor.py" line="168"/>
         <source>&amp;Language</source>
         <translation>語言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="194"/>
+        <location filename="../../talkeditor/talkeditor.py" line="169"/>
         <source>&amp;Help</source>
         <translation>幫助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="195"/>
+        <location filename="../../talkeditor/talkeditor.py" line="170"/>
         <source>&amp;Quit</source>
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="196"/>
+        <location filename="../../talkeditor/talkeditor.py" line="171"/>
         <source>&amp;About</source>
         <translation>關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="202"/>
+        <location filename="../../talkeditor/talkeditor.py" line="177"/>
         <source>Add Talk</source>
         <translation>添加演講記錄</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="203"/>
+        <location filename="../../talkeditor/talkeditor.py" line="178"/>
         <source>Title</source>
         <translation>標題</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="204"/>
+        <location filename="../../talkeditor/talkeditor.py" line="179"/>
         <source>Presenter</source>
         <translation>演講者</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="205"/>
+        <location filename="../../talkeditor/talkeditor.py" line="180"/>
         <source>Event</source>
         <translation>會議</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="206"/>
+        <location filename="../../talkeditor/talkeditor.py" line="181"/>
         <source>Room</source>
         <translation>會議室</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="207"/>
+        <location filename="../../talkeditor/talkeditor.py" line="182"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="208"/>
+        <location filename="../../talkeditor/talkeditor.py" line="183"/>
         <source>Time</source>
         <translation>時間</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="218"/>
+        <location filename="../../talkeditor/talkeditor.py" line="193"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="210"/>
+        <location filename="../../talkeditor/talkeditor.py" line="185"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="216"/>
+        <location filename="../../talkeditor/talkeditor.py" line="191"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="217"/>
+        <location filename="../../talkeditor/talkeditor.py" line="192"/>
         <source>Load talks from RSS</source>
         <translation>從RSS載入演講</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="219"/>
+        <location filename="../../talkeditor/talkeditor.py" line="194"/>
         <source>Remove</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="220"/>
+        <location filename="../../talkeditor/talkeditor.py" line="195"/>
         <source>Clear</source>
         <translation>清除全部</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="221"/>
+        <location filename="../../talkeditor/talkeditor.py" line="196"/>
         <source>Close</source>
         <translation type="unfinished">關閉</translation>
     </message>
@@ -350,7 +350,7 @@
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="249"/>
+        <location filename="../../talkeditor/talkeditor.py" line="224"/>
         <source>Language Display Text</source>
         <translation>繁體中文</translation>
     </message>
