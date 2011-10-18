@@ -181,6 +181,8 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.connect(self.loggerWidget.syslogLoggerLevelComboBox,
                      QtCore.SIGNAL('activated(const QString&)'),
                      self.change_syslog_loglevel)
+        
+        self.retranslate()
 
         # load active plugin widgets
         self.load_plugin_widgets()
@@ -190,9 +192,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         if len(items) > 0:
             item = items[0]
             self.mainWidget.optionsTreeWidget.setCurrentItem(item)
-            
-        self.retranslate()
-        
+
     ###
     ### Translation
     ###
@@ -214,6 +214,24 @@ class ConfigToolApp(QtGui.QMainWindow):
         #
         # ConfigToolWidget
         #
+        self.generalString = self.uiTranslator.translate("ConfigToolApp", "General")
+        self.pluginsString = self.uiTranslator.translate("ConfigToolApp", "Plugins")
+        self.audioInputString = self.uiTranslator.translate("ConfigToolApp", "AudioInput")
+        self.audioMixerString = self.uiTranslator.translate("ConfigToolApp", "AudioMixer")
+        self.videoInputString = self.uiTranslator.translate("ConfigToolApp", "VideoInput")
+        self.videoMixerString = self.uiTranslator.translate("ConfigToolApp", "VideoMixer")
+        self.outputString = self.uiTranslator.translate("ConfigToolApp", "Output")
+        self.loggerString = self.uiTranslator.translate("ConfigToolApp", "Logger")
+        
+        self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.pluginsString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(0).setText(0, self.audioInputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(1).setText(0, self.audioMixerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(2).setText(0, self.videoInputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(3).setText(0, self.videoMixerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(4).setText(0, self.outputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.loggerString)
+        
         self.mainWidget.closePushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
         
@@ -288,21 +306,21 @@ class ConfigToolApp(QtGui.QMainWindow):
             self.mainWidgetLayout.removeWidget(self.currentWidget)
             self.currentWidget.hide()
           
-        if option == "General":
+        if option == self.generalString:
             self.load_general_widget()
-        elif option == "Plugins":
+        elif option == self.pluginsString:
             pass
-        elif option == "AudioInput":
+        elif option == self.audioInputString:
             self.load_option_audioinput_plugins()
-        elif option == "AudioMixer":
+        elif option == self.audioMixerString:
             self.load_option_audiomixer_plugins()
-        elif option == "VideoInput":
+        elif option == self.videoInputString:
             self.load_option_videoinput_plugins()
-        elif option == "VideoMixer":
+        elif option == self.videoMixerString:
             self.load_option_videomixer_plugins()
-        elif option == "Output":
+        elif option == self.outputString:
             self.load_option_output_plugins()
-        elif option == "Logger":
+        elif option == self.loggerString:
             self.load_logger_widget()
         else:
             pass
