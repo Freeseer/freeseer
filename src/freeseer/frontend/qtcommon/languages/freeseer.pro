@@ -10,4 +10,5 @@ TRANSLATIONS = tr_en_US.ts \
                tr_zh_HK.ts \
                tr_sv_SE.ts \
                tr_de_DE.ts \
-               tr_fr_CA.ts
+               tr_fr_CA.ts \
+               tr_nl_NL.ts
