@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -148,42 +149,42 @@
     <message>
         <location filename="../../configtool/configtool.py" line="217"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>一般設定</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="218"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>插件</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="219"/>
         <source>AudioInput</source>
-        <translation type="unfinished"></translation>
+        <translation>音頻輸入</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="220"/>
         <source>AudioMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>音頻混頻器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>VideoInput</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻輸入</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="222"/>
         <source>VideoMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻混頻器</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="223"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>輸出</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="224"/>
         <source>Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>日誌</translation>
     </message>
 </context>
 <context>
@@ -211,7 +212,7 @@
     <message>
         <location filename="../../record/record.py" line="182"/>
         <source>Show Main Window</source>
-        <translation type="unfinished">顯示主窗口</translation>
+        <translation>顯示主窗口</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="188"/>
@@ -384,7 +385,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="197"/>
         <source>Close</source>
-        <translation type="unfinished">關閉</translation>
+        <translation>關閉</translation>
     </message>
 </context>
 <context>
