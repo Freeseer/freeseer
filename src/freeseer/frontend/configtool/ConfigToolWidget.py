@@ -32,8 +32,10 @@ try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
-    
-import resource_rc
+
+from freeseer.frontend.qtcommon.Resource import resource_rc
+   
+#import resource_rc
 
 class ConfigToolWidget(QtGui.QWidget):
     '''

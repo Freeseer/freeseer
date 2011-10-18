@@ -37,6 +37,7 @@ from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from EditorWidget import EditorWidget
 from AddTalkWidget import AddTalkWidget
