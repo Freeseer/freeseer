@@ -30,8 +30,7 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-
-import resource_rc
+from freeseer.frontend.qtcommon.Resource import resource_rc
 
 __version__= project_info.VERSION
 
