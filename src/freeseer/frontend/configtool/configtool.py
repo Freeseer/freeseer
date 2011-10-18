@@ -45,8 +45,6 @@ from LoggerWidget import LoggerWidget
 
 __version__ = project_info.VERSION
 
-LANGUAGE_DIR = 'freeseer/frontend/configtool/languages/'
-
 class ConfigToolApp(QtGui.QMainWindow):
     '''
     ConfigTool is used to tune settings used by the Freeseer Application
