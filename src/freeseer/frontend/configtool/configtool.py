@@ -36,6 +36,7 @@ except AttributeError:
 
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
+from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
@@ -69,6 +70,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.mainWidget.rightPanelWidget.setLayout(self.mainWidgetLayout)
         
         # Load all ConfigTool Widgets
+        self.aboutDialog = AboutDialog()
         self.generalWidget = GeneralWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
         self.loggerWidget = LoggerWidget()
@@ -130,6 +132,8 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
+        
+        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
         self.setupLanguageMenu()
         # --- End Menubar
@@ -238,15 +242,17 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.loggerWidget.syslogLoggerLevelLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Log Level"))
         # --- End LoggerWidget
         
+        self.aboutDialog.retranslate(self.current_language)
+        
     def translate(self, action):
         '''
         When a language is selected from the language menu this function is called
         The language to be changed to is retrieved
         '''
-        language = action.data().toString()
+        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
         
         logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/%s" % language)
+        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
         
         self.retranslate()
 
