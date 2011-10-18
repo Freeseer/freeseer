@@ -37,10 +37,9 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from RecordingWidget import RecordingWidget
-
-import resource_rc
 
 __version__= project_info.VERSION
 
