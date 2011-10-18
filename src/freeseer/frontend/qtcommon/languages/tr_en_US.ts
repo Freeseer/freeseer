@@ -46,102 +46,102 @@
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="198"/>
+        <location filename="../../configtool/configtool.py" line="200"/>
         <source>Freeseer ConfigTool</source>
         <translation>Freeseer Configuration Tool</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="214"/>
+        <location filename="../../configtool/configtool.py" line="216"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="220"/>
+        <location filename="../../configtool/configtool.py" line="222"/>
         <source>Audio / Video Settings</source>
         <translation>Audio / Video Settings</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="221"/>
+        <location filename="../../configtool/configtool.py" line="223"/>
         <source>Record Audio</source>
         <translation>Record Audio</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="222"/>
+        <location filename="../../configtool/configtool.py" line="224"/>
         <source>Audio Mixer</source>
         <translation>Audio Mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="226"/>
+        <location filename="../../configtool/configtool.py" line="228"/>
         <source>Setup</source>
         <translation>Setup</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="224"/>
+        <location filename="../../configtool/configtool.py" line="226"/>
         <source>Record Video</source>
         <translation>Record Video</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="225"/>
+        <location filename="../../configtool/configtool.py" line="227"/>
         <source>Video Mixer</source>
         <translation>Video Mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="227"/>
+        <location filename="../../configtool/configtool.py" line="229"/>
         <source>Miscellaneous</source>
         <translation>Miscellaneous</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="228"/>
+        <location filename="../../configtool/configtool.py" line="230"/>
         <source>Record Directory</source>
         <translation>Record Directory</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="229"/>
+        <location filename="../../configtool/configtool.py" line="231"/>
         <source>Enable Auto-Hide</source>
         <translation>Enable Auto Hide</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="235"/>
+        <location filename="../../configtool/configtool.py" line="237"/>
         <source>Console Logger</source>
         <translation>Console Logger</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="238"/>
+        <location filename="../../configtool/configtool.py" line="240"/>
         <source>Log Level</source>
         <translation>Log Level</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="237"/>
+        <location filename="../../configtool/configtool.py" line="239"/>
         <source>Syslog Logger</source>
         <translation>Syslog Logger</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="203"/>
+        <location filename="../../configtool/configtool.py" line="205"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="204"/>
+        <location filename="../../configtool/configtool.py" line="206"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="205"/>
+        <location filename="../../configtool/configtool.py" line="207"/>
         <source>&amp;Language</source>
         <translation>&amp;Language</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="206"/>
+        <location filename="../../configtool/configtool.py" line="208"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
+        <location filename="../../configtool/configtool.py" line="209"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
+        <location filename="../../configtool/configtool.py" line="210"/>
         <source>&amp;About</source>
         <translation>&amp;About</translation>
     </message>
@@ -232,117 +232,117 @@
 <context>
     <name>TalkEditorApp</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="179"/>
+        <location filename="../../talkeditor/talkeditor.py" line="154"/>
         <source>Freeseer Talk Editor</source>
         <translation>Freeseer Talk Editor</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="184"/>
+        <location filename="../../talkeditor/talkeditor.py" line="159"/>
         <source>Clear Database</source>
         <translation>Clear Database</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="185"/>
+        <location filename="../../talkeditor/talkeditor.py" line="160"/>
         <source>Are you sure you want to clear the DB?</source>
         <translation>Are you sure you want to clear the Database?</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="191"/>
+        <location filename="../../talkeditor/talkeditor.py" line="166"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="192"/>
+        <location filename="../../talkeditor/talkeditor.py" line="167"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="193"/>
+        <location filename="../../talkeditor/talkeditor.py" line="168"/>
         <source>&amp;Language</source>
         <translation>&amp;Language</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="194"/>
+        <location filename="../../talkeditor/talkeditor.py" line="169"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="195"/>
+        <location filename="../../talkeditor/talkeditor.py" line="170"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="196"/>
+        <location filename="../../talkeditor/talkeditor.py" line="171"/>
         <source>&amp;About</source>
         <translation>&amp;About</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="202"/>
+        <location filename="../../talkeditor/talkeditor.py" line="177"/>
         <source>Add Talk</source>
         <translation>Add Talk</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="203"/>
+        <location filename="../../talkeditor/talkeditor.py" line="178"/>
         <source>Title</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="204"/>
+        <location filename="../../talkeditor/talkeditor.py" line="179"/>
         <source>Presenter</source>
         <translation>Presenter</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="205"/>
+        <location filename="../../talkeditor/talkeditor.py" line="180"/>
         <source>Event</source>
         <translation>Event</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="206"/>
+        <location filename="../../talkeditor/talkeditor.py" line="181"/>
         <source>Room</source>
         <translation>Room</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="207"/>
+        <location filename="../../talkeditor/talkeditor.py" line="182"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="208"/>
+        <location filename="../../talkeditor/talkeditor.py" line="183"/>
         <source>Time</source>
         <translation>Time</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="218"/>
+        <location filename="../../talkeditor/talkeditor.py" line="193"/>
         <source>Add</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="210"/>
+        <location filename="../../talkeditor/talkeditor.py" line="185"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="216"/>
+        <location filename="../../talkeditor/talkeditor.py" line="191"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="217"/>
+        <location filename="../../talkeditor/talkeditor.py" line="192"/>
         <source>Load talks from RSS</source>
         <translation>Load talks from RSS</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="219"/>
+        <location filename="../../talkeditor/talkeditor.py" line="194"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="220"/>
+        <location filename="../../talkeditor/talkeditor.py" line="195"/>
         <source>Clear</source>
         <translation>Clear</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="221"/>
+        <location filename="../../talkeditor/talkeditor.py" line="196"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>
@@ -350,7 +350,7 @@
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="249"/>
+        <location filename="../../talkeditor/talkeditor.py" line="224"/>
         <source>Language Display Text</source>
         <translation>English</translation>
     </message>
