@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ja_JP" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="ja_JP">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -148,42 +149,42 @@
     <message>
         <location filename="../../configtool/configtool.py" line="217"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>一般</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="218"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>プラグイン</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="219"/>
         <source>AudioInput</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ入力</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="220"/>
         <source>AudioMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ ミキサー</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>VideoInput</source>
-        <translation type="unfinished"></translation>
+        <translation>ビデオ入力</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="222"/>
         <source>VideoMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>ビデオ ミキサー</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="223"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>出力</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="224"/>
         <source>Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>ロガー</translation>
     </message>
 </context>
 <context>
