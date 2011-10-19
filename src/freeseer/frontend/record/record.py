@@ -165,10 +165,7 @@ class RecordApp(QtGui.QMainWindow):
         # setup spacebar key
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
         self.mainWidget.recordPushButton.setFocus()
-        
-        self.retranslate()
-        
-        
+
     ###
     ### Translation Related
     ###
