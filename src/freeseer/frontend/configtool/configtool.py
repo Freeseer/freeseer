@@ -372,6 +372,12 @@ class ConfigToolApp(QtGui.QMainWindow):
         # Load default language
         i = self.generalWidget.languageComboBox.findData(self.config.default_language)
         self.generalWidget.languageComboBox.setCurrentIndex(i)
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.config.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
         
         # Recording Directory Settings
         self.generalWidget.recordDirLineEdit.setText(self.config.videodir)
