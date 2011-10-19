@@ -77,6 +77,8 @@ class TalkEditorApp(QtGui.QMainWindow):
             self.core = core
         else:
             self.core = FreeseerCore(self)
+            
+        self.config = self.core.get_config()
         
         #
         # Translator
@@ -144,9 +146,15 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
-        self.load_presentations_model()
+        # Load default language
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.config.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
         
-        self.retranslate()
+        self.load_presentations_model()
 
     ###
     ### Translation

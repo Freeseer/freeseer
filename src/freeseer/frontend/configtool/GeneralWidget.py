@@ -87,6 +87,15 @@ class GeneralWidget(QtGui.QWidget):
         self.MiscGroupBox.setLayout(self.MiscLayout)
         self.mainLayout.addWidget(self.MiscGroupBox)
         
+        self.languageLayout = QtGui.QHBoxLayout()
+        self.MiscLayout.addLayout(self.languageLayout)
+        self.languageLabel = QtGui.QLabel("Default Language")
+        self.languageComboBox = QtGui.QComboBox()
+        self.languageComboBox.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        self.languageLabel.setBuddy(self.languageComboBox)
+        self.languageLayout.addWidget(self.languageLabel)
+        self.languageLayout.addWidget(self.languageComboBox)
+        
         self.recordDirLayout = QtGui.QHBoxLayout()
         self.MiscLayout.addLayout(self.recordDirLayout)
         

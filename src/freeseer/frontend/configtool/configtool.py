@@ -150,6 +150,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.connect(self.generalWidget.recordVideoCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
         self.connect(self.generalWidget.videoMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
         self.connect(self.generalWidget.videoMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.generalWidget.languageComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_default_language)
         self.connect(self.generalWidget.recordDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.generalWidget.recordDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalWidget.autoHideCheckBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
@@ -246,6 +247,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.generalWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
         self.generalWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
         self.generalWidget.MiscGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Miscellaneous"))
+        self.generalWidget.languageLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Default Language"))
         self.generalWidget.recordDirLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Record Directory"))
         self.generalWidget.autoHideCheckBox.setText(self.uiTranslator.translate("ConfigToolApp", "Enable Auto-Hide"))
         # --- End GeneralWidget
@@ -291,6 +293,7 @@ class ConfigToolApp(QtGui.QMainWindow):
             languageAction.setData(language)
             self.menuLanguage.addAction(languageAction)
             self.langActionGroup.addAction(languageAction)
+            self.generalWidget.languageComboBox.addItem(language_display_text, language)
             
             if self.current_language == str(language).strip("tr_").rstrip(".qm"):
                 languageAction.setChecked(True)
@@ -366,6 +369,16 @@ class ConfigToolApp(QtGui.QMainWindow):
                     self.generalWidget.videoMixerComboBox.setCurrentIndex(n)
                 n += 1
         
+        # Load default language
+        i = self.generalWidget.languageComboBox.findData(self.config.default_language)
+        self.generalWidget.languageComboBox.setCurrentIndex(i)
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.config.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
+        
         # Recording Directory Settings
         self.generalWidget.recordDirLineEdit.setText(self.config.videodir)
         
@@ -400,6 +413,11 @@ class ConfigToolApp(QtGui.QMainWindow):
         mixer = str(self.generalWidget.videoMixerComboBox.currentText())
         plugin = self.plugman.plugmanc.getPluginByName(mixer, "VideoMixer")
         plugin.plugin_object.get_dialog()
+
+    def set_default_language(self, language):
+        language_file = str(self.generalWidget.languageComboBox.itemData(language).toString())
+        self.config.default_language = language_file
+        self.config.writeConfig()
 
     def browse_video_directory(self):
         directory = self.generalWidget.recordDirLineEdit.text()
@@ -491,9 +509,13 @@ class ConfigToolApp(QtGui.QMainWindow):
     def show_plugin_widget_dialog(self, widget):
         self.dialog = QtGui.QDialog(self)
     
-        self.dialog_layout = QtGui.QHBoxLayout()
+        self.dialog_layout = QtGui.QVBoxLayout()
         self.dialog.setLayout(self.dialog_layout)
         self.dialog_layout.addWidget(widget)
+        
+        self.dialog.closeButton = QtGui.QPushButton("Close")
+        self.dialog_layout.addWidget(self.dialog.closeButton)
+        self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
         self.dialog.show()
             
     def get_plugin_settings_widget(self, plugin):

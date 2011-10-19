@@ -54,6 +54,7 @@ class Config:
         self.enable_audio_recoding = True
         self.videomixer = 'Video Passthrough'
         self.audiomixer = 'Audio Passthrough'
+        self.default_language = "English"
 
         # Lastrun
         self.start_x = 0
@@ -105,6 +106,7 @@ class Config:
             self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
             self.videomixer = config.get('Global', 'videomixer')
             self.audiomixer = config.get('Global', 'audiomixer')
+            self.default_language = config.get('Global', 'Default Language')
             
             # LastRun Section
             self.start_x = config.get('lastrun', 'area_start_x')
@@ -132,6 +134,7 @@ class Config:
         config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
         config.set('Global','videomixer',self.videomixer)
         config.set('Global','audiomixer',self.audiomixer)
+        config.set('Global', 'Default Language', self.default_language)
         
         config.add_section('lastrun')
         config.set('lastrun', 'area_start_x', self.start_x)

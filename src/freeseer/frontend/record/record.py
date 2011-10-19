@@ -68,6 +68,7 @@ class RecordApp(QtGui.QMainWindow):
         self.geometry = None
 
         self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
+        self.config = self.core.get_config()
         
         #
         # Translator
@@ -164,10 +165,7 @@ class RecordApp(QtGui.QMainWindow):
         # setup spacebar key
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
         self.mainWidget.recordPushButton.setFocus()
-        
-        self.retranslate()
-        
-        
+
     ###
     ### Translation Related
     ###
@@ -253,6 +251,14 @@ class RecordApp(QtGui.QMainWindow):
     ###    
     def load_settings(self): 
         logging.info('Loading settings...')
+        
+        # Load default language
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.config.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
         
         # Load Talks as a SQL Data Model
         self.load_event_list()
