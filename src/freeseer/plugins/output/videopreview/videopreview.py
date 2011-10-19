@@ -23,9 +23,13 @@ http://wiki.github.com/fosslc/freeseer/
 @author: Thanh Ha
 '''
 
+
 import pygst
+import ConfigParser
 pygst.require("0.10")
 import gst
+
+from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IOutput
 
@@ -39,7 +43,7 @@ class VideoPreview(IOutput):
         videoqueue = gst.element_factory_make("queue", "videoqueue")
         bin.add(videoqueue)
         
-        videosink = gst.element_factory_make("autovideosink", "videosink")
+        videosink = gst.element_factory_make(self.previewsink, "videosink")
         bin.add(videosink)
         
         # Setup ghost pad
@@ -50,3 +54,42 @@ class VideoPreview(IOutput):
         gst.element_link_many(videoqueue, videosink)
         
         return bin
+    def load_config(self, plugman):
+        self.plugman = plugman
+        self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
+        
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            self.previewLabel = QtGui.QLabel(self.widget.tr("Preview"))
+            self.previewComboBox = QtGui.QComboBox()
+            self.previewComboBox.addItem("autovideosink")
+            self.previewComboBox.addItem("ximagesink")
+            self.previewComboBox.addItem("xvimagesink")
+            self.previewComboBox.addItem("gconfvideosink")
+            
+            layout.addRow(self.previewLabel, self.previewComboBox)
+            
+            self.widget.connect(self.previewComboBox, 
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                self.set_previewsink)
+            
+        return self.widget
+    
+    def widget_load_config(self, plugman):
+        self.plugman = plugman
+        try:
+            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
+            self.a = ""
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.previewsink = "autovideosink"
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Preview Sink", self.previewsink)
+        previewIndex = self.previewComboBox.findText(self.previewsink)
+        self.previewComboBox.setCurrentIndex(previewIndex)
+            
+    def set_previewsink(self, previewsink):
+        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Preview Sink", previewsink)
+        self.plugman.save()
