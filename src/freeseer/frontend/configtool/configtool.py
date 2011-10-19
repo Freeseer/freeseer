@@ -246,6 +246,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.generalWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
         self.generalWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
         self.generalWidget.MiscGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Miscellaneous"))
+        self.generalWidget.languageLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Default Language"))
         self.generalWidget.recordDirLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Record Directory"))
         self.generalWidget.autoHideCheckBox.setText(self.uiTranslator.translate("ConfigToolApp", "Enable Auto-Hide"))
         # --- End GeneralWidget
