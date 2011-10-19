@@ -60,6 +60,7 @@ class ConfigToolWidget(QtGui.QWidget):
         
         # General
         self.optionsTreeWidget = QtGui.QTreeWidget()
+        self.optionsTreeWidget.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         self.optionsTreeWidget.setHeaderHidden(True)
         self.optionsTreeWidget.headerItem().setText(0, "1")
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
