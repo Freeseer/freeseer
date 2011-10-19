@@ -491,9 +491,13 @@ class ConfigToolApp(QtGui.QMainWindow):
     def show_plugin_widget_dialog(self, widget):
         self.dialog = QtGui.QDialog(self)
     
-        self.dialog_layout = QtGui.QHBoxLayout()
+        self.dialog_layout = QtGui.QVBoxLayout()
         self.dialog.setLayout(self.dialog_layout)
         self.dialog_layout.addWidget(widget)
+        
+        self.dialog.closeButton = QtGui.QPushButton("Close")
+        self.dialog_layout.addWidget(self.dialog.closeButton)
+        self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
         self.dialog.show()
             
     def get_plugin_settings_widget(self, plugin):
