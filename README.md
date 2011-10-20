@@ -73,7 +73,12 @@ Developers
     Coming soon!
           
 ### 2. Download
-Get the latest source code from https://github.com/fosslc/freeseer
+Download the source code as a [zip](https://github.com/fosslc/freeseer/zipball/master)
+or [tarball](https://github.com/fosslc/freeseer/tarball/master).
+
+Alternatively, you have the option to clone the project with git:
+
+    $ git clone git@github.com:fosslc/freeseer.git  # Clones a copy of the master repo
 
 ### 3. Build
 
