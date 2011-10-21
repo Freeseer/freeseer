@@ -128,8 +128,8 @@ Authors
 - [Andrew Ross](https://github.com/fosslc)
 - [Thanh Ha](https://github.com/zxiiro)
 
-And many student contributors from Google Summer of Code (GSoC), Fedora Summer Coding,
-and Undergraduate Capstone Open Source Projects (UCOSP).
+And many student contributors from [Google Summer of Code](http://code.google.com/soc), Fedora Summer Coding,
+and [Undergraduate Capstone Open Source Projects](http://ucosp.ca).
 
 
 Copyright and license
