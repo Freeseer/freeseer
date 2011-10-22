@@ -60,6 +60,7 @@ class OggOutput(IOutput):
         bin.add(videoqueue)
         
         videocodec = gst.element_factory_make("theoraenc", "videocodec")
+        videocodec.set_property("bitrate", 2400)
         bin.add(videocodec)
         
         # Setup metadata
