@@ -23,16 +23,21 @@ http://wiki.github.com/fosslc/freeseer/
 @author: Thanh Ha
 '''
 
+import ConfigParser
 import os
 
 import pygst
 pygst.require("0.10")
 import gst
 
+from PyQt4 import QtGui, QtCore
+
 from freeseer.framework.plugin import IVideoInput
 
 class FirewireSrc(IVideoInput):
     name = "Firewire Source"
+    device = "/dev/fw1"
+    device_list = []
     
     def __init__(self):
         IVideoInput.__init__(self)
@@ -66,3 +71,49 @@ class FirewireSrc(IVideoInput):
         bin.add_pad(ghostpad)
         
         return bin
+    
+    def load_config(self, plugman):
+        self.plugman = plugman
+        self.device = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Video Device")
+        self.input_type = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Input Type")
+        self.framerate = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Framerate")
+        self.resolution = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Resolution")
+        
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            
+            self.label = QtGui.QLabel("Video Device")
+            self.combobox = QtGui.QComboBox()
+            layout.addRow(self.label, self.combobox)
+            
+            # Connections
+            self.widget.connect(self.combobox, 
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                self.set_device)
+                        
+        return self.widget
+
+    def widget_load_config(self, plugman):
+        self.plugman = plugman
+        
+        try:
+            self.device = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Video Device")
+        except ConfigParser.NoSectionError:
+            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Video Device", self.device)
+                
+        # Load the combobox with inputs
+        self.combobox.clear()
+        n = 0
+        for i in self.device_list:
+            self.combobox.addItem(i)
+            if i == self.device:
+                self.combobox.setCurrentIndex(n)
+            n = n +1
+            
+    def set_device(self, device):
+        self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Video Device", device)
+        self.plugman.save()
