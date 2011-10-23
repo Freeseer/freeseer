@@ -51,24 +51,28 @@ class AddTalkWidget(QtGui.QWidget):
         # Title
         self.titleLabel = QtGui.QLabel("Title")
         self.titleLineEdit = QtGui.QLineEdit()
+        self.titleLineEdit.setPlaceholderText("Title of the presentation")
         self.titleLabel.setBuddy(self.titleLineEdit)
         self.addTalkLayout.addRow(self.titleLabel, self.titleLineEdit)
         
         # Presenter
         self.presenterLabel = QtGui.QLabel("Presenter")
         self.presenterLineEdit = QtGui.QLineEdit()
+        self.presenterLineEdit.setPlaceholderText("Name person or people presenting (comma separated)")
         self.presenterLabel.setBuddy(self.presenterLineEdit)
         self.addTalkLayout.addRow(self.presenterLabel, self.presenterLineEdit)
         
         # Event
         self.eventLabel = QtGui.QLabel("Event")
         self.eventLineEdit = QtGui.QLineEdit()
+        self.eventLineEdit.setPlaceholderText("The name of the Event this talk is being presented at")
         self.eventLabel.setBuddy(self.eventLineEdit)
         self.addTalkLayout.addRow(self.eventLabel, self.eventLineEdit)
         
         # Room
         self.roomLabel = QtGui.QLabel("Room")
         self.roomLineEdit = QtGui.QLineEdit()
+        self.roomLineEdit.setPlaceholderText("The Room in which the presentation is taking place")
         self.roomLabel.setBuddy(self.roomLineEdit)
         self.addTalkLayout.addRow(self.roomLabel, self.roomLineEdit)
         
