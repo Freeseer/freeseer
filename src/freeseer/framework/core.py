@@ -276,6 +276,12 @@ class FreeseerCore:
         
         self.backend.record()
 
+    def pause(self):
+        """
+        Sets the pipeline up in paused state.
+        """
+        self.backend.pause()
+
     def stop(self):
         '''
         Informs backend to stop recording.
