@@ -114,6 +114,7 @@ class Gstreamer:
         Start recording.
         """
         self.player.set_state(gst.STATE_PLAYING)
+        self.current_state = Gstreamer.RECORD
         logging.debug("Recording started.")
         
     def pause(self):
@@ -121,20 +122,21 @@ class Gstreamer:
         Pause recording.
         """
         self.player.set_state(gst.STATE_PAUSED)
-        self.current_state= Gstreamer.PAUSE
+        self.current_state = Gstreamer.PAUSE
         logging.debug("Gstreamer paused.")
     
     def stop(self):
         """
         Stop recording.
         """
-        if self.current_state != Gstreamer.NULL:
+        if self.current_state != Gstreamer.NULL and self.current_state != Gstreamer.STOP:
             self.player.set_state(gst.STATE_NULL)
             
             self.unload_audiomixer()
             self.unload_videomixer()    
             self.unload_output_plugins()
             
+            self.current_state = Gstreamer.STOP
             logging.debug("Gstreamer stopped.")
     
     def load_output_plugins(self, plugins, metadata):
