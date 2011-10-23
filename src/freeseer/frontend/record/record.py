@@ -147,6 +147,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
         self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const int)'), self.load_backend)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.mainWidget.pausePushButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
 
         # Main Window Connections
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
@@ -307,6 +308,14 @@ class RecordApp(QtGui.QMainWindow):
             self.statusBar().showMessage('ready')
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
+            
+    def pause(self, state):
+        if (state): # Pause Recording.
+            self.core.pause()
+            print "Pausing"
+        else:
+            self.core.record()
+            print "Unpausing"
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
