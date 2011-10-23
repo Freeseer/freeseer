@@ -285,7 +285,7 @@ class TalkEditorApp(QtGui.QMainWindow):
 
     def remove_talk(self):
         try:
-            row_clicked = self.ui.editTable.currentIndex().row()
+            row_clicked = self.editorWidget.editor.currentIndex().row()
         except:
             return
         
