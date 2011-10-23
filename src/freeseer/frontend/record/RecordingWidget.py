@@ -59,6 +59,7 @@ class RecordingWidget(QtGui.QWidget):
         self.stopIcon =  QtGui.QIcon.fromTheme("media-playback-stop", stopFallbackIcon)
         
         self.recordPushButton = QtGui.QPushButton("Record")
+        self.recordPushButton.setToolTip("Record")
         self.recordPushButton.setMinimumSize(QtCore.QSize(0, 40))
         self.recordPushButton.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         self.recordPushButton.setIcon(self.recordIcon)
@@ -70,6 +71,7 @@ class RecordingWidget(QtGui.QWidget):
         pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
         self.pauseToolButton = QtGui.QToolButton()
         self.pauseToolButton.setText("Pause")
+        self.pauseToolButton.setToolTip("Pause")
         self.pauseToolButton.setIcon(pauseIcon)
         self.pauseToolButton.setMinimumSize(QtCore.QSize(40, 40))
         self.pauseToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
