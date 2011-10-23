@@ -30,14 +30,20 @@ import pygst
 pygst.require("0.10")
 import gst
 
-
 class Gstreamer:
+    NULL = 0
+    RECORD = 1
+    PAUSE = 2
+    STOP = 3
+    
     def __init__(self, window_id=None, audio_feedback=None):
         self.window_id = window_id
         self.audio_feedback_event = audio_feedback
         
         self.record_audio = False
         self.record_video = False
+        
+        self.current_state = Gstreamer.NULL
         
         # Initialize Player
         self.player = gst.Pipeline('player')
@@ -109,36 +115,27 @@ class Gstreamer:
         """
         self.player.set_state(gst.STATE_PLAYING)
         logging.debug("Recording started.")
+        
+    def pause(self):
+        """
+        Pause recording.
+        """
+        self.player.set_state(gst.STATE_PAUSED)
+        self.current_state= Gstreamer.PAUSE
+        logging.debug("Gstreamer paused.")
     
     def stop(self):
         """
         Stop recording.
         """
-        self.player.set_state(gst.STATE_NULL)
-        
-        # Unlink Audio plugins
-        if self.record_audio is True:
-            for plugin in self.audio_input_plugins:
-                gst.element_unlink_many(self.audio_tee, plugin)
-                self.player.remove(plugin)
-        
-            gst.element_unlink_many(self.audiomixer, self.audio_tee)
-            self.player.remove(self.audiomixer)
-        
-        # Unlink Video plugins
-        if self.record_video is True:
-            for plugin in self.video_input_plugins:
-                gst.element_unlink_many(self.video_tee, plugin)
-                self.player.remove(plugin)
+        if self.current_state != Gstreamer.NULL:
+            self.player.set_state(gst.STATE_NULL)
             
-            gst.element_unlink_many(self.videomixer, self.video_tee)
-            self.player.remove(self.videomixer)
+            self.unload_audiomixer()
+            self.unload_videomixer()    
+            self.unload_output_plugins()
             
-        for plugin in self.output_plugins:
-            gst.element_unlink_many(self.video_tee, plugin)
-            self.player.remove(plugin)
-        
-        logging.debug("Recording stopped.")
+            logging.debug("Gstreamer stopped.")
     
     def load_output_plugins(self, plugins, metadata):
         self.output_plugins = []
@@ -157,6 +154,11 @@ class Gstreamer:
                 self.player.add(bin)
                 self.audio_tee.link_pads("src%d", bin, "audiosink")                
                 self.video_tee.link_pads("src%d", bin, "videosink")
+                
+    def unload_output_plugins(self):
+        for plugin in self.output_plugins:
+            gst.element_unlink_many(self.video_tee, plugin)
+            self.player.remove(plugin)
     
     def load_audiomixer(self, mixer, inputs):
         self.record_audio = True
@@ -167,6 +169,15 @@ class Gstreamer:
         self.audiomixer.link(self.audio_tee)
         
         self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
+        
+    def unload_audiomixer(self):
+        if self.record_audio is True:
+            for plugin in self.audio_input_plugins:
+                gst.element_unlink_many(self.audio_tee, plugin)
+                self.player.remove(plugin)
+        
+            gst.element_unlink_many(self.audiomixer, self.audio_tee)
+            self.player.remove(self.audiomixer)
 
     def load_videomixer(self, mixer, inputs):
         self.record_video = True
@@ -177,3 +188,12 @@ class Gstreamer:
         self.videomixer.link(self.video_tee)
         
         self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)
+        
+    def unload_videomixer(self):
+        if self.record_video is True:
+            for plugin in self.video_input_plugins:
+                gst.element_unlink_many(self.video_tee, plugin)
+                self.player.remove(plugin)
+            
+            gst.element_unlink_many(self.videomixer, self.video_tee)
+            self.player.remove(self.videomixer)

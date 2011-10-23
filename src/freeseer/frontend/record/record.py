@@ -143,11 +143,10 @@ class RecordApp(QtGui.QMainWindow):
 
         # main tab connections
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
-        self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
-        self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
 
         # Main Window Connections
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
@@ -155,11 +154,13 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
         # GUI Disabling/Enabling Connections
+        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
+        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setChecked)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.eventComboBox.setDisabled)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
-                
+
         self.load_settings()
 
         # setup spacebar key
@@ -267,7 +268,8 @@ class RecordApp(QtGui.QMainWindow):
         '''
         Creates a presentation object from the currently selected title on the GUI
         '''
-        p_id = self.mainWidget.talkComboBox.model().index(0, 1).data(QtCore.Qt.DisplayRole).toString()
+        i = self.mainWidget.talkComboBox.currentIndex()
+        p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
         return self.core.db.get_presentation(p_id)
 
     def capture(self, state):
@@ -275,23 +277,20 @@ class RecordApp(QtGui.QMainWindow):
         Function for recording and stopping recording.
         '''
 
-
         if (state): # Start Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-
-            self.core.record(self.current_presentation())    
+            self.load_backend()
+            self.core.record()    
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
 
-
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
-
 
             self.statusBar().showMessage('recording...')
             self.core.config.writeConfig()
@@ -308,6 +307,18 @@ class RecordApp(QtGui.QMainWindow):
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
+    def pause(self, state):
+        if (state): # Pause Recording.
+            self.core.pause()
+            logging.info("Recording paused.")
+        else:
+            self.core.record()
+            logging.info("Recording unpaused.")
+            
+    def load_backend(self, talk=None):
+        if talk is not None: self.core.stop()
+        
+        self.core.load_backend(self.current_presentation())
 
     ###
     ### Talk Related
@@ -318,25 +329,23 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.eventComboBox.setModel(model)
 
     def load_rooms_from_event(self, event):
+        #self.disconnect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
+        
         self.current_event = event
 
         model = self.core.db.get_rooms_model(self.current_event)
         self.mainWidget.roomComboBox.setModel(model)
+        
+        #self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         
     def load_dates_from_event_room(self, change):
         event = str(self.mainWidget.eventComboBox.currentText())
         room = str(self.mainWidget.roomComboBox.currentText())
         model = self.core.db.get_dates_from_event_room_model(event, room)
         self.mainWidget.dateComboBox.setModel(model)
-        
-    def load_talks_from_room(self, room):
-        self.current_room = room
-        self.current_date = str(self.mainWidget.dateComboBox.currentText())
 
-        model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
-        self.mainWidget.talkComboBox.setModel(model)
-        
     def load_talks_from_date(self, date):
+        self.current_room = str(self.mainWidget.roomComboBox.currentText())
         self.current_date = date
         
         model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
