@@ -99,16 +99,21 @@ class RecordApp(QtGui.QMainWindow):
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
+        folderIcon = QtGui.QIcon.fromTheme("folder")
         self.actionOpenVideoFolder = QtGui.QAction(self)
         self.actionOpenVideoFolder.setShortcut("Ctrl+O")
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
+        self.actionOpenVideoFolder.setIcon(folderIcon)
         
+        exitIcon = QtGui.QIcon.fromTheme("application-exit")
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        self.actionExit.setIcon(exitIcon)
         
         self.actionAbout = QtGui.QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.actionAbout.setIcon(icon)
         
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
