@@ -49,19 +49,27 @@ class RecordingWidget(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
+        # Control bar
+        self.controlRow = QtGui.QHBoxLayout()
+        self.mainLayout.addLayout(self.controlRow)
+        
         self.recordPushButton = QtGui.QPushButton("Record")
         self.recordPushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.recordPushButton.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/multimedia/record.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         icon1.addPixmap(QtGui.QPixmap(":/multimedia/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.recordPushButton.setIcon(icon1)
         self.recordPushButton.setCheckable(True)
         self.recordPushButton.setObjectName("recordButton")
-        self.mainLayout.addWidget(self.recordPushButton)
+        self.controlRow.addWidget(self.recordPushButton)
         
         self.pausePushButton = QtGui.QPushButton("Pause")
+        self.pausePushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.pausePushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+        self.pausePushButton.setEnabled(False)
         self.pausePushButton.setCheckable(True)
-        self.mainLayout.addWidget(self.pausePushButton)
+        self.controlRow.addWidget(self.pausePushButton)
         
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
