@@ -112,10 +112,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
-        self.actionOpenVideoFolder = QtGui.QAction(self)
-        self.actionOpenVideoFolder.setShortcut("Ctrl+O")
-        self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
-        
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
