@@ -93,6 +93,7 @@ class EditorWidget(QtGui.QWidget):
         
         self.editor = QtGui.QTableView()
         self.editor.setAlternatingRowColors(True)
+        self.editor.setSortingEnabled(True)
         self.editorLayout.addWidget(self.editor)
 
 if __name__ == "__main__":
