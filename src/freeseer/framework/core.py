@@ -272,7 +272,7 @@ class FreeseerCore:
                 
         self.pause()
 
-    def record(self, presentation):
+    def record(self):
         '''
         Informs backend to begin recording presentation.
         '''

@@ -280,7 +280,7 @@ class RecordApp(QtGui.QMainWindow):
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
 
-            self.core.record(self.current_presentation())    
+            self.core.record()    
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
             # check if auto-hide is set and if so hide
@@ -303,6 +303,7 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
+            self.load_backend()
             self.statusBar().showMessage('ready')
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
