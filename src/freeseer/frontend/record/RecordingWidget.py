@@ -53,16 +53,19 @@ class RecordingWidget(QtGui.QWidget):
         self.controlRow = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.controlRow)
         
+        recordFallbackIcon = QtGui.QIcon(":/multimedia/record.png")
+        self.recordIcon = QtGui.QIcon.fromTheme("media-record", recordFallbackIcon)
+        stopFallbackIcon = QtGui.QIcon(":/multimedia/stop.png")
+        self.stopIcon =  QtGui.QIcon.fromTheme("media-playback-stop", stopFallbackIcon)
+        
         self.recordPushButton = QtGui.QPushButton("Record")
         self.recordPushButton.setMinimumSize(QtCore.QSize(0, 40))
         self.recordPushButton.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/multimedia/record.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon1.addPixmap(QtGui.QPixmap(":/multimedia/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.recordPushButton.setIcon(icon1)
+        self.recordPushButton.setIcon(self.recordIcon)
         self.recordPushButton.setCheckable(True)
         self.recordPushButton.setObjectName("recordButton")
         self.controlRow.addWidget(self.recordPushButton)
+        self.connect(self.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.setIcon)
         
         pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
         self.pauseToolButton = QtGui.QToolButton()
@@ -120,6 +123,11 @@ class RecordingWidget(QtGui.QWidget):
         self.previewLayout.addWidget(self.previewWidget)
         self.previewLayout.addWidget(self.audioSlider)
         
+    def setIcon(self, state):
+        if state:
+            self.recordPushButton.setIcon(self.stopIcon)
+        else:
+            self.recordPushButton.setIcon(self.recordIcon)
 
 if __name__ == "__main__":
     import sys
