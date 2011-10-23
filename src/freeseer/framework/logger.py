@@ -69,7 +69,7 @@ class Logger():
         
         config.add_section('logger_root')
         config.set('logger_root', 'level', 'DEBUG')
-        config.set('logger_root', 'handlers', 'consoleHandler,syslogHandler')
+        config.set('logger_root', 'handlers', 'consoleHandler')
         
         config.add_section('handler_consoleHandler')
         config.set('handler_consoleHandler', 'class', 'StreamHandler')
