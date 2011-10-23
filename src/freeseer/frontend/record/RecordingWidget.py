@@ -59,6 +59,10 @@ class RecordingWidget(QtGui.QWidget):
         self.recordPushButton.setObjectName("recordButton")
         self.mainLayout.addWidget(self.recordPushButton)
         
+        self.pausePushButton = QtGui.QPushButton("Pause")
+        self.pausePushButton.setCheckable(True)
+        self.mainLayout.addWidget(self.pausePushButton)
+        
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.filterBarLayout)
