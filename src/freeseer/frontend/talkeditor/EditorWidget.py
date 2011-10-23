@@ -52,6 +52,7 @@ class EditorWidget(QtGui.QWidget):
         
         self.rssLabel = QtGui.QLabel("URL")
         self.rssLineEdit = QtGui.QLineEdit()
+        self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
         self.rssLabel.setBuddy(self.rssLineEdit)
         self.rssPushButton = QtGui.QPushButton("Load talks from RSS")
         rss_icon = QtGui.QIcon()
