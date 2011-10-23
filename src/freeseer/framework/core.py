@@ -229,11 +229,7 @@ class FreeseerCore:
                  "comment" : presentation.description}
 
 
-    def record(self, presentation):
-        '''
-        Informs backend to begin recording presentation.
-        '''
-
+    def load_backend(self, presentation):
         logging.debug("Loading Output plugins...")
         plugins = []
         for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
@@ -272,7 +268,13 @@ class FreeseerCore:
                 videoinputs = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
                 videomixer.load_config(self.plugman)
                 self.backend.load_videomixer(videomixer, videoinputs)
-        
+                
+        self.pause()
+
+    def record(self, presentation):
+        '''
+        Informs backend to begin recording presentation.
+        '''
         self.backend.record()
 
     def pause(self):
