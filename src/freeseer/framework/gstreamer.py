@@ -30,14 +30,20 @@ import pygst
 pygst.require("0.10")
 import gst
 
-
 class Gstreamer:
+    NULL = 0
+    RECORD = 1
+    PAUSE = 2
+    STOP = 3
+    
     def __init__(self, window_id=None, audio_feedback=None):
         self.window_id = window_id
         self.audio_feedback_event = audio_feedback
         
         self.record_audio = False
         self.record_video = False
+        
+        self.current_state = Gstreamer.NULL
         
         # Initialize Player
         self.player = gst.Pipeline('player')
@@ -115,19 +121,21 @@ class Gstreamer:
         Pause recording.
         """
         self.player.set_state(gst.STATE_PAUSED)
+        self.current_state= Gstreamer.PAUSE
         logging.debug("Gstreamer paused.")
     
     def stop(self):
         """
         Stop recording.
         """
-        self.player.set_state(gst.STATE_NULL)
-        
-        self.unload_audiomixer()
-        self.unload_videomixer()    
-        self.unload_output_plugins()
-        
-        logging.debug("Recording stopped.")
+        if self.current_state != Gstreamer.NULL:
+            self.player.set_state(gst.STATE_NULL)
+            
+            self.unload_audiomixer()
+            self.unload_videomixer()    
+            self.unload_output_plugins()
+            
+            logging.debug("Gstreamer stopped.")
     
     def load_output_plugins(self, plugins, metadata):
         self.output_plugins = []
