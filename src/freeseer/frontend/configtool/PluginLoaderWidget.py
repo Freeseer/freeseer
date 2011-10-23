@@ -53,6 +53,36 @@ class PluginLoaderWidget(QtGui.QWidget):
         layout = QtGui.QHBoxLayout()
         widget.setLayout(layout)
         
+        # Display Plugin's meta data in a tooltip
+        pluginTooltip = """
+        <table>
+        <tr>
+            <td>Name: </td>
+            <td><b>%(name)s</b></td>
+        </tr>
+        <tr>
+            <td>Version: </td>
+            <td><b>%(version)s</b></td>
+        <tr>
+            <td>Author: </td>
+            <td><b>%(author)s</b></td>
+        </tr>
+        <tr>
+            <td>Website: </td>
+            <td><b>%(website)s</b></td>
+        </tr>
+        <tr>
+            <td>Description: </td>
+            <td><b>%(description)s</b></td>
+        </tr>
+        </table>
+        """ % {"name" : plugin.name,
+               "version" : plugin.version,
+               "author" : plugin.author,
+               "website" : plugin.website,
+               "description" : plugin.description}
+        widget.setToolTip(pluginTooltip)
+        
         # Checkbox, set the proper state on load
         pluginCheckBox = QtGui.QCheckBox()
         pluginCheckBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Maximum)
