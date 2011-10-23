@@ -147,6 +147,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
+        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.reload_capture)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
         # Main Window Connections
@@ -165,6 +166,8 @@ class RecordApp(QtGui.QMainWindow):
         # setup spacebar key
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
         self.mainWidget.recordPushButton.setFocus()
+        
+        self.capture(True)
 
     ###
     ### Translation Related
@@ -275,7 +278,6 @@ class RecordApp(QtGui.QMainWindow):
         Function for recording and stopping recording.
         '''
 
-
         if (state): # Start Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
@@ -308,6 +310,9 @@ class RecordApp(QtGui.QMainWindow):
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
+    def reload_capture(self, talk):
+        self.capture(False)
+        self.capture(True)
 
     ###
     ### Talk Related
