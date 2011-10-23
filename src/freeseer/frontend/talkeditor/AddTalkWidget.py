@@ -91,9 +91,14 @@ class AddTalkWidget(QtGui.QWidget):
         self.addTalkLayout.addRow(self.timeLabel, self.timeEdit)
         
         # Buttons
+        addIcon = QtGui.QIcon.fromTheme("list-add")
+        cancelIcon = QtGui.QIcon.fromTheme("edit-clear")
+        
         self.buttonsWidget = QtGui.QHBoxLayout()
         self.addButton = QtGui.QPushButton("Add")
+        self.addButton.setIcon(addIcon)
         self.cancelButton = QtGui.QPushButton("Cancel")
+        self.cancelButton.setIcon(cancelIcon)
         self.buttonsWidget.addWidget(self.addButton)
         self.buttonsWidget.addWidget(self.cancelButton)
         self.addTalkLayout.addRow(None, self.buttonsWidget)
