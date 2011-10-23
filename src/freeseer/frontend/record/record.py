@@ -145,7 +145,6 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
-        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const int)'), self.load_backend)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.mainWidget.pausePushButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
 
@@ -282,7 +281,7 @@ class RecordApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-
+            self.load_backend()
             self.core.record()    
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
@@ -290,10 +289,8 @@ class RecordApp(QtGui.QMainWindow):
             if(self.core.config.auto_hide == True):
                 self.hide_window()
 
-
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
-
 
             self.statusBar().showMessage('recording...')
             self.core.config.writeConfig()
@@ -306,7 +303,6 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.load_backend()
             self.statusBar().showMessage('ready')
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
