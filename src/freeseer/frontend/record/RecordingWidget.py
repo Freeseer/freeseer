@@ -64,12 +64,15 @@ class RecordingWidget(QtGui.QWidget):
         self.recordPushButton.setObjectName("recordButton")
         self.controlRow.addWidget(self.recordPushButton)
         
-        self.pausePushButton = QtGui.QPushButton("Pause")
-        self.pausePushButton.setMinimumSize(QtCore.QSize(0, 40))
-        self.pausePushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
-        self.pausePushButton.setEnabled(False)
-        self.pausePushButton.setCheckable(True)
-        self.controlRow.addWidget(self.pausePushButton)
+        pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
+        self.pauseToolButton = QtGui.QToolButton()
+        self.pauseToolButton.setText("Pause")
+        self.pauseToolButton.setIcon(pauseIcon)
+        self.pauseToolButton.setMinimumSize(QtCore.QSize(40, 40))
+        self.pauseToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+        self.pauseToolButton.setEnabled(False)
+        self.pauseToolButton.setCheckable(True)
+        self.controlRow.addWidget(self.pauseToolButton)
         
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
