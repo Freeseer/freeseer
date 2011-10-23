@@ -314,10 +314,10 @@ class RecordApp(QtGui.QMainWindow):
     def pause(self, state):
         if (state): # Pause Recording.
             self.core.pause()
-            print "Pausing"
+            logging.info("Recording paused.")
         else:
             self.core.record()
-            print "Unpausing"
+            logging.info("Recording unpaused.")
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
