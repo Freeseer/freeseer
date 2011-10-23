@@ -309,7 +309,7 @@ class RecordApp(QtGui.QMainWindow):
             # we have - hidden or showing
             
     def load_backend(self, talk=None):
-        self.core.stop()
+        if talk is not None: self.core.stop()
         
         self.core.load_backend(self.current_presentation())
 
