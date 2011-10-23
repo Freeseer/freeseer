@@ -143,10 +143,9 @@ class RecordApp(QtGui.QMainWindow):
 
         # main tab connections
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
-        self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
-        self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
+        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const int)'), self.load_backend)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
 
         # Main Window Connections
@@ -267,7 +266,8 @@ class RecordApp(QtGui.QMainWindow):
         '''
         Creates a presentation object from the currently selected title on the GUI
         '''
-        p_id = self.mainWidget.talkComboBox.model().index(0, 1).data(QtCore.Qt.DisplayRole).toString()
+        i = self.mainWidget.talkComboBox.currentIndex()
+        p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
         return self.core.db.get_presentation(p_id)
 
     def capture(self, state):
@@ -311,8 +311,6 @@ class RecordApp(QtGui.QMainWindow):
         self.core.stop()
         
         self.core.load_backend(self.current_presentation())
-        
-        self.core.pause()
 
     ###
     ### Talk Related
@@ -323,38 +321,27 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.eventComboBox.setModel(model)
 
     def load_rooms_from_event(self, event):
+        #self.disconnect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
+        
         self.current_event = event
 
         model = self.core.db.get_rooms_model(self.current_event)
         self.mainWidget.roomComboBox.setModel(model)
+        
+        #self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
         
     def load_dates_from_event_room(self, change):
         event = str(self.mainWidget.eventComboBox.currentText())
         room = str(self.mainWidget.roomComboBox.currentText())
         model = self.core.db.get_dates_from_event_room_model(event, room)
         self.mainWidget.dateComboBox.setModel(model)
-        
-    def load_talks_from_room(self, room):
-        self.disconnect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_backend)
-        
-        self.current_room = room
-        self.current_date = str(self.mainWidget.dateComboBox.currentText())
 
-        model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
-        self.mainWidget.talkComboBox.setModel(model)
-        
-        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_backend)
-        
     def load_talks_from_date(self, date):
-        self.disconnect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_backend)
-        
+        self.current_room = str(self.mainWidget.roomComboBox.currentText())
         self.current_date = date
         
         model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
         self.mainWidget.talkComboBox.setModel(model)
-        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_backend)
-        
-        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_backend)
 
     ###
     ### Misc
