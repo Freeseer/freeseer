@@ -145,6 +145,10 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         
+        # CSV Widget
+        self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
+        self.connect(self.editorWidget.csvPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_csv)
+        
         # Main Window Connections
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
@@ -202,6 +206,9 @@ class TalkEditorApp(QtGui.QMainWindow):
         #
         self.editorWidget.rssLabel.setText(self.uiTranslator.translate("TalkEditorApp", "URL"))
         self.editorWidget.rssPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from RSS"))
+        self.editorWidget.csvLabel.setText(self.uiTranslator.translate("TalkEditorApp", "File"))
+        self.editorWidget.csvFileSelectButton.setText(self.uiTranslator.translate("TalkEditorApp", "Select CSV file"))
+        self.editorWidget.csvPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from CSV"))
         self.editorWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
         self.editorWidget.removeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Remove"))
         self.editorWidget.clearButton.setText(self.uiTranslator.translate("TalkEditorApp", "Clear"))
@@ -322,6 +329,16 @@ class TalkEditorApp(QtGui.QMainWindow):
         logging.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
         event.accept()
+    
+    def csv_file_select(self):
+        fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file')
+        if fname:
+            self.editorWidget.csvLineEdit.setText(fname)    
+    
+    def add_talks_from_csv(self):
+        fname = self.editorWidget.csvLineEdit.text()
+        self.core.add_talks_from_csv(fname)
+        self.presentationModel.select()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

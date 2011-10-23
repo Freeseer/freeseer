@@ -64,6 +64,23 @@ class EditorWidget(QtGui.QWidget):
         self.rssLayout.addWidget(self.rssPushButton)
         
         #
+        # CSV Layout
+        #
+        self.csvLayout = QtGui.QHBoxLayout()
+        self.mainLayout.addLayout(self.csvLayout)
+        
+        self.csvLabel = QtGui.QLabel("File")
+        self.csvLineEdit = QtGui.QLineEdit()
+        self.csvLabel.setBuddy(self.csvLineEdit)
+        self.csvFileSelectButton = QtGui.QPushButton("Select CSV file")
+        self.csvPushButton = QtGui.QPushButton("Load talks from CSV")
+        
+        self.csvLayout.addWidget(self.csvLabel)
+        self.csvLayout.addWidget(self.csvLineEdit)
+        self.csvLayout.addWidget(self.csvFileSelectButton)
+        self.csvLayout.addWidget(self.csvPushButton)
+        
+        #
         # Editor Layout
         #
         self.editorLayout = QtGui.QHBoxLayout()
