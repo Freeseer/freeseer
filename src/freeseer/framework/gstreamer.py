@@ -109,6 +109,13 @@ class Gstreamer:
         """
         self.player.set_state(gst.STATE_PLAYING)
         logging.debug("Recording started.")
+        
+    def pause(self):
+        """
+        Pause recording.
+        """
+        self.player.set_state(gst.STATE_PAUSED)
+        logging.debug("Gstreamer paused.")
     
     def stop(self):
         """
