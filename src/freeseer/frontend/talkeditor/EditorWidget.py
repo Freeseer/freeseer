@@ -75,7 +75,7 @@ class EditorWidget(QtGui.QWidget):
         addIcon = QtGui.QIcon.fromTheme("list-add")
         removeIcon = QtGui.QIcon.fromTheme("list-remove")
         clearIcon = QtGui.QIcon.fromTheme("edit-clear")
-        closeIcon = QtGui.QIcon.fromTheme("application-exit") 
+        closeIcon = QtGui.QIcon.fromTheme("application-exit")
         
         self.addButton = QtGui.QPushButton("Add")
         self.addButton.setIcon(addIcon)
