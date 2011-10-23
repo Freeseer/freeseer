@@ -23,9 +23,9 @@ http://wiki.github.com/fosslc/freeseer/
 @author: Thanh Ha
 '''
 
+import ConfigParser
 
 import pygst
-import ConfigParser
 pygst.require("0.10")
 import gst
 
@@ -54,6 +54,7 @@ class VideoPreview(IOutput):
         gst.element_link_many(videoqueue, videosink)
         
         return bin
+    
     def load_config(self, plugman):
         self.plugman = plugman
         self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
