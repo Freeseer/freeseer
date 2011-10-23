@@ -22,10 +22,13 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+
+import sys
 import datetime
 import logging
 import os
 import unicodedata
+import csv
 
 from freeseer import project_info
 import gstreamer
@@ -200,6 +203,19 @@ class FreeseerCore:
     ##
     ## Backend Functions
     ##
+    
+    def add_talks_from_csv(self, file):
+        reader = csv.DictReader(open(file,'r'))
+        for row in reader:
+            print row
+            talk = Presentation(row["Title"],
+                                row["Speaker"],
+                                row["Abstract"],
+                                row["Level"],
+                                row["Event"],
+                                row["Room"],
+                                row["Time"])
+            self.db.insert_presentation(talk)
 
     def set_recording_area(self, x1, y1, x2, y2):
         # gstreamer backend needs to have the lower x/y coordinates
