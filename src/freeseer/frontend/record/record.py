@@ -176,6 +176,7 @@ class RecordApp(QtGui.QMainWindow):
         # Reusable Strings
         #
         self.recordString = self.uiTranslator.translate("RecordApp", "Record")
+        self.pauseString = self.uiTranslator.translate("RecordApp", "Pause")
         self.stopString = self.uiTranslator.translate("RecordApp", "Stop")
         self.hideWindowString = self.uiTranslator.translate("RecordApp", "Hide Main Window")
         self.showWindowString = self.uiTranslator.translate("RecordApp", "Show Main Window")
@@ -205,6 +206,9 @@ class RecordApp(QtGui.QMainWindow):
         # RecordingWidget
         #
         self.mainWidget.recordPushButton.setText(self.recordString)
+        self.mainWidget.recordPushButton.setToolTip(self.recordString)
+        self.mainWidget.pauseToolButton.setText(self.pauseString)
+        self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
         self.mainWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event"))
         self.mainWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room"))
         self.mainWidget.dateLabel.setText(self.uiTranslator.translate("RecordApp", "Date"))
