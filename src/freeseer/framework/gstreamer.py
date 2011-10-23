@@ -123,27 +123,9 @@ class Gstreamer:
         """
         self.player.set_state(gst.STATE_NULL)
         
-        # Unlink Audio plugins
-        if self.record_audio is True:
-            for plugin in self.audio_input_plugins:
-                gst.element_unlink_many(self.audio_tee, plugin)
-                self.player.remove(plugin)
-        
-            gst.element_unlink_many(self.audiomixer, self.audio_tee)
-            self.player.remove(self.audiomixer)
-        
-        # Unlink Video plugins
-        if self.record_video is True:
-            for plugin in self.video_input_plugins:
-                gst.element_unlink_many(self.video_tee, plugin)
-                self.player.remove(plugin)
-            
-            gst.element_unlink_many(self.videomixer, self.video_tee)
-            self.player.remove(self.videomixer)
-            
-        for plugin in self.output_plugins:
-            gst.element_unlink_many(self.video_tee, plugin)
-            self.player.remove(plugin)
+        self.unload_audiomixer()
+        self.unload_videomixer()    
+        self.unload_output_plugins()
         
         logging.debug("Recording stopped.")
     
@@ -164,6 +146,11 @@ class Gstreamer:
                 self.player.add(bin)
                 self.audio_tee.link_pads("src%d", bin, "audiosink")                
                 self.video_tee.link_pads("src%d", bin, "videosink")
+                
+    def unload_output_plugins(self):
+        for plugin in self.output_plugins:
+            gst.element_unlink_many(self.video_tee, plugin)
+            self.player.remove(plugin)
     
     def load_audiomixer(self, mixer, inputs):
         self.record_audio = True
@@ -174,6 +161,15 @@ class Gstreamer:
         self.audiomixer.link(self.audio_tee)
         
         self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
+        
+    def unload_audiomixer(self):
+        if self.record_audio is True:
+            for plugin in self.audio_input_plugins:
+                gst.element_unlink_many(self.audio_tee, plugin)
+                self.player.remove(plugin)
+        
+            gst.element_unlink_many(self.audiomixer, self.audio_tee)
+            self.player.remove(self.audiomixer)
 
     def load_videomixer(self, mixer, inputs):
         self.record_video = True
@@ -184,3 +180,12 @@ class Gstreamer:
         self.videomixer.link(self.video_tee)
         
         self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)
+        
+    def unload_videomixer(self):
+        if self.record_video is True:
+            for plugin in self.video_input_plugins:
+                gst.element_unlink_many(self.video_tee, plugin)
+                self.player.remove(plugin)
+            
+            gst.element_unlink_many(self.videomixer, self.video_tee)
+            self.player.remove(self.videomixer)
