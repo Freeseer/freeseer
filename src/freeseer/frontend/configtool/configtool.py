@@ -112,15 +112,17 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
+        exitIcon = QtGui.QIcon.fromTheme("application-exit")
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        self.actionExit.setIcon(exitIcon)
         
         self.actionAbout = QtGui.QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.actionAbout.setIcon(icon)
         
         # Actions
-        self.menuFile.addAction(self.actionOpenVideoFolder)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
         self.menuOptions.addAction(self.menuLanguage.menuAction())
