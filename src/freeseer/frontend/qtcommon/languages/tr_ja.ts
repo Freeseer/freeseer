@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ja_JP" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="ja_JP">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -188,7 +189,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="248"/>
         <source>Default Language</source>
-        <translation type="unfinished">デフォルトの言語</translation>
+        <translation>デフォルトの言語</translation>
     </message>
 </context>
 <context>
@@ -276,22 +277,22 @@
     <message>
         <location filename="../../record/record.py" line="185"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>ポーズ</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="191"/>
         <source>Ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>レディ.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="192"/>
         <source>Recording...</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディング...</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="193"/>
         <source>Recording Paused.</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディングは一時停止.</translation>
     </message>
 </context>
 <context>
