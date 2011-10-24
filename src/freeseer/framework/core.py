@@ -22,8 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-
-import sys
 import datetime
 import logging
 import os
@@ -183,6 +181,9 @@ class FreeseerCore:
     ## Database Functions
     ##
     def add_talks_from_rss(self, rss):
+        '''
+        Add talks from rss feed
+        '''
         entry = str(rss)
         feedparser = FeedParser(entry)
 
@@ -199,24 +200,63 @@ class FreeseerCore:
                                     presentation["Room"],
                                     presentation["Time"])
                 self.db.insert_presentation(talk)
+    
+    def add_talks_from_csv(self, file):
+        '''
+        Add talks from a csv file, title and speaker must be present
+        '''
+        try:
+            reader = csv.DictReader(open(file,'r'))
+        except IOError:
+            logging.error("CSV: File %s not found" % file)
+            return;
+        for row in reader:
+            try:
+                title = row['Title']
+                speaker = row['Speaker']
+            except KeyError:
+                logging.error("Missing Key in Row: %s" % row)
+                return;
+                
+            try:
+                abstract = row['Abstract'] #Description
+            except KeyError:
+                abstract = ''
+            
+            try:
+                level = row['Level']
+            except KeyError:
+                level = ''
+            
+            try:
+                event = row['Event']
+            except KeyError:
+                event = ''
+            
+            try:
+                room = row['Room']
+            except KeyError:
+                room = ''
+            
+            try:
+                time = row['Time']
+            except KeyError:
+                time = ''
+            
+            talk = Presentation(title,
+                                speaker,
+                                abstract,
+                                level,
+                                event,
+                                room,
+                                time)
+            self.db.insert_presentation(talk)
+
 
     ##
     ## Backend Functions
     ##
     
-    def add_talks_from_csv(self, file):
-        reader = csv.DictReader(open(file,'r'))
-        for row in reader:
-            print row
-            talk = Presentation(row["Title"],
-                                row["Speaker"],
-                                row["Abstract"],
-                                row["Level"],
-                                row["Event"],
-                                row["Room"],
-                                row["Time"])
-            self.db.insert_presentation(talk)
-
     def set_recording_area(self, x1, y1, x2, y2):
         # gstreamer backend needs to have the lower x/y coordinates
         # sent first.
