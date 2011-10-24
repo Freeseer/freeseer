@@ -191,7 +191,12 @@ class RecordApp(QtGui.QMainWindow):
         self.pausedString = self.uiTranslator.translate("RecordApp", "Recording Paused.")
         # --- End Reusable Strings
         
-        self.statusBar().showMessage(self.readyString)
+        if self.mainWidget.recordPushButton.isChecked() and self.mainWidget.pauseToolButton.isChecked():
+            self.statusBar().showMessage(self.pausedString)
+        elif self.mainWidget.recordPushButton.isChecked() and (not self.mainWidget.pauseToolButton.isChecked()):
+            self.statusBar().showMessage(self.recordingString)
+        else:
+            self.statusBar().showMessage(self.readyString)
         
         #
         # Menubar
@@ -216,8 +221,12 @@ class RecordApp(QtGui.QMainWindow):
         #
         # RecordingWidget
         #
-        self.mainWidget.recordPushButton.setText(self.recordString)
-        self.mainWidget.recordPushButton.setToolTip(self.recordString)
+        if self.mainWidget.recordPushButton.isChecked():
+            self.mainWidget.recordPushButton.setText(self.stopString)
+            self.mainWidget.recordPushButton.setToolTip(self.stopString)
+        else:
+            self.mainWidget.recordPushButton.setText(self.recordString)
+            self.mainWidget.recordPushButton.setToolTip(self.recordString)
         self.mainWidget.pauseToolButton.setText(self.pauseString)
         self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
         self.mainWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event"))
