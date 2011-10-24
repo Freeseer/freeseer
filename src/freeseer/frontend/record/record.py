@@ -55,8 +55,6 @@ class RecordApp(QtGui.QMainWindow):
         self.setWindowIcon(icon)
         self.resize(550, 450)
         
-        
-        self.statusBar().showMessage('ready')
         self.aboutDialog = AboutDialog()
         self.talks_to_save = []
         self.talks_to_delete = []
@@ -186,7 +184,14 @@ class RecordApp(QtGui.QMainWindow):
         self.stopString = self.uiTranslator.translate("RecordApp", "Stop")
         self.hideWindowString = self.uiTranslator.translate("RecordApp", "Hide Main Window")
         self.showWindowString = self.uiTranslator.translate("RecordApp", "Show Main Window")
+        
+        # Status Bar messages
+        self.readyString = self.uiTranslator.translate("RecordApp", "Ready.")
+        self.recordingString = self.uiTranslator.translate("RecordApp", "Recording...")
+        self.pausedString = self.uiTranslator.translate("RecordApp", "Recording Paused.")
         # --- End Reusable Strings
+        
+        self.statusBar().showMessage(self.readyString)
         
         #
         # Menubar
@@ -302,7 +307,7 @@ class RecordApp(QtGui.QMainWindow):
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
 
-            self.statusBar().showMessage('Recording...')
+            self.statusBar().showMessage(self.recordingString)
             self.core.config.writeConfig()
             
         else: # Stop Recording.
@@ -313,7 +318,7 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.statusBar().showMessage('Ready.')
+            self.statusBar().showMessage(self.readyString)
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
@@ -321,12 +326,12 @@ class RecordApp(QtGui.QMainWindow):
         if (state): # Pause Recording.
             self.core.pause()
             logging.info("Recording paused.")
-            self.statusBar().showMessage("Recording Paused.")
+            self.statusBar().showMessage(self.pausedString)
         else:
             if self.mainWidget.recordPushButton.isChecked():
                 self.core.record()
                 logging.info("Recording unpaused.")
-                self.statusBar().showMessage("Recording...")
+                self.statusBar().showMessage(self.recordingString)
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
