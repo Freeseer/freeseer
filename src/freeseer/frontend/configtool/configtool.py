@@ -419,7 +419,11 @@ class ConfigToolApp(QtGui.QMainWindow):
 
     def browse_video_directory(self):
         directory = self.generalWidget.recordDirLineEdit.text()
-        videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)))
+        
+        newDir = QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)
+        if newDir == "": newDir = directory
+        
+        videodir = os.path.abspath(str(newDir))
         self.generalWidget.recordDirLineEdit.setText(videodir)
         self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
 
