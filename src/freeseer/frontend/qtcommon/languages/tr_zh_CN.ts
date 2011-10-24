@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_CN" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_CN" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -188,7 +189,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="248"/>
         <source>Default Language</source>
-        <translation type="unfinished">默认语言</translation>
+        <translation>默认语言</translation>
     </message>
 </context>
 <context>
@@ -276,22 +277,22 @@
     <message>
         <location filename="../../record/record.py" line="185"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>暂停</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="191"/>
         <source>Ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>准备就绪.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="192"/>
         <source>Recording...</source>
-        <translation type="unfinished"></translation>
+        <translation>记录...</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="193"/>
         <source>Recording Paused.</source>
-        <translation type="unfinished"></translation>
+        <translation>记录暂停.</translation>
     </message>
 </context>
 <context>
