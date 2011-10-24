@@ -150,6 +150,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
+        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_talk_tooltip)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
 
@@ -332,6 +333,9 @@ class RecordApp(QtGui.QMainWindow):
     ###
     ### Talk Related
     ###
+    
+    def set_talk_tooltip(self, talk):
+        self.mainWidget.talkComboBox.setToolTip(talk)
     
     def load_event_list(self):
         model = self.core.db.get_events_model()
