@@ -53,7 +53,7 @@ class RecordApp(QtGui.QMainWindow):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-        self.resize(400, 400)
+        self.resize(550, 450)
         
         
         self.statusBar().showMessage('ready')
