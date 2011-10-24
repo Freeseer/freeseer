@@ -112,19 +112,17 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
-        self.actionOpenVideoFolder = QtGui.QAction(self)
-        self.actionOpenVideoFolder.setShortcut("Ctrl+O")
-        self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
-        
+        exitIcon = QtGui.QIcon.fromTheme("application-exit")
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        self.actionExit.setIcon(exitIcon)
         
         self.actionAbout = QtGui.QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.actionAbout.setIcon(icon)
         
         # Actions
-        self.menuFile.addAction(self.actionOpenVideoFolder)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
         self.menuOptions.addAction(self.menuLanguage.menuAction())
@@ -421,7 +419,11 @@ class ConfigToolApp(QtGui.QMainWindow):
 
     def browse_video_directory(self):
         directory = self.generalWidget.recordDirLineEdit.text()
-        videodir = os.path.abspath(str(QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)))
+        
+        newDir = QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)
+        if newDir == "": newDir = directory
+        
+        videodir = os.path.abspath(str(newDir))
         self.generalWidget.recordDirLineEdit.setText(videodir)
         self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
 

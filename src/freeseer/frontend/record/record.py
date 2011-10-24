@@ -53,7 +53,7 @@ class RecordApp(QtGui.QMainWindow):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-        self.resize(400, 400)
+        self.resize(550, 450)
         
         
         self.statusBar().showMessage('ready')
@@ -99,16 +99,21 @@ class RecordApp(QtGui.QMainWindow):
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
         
+        folderIcon = QtGui.QIcon.fromTheme("folder")
         self.actionOpenVideoFolder = QtGui.QAction(self)
         self.actionOpenVideoFolder.setShortcut("Ctrl+O")
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
+        self.actionOpenVideoFolder.setIcon(folderIcon)
         
+        exitIcon = QtGui.QIcon.fromTheme("application-exit")
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        self.actionExit.setIcon(exitIcon)
         
         self.actionAbout = QtGui.QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.actionAbout.setIcon(icon)
         
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
@@ -145,6 +150,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_rooms_from_event)
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
+        self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_talk_tooltip)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
         self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
 
@@ -296,7 +302,7 @@ class RecordApp(QtGui.QMainWindow):
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
 
-            self.statusBar().showMessage('recording...')
+            self.statusBar().showMessage('Recording...')
             self.core.config.writeConfig()
             
         else: # Stop Recording.
@@ -307,7 +313,7 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.statusBar().showMessage('ready')
+            self.statusBar().showMessage('Ready.')
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
@@ -315,9 +321,12 @@ class RecordApp(QtGui.QMainWindow):
         if (state): # Pause Recording.
             self.core.pause()
             logging.info("Recording paused.")
+            self.statusBar().showMessage("Recording Paused.")
         else:
-            self.core.record()
-            logging.info("Recording unpaused.")
+            if self.mainWidget.recordPushButton.isChecked():
+                self.core.record()
+                logging.info("Recording unpaused.")
+                self.statusBar().showMessage("Recording...")
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
@@ -327,6 +336,9 @@ class RecordApp(QtGui.QMainWindow):
     ###
     ### Talk Related
     ###
+    
+    def set_talk_tooltip(self, talk):
+        self.mainWidget.talkComboBox.setToolTip(talk)
     
     def load_event_list(self):
         model = self.core.db.get_events_model()

@@ -52,6 +52,7 @@ class EditorWidget(QtGui.QWidget):
         
         self.rssLabel = QtGui.QLabel("URL")
         self.rssLineEdit = QtGui.QLineEdit()
+        self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
         self.rssLabel.setBuddy(self.rssLineEdit)
         self.rssPushButton = QtGui.QPushButton("Load talks from RSS")
         rss_icon = QtGui.QIcon()
@@ -71,10 +72,19 @@ class EditorWidget(QtGui.QWidget):
         self.buttonsLayout = QtGui.QVBoxLayout()
         self.editorLayout.addLayout(self.buttonsLayout)
         
+        addIcon = QtGui.QIcon.fromTheme("list-add")
+        removeIcon = QtGui.QIcon.fromTheme("list-remove")
+        clearIcon = QtGui.QIcon.fromTheme("edit-clear")
+        closeIcon = QtGui.QIcon.fromTheme("application-exit")
+        
         self.addButton = QtGui.QPushButton("Add")
+        self.addButton.setIcon(addIcon)
         self.removeButton = QtGui.QPushButton("Remove")
+        self.removeButton.setIcon(removeIcon)
         self.clearButton = QtGui.QPushButton("Clear")
+        self.clearButton.setIcon(clearIcon)
         self.closeButton = QtGui.QPushButton("Close")
+        self.closeButton.setIcon(closeIcon)
         self.buttonsLayout.addWidget(self.addButton)
         self.buttonsLayout.addWidget(self.removeButton)
         self.buttonsLayout.addWidget(self.clearButton)
@@ -83,6 +93,7 @@ class EditorWidget(QtGui.QWidget):
         
         self.editor = QtGui.QTableView()
         self.editor.setAlternatingRowColors(True)
+        self.editor.setSortingEnabled(True)
         self.editorLayout.addWidget(self.editor)
 
 if __name__ == "__main__":
