@@ -302,7 +302,7 @@ class RecordApp(QtGui.QMainWindow):
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
 
-            self.statusBar().showMessage('recording...')
+            self.statusBar().showMessage('Recording...')
             self.core.config.writeConfig()
             
         else: # Stop Recording.
@@ -313,7 +313,7 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.statusBar().showMessage('ready')
+            self.statusBar().showMessage('Ready.')
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
@@ -321,9 +321,12 @@ class RecordApp(QtGui.QMainWindow):
         if (state): # Pause Recording.
             self.core.pause()
             logging.info("Recording paused.")
+            self.statusBar().showMessage("Recording Paused.")
         else:
-            self.core.record()
-            logging.info("Recording unpaused.")
+            if self.mainWidget.recordPushButton.isChecked():
+                self.core.record()
+                logging.info("Recording unpaused.")
+                self.statusBar().showMessage("Recording...")
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
