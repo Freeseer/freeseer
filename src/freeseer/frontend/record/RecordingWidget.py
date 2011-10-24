@@ -49,6 +49,9 @@ class RecordingWidget(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
+        boldFont = QtGui.QFont()
+        boldFont.setBold(True)
+        
         # Control bar
         self.controlRow = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.controlRow)
@@ -109,6 +112,7 @@ class RecordingWidget(QtGui.QWidget):
         self.talkLabel = QtGui.QLabel("Talk ")
         self.talkLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
         self.talkComboBox = QtGui.QComboBox()
+        self.talkComboBox.setFont(boldFont)
         self.talkComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
         self.talkComboBox.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToMinimumContentsLength)
         self.filterBarLayoutRow_2.addWidget(self.talkLabel)
