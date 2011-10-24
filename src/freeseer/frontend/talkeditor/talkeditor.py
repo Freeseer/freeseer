@@ -331,14 +331,18 @@ class TalkEditorApp(QtGui.QMainWindow):
         event.accept()
     
     def csv_file_select(self):
-        fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file')
+        dirpath = str(self.editorWidget.csvLineEdit.text())
+        fname = QtGui.QFileDialog.getOpenFileName(self,'Select file',
+                                dirpath[0:dirpath.rfind(os.path.sep)])
         if fname:
             self.editorWidget.csvLineEdit.setText(fname)    
     
     def add_talks_from_csv(self):
         fname = self.editorWidget.csvLineEdit.text()
-        self.core.add_talks_from_csv(fname)
-        self.presentationModel.select()
+        
+        if fname:
+            self.core.add_talks_from_csv(fname)
+            self.presentationModel.select()
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
