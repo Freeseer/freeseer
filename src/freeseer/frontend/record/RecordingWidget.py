@@ -129,6 +129,9 @@ class RecordingWidget(QtGui.QWidget):
         self.previewLayout.addWidget(self.previewWidget)
         self.previewLayout.addWidget(self.audioSlider)
         
+        self.statusLabel = QtGui.QLabel()
+        self.mainLayout.addWidget(self.statusLabel)
+        
     def setIcon(self, state):
         if state:
             self.recordPushButton.setIcon(self.stopIcon)

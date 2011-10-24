@@ -62,6 +62,8 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
         
+        self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
+        
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
@@ -192,11 +194,11 @@ class RecordApp(QtGui.QMainWindow):
         # --- End Reusable Strings
         
         if self.mainWidget.recordPushButton.isChecked() and self.mainWidget.pauseToolButton.isChecked():
-            self.statusBar().showMessage(self.pausedString)
+            self.mainWidget.statusLabel.setText(self.pausedString)
         elif self.mainWidget.recordPushButton.isChecked() and (not self.mainWidget.pauseToolButton.isChecked()):
-            self.statusBar().showMessage(self.recordingString)
+            self.mainWidget.statusLabel.setText(self.recordingString)
         else:
-            self.statusBar().showMessage(self.readyString)
+            self.mainWidget.statusLabel.setText(self.readyString)
         
         #
         # Menubar
@@ -316,7 +318,7 @@ class RecordApp(QtGui.QMainWindow):
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
 
-            self.statusBar().showMessage(self.recordingString)
+            self.mainWidget.statusLabel.setText(self.recordingString)
             self.core.config.writeConfig()
             
         else: # Stop Recording.
@@ -327,7 +329,7 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.statusBar().showMessage(self.readyString)
+            self.mainWidget.statusLabel.setText(self.readyString)
             # for stop recording, we'll keep whatever window state
             # we have - hidden or showing
             
@@ -335,12 +337,12 @@ class RecordApp(QtGui.QMainWindow):
         if (state): # Pause Recording.
             self.core.pause()
             logging.info("Recording paused.")
-            self.statusBar().showMessage(self.pausedString)
+            self.mainWidget.statusLabel.setText(self.pausedString)
         else:
             if self.mainWidget.recordPushButton.isChecked():
                 self.core.record()
                 logging.info("Recording unpaused.")
-                self.statusBar().showMessage(self.recordingString)
+                self.mainWidget.statusLabel.setText(self.recordingString)
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
