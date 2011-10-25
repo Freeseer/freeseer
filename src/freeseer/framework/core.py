@@ -210,14 +210,14 @@ class FreeseerCore:
             reader = csv.DictReader(open(file,'r'))
         except IOError:
             logging.error("CSV: File %s not found" % file)
-            return;
+            return
         for row in reader:
             try:
                 title = row['Title']
                 speaker = row['Speaker']
             except KeyError:
                 logging.error("Missing Key in Row: %s" % row)
-                return;
+                return
                 
             try:
                 abstract = row['Abstract'] #Description
