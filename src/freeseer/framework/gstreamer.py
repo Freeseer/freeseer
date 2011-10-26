@@ -164,13 +164,13 @@ class Gstreamer:
     
     def load_audiomixer(self, mixer, inputs):
         self.record_audio = True
-        self.audio_input_plugins = []
+        self.audio_input_plugins = inputs
         
         self.audiomixer = mixer.get_audiomixer_bin()
         self.player.add(self.audiomixer)
         self.audiomixer.link(self.audio_tee)
         
-        self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
+        mixer.load_inputs(self.player, self.audiomixer, inputs)
         
     def unload_audiomixer(self):
         if self.record_audio is True:
