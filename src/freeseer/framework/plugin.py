@@ -175,6 +175,23 @@ class IAudioMixer(IBackendPlugin):
     def get_audiomixer_bin(self):
         pass
     
+    def get_inputs(self):
+        """
+        Returns a list of inputs the that the audio mixer needs
+        in order to initialize it's pipelines.
+        
+        This should be used so that the code that calls it can
+        gather the required inputs before calling load_inputs().
+        """
+        pass
+    
+    def load_inputs(self, player, mixer, inputs):
+        """
+        This method is responsible for loading the inputs needed
+        by the mixer.
+        """
+        pass
+    
 class IVideoInput(IBackendPlugin):
     
     def __init__(self):
@@ -205,8 +222,14 @@ class IVideoMixer(IBackendPlugin):
         in order to initialize it's pipelines.
         
         This should be used so that the code that calls it can
-        gather the required inputs before calling get_videomixer_bin()
-        to initialize the gstreamer pipeline.
+        gather the required inputs before calling load_inputs().
+        """
+        pass
+    
+    def load_inputs(self, player, mixer, inputs):
+        """
+        This method is responsible for loading the inputs needed
+        by the mixer.
         """
         pass
 
