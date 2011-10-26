@@ -108,7 +108,7 @@ class OggIcecast(IOutput):
             gst.element_link_many(videoqueue, videocodec, muxer)
         
         #
-        # Link muxer to filesink
+        # Link muxer to icecast
         #
         gst.element_link_many(muxer, icecast)
         
