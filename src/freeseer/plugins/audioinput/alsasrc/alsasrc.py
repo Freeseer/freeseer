@@ -33,7 +33,7 @@ class ALSASrc(IAudioInput):
     name = "ALSA Source"
     
     def get_audioinput_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         audiosrc = gst.element_factory_make("alsasrc", "audiosrc")
         bin.add(audiosrc)
