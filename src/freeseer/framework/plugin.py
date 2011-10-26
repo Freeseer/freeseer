@@ -175,6 +175,23 @@ class IAudioMixer(IBackendPlugin):
     def get_audiomixer_bin(self):
         pass
     
+    def get_inputs(self):
+        """
+        Returns a list of inputs the that the audio mixer needs
+        in order to initialize it's pipelines.
+        
+        This should be used so that the code that calls it can
+        gather the required inputs before calling load_inputs().
+        """
+        pass
+    
+    def load_inputs(self, player, mixer, inputs):
+        """
+        This method is responsible for loading the inputs needed
+        by the mixer.
+        """
+        pass
+    
 class IVideoInput(IBackendPlugin):
     
     def __init__(self):
@@ -198,6 +215,23 @@ class IVideoMixer(IBackendPlugin):
         MUST be overridded when creating a video mixer plugin.
         """
         pass
+    
+    def get_inputs(self):
+        """
+        Returns a list of inputs the that the video mixer needs
+        in order to initialize it's pipelines.
+        
+        This should be used so that the code that calls it can
+        gather the required inputs before calling load_inputs().
+        """
+        pass
+    
+    def load_inputs(self, player, mixer, inputs):
+        """
+        This method is responsible for loading the inputs needed
+        by the mixer.
+        """
+        pass
 
 class IOutput(IBackendPlugin):
     type = None # Types: audio, video, both
@@ -210,7 +244,7 @@ class IOutput(IBackendPlugin):
     def get_type(self):
         return self.type
     
-    def get_output_bin(self, metadata=None):
+    def get_output_bin(self, audio=True, video=True, metadata=None):
         """
         Returns the Gstreamer Bin for the output plugin.
         MUST be overridded when creating an output plugin.

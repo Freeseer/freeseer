@@ -4,6 +4,6 @@ Module = autoaudiosrc
 
 [Documentation]
 Author = Thanh Ha
-Version = 0.1
+Version = 0.2
 Website = http://fosslc.org
 Description = Auto Audio Source

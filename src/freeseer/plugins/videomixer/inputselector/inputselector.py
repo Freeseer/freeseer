@@ -63,18 +63,15 @@ class InputSelector(IVideoMixer):
     def set_input(self, input1):
         self.input1 = input1
         
+    def get_inputs(self):
+        inputs = [self.input1]
+        return inputs
+        
     def load_inputs(self, player, mixer, inputs):
-        loaded = []
-        for plugin in inputs:
-            print self.input1, plugin.plugin_object.get_name()
-            if plugin.is_activated and plugin.plugin_object.get_name() == self.input1:
-                input = plugin.plugin_object.get_videoinput_bin()
-                player.add(input)
-                input.link(mixer)
-                loaded.append(input)
-                break
-            
-        return loaded
+        # Load inputs
+        input = inputs[0]
+        player.add(input)
+        input.link(mixer)
    
     def load_config(self, plugman):
         self.plugman = plugman

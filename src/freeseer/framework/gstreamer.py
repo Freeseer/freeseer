@@ -139,23 +139,27 @@ class Gstreamer:
             self.current_state = Gstreamer.STOP
             logging.debug("Gstreamer stopped.")
     
-    def load_output_plugins(self, plugins, metadata):
+    def load_output_plugins(self, plugins, record_audio, record_video, metadata):
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
-            bin = plugin.get_output_bin(metadata)
-            self.output_plugins.append(bin)
+            bin = plugin.get_output_bin(record_audio, record_video, metadata)
             
             if type == "audio":
-                self.player.add(bin)
-                self.audio_tee.link(bin)
+                if record_audio:
+                    self.player.add(bin)
+                    self.audio_tee.link(bin)
+                    self.output_plugins.append(bin)
             elif type == "video":
-                self.player.add(bin)
-                self.video_tee.link(bin)
+                if record_video:
+                    self.player.add(bin)
+                    self.video_tee.link(bin)
+                    self.output_plugins.append(bin)
             elif type == "both":
                 self.player.add(bin)
-                self.audio_tee.link_pads("src%d", bin, "audiosink")                
-                self.video_tee.link_pads("src%d", bin, "videosink")
+                if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
+                if record_video: self.video_tee.link_pads("src%d", bin, "videosink")
+                self.output_plugins.append(bin)
                 
     def unload_output_plugins(self):
         for plugin in self.output_plugins:
@@ -164,13 +168,13 @@ class Gstreamer:
     
     def load_audiomixer(self, mixer, inputs):
         self.record_audio = True
-        self.audio_input_plugins = []
+        self.audio_input_plugins = inputs
         
         self.audiomixer = mixer.get_audiomixer_bin()
         self.player.add(self.audiomixer)
         self.audiomixer.link(self.audio_tee)
         
-        self.audio_input_plugins = mixer.load_inputs(self.player, self.audiomixer, inputs)
+        mixer.load_inputs(self.player, self.audiomixer, inputs)
         
     def unload_audiomixer(self):
         if self.record_audio is True:
@@ -183,13 +187,13 @@ class Gstreamer:
 
     def load_videomixer(self, mixer, inputs):
         self.record_video = True
-        self.video_input_plugins = []
+        self.video_input_plugins = inputs
         
         self.videomixer = mixer.get_videomixer_bin()
         self.player.add(self.videomixer)
         self.videomixer.link(self.video_tee)
         
-        self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)
+        mixer.load_inputs(self.player, self.videomixer, inputs)
         
     def unload_videomixer(self):
         if self.record_video is True:

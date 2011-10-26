@@ -44,7 +44,7 @@ class DesktopLinuxSrc(IVideoInput):
         """
         Return the video input object in gstreamer bin format.
         """
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         videosrc = gst.element_factory_make("ximagesrc", "videosrc")
         bin.add(videosrc)
