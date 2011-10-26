@@ -198,6 +198,17 @@ class IVideoMixer(IBackendPlugin):
         MUST be overridded when creating a video mixer plugin.
         """
         pass
+    
+    def get_inputs(self):
+        """
+        Returns a list of inputs the that the video mixer needs
+        in order to initialize it's pipelines.
+        
+        This should be used so that the code that calls it can
+        gather the required inputs before calling get_videomixer_bin()
+        to initialize the gstreamer pipeline.
+        """
+        pass
 
 class IOutput(IBackendPlugin):
     type = None # Types: audio, video, both
