@@ -148,10 +148,10 @@ class Gstreamer:
             
             if type == "audio":
                 self.player.add(bin)
-                self.audio_tee.link(bin)
+                if record_audio: self.audio_tee.link(bin)
             elif type == "video":
                 self.player.add(bin)
-                self.video_tee.link(bin)
+                if record_video: self.video_tee.link(bin)
             elif type == "both":
                 self.player.add(bin)
                 if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
