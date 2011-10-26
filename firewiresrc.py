@@ -55,7 +55,7 @@ class FirewireSrc(IVideoInput):
             devpath=path + str(i)
     
     def get_videoinput_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
 
         videosrc = gst.element_factory_make("dv1394src", "videosrc")
         dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
