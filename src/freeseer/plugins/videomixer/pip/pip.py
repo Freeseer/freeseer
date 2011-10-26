@@ -87,50 +87,33 @@ class PictureInPicture(IVideoMixer):
         return inputs
         
     def load_inputs(self, player, mixer, inputs):
-        loaded = []
-        
         # Load main source
-        for plugin in inputs:
-            if plugin.is_activated and plugin.plugin_object.get_name() == self.input1:
-                input1 = plugin.plugin_object.get_videoinput_bin()
-                player.add(input1)
-                
-                mainsrc_capsfilter = gst.element_factory_make("capsfilter", "mainsrc_capsfilter")
-                mainsrc_capsfilter.set_property('caps',
-                                gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
-                player.add(mainsrc_capsfilter)
-                
-                input1.link(mainsrc_capsfilter)
-                srcpad = mainsrc_capsfilter.get_pad("src")
-                sinkpad = mixer.get_pad("sink_main")
-                srcpad.link(sinkpad)
-                
-                loaded.append(input1)
-                loaded.append(mainsrc_capsfilter)
-                break
-            
-        # Load pip source
-        for plugin in inputs:
-            if plugin.is_activated and plugin.plugin_object.get_name() == self.input2:
-                input2 = plugin.plugin_object.get_videoinput_bin()
-                player.add(input2)
-                
-                pipsrc_capsfilter = gst.element_factory_make("capsfilter", "pipsrc_capsfilter")
-                pipsrc_capsfilter.set_property('caps',
-                                gst.caps_from_string('video/x-raw-rgb, width=200, height=150'))
-                player.add(pipsrc_capsfilter)
-                
-                input2.link(pipsrc_capsfilter)
-                srcpad = pipsrc_capsfilter.get_pad("src")
-                sinkpad = mixer.get_pad("sink_pip")
-                srcpad.link(sinkpad)
-                print sinkpad
-                
-                loaded.append(input2)
-                loaded.append(pipsrc_capsfilter)
-                break
-            
-        return loaded
+        input1 = inputs[0]
+        player.add(input1)
+        
+        mainsrc_capsfilter = gst.element_factory_make("capsfilter", "mainsrc_capsfilter")
+        mainsrc_capsfilter.set_property('caps',
+                        gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
+        player.add(mainsrc_capsfilter)
+        
+        input1.link(mainsrc_capsfilter)
+        srcpad = mainsrc_capsfilter.get_pad("src")
+        sinkpad = mixer.get_pad("sink_main")
+        srcpad.link(sinkpad)
+    
+        # Load the secondary source
+        input2 = inputs[1]
+        player.add(input2)
+        
+        pipsrc_capsfilter = gst.element_factory_make("capsfilter", "pipsrc_capsfilter")
+        pipsrc_capsfilter.set_property('caps',
+                        gst.caps_from_string('video/x-raw-rgb, width=200, height=150'))
+        player.add(pipsrc_capsfilter)
+        
+        input2.link(pipsrc_capsfilter)
+        srcpad = pipsrc_capsfilter.get_pad("src")
+        sinkpad = mixer.get_pad("sink_pip")
+        srcpad.link(sinkpad)
     
     def load_config(self, plugman):
         self.plugman = plugman
