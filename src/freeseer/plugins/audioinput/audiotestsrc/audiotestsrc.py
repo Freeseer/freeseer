@@ -33,7 +33,7 @@ class AudioTestSrc(IAudioInput):
     name = "Audio Test Source"
     
     def get_audioinput_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         audiosrc = gst.element_factory_make("audiotestsrc", "audiosrc")
         bin.add(audiosrc)
