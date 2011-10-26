@@ -183,13 +183,13 @@ class Gstreamer:
 
     def load_videomixer(self, mixer, inputs):
         self.record_video = True
-        self.video_input_plugins = []
+        self.video_input_plugins = inputs
         
         self.videomixer = mixer.get_videomixer_bin()
         self.player.add(self.videomixer)
         self.videomixer.link(self.video_tee)
         
-        self.video_input_plugins = mixer.load_inputs(self.player, self.videomixer, inputs)
+        mixer.load_inputs(self.player, self.videomixer, inputs)
         
     def unload_videomixer(self):
         if self.record_video is True:
