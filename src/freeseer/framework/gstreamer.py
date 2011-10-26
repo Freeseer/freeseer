@@ -139,11 +139,11 @@ class Gstreamer:
             self.current_state = Gstreamer.STOP
             logging.debug("Gstreamer stopped.")
     
-    def load_output_plugins(self, plugins, metadata):
+    def load_output_plugins(self, plugins, record_audio, record_video, metadata):
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
-            bin = plugin.get_output_bin(metadata)
+            bin = plugin.get_output_bin(record_audio, record_video, metadata)
             self.output_plugins.append(bin)
             
             if type == "audio":
@@ -154,8 +154,8 @@ class Gstreamer:
                 self.video_tee.link(bin)
             elif type == "both":
                 self.player.add(bin)
-                self.audio_tee.link_pads("src%d", bin, "audiosink")                
-                self.video_tee.link_pads("src%d", bin, "videosink")
+                if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
+                if record_video: self.video_tee.link_pads("src%d", bin, "videosink")
                 
     def unload_output_plugins(self):
         for plugin in self.output_plugins:
