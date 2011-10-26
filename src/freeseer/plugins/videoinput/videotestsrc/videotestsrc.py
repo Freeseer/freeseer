@@ -8,7 +8,7 @@ class VideoTestSrc(IVideoInput):
     name = "Video Test Source"
     
     def get_videoinput_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         videosrc = gst.element_factory_make("videotestsrc", "videosrc")
         bin.add(videosrc)
