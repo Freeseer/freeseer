@@ -251,7 +251,10 @@ class FreeseerCore:
                 plugin.plugin_object.load_config(self.plugman)
                 plugins.append(plugin.plugin_object)
 
-        self.backend.load_output_plugins(plugins, metadata)
+        self.backend.load_output_plugins(plugins,
+                                         self.config.enable_audio_recoding,
+                                         self.config.enable_video_recoding,
+                                         metadata)
         
         if self.config.enable_audio_recoding:
             logging.debug("Loading Audio recording plugins...")
