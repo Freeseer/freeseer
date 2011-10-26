@@ -37,7 +37,7 @@ class VideoPreview(IOutput):
     name = "Video Preview"
     type = "video"
     
-    def get_output_bin(self, metadata=None):
+    def get_output_bin(self, audio=False, video=True, metadata=None):
         bin = gst.Bin(self.name)
         
         videoqueue = gst.element_factory_make("queue", "videoqueue")

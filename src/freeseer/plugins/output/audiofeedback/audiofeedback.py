@@ -37,7 +37,7 @@ class AudioFeedback(IOutput):
     name = "Audio Feedback"
     type = "audio"
     
-    def get_output_bin(self, metadata=None):
+    def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin(self.name)
         
         audioqueue = gst.element_factory_make("queue", "audioqueue")
