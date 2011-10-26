@@ -244,7 +244,7 @@ class IOutput(IBackendPlugin):
     def get_type(self):
         return self.type
     
-    def get_output_bin(self, metadata=None):
+    def get_output_bin(self, audio=True, video=True, metadata=None):
         """
         Returns the Gstreamer Bin for the output plugin.
         MUST be overridded when creating an output plugin.
