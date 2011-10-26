@@ -54,18 +54,16 @@ class Adder(IAudioMixer):
         bin.add_pad(src_ghostpad)
         
         return bin
+    
+    def get_inputs(self):
+        inputs = [self.input1]
+        return inputs
         
     def load_inputs(self, player, mixer, inputs):
-        loaded = []
-        for plugin in inputs:
-            if plugin.is_activated and plugin.plugin_object.get_name() == self.input1:
-                input = plugin.plugin_object.get_audioinput_bin()
-                player.add(input)
-                input.link(mixer)
-                loaded.append(input)
-                break
-            
-        return loaded
+        # load inputs
+        input = inputs[0]
+        player.add(input)
+        input.link(mixer)
 
 
     def load_config(self, plugman):
