@@ -81,6 +81,10 @@ class PictureInPicture(IVideoMixer):
         bin.add_pad(src_ghostpad)
         
         return bin
+    
+    def get_inputs(self):
+        inputs = [self.input1, self.input2]
+        return inputs
         
     def load_inputs(self, player, mixer, inputs):
         loaded = []
