@@ -33,7 +33,7 @@ class PulseSrc(IAudioInput):
     name = "Pulse Audio Source"
     
     def get_audioinput_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
         bin.add(audiosrc)
