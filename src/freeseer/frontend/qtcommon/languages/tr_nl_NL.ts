@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="nl_NL" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="nl_NL" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -276,22 +277,22 @@
     <message>
         <location filename="../../record/record.py" line="185"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pauzeren</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="191"/>
         <source>Ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gereed.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="192"/>
         <source>Recording...</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnemen...</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="193"/>
         <source>Recording Paused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opname gepauzeerd.</translation>
     </message>
 </context>
 <context>
