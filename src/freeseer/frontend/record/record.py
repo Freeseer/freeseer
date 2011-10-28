@@ -193,6 +193,7 @@ class RecordApp(QtGui.QMainWindow):
         self.showWindowString = self.uiTranslator.translate("RecordApp", "Show Main Window")
         
         # Status Bar messages
+        self.idleString = self.uiTranslator.translate("RecordApp", "Idle.")
         self.readyString = self.uiTranslator.translate("RecordApp", "Ready.")
         self.recordingString = self.uiTranslator.translate("RecordApp", "Recording...")
         self.pausedString = self.uiTranslator.translate("RecordApp", "Recording Paused.")
@@ -202,8 +203,10 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.statusLabel.setText(self.pausedString)
         elif self.mainWidget.recordPushButton.isChecked() and (not self.mainWidget.pauseToolButton.isChecked()):
             self.mainWidget.statusLabel.setText(self.recordingString)
-        else:
+        elif self.mainWidget.standbyPushButton.isChecked():
             self.mainWidget.statusLabel.setText(self.readyString)
+        else:
+            self.mainWidget.statusLabel.setText(self.idleString)
         
         #
         # Menubar
@@ -309,6 +312,7 @@ class RecordApp(QtGui.QMainWindow):
         if (state): # Prepare the pipelines
             self.load_backend()
             self.core.pause()
+            self.mainWidget.statusLabel.setText(self.readyString)
 
     def record(self, state):
         '''
@@ -341,7 +345,6 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.mainWidget.statusLabel.setText(self.readyString)
             
             # Finally set the standby button back to unchecked position.
             self.mainWidget.standbyPushButton.setChecked(False)
