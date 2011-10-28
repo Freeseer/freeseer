@@ -61,6 +61,8 @@ class RecordingWidget(QtGui.QWidget):
         self.recordIcon = QtGui.QIcon.fromTheme("media-record", recordFallbackIcon)
         stopFallbackIcon = QtGui.QIcon(":/multimedia/stop.png")
         self.stopIcon =  QtGui.QIcon.fromTheme("media-playback-stop", stopFallbackIcon)
+        self.pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
+        self.resumeIcon = QtGui.QIcon.fromTheme("media-playback-start")
         
         self.standbyPushButton = QtGui.QPushButton("Standby")
         self.standbyPushButton.setToolTip("Standby")
@@ -81,19 +83,19 @@ class RecordingWidget(QtGui.QWidget):
         self.recordPushButton.setCheckable(True)
         self.recordPushButton.setObjectName("recordButton")
         self.controlRow.addWidget(self.recordPushButton)
-        self.connect(self.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.setIcon)
+        self.connect(self.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.setRecordIcon)
         
-        pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
         self.pauseToolButton = QtGui.QToolButton()
         self.pauseToolButton.setText("Pause")
         self.pauseToolButton.setToolTip("Pause")
-        self.pauseToolButton.setIcon(pauseIcon)
+        self.pauseToolButton.setIcon(self.pauseIcon)
         self.pauseToolButton.setMinimumSize(QtCore.QSize(40, 40))
         self.pauseToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
         self.pauseToolButton.setHidden(True)
         self.pauseToolButton.setEnabled(False)
         self.pauseToolButton.setCheckable(True)
         self.controlRow.addWidget(self.pauseToolButton)
+        self.connect(self.pauseToolButton, QtCore.SIGNAL("toggled(bool)"), self.setPauseIcon)
         
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
@@ -145,11 +147,17 @@ class RecordingWidget(QtGui.QWidget):
         self.statusLabel = QtGui.QLabel()
         self.mainLayout.addWidget(self.statusLabel)
         
-    def setIcon(self, state):
+    def setRecordIcon(self, state):
         if state:
             self.recordPushButton.setIcon(self.stopIcon)
         else:
             self.recordPushButton.setIcon(self.recordIcon)
+            
+    def setPauseIcon(self, state):
+        if state:
+            self.pauseToolButton.setIcon(self.resumeIcon)
+        else:
+            self.pauseToolButton.setIcon(self.pauseIcon)
 
 if __name__ == "__main__":
     import sys
