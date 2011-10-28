@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="nl_NL" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="nl_NL" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -296,17 +297,17 @@
     <message>
         <location filename="../../record/record.py" line="188"/>
         <source>Standby</source>
-        <translation type="unfinished"></translation>
+        <translation>Stand-by</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="191"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervatten</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="197"/>
         <source>Idle.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nietsdoend.</translation>
     </message>
 </context>
 <context>
@@ -429,22 +430,23 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="190"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>gescheiden door lijstscheidingsteken</translatorcomment>
+        <translation>&amp;Exporteer naar CSV</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="215"/>
         <source>Select CSV file</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecteer CSV bestand</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="216"/>
         <source>Load talks from CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesprekken inladen via CSV</translation>
     </message>
 </context>
 <context>
@@ -452,7 +454,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="248"/>
         <source>Language Display Text</source>
-        <translation>Interfacetaal</translation>
+        <translation>Nederlands</translation>
     </message>
 </context>
 </TS>
