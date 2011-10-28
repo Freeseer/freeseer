@@ -205,72 +205,72 @@
         <translation>Record</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="191"/>
+        <location filename="../../record/record.py" line="192"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="192"/>
+        <location filename="../../record/record.py" line="193"/>
         <source>Hide Main Window</source>
         <translation>Hide Main Window</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="193"/>
+        <location filename="../../record/record.py" line="194"/>
         <source>Show Main Window</source>
         <translation>Show Main Window</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="211"/>
+        <location filename="../../record/record.py" line="215"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="212"/>
+        <location filename="../../record/record.py" line="216"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="213"/>
+        <location filename="../../record/record.py" line="217"/>
         <source>&amp;Language</source>
         <translation>&amp;Language</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="214"/>
+        <location filename="../../record/record.py" line="218"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="216"/>
+        <location filename="../../record/record.py" line="220"/>
         <source>&amp;Open Video Directory</source>
         <translation>&amp;Open Video Directory</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="217"/>
+        <location filename="../../record/record.py" line="221"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quit</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="222"/>
         <source>&amp;About</source>
         <translation>&amp;About</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="241"/>
+        <location filename="../../record/record.py" line="245"/>
         <source>Event</source>
         <translation>Event</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="242"/>
+        <location filename="../../record/record.py" line="246"/>
         <source>Room</source>
         <translation>Room</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="243"/>
+        <location filename="../../record/record.py" line="247"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="244"/>
+        <location filename="../../record/record.py" line="248"/>
         <source>Talk</source>
         <translation>Talk</translation>
     </message>
@@ -280,17 +280,17 @@
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="196"/>
+        <location filename="../../record/record.py" line="198"/>
         <source>Ready.</source>
         <translation>Ready.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="197"/>
+        <location filename="../../record/record.py" line="199"/>
         <source>Recording...</source>
         <translation>Recording...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="198"/>
+        <location filename="../../record/record.py" line="200"/>
         <source>Recording Paused.</source>
         <translation>Recording Paused.</translation>
     </message>
@@ -298,6 +298,16 @@
         <location filename="../../record/record.py" line="188"/>
         <source>Standby</source>
         <translation>Standby</translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="191"/>
+        <source>Resume</source>
+        <translation>Resume</translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="197"/>
+        <source>Idle.</source>
+        <translation>Idle.</translation>
     </message>
 </context>
 <context>
