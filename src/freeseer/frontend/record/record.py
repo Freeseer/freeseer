@@ -188,6 +188,7 @@ class RecordApp(QtGui.QMainWindow):
         self.standbyString = self.uiTranslator.translate("RecordApp", "Standby")
         self.recordString = self.uiTranslator.translate("RecordApp", "Record")
         self.pauseString = self.uiTranslator.translate("RecordApp", "Pause")
+        self.resumeString = self.uiTranslator.translate("RecordApp", "Resume")
         self.stopString = self.uiTranslator.translate("RecordApp", "Stop")
         self.hideWindowString = self.uiTranslator.translate("RecordApp", "Hide Main Window")
         self.showWindowString = self.uiTranslator.translate("RecordApp", "Show Main Window")
@@ -353,11 +354,13 @@ class RecordApp(QtGui.QMainWindow):
         if (state): # Pause Recording.
             self.core.pause()
             logging.info("Recording paused.")
+            self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
         else:
             if self.mainWidget.recordPushButton.isChecked():
                 self.core.record()
                 logging.info("Recording unpaused.")
+                self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
                 self.mainWidget.statusLabel.setText(self.recordingString)
             
     def load_backend(self, talk=None):
