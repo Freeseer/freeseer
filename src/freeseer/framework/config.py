@@ -54,7 +54,7 @@ class Config:
         self.enable_audio_recoding = True
         self.videomixer = 'Video Passthrough'
         self.audiomixer = 'Audio Passthrough'
-        self.default_language = "English"
+        self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
 
         # Lastrun
         self.start_x = 0
