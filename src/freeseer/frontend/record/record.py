@@ -151,7 +151,8 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
         self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_talk_tooltip)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.capture)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.standby)
+        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.record)
         self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
 
         # Main Window Connections
@@ -160,8 +161,11 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
         # GUI Disabling/Enabling Connections
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.recordPushButton.setVisible)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.recordPushButton.setEnabled)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setVisible)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setChecked)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.eventComboBox.setDisabled)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
@@ -298,7 +302,12 @@ class RecordApp(QtGui.QMainWindow):
         p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
         return self.core.db.get_presentation(p_id)
 
-    def capture(self, state):
+    def standby(self, state):
+        if (state): # Prepare the pipelines
+            self.load_backend()
+            self.core.pause()
+
+    def record(self, state):
         '''
         Function for recording and stopping recording.
         '''
@@ -307,8 +316,8 @@ class RecordApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-            self.load_backend()
-            self.core.record()    
+            
+            self.core.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
             # check if auto-hide is set and if so hide
@@ -319,19 +328,20 @@ class RecordApp(QtGui.QMainWindow):
                 time.sleep(float(self.core.config.delay_recording))
 
             self.mainWidget.statusLabel.setText(self.recordingString)
-            self.core.config.writeConfig()
             
         else: # Stop Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo.png")
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.core.stop()
+            self.mainWidget.pauseToolButton.setChecked(False)
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
             self.mainWidget.statusLabel.setText(self.readyString)
-            # for stop recording, we'll keep whatever window state
-            # we have - hidden or showing
+            
+            # Finally set the standby button back to unchecked position.
+            self.mainWidget.standbyPushButton.setChecked(False)
             
     def pause(self, state):
         if (state): # Pause Recording.
