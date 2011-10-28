@@ -185,6 +185,7 @@ class RecordApp(QtGui.QMainWindow):
         #
         # Reusable Strings
         #
+        self.standbyString = self.uiTranslator.translate("RecordApp", "Standby")
         self.recordString = self.uiTranslator.translate("RecordApp", "Record")
         self.pauseString = self.uiTranslator.translate("RecordApp", "Pause")
         self.stopString = self.uiTranslator.translate("RecordApp", "Stop")
@@ -227,6 +228,8 @@ class RecordApp(QtGui.QMainWindow):
         #
         # RecordingWidget
         #
+        self.mainWidget.standbyPushButton.setText(self.standbyString)
+        self.mainWidget.standbyPushButton.setToolTip(self.standbyString)
         if self.mainWidget.recordPushButton.isChecked():
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.mainWidget.recordPushButton.setToolTip(self.stopString)
