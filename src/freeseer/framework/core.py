@@ -26,6 +26,7 @@ import datetime
 import logging
 import os
 import unicodedata
+import csv
 
 from freeseer import project_info
 import gstreamer
@@ -181,6 +182,9 @@ class FreeseerCore:
     ##
     
     def add_talks_from_rss(self, rss):
+        '''
+        Add talks from rss feed
+        '''
         entry = str(rss)
         feedparser = FeedParser(entry)
 
@@ -197,11 +201,95 @@ class FreeseerCore:
                                     presentation["Room"],
                                     presentation["Time"])
                 self.db.insert_presentation(talk)
+    
+    def add_talks_from_csv(self, fname):
+        '''
+        Add talks from a csv file, title and speaker must be present
+        '''
+        file = open(fname,'r')
+        try:
+            reader = csv.DictReader(file)
+            for row in reader:
+                try:
+                    title = row['Title']
+                    speaker = row['Speaker']
+                except KeyError:
+                    logging.error("Missing Key in Row: %s" % row)
+                    return
+                    
+                try:
+                    abstract = row['Abstract'] #Description
+                except KeyError:
+                    abstract = ''
+                
+                try:
+                    level = row['Level']
+                except KeyError:
+                    level = ''
+                
+                try:
+                    event = row['Event']
+                except KeyError:
+                    event = ''
+                
+                try:
+                    room = row['Room']
+                except KeyError:
+                    room = ''
+                
+                try:
+                    time = row['Time']
+                except KeyError:
+                    time = ''
+                
+                talk = Presentation(title,
+                                    speaker,
+                                    abstract,
+                                    level,
+                                    event,
+                                    room,
+                                    time)
+                self.db.insert_presentation(talk)
+            
+        except IOError:
+            logging.error("CSV: File %s not found" % file)
+        
+        finally:
+            file.close()
+                 
+    def export_talks_to_csv(self, fname):
+        #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
 
+        fieldNames = ('Title',
+                      'Speaker',
+                      'Abstract',
+                      'Level',
+                      'Event',
+                      'Room',
+                      'Time')
+        
+        try:
+            file = open(fname, 'w')
+            writer = csv.DictWriter(file, fieldnames=fieldNames)
+            headers = dict( (n,n) for n in fieldNames )
+            writer.writerow(headers)
+            
+            result = self.db.get_talks()
+            while(result.next()):
+                #print unicode(result.value(1).toString())
+                writer.writerow({'Title':unicode(result.value(1).toString()),
+                                 'Speaker':unicode(result.value(2).toString()),
+                                 'Abstract':unicode(result.value(3).toString()),
+                                 'Level':unicode(result.value(4).toString()),
+                                 'Event':unicode(result.value(5).toString()),
+                                 'Room':unicode(result.value(6).toString()),
+                                 'Time':unicode(result.value(7).toString())})   
+        finally:
+            file.close()
     ##
     ## Backend Functions
     ##
-
+    
     def set_recording_area(self, x1, y1, x2, y2):
         # gstreamer backend needs to have the lower x/y coordinates
         # sent first.
