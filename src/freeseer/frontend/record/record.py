@@ -166,10 +166,10 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.recordPushButton.setEnabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setVisible)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.eventComboBox.setDisabled)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.eventComboBox.setDisabled)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
 
         self.load_settings()
 
