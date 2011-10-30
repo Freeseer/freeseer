@@ -130,6 +130,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         
+        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         
         self.setupLanguageMenu()
