@@ -1,0 +1,26 @@
+TODO list
+
+populate file list (populateFiles slot)
+- change directory
+-- make slot to open browser window, connect browse button to it
+-- connect browse window's ok slot to populate file list slot
+
+
+- load file metadata
+- select files
+-  all/none/invert/filter
+
+maintain a list of favourite directories
+- load from preferences file (loadFavorites slot)
+- connect directory favourite signal to populate slot
+- show a prompt when adding a favourite
+
+- allow for management in preferences dialog
+
+check that something is in the username, password, server and port fields.
+
+pass arguments to uploader.py, execute.
+
+add menu entry 
+
+wire up close button.
