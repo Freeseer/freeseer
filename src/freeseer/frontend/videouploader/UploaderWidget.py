@@ -84,91 +84,79 @@ class UploaderWidget(QtGui.QWidget):
         self.buttonBox_windowactions.setObjectName("buttonBox_windowactions")
         self.verticalLayout_central.addWidget(self.buttonBox_windowactions)
         
-        self.retranslateUi()
+        self.retranslate()
     
-    def retranslateUi(self):
-        self.pushButton_upload.setText(QtGui.QApplication
-            .translate("MainWindow", "Upload", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslate(self):
+        self.pushButton_upload.setText(self.tr("Upload"))
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(560, 600)
+class UploaderMenuBar(QtGui.QMenuBar):
+    def __init__(self, parent = None):
+        QtGui.QMenuBar.__init__(self, parent)
         
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/freeseer/freeseer_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        MainWindow.setWindowIcon(icon)
-        
-        ## todo: refactor class so that self is centralwidget
-        ## or that self is the MainWindow
-        
-#        self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget = UploaderWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        
-        
-        MainWindow.setCentralWidget(self.centralwidget)
-        
-        ### menubar ###
-        self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 557, 29))
-        self.menubar.setObjectName("menubar")
-        self.menuFile = QtGui.QMenu(self.menubar)
+        self.setObjectName("menubar")
+        self.menuFile = QtGui.QMenu(self)
         self.menuFile.setObjectName("menuFile")
-        self.menuEdit = QtGui.QMenu(self.menubar)
+        self.menuEdit = QtGui.QMenu(self)
         self.menuEdit.setObjectName("menuEdit")
-        self.menuView = QtGui.QMenu(self.menubar)
+        self.menuView = QtGui.QMenu(self)
         self.menuView.setObjectName("menuView")
-        MainWindow.setMenuBar(self.menubar)
-        self.actionOpen_Directory = QtGui.QAction(MainWindow)
-        self.actionOpen_Directory.setObjectName("actionOpen_Directory")
-        self.actionUpload = QtGui.QAction(MainWindow)
-        self.actionUpload.setObjectName("actionUpload")
-        self.actionClose = QtGui.QAction(MainWindow)
-        self.actionClose.setObjectName("actionClose")
-        self.actionCut = QtGui.QAction(MainWindow)
-        self.actionCut.setObjectName("actionCut")
-        self.actionSelect_None = QtGui.QAction(MainWindow)
-        self.actionSelect_None.setObjectName("actionSelect_None")
-        self.actionInvert_Selection = QtGui.QAction(MainWindow)
-        self.actionInvert_Selection.setObjectName("actionInvert_Selection")
-        self.actionPreferences = QtGui.QAction(MainWindow)
-        self.actionPreferences.setObjectName("actionPreferences")
-        self.actionFilter = QtGui.QAction(MainWindow)
-        self.actionFilter.setObjectName("actionFilter")
-        self.actionFile_Name = QtGui.QAction(MainWindow)
-        self.actionFile_Name.setCheckable(True)
-        self.actionFile_Name.setChecked(True)
-        self.actionFile_Name.setObjectName("actionFile_Name")
-        self.actionTitle = QtGui.QAction(MainWindow)
-        self.actionTitle.setCheckable(True)
-        self.actionTitle.setChecked(True)
-        self.actionTitle.setObjectName("actionTitle")
-        self.actionArtist = QtGui.QAction(MainWindow)
-        self.actionArtist.setCheckable(True)
-        self.actionArtist.setChecked(True)
-        self.actionArtist.setObjectName("actionArtist")
-        self.actionAlbum = QtGui.QAction(MainWindow)
-        self.actionAlbum.setObjectName("actionAlbum")
-        self.actionLocation = QtGui.QAction(MainWindow)
-        self.actionLocation.setCheckable(True)
-        self.actionLocation.setChecked(True)
-        self.actionLocation.setObjectName("actionLocation")
-        self.actionTrack_Number = QtGui.QAction(MainWindow)
-        self.actionTrack_Number.setObjectName("actionTrack_Number")
-        self.actionDate = QtGui.QAction(MainWindow)
-        self.actionDate.setCheckable(True)
-        self.actionDate.setChecked(True)
-        self.actionDate.setObjectName("actionDate")
-        self.actionComment = QtGui.QAction(MainWindow)
-        self.actionComment.setObjectName("actionComment")
-        self.actionDuration = QtGui.QAction(MainWindow)
-        self.actionDuration.setCheckable(True)
-        self.actionDuration.setChecked(True)
-        self.actionDuration.setObjectName("actionDuration")
-        self.actionMetadata_Launch_Ex_Falso = QtGui.QAction(MainWindow)
-        self.actionMetadata_Launch_Ex_Falso.setObjectName("actionMetadata_Launch_Ex_Falso")
         
+        self.actionOpen_Directory = QtGui.QAction(parent)
+        self.actionOpen_Directory.setObjectName("actionOpen_Directory")
+        self.actionUpload = QtGui.QAction(parent)
+        self.actionUpload.setObjectName("actionUpload")
+        self.actionClose = QtGui.QAction(parent)
+        self.actionClose.setObjectName("actionClose")
+        self.actionCut = QtGui.QAction(parent)
+        self.actionCut.setObjectName("actionCut")
+        self.actionSelect_None = QtGui.QAction(parent)
+        self.actionSelect_None.setObjectName("actionSelect_None")
+        self.actionInvert_Selection = QtGui.QAction(parent)
+        self.actionInvert_Selection.setObjectName("actionInvert_Selection")
+        self.actionPreferences = QtGui.QAction(parent)
+        self.actionPreferences.setObjectName("actionPreferences")
+        self.actionFilter = QtGui.QAction(parent)
+        self.actionFilter.setObjectName("actionFilter")
+        
+        self.actionFile_Name = QtGui.QAction(parent)
+        self.actionFile_Name.setCheckable(True)
+        self.actionFile_Name.setObjectName("actionFile_Name")
+
+        self.actionTitle = QtGui.QAction(parent)
+        self.actionTitle.setCheckable(True)
+        self.actionTitle.setObjectName("actionTitle")
+        
+        self.actionArtist = QtGui.QAction(parent)
+        self.actionArtist.setCheckable(True)
+        self.actionArtist.setObjectName("actionArtist")
+        
+        self.actionAlbum = QtGui.QAction(parent)
+        self.actionAlbum.setCheckable(True)
+        self.actionAlbum.setObjectName("actionAlbum")
+        
+        self.actionLocation = QtGui.QAction(parent)
+        self.actionLocation.setCheckable(True)
+        self.actionLocation.setObjectName("actionLocation")
+        
+        self.actionTrack_Number = QtGui.QAction(parent)
+        self.actionTrack_Number.setCheckable(True)
+        self.actionTrack_Number.setObjectName("actionTrack_Number")
+        
+        self.actionDate = QtGui.QAction(parent)
+        self.actionDate.setCheckable(True)
+        self.actionDate.setObjectName("actionDate")
+        
+        self.actionComment = QtGui.QAction(parent)
+        self.actionComment.setCheckable(True)
+        self.actionComment.setObjectName("actionComment")
+        
+        self.actionDuration = QtGui.QAction(parent)
+        self.actionDuration.setCheckable(True)
+        self.actionDuration.setObjectName("actionDuration")
+        
+        self.actionMetadata_Launch_Ex_Falso = QtGui.QAction(parent)
+        self.actionMetadata_Launch_Ex_Falso.setObjectName("actionMetadata_Launch_Ex_Falso")
+                
         self.menuFile.addAction(self.actionOpen_Directory)
         self.menuFile.addAction(self.actionUpload)
         self.menuFile.addSeparator()
@@ -190,86 +178,61 @@ class Ui_MainWindow(object):
         self.menuView.addAction(self.actionDate)
         self.menuView.addAction(self.actionComment)
         self.menuView.addAction(self.actionDuration)
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuEdit.menuAction())
-        self.menubar.addAction(self.menuView.menuAction())
+        self.addAction(self.menuFile.menuAction())
+        self.addAction(self.menuEdit.menuAction())
+        self.addAction(self.menuView.menuAction())
+        
+        self.retranslate()
+        self.loadSettings()
+        
+    def retranslate(self): 
+        self.menuFile.setTitle(self.tr("&File"))
+        self.menuEdit.setTitle(self.tr("&Edit"))
+        self.menuView.setTitle(self.tr("&View"))
+        self.actionOpen_Directory.setText(self.tr("&Open Directory..."))
+        self.actionUpload.setText(self.tr("&Upload"))
+        self.actionClose.setText(self.tr("&Close"))
+        self.actionCut.setText(self.tr("Select &All"))
+        self.actionSelect_None.setText(self.tr("Select &None"))
+        self.actionInvert_Selection.setText(self.tr("&Invert Selection"))
+        self.actionPreferences.setText(self.tr("&Preferences"))
+        self.actionFilter.setText(self.tr("&Filter..."))
+        self.actionFile_Name.setText(self.tr("Filename"))
+        self.actionTitle.setText(self.tr("Title"))
+        self.actionArtist.setText(self.tr("Artist"))
+        self.actionAlbum.setText(self.tr("Album"))
+        self.actionLocation.setText(self.tr("Location"))
+        self.actionTrack_Number.setText(self.tr("Track Number"))
+        self.actionDate.setText(self.tr("Date"))
+        self.actionComment.setText(self.tr("Comment"))
+        self.actionDuration.setText(self.tr("Duration"))
+        self.actionMetadata_Launch_Ex_Falso.setText(self.tr("Metadata (Launch Ex Falso)"))
 
-        self.retranslateUi(MainWindow)
-        
-        
-        
-        # Signals and slots connections
-#        QtCore.QObject.connect(self.buttonBox_windowactions, QtCore.SIGNAL("clicked(QAbstractButton*)"), MainWindow.close)
-        QtCore.QObject.connect(self.centralwidget.buttonBox_windowactions, QtCore.SIGNAL("clicked(QAbstractButton*)"), 
-                               self.customButtonBoxSlot)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-#        self.buttonBox_windowactions.connect(QObject, SIGNAL()
-#        self.buttonBox_windowactions.clicked.connect(self.customButtonBoxSlot)
-#        self.buttonBox_windowactions.clicked.emit(self.toolButton_selectall)
-#        self.connect(self.addTalkWidget.addButton, QtCore.SIGNAL('clicked()'), self.add_talk)
-#        self.actionClose.triggered.
-        
-    @QtCore.pyqtSlot(QtGui.QAbstractButton)
-    def customButtonBoxSlot(self, button):
-        print "clicked"
-        print button
-#    
-#    def testslot(self, button):
-#        print "clicked"
-#        print button
+    def loadSettings(self):
+        # TODO: actually load & save the previously checked properties
+        # this means moving this function up to videouploader.UploaderApp, 
+        #  which will have access to FreeseerCore.config
+        self.actionFile_Name.setChecked(True)
+        self.actionTitle.setChecked(True)
+        self.actionArtist.setChecked(True)
+        self.actionAlbum.setChecked(False)
+        self.actionLocation.setChecked(True)
+        self.actionTrack_Number.setChecked(False)
+        self.actionDate.setChecked(True)
+        self.actionComment.setChecked(False)
+        self.actionDuration.setChecked(True)
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication
-            .translate("MainWindow", "Freeseer Video Uploader", None, QtGui.QApplication.UnicodeUTF8))
-                
-        self.menuFile.setTitle(QtGui.QApplication
-            .translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuEdit.setTitle(QtGui.QApplication
-            .translate("MainWindow", "Edit", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuView.setTitle(QtGui.QApplication
-            .translate("MainWindow", "View", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen_Directory.setText(QtGui.QApplication
-            .translate("MainWindow", "Open Directory...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionUpload.setText(QtGui.QApplication
-            .translate("MainWindow", "Upload", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionClose.setText(QtGui.QApplication
-            .translate("MainWindow", "Close", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionCut.setText(QtGui.QApplication
-            .translate("MainWindow", "Select All", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSelect_None.setText(QtGui.QApplication
-            .translate("MainWindow", "Select None", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionInvert_Selection.setText(QtGui.QApplication
-            .translate("MainWindow", "Invert Selection", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionPreferences.setText(QtGui.QApplication
-            .translate("MainWindow", "Preferences", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionFilter.setText(QtGui.QApplication
-            .translate("MainWindow", "Filter...", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionFile_Name.setText(QtGui.QApplication
-            .translate("MainWindow", "Filename", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionTitle.setText(QtGui.QApplication
-            .translate("MainWindow", "Title", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionArtist.setText(QtGui.QApplication
-            .translate("MainWindow", "Artist", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAlbum.setText(QtGui.QApplication
-            .translate("MainWindow", "Album", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionLocation.setText(QtGui.QApplication
-            .translate("MainWindow", "Location", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionTrack_Number.setText(QtGui.QApplication
-            .translate("MainWindow", "Track Number", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDate.setText(QtGui.QApplication
-            .translate("MainWindow", "Date", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionComment.setText(QtGui.QApplication
-            .translate("MainWindow", "Comment", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDuration.setText(QtGui.QApplication
-            .translate("MainWindow", "Duration", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionMetadata_Launch_Ex_Falso.setText(QtGui.QApplication
-            .translate("MainWindow", "Metadata (Launch Ex Falso)", None, QtGui.QApplication.UnicodeUTF8))
+#class Ui_MainWindow(object):
+#    def setupUi(self, MainWindow):
+#        MainWindow.setObjectName("MainWindow")
+        
         
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    main = QtGui.QMainWindow()
-    Ui_MainWindow().setupUi(main)
+#    main = QtGui.QMainWindow()
+#    Ui_MainWindow().setupUi(main)
+    main = UploaderWidget()
     main.show()
     sys.exit(app.exec_())
     

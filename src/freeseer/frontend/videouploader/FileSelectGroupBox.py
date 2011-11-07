@@ -25,10 +25,11 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         self.horizontalLayout_filepathbuttons.setObjectName("horizontalLayout_filepathbuttons")
         
         # directory select button #
-        self.toolButton_directorydropdown = QtGui.QToolButton(self)
-        self.toolButton_directorydropdown.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
+#        self.toolButton_directorydropdown = QtGui.QToolButton(self)
+        self.toolButton_directorydropdown = QtGui.QPushButton(self)
+#        self.toolButton_directorydropdown.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 #        self.toolButton_directorydropdown.setArrowType(QtCore.Qt.DownArrow)
-        self.toolButton_directorydropdown.setPopupMode(QtGui.QToolButton.InstantPopup)
+#        self.toolButton_directorydropdown.setPopupMode(QtGui.QToolButton.InstantPopup)
         self.toolButton_directorydropdown.setObjectName("toolButton_directorydropdown")
         self.horizontalLayout_filepathbuttons.addWidget(self.toolButton_directorydropdown)
         
@@ -97,9 +98,9 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         
         self.verticalLayout_fileselectgbox.addLayout(self.horizontalLayout_fileselectbuttons)
         
-        self.retranslateUi()
+        self.retranslate()
         
-    def retranslateUi(self):
+    def retranslate(self):
         self.setTitle(self.tr("File Selection"))
         self.toolButton_directorydropdown.setText(self.tr("Directory "))
         self.actionNavFreeseerVideoDir.setText(self.tr("Freeseer Video Directory"))

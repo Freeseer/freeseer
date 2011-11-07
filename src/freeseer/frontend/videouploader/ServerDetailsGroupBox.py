@@ -17,8 +17,6 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         '''
         QtGui.QGroupBox.__init__(self, parent)
         
-        
-        
         self.setObjectName("groupBox_server")
         
         self.verticalLayout = QtGui.QVBoxLayout(self)
@@ -92,9 +90,9 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         
         self.verticalLayout.addLayout(self.horizontalLayout_servertype)
         
-        self.retranslateUi()
+        self.retranslate()
     
-    def retranslateUi(self):
+    def retranslate(self):
         self.setTitle(self.tr("Server Details"))
         self.label_username.setText(self.tr("Username"))
         self.label_password.setText(self.tr("Password"))
