@@ -86,7 +86,6 @@ class UploaderMenuBar(QtGui.QMenuBar):
     def __init__(self, parent = None):
         QtGui.QMenuBar.__init__(self, parent)
         
-        self.setObjectName("menubar")
         self.menuFile = QtGui.QMenu(self)
         self.menuFile.setObjectName("menuFile")
         self.menuEdit = QtGui.QMenu(self)
