@@ -44,34 +44,8 @@ class UploaderWidget(QtGui.QWidget):
         self.verticalLayout_central.setObjectName("verticalLayout_central")
         
         ### top half ###
-#        self.horizontalLayout_serverdetails = QtGui.QHBoxLayout()
-#        self.horizontalLayout_serverdetails.setObjectName("horizontalLayout_serverdetails")
         
         self.groupBox_server = ServerDetailsGroupBox(self)
-        
-#        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
-#        sizePolicy.setHorizontalStretch(4)
-#        sizePolicy.setVerticalStretch(0)
-#        sizePolicy.setHeightForWidth(self.groupBox_server.sizePolicy().hasHeightForWidth())
-#        self.groupBox_server.setSizePolicy(sizePolicy)
-        
-#        self.horizontalLayout_serverdetails.addWidget(self.groupBox_server)
-        
-#        self.verticalLayout_uploadbutton = QtGui.QVBoxLayout()
-#        self.verticalLayout_uploadbutton.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
-#        self.verticalLayout_uploadbutton.setContentsMargins(4, 4, 4, 20)
-#        self.verticalLayout_uploadbutton.setObjectName("verticalLayout_uploadbutton")
-        self.pushButton_upload = QtGui.QPushButton(self)
-#        self.pushButton_upload.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_upload.setAutoDefault(True)
-        self.pushButton_upload.setDefault(True)
-        self.pushButton_upload.setObjectName("pushButton_upload")
-#        self.verticalLayout_uploadbutton.addWidget(self.pushButton_upload)
-#        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
-#        self.verticalLayout_uploadbutton.addItem(spacerItem)
-#        self.horizontalLayout_serverdetails.addLayout(self.verticalLayout_uploadbutton)
-        
-#        self.verticalLayout_central.addLayout(self.horizontalLayout_serverdetails)
         self.verticalLayout_central.addWidget(self.groupBox_server)
         
         ### bottom half ###
@@ -79,8 +53,18 @@ class UploaderWidget(QtGui.QWidget):
         self.groupBox_fileselect = FileSelectGroupBox(self)
         self.verticalLayout_central.addWidget(self.groupBox_fileselect)
         
-        ## closebutton ##
-        self.buttonBox_windowactions = QtGui.QDialogButtonBox(self.groupBox_fileselect)
+        self.buttonBox_windowactions = QtGui.QDialogButtonBox(self)
+        self.pushButton_upload = QtGui.QPushButton(self)
+        modfont = QtGui.QFont(self.pushButton_upload.font())
+        modfont.setPointSize(modfont.pointSize() + 4)
+#        modfont.setBold(True)
+        self.pushButton_upload.setFont(modfont)
+        self.pushButton_upload.setMinimumSize(QtCore.QSize(0, self.pushButton_upload.height()*1.2))
+        self.pushButton_upload.setAutoDefault(True)
+        self.pushButton_upload.setDefault(True)
+        self.pushButton_upload.setObjectName("pushButton_upload")
+        
+        ## cancelbutton ##
         self.pushButton_cancel = self.buttonBox_windowactions.addButton(QtGui.QDialogButtonBox.Cancel)
         self.buttonBox_windowactions.addButton(self.pushButton_upload, QtGui.QDialogButtonBox.AcceptRole)
         self.buttonBox_windowactions.setObjectName("buttonBox_windowactions")
@@ -89,7 +73,7 @@ class UploaderWidget(QtGui.QWidget):
         self.retranslate()
     
     def retranslate(self):
-        self.pushButton_upload.setText(self.tr("Upload"))
+        self.pushButton_upload.setText(self.tr("Upload!"))
 
 class UploaderMenuBar(QtGui.QMenuBar):
     def __init__(self, parent = None):
