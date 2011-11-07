@@ -17,7 +17,6 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         '''
         QtGui.QGroupBox.__init__(self, parent)
         
-        self.setObjectName("groupBox_fileselect")
         self.verticalLayout_fileselectgbox = QtGui.QVBoxLayout(self)
         self.verticalLayout_fileselectgbox.setObjectName("verticalLayout_fileselectgbox")
         
