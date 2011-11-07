@@ -1,5 +1,8 @@
 TODO list
 
+test uploader.py to make sure it works
+- pending response from author of uploader.py
+
 finish modularization of user interface files
 	time: .5-1hr
 
@@ -63,7 +66,7 @@ miscellaneous
    - call QTranslator.load() when we want to change the tranlsation
    - override QWidget
   
-   
+  
     
 	
 total time: 8.25 to 19 hours
