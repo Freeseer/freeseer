@@ -61,8 +61,8 @@ class UploaderApp(QtGui.QMainWindow):
     
     def __initConnect(self):
         self.menubar.actionClose.triggered.connect(self.close)
-        self.mainWidget.buttonBox_windowactions.rejected.connect(self.close)
-        self.mainWidget.buttonBox_windowactions.accepted.connect(self.upload)
+        self.mainWidget.buttonbar.rejected.connect(self.close)
+        self.mainWidget.buttonbar.accepted.connect(self.upload)
     
     @QtCore.pyqtSlot()
     def upload(self):
