@@ -1,26 +1,69 @@
 TODO list
 
+finish modularization of user interface files
+	time: .5-1hr
+
 populate file list (populateFiles slot)
 - change directory
 -- make slot to open browser window, connect browse button to it
--- connect browse window's ok slot to populate file list slot
-
+-- connect browse window's go slot to populate file list slot
+	time: 1-3hr
 
 - load file metadata
+	time: .5-1hr
 - select files
 -  all/none/invert/filter
+	time: .5-1hr
+	
+File metadata
+- load (see above)
+- select visible columns
+	time: 1-3hr
 
 maintain a list of favourite directories
 - load from preferences file (loadFavorites slot)
 - connect directory favourite signal to populate slot
 - show a prompt when adding a favourite
+- allow for management of favourites in preferences dialog
 
-- allow for management in preferences dialog
+    Do this last, leave out if time runs out
+    time: 2-6 hr
 
-check that something is in the username, password, server and port fields.
+When upload button is pressed:
+- do a simple validation, check that something is in the username, password, server and port fields, and at least one file is selected
+    - create slot, connect signal
+- pass arguments to uploader.py, execute.
+	time: .5-1.5hr
 
-pass arguments to uploader.py, execute.
 
-add menu entry 
+add menu entry to main freeseer window
+    time: 15-30 minutes
 
-wire up close button.
+miscellaneous
+- wire up close button.
+- make sure tab order is sensible
+- make some automated tests
+- make some manual tests
+	time: 2hr?
+	
+- add translation settings
+  - the current translation scheme could use some work; this could be a possible future fosslc/gsoc project
+  - should be converted to whatever the standard for qt is, and get & listen to the system language
+  
+  - or we could continue on our custom organization, and set it up to use mixins.
+  - if I do have time or need to add transation settings, I'll be making a mixin
+    - making the mixin will simply involve moving the translation logic from talkeditor to a new class, 
+       and inheriting that class in talkeditorApp. then inherit that class in videouploaderApp 
+  
+  scratch that, i figured it out.
+  http://www.pyside.org/docs/pyside/PySide/QtCore/QCoreApplication.html#PySide.QtCore.PySide.QtCore.QCoreApplication.installTranslator
+  
+  All we need to do for dynamic translation is 
+   - call QtCore.QCoreApplication.installTranslator() at the beginning
+   - call QTranslator.load() when we want to change the tranlsation
+   - override QWidget
+  
+   
+    
+	
+total time: 8.25 to 19 hours
