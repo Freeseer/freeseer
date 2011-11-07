@@ -61,12 +61,23 @@ class UploaderApp(QtGui.QMainWindow):
     
     def __initConnect(self):
         self.menubar.actionClose.triggered.connect(self.close)
-        self.mainWidget.pushButton_close.clicked.connect(self.close)
+        self.mainWidget.buttonBox_windowactions.rejected.connect(self.close)
+        self.mainWidget.buttonBox_windowactions.accepted.connect(self.upload)
+    
+    @QtCore.pyqtSlot()
+    def upload(self):
+        QtGui.QMessageBox.critical(self, "", "Not yet implemented")
+        success = False
+        
+        if success:
+            self.close()
+        
     
     # todo: custom slots; use the following template
 #    @QtCore.pyqtSlot([type-list])
 #    def customSlot(self, [var-list]):
 #        assert isinstance([var], [type])
+    
 
     def retranslate(self):
         self.setWindowTitle(self.tr("Freeseer Video Uploader"))
