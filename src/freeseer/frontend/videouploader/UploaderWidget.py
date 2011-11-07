@@ -44,16 +44,25 @@ class UploaderWidget(QtGui.QWidget):
         self.verticalLayout_central.setObjectName("verticalLayout_central")
         
         ### top half ###
-        
-        self.groupBox_server = ServerDetailsGroupBox(self)
-        self.verticalLayout_central.addWidget(self.groupBox_server)
+        self.serverdetails = ServerDetailsGroupBox(self)
+        self.setObjectName("serverdetails")
+        self.verticalLayout_central.addWidget(self.serverdetails)
         
         ### bottom half ###
+        self.fileselect = FileSelectGroupBox(self)
+        self.setObjectName("fileselect")
+        self.verticalLayout_central.addWidget(self.fileselect)
         
-        self.groupBox_fileselect = FileSelectGroupBox(self)
-        self.verticalLayout_central.addWidget(self.groupBox_fileselect)
+        ### bottom button bar ###
+        self.buttonbar = UploaderButtonBar(self)
+        self.buttonbar.setObjectName("buttonbar")
+        self.verticalLayout_central.addWidget(self.buttonbar)
+
+class UploaderButtonBar(QtGui.QDialogButtonBox):
+    def __init__(self, parent=None):
+        QtGui.QDialogButtonBox.__init__(self, parent)
         
-        self.buttonBox_windowactions = QtGui.QDialogButtonBox(self)
+        ## uploadbutton ##
         self.pushButton_upload = QtGui.QPushButton(self)
         modfont = QtGui.QFont(self.pushButton_upload.font())
         modfont.setPointSize(modfont.pointSize() + 4)
@@ -63,12 +72,10 @@ class UploaderWidget(QtGui.QWidget):
         self.pushButton_upload.setAutoDefault(True)
         self.pushButton_upload.setDefault(True)
         self.pushButton_upload.setObjectName("pushButton_upload")
+        self.addButton(self.pushButton_upload, QtGui.QDialogButtonBox.AcceptRole)
         
         ## cancelbutton ##
-        self.pushButton_cancel = self.buttonBox_windowactions.addButton(QtGui.QDialogButtonBox.Cancel)
-        self.buttonBox_windowactions.addButton(self.pushButton_upload, QtGui.QDialogButtonBox.AcceptRole)
-        self.buttonBox_windowactions.setObjectName("buttonBox_windowactions")
-        self.verticalLayout_central.addWidget(self.buttonBox_windowactions)
+        self.pushButton_cancel = self.addButton(QtGui.QDialogButtonBox.Cancel)
         
         self.retranslate()
     

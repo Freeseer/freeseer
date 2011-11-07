@@ -17,8 +17,6 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         '''
         QtGui.QGroupBox.__init__(self, parent)
         
-        self.setObjectName("groupBox_server")
-        
         self.verticalLayout = QtGui.QVBoxLayout(self)
         self.verticalLayout.setObjectName("verticalLayout")
         
