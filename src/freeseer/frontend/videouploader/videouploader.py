@@ -61,8 +61,7 @@ class UploaderApp(QtGui.QMainWindow):
     
     def __initConnect(self):
         self.menubar.actionClose.triggered.connect(self.close)
-        self.mainWidget.buttonBox_windowactions.button(QtGui.QDialogButtonBox.Close
-                                                       ).clicked.connect(self.close)
+        self.mainWidget.pushButton_close.clicked.connect(self.close)
     
     # todo: custom slots; use the following template
 #    @QtCore.pyqtSlot([type-list])
