@@ -61,28 +61,13 @@ class UploaderApp(QtGui.QMainWindow):
     
     def __initConnect(self):
         self.menubar.actionClose.triggered.connect(self.close)
-        self.mainWidget.buttonBox_windowactions.
-        self.mainWidget.buttonBox_windowactions.clicked.connect(
-                                                    self.windowActionSlot)
+        self.mainWidget.buttonBox_windowactions.button(QtGui.QDialogButtonBox.Close
+                                                       ).clicked.connect(self.close)
     
-    @QtCore.pyqtSlot(QtGui.QAbstractButton)
-    def windowActionSlot(self, button):
-        assert isinstance(button, QtGui.QAbstractButton)
-        
-        # the following is like a case statement. Figure it out, 
-        #  and you will have taken one more step to being a python ninja!
-        
-        # to add more "cases", add a function below, 
-        #  with the actions you want to do
-        # then add an entry to the dict
-        
-        # all this does is chain its call to the menubar.actionClose QAction
-        def close():
-            self.menubar.actionClose.trigger()
-#            self.close()
-        
-        {QtGui.QDialogButtonBox.Close: close
-         }[self.mainWidget.buttonBox_windowactions.standardButton(button)]()
+    # todo: custom slots; use the following template
+#    @QtCore.pyqtSlot([type-list])
+#    def customSlot(self, [var-list]):
+#        assert isinstance([var], [type])
 
     def retranslate(self):
         self.setWindowTitle(self.tr("Freeseer Video Uploader"))
