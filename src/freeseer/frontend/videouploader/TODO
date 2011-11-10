@@ -64,7 +64,8 @@ miscellaneous
   All we need to do for dynamic translation is 
    - call QtCore.QCoreApplication.installTranslator() at the beginning
    - call QTranslator.load() when we want to change the tranlsation
-   - override QWidget.changeEvent similar to how it is in videouploader.UploaderApp
+   - decorate your gui classes with @videouploader.retranslateOnLanguageChange
+     - they must have a retranslate function
     
 	
 total time: 8.25 to 19 hours
