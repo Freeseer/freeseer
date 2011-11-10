@@ -6,11 +6,27 @@ Created on Oct 15, 2011
 
 from PyQt4 import QtGui, QtCore
 
+from os import path
+
 from UploaderWidget import UploaderMenuBar, UploaderWidget
 from MinimalistCore import MinimalistCore
 
 from freeseer.framework.core import FreeseerCore
+    
+USE_NATIVE_DIALOG = True
+      
+def retranslateOnLanguageChange(klass):
+    def changeEvent(self, event):
+        super(klass, self).changeEvent(event)
+        assert isinstance(event, QtCore.QEvent)
+        
+        if event.type() == QtCore.QEvent.LanguageChange:
+            self.retranslate()
+    
+    klass.changeEvent = changeEvent
+    return klass
 
+@retranslateOnLanguageChange
 class UploaderApp(QtGui.QMainWindow):
     '''
     Video Uploader Main window
@@ -27,7 +43,17 @@ class UploaderApp(QtGui.QMainWindow):
         # superclass #
         QtGui.QMainWindow.__init__(self, None)
         
-        # init gui #
+        # define members #
+        self.core = core
+        self.mainWidget = None
+        self.menubar = None
+        
+        self.__initGui()
+        self.__loadDefaults()
+        self.__loadSettings()
+        self.__initConnections()
+    
+    def __initGui(self):
         self.resize(560, 600)
         
         icon = QtGui.QIcon()
@@ -50,9 +76,6 @@ class UploaderApp(QtGui.QMainWindow):
 #        self.__initToolbar()
         
         self.retranslate()
-        
-        # Signals and slots' connections #
-        self.__initConnections()
     
     def __initToolbar(self):
         self.toolbar.setFloatable(False)
@@ -68,11 +91,21 @@ class UploaderApp(QtGui.QMainWindow):
         self.addToolBar(QtCore.Qt.TopToolBarArea, self.toolbar)
         self.addToolBarBreak(QtCore.Qt.TopToolBarArea)
     
+    def __loadDefaults(self):
+        abspath = path.expanduser("~/Videos")
+        self.mainWidget.fileselect.lineEdit_filepath.setText(abspath)
+        
+    def __loadSettings(self):
+        pass
+    
     def __initConnections(self):
         self.menubar.actionClose.triggered.connect(self.close)
         self.mainWidget.buttonbar.rejected.connect(self.close)
         self.menubar.actionUpload.triggered.connect(self.upload)
         self.mainWidget.buttonbar.accepted.connect(self.upload)
+        
+        self.menubar.actionOpen_Directory.triggered.connect(self.browse)
+        self.mainWidget.fileselect.pushButton_filepathbrowse.clicked.connect(self.browse)
     
     @QtCore.pyqtSlot()
     def upload(self):
@@ -81,6 +114,34 @@ class UploaderApp(QtGui.QMainWindow):
         
         if success:
             self.close()
+    
+    def browse(self):
+        def setPath(newpath):
+            self.mainWidget.fileselect.lineEdit_filepath.setText(newpath)
+        
+        oldpath = self.mainWidget.fileselect.lineEdit_filepath.text()
+        
+        if USE_NATIVE_DIALOG:
+            newpath = QtGui.QFileDialog.getExistingDirectory(self, self.tr("Open Directory"), 
+                                                             oldpath,
+                                                             QtGui.QFileDialog.ShowDirsOnly)
+            setPath(newpath)
+            
+        else:
+            dialog = QtGui.QFileDialog(self, self.tr("Open Directory"), oldpath)
+            dialog.setModal(True)
+            dialog.setOption(QtGui.QFileDialog.ShowDirsOnly)
+            dialog.setAcceptMode(QtGui.QFileDialog.AcceptOpen)
+            dialog.setFileMode(QtGui.QFileDialog.Directory)
+            # TODO: set these to favourites.
+            sideurls = dialog.sidebarUrls()
+            sideurls.append(QtCore.QUrl("file://" + path.expanduser("~/Videos")))
+            dialog.setSidebarUrls(sideurls)
+            dialog.directoryEntered.connect(setPath)
+            dialog.show()
+    
+    def directoryChanged(self):
+        pass
         
     # todo: custom slots; use the following template
 #    @QtCore.pyqtSlot([type-list])
@@ -90,12 +151,7 @@ class UploaderApp(QtGui.QMainWindow):
     def retranslate(self):
         self.setWindowTitle(self.tr("Freeseer Video Uploader"))
     
-    def changeEvent(self, event):
-        QtGui.QMainWindow.changeEvent(self, event)
-        assert isinstance(event, QtCore.QEvent)
-        
-        if event.type() == QtCore.QEvent.LanguageChange:
-            self.retranslate()
+
     
 if __name__ == '__main__':
     import sys
