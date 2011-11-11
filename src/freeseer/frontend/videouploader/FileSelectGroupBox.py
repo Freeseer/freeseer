@@ -113,7 +113,37 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         self.toolButton_selectnone.setText(self.tr("None"))
         self.toolButton_selectinvert.setText(self.tr("Invert"))
         self.toolButton_selectfilter.setText(self.tr("Filter..."))
-        
+    
+    def getDirectory(self):
+        return self.lineEdit_filepath.text()
+    def setDirectory(self, value):
+        return self.lineEdit_filepath.setText(value)
+    directory = property(getDirectory, setDirectory)
+    
+    def getAddFavorite(self):
+        return self.actionAddFavourite.triggered
+    addFavorite = property(getAddFavorite)
+    
+    def getGoDirectory(self):
+        return self.toolButton_filepathgo
+    goDirectory = property(getGoDirectory)
+    
+    def getBrowse(self):
+        return self.pushButton_filepathbrowse.clicked
+    browse = property(getBrowse)
+    
+    def getSelectAll(self):
+        return self.toolButton_selectall.clicked
+    selectAll = property(getSelectAll)
+    def getSelectNone(self):
+        return self.toolButton_selectnone.clicked
+    selectNone = property(getSelectNone)
+    def getSelectInvert(self):
+        return self.toolButton_selectinvert.clicked
+    selectInvert = property(getSelectInvert)
+    def getFilterSelection(self):
+        return self.toolButton_selectfilter.clicked
+    filterSelection = property(getFilterSelection)
     
 if __name__ == "__main__":
     import sys
