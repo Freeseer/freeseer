@@ -13,8 +13,6 @@ from MinimalistCore import MinimalistCore
 
 from freeseer.framework.core import FreeseerCore
     
-USE_NATIVE_DIALOG = True
-      
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
         super(klass, self).changeEvent(event)
@@ -31,6 +29,7 @@ class UploaderApp(QtGui.QMainWindow):
     '''
     Video Uploader Main window
     '''
+    USE_NATIVE_DIALOG = True
     
 #    def __init__(self, parent = None, flags = QtCore.Qt.WindowFlags()):
 #        QtGui.QMainWindow.__init__(self, parent, flags)
@@ -121,7 +120,7 @@ class UploaderApp(QtGui.QMainWindow):
         
         oldpath = self.mainWidget.fileselect.lineEdit_filepath.text()
         
-        if USE_NATIVE_DIALOG:
+        if UploaderApp.USE_NATIVE_DIALOG:
             newpath = QtGui.QFileDialog.getExistingDirectory(self, self.tr("Open Directory"), 
                                                              oldpath,
                                                              QtGui.QFileDialog.ShowDirsOnly)
