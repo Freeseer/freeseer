@@ -104,7 +104,7 @@ class UploaderApp(QtGui.QMainWindow):
         self.mainWidget.buttonbar.accepted.connect(self.upload)
         
         self.menubar.actionOpen_Directory.triggered.connect(self.browse)
-        self.mainWidget.fileselect.pushButton_filepathbrowse.clicked.connect(self.browse)
+        self.mainWidget.fileselect.browse.connect(self.browse)
     
     @QtCore.pyqtSlot()
     def upload(self):
