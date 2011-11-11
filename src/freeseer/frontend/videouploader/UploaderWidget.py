@@ -81,7 +81,7 @@ class UploaderButtonBar(QtGui.QDialogButtonBox):
     
     def retranslate(self):
         self.pushButton_upload.setText(self.tr("Upload!"))
-
+    
 class UploaderMenuBar(QtGui.QMenuBar):
     def __init__(self, parent = None):
         QtGui.QMenuBar.__init__(self, parent)
