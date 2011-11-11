@@ -116,9 +116,9 @@ class UploaderApp(QtGui.QMainWindow):
     
     def browse(self):
         def setPath(newpath):
-            self.mainWidget.fileselect.lineEdit_filepath.setText(newpath)
+            self.mainWidget.fileselect.directory = newpath
         
-        oldpath = self.mainWidget.fileselect.lineEdit_filepath.text()
+        oldpath = self.mainWidget.fileselect.directory
         
         if UploaderApp.USE_NATIVE_DIALOG:
             newpath = QtGui.QFileDialog.getExistingDirectory(self, self.tr("Open Directory"), 
