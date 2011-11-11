@@ -11,6 +11,8 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
     classdocs
     '''
     
+    Sftp, Drupal = range(2)
+    
     def __init__(self, parent=None):
         '''
         Constructor
@@ -86,9 +88,19 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.radioButton_drupal.setObjectName("radioButton_drupal")
         self.horizontalLayout_servertype.addWidget(self.radioButton_drupal)
         
+        self.buttonGroup_serverType = QtGui.QButtonGroup(self)
+        self.buttonGroup_serverType.addButton(self.radioButton_sftp)
+        self.buttonGroup_serverType.addButton(self.radioButton_drupal)
+        
         self.verticalLayout.addLayout(self.horizontalLayout_servertype)
         
         self.retranslate()
+        
+        # radiobutton mapping #
+        self.serverType_button_mapping = {self.Sftp:   self.radioButton_sftp,
+                                          self.Drupal: self.radioButton_drupal}
+        
+        self.button_serverType_mapping = dict(reversed(item) for item in self.serverType_button_mapping.items())
     
     def retranslate(self):
         self.setTitle(self.tr("Server Details"))
@@ -99,7 +111,33 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.radioButton_sftp.setText(self.tr("SFTP/SCP"))
         self.radioButton_drupal.setText(self.tr("Drupal"))
         
+    def getUsername(self):
+        return self.lineEdit_username.text()
+    def setUsername(self, value):
+        self.lineEdit_username.setText(value)
+    username = property(getUsername, setUsername)
     
+    def getPassword(self):
+        return self.lineEdit_password.text()
+    password = property(getPassword)
+    
+    def getServerAddress(self):
+        return self.lineEdit_Server.text()
+    def setServerAddress(self, value):
+        self.lineEdit_Server.setText(value)
+    serverAddress = property(getServerAddress, setServerAddress)
+    
+    def getServerPort(self):
+        return self.lineEdit_port.text()
+    def setServerPort(self, value):
+        self.lineEdit_port.setText(value)
+    serverPort = property(getServerPort, setServerPort)
+        
+    def getServerType(self):
+        return self.button_serverType_mapping[self.buttonGroup_serverType.checkedButton()]
+    def setServerType(self, value):
+        self.serverType_button_mapping[value].click()
+    serverType = property(getServerType, setServerType)
     
 if __name__ == "__main__":
     import sys
