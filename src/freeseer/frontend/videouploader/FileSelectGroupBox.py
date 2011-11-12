@@ -5,6 +5,7 @@ Created on Oct 15, 2011
 '''
 
 from PyQt4 import QtCore, QtGui
+import MediaFile
 
 class FileSelectGroupBox(QtGui.QGroupBox):
     '''
@@ -63,9 +64,14 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         self.pushButton_filepathbrowse.setObjectName("pushButton_filepathbrowse")
         self.horizontalLayout_filepathbuttons.addWidget(self.pushButton_filepathbrowse)
         self.verticalLayout_fileselectgbox.addLayout(self.horizontalLayout_filepathbuttons)
-        self.listView_filelist = QtGui.QListView(self)
-        self.listView_filelist.setObjectName("listView_filelist")
-        self.verticalLayout_fileselectgbox.addWidget(self.listView_filelist)
+        
+        self.filelist = MediaFile.MediaFileView(self)
+        self.filelist.setObjectName("filelist")
+        
+        self.filemodel = MediaFile.MediaFileModel(self)
+        self.filelist.setModel(self.filemodel)
+        
+        self.verticalLayout_fileselectgbox.addWidget(self.filelist)
         
         ## file selection modification buttons ##
         self.horizontalLayout_fileselectbuttons = QtGui.QHBoxLayout()
@@ -78,7 +84,7 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         
         # none #
         self.toolButton_selectnone = QtGui.QToolButton(self)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+#        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
         self.toolButton_selectnone.setObjectName("toolButton_selectnone")
         self.horizontalLayout_fileselectbuttons.addWidget(self.toolButton_selectnone)
         
@@ -144,7 +150,9 @@ class FileSelectGroupBox(QtGui.QGroupBox):
     def getFilterSelection(self):
         return self.toolButton_selectfilter.clicked
     filterSelection = property(getFilterSelection)
-    
+
+
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
