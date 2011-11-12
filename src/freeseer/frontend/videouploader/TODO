@@ -5,6 +5,7 @@ test uploader.py to make sure it works
 
 finish modularization of user interface files
 	time: .5-1hr
+	DONE
 
 populate file list (populateFiles slot)
 - change directory
@@ -17,6 +18,7 @@ populate file list (populateFiles slot)
 - select files
 -  all/none/invert/filter
 	time: .5-1hr
+	DONE
 	
 File metadata
 - load (see above)
