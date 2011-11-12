@@ -37,6 +37,18 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.label_Server.setObjectName("label_Server")
         self.formLayout_serverdetails.setWidget(2, QtGui.QFormLayout.LabelRole, self.label_Server)
         
+        self.lineEdit_username = QtGui.QLineEdit(self)
+        self.label_username.setBuddy(self.lineEdit_username)
+        self.lineEdit_username.setObjectName("lineEdit_username")
+        self.formLayout_serverdetails.setWidget(0, QtGui.QFormLayout.FieldRole, self.lineEdit_username)
+        
+        self.lineEdit_password = QtGui.QLineEdit(self)
+        self.lineEdit_password.setText("")
+        self.lineEdit_password.setEchoMode(QtGui.QLineEdit.Password)
+        self.label_password.setBuddy(self.lineEdit_password)
+        self.lineEdit_password.setObjectName("lineEdit_password")
+        self.formLayout_serverdetails.setWidget(1, QtGui.QFormLayout.FieldRole, self.lineEdit_password)
+        
         self.horizontalLayout_serveraddress = QtGui.QHBoxLayout()
         self.horizontalLayout_serveraddress.setObjectName("horizontalLayout_serveraddress")
         
@@ -67,17 +79,6 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.horizontalLayout_serveraddress.addWidget(self.lineEdit_port)
         
         self.formLayout_serverdetails.setLayout(2, QtGui.QFormLayout.FieldRole, self.horizontalLayout_serveraddress)
-        self.lineEdit_password = QtGui.QLineEdit(self)
-        self.lineEdit_password.setText("")
-        self.lineEdit_password.setEchoMode(QtGui.QLineEdit.Password)
-        self.label_password.setBuddy(self.lineEdit_password)
-        self.lineEdit_password.setObjectName("lineEdit_password")
-        self.formLayout_serverdetails.setWidget(1, QtGui.QFormLayout.FieldRole, self.lineEdit_password)
-        
-        self.lineEdit_username = QtGui.QLineEdit(self)
-        self.label_username.setBuddy(self.lineEdit_username)
-        self.lineEdit_username.setObjectName("lineEdit_username")
-        self.formLayout_serverdetails.setWidget(0, QtGui.QFormLayout.FieldRole, self.lineEdit_username)
         
         self.verticalLayout.addLayout(self.formLayout_serverdetails)
         
