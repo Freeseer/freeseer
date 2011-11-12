@@ -96,9 +96,10 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_fileselectbuttons.addItem(spacerItem1)
         
-        # filter #
+        # filter # (disabled)
         self.toolButton_selectfilter = QtGui.QToolButton(self)
         self.toolButton_selectfilter.setObjectName("toolButton_selectfilter")
+        self.toolButton_selectfilter.hide()
         self.horizontalLayout_fileselectbuttons.addWidget(self.toolButton_selectfilter)
         
         self.verticalLayout_fileselectgbox.addLayout(self.horizontalLayout_fileselectbuttons)
@@ -119,6 +120,11 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         self.toolButton_selectnone.setText(self.tr("None"))
         self.toolButton_selectinvert.setText(self.tr("Invert"))
         self.toolButton_selectfilter.setText(self.tr("Filter..."))
+        
+    def _initConnections(self):
+        self.selectAll.connect(self.filemodel.checkAll)
+        self.selectNone.connect(self.filemodel.checkNone)
+        self.selectInvert.connect(self.filemodel.checkInvert)
     
     def getDirectory(self):
         return self.lineEdit_filepath.text()
@@ -157,5 +163,6 @@ if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
     main = FileSelectGroupBox()
+    main._initConnections()
     main.show()
     sys.exit(app.exec_())
