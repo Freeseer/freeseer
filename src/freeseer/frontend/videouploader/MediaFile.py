@@ -6,6 +6,7 @@ Created on Nov 11, 2011
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt
+from freeseer.framework.presentation import PresentationFile
 
 class MediaFileView(QtGui.QTableView):
     def __init__(self, parent=None):
@@ -166,8 +167,34 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
             yield self.index(row, self.CHECK_COL)
     
 class MediaFileModel(CheckableRowTableModel):
+    # attributes of the presentation.PresentationFile class
+    FIELD_ATTRIBUTES = {1: "filebase",
+                        2: "filepath",
+                        3: "title",
+                        4: "speaker",
+                        5: "description",
+                        6: "time",
+                        7: "duration",
+                        8: "filedate",
+                        9: "filesize"
+                        }
+    @property
+    def FIELD_HEADERS(self):
+        return         {1: self.tr("File Name"),
+                        2: self.tr("File Path"),
+                        3: self.tr("Title"),
+                        4: self.tr("Speaker"),
+                        5: self.tr("Description"),
+                        6: self.tr("Time"),
+                        7: self.tr("Duration"),
+                        8: self.tr("Date Modified"),
+                        9: self.tr("Size")}
+    NUM_FIELDS = 10
+    
     def __init__(self, parent=None):
         CheckableRowTableModel.__init__(self, parent)
+#        self.filedata = []
+        self.filedata = [MediaFileItem(), MediaFileItem(), MediaFileItem()]
         
     def setDirectory(self, directory):
         # TODO: look at QtGui.QFileSystemModel
@@ -176,22 +203,19 @@ class MediaFileModel(CheckableRowTableModel):
     # pylint: disable-msg=W0613
     ## Mandatory implemented abstract methods ##
     def rowCount(self, parent=QtCore.QModelIndex()):
-        return 4
+        return len(self.filedata)
     
     def columnCount(self, parent=QtCore.QModelIndex()):
-        return 5
+        return MediaFileModel.NUM_FIELDS
     # pylint: enable-msg=W0613
     
     def data(self, index, role=QtCore.Qt.DisplayRole):
         assert isinstance(index, QtCore.QModelIndex)
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
-            return {1: self.tr("fname"),
-                    2: self.tr("title"),
-                    3: self.tr("artist"),
-                    4: self.tr("blah")
-                    }.get(index.column(),
-                          CheckableRowTableModel.data(self, index, 
-                                                            role))
+            if MediaFileModel.FIELD_ATTRIBUTES.has_key(index.column()):
+                return (self.filedata[index.row()].data
+                            .__getattribute__(
+                                MediaFileModel.FIELD_ATTRIBUTES[index.column()]))
         
         return CheckableRowTableModel.data(self, index, role)
     
@@ -202,11 +226,7 @@ class MediaFileModel(CheckableRowTableModel):
         if orientation == QtCore.Qt.Horizontal:
             if role == QtCore.Qt.DisplayRole:
 #                print section
-                return {1: self.tr("File Name"),
-                        2: self.tr("Title"),
-                        3: self.tr("Speaker"),
-                        4: self.tr("Description")
-                        }.get(section,
+                return self.FIELD_HEADERS.get(section,
                           CheckableRowTableModel.headerData(self, section, 
                                                             orientation, 
                                                             role))
@@ -215,7 +235,9 @@ class MediaFileModel(CheckableRowTableModel):
 
 class MediaFileItem(QtCore.QObject):
     def __init__(self, parent=None):
-        QtCore.QObject.__init__(parent)
+        QtCore.QObject.__init__(self, parent)
+        self.data = PresentationFile("default")
+        
     
 if __name__ == "__main__":
     import sys

@@ -22,7 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-
+from os import path
 
 class Presentation(object):	
     '''
@@ -51,7 +51,7 @@ class PresentationFile(Presentation):
     def __init__(self, title, speaker="", description="", level="", event="Default", room="Default", time=""):
         Presentation.__init__(self, title, speaker, description, level, event, room, time)
         
-        self.filename = None
+        self.filename = "/home/test/Videos/test.mp4"
         self.tracknumber = None
         self.filedate = None
         self.duration = None
@@ -59,3 +59,6 @@ class PresentationFile(Presentation):
         
     artist = property(lambda self: self.speaker, 
                       lambda self, value: self.__setattr__('speaker', value))
+    
+    filebase = property(lambda self: path.basename(self.filename))
+    filepath = property(lambda self: path.dirname(self.filename))
