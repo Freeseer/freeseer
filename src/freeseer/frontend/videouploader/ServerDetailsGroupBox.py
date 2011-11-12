@@ -47,6 +47,7 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         sizePolicy.setHeightForWidth(self.lineEdit_Server.sizePolicy().hasHeightForWidth())
         self.lineEdit_Server.setSizePolicy(sizePolicy)
         self.lineEdit_Server.setMinimumSize(QtCore.QSize(150, 0))
+        self.label_Server.setBuddy(self.lineEdit_Server)
         self.lineEdit_Server.setObjectName("lineEdit_Server")
         self.horizontalLayout_serveraddress.addWidget(self.lineEdit_Server)
         
@@ -61,6 +62,7 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         sizePolicy.setHeightForWidth(self.lineEdit_port.sizePolicy().hasHeightForWidth())
         self.lineEdit_port.setSizePolicy(sizePolicy)
         self.lineEdit_port.setMinimumSize(QtCore.QSize(50, 0))
+        self.label_port.setBuddy(self.lineEdit_port)
         self.lineEdit_port.setObjectName("lineEdit_port")
         self.horizontalLayout_serveraddress.addWidget(self.lineEdit_port)
         
@@ -68,10 +70,12 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.lineEdit_password = QtGui.QLineEdit(self)
         self.lineEdit_password.setText("")
         self.lineEdit_password.setEchoMode(QtGui.QLineEdit.Password)
+        self.label_password.setBuddy(self.lineEdit_password)
         self.lineEdit_password.setObjectName("lineEdit_password")
         self.formLayout_serverdetails.setWidget(1, QtGui.QFormLayout.FieldRole, self.lineEdit_password)
         
         self.lineEdit_username = QtGui.QLineEdit(self)
+        self.label_username.setBuddy(self.lineEdit_username)
         self.lineEdit_username.setObjectName("lineEdit_username")
         self.formLayout_serverdetails.setWidget(0, QtGui.QFormLayout.FieldRole, self.lineEdit_username)
         
@@ -104,12 +108,12 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
     
     def retranslate(self):
         self.setTitle(self.tr("Server Details"))
-        self.label_username.setText(self.tr("Username"))
-        self.label_password.setText(self.tr("Password"))
-        self.label_Server.setText(self.tr("Server"))
-        self.label_port.setText(self.tr("Port"))
-        self.radioButton_sftp.setText(self.tr("SFTP/SCP"))
-        self.radioButton_drupal.setText(self.tr("Drupal"))
+        self.label_username.setText(self.tr("&Username"))
+        self.label_password.setText(self.tr("&Password"))
+        self.label_Server.setText(self.tr("&Server"))
+        self.label_port.setText(self.tr("P&ort"))
+        self.radioButton_sftp.setText(self.tr("SF&TP/SCP"))
+        self.radioButton_drupal.setText(self.tr("&Drupal"))
         
     def getUsername(self):
         return self.lineEdit_username.text()
