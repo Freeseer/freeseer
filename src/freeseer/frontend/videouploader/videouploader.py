@@ -12,7 +12,7 @@ from UploaderWidget import UploaderMenuBar, UploaderWidget
 from MinimalistCore import MinimalistCore
 
 from freeseer.framework.core import FreeseerCore
-    
+
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
         super(klass, self).changeEvent(event)
@@ -23,6 +23,8 @@ def retranslateOnLanguageChange(klass):
     
     klass.changeEvent = changeEvent
     return klass
+
+
 
 @retranslateOnLanguageChange
 class UploaderApp(QtGui.QMainWindow):
@@ -95,9 +97,12 @@ class UploaderApp(QtGui.QMainWindow):
         self.mainWidget.fileselect.lineEdit_filepath.setText(abspath)
         
     def __loadSettings(self):
+        #self.core.config.videodir
         pass
     
     def __initConnections(self):
+        
+        
         self.menubar.actionClose.triggered.connect(self.close)
         self.mainWidget.buttonbar.rejected.connect(self.close)
         self.menubar.actionUpload.triggered.connect(self.upload)
@@ -134,13 +139,14 @@ class UploaderApp(QtGui.QMainWindow):
             dialog.setFileMode(QtGui.QFileDialog.Directory)
             # TODO: set these to favourites.
             sideurls = dialog.sidebarUrls()
-            sideurls.append(QtCore.QUrl("file://" + path.expanduser("~/Videos")))
+            sideurls.append(QtCore.QUrl("file://" + path.expanduser(self.core.config.videodir)))
             dialog.setSidebarUrls(sideurls)
             dialog.directoryEntered.connect(setPath)
             dialog.show()
     
     def directoryChanged(self):
-        pass
+        print "file://" + self.mainWidget.fileselect.directory
+        self.mainWidget.fileselect.filemodel.setDirectory("file://" + self.mainWidget.fileselect.directory)
         
     # todo: custom slots; use the following template
 #    @QtCore.pyqtSlot([type-list])
@@ -149,9 +155,7 @@ class UploaderApp(QtGui.QMainWindow):
 
     def retranslate(self):
         self.setWindowTitle(self.tr("Freeseer Video Uploader"))
-    
-
-    
+  
 if __name__ == '__main__':
     import sys
     app = QtGui.QApplication(sys.argv)
