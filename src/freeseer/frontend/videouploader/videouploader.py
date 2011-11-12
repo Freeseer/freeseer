@@ -101,8 +101,6 @@ class UploaderApp(QtGui.QMainWindow):
         pass
     
     def __initConnections(self):
-        
-        
         self.menubar.actionClose.triggered.connect(self.close)
         self.mainWidget.buttonbar.rejected.connect(self.close)
         self.menubar.actionUpload.triggered.connect(self.upload)
@@ -110,6 +108,14 @@ class UploaderApp(QtGui.QMainWindow):
         
         self.menubar.actionOpen_Directory.triggered.connect(self.browse)
         self.mainWidget.fileselect.browse.connect(self.browse)
+        
+        self.mainWidget.fileselect._initConnections()
+        self.menubar.actionSelect_All.triggered.connect(
+                                self.mainWidget.fileselect.filemodel.checkAll)
+        self.menubar.actionSelect_None.triggered.connect(
+                                self.mainWidget.fileselect.filemodel.checkNone)
+        self.menubar.actionInvert_Selection.triggered.connect(
+                                self.mainWidget.fileselect.filemodel.checkInvert)
     
     @QtCore.pyqtSlot()
     def upload(self):

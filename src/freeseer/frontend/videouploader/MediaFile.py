@@ -117,17 +117,18 @@ class CheckBoxDelegate(QtGui.QStyledItemDelegate):
 class CheckableRowTableModel(QtCore.QAbstractTableModel):
     def __init__(self, parent=None):
         QtCore.QAbstractTableModel.__init__(self, parent)
+        self.CHECK_COL = 0
         self.checked = {}
     
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         if orientation == Qt.Horizontal:
             if role == Qt.DisplayRole:
-                if section == 0:
+                if section == self.CHECK_COL:
                     return ""
     
     def data(self, index, role=QtCore.Qt.DisplayRole):
         assert isinstance(index, QtCore.QModelIndex)
-        if index.column() == 0:   
+        if index.column() == self.CHECK_COL:   
             if role == Qt.DisplayRole:
                 return self.checked.get(index.row(), False)
             if role == Qt.CheckStateRole:
@@ -136,9 +137,10 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
     
     def setData(self, index, value, role=Qt.EditRole):
         assert isinstance(index, QtCore.QModelIndex)
-        if index.column() == 0:
+        if index.column() == self.CHECK_COL:
             if role == Qt.EditRole:
                 self.checked[index.row()] = value
+                self.dataChanged.emit(index, index)
     
     def flags(self, index):
         assert isinstance(index, QtCore.QModelIndex)
@@ -147,7 +149,22 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
 #        if True:
 #            return Qt.ItemIsEnabled | Qt.ItemIsUserCheckable | Qt.ItemIsSelectable
         return QtCore.QAbstractTableModel.flags(self, index)
-
+    
+    # selection modification tools #
+    def checkAll(self):
+        for index in self._iterCheckIndicies():
+            self.setData(index, True, Qt.EditRole)
+    def checkNone(self):
+        for index in self._iterCheckIndicies():
+            self.setData(index, False, Qt.EditRole)
+    def checkInvert(self):
+        for index in self._iterCheckIndicies():
+            self.setData(index, not self.data(index, Qt.DisplayRole), Qt.EditRole)
+    
+    def _iterCheckIndicies(self):
+        for row in range(0, self.rowCount()):
+            yield self.index(row, self.CHECK_COL)
+    
 class MediaFileModel(CheckableRowTableModel):
     def __init__(self, parent=None):
         CheckableRowTableModel.__init__(self, parent)
@@ -199,10 +216,7 @@ class MediaFileModel(CheckableRowTableModel):
 class MediaFileItem(QtCore.QObject):
     def __init__(self, parent=None):
         QtCore.QObject.__init__(parent)
-        
-        
     
-
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
