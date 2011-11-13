@@ -28,6 +28,7 @@ import os
 from PyQt4 import QtSql
 
 from freeseer.framework.presentation import *
+from freeseer.framework.failure import *
 
 class QtDBConnector():
     presentationsModel = None
@@ -83,7 +84,12 @@ class QtDBConnector():
                                         Event varchar(100),
                                         Room varchar(25),
                                         Time timestamp,
-                                        UNIQUE (Speaker, Title) ON CONFLICT REPLACE)''')
+                                        UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
+        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS
+                                        (Id INTERGER PRIMARY KEY,
+                                        Comments text,
+                                        Indicator text),
+                                        UNIQUE (ID) ON CONFLICT REPLACE)''')
         
     def __insert_default_talk(self):
         """
@@ -120,9 +126,23 @@ class QtDBConnector():
                              unicode(result.value(7).toString()))    # time
             
             return p
-    
+        
+    def get_failures(self):
+        """
+        Return a list of failures in Report format.
+        """
+        result = Qt.Sql.QSqlQuery('''Select * FROM failures''')
+        list = []
+        while(result.next()):
+            f = Failures(unicode(result.value(1).toString()),    # id
+                             unicode(result.value(2).toString()),    # comment
+                             unicode(result.value(3).toString()))    # indicator
+            p = get_presentation(self, f.talkId);
+            r = Report(p, f)
+            list.append(r)
+        return list
     #
-    # Create, Update, Delete
+    # Presentation Create, Update, Delete
     #
     def insert_presentation(self, presentation):
         """
@@ -164,6 +184,33 @@ class QtDBConnector():
         """
         query = QtSql.QSqlQuery('''DELETE FROM presentations''')
         logging.info("Database cleared.")
+    
+    def insert_failure(self, failure):
+        """
+        Insert a failure into the database.
+        """
+        
+        query = QtSql.QSqlQuery('''Insert Into failures VALUES ("%d", "%s", "%s"))''' %
+                           (int(failure.talkId), failure.comment, failure.indicator))
+        logging.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
+    
+    def update_failure(self, talk_id, failure):
+        """
+        Update an existing Failure in the database.
+        """
+        
+        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s" WHERE Id="%s"''' %
+                           (failure.comment,
+                            failure.indicator,
+                            failure.talkId))
+        logging.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
+    
+    def delete_failure(self, talk_id):
+        """
+        Removes a Presentation from the database
+        """
+        query = QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
+        logging.info("Failure %s deleted." % talk_id) 
     
     #
     # Data Model Retrieval 
