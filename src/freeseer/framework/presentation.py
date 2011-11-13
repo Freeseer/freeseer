@@ -51,7 +51,8 @@ class PresentationFile(Presentation):
     def __init__(self, title, speaker="", description="", level="", event="Default", room="Default", time=""):
         Presentation.__init__(self, title, speaker, description, level, event, room, time)
         
-        self.filename = "/home/test/Videos/test.mp4"
+        self.filename = ""
+        self.album = ""
         self.tracknumber = None
         self.filedate = None
         self.duration = None
