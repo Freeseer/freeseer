@@ -137,7 +137,7 @@ class FileSelectGroupBox(QtGui.QGroupBox):
     addFavorite = property(getAddFavorite)
     
     def getGoDirectory(self):
-        return self.toolButton_filepathgo
+        return self.toolButton_filepathgo.clicked
     goDirectory = property(getGoDirectory)
     
     def getBrowse(self):

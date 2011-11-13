@@ -37,6 +37,7 @@ import gobject
 gobject.threads_init()
 import pygst
 pygst.require('0.10')
+import gst
 from gst.extend.discoverer import Discoverer
 
 USER = None
@@ -255,6 +256,7 @@ class VideoData:
     #Will have to get specific tags from discoverer object to store them
     def retrieveData(self, discoverer, ismedia):
         tags = discoverer.tags
+        self.tags = tags
         if 'title' in tags:
             self.title = tags['title']
         if 'artist' in tags:
@@ -268,8 +270,10 @@ class VideoData:
         if 'comment' in tags:
             self.comment = tags['comment']
         self.duration = discoverer._time_to_string(max(discoverer.audiolength, discoverer.videolength))
-        self.body = 'Speaker: '+self.artist+'\nEvent: '+self.album+'\nDate:'+self.date+'\nRoom: '+self.location+'\n\n'+self.comment
+#        self.body = 'Speaker: '+self.artist+'\nEvent: '+self.album+'\nDate:'+str(self.date)+'\nRoom: '+self.location+'\n\n'+self.comment
         self.current = None
+        self.mainloop.quit()
+        discoverer.set_state(gst.STATE_NULL)
         
     def getBody (self):
         return self.body

@@ -108,6 +108,7 @@ class UploaderApp(QtGui.QMainWindow):
         
         self.menubar.actionOpen_Directory.triggered.connect(self.browse)
         self.mainWidget.fileselect.browse.connect(self.browse)
+        self.mainWidget.fileselect.goDirectory.connect(self.directoryChanged)
         
         self.mainWidget.fileselect._initConnections()
         self.menubar.actionSelect_All.triggered.connect(
@@ -126,10 +127,11 @@ class UploaderApp(QtGui.QMainWindow):
             self.close()
     
     def browse(self):
+        oldpath = self.mainWidget.fileselect.directory
         def setPath(newpath):
             self.mainWidget.fileselect.directory = newpath
-        
-        oldpath = self.mainWidget.fileselect.directory
+            if oldpath != newpath:
+                self.directoryChanged()
         
         if UploaderApp.USE_NATIVE_DIALOG:
             newpath = QtGui.QFileDialog.getExistingDirectory(self, self.tr("Open Directory"), 
@@ -151,8 +153,9 @@ class UploaderApp(QtGui.QMainWindow):
             dialog.show()
     
     def directoryChanged(self):
-        print "file://" + self.mainWidget.fileselect.directory
-        self.mainWidget.fileselect.filemodel.setDirectory("file://" + self.mainWidget.fileselect.directory)
+        print self.mainWidget.fileselect.directory
+        self.mainWidget.fileselect.filemodel.setDirectory(self.mainWidget.fileselect.directory)
+        
         
     # todo: custom slots; use the following template
 #    @QtCore.pyqtSlot([type-list])

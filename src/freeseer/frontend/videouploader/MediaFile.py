@@ -3,10 +3,16 @@ Created on Nov 11, 2011
 
 @author: jord
 '''
+import os
+import mimetypes
 
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt
 from freeseer.framework.presentation import PresentationFile
+from freeseer.framework import uploader
+
+listabsdir = lambda d: [os.path.join(str(d), f) for f in os.listdir(str(d))]
+isAVmimetype = lambda t: t[0] != None and (t[0].find("video") >= 0 or t[0].find("audio") >= 0)
 
 class MediaFileView(QtGui.QTableView):
     def __init__(self, parent=None):
@@ -25,6 +31,8 @@ class MediaFileView(QtGui.QTableView):
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         
         self.setItemDelegateForColumn(0, CheckBoxDelegate(self))
+        
+        
     
     def setModel(self, model):
         QtGui.QTableView.setModel(self, model)
@@ -33,7 +41,10 @@ class MediaFileView(QtGui.QTableView):
         
         hheader.resizeSection(0,25)
         hheader.setResizeMode(0, QtGui.QHeaderView.Fixed)
+        hheader.resizeSection(1, 300)
         hheader.setStretchLastSection(True)
+        
+        self.setColumnHidden(2, True)
         
     @QtCore.pyqtSlot(int, Qt.SortOrder)
     def cancelFirstColumnSort(self, column, order):
@@ -173,7 +184,7 @@ class MediaFileModel(CheckableRowTableModel):
                         3: "title",
                         4: "speaker",
                         5: "description",
-                        6: "time",
+                        6: "album",
                         7: "duration",
                         8: "filedate",
                         9: "filesize"
@@ -185,7 +196,7 @@ class MediaFileModel(CheckableRowTableModel):
                         3: self.tr("Title"),
                         4: self.tr("Speaker"),
                         5: self.tr("Description"),
-                        6: self.tr("Time"),
+                        6: self.tr("Album"),
                         7: self.tr("Duration"),
                         8: self.tr("Date Modified"),
                         9: self.tr("Size")}
@@ -193,12 +204,41 @@ class MediaFileModel(CheckableRowTableModel):
     
     def __init__(self, parent=None):
         CheckableRowTableModel.__init__(self, parent)
+        
 #        self.filedata = []
         self.filedata = [MediaFileItem(), MediaFileItem(), MediaFileItem()]
         
     def setDirectory(self, directory):
         # TODO: look at QtGui.QFileSystemModel
-        pass
+        self.beginResetModel()
+        self.filedata = []
+        self.endResetModel()
+        
+        # using qt libraries
+#        qdir = QtCore.QDir(directory)
+#        print [entry.absoluteFilePath() for entry in qdir.entryInfoList()]
+        
+        # using python libraries
+        for f in [f for f in listabsdir(directory) 
+                  if isAVmimetype(mimetypes.guess_type(f, False))]:
+            self.beginInsertRows(QtCore.QModelIndex(), 
+                                 len(self.filedata), len(self.filedata))
+            d = uploader.VideoData(f)
+            print f
+            d.run()
+            print d.tags
+            item = MediaFileItem(self)
+            item.data.filename = f
+            item.data.title = d.title
+            item.data.artist = d.artist
+            item.data.album = d.album
+            item.data.duration = d.duration
+            item.data.description = d.comment
+            stdata = os.stat(f)
+            item.data.filesize = stdata.st_size
+            item.data.filedate = stdata.st_mtime
+            self.filedata.append(item)
+            self.endInsertRows()
     
     # pylint: disable-msg=W0613
     ## Mandatory implemented abstract methods ##
