@@ -1,57 +1,56 @@
 TODO list
 
-test uploader.py to make sure it works
-- pending response from author of uploader.py
+TODO: test uploader.py to make sure it works
+        - pending response from author of uploader.py
+        - need a working ftp and drupal server (or instructions on how to set up a simple one locally)
+    time: 2-6hr
 
-finish modularization of user interface files
-	time: .5-1hr
-	DONE
+DONE: finish modularization of user interface files
 
-populate file list (populateFiles slot)
-- change directory
--- make slot to open browser window, connect browse button to it
--- connect browse window's go slot to populate file list slot
-	time: 1-3hr
+DONE: populate file list (populateFiles slot)
 
-- load file metadata
-	time: .5-1hr
-- select files
--  all/none/invert/filter
-	time: .5-1hr
-	DONE
-	
-File metadata
-- load (see above)
-- select visible columns
-	time: 1-3hr
+DONE: load file metadata 
+ TODO: create simple plugin system for using different libraries to load metadata
+        - add a new class to plugin.py
+        - OPTIONAL: expose settings to GUI
+ TODO: set visible columns
+        - refactor current proof of concept code to simplify this
+    time: 2-6hr (or more)
 
-maintain a list of favourite directories
-- load from preferences file (loadFavorites slot)
-- connect directory favourite signal to populate slot
-- show a prompt when adding a favourite
-- allow for management of favourites in preferences dialog
+DONE: select files
+        all/none/invert/filter
 
+TODO: maintain a list of favourite directories
+        - load from preferences file (loadFavorites slot)
+        - connect directory favourite signal to populate slot
+        - show a prompt when adding a favourite
+        - allow for management of favourites in preferences dialog
     Do this last, leave out if time runs out
     time: 2-6 hr
 
-When upload button is pressed:
-- do a simple validation, check that something is in the username, password, server and port fields, and at least one file is selected
-    - create slot, connect signal
-- pass arguments to uploader.py, execute.
-	time: .5-1.5hr
+TODO: actual uploading
+        When upload button is pressed:
+          - do a simple validation, check that something is in the username, password, server and port fields, and at least one file is selected
+            - collect list of currently checked files
+            - create slot, connect signal
+          - pass arguments to uploader.py, execute.
+	  time: .5-1.5hr
 
+TODO: add menu entry to main freeseer window
+        time: .5 hr
 
-add menu entry to main freeseer window
-    time: 15-30 minutes
+-------------------
+(misc)
+DONE: wire up close button.
+DONE: make sure tab order is sensible
 
-miscellaneous
-- wire up close button.
-- make sure tab order is sensible
-- make some automated tests
-- make some manual tests
-	time: 2hr?
+TODO: make some automated tests
+TODO: make some manual tests
+	time: 2-6 hr
 	
-- add translation settings
+TODO: add translation settings
+
+Misc notes on translation:
   - the current translation scheme could use some work; this could be a possible future fosslc/gsoc project
   - should be converted to whatever the standard for qt is, and get & listen to the system language
   
@@ -69,5 +68,5 @@ miscellaneous
    - decorate your gui classes with @videouploader.retranslateOnLanguageChange
      - they must have a retranslate function
     
-	
-total time: 8.25 to 19 hours
+time remaining: 9 to 26 hours
+mandatory time: less than 20 hours (hopefully)
