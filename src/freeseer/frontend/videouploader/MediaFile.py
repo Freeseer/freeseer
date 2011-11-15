@@ -54,7 +54,8 @@ class MediaFileView(QtGui.QTableView):
         else:
             self.lastSort = (column, order)
 
-# http://stackoverflow.com/questions/3363190/qt-qtableview-how-to-have-a-checkbox-only-column/7392432#7392432
+# http://stackoverflow.com/questions/3363190/
+#  qt-qtableview-how-to-have-a-checkbox-only-column/7392432#7392432
 # pylint: disable-msg=W0613
 class CheckBoxDelegate(QtGui.QStyledItemDelegate):
     def createEditor(self, parent, option, index):
@@ -176,7 +177,7 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
     def _iterCheckIndicies(self):
         for row in range(0, self.rowCount()):
             yield self.index(row, self.CHECK_COL)
-    
+import time
 class MediaFileModel(CheckableRowTableModel):
     # attributes of the presentation.PresentationFile class
     FIELD_ATTRIBUTES = {1: "filebase",
@@ -237,6 +238,7 @@ class MediaFileModel(CheckableRowTableModel):
             stdata = os.stat(f)
             item.data.filesize = stdata.st_size
             item.data.filedate = stdata.st_mtime
+            
             self.filedata.append(item)
             self.endInsertRows()
     
@@ -253,7 +255,7 @@ class MediaFileModel(CheckableRowTableModel):
         assert isinstance(index, QtCore.QModelIndex)
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
             if MediaFileModel.FIELD_ATTRIBUTES.has_key(index.column()):
-                return (self.filedata[index.row()].data
+                return (self.filedata[index.row()]
                             .__getattribute__(
                                 MediaFileModel.FIELD_ATTRIBUTES[index.column()]))
         
@@ -273,11 +275,42 @@ class MediaFileModel(CheckableRowTableModel):
         # else
         return CheckableRowTableModel.headerData(self, section, orientation, role)
 
+# based on gui/dialogs/qfilesystemmodel.cpp in Qt
+#TODO: move this function somewhere else
+def humanfilesize(nbytes):
+    if nbytes == None:
+        return ''
+    # According to the Si standard KB is 1000 bytes, KiB is 1024
+    # but on windows sizes are calculated by dividing by 1024 so we do what they do.
+    kb = 1024
+    mb = 1024 * kb
+    gb = 1024 * mb
+    tb = 1024 * gb
+    if (nbytes >= tb):
+        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 TB").arg(QtCore.QLocale().toString(float(nbytes) / tb, 'f', 3))
+    if (nbytes >= gb):
+        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 GB").arg(QtCore.QLocale().toString(float(nbytes) / gb, 'f', 2))
+    if (nbytes >= mb):
+        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 MB").arg(QtCore.QLocale().toString(float(nbytes) / mb, 'f', 1))
+    if (nbytes >= kb):
+        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 KB").arg(QtCore.QLocale().toString(nbytes / kb))
+    return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 bytes").arg(QtCore.QLocale().toString(nbytes))
+   
+
 class MediaFileItem(QtCore.QObject):
     def __init__(self, parent=None):
         QtCore.QObject.__init__(self, parent)
         self.data = PresentationFile("default")
-        
+    filebase    = property(lambda self: self.data.filebase)
+    filepath    = property(lambda self: self.data.filepath)
+    title       = property(lambda self: self.data.title)
+    speaker     = property(lambda self: self.data.speaker)
+    description = property(lambda self: self.data.description)
+    album       = property(lambda self: self.data.album)
+    duration    = property(lambda self: self.data.duration)
+    filedate    = property(lambda self: None if self.data.filedate == None else 
+                           QtCore.QDateTime.fromTime_t(int(self.data.filedate)))
+    filesize    = property(lambda self: humanfilesize(self.data.filesize))
     
 if __name__ == "__main__":
     import sys
