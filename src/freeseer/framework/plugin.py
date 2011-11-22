@@ -25,6 +25,7 @@
 import ConfigParser
 import logging
 import os
+import functools
 
 import pygst
 pygst.require("0.10")
@@ -33,6 +34,7 @@ import gst
 from yapsy.PluginManager import PluginManagerSingleton
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
+from PyQt4 import QtCore, QtGui
 
 class PluginManager:
     def __init__(self, configdir):
@@ -59,6 +61,7 @@ class PluginManager:
             "VideoInput" : IVideoInput,
             "VideoMixer" : IVideoMixer,
             "Output" : IOutput,
+            IMetadataReader.CATEGORY: IMetadataReader
             })
         self.plugmanc.collectPlugins()
         
@@ -228,3 +231,124 @@ class IOutput(IBackendPlugin):
         Set the metadata if supported by Output plugin. 
         """
         pass
+    
+class IMetadataReader(IBackendPlugin, QtCore.QObject):
+    ## abstract class members/methods
+    # this dict should be of type {string:header}
+    '''
+    Don't use externally! use get_fields() instead
+    '''
+    fields_provided = {}
+    
+    def retrieve_metadata_internal(self, filepath):
+        raise NotImplementedError
+    
+    def retrieve_metadata_batch_begin(self):
+        '''
+        Optional abstract method
+        '''
+    
+    def retrieve_metadata_batch_end(self):
+        '''
+        Optional abstract method
+        '''
+    
+    ## concrete class members/methods
+    CATEGORY = "Metadata"
+    
+    class header(object):
+        def __init__(self, name, typ=None):
+            self.name = name
+            self.type = typ
+            
+    field_visibility_changed = QtCore.pyqtSignal(
+            "QString", bool, name="fieldVisibilityChanged")
+    
+    def __init__(self):
+        IBackendPlugin.__init__(self)
+        QtCore.QObject.__init__(self)
+        self.checkboxes = {}
+    
+    def retrieve_metadata(self, filepath):
+        '''
+        @return: Dict of field: data
+        '''
+        n = type(self).__name__
+        return dict((".".join((n,k)),v) for (k,v) in 
+                    self.retrieve_metadata_internal(filepath))
+    
+    def retrieve_metadata_batch(self, filepath_list):
+        self.retrieve_metadata_batch_begin()
+        for filepath in filepath_list:
+            yield self.retrieve_metadata(filepath)
+        self.retrieve_metadata_batch_end()
+    
+    def load_config(self, plugman):
+        self.plugman.plugmanc = plugman
+        for key in self.fields_provided.iterkeys():
+            try:
+                self.set_visible(key, self.plugman.readOptionFromPlugin(
+                        self.CATEGORY, self.name, key))
+            except ConfigParser.NoSectionError:
+                self.set_visible(key, self.plugman.registerOptionFromPlugin(
+                        self.CATEGORY, self.name, key, True))
+    
+    def set_visible(self, option_name, option_value):
+        self.plugman.plugmanc.registerOptionFromPlugin(
+                self.CATEGORY, self.name, option_name, option_value)
+        self.plugman.save()
+        # dispatch signal to notify any slots of changes
+        self.field_visibility_changed.emit(option_name, option_value)
+    
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QVBoxLayout(self.widget)
+            self.widget.setLayout(layout)
+            
+            for key in self.fields_provided:
+                cbox = QtGui.QCheckBox(
+                        self.fields_provided[key].name, self.widget)
+                layout.addWidget(cbox)
+                cbox.toggled.connect(functools.partial(self.set_visible, key))
+                self.checkboxes[key] = cbox
+            
+        return self.widget
+    
+    def widget_load_config(self, plugman):
+        self.load_config(plugman)
+        for key in self.fields_provided:
+            self.checkboxes[key].setChecked(self.plugman.readOptionFromPlugin(
+                self.CATEGORY, self.name, key))
+    
+    @classmethod
+    def get_fields(cls):
+        '''
+        ensures that the field dictionary is unique
+        @return: Dict of field: header
+        '''
+        return dict((".".join((cls.__name__,k)),v) for (k,v) in cls.fields_provided)
+        #python 2.7+ only
+        #return {".".join((cls.__name__,k)) : v for k in cls.fields_provided} 
+    
+
+    # the following commented code precaches unique names for fields
+#    ufields_provided = {}
+#    @classmethod
+#    def get_fields(cls):
+#        '''
+#        @return: Dict of field: header
+#        '''
+#        return cls.ufields_provided
+#    
+#    @staticmethod
+#    def setup_ufields_on_subclasses(name, bases, attrs):
+#        cls = type(name, bases, attrs)
+#        
+#        cls.ufields_provided = dict((".".join((name,k)),v) for (k,v) in cls.fields_provided)
+#        #cls.ufields_provided = {".".join((name,k)) : v for k in cls.fields_provided} #python 2.7+ only
+#    __metaclass__ = setup_ufields_on_subclasses
+        
+        
+    
