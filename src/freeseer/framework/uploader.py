@@ -243,7 +243,10 @@ class VideoData:
         self.location = ''
         self.date = ''
         self.comment = ''
+        self.raw_duration = 0
         self.duration = ''
+        self.videowidth = 0
+        self.videoheight = 0
         self.tags = {}
         self.mainloop = gobject.MainLoop()
         self.current = None
@@ -269,7 +272,10 @@ class VideoData:
             self.date = tags['date']
         if 'comment' in tags:
             self.comment = tags['comment']
-        self.duration = discoverer._time_to_string(max(discoverer.audiolength, discoverer.videolength))
+        self.raw_duration = max(discoverer.audiolength, discoverer.videolength)
+        self.duration = discoverer._time_to_string(self.raw_duration)
+        self.videowidth = discoverer.videowidth
+        self.videoheight = discoverer.videoheight
 #        self.body = 'Speaker: '+self.artist+'\nEvent: '+self.album+'\nDate:'+str(self.date)+'\nRoom: '+self.location+'\n\n'+self.comment
         self.current = None
         self.mainloop.quit()
