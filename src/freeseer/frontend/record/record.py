@@ -338,14 +338,15 @@ class RecordApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-            
+            self.systray.showMessage("Recording", "RECORDING")
             self.core.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
-
+                self.visibilityAction.setText(self.showWindowString)
+                
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
 
@@ -438,7 +439,7 @@ class RecordApp(QtGui.QMainWindow):
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             self.hide_window() 
-            
+            self.visibilityAction.setText(self.showWindowString)
             
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.mainWidget.recordPushButton.toggle()
