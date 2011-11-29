@@ -71,6 +71,7 @@ class EditorWidget(QtGui.QWidget):
         
         self.csvLabel = QtGui.QLabel("File")
         self.csvLineEdit = QtGui.QLineEdit()
+        self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
         self.csvLabel.setBuddy(self.csvLineEdit)
         self.csvFileSelectButton = QtGui.QPushButton("Select CSV file")
         self.csvPushButton = QtGui.QPushButton("Load talks from CSV")
