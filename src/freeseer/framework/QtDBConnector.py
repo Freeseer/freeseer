@@ -32,7 +32,7 @@ from freeseer.framework.failure import *
 
 class QtDBConnector():
     presentationsModel = None
-    
+    failuresModel = None
     def __init__(self, configdir, talkdb_file="presentations.db"):
         """
         Initialize the QtDBConnector
@@ -58,19 +58,22 @@ class QtDBConnector():
             
             # check if presentations table exists and if not create it.
             if not self.talkdb.tables().contains("presentations"):
-                self.__create_table()
+                self.__create_presentations_table()
                 self.__insert_default_talk()
             
+            # check if failures table exists and if not create it.
+            if not self.talkdb.tables().contains("failures"):
+                self.__create_failures_table()
         else:
             print "Unable to create talkdb file."
             
     def __close_table(self):
         """
-        This function is used to close the connection the the database.
+        This function is used to close the connection the the database.    
         """
         self.talkdb.close()
             
-    def __create_table(self):
+    def __create_presentations_table(self):
         """
         Creates the presentations table in the database. Should be used to
         initialize a new table.
@@ -85,10 +88,16 @@ class QtDBConnector():
                                         Room varchar(25),
                                         Time timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS
+        
+    def __create_failures_table(self):
+        """
+        Create the failures table in the database 
+        Should be used to initialize a new table.
+        """
+        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
                                         (Id INTERGER PRIMARY KEY,
                                         Comments text,
-                                        Indicator text),
+                                        Indicator text,
                                         UNIQUE (ID) ON CONFLICT REPLACE)''')
         
     def __insert_default_talk(self):
@@ -227,7 +236,18 @@ class QtDBConnector():
             self.presentationsModel.select()
         
         return self.presentationsModel
-    
+    def get_failures_model(self):
+        """
+        Gets the Failure reports table Model
+        Useful for QT GUI based Frontends to load the Model in Table Views.
+        """
+        if self.failuresModel is None:
+            self.failuresModel = QtSql.QSqlTableModel()
+            self.failuresModel.setTable("failures")
+            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
+            self.failuresModel.select()
+        
+        return self.failuresModel
     def get_events_model(self):
         """
         Gets the Events Model.
