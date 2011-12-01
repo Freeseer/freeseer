@@ -136,18 +136,19 @@ class QtDBConnector():
             
             return p
         
-    def get_failures(self):
+    def get_reports(self):
         """
         Return a list of failures in Report format.
         """
-        result = Qt.Sql.QSqlQuery('''Select * FROM failures''')
+        result = QtSql.QSqlQuery('''Select * FROM failures''')
+        #return result
         list = []
         while(result.next()):
-            f = Failures(unicode(result.value(1).toString()),    # id
-                             unicode(result.value(2).toString()),    # comment
-                             unicode(result.value(3).toString()))    # indicator
-            p = get_presentation(self, f.talkId);
-            r = Report(p, f)
+            failure = Failure(unicode(result.value(0).toString()),    # id
+                             unicode(result.value(1).toString()),    # comment
+                             unicode(result.value(2).toString()))    # indicator
+            p = self.get_presentation(failure.talkId)
+            r = Report(p, failure)
             list.append(r)
         return list
     #
@@ -199,7 +200,7 @@ class QtDBConnector():
         Insert a failure into the database.
         """
         
-        query = QtSql.QSqlQuery('''Insert Into failures VALUES ("%d", "%s", "%s"))''' %
+        query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s")''' %
                            (int(failure.talkId), failure.comment, failure.indicator))
         logging.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
     
