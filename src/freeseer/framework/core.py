@@ -286,6 +286,37 @@ class FreeseerCore:
                                  'Time':unicode(result.value(7).toString())})   
         finally:
             file.close()
+    
+    def export_reports_to_csv(self, fname):
+        fieldNames = ('Title',
+                      'Speaker',
+                      'Abstract',
+                      'Level',
+                      'Event',
+                      'Room',
+                      'Time',
+                      'Problem',
+                      'Error')
+        try:
+            file = open(fname, 'w')
+            writer = csv.DictWriter(file, fieldnames=fieldNames)
+            headers = dict( (n,n) for n in fieldNames)
+            writer.writerow(headers)
+            
+            result = self.db.get_reports()
+            for report in result:
+                writer.writerow({'Title':report.presentation.title,
+                                 'Speaker':report.presentation.speaker,
+                                 'Abstract':report.presentation.description,
+                                 'Level':report.presentation.level,
+                                 'Event':report.presentation.event,
+                                 'Room':report.presentation.room,
+                                 'Time':report.presentation.time,
+                                 'Problem':report.failure.indicator,
+                                 'Error':report.failure.comment})
+        finally:
+            file.close()
+            
     ##
     ## Backend Functions
     ##
