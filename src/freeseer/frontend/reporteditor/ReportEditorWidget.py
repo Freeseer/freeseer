@@ -30,7 +30,7 @@ from PyQt4 import QtCore, QtGui
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
-class EditorWidget(QtGui.QWidget):
+class ReportEditorWidget(QtGui.QWidget):
     '''
     classdocs
     '''
@@ -45,65 +45,30 @@ class EditorWidget(QtGui.QWidget):
         self.setLayout(self.mainLayout)
         
         #
-        # RSS Layout
-        #
-        self.rssLayout = QtGui.QHBoxLayout()
-        self.mainLayout.addLayout(self.rssLayout)
-        
-        self.rssLabel = QtGui.QLabel("URL")
-        self.rssLineEdit = QtGui.QLineEdit()
-        self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
-        self.rssLabel.setBuddy(self.rssLineEdit)
-        self.rssPushButton = QtGui.QPushButton("Load talks from RSS")
-        rss_icon = QtGui.QIcon()
-        rss_icon.addPixmap(QtGui.QPixmap(":/multimedia/rss.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.rssPushButton.setIcon(rss_icon)
-        
-        self.rssLayout.addWidget(self.rssLabel)
-        self.rssLayout.addWidget(self.rssLineEdit)
-        self.rssLayout.addWidget(self.rssPushButton)
-        
-        #
-        # CSV Layout
-        #
-        self.csvLayout = QtGui.QHBoxLayout()
-        self.mainLayout.addLayout(self.csvLayout)
-        
-        self.csvLabel = QtGui.QLabel("File")
-        self.csvLineEdit = QtGui.QLineEdit()
-        self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
-        self.csvLabel.setBuddy(self.csvLineEdit)
-        self.csvFileSelectButton = QtGui.QPushButton("Select CSV file")
-        self.csvPushButton = QtGui.QPushButton("Load talks from CSV")
-        
-        self.csvLayout.addWidget(self.csvLabel)
-        self.csvLayout.addWidget(self.csvLineEdit)
-        self.csvLayout.addWidget(self.csvFileSelectButton)
-        self.csvLayout.addWidget(self.csvPushButton)
-        
-        #
-        # Editor Layout
+        # ReportEditor Layout
         #
         self.editorLayout = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.editorLayout)
         
         self.buttonsLayout = QtGui.QVBoxLayout()
+        
         self.editorLayout.addLayout(self.buttonsLayout)
+
         
         addIcon = QtGui.QIcon.fromTheme("list-add")
         removeIcon = QtGui.QIcon.fromTheme("list-remove")
         clearIcon = QtGui.QIcon.fromTheme("edit-clear")
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         
-        self.addButton = QtGui.QPushButton("Add")
-        self.addButton.setIcon(addIcon)
+        #self.addButton = QtGui.QPushButton("Add")
+        #self.addButton.setIcon(addIcon)
         self.removeButton = QtGui.QPushButton("Remove")
         self.removeButton.setIcon(removeIcon)
         self.clearButton = QtGui.QPushButton("Clear")
         self.clearButton.setIcon(clearIcon)
         self.closeButton = QtGui.QPushButton("Close")
         self.closeButton.setIcon(closeIcon)
-        self.buttonsLayout.addWidget(self.addButton)
+        #self.buttonsLayout.addWidget(self.addButton)
         self.buttonsLayout.addWidget(self.removeButton)
         self.buttonsLayout.addWidget(self.clearButton)
         self.buttonsLayout.addStretch(0)
@@ -112,11 +77,37 @@ class EditorWidget(QtGui.QWidget):
         self.editor = QtGui.QTableView()
         self.editor.setAlternatingRowColors(True)
         self.editor.setSortingEnabled(True)
-        self.editorLayout.addWidget(self.editor)
-
+        
+        self.tableLayout = QtGui.QGridLayout()
+        self.tableLayout.addWidget(self.editor)
+        self.editorLayout.addLayout(self.tableLayout)
+        
+        self.infoLayout = QtGui.QVBoxLayout()
+        self.editorLayout.addLayout(self.infoLayout)
+        
+        self.titleLabel = QtGui.QLabel("Title :")
+        self.speakerLabel = QtGui.QLabel("Speaker :")
+        self.descriptionLabel = QtGui.QLabel("Description :")
+        self.levelLabel = QtGui.QLabel("Level :")
+        self.eventLabel = QtGui.QLabel("Event :")
+        self.roomLabel = QtGui.QLabel("Room :")
+        self.timeLabel = QtGui.QLabel("Time :")
+        
+        self.emptyLabel = QtGui.QLabel(" "*80)
+        self.infoLayout.addWidget(self.titleLabel)
+        self.infoLayout.addWidget(self.speakerLabel)
+        self.infoLayout.addWidget(self.descriptionLabel)
+        self.infoLayout.addWidget(self.levelLabel)
+        self.infoLayout.addWidget(self.eventLabel)
+        self.infoLayout.addWidget(self.roomLabel)
+        self.infoLayout.addWidget(self.timeLabel)
+        self.infoLayout.addWidget(self.emptyLabel)
+        self.infoLayout.addStretch(0)
+        
+        
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    main = EditorWidget()
+    main = ReportEditorWidget()
     main.show()
     sys.exit(app.exec_())

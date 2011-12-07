@@ -37,6 +37,7 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from RecordingWidget import RecordingWidget
@@ -115,10 +116,15 @@ class RecordApp(QtGui.QMainWindow):
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.actionAbout.setIcon(icon)
         
+        self.actionReport = QtGui.QAction(self)
+        self.actionReport.setObjectName(_fromUtf8("actionReport"))
+        self.actionReport.setIcon(icon)
+        
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addAction(self.actionReport)
         self.menuOptions.addAction(self.menuLanguage.menuAction())
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
@@ -159,6 +165,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.reportError)
         
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
@@ -305,10 +312,17 @@ class RecordApp(QtGui.QMainWindow):
         '''
         Creates a presentation object from the currently selected title on the GUI
         '''
+        #i = self.mainWidget.talkComboBox.currentIndex()
+        #p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
+        return self.core.db.get_presentation(self.current_presentation_id())
+    
+    def current_presentation_id(self):
+        '''
+        Return the current selected presentation ID
+        '''
         i = self.mainWidget.talkComboBox.currentIndex()
-        p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
-        return self.core.db.get_presentation(p_id)
-
+        return self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
+    
     def standby(self, state):
         if (state): # Prepare the pipelines
             self.load_backend()
@@ -324,14 +338,15 @@ class RecordApp(QtGui.QMainWindow):
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-            
+            self.systray.showMessage("Recording", "RECORDING")
             self.core.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
             # check if auto-hide is set and if so hide
             if(self.core.config.auto_hide == True):
                 self.hide_window()
-
+                self.visibilityAction.setText(self.showWindowString)
+                
             if (self.core.config.delay_recording>0):
                 time.sleep(float(self.core.config.delay_recording))
 
@@ -424,7 +439,7 @@ class RecordApp(QtGui.QMainWindow):
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             self.hide_window() 
-            
+            self.visibilityAction.setText(self.showWindowString)
             
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.mainWidget.recordPushButton.toggle()
@@ -472,6 +487,12 @@ class RecordApp(QtGui.QMainWindow):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
 
+    ###
+    ###Report Failure
+    ###
+    def reportError(self):
+        self.reportDialog = ReportDialog(self.current_presentation(), self.current_presentation_id(), self.core)
+        self.reportDialog.show()
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = RecordApp()
