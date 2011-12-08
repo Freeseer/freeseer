@@ -15,34 +15,44 @@ class FreeseerMetadataLoader(
                              ):
     def __init__(self, plugin_manager):
 #        IFileMetadataReader.__init__(self)
-        assert isinstance(plugin_manager, pluginpkg.PluginManager)
-        plugin_manager.plugmanc
+#        assert isinstance(plugin_manager, pluginpkg.PluginManager)
+#        plugin_manager.plugmanc
         self.plugman = plugin_manager
         
-    def retrieve_metadata(self, filepath):
+    def iter_active_plugins(self):
         plugman = self.plugman.plugmanc
         assert isinstance(plugman, ConfigurablePluginManager)
-        assert isinstance(plugman, PluginManager)
-        data = {}
+#        assert isinstance(plugman, PluginManager)
         for plugin in plugman.getPluginsOfCategory(
-                pluginpkg.PluginManager.CATEGORY_METADATA):
-            assert isinstance(plugin, pluginpkg.IMetadataReader)
+                pluginpkg.IMetadataReader.CATEGORY):
+#            assert isinstance(plugin.plugin_object, pluginpkg.IMetadataReader)
 #            if plugin.is_activated:
             if True:
-                data.update(plugin.retrieve_metadata(filepath))
+                yield plugin.plugin_object
+        
+    def retrieve_metadata(self, filepath):
+        data = {}
+        for plugin in self.iter_active_plugins():
+            data.update(plugin.retrieve_metadata(filepath))
         return data
         
     def retrieve_metadata_batch(self, filepath_list):
-        plugman = self.plugman.plugmanc
-        for plugin in plugman.getPluginsOfCategory(
-                pluginpkg.PluginManager.CATEGORY_METADATA):
-            assert isinstance(plugin, pluginpkg.IMetadataReader)
+        for plugin in self.iter_active_plugins():
             plugin.retrieve_metadata_batch_begin()
             
         for filepath in filepath_list:
             yield self.retrieve_metadata(filepath)
             
-        for plugin in plugman.getPluginsOfCategory(
-                pluginpkg.PluginManager.CATEGORY_METADATA):
-            assert isinstance(plugin, pluginpkg.IMetadataReader)
+        for plugin in self.iter_active_plugins():
             plugin.retrieve_metadata_batch_end()
+            
+    def get_fields(self):
+        '''
+        @return: dict of {str:IMetadataReader.header}
+        '''
+        # TODO: cache this and update when fields are changed (connect slots to see when changes occur)
+        headers = {}
+        for plugin in self.iter_active_plugins():
+            headers.update(plugin.get_fields())
+        return headers
+        
