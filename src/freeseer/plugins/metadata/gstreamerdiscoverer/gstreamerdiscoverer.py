@@ -37,6 +37,8 @@ from freeseer.framework import uploader
 from freeseer.framework.plugin import IMetadataReader
 
 class GStreamerDiscoverer(IMetadataReader):
+    name = "GstDiscoverer Parser"
+    
     fields_provided = {
         'album':            IMetadataReader.header(tr("Album"), str, 202), 
         'comment':          IMetadataReader.header(tr("Description"), str, 203), 
