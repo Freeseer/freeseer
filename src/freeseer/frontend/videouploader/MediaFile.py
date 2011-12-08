@@ -32,11 +32,31 @@ class MediaFileView(QtGui.QTableView):
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         
         self.setItemDelegateForColumn(0, CheckBoxDelegate(self))
-        
-        
     
     def setModel(self, model):
+        self.onModelReset()
+        if self.model():
+            self.model().headerDataChanged.disconnect(self.onModelDataChangeH)
+#            self.model().dataChanged.disconnect(self.onModelDataChangeD)
+            self.model().modelReset.connect(self.onModelReset)
         QtGui.QTableView.setModel(self, model)
+        assert isinstance(model, MediaFileModel)
+        model.modelReset.connect(self.onModelReset)
+#        model.dataChanged.connect(self.onModelDataChangeD)
+        model.headerDataChanged.connect(self.onModelDataChangeH)
+    
+    @QtCore.pyqtSlot(QtCore.QModelIndex, QtCore.QModelIndex)
+    def onModelDataChangeD(self, topLeft, bottomRight):
+        print(topLeft, bottomRight)
+        return self.onModelReset()
+    
+    @QtCore.pyqtSlot(Qt.Orientation,int,int)
+    def onModelDataChangeH(self, orientation, first, last):
+        print(orientation, first, last)
+        return self.onModelReset()
+    
+    def onModelReset(self):
+        print "modeldatachange"
         hheader = self.horizontalHeader()
         assert isinstance(hheader, QtGui.QHeaderView)
         
@@ -45,7 +65,7 @@ class MediaFileView(QtGui.QTableView):
         hheader.resizeSection(1, 300)
         hheader.setStretchLastSection(True)
         
-        self.setColumnHidden(2, True)
+#        self.setColumnHidden(2, True)
         
     @QtCore.pyqtSlot(int, Qt.SortOrder)
     def cancelFirstColumnSort(self, column, order):
@@ -54,6 +74,12 @@ class MediaFileView(QtGui.QTableView):
             self.horizontalHeader().setSortIndicator(column, order)
         else:
             self.lastSort = (column, order)
+            
+            
+            
+    def sortByColumn(self, column, order):
+        print(column, order)
+        
 
 # http://stackoverflow.com/questions/3363190/
 #  qt-qtableview-how-to-have-a-checkbox-only-column/7392432#7392432

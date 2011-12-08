@@ -36,8 +36,18 @@ from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
 from PyQt4 import QtCore, QtGui
 
-class PluginManager:
+class PluginManager(QtCore.QObject):
+    '''
+    @signal pluginActivated(plugin_name, plugin_category)
+    Emitted when a plugin is activated.
+    
+    @signal pluginDectivated(plugin_name, plugin_category)
+    Emitted when a plugin is deactivated.
+    '''
+    
     def __init__(self, configdir):
+        QtCore.QObject.__init__()
+        
         self.firstrun = False
         plugman = PluginManagerSingleton().get()
         
@@ -116,12 +126,21 @@ class PluginManager:
     def activate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
         self.save()
+        self.plugin_activated.emit(plugin_name, plugin_category)
         logging.debug("Plugin %s activated." % plugin_name)
         
     def deactivate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
         self.save()
+        self.plugin_deactivated.emit(plugin_name, plugin_category)
         logging.debug("Plugin %s deactivated." % plugin_name)
+        
+    # the arguments are plugin_name, plugin_category
+    plugin_activated = QtCore.pyqtSignal(
+            "QString", "QString", name="pluginActivated")
+    plugin_deactivated = QtCore.pyqtSignal(
+            "QString", "QString", name="pluginDectivated")
+    
 
 class IBackendPlugin(IPlugin):
     name = None
@@ -235,9 +254,7 @@ class IOutput(IBackendPlugin):
 class IMetadataReader(IBackendPlugin, QtCore.QObject):
     ## abstract class members/methods
     # this dict should be of type {string:header}
-    '''
-    Don't use externally! use get_fields() instead
-    '''
+    # Don't use externally! use get_fields() instead
     fields_provided = {}
     
     def retrieve_metadata_internal(self, filepath):
