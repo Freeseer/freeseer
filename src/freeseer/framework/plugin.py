@@ -46,7 +46,7 @@ class PluginManager(QtCore.QObject):
     '''
     
     def __init__(self, configdir):
-        QtCore.QObject.__init__()
+        QtCore.QObject.__init__(self)
         
         self.firstrun = False
         plugman = PluginManagerSingleton().get()
@@ -78,6 +78,11 @@ class PluginManager(QtCore.QObject):
         # If config was corrupt or did not exist, reset default plugins.
         if self.firstrun == True:
             self.set_default_plugins()
+        else:
+            # activate the default metadata reader plugins if none are active
+            if not any(p.is_activated for p in 
+                       plugman.getPluginsOfCategory(IMetadataReader.CATEGORY)):
+                self._activate_default_metadata_plugins()
             
         for plugin in self.plugmanc.getAllPlugins():
             plugin.plugin_object.set_plugman(self)
@@ -117,7 +122,13 @@ class PluginManager(QtCore.QObject):
         self.activate_plugin("USB Source", "VideoInput")
         self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "USB Source")
         self.activate_plugin("Ogg Output", "Output")
+        self._activate_default_metadata_plugins()
         logging.debug("Default plugins activated.")
+        
+    def _activate_default_metadata_plugins(self):
+        self.activate_plugin("Filename Parser", IMetadataReader.CATEGORY)
+        self.activate_plugin("GstDiscoverer Parser", IMetadataReader.CATEGORY)
+        self.activate_plugin("os.stat Parser", IMetadataReader.CATEGORY)
         
     def save(self):
         with open(self.configfile, 'w') as configfile:
@@ -319,7 +330,10 @@ class IMetadataReader(IBackendPlugin, QtCore.QObject):
                 self.CATEGORY, self.name, option_name, option_value)
         self.plugman.save()
         # dispatch signal to notify any slots of changes
-        self.field_visibility_changed.emit(option_name, option_value)
+#        self.field_visibility_changed.emit(option_name, option_value)
+        self.field_visibility_changed.emit(
+                ".".join(type(self).__name__, option_name),
+                option_value)
     
     def get_widget(self):
         if self.widget is None:

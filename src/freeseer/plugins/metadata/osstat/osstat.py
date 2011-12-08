@@ -33,6 +33,8 @@ tr = functools.partial(QtCore.QCoreApplication.translate, "metadata_filename")
 from freeseer.framework.plugin import IMetadataReader
 
 class OSStat(IMetadataReader):
+    name = "os.stat Parser"
+    
     # TODO: (not really important at all) create alternative using only qt calls
     fields_provided = {
         "size":IMetadataReader.header(tr("File Size"), QtCore.QString, 300),

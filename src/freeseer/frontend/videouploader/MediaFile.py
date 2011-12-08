@@ -56,7 +56,6 @@ class MediaFileView(QtGui.QTableView):
         return self.onModelReset()
     
     def onModelReset(self):
-        print "modeldatachange"
         hheader = self.horizontalHeader()
         assert isinstance(hheader, QtGui.QHeaderView)
         
