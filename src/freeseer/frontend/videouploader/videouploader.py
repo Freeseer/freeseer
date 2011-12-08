@@ -12,6 +12,7 @@ from UploaderWidget import UploaderMenuBar, UploaderWidget
 from MinimalistCore import MinimalistCore
 
 from freeseer.framework.core import FreeseerCore
+from freeseer.framework.metadata import FreeseerMetadataLoader
 
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
@@ -49,7 +50,10 @@ class UploaderApp(QtGui.QMainWindow):
         self.mainWidget = None
         self.menubar = None
         
+        metadataloader = FreeseerMetadataLoader(core.plugman)
+        
         self.__initGui()
+        self.mainWidget.fileselect.filemodel.setMetadataLoader(metadataloader)
         self.__loadDefaults()
         self.__loadSettings()
         self.__initConnections()

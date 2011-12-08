@@ -38,22 +38,22 @@ from freeseer.framework.plugin import IMetadataReader
 
 class GStreamerDiscoverer(IMetadataReader):
     fields_provided = {
-        'album':            IMetadataReader.header(tr("Album"), str), 
-        'comment':          IMetadataReader.header(tr("Description"), str), 
+        'album':            IMetadataReader.header(tr("Album"), str, 202), 
+        'comment':          IMetadataReader.header(tr("Description"), str, 203), 
 #        'performer':        IMetadataReader.header(tr("Performer"), str),
 #        'encoder-version':  IMetadataReader.header(tr("Encoder Version"), int), 
-        'title':            IMetadataReader.header(tr("Title"), str), 
+        'title':            IMetadataReader.header(tr("Title"), str, 200), 
 #        'audio-codec':      IMetadataReader.header(tr("Audio Codec"), str), 
-        'artist':           IMetadataReader.header(tr("Artist"), str), 
+        'artist':           IMetadataReader.header(tr("Artist"), str, 201), 
 #        'encoder':          IMetadataReader.header(tr("Encoder"), str), 
 #        'nominal-bitrate':  IMetadataReader.header(tr("Nominal Bitrate"), int), 
 #        'date':             IMetadataReader.header(tr("Recording Date"), gst.Date),
 #        'video-codec':      IMetadataReader.header(tr("Video Codec"), str), 
 #        'bitrate':          IMetadataReader.header(tr("Bitrate"), int), 
 #        'container-format': IMetadataReader.header(tr("Format"), str),
-        'duration':         IMetadataReader.header(tr("Duration"), long),
-        'videowidth':       IMetadataReader.header(tr("Width"), int),
-        'videoheight':      IMetadataReader.header(tr("Height"), int),
+        'duration':         IMetadataReader.header(tr("Duration"), long, 204),
+        'videowidth':       IMetadataReader.header(tr("Width"), int, 205),
+        'videoheight':      IMetadataReader.header(tr("Height"), int, 206),
         }
     
     def retrieve_metadata_internal(self, filepath):

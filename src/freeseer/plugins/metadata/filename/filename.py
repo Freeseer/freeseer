@@ -33,8 +33,8 @@ tr = functools.partial(QtCore.QCoreApplication.translate, "metadata_filename")
 from freeseer.framework.plugin import IMetadataReader
 
 class FileName(IMetadataReader):
-    fields_provided = {"name":IMetadataReader.header(tr("File Name"), str),
-                       "path":IMetadataReader.header(tr("File Path"), str)} 
+    fields_provided = {"name":IMetadataReader.header(tr("File Name"), str, 100),
+                       "path":IMetadataReader.header(tr("File Path"), str, 101)} 
     
     def retrieve_metadata_internal(self, filepath):
         return {"name":path.basename(filepath),
