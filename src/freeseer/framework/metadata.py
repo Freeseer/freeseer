@@ -57,8 +57,7 @@ class FreeseerMetadataLoader(
         for plugin in plugman.getPluginsOfCategory(
                 pluginpkg.IMetadataReader.CATEGORY):
 #            assert isinstance(plugin.plugin_object, pluginpkg.IMetadataReader)
-#            if plugin.is_activated:
-            if True:
+            if plugin.is_activated:
                 yield plugin.plugin_object
         
     def retrieve_metadata(self, filepath):
