@@ -291,9 +291,13 @@ class IMetadataReader(IBackendPlugin, QtCore.QObject):
     CATEGORY = "Metadata"
     
     class header(object):
-        def __init__(self, name, typ=None):
+        '''
+        defines the data that is being depicted by the metadata
+        '''
+        def __init__(self, name, typ=None, pos=0):
             self.name = name
             self.type = typ
+            self.position = pos
             
     field_visibility_changed = QtCore.pyqtSignal(
             "QString", bool, name="fieldVisibilityChanged")
@@ -309,7 +313,7 @@ class IMetadataReader(IBackendPlugin, QtCore.QObject):
         '''
         n = type(self).__name__
         return dict((".".join((n,k)),v) for (k,v) in 
-                    self.retrieve_metadata_internal(filepath))
+                    self.retrieve_metadata_internal(filepath).iteritems())
     
     def retrieve_metadata_batch(self, filepath_list):
         self.retrieve_metadata_batch_begin()
@@ -360,12 +364,11 @@ class IMetadataReader(IBackendPlugin, QtCore.QObject):
     def get_fields(cls):
         '''
         ensures that the field dictionary is unique
-        @return: Dict of field: header
+        @return: Dict of field: IMetadataReader.header
         '''
-        return dict((".".join((cls.__name__,k)),v) for (k,v) in cls.fields_provided)
+        return dict((".".join((cls.__name__,k)),v) for (k,v) in cls.fields_provided.iteritems())
         #python 2.7+ only
-        #return {".".join((cls.__name__,k)) : v for k in cls.fields_provided} 
-    
+#        return {".".join((cls.__name__,k)) : v for k in cls.fields_provided.iteritems()} 
 
     # the following commented code precaches unique names for fields
 #    ufields_provided = {}

@@ -10,6 +10,7 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import Qt
 from freeseer.framework.presentation import PresentationFile
 from freeseer.framework import uploader
+from freeseer.framework.metadata import FreeseerMetadataLoader
 
 listabsdir = lambda d: [os.path.join(str(d), f) for f in os.listdir(str(d))]
 isAVmimetype = lambda t: t[0] != None and (t[0].find("video") >= 0 or t[0].find("audio") >= 0)
@@ -177,37 +178,46 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
     def _iterCheckIndicies(self):
         for row in range(0, self.rowCount()):
             yield self.index(row, self.CHECK_COL)
-import time
+
 class MediaFileModel(CheckableRowTableModel):
     # attributes of the presentation.PresentationFile class
-    FIELD_ATTRIBUTES = {1: "filebase",
-                        2: "filepath",
-                        3: "title",
-                        4: "speaker",
-                        5: "description",
-                        6: "album",
-                        7: "duration",
-                        8: "filedate",
-                        9: "filesize"
-                        }
-    @property
-    def FIELD_HEADERS(self):
-        return         {1: self.tr("File Name"),
-                        2: self.tr("File Path"),
-                        3: self.tr("Title"),
-                        4: self.tr("Speaker"),
-                        5: self.tr("Description"),
-                        6: self.tr("Album"),
-                        7: self.tr("Duration"),
-                        8: self.tr("Date Modified"),
-                        9: self.tr("Size")}
-    NUM_FIELDS = 10
+#    FIELD_ATTRIBUTES = {1: "filebase",
+#                        2: "filepath",
+#                        3: "title",
+#                        4: "speaker",
+#                        5: "description",
+#                        6: "album",
+#                        7: "duration",
+#                        8: "filedate",
+#                        9: "filesize"
+#                        }
+#    @property
+#    def FIELD_HEADERS(self):
+#        return         {1: self.tr("File Name"),
+#                        2: self.tr("File Path"),
+#                        3: self.tr("Title"),
+#                        4: self.tr("Speaker"),
+#                        5: self.tr("Description"),
+#                        6: self.tr("Album"),
+#                        7: self.tr("Duration"),
+#                        8: self.tr("Date Modified"),
+#                        9: self.tr("Size")}
+#    NUM_FIELDS = 10
+    class emptyloader(FreeseerMetadataLoader):
+        def __init__(self):
+            FreeseerMetadataLoader.__init__(self, None)
+        def get_fields(self):
+            return {}
     
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, loader=None):
         CheckableRowTableModel.__init__(self, parent)
+        self.setMetadataLoader(loader)
         
 #        self.filedata = []
-        self.filedata = [MediaFileItem(), MediaFileItem(), MediaFileItem()]
+        self.filedata = [{}, {}, {}]
+        self.header_data = {}
+        self.header_indexkey = {}
+        self.header_keyindex = {}
         
     def setDirectory(self, directory):
         # TODO: look at QtGui.QFileSystemModel
@@ -218,29 +228,37 @@ class MediaFileModel(CheckableRowTableModel):
         # using qt libraries
 #        qdir = QtCore.QDir(directory)
 #        print [entry.absoluteFilePath() for entry in qdir.entryInfoList()]
-        
-        # using python libraries
         for f in [f for f in listabsdir(directory) 
                   if isAVmimetype(mimetypes.guess_type(f, False))]:
             self.beginInsertRows(QtCore.QModelIndex(), 
                                  len(self.filedata), len(self.filedata))
-            d = uploader.VideoData(f)
-            print f
-            d.run()
-            print d.tags
-            item = MediaFileItem(self)
-            item.data.filename = f
-            item.data.title = d.title
-            item.data.artist = d.artist
-            item.data.album = d.album
-            item.data.duration = d.duration
-            item.data.description = d.comment
-            stdata = os.stat(f)
-            item.data.filesize = stdata.st_size
-            item.data.filedate = stdata.st_mtime
+            item = self.loader.retrieve_metadata(f)
+#            print item
             
             self.filedata.append(item)
             self.endInsertRows()
+    
+    def setMetadataLoader(self, loader):
+        #TODO: actually do stuff with this
+        if loader == None:
+            loader = self.emptyloader()
+        self.loader = loader
+        self.refreshHeaders()
+        
+    def refreshHeaders(self):
+        self.beginResetModel()
+        self.header_indexkey = {}
+        self.header_keyindex = {}
+        
+        self.header_data = self.loader.get_fields()
+        
+        count = 1
+        for key, _ in sorted(self.header_data.iteritems(), key=lambda (k,v): v.position):
+            self.header_indexkey[count] = key
+            self.header_keyindex[key] = count
+            count = count + 1
+        
+        self.endResetModel()
     
     # pylint: disable-msg=W0613
     ## Mandatory implemented abstract methods ##
@@ -248,16 +266,18 @@ class MediaFileModel(CheckableRowTableModel):
         return len(self.filedata)
     
     def columnCount(self, parent=QtCore.QModelIndex()):
-        return MediaFileModel.NUM_FIELDS
+#        return MediaFileModel.NUM_FIELDS
+        return len(self.loader.get_fields())+1
     # pylint: enable-msg=W0613
     
     def data(self, index, role=QtCore.Qt.DisplayRole):
         assert isinstance(index, QtCore.QModelIndex)
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
-            if MediaFileModel.FIELD_ATTRIBUTES.has_key(index.column()):
-                return (self.filedata[index.row()]
-                            .__getattribute__(
-                                MediaFileModel.FIELD_ATTRIBUTES[index.column()]))
+            if self.header_indexkey.has_key(index.column()):
+                return self.filedata[index.row()].get(self.header_indexkey[index.column()])
+#                return str(index.row()) + ", " + str(index.column())
+#                return (self.filedata[index.row()].get(
+#                        self.header_indexkey[index.column()]), "")
         
         return CheckableRowTableModel.data(self, index, role)
     
@@ -268,10 +288,14 @@ class MediaFileModel(CheckableRowTableModel):
         if orientation == QtCore.Qt.Horizontal:
             if role == QtCore.Qt.DisplayRole:
 #                print section
-                return self.FIELD_HEADERS.get(section,
-                          CheckableRowTableModel.headerData(self, section, 
-                                                            orientation, 
-                                                            role))
+                try:
+                    return self.header_data[self.header_indexkey[section]].name
+                except KeyError: 
+                    pass
+#                return self.FIELD_HEADERS.get(section,
+#                          CheckableRowTableModel.headerData(self, section, 
+#                                                            orientation, 
+#                                                            role))
         # else
         return CheckableRowTableModel.headerData(self, section, orientation, role)
 

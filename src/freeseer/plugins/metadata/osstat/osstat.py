@@ -35,8 +35,8 @@ from freeseer.framework.plugin import IMetadataReader
 class OSStat(IMetadataReader):
     # TODO: (not really important at all) create alternative using only qt calls
     fields_provided = {
-        "size":IMetadataReader.header(tr("File Size"), QtCore.QString),
-        "date":IMetadataReader.header(tr("Date Modified"), QtCore.QDateTime)} 
+        "size":IMetadataReader.header(tr("File Size"), QtCore.QString, 300),
+        "date":IMetadataReader.header(tr("Date Modified"), QtCore.QDateTime, 301)} 
     
     def retrieve_metadata_internal(self, filepath):
         stdata = stat(filepath)
