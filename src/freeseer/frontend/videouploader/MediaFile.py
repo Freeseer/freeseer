@@ -30,16 +30,21 @@ class MediaFileView(QtGui.QTableView):
         self.setShowGrid(False)
         self.setSortingEnabled(True) # TODO: sorting.
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.realmodel = None
+        self.sortmodel = QtGui.QSortFilterProxyModel(self)
+        QtGui.QTableView.setModel(self, self.sortmodel)
     
     def setModel(self, model):
         self.onModelReset()
-        if self.model():
-            self.model().modelReset.disconnect(self.onModelReset)
-            self.model().headersReset.disconnect(self.onHeadersReset)
-            self.model().columnHidden.disconnect(self.setColumnHidden)
+        if self.realmodel:
+            self.realmodel.modelReset.disconnect(self.onModelReset)
+            self.realmodel.headersReset.disconnect(self.onHeadersReset)
+            self.realmodel.columnHidden.disconnect(self.setColumnHidden)
             if isinstance(self.model(), CheckableRowTableModel):
                 self.setItemDelegateForColumn(self.model().CHECK_COL, self.itemDelegate())
-        QtGui.QTableView.setModel(self, model)
+        self.realmodel = model
+        self.sortmodel.setSourceModel(model)
+#        QtGui.QTableView.setModel(self, model)
         
         if isinstance(model, CheckableRowTableModel):
             self.setItemDelegateForColumn(model.CHECK_COL, CheckBoxDelegate(self))
@@ -55,7 +60,8 @@ class MediaFileView(QtGui.QTableView):
     def onHeadersReset(self):
         hheader = self.horizontalHeader()
         assert isinstance(hheader, QtGui.QHeaderView)
-        model = self.model()
+#        model = self.model()
+        model = self.realmodel
         if model == None:
             return
         assert isinstance(model, MediaFileModel)
@@ -89,7 +95,9 @@ class CheckBoxDelegate(QtGui.QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         return None
     def paint(self, painter, option, index):
-        checked = bool(index.model().data(index, Qt.DisplayRole))
+        data = index.model().data(index, Qt.DisplayRole)
+        checked = (data.toBool() if isinstance(data, QtCore.QVariant) else
+                   bool(data))
         check_box_style_option = QtGui.QStyleOptionButton()
     
         if index.flags() & Qt.ItemIsEditable:
@@ -140,7 +148,9 @@ class CheckBoxDelegate(QtGui.QStyledItemDelegate):
         '''
         The user wanted to change the old state in the opposite.
         '''
-        newValue = not bool(index.model().data(index, Qt.DisplayRole))
+        data = index.model().data(index, Qt.DisplayRole)
+        newValue = not (data.toBool() if isinstance(data, QtCore.QVariant) else
+                        bool(data))
         model.setData(index, newValue, Qt.EditRole)
     def getCheckBoxRect(self, option):
         check_box_style_option = QtGui.QStyleOptionButton()
@@ -180,8 +190,13 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
         assert isinstance(index, QtCore.QModelIndex)
         if index.column() == self.CHECK_COL:
             if role == Qt.EditRole:
-                self.checked[index.row()] = value
+                if isinstance(value, QtCore.QVariant):
+                    self.checked[index.row()] = value.toBool()
+                else:
+                    self.checked[index.row()] = value
                 self.dataChanged.emit(index, index)
+            return True
+        return False
     
     def flags(self, index):
         assert isinstance(index, QtCore.QModelIndex)
@@ -302,6 +317,12 @@ class MediaFileModel(CheckableRowTableModel):
                 except KeyError: 
                     pass
         return CheckableRowTableModel.headerData(self, section, orientation, role)
+    
+#    def sort(self, column, order):
+#        
+#        
+#        if order == Qt.DescendingOrder:
+#            [].reverse()
     
     def onFieldVisiblityChange(self, field_id, value):
         self.columnHidden.emit(self.header_keyindex[str(field_id)], not value)
