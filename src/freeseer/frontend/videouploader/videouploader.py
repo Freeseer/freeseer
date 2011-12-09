@@ -160,12 +160,6 @@ class UploaderApp(QtGui.QMainWindow):
     
     def directoryChanged(self):
         self.mainWidget.fileselect.filemodel.setDirectory(self.mainWidget.fileselect.directory)
-        
-        
-    # todo: custom slots; use the following template
-#    @QtCore.pyqtSlot([type-list])
-#    def customSlot(self, [var-list]):
-#        assert isinstance([var], [type])
 
     def __doInitialActions(self):
         self.directoryChanged()

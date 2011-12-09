@@ -28,11 +28,8 @@ class MediaFileView(QtGui.QTableView):
         
         self.setAlternatingRowColors(True)
         self.setShowGrid(False)
-        self.setSortingEnabled(True)
+        self.setSortingEnabled(True) # TODO: sorting.
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        
-        
-#        self.setItemDelegateForColumn(0, CheckBoxDelegate(self))
     
     def setModel(self, model):
         self.onModelReset()
@@ -51,16 +48,6 @@ class MediaFileView(QtGui.QTableView):
         model.modelReset.connect(self.onModelReset)
         model.headersReset.connect(self.onHeadersReset)
         model.columnHidden.connect(self.setColumnHidden)
-    
-#    @QtCore.pyqtSlot(QtCore.QModelIndex, QtCore.QModelIndex)
-#    def onModelDataChangeD(self, topLeft, bottomRight):
-#        print(topLeft, bottomRight)
-##        return self.onModelReset()
-#    
-#    @QtCore.pyqtSlot(Qt.Orientation,int,int)
-#    def onModelDataChangeH(self, orientation, first, last):
-#        print(orientation, first, last)
-#        return self.onModelReset()
     
     def onModelReset(self):
         pass
@@ -94,10 +81,6 @@ class MediaFileView(QtGui.QTableView):
             
     def sortByColumn(self, column, order):
         print(column, order)
-    
-#    def onColumnHidden(self, column, hidden):
-#        print column, hidden
-        
 
 # http://stackoverflow.com/questions/3363190/
 #  qt-qtableview-how-to-have-a-checkbox-only-column/7392432#7392432
@@ -224,29 +207,6 @@ class CheckableRowTableModel(QtCore.QAbstractTableModel):
             yield self.index(row, self.CHECK_COL)
 
 class MediaFileModel(CheckableRowTableModel):
-    # attributes of the presentation.PresentationFile class
-#    FIELD_ATTRIBUTES = {1: "filebase",
-#                        2: "filepath",
-#                        3: "title",
-#                        4: "speaker",
-#                        5: "description",
-#                        6: "album",
-#                        7: "duration",
-#                        8: "filedate",
-#                        9: "filesize"
-#                        }
-#    @property
-#    def FIELD_HEADERS(self):
-#        return         {1: self.tr("File Name"),
-#                        2: self.tr("File Path"),
-#                        3: self.tr("Title"),
-#                        4: self.tr("Speaker"),
-#                        5: self.tr("Description"),
-#                        6: self.tr("Album"),
-#                        7: self.tr("Duration"),
-#                        8: self.tr("Date Modified"),
-#                        9: self.tr("Size")}
-#    NUM_FIELDS = 10
     headersReset = QtCore.pyqtSignal()
     columnHidden = QtCore.pyqtSignal(int, bool)
 
@@ -267,7 +227,6 @@ class MediaFileModel(CheckableRowTableModel):
         self.header_keyindex = {} # {field_id: int}
         
     def setDirectory(self, directory):
-        # TODO: look at QtGui.QFileSystemModel
         self.beginResetModel()
         self.filedata = []
         self.endResetModel()
@@ -329,10 +288,6 @@ class MediaFileModel(CheckableRowTableModel):
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
             if self.header_indexkey.has_key(index.column()):
                 return self.filedata[index.row()].get(self.header_indexkey[index.column()])
-#                return str(index.row()) + ", " + str(index.column())
-#                return (self.filedata[index.row()].get(
-#                        self.header_indexkey[index.column()]), "")
-        
         return CheckableRowTableModel.data(self, index, role)
     
     ## Optionally implemented abstract methods ##
@@ -346,11 +301,6 @@ class MediaFileModel(CheckableRowTableModel):
                     return self.header_data[self.header_indexkey[section]].name
                 except KeyError: 
                     pass
-#                return self.FIELD_HEADERS.get(section,
-#                          CheckableRowTableModel.headerData(self, section, 
-#                                                            orientation, 
-#                                                            role))
-        # else
         return CheckableRowTableModel.headerData(self, section, orientation, role)
     
     def onFieldVisiblityChange(self, field_id, value):
@@ -361,43 +311,6 @@ class MediaFileModel(CheckableRowTableModel):
                 for k, v in self.header_data.iteritems() 
                 if not v.visible)
 
-# based on gui/dialogs/qfilesystemmodel.cpp in Qt
-#TODO: move this function somewhere else
-def humanfilesize(nbytes):
-    if nbytes == None:
-        return ''
-    # According to the Si standard KB is 1000 bytes, KiB is 1024
-    # but on windows sizes are calculated by dividing by 1024 so we do what they do.
-    kb = 1024
-    mb = 1024 * kb
-    gb = 1024 * mb
-    tb = 1024 * gb
-    if (nbytes >= tb):
-        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 TB").arg(QtCore.QLocale().toString(float(nbytes) / tb, 'f', 3))
-    if (nbytes >= gb):
-        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 GB").arg(QtCore.QLocale().toString(float(nbytes) / gb, 'f', 2))
-    if (nbytes >= mb):
-        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 MB").arg(QtCore.QLocale().toString(float(nbytes) / mb, 'f', 1))
-    if (nbytes >= kb):
-        return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 KB").arg(QtCore.QLocale().toString(nbytes / kb))
-    return QtCore.QCoreApplication.translate("QFileSystemDialog", "%1 bytes").arg(QtCore.QLocale().toString(nbytes))
-   
-
-class MediaFileItem(QtCore.QObject):
-    def __init__(self, parent=None):
-        QtCore.QObject.__init__(self, parent)
-        self.data = PresentationFile("default")
-    filebase    = property(lambda self: self.data.filebase)
-    filepath    = property(lambda self: self.data.filepath)
-    title       = property(lambda self: self.data.title)
-    speaker     = property(lambda self: self.data.speaker)
-    description = property(lambda self: self.data.description)
-    album       = property(lambda self: self.data.album)
-    duration    = property(lambda self: self.data.duration)
-    filedate    = property(lambda self: None if self.data.filedate == None else 
-                           QtCore.QDateTime.fromTime_t(int(self.data.filedate)))
-    filesize    = property(lambda self: humanfilesize(self.data.filesize))
-    
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
@@ -406,27 +319,7 @@ if __name__ == "__main__":
     filelist.resize(QtCore.QSize(320,320))
     
     filemodel = MediaFileModel(filelist)
-#    filemodel.in
     filelist.setModel(filemodel)
-#    filelist.horizontalHeader().resizeSections(QtGui.QHeaderView.ResizeToContents)
-#    filelist.horizontalHeader().resizeSection(0,25)
-    
-#    filelist_model = QtGui.QFileSystemModel()
-#    filelist_model.setRootPath("file:///home/")
-#    filelist_model = QtGui.QStandardItemModel()
-#    filelist_model.setColumnCount(3)
-#    
-#    from random import randint
-#    for _ in range(10):
-#        item = QtGui.QStandardItem('Item %s' % randint(1, 100))
-#        check = QtCore.Qt.Checked if randint(0, 1) == 1 else QtCore.Qt.Unchecked
-#        item.setColumnCount(3)
-#        item.setCheckState(check)
-#        item.setCheckable(True)
-#        item.setEditable(False)
-#        filelist_model.appendRow(item)
-#    filelist.setModel(filelist_model)
-    
     
     filelist.show()
     sys.exit(app.exec_())
