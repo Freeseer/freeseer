@@ -36,6 +36,7 @@ from PyQt4 import QtCore, QtGui
 from ServerDetailsGroupBox import ServerDetailsGroupBox
 from FileSelectGroupBox import FileSelectGroupBox
 import resource_rc
+from freeseer.framework.metadata import FreeseerMetadataLoader
 
 class UploaderWidget(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -163,6 +164,7 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.menuView.addAction(self.actionFilter)
         self.menuView.addSeparator()
         
+        self.loader = None
         self.columnViewActions = []
         
 #        self.menuView.addAction(self.actionFile_Name)
@@ -219,13 +221,33 @@ class UploaderMenuBar(QtGui.QMenuBar):
 #        self.actionDuration.setChecked(True)
         pass
     
+    def onFieldVisibilityChange(self):
+        pass
+    
+    def onFieldsChanged(self):
+        pass
+    
+    def _resetColumnViewActions(self):
+        for action in self.columnViewActions:
+            self.menuView.removeAction(action)
+        self.columnViewActions = []
+        if self.loader == None:
+            return
+        
+        
+    
     def setMetadataLoader(self, loader):
         
+        # todo: disconnect slots
         
-        
+        self.loader = loader
+        self._resetColumnViewActions()
         if loader == None:
             return
         
+        assert isinstance(loader, FreeseerMetadataLoader)
+        loader.field_visibility_changed.connect(self.onFieldVisibilityChange)
+        loader.fields_changed
         
 
 #class Ui_MainWindow(object):
