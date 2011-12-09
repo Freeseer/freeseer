@@ -269,12 +269,18 @@ class IMetadataReaderBase(QtCore.QObject):
     class header(object):
         '''
         defines the data that is being depicted by the metadata
+        @ivar name:Human readable name of the field
+        @ivar type:expected type (not used)
+        @ivar position:where the field should go in relation to the others
+                        (we sort by this value when populating the headers)
+        @ivar visible:if the field is currently visible (get from settings)
         '''
-        def __init__(self, name, typ=None, pos=0):
+        # todo: load visibility from settings.
+        def __init__(self, name, typ=None, pos=0, visible=True):
             self.name = name
             self.type = typ
             self.position = pos
-            self.visible = True
+            self.visible = visible
             
     def retrieve_metadata(self, filepath):
         raise NotImplementedError
