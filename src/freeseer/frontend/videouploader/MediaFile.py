@@ -23,7 +23,7 @@ class MediaFileView(QtGui.QTableView):
         hheader = self.horizontalHeader()
         assert isinstance(hheader, QtGui.QHeaderView)
         hheader.setHighlightSections(False)
-        self.lastSort = (1, Qt.DescendingOrder)
+        self.lastSort = (-1, Qt.DescendingOrder)
         hheader.sortIndicatorChanged.connect(self.cancelFirstColumnSort)
         
         self.setAlternatingRowColors(True)
@@ -31,7 +31,8 @@ class MediaFileView(QtGui.QTableView):
         self.setSortingEnabled(True) # TODO: sorting.
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.realmodel = None
-        self.sortmodel = QtGui.QSortFilterProxyModel(self)
+        self.sortmodel = DisabledColumnSortFilterProxyModel(self)
+        self.sortmodel.setSortCaseSensitivity(Qt.CaseInsensitive)
         QtGui.QTableView.setModel(self, self.sortmodel)
     
     def setModel(self, model):
@@ -43,6 +44,7 @@ class MediaFileView(QtGui.QTableView):
             if isinstance(self.model(), CheckableRowTableModel):
                 self.setItemDelegateForColumn(self.model().CHECK_COL, self.itemDelegate())
         self.realmodel = model
+        self.sortmodel.check_col = model.CHECK_COL
         self.sortmodel.setSourceModel(model)
 #        QtGui.QTableView.setModel(self, model)
         
@@ -164,6 +166,15 @@ class CheckBoxDelegate(QtGui.QStyledItemDelegate):
                              check_box_rect.height() / 2)
         return QtCore.QRect(check_box_point, check_box_rect.size())
 # pylint: enable-msg=W0613
+
+class DisabledColumnSortFilterProxyModel(QtGui.QSortFilterProxyModel):
+    def __init__(self, *args, **kwargs):
+        QtGui.QSortFilterProxyModel.__init__(self, *args, **kwargs)
+        self.check_col = -1
+    def sort(self, column, order):
+        if column == self.check_col:
+            return
+        QtGui.QSortFilterProxyModel.sort(self, column, order)
 
 class CheckableRowTableModel(QtCore.QAbstractTableModel):
     def __init__(self, parent=None):
