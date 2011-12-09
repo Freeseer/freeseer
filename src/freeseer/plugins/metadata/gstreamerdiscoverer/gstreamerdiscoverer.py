@@ -25,9 +25,9 @@ http://wiki.github.com/fosslc/freeseer/
 
 
 import functools
-#import pygst
-#pygst.require('0.10')
-#import gst
+import pygst
+pygst.require('0.10')
+import gst
 from PyQt4 import QtGui, QtCore
 # i don't know if this works with translate's scanner, 
 #  may need some hand coding of translation files
@@ -61,7 +61,7 @@ class GStreamerDiscoverer(IMetadataReader):
     def retrieve_metadata_internal(self, filepath):
         # TODO: implement batch begin/end for this class so that the 
         #  gobject main loop isn't constantly being started and stopped
-        # TODO: call discoverer directly instead of throught uploader.VideoData
+        # TODO: call discoverer directly instead of through uploader.VideoData
         
         d = uploader.VideoData(filepath)
         d.run()
@@ -72,8 +72,22 @@ class GStreamerDiscoverer(IMetadataReader):
         'title':            d.title, 
         'artist':           d.artist, 
 #        'date':             ,
-        'duration':         d.raw_duration,
+        'duration':         humantime(d.raw_duration),
         'videowidth':       d.videowidth,
         'videoheight':      d.videoheight,
         }
-        
+
+# adapted from gst.extend.discoverer._time_to_string
+def humantime(value):
+    """
+    transform a value in nanoseconds into a human-readable string
+    """
+    ms = value / gst.MSECOND
+    sec = ms / 1000
+    ms = ms % 1000
+    mn = sec / 60
+    sec = sec % 60
+#    return "%2dm %2ds %3d" % (mn, sec, ms)
+    return "{:0>2}m {:0>2}s".format(mn, sec)
+
+#    return QtCore.QTime().addMSecs(ms)
