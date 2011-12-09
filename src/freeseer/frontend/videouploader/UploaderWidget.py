@@ -114,42 +114,6 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.actionFilter.setObjectName("actionFilter")
         self.actionFilter.setVisible(False)
         
-#        self.actionFile_Name = QtGui.QAction(parent)
-#        self.actionFile_Name.setCheckable(True)
-#        self.actionFile_Name.setObjectName("actionFile_Name")
-#
-#        self.actionTitle = QtGui.QAction(parent)
-#        self.actionTitle.setCheckable(True)
-#        self.actionTitle.setObjectName("actionTitle")
-#        
-#        self.actionArtist = QtGui.QAction(parent)
-#        self.actionArtist.setCheckable(True)
-#        self.actionArtist.setObjectName("actionArtist")
-#        
-#        self.actionAlbum = QtGui.QAction(parent)
-#        self.actionAlbum.setCheckable(True)
-#        self.actionAlbum.setObjectName("actionAlbum")
-#        
-#        self.actionLocation = QtGui.QAction(parent)
-#        self.actionLocation.setCheckable(True)
-#        self.actionLocation.setObjectName("actionLocation")
-#        
-#        self.actionTrack_Number = QtGui.QAction(parent)
-#        self.actionTrack_Number.setCheckable(True)
-#        self.actionTrack_Number.setObjectName("actionTrack_Number")
-#        
-#        self.actionDate = QtGui.QAction(parent)
-#        self.actionDate.setCheckable(True)
-#        self.actionDate.setObjectName("actionDate")
-#        
-#        self.actionComment = QtGui.QAction(parent)
-#        self.actionComment.setCheckable(True)
-#        self.actionComment.setObjectName("actionComment")
-#        
-#        self.actionDuration = QtGui.QAction(parent)
-#        self.actionDuration.setCheckable(True)
-#        self.actionDuration.setObjectName("actionDuration")
-        
         self.actionMetadata_Launch_Ex_Falso = QtGui.QAction(parent)
         self.actionMetadata_Launch_Ex_Falso.setObjectName("actionMetadata_Launch_Ex_Falso")
                 
@@ -167,19 +131,9 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.menuView.addSeparator()
         
         self.loader = None
-        
         self.columnViewActions = []    # [(key, field, action, slot)]
         self.columnViewActionDict = {} # {key: action}
         
-#        self.menuView.addAction(self.actionFile_Name)
-#        self.menuView.addAction(self.actionTrack_Number)
-#        self.menuView.addAction(self.actionTitle)
-#        self.menuView.addAction(self.actionArtist)
-#        self.menuView.addAction(self.actionAlbum)
-#        self.menuView.addAction(self.actionLocation)
-#        self.menuView.addAction(self.actionDate)
-#        self.menuView.addAction(self.actionComment)
-#        self.menuView.addAction(self.actionDuration)
         self.addAction(self.menuFile.menuAction())
         self.addAction(self.menuEdit.menuAction())
         self.addAction(self.menuView.menuAction())
@@ -199,30 +153,13 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.actionInvert_Selection.setText(self.tr("&Invert Selection"))
         self.actionPreferences.setText(self.tr("&Preferences"))
         self.actionFilter.setText(self.tr("&Filter..."))
-#        self.actionFile_Name.setText(self.tr("Filename"))
-#        self.actionTitle.setText(self.tr("Title"))
-#        self.actionArtist.setText(self.tr("Artist"))
-#        self.actionAlbum.setText(self.tr("Album"))
-#        self.actionLocation.setText(self.tr("Location"))
-#        self.actionTrack_Number.setText(self.tr("Track Number"))
-#        self.actionDate.setText(self.tr("Date"))
-#        self.actionComment.setText(self.tr("Comment"))
-#        self.actionDuration.setText(self.tr("Duration"))
         self.actionMetadata_Launch_Ex_Falso.setText(self.tr("Metadata (Launch Ex Falso)"))
+        # TODO: iterate through metadata plugins and retranslate their header text.
 
     def loadSettings(self):
         # TODO: actually load & save the previously checked properties
         # this means moving this function up to videouploader.UploaderApp, 
         #  which will have access to FreeseerCore.config
-#        self.actionFile_Name.setChecked(True)
-#        self.actionTitle.setChecked(True)
-#        self.actionArtist.setChecked(True)
-#        self.actionAlbum.setChecked(False)
-#        self.actionLocation.setChecked(True)
-#        self.actionTrack_Number.setChecked(False)
-#        self.actionDate.setChecked(True)
-#        self.actionComment.setChecked(False)
-#        self.actionDuration.setChecked(True)
         pass
     
     def onFieldVisibilityChange(self, field_name, state):
@@ -252,7 +189,6 @@ class UploaderMenuBar(QtGui.QMenuBar):
             action.setText(field.name)
             action.setCheckable(True)
             action.setChecked(field.visible)
-#            action.triggered.connect(functools.partial(self.emitFieldVisibilityChange, key))
             slot = functools.partial(self.loader.field_visibility_changed.emit, key)
             action.triggered.connect(slot)
             self.columnViewActions.append((key, field, action, slot))
@@ -273,17 +209,10 @@ class UploaderMenuBar(QtGui.QMenuBar):
         loader.field_visibility_changed.connect(self.onFieldVisibilityChange)
         loader.fields_changed.connect(self.onFieldsChanged)
         
-
-#class Ui_MainWindow(object):
-#    def setupUi(self, MainWindow):
-#        MainWindow.setObjectName("MainWindow")
-        
         
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-#    main = QtGui.QMainWindow()
-#    Ui_MainWindow().setupUi(main)
     main = UploaderWidget()
     main.show()
     sys.exit(app.exec_())
