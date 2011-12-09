@@ -57,6 +57,7 @@ class UploaderApp(QtGui.QMainWindow):
         self.__loadDefaults()
         self.__loadSettings()
         self.__initConnections()
+        self.__doInitialActions()
     
     def __initGui(self):
         self.resize(560, 600)
@@ -157,7 +158,6 @@ class UploaderApp(QtGui.QMainWindow):
             dialog.show()
     
     def directoryChanged(self):
-        print self.mainWidget.fileselect.directory
         self.mainWidget.fileselect.filemodel.setDirectory(self.mainWidget.fileselect.directory)
         
         
@@ -165,6 +165,9 @@ class UploaderApp(QtGui.QMainWindow):
 #    @QtCore.pyqtSlot([type-list])
 #    def customSlot(self, [var-list]):
 #        assert isinstance([var], [type])
+
+    def __doInitialActions(self):
+        self.directoryChanged()
 
     def retranslate(self):
         self.setWindowTitle(self.tr("Freeseer Video Uploader"))
