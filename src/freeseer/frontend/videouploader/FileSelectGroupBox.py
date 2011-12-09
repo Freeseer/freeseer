@@ -25,28 +25,32 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         self.horizontalLayout_filepathbuttons.setObjectName("horizontalLayout_filepathbuttons")
         
         # directory select button #
-#        self.toolButton_directorydropdown = QtGui.QToolButton(self)
-        self.toolButton_directorydropdown = QtGui.QPushButton(self)
+##        self.toolButton_directorydropdown = QtGui.QToolButton(self)
+#        self.toolButton_directorydropdown = QtGui.QPushButton(self)
 #        self.toolButton_directorydropdown.setToolButtonStyle(QtCore.Qt.ToolButtonTextBesideIcon)
 #        self.toolButton_directorydropdown.setArrowType(QtCore.Qt.DownArrow)
 #        self.toolButton_directorydropdown.setPopupMode(QtGui.QToolButton.InstantPopup)
-        self.toolButton_directorydropdown.setObjectName("toolButton_directorydropdown")
-        self.horizontalLayout_filepathbuttons.addWidget(self.toolButton_directorydropdown)
+#        self.toolButton_directorydropdown.setObjectName("toolButton_directorydropdown")
+#        self.horizontalLayout_filepathbuttons.addWidget(self.toolButton_directorydropdown)
         
         # directory dropdown menu #
-        self.menu_directorydropdown = QtGui.QMenu(self.toolButton_directorydropdown)
-        self.actionNavFreeseerVideoDir = QtGui.QAction(self)
-        self.actionNavFreeseerVideoDir.setObjectName("actionNavFreeseerVideoDir")
-        self.actionNavHomeDir = QtGui.QAction(self)
-        self.actionNavHomeDir.setObjectName("actionNavHomeDir")
-        self.actionAddFavourite = QtGui.QAction(self)
-        self.actionAddFavourite.setObjectName("actionAddFavourite")
+#        self.menu_directorydropdown = QtGui.QMenu(self.toolButton_directorydropdown)
+#        self.actionNavFreeseerVideoDir = QtGui.QAction(self)
+#        self.actionNavFreeseerVideoDir.setObjectName("actionNavFreeseerVideoDir")
+#        self.actionNavHomeDir = QtGui.QAction(self)
+#        self.actionNavHomeDir.setObjectName("actionNavHomeDir")
+#        self.actionAddFavourite = QtGui.QAction(self)
+#        self.actionAddFavourite.setObjectName("actionAddFavourite")
+#        
+#        self.menu_directorydropdown.addAction(self.actionNavFreeseerVideoDir)
+#        self.menu_directorydropdown.addAction(self.actionNavHomeDir)
+#        self.menu_directorydropdown.addSeparator()
+#        self.menu_directorydropdown.addAction(self.actionAddFavourite)
+#        self.toolButton_directorydropdown.setMenu(self.menu_directorydropdown)
         
-        self.menu_directorydropdown.addAction(self.actionNavFreeseerVideoDir)
-        self.menu_directorydropdown.addAction(self.actionNavHomeDir)
-        self.menu_directorydropdown.addSeparator()
-        self.menu_directorydropdown.addAction(self.actionAddFavourite)
-        self.toolButton_directorydropdown.setMenu(self.menu_directorydropdown)
+        # directory label # (directory select dropdown to be implemented later)
+        self.label_directory = QtGui.QLabel(self)
+        self.horizontalLayout_filepathbuttons.addWidget(self.label_directory)
         
         # file path input #
         self.lineEdit_filepath = QtGui.QLineEdit(self)
@@ -108,10 +112,11 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         
     def retranslate(self):
         self.setTitle(self.tr("File Selection"))
-        self.toolButton_directorydropdown.setText(self.tr("Directory "))
-        self.actionNavFreeseerVideoDir.setText(self.tr("Freeseer Video Directory"))
-        self.actionNavHomeDir.setText(self.tr("Home"))
-        self.actionAddFavourite.setText(self.tr("Add favourite..."))
+#        self.toolButton_directorydropdown.setText(self.tr("Directory "))
+#        self.actionNavFreeseerVideoDir.setText(self.tr("Freeseer Video Directory"))
+#        self.actionNavHomeDir.setText(self.tr("Home"))
+#        self.actionAddFavourite.setText(self.tr("Add favourite..."))
+        self.label_directory.setText(self.tr("Directory: "))
         
         self.lineEdit_filepath.setText(self.tr("~/Videos"))
         self.toolButton_filepathgo.setText(self.tr("Go"))
