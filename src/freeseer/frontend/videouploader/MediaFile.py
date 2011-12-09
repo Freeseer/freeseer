@@ -31,41 +31,59 @@ class MediaFileView(QtGui.QTableView):
         self.setSortingEnabled(True)
         self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         
-        self.setItemDelegateForColumn(0, CheckBoxDelegate(self))
+        
+#        self.setItemDelegateForColumn(0, CheckBoxDelegate(self))
     
     def setModel(self, model):
         self.onModelReset()
         if self.model():
-            self.model().headerDataChanged.disconnect(self.onModelDataChangeH)
-#            self.model().dataChanged.disconnect(self.onModelDataChangeD)
-            self.model().modelReset.connect(self.onModelReset)
+            self.model().modelReset.disconnect(self.onModelReset)
+            self.model().headersReset.disconnect(self.onHeadersReset)
+            self.model().columnHidden.disconnect(self.setColumnHidden)
+            if isinstance(self.model(), CheckableRowTableModel):
+                self.setItemDelegateForColumn(self.model().CHECK_COL, self.itemDelegate())
         QtGui.QTableView.setModel(self, model)
+        
+        if isinstance(model, CheckableRowTableModel):
+            self.setItemDelegateForColumn(model.CHECK_COL, CheckBoxDelegate(self))
+        
         assert isinstance(model, MediaFileModel)
         model.modelReset.connect(self.onModelReset)
-#        model.dataChanged.connect(self.onModelDataChangeD)
-        model.headerDataChanged.connect(self.onModelDataChangeH)
+        model.headersReset.connect(self.onHeadersReset)
+        model.columnHidden.connect(self.setColumnHidden)
     
-    @QtCore.pyqtSlot(QtCore.QModelIndex, QtCore.QModelIndex)
-    def onModelDataChangeD(self, topLeft, bottomRight):
-        print(topLeft, bottomRight)
-        return self.onModelReset()
-    
-    @QtCore.pyqtSlot(Qt.Orientation,int,int)
-    def onModelDataChangeH(self, orientation, first, last):
-        print(orientation, first, last)
-        return self.onModelReset()
+#    @QtCore.pyqtSlot(QtCore.QModelIndex, QtCore.QModelIndex)
+#    def onModelDataChangeD(self, topLeft, bottomRight):
+#        print(topLeft, bottomRight)
+##        return self.onModelReset()
+#    
+#    @QtCore.pyqtSlot(Qt.Orientation,int,int)
+#    def onModelDataChangeH(self, orientation, first, last):
+#        print(orientation, first, last)
+#        return self.onModelReset()
     
     def onModelReset(self):
+        pass
+    
+    def onHeadersReset(self):
         hheader = self.horizontalHeader()
         assert isinstance(hheader, QtGui.QHeaderView)
+        model = self.model()
+        if model == None:
+            return
+        assert isinstance(model, MediaFileModel)
         
-        hheader.resizeSection(0,25)
-        hheader.setResizeMode(0, QtGui.QHeaderView.Fixed)
-        hheader.resizeSection(1, 300)
+        hheader.resizeSection(model.CHECK_COL,25)
+        hheader.setResizeMode(model.CHECK_COL, QtGui.QHeaderView.Fixed)
+        
         hheader.setStretchLastSection(True)
+        if model.header_keyindex.has_key("FileName.name"):
+            hheader.resizeSection(model.header_keyindex["FileName.name"], 300)
         
-#        self.setColumnHidden(2, True)
-        
+        for index in model.iterHiddenColumnIndicies():
+            self.setColumnHidden(index, True)
+    
+    
     @QtCore.pyqtSlot(int, Qt.SortOrder)
     def cancelFirstColumnSort(self, column, order):
         if column == 0:
@@ -74,10 +92,11 @@ class MediaFileView(QtGui.QTableView):
         else:
             self.lastSort = (column, order)
             
-            
-            
     def sortByColumn(self, column, order):
         print(column, order)
+    
+#    def onColumnHidden(self, column, hidden):
+#        print column, hidden
         
 
 # http://stackoverflow.com/questions/3363190/
@@ -228,6 +247,9 @@ class MediaFileModel(CheckableRowTableModel):
 #                        8: self.tr("Date Modified"),
 #                        9: self.tr("Size")}
 #    NUM_FIELDS = 10
+    headersReset = QtCore.pyqtSignal()
+    columnHidden = QtCore.pyqtSignal(int, bool)
+
     class emptyloader(FreeseerMetadataLoader):
         def __init__(self):
             FreeseerMetadataLoader.__init__(self, None)
@@ -236,13 +258,13 @@ class MediaFileModel(CheckableRowTableModel):
     
     def __init__(self, parent=None, loader=None):
         CheckableRowTableModel.__init__(self, parent)
+        self.loader = None
         self.setMetadataLoader(loader)
         
-#        self.filedata = []
-        self.filedata = [{}, {}, {}]
-        self.header_data = {}
-        self.header_indexkey = {}
-        self.header_keyindex = {}
+        self.filedata = [] # [{field_id: data}]
+        self.header_data = {} # {field_id: IMetadataReader.header}
+        self.header_indexkey = {} # {int: field_id}
+        self.header_keyindex = {} # {field_id: int}
         
     def setDirectory(self, directory):
         # TODO: look at QtGui.QFileSystemModel
@@ -264,11 +286,16 @@ class MediaFileModel(CheckableRowTableModel):
             self.endInsertRows()
     
     def setMetadataLoader(self, loader):
-        #TODO: actually do stuff with this
+        if self.loader != None:
+            self.loader.field_visibility_changed.disconnect(self.onFieldVisiblityChange)
+            self.loader.fields_changed.disconnect(self.refreshHeaders)
         if loader == None:
             loader = self.emptyloader()
         self.loader = loader
         self.refreshHeaders()
+#        assert isinstance(loader, FreeseerMetadataLoader)
+        loader.field_visibility_changed.connect(self.onFieldVisiblityChange)
+        loader.fields_changed.connect(self.refreshHeaders)
         
     def refreshHeaders(self):
         self.beginResetModel()
@@ -278,12 +305,14 @@ class MediaFileModel(CheckableRowTableModel):
         self.header_data = self.loader.get_fields()
         
         count = 1
-        for key, _ in sorted(self.header_data.iteritems(), key=lambda (k,v): v.position):
+#        for key, _ in sorted(self.header_data.iteritems(), key=lambda (k,v): v.position):
+        for key, _ in self.loader.get_fields_sorted():
             self.header_indexkey[count] = key
             self.header_keyindex[key] = count
             count = count + 1
         
         self.endResetModel()
+        self.headersReset.emit()
     
     # pylint: disable-msg=W0613
     ## Mandatory implemented abstract methods ##
@@ -323,6 +352,14 @@ class MediaFileModel(CheckableRowTableModel):
 #                                                            role))
         # else
         return CheckableRowTableModel.headerData(self, section, orientation, role)
+    
+    def onFieldVisiblityChange(self, field_id, value):
+        self.columnHidden.emit(self.header_keyindex[str(field_id)], not value)
+    
+    def iterHiddenColumnIndicies(self):
+        return (self.header_keyindex[k] 
+                for k, v in self.header_data.iteritems() 
+                if not v.visible)
 
 # based on gui/dialogs/qfilesystemmodel.cpp in Qt
 #TODO: move this function somewhere else
