@@ -51,14 +51,17 @@ class FreeseerMetadataLoader(
         self.headers = headers
         
     def iter_active_plugins(self):
-        plugman = self.plugman.plugmanc
-        assert isinstance(plugman, ConfigurablePluginManager)
-#        assert isinstance(plugman, PluginManager)
-        for plugin in plugman.getPluginsOfCategory(
-                pluginpkg.IMetadataReader.CATEGORY):
-#            assert isinstance(plugin.plugin_object, pluginpkg.IMetadataReader)
-            if plugin.is_activated:
-                yield plugin.plugin_object
+#        plugman = self.plugman.plugmanc
+##        assert isinstance(plugman, ConfigurablePluginManager)
+##        assert isinstance(plugman, PluginManager)
+#        for plugin in plugman.getPluginsOfCategory(
+#                pluginpkg.IMetadataReader.CATEGORY):
+##            assert isinstance(plugin.plugin_object, pluginpkg.IMetadataReader)
+#            if plugin.is_activated:
+#                yield plugin.plugin_object
+                
+        return (p.plugin_object for p in self.plugman.plugmanc.getPluginsOfCategory( 
+                pluginpkg.IMetadataReader.CATEGORY) if p.is_activated)
         
     def retrieve_metadata(self, filepath):
         data = {}
