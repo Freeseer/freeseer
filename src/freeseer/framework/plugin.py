@@ -295,8 +295,34 @@ class IOutput(IBackendPlugin):
         Set the metadata if supported by Output plugin. 
         """
         pass
+
+class IMetadataReaderBase(QtCore.QObject):
+    def __init__(self):
+        QtCore.QObject.__init__(self)
     
-class IMetadataReader(IBackendPlugin, QtCore.QObject):
+    class header(object):
+        '''
+        defines the data that is being depicted by the metadata
+        '''
+        def __init__(self, name, typ=None, pos=0):
+            self.name = name
+            self.type = typ
+            self.position = pos
+            self.visible = True
+            
+    def retrieve_metadata(self, filepath):
+        raise NotImplementedError
+    
+    def retrieve_metadata_batch(self, filepath_list):
+        raise NotImplementedError
+    
+    def get_fields(self):
+        raise NotImplementedError
+            
+    field_visibility_changed = QtCore.pyqtSignal(
+            "QString", bool, name="fieldVisibilityChanged")
+
+class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
     ## abstract class members/methods
     # this dict should be of type {string:header}
     # Don't use externally! use get_fields() instead
@@ -318,21 +344,9 @@ class IMetadataReader(IBackendPlugin, QtCore.QObject):
     ## concrete class members/methods
     CATEGORY = "Metadata"
     
-    class header(object):
-        '''
-        defines the data that is being depicted by the metadata
-        '''
-        def __init__(self, name, typ=None, pos=0):
-            self.name = name
-            self.type = typ
-            self.position = pos
-            
-    field_visibility_changed = QtCore.pyqtSignal(
-            "QString", bool, name="fieldVisibilityChanged")
-    
     def __init__(self):
         IBackendPlugin.__init__(self)
-        QtCore.QObject.__init__(self)
+        IMetadataReaderBase.__init__(self)
         self.checkboxes = {}
     
     def retrieve_metadata(self, filepath):
