@@ -9,16 +9,20 @@ from freeseer.framework import plugin as pluginpkg
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.PluginManager import PluginManager
 from PyQt4 import QtCore
+from freeseer.framework.plugin import IMetadataReader
+import functools
 
 
-class FreeseerMetadataLoader(
-                             QtCore.QObject 
-#                             IFileMetadataReader
-                             ):
+class FreeseerMetadataLoader(pluginpkg.IMetadataReaderBase):
     '''
+    This class acts as an aggregate of pluginpkg.IMetadataReader's
+    
     @signal fieldsChanged() Emitted when fields are added or removed, via plugin enabling/disabling
     '''
     fields_changed = QtCore.pyqtSignal(name="fieldsChanged")
+    
+    field_visibility_changed = QtCore.pyqtSignal(
+            "QString", bool, name="fieldVisibilityChanged")
                              
     def __init__(self, plugin_manager):
         QtCore.QObject.__init__(self)
@@ -32,23 +36,42 @@ class FreeseerMetadataLoader(
         assert isinstance(plugin_manager, pluginpkg.PluginManager)
         self._cache_fields()
         
-        plugin_manager.plugin_activated.connect(self.field_activated_or_deactivated)
-        plugin_manager.plugin_deactivated.connect(self.field_activated_or_deactivated)
+        for plugin in self.iter_active_plugins():
+            self._chain_signals(plugin)
+        
+        plugin_manager.plugin_activated.connect(self.plugin_activated)
+        plugin_manager.plugin_deactivated.connect(self.plugin_deactivated)
     
+    def set_visible(self, field_id, value):
+        plugin = next(p for p in self.iter_active_plugins() 
+                      if p.get_fields().has_key(field_id))
+        assert isinstance(plugin, IMetadataReader)
+        plugin.field_visibility_changed.emit(field_id, value)
+        
+    def _field_visibility_changed(self, field_id, value):
+        print field_id, value
+        self.field_visibility_changed.emit(field_id, value)
     
-    def field_activated_or_deactivated(self, plugin_name, plugin_category):
+    def plugin_activated_or_deactivated(self, plugin_name, plugin_category, activated):
         print(plugin_name, plugin_category)
         if plugin_category != pluginpkg.IMetadataReader.CATEGORY:
             return
-        
+        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
+        self._chain_signals(plugin, activated)
         self._cache_fields()
         self.fields_changed.emit()
+    plugin_activated = functools.partial(plugin_activated_or_deactivated, activated = True)
+    plugin_deactivated = functools.partial(plugin_activated_or_deactivated, activated = False)
     
     def _cache_fields(self):
         headers = {}
         for plugin in self.iter_active_plugins():
             headers.update(plugin.get_fields())
         self.headers = headers
+        
+    def _chain_signals(self, plugin, connect=True):
+        (plugin.field_visibility_changed.connect if connect else
+         plugin.field_visibility_changed.disconnect)(self._field_visibility_changed)
         
     def iter_active_plugins(self):
 #        plugman = self.plugman.plugmanc
@@ -84,6 +107,5 @@ class FreeseerMetadataLoader(
         @return: dict of {str:IMetadataReader.header}
         '''
         return self.headers
-    
     
         
