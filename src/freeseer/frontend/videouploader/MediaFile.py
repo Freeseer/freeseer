@@ -12,9 +12,8 @@ from freeseer.framework.presentation import PresentationFile
 from freeseer.framework import uploader
 from freeseer.framework.metadata import FreeseerMetadataLoader
 
-listabsdir = lambda d: [os.path.join(str(d), f) for f in os.listdir(str(d))]
-isAVmimetype = lambda t: t[0] != None and (t[0].find("video") >= 0 or t[0].find("audio") >= 0)
-
+# TODO: (junior task) separate this class between the checkbox column functions
+# and the rest of the essential functions
 class MediaFileView(QtGui.QTableView):
     def __init__(self, parent=None):
         QtGui.QTableView.__init__(self, parent)
@@ -23,7 +22,7 @@ class MediaFileView(QtGui.QTableView):
         hheader = self.horizontalHeader()
         assert isinstance(hheader, QtGui.QHeaderView)
         hheader.setHighlightSections(False)
-        self.lastSort = (-1, Qt.DescendingOrder)
+#        self.lastSort = (-1, Qt.DescendingOrder)
         hheader.sortIndicatorChanged.connect(self.cancelFirstColumnSort)
         
         self.setAlternatingRowColors(True)
@@ -81,11 +80,14 @@ class MediaFileView(QtGui.QTableView):
     
     @QtCore.pyqtSlot(int, Qt.SortOrder)
     def cancelFirstColumnSort(self, column, order):
+#        if column == 0:
+#            column, order = self.lastSort
+#            self.horizontalHeader().setSortIndicator(column, order)
+#        else:
+#            self.lastSort = (column, order)
+        # instead of canceling, lets just revert to the natural sort
         if column == 0:
-            column, order = self.lastSort
-            self.horizontalHeader().setSortIndicator(column, order)
-        else:
-            self.lastSort = (column, order)
+            self.horizontalHeader().setSortIndicator(-1, Qt.DescendingOrder)
             
     def sortByColumn(self, column, order):
         print(column, order)
@@ -173,6 +175,8 @@ class DisabledColumnSortFilterProxyModel(QtGui.QSortFilterProxyModel):
         self.check_col = -1
     def sort(self, column, order):
         if column == self.check_col:
+            # remove the following line to just disable sorting of the column
+            QtGui.QSortFilterProxyModel.sort(self, -1, Qt.DescendingOrder)
             return
         QtGui.QSortFilterProxyModel.sort(self, column, order)
 
@@ -256,6 +260,10 @@ class MediaFileModel(CheckableRowTableModel):
         self.beginResetModel()
         self.filedata = []
         self.endResetModel()
+        
+        listabsdir = lambda d: (os.path.join(str(d), f) for f in os.listdir(str(d)))
+        isAVmimetype = lambda t: t[0] != None and (t[0].find("video") >= 0 or
+                                                   t[0].find("audio") >= 0)
         
         # using qt libraries
 #        qdir = QtCore.QDir(directory)
