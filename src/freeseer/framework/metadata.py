@@ -12,7 +12,7 @@ from PyQt4 import QtCore
 from freeseer.framework.plugin import IMetadataReader
 import functools
 
-
+# could use a better name.
 class FreeseerMetadataLoader(pluginpkg.IMetadataReaderBase):
     '''
     This class acts as an aggregate of pluginpkg.IMetadataReader's
