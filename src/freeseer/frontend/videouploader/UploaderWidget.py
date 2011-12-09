@@ -37,6 +37,8 @@ from ServerDetailsGroupBox import ServerDetailsGroupBox
 from FileSelectGroupBox import FileSelectGroupBox
 import resource_rc
 from freeseer.framework.metadata import FreeseerMetadataLoader
+from freeseer.framework.plugin import IMetadataReader
+import functools
 
 class UploaderWidget(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -165,7 +167,9 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.menuView.addSeparator()
         
         self.loader = None
-        self.columnViewActions = []
+        
+        self.columnViewActions = []    # [(key, field, action, slot)]
+        self.columnViewActionDict = {} # {key: action}
         
 #        self.menuView.addAction(self.actionFile_Name)
 #        self.menuView.addAction(self.actionTrack_Number)
@@ -221,33 +225,53 @@ class UploaderMenuBar(QtGui.QMenuBar):
 #        self.actionDuration.setChecked(True)
         pass
     
-    def onFieldVisibilityChange(self):
-        pass
+    def onFieldVisibilityChange(self, field_name, state):
+        self.columnViewActionDict[str(field_name)].setChecked(state)
     
     def onFieldsChanged(self):
-        pass
+        self._resetColumnViewActions()
     
     def _resetColumnViewActions(self):
-        for action in self.columnViewActions:
+        # TODO:make sure there isn't a memory leak
+        # make sure that the actions aren't left around since their parent is still around
+        # look at pyqt's documentation on QObject lifecycle
+        for _, _, action, slot in self.columnViewActions:
+            action.triggered.disconnect(slot)
             self.menuView.removeAction(action)
         self.columnViewActions = []
+        self.columnViewActionDict = {}
         if self.loader == None:
             return
         
-        
-    
+        for key, field in self.loader.get_fields_sorted():
+            assert isinstance(field, IMetadataReader.header)
+            # see above: note: we don't set the parent of the qaction so that it
+            #                  will be managed by python and get deleted on g.c.
+#            action = QtGui.QAction(self.parent())
+            action = QtGui.QAction(None)
+            action.setText(field.name)
+            action.setCheckable(True)
+            action.setChecked(field.visible)
+#            action.triggered.connect(functools.partial(self.emitFieldVisibilityChange, key))
+            slot = functools.partial(self.loader.field_visibility_changed.emit, key)
+            action.triggered.connect(slot)
+            self.columnViewActions.append((key, field, action, slot))
+            self.columnViewActionDict[key] = action
+            self.menuView.addAction(action)
+            
     def setMetadataLoader(self, loader):
-        
-        # todo: disconnect slots
+        if self.loader != None:
+            self.loader.field_visibility_changed.disconnect(self.onFieldVisibilityChange)
+            self.loader.fields_changed.disconnect(self.onFieldsChanged)
         
         self.loader = loader
         self._resetColumnViewActions()
         if loader == None:
             return
-        
         assert isinstance(loader, FreeseerMetadataLoader)
+        
         loader.field_visibility_changed.connect(self.onFieldVisibilityChange)
-        loader.fields_changed
+        loader.fields_changed.connect(self.onFieldsChanged)
         
 
 #class Ui_MainWindow(object):

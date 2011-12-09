@@ -104,8 +104,14 @@ class FreeseerMetadataLoader(pluginpkg.IMetadataReaderBase):
             
     def get_fields(self):
         '''
-        @return: dict of {str:IMetadataReader.header}
+        @rtype: {str:IMetadataReader.header}
         '''
         return self.headers
     
+    def get_fields_sorted(self):
+        '''
+        @rtype: [(str, IMetadataReader.header)]
+        fields are sorted based on the position value in the header.
+        '''
+        return sorted(self.headers.iteritems(), key=lambda (k,v): v.position)
         

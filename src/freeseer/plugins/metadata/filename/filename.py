@@ -36,7 +36,8 @@ class FileName(IMetadataReader):
     name = "Filename Parser"
     
     fields_provided = {"name":IMetadataReader.header(tr("File Name"), str, 100),
-                       "path":IMetadataReader.header(tr("File Path"), str, 101)} 
+                       "path":IMetadataReader.header(tr("File Path"), str, 101, 
+                                                     visible=False)}
     
     def retrieve_metadata_internal(self, filepath):
         return {"name":path.basename(filepath),

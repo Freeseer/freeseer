@@ -54,6 +54,7 @@ class UploaderApp(QtGui.QMainWindow):
         
         self.__initGui()
         self.mainWidget.fileselect.filemodel.setMetadataLoader(metadataloader)
+        self.menubar.setMetadataLoader(metadataloader)
         self.__loadDefaults()
         self.__loadSettings()
         self.__initConnections()
