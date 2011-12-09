@@ -22,9 +22,12 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+# pylint: disable=E1101
+
 from twisted.conch.ssh import transport, userauth, connection, channel, keys, common, filetransfer
 from twisted.internet import defer, protocol, reactor
-from twisted.python import log
+from twisted.python import log, failure
+from twisted.python.log import logging
 from twisted.conch import error
 import sys
 import os
@@ -34,7 +37,7 @@ import base64
 import xmlrpclib
 import time
 import gobject
-gobject.threads_init()
+gobject.threads_init() #@UndefinedVariable
 import pygst
 pygst.require('0.10')
 import gst
@@ -74,7 +77,7 @@ class UserAuth(userauth.SSHUserAuthClient):
     def getPassword(self):
         try:
             passwd = defer.succeed(getpass.getpass("%s@%s's password: " % (USER, HOST)))
-        except GetPassWarning:
+        except getpass.GetPassWarning:
             print "Ooop that was not a valid password, %s" % passwd
         return passwd
             
@@ -120,7 +123,7 @@ class TransferChannelBase(channel.SSHChannel):
         
     def closed(self):
         self.loseConnection()
-        reactor.stop()
+        reactor.stop() #@UndefinedVariable
 
 #This class handles transferring via SCP
 class ScpChannel(TransferChannelBase):
@@ -323,7 +326,7 @@ class DrupalNode:
                 try:
                     self.server = xmlrpclib.ServerProxy(site+'/services/xmlrpc', allow_none=True)
                     connection = self.server.system.connect()
-                except xmlrpclb.ProtocolError:
+                except xmlrpclib.ProtocolError:
                     print 'XMLRPC server not found'
                     sys.exit()
         session = self.server.user.login(connection['sessid'], username, self.password)
@@ -413,7 +416,7 @@ if __name__ == '__main__':
             node.save()
         else:
             protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
-            reactor.run()
+            reactor.run() #@UndefinedVariable
     else:
         print 'Please enter a username, password, host, and filepath'
         sys.exit()
