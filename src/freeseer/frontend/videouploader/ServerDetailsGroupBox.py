@@ -106,7 +106,16 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
                                           self.Drupal: self.radioButton_drupal}
         
         self.button_serverType_mapping = dict(reversed(item) for item in self.serverType_button_mapping.items())
+        
+        self.buttonGroup_serverType.buttonClicked.connect(self.onServerTypeChange)
     
+    @QtCore.pyqtSlot(QtGui.QAbstractButton)
+    def onServerTypeChange(self, button):
+        servertype = self.button_serverType_mapping[button]
+        self.lineEdit_port.setEnabled(servertype == self.Sftp)
+        self.label_port.setEnabled(servertype == self.Sftp)
+        
+        
     def retranslate(self):
         self.setTitle(self.tr("Server Details"))
         self.label_username.setText(self.tr("&Username"))
