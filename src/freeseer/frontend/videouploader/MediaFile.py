@@ -268,8 +268,8 @@ class MediaFileModel(CheckableRowTableModel):
         # using qt libraries
 #        qdir = QtCore.QDir(directory)
 #        print [entry.absoluteFilePath() for entry in qdir.entryInfoList()]
-        for f in [f for f in listabsdir(directory) 
-                  if isAVmimetype(mimetypes.guess_type(f, False))]:
+        for f in (f for f in listabsdir(directory) 
+                  if isAVmimetype(mimetypes.guess_type(f, False))):
             self.beginInsertRows(QtCore.QModelIndex(), 
                                  len(self.filedata), len(self.filedata))
             item = self.loader.retrieve_metadata(f)

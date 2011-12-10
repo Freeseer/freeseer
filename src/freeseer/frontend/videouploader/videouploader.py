@@ -13,6 +13,7 @@ from MinimalistCore import MinimalistCore
 
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.metadata import FreeseerMetadataLoader
+from freeseer.frontend.videouploader import exfalsolauncher
 
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
@@ -123,6 +124,9 @@ class UploaderApp(QtGui.QMainWindow):
                                 self.mainWidget.fileselect.filemodel.checkNone)
         self.menubar.actionInvert_Selection.triggered.connect(
                                 self.mainWidget.fileselect.filemodel.checkInvert)
+        
+        self.menubar.actionMetadata_Launch_Ex_Falso.triggered.connect(
+                                self.launchExFalso)
     
     @QtCore.pyqtSlot()
     def upload(self):
@@ -167,6 +171,10 @@ class UploaderApp(QtGui.QMainWindow):
 
     def retranslate(self):
         self.setWindowTitle(self.tr("Freeseer Video Uploader"))
+        
+    def launchExFalso(self):
+        #exfalsolauncher.run_in_new_process(self.mainWidget.fileselect.directory)
+        exfalsolauncher.run(str(self.mainWidget.fileselect.directory))
   
 if __name__ == '__main__':
     import sys
