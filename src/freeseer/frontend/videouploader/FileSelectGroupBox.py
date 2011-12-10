@@ -120,6 +120,7 @@ class FileSelectGroupBox(QtGui.QGroupBox):
         
         self.lineEdit_filepath.setText(self.tr("~/Videos"))
         self.toolButton_filepathgo.setText(self.tr("Go"))
+        self.toolButton_filepathgo.setToolTip(self.tr("Load or Reload the current directory"))
         self.pushButton_filepathbrowse.setText(self.tr("Browse..."))
         self.toolButton_selectall.setText(self.tr("All"))
         self.toolButton_selectnone.setText(self.tr("None"))
