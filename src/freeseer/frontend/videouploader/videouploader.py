@@ -14,6 +14,7 @@ from MinimalistCore import MinimalistCore
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.metadata import FreeseerMetadataLoader
 from freeseer.frontend.videouploader import exfalsolauncher
+from freeseer.frontend.videouploader.ServerDetailsGroupBox import ServerDetailsGroupBox
 
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
@@ -84,7 +85,6 @@ class UploaderApp(QtGui.QMainWindow):
 #        self.__initToolbar()
         
         self.retranslate()
-    
     def __initToolbar(self):
         self.toolbar.setFloatable(False)
         self.toolbar.setMovable(False)
@@ -98,15 +98,12 @@ class UploaderApp(QtGui.QMainWindow):
         
         self.addToolBar(QtCore.Qt.TopToolBarArea, self.toolbar)
         self.addToolBarBreak(QtCore.Qt.TopToolBarArea)
-    
     def __loadDefaults(self):
         abspath = path.expanduser("~/Videos")
         self.mainWidget.fileselect.lineEdit_filepath.setText(abspath)
-        
     def __loadSettings(self):
         #self.core.config.videodir
         pass
-    
     def __initConnections(self):
         self.menubar.actionClose.triggered.connect(self.close)
         self.mainWidget.buttonbar.rejected.connect(self.close)
@@ -128,13 +125,77 @@ class UploaderApp(QtGui.QMainWindow):
         self.menubar.actionMetadata_Launch_Ex_Falso.triggered.connect(
                                 self.launchExFalso)
     
+    def _validateArguments(self):
+        validation_messages = []
+        
+        # verify arguments
+        username = self.mainWidget.serverdetails.username
+        state, _ = self.mainWidget.serverdetails.text_validator.validate(
+                                                                username, 0)
+        if state != QtGui.QValidator.Acceptable:
+            validation_messages.append("Please enter a username.")
+            
+        password = self.mainWidget.serverdetails.password
+        state, _ = self.mainWidget.serverdetails.text_validator.validate(
+                                                                password, 0)
+        if state != QtGui.QValidator.Acceptable:
+            validation_messages.append("Please enter your password.")
+        serveraddress = self.mainWidget.serverdetails.serverAddress
+        state, _ = self.mainWidget.serverdetails.text_validator.validate(
+                                                                serveraddress, 0)
+        if state != QtGui.QValidator.Acceptable:
+            validation_messages.append("Please enter the server address.")
+        
+        servertype = self.mainWidget.serverdetails.serverType
+        if servertype == ServerDetailsGroupBox.NotSelected:
+            validation_messages.append("Server type not selected.")
+            
+        serverport = None
+        if servertype == ServerDetailsGroupBox.Sftp:
+            serverport = self.mainWidget.serverdetails.serverPort
+            state, _ = self.mainWidget.serverdetails.port_validator.validate(
+                                                                serverport, 0)
+            if state != QtGui.QValidator.Acceptable:
+                validation_messages.append("Invalid port number.")
+            else:
+                serverport = int(serverport)
+        
+        files = self.mainWidget.fileselect.filemodel.getSelectedFiles()
+        print files
+        
+        if len(files) <= 0:
+            validation_messages.append("Please select one or more files.")
+        
+        if len(validation_messages) > 0:
+            QtGui.QMessageBox.critical(self, "", "\n".join(validation_messages))
+            return None
+            
+        drupal = servertype == ServerDetailsGroupBox.Drupal
+        
+        return username, password, serveraddress, serverport, drupal, files
+    
     @QtCore.pyqtSlot()
     def upload(self):
-        QtGui.QMessageBox.critical(self, "", "Not yet implemented")
-        success = False
+        args = self._validateArguments()
+        if args == None:
+            return
+        username, password, serveraddress, serverport, drupal, files = args
         
-        if success:
-            self.close()
+        QtGui.QMessageBox.critical(self, "", "Not yet implemented")
+        return
+        
+        from freeseer.framework import uploader
+        # TODO: set global variables (uuuggghh) in uploader and run.
+#        if drupal:
+#            video = VideoData(VIDEO)
+#            video.run()
+#            node = DrupalNode (video.title, video.body, USER, PASS, HOST, VIDEO)
+#            node.save()
+#        else:
+#            protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+#            reactor.run() #@UndefinedVariable
+        
+        self.close()
     
     def browse(self):
         oldpath = self.mainWidget.fileselect.directory

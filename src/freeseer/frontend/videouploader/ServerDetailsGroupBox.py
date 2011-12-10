@@ -11,7 +11,10 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
     classdocs
     '''
     
+    NotSelected = -1
     Sftp, Drupal = range(2)
+    
+    SFTP_DEFAULT_PORT = 22
     
     def __init__(self, parent=None):
         '''
@@ -75,8 +78,12 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.lineEdit_port.setSizePolicy(sizePolicy)
         self.lineEdit_port.setMinimumSize(QtCore.QSize(50, 0))
         self.label_port.setBuddy(self.lineEdit_port)
+        self.lineEdit_port.setText(str(self.SFTP_DEFAULT_PORT))
         self.lineEdit_port.setObjectName("lineEdit_port")
         self.horizontalLayout_serveraddress.addWidget(self.lineEdit_port)
+        
+        self.text_validator = QtGui.QRegExpValidator(QtCore.QRegExp(r".+"), self)
+        self.port_validator = QtGui.QIntValidator(1, 65535, self)
         
         self.formLayout_serverdetails.setLayout(2, QtGui.QFormLayout.FieldRole, self.horizontalLayout_serveraddress)
         
@@ -148,6 +155,8 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
     serverPort = property(getServerPort, setServerPort)
         
     def getServerType(self):
+        if self.buttonGroup_serverType.checkedButton() == None:
+            return -1 
         return self.button_serverType_mapping[self.buttonGroup_serverType.checkedButton()]
     def setServerType(self, value):
         self.serverType_button_mapping[value].click()
