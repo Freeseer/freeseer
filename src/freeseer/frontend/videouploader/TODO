@@ -10,10 +10,10 @@ DONE: finish modularization of user interface files
 DONE: populate file list (populateFiles slot)
 
 DONE: load file metadata 
- TODO: create simple plugin system for using different libraries to load metadata
+ DONE: create simple plugin system for using different libraries to load metadata
         - add a new class to plugin.py
         - OPTIONAL: expose settings to GUI
- TODO: set visible columns
+ DONE: set visible columns
         - refactor current proof of concept code to simplify this
     time: 2-6hr (or more)
 
@@ -28,12 +28,17 @@ TODO: maintain a list of favourite directories
     Do this last, leave out if time runs out
     time: 2-6 hr
 
+TODO: (extra)
+	maintain a list of recently used server settings
+	time: 2-6 hr
+
 TODO: actual uploading
         When upload button is pressed:
           - do a simple validation, check that something is in the username, password, server and port fields, and at least one file is selected
             - collect list of currently checked files
             - create slot, connect signal
           - pass arguments to uploader.py, execute.
+          - make a dialog box to show the current progress
 	  time: .5-1.5hr
 
 TODO: add menu entry to main freeseer window
@@ -69,4 +74,4 @@ Misc notes on translation:
      - they must have a retranslate function
     
 time remaining: 9 to 26 hours
-mandatory time: less than 20 hours (hopefully)
+mandatory time: about 6 hours (hopefully)
