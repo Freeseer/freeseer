@@ -108,11 +108,11 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.actionSelect_None.setObjectName("actionSelect_None")
         self.actionInvert_Selection = QtGui.QAction(parent)
         self.actionInvert_Selection.setObjectName("actionInvert_Selection")
-        self.actionPreferences = QtGui.QAction(parent)
-        self.actionPreferences.setObjectName("actionPreferences")
-        self.actionFilter = QtGui.QAction(parent)
-        self.actionFilter.setObjectName("actionFilter")
-        self.actionFilter.setVisible(False)
+#        self.actionPreferences = QtGui.QAction(parent)
+#        self.actionPreferences.setObjectName("actionPreferences")
+#        self.actionFilter = QtGui.QAction(parent)
+#        self.actionFilter.setObjectName("actionFilter")
+#        self.actionFilter.setVisible(False)
         
         self.actionMetadata_Launch_Ex_Falso = QtGui.QAction(parent)
         self.actionMetadata_Launch_Ex_Falso.setObjectName("actionMetadata_Launch_Ex_Falso")
@@ -126,8 +126,8 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.menuEdit.addAction(self.actionInvert_Selection)
         self.menuEdit.addSeparator()
         self.menuEdit.addAction(self.actionMetadata_Launch_Ex_Falso)
-        self.menuEdit.addAction(self.actionPreferences)
-        self.menuView.addAction(self.actionFilter)
+#        self.menuEdit.addAction(self.actionPreferences)
+#        self.menuView.addAction(self.actionFilter)
         self.menuView.addSeparator()
         
         self.loader = None
@@ -151,8 +151,8 @@ class UploaderMenuBar(QtGui.QMenuBar):
         self.actionSelect_All.setText(self.tr("Select &All"))
         self.actionSelect_None.setText(self.tr("Select &None"))
         self.actionInvert_Selection.setText(self.tr("&Invert Selection"))
-        self.actionPreferences.setText(self.tr("&Preferences"))
-        self.actionFilter.setText(self.tr("&Filter..."))
+#        self.actionPreferences.setText(self.tr("&Preferences"))
+#        self.actionFilter.setText(self.tr("&Filter..."))
         self.actionMetadata_Launch_Ex_Falso.setText(self.tr("Metadata (Launch Ex Falso)"))
         # TODO: iterate through metadata plugins and retranslate their header text.
 
