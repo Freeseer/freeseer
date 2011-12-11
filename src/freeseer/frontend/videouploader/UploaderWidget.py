@@ -189,7 +189,7 @@ class UploaderMenuBar(QtGui.QMenuBar):
             action.setText(field.name)
             action.setCheckable(True)
             action.setChecked(field.visible)
-            slot = functools.partial(self.loader.field_visibility_changed.emit, key)
+            slot = functools.partial(self.loader.set_visible, key)
             action.triggered.connect(slot)
             self.columnViewActions.append((key, field, action, slot))
             self.columnViewActionDict[key] = action
