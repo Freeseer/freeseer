@@ -5,17 +5,12 @@ Created on Oct 15, 2011
 '''
 
 from PyQt4 import QtCore, QtGui
+from freeseer.framework import const
 
 class ServerDetailsGroupBox(QtGui.QGroupBox):
     '''
     classdocs
     '''
-    
-    NotSelected = -1
-    Sftp, Drupal = range(2)
-    
-    SFTP_DEFAULT_PORT = 22
-    
     def __init__(self, parent=None):
         '''
         Constructor
@@ -78,7 +73,7 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.lineEdit_port.setSizePolicy(sizePolicy)
         self.lineEdit_port.setMinimumSize(QtCore.QSize(50, 0))
         self.label_port.setBuddy(self.lineEdit_port)
-        self.lineEdit_port.setText(str(self.SFTP_DEFAULT_PORT))
+        self.lineEdit_port.setText(str(const.SFTP_DEFAULT_PORT))
         self.lineEdit_port.setObjectName("lineEdit_port")
         self.horizontalLayout_serveraddress.addWidget(self.lineEdit_port)
         
@@ -109,8 +104,8 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
         self.retranslate()
         
         # radiobutton mapping #
-        self.serverType_button_mapping = {self.Sftp:   self.radioButton_sftp,
-                                          self.Drupal: self.radioButton_drupal}
+        self.serverType_button_mapping = {const.Sftp:   self.radioButton_sftp,
+                                          const.Drupal: self.radioButton_drupal}
         
         self.button_serverType_mapping = dict(reversed(item) for item in self.serverType_button_mapping.items())
         
@@ -119,8 +114,8 @@ class ServerDetailsGroupBox(QtGui.QGroupBox):
     @QtCore.pyqtSlot(QtGui.QAbstractButton)
     def onServerTypeChange(self, button):
         servertype = self.button_serverType_mapping[button]
-        self.lineEdit_port.setEnabled(servertype == self.Sftp)
-        self.label_port.setEnabled(servertype == self.Sftp)
+        self.lineEdit_port.setEnabled(servertype == const.Sftp)
+        self.label_port.setEnabled(servertype == const.Sftp)
         
         
     def retranslate(self):

@@ -341,7 +341,6 @@ class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
         self.plugman = plugman
         for key in self.fields_provided.iterkeys():
             try:
-                print "%s Plugin: %s" % (self.CATEGORY,self.name)
                 self.set_visible(key, plugman.plugmanc.readOptionFromPlugin(
                         self.CATEGORY, self.name, key))
             except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
