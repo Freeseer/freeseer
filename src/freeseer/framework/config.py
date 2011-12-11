@@ -180,8 +180,8 @@ class BaseSectionConfig(object):
         self.config.add_section(self.section)
         for k, v in self.defaults.iteritems():
             self.config.set(self.section, k, v)
-def propertyargs(option):
-    return (lambda self:self.config.get(self.section, option),
+def propertyargs(option, rtype=lambda x:x):
+    return (lambda self:rtype(self.config.get(self.section, option)),
             lambda self, value:self.config.set(self.section, option, value))
 
 class UploaderConfig(BaseSubConfig):
@@ -200,7 +200,7 @@ class UploaderServerHistoryConfig(BaseSectionConfig):
     username = property(*propertyargs('username'))
     server = property(*propertyargs('server'))
     port = property(*propertyargs('port'))
-    servertype = property(*propertyargs('servertype'))
+    servertype = property(*propertyargs('servertype', int))
             
             
 # Config class test code
