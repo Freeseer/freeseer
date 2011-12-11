@@ -101,8 +101,18 @@ class UploaderApp(QtGui.QMainWindow):
         abspath = path.expanduser("~/Videos")
         self.mainWidget.fileselect.lineEdit_filepath.setText(abspath)
     def __loadSettings(self):
-        #self.core.config.videodir
-        pass
+        self.mainWidget.fileselect.lineEdit_filepath.setText(
+                self.core.config.videodir)
+        self.mainWidget.serverdetails.serverAddress = (
+                self.core.config.uploader.serverhistory.server)
+        servertype = self.core.config.uploader.serverhistory.servertype
+        if servertype != const.NotSelected:
+            self.mainWidget.serverdetails.serverType = servertype
+        if servertype == const.Sftp:
+            self.mainWidget.serverdetails.serverPort = (
+                    self.core.config.uploader.serverhistory.port)
+        self.mainWidget.serverdetails.username = (
+                self.core.config.uploader.serverhistory.username)
     def __initConnections(self):
         self.menubar.actionClose.triggered.connect(self.close)
         self.mainWidget.buttonbar.rejected.connect(self.close)
