@@ -16,6 +16,8 @@ DONE: load file metadata
  DONE: set visible columns
         - refactor current proof of concept code to simplify this
     time: 2-6hr (or more)
+ TODO: (extra) fix sorting by fields for duration and filesize 
+ 			(add an int field to sort by and a delegate to display the text) 
 
 DONE: select files
         all/none/invert/filter
