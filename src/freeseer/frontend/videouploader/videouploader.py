@@ -15,6 +15,7 @@ from freeseer.framework.core import FreeseerCore
 from freeseer.framework.metadata import FreeseerMetadataLoader
 from freeseer.frontend.videouploader import exfalsolauncher
 from freeseer.frontend.videouploader.ServerDetailsGroupBox import ServerDetailsGroupBox
+from freeseer.framework import const
 
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
@@ -26,8 +27,6 @@ def retranslateOnLanguageChange(klass):
     
     klass.changeEvent = changeEvent
     return klass
-
-
 
 @retranslateOnLanguageChange
 class UploaderApp(QtGui.QMainWindow):
@@ -147,11 +146,11 @@ class UploaderApp(QtGui.QMainWindow):
             validation_messages.append("Please enter the server address.")
         
         servertype = self.mainWidget.serverdetails.serverType
-        if servertype == ServerDetailsGroupBox.NotSelected:
+        if servertype == const.NotSelected:
             validation_messages.append("Server type not selected.")
             
         serverport = None
-        if servertype == ServerDetailsGroupBox.Sftp:
+        if servertype == const.Sftp:
             serverport = self.mainWidget.serverdetails.serverPort
             state, _ = self.mainWidget.serverdetails.port_validator.validate(
                                                                 serverport, 0)
@@ -170,7 +169,7 @@ class UploaderApp(QtGui.QMainWindow):
             QtGui.QMessageBox.critical(self, "", "\n".join(validation_messages))
             return None
             
-        drupal = servertype == ServerDetailsGroupBox.Drupal
+        drupal = servertype == const.Drupal
         
         return username, password, serveraddress, serverport, drupal, files
     
@@ -179,7 +178,16 @@ class UploaderApp(QtGui.QMainWindow):
         args = self._validateArguments()
         if args == None:
             return
+        
+#        self.core.config.
+        
         username, password, serveraddress, serverport, drupal, files = args
+        history = self.core.config.uploader.serverhistory
+        history.port = serverport
+        history.username = username
+        history.server = serveraddress
+        history.servertype = const.Drupal if drupal else const.Sftp
+        self.core.config.uploader.write()
         
         QtGui.QMessageBox.critical(self, "", "Not yet implemented")
         return
