@@ -30,30 +30,31 @@ class FreeseerMetadataLoader(pluginpkg.IMetadataReaderBase):
 
 #        plugin_manager.plugmanc
         self.plugman = plugin_manager
-        self.headers = {}
         if self.plugman == None:
             return
         assert isinstance(plugin_manager, pluginpkg.PluginManager)
-        self._cache_fields()
         
         for plugin in self.iter_active_plugins():
+            plugin.load_config(plugin_manager)
             self._chain_signals(plugin)
         
         plugin_manager.plugin_activated.connect(self.plugin_activated)
         plugin_manager.plugin_deactivated.connect(self.plugin_deactivated)
+        
+        
     
     def set_visible(self, field_id, value):
         plugin = next(p for p in self.iter_active_plugins() 
                       if p.get_fields().has_key(field_id))
         assert isinstance(plugin, IMetadataReader)
-        plugin.field_visibility_changed.emit(field_id, value)
+        plugin.set_visible(plugin.globaltolocal(field_id), value)
         
     def _field_visibility_changed(self, field_id, value):
-        print field_id, value
+#        print field_id, value
         self.field_visibility_changed.emit(field_id, value)
     
     def plugin_activated_or_deactivated(self, plugin_name, plugin_category, activated):
-        print(plugin_name, plugin_category)
+#        print(plugin_name, plugin_category)
         if plugin_category != pluginpkg.IMetadataReader.CATEGORY:
             return
         plugin = self.plugman.plugmanc.getPluginByName(plugin_name, plugin_category)
@@ -62,12 +63,6 @@ class FreeseerMetadataLoader(pluginpkg.IMetadataReaderBase):
         self.fields_changed.emit()
     plugin_activated = functools.partial(plugin_activated_or_deactivated, activated = True)
     plugin_deactivated = functools.partial(plugin_activated_or_deactivated, activated = False)
-    
-    def _cache_fields(self):
-        headers = {}
-        for plugin in self.iter_active_plugins():
-            headers.update(plugin.get_fields())
-        self.headers = headers
         
     def _chain_signals(self, plugin, connect=True):
         (plugin.field_visibility_changed.connect if connect else
@@ -106,12 +101,15 @@ class FreeseerMetadataLoader(pluginpkg.IMetadataReaderBase):
         '''
         @rtype: {str:IMetadataReader.header}
         '''
-        return self.headers
+        headers = {}
+        for plugin in self.iter_active_plugins():
+            headers.update(plugin.get_fields())
+        return headers
     
     def get_fields_sorted(self):
         '''
         @rtype: [(str, IMetadataReader.header)]
         fields are sorted based on the position value in the header.
         '''
-        return sorted(self.headers.iteritems(), key=lambda (k,v): v.position)
+        return sorted(self.get_fields().iteritems(), key=lambda (k,v): v.position)
         

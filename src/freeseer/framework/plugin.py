@@ -294,6 +294,7 @@ class IMetadataReaderBase(QtCore.QObject):
     field_visibility_changed = QtCore.pyqtSignal(
             "QString", bool, name="fieldVisibilityChanged")
 
+strtobool = lambda s:bool(s) and s != str(False)
 class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
     ## abstract class members/methods
     # this dict should be of type {string:header}
@@ -320,6 +321,7 @@ class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
         IBackendPlugin.__init__(self)
         IMetadataReaderBase.__init__(self)
         self.checkboxes = {}
+        self.fields = self._get_fields()
     
     def retrieve_metadata(self, filepath):
         '''
@@ -336,24 +338,32 @@ class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
         self.retrieve_metadata_batch_end()
     
     def load_config(self, plugman):
-        self.plugman.plugmanc = plugman
+        self.plugman = plugman
         for key in self.fields_provided.iterkeys():
             try:
-                self.set_visible(key, self.plugman.readOptionFromPlugin(
+                print "%s Plugin: %s" % (self.CATEGORY,self.name)
+                self.set_visible(key, plugman.plugmanc.readOptionFromPlugin(
                         self.CATEGORY, self.name, key))
-            except ConfigParser.NoSectionError:
-                self.set_visible(key, self.plugman.registerOptionFromPlugin(
-                        self.CATEGORY, self.name, key, True))
+            except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+                plugman.plugmanc.registerOptionFromPlugin(
+                        self.CATEGORY, self.name, key, 
+                        self.fields[self.localtoglobal(key)].visible)
+#                self.set_visible(key, True)
     
     def set_visible(self, option_name, option_value):
         self.plugman.plugmanc.registerOptionFromPlugin(
-                self.CATEGORY, self.name, option_name, option_value)
+                self.CATEGORY, self.name, option_name, str(option_value))
         self.plugman.save()
+        self.fields[self.localtoglobal(option_name)].visible = strtobool(option_value)
         # dispatch signal to notify any slots of changes
 #        self.field_visibility_changed.emit(option_name, option_value)
         self.field_visibility_changed.emit(
-                ".".join(type(self).__name__, option_name),
-                option_value)
+                self.localtoglobal(option_name),
+                strtobool(option_value))
+        
+#    globaltolocal = lambda field_id: field_id.split(".",1)[1]
+    globaltolocal = lambda self, field_id: field_id[len(type(self).__name__)+1:]
+    localtoglobal = lambda self, option_name: ".".join((type(self).__name__, option_name))
     
     def get_widget(self):
         if self.widget is None:
@@ -374,11 +384,12 @@ class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         for key in self.fields_provided:
-            self.checkboxes[key].setChecked(self.plugman.readOptionFromPlugin(
-                self.CATEGORY, self.name, key))
+            checked = self.plugman.plugmanc.readOptionFromPlugin(
+                self.CATEGORY, self.name, key)
+            self.checkboxes[key].setChecked(strtobool(checked))
     
     @classmethod
-    def get_fields(cls):
+    def _get_fields(cls):
         '''
         ensures that the field dictionary is unique
         @return: Dict of field: IMetadataReader.header
@@ -386,6 +397,8 @@ class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
         return dict((".".join((cls.__name__,k)),v) for (k,v) in cls.fields_provided.iteritems())
         #python 2.7+ only
 #        return {".".join((cls.__name__,k)) : v for k in cls.fields_provided.iteritems()} 
+    def get_fields(self):
+        return self.fields
 
     # the following commented code precaches unique names for fields
 #    ufields_provided = {}

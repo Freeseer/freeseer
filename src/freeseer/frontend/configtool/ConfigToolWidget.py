@@ -78,6 +78,8 @@ class ConfigToolWidget(QtGui.QWidget):
         self.optionsTreeWidget.topLevelItem(1).child(3).setText(0, "VideoMixer")
         item_1 = QtGui.QTreeWidgetItem(item_0)
         self.optionsTreeWidget.topLevelItem(1).child(4).setText(0, "Output")
+        item_m = QtGui.QTreeWidgetItem(item_0)
+        self.optionsTreeWidget.topLevelItem(1).child(5).setText(0, "Metadata")
         
         # Logger
         item_2 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
