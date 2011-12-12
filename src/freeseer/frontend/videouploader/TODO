@@ -22,7 +22,7 @@ DONE: load file metadata
 DONE: select files
         all/none/invert/filter
 
-TODO: maintain a list of favourite directories
+TODO: (extra) maintain a list of favourite directories
         - load from preferences file (loadFavorites slot)
         - connect directory favourite signal to populate slot
         - show a prompt when adding a favourite
@@ -36,14 +36,21 @@ TODO: (extra)
 
 TODO: actual uploading
         When upload button is pressed:
+        DONE:
           - do a simple validation, check that something is in the username, password, server and port fields, and at least one file is selected
             - collect list of currently checked files
             - create slot, connect signal
+        TODO/BLOCKED:
           - pass arguments to uploader.py, execute.
+          - uploader.py doesn't work. this task is blocked on its completion, or replacement
+        TODO: 
           - make a dialog box to show the current progress
-	  time: .5-1.5hr
+	  			time: 1-3hr
+	  	TODO: (extra)
+	  	  - make a nice queue manager for the uploads.
+	  	  		time: 3-6 hr
 
-TODO: add menu entry to main freeseer window
+DONE: add menu entry to main freeseer window
         time: .5 hr
 
 -------------------
@@ -74,6 +81,12 @@ Misc notes on translation:
    - call QTranslator.load() when we want to change the tranlsation
    - decorate your gui classes with @videouploader.retranslateOnLanguageChange
      - they must have a retranslate function
-    
-time remaining: 9 to 26 hours
-mandatory time: about 6 hours (hopefully)
+
+
+mandatory tasks remaining: 
+	Progress Indicator
+		time: about 1 or 2 hours (hopefully)
+	WORKING uploader code
+		when it's developed, it can be called at videouploader.UploaderApp.upload()
+		time: unknown
+ 

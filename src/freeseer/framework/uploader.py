@@ -75,10 +75,12 @@ class Transport(transport.SSHClientTransport):
 class UserAuth(userauth.SSHUserAuthClient):
     
     def getPassword(self):
+        print "getpassword"
         try:
             passwd = defer.succeed(getpass.getpass("%s@%s's password: " % (USER, HOST)))
         except getpass.GetPassWarning:
             print "Ooop that was not a valid password, %s" % passwd
+        print "getpassword return"
         return passwd
             
     def getPublicKey(self):
@@ -96,6 +98,7 @@ class UserAuth(userauth.SSHUserAuthClient):
 class ClientConnection(connection.SSHConnection):
 
     def serviceStarted(self):
+        print "clientconnection servicestarted", PROTOCOL
         if PROTOCOL == 'scp':
             self.openChannel(ScpChannel(2**16, 2**15, self))
         else:
@@ -174,13 +177,22 @@ class ScpChannel(TransferChannelBase):
 class SftpChannel(TransferChannelBase):
     #start SFTP transfer 
     def channelOpened(self, data):
+        print "sftpchannel channelopened"
         self.client = filetransfer.FileTransferClient()
         self.client.makeConnection(self)
-        #self.dataReceived = self.client.dataReceived
-        #d = self.client.openFile(SRC, filetransfer.FXF_READ, {})
-        #d.addCallbacks(self.fileOpened, log.err)
+        self.dataReceived = self.client.dataReceived
+#        d = self.client.openFile(SRC, filetransfer.FXF_READ, {})
+        # todo: select a destination directory for the video
+        d = self.client.openFile(VIDEO, filetransfer.FXF_READ, {})
+        d.addCallbacks(self.fileOpened, log.err)
+
+    def fileOpened(self, result):
+        # TODO: do something.
+#        assert isinstance(result, filetransfer.ClientFile)
+        pass
 
     def getDirectoryContents(self, path):
+        print "getdirectorycontents"
         return self._remoteGlob(path)
 
         
@@ -394,6 +406,9 @@ class DrupalNode:
         self.saveNode()
             
 if __name__ == '__main__':
+    # sftp doesn't work
+    # scp is untested (probably broken)
+    # drupal is untested (probably works)
     drupal = False
     
     if '-u' in sys.argv:
