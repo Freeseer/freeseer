@@ -45,6 +45,7 @@ class UploaderApp(QtGui.QMainWindow):
         
         # superclass #
         QtGui.QMainWindow.__init__(self, None)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         
         # define members #
         self.core = core
