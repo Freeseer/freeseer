@@ -16,6 +16,10 @@ from freeseer.framework.metadata import FreeseerMetadataLoader
 from freeseer.frontend.videouploader import exfalsolauncher
 from freeseer.frontend.videouploader.ServerDetailsGroupBox import ServerDetailsGroupBox
 from freeseer.framework import const
+from freeseer.frontend.videouploader.UploadProgressIndicator import UploadProgressIndicator
+import time
+import functools
+import logging
 
 def retranslateOnLanguageChange(klass):
     def changeEvent(self, event):
@@ -51,6 +55,7 @@ class UploaderApp(QtGui.QMainWindow):
         self.core = core
         self.mainWidget = None
         self.menubar = None
+        self.backend = None
         
         metadataloader = FreeseerMetadataLoader(core.plugman)
         
@@ -171,7 +176,6 @@ class UploaderApp(QtGui.QMainWindow):
                 serverport = int(serverport)
         
         files = self.mainWidget.fileselect.filemodel.getSelectedFiles()
-        print files
         
         if len(files) <= 0:
             validation_messages.append("Please select one or more files.")
@@ -183,15 +187,7 @@ class UploaderApp(QtGui.QMainWindow):
         drupal = servertype == const.Drupal
         
         return username, password, serveraddress, serverport, drupal, files
-    
-    @QtCore.pyqtSlot()
-    def upload(self):
-        args = self._validateArguments()
-        if args == None:
-            return
-        
-#        self.core.config.
-        
+    def _saveHistory(self, args):
         username, password, serveraddress, serverport, drupal, files = args
         history = self.core.config.uploader.serverhistory
         history.port = serverport
@@ -199,21 +195,27 @@ class UploaderApp(QtGui.QMainWindow):
         history.server = serveraddress
         history.servertype = const.Drupal if drupal else const.Sftp
         self.core.config.uploader.write()
+    
+    @QtCore.pyqtSlot()
+    def upload(self):
+        args = self._validateArguments()
+        if args == None:
+            return
+        self._saveHistory(args)
+        _,_,serveraddress,_,_,files = args
+        progressIndicator = UploadProgressIndicator()
+        self.backend = UploaderBackend(args, progressIndicator)
+        progressIndicator.fileList = files
+        progressIndicator.destination = serveraddress
         
-        QtGui.QMessageBox.critical(self, "", "Not yet implemented")
-        return
+        # connect signals/slots between backend and frontend
+        progressIndicator.cancelRequested.connect(self.backend.cancel)
+        progressIndicator.forceCancelRequested.connect(self.backend.forceCancel)
+        self.backend.uploadStarted.connect(progressIndicator.setCurrent)
+        self.backend.uploadsComplete.connect(progressIndicator.onComplete)
+        progressIndicator.show()
         
-        from freeseer.framework import uploader
-        # TODO: set global variables (uuuggghh) in uploader and run.
-#        if drupal:
-#            video = VideoData(VIDEO)
-#            video.run()
-#            node = DrupalNode (video.title, video.body, USER, PASS, HOST, VIDEO)
-#            node.save()
-#        else:
-#            protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
-#            reactor.run() #@UndefinedVariable
-        
+        self.backend.uploadAll()
         self.close()
     
     def browse(self):
@@ -255,7 +257,101 @@ class UploaderApp(QtGui.QMainWindow):
     def launchExFalso(self):
         #exfalsolauncher.run_in_new_process(self.mainWidget.fileselect.directory)
         exfalsolauncher.run(str(self.mainWidget.fileselect.directory))
-  
+        
+class UploaderBackend(QtCore.QObject):
+    '''
+    This class starts a single thread that uploads individual files
+    '''
+    def __init__(self, args, parent=None):
+        super(UploaderBackend, self).__init__(parent)
+        self.currentindex = -1
+        self.numfiles = len(args[5])
+        self.cancelRequested = False
+        self.cancelForced = False
+        
+        # we use a different thread so that the ui isn't blocked
+        self.uploadThread = UploaderBackendThread(args, self)
+        self.uploadThread.finished.connect(self._uploadNext)
+#        
+#        self.current = QtCore.QTimer()
+    
+    # called when a single upload is started
+    uploadStarted = QtCore.pyqtSignal(int)
+    
+    # called when all uploads are complete
+    uploadsComplete = QtCore.pyqtSignal(int)
+    
+#    _startUpload = QtCore.pyqtSignal()
+    
+    def uploadAll(self):
+        self.currentindex = -1
+        self._uploadNext()
+        
+    def _uploadNext(self):
+        index = self.currentindex
+        if self.cancelRequested:
+            self.uploadsComplete.emit(index+1)
+            return
+        if self.cancelForced:
+#            self.uploadsComplete.emit(index)
+            return
+        
+        if index+1 >= self.numfiles:
+            self.uploadsComplete.emit(index+1)
+        else:
+            self.currentindex = index+1
+            self.upload(self.currentindex)
+    
+    def upload(self, index):
+        self.uploadThread.current = index
+        self.uploadStarted.emit(index)
+        self.uploadThread.start()
+#        self._uploadNext(index)
+    
+    def cancel(self):
+        self.cancelRequested=True
+    
+    def forceCancel(self):
+        self.cancelForced=True
+        # todo: find a better way to terminate upload
+        self.uploadThread.terminate()
+        self.uploadsComplete.emit(self.currentindex)
+
+class UploaderBackendThread(QtCore.QThread):
+    def __init__(self, args, parent=None):
+        super(UploaderBackendThread, self).__init__(parent)
+        (self.username, 
+         self.password, 
+         self.serveraddress, 
+         self.serverport, 
+         self.drupal, 
+         self.files) = args
+        self.current = -1
+    
+    def __del__(self):
+        self.wait()
+    
+    def run(self):
+        current_file = self.files[self.current]
+        logging.info("Uploading {}".format(current_file))
+        
+#        from freeseer.framework import uploader
+        # TODO: set global variables (uuuggghh) in uploader and run.
+        # or write a better alternative to uploader
+        
+        # following is code from the uploader's main that we will have to emulate
+#        if drupal:
+#            video = VideoData(VIDEO)
+#            video.run()
+#            node = DrupalNode (video.title, video.body, USER, PASS, HOST, VIDEO)
+#            node.save()
+#        else:
+#            protocol.ClientCreator(reactor, Transport).connectTCP(HOST, 22)
+#            reactor.run() #@UndefinedVariable
+        
+        # placeholder for basic ui testing
+        time.sleep(12)
+         
 if __name__ == '__main__':
     import sys
     app = QtGui.QApplication(sys.argv)
