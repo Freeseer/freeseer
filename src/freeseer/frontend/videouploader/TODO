@@ -84,9 +84,8 @@ Misc notes on translation:
 
 
 mandatory tasks remaining: 
-	Progress Indicator
-		time: about 1 or 2 hours (hopefully)
 	WORKING uploader code
-		when it's developed, it can be called at videouploader.UploaderApp.upload()
+		the current code at freeseer.framework.uploader doesn't work as expected
+		when it's fixed or replaced, call it in videouploader.UploaderBackendThread.run()
 		time: unknown
  

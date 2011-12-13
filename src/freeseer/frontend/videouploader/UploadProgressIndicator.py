@@ -6,29 +6,65 @@ class UploadProgressIndicator(QtGui.QWidget):
     def __init__(self, parent=None):
         super(UploadProgressIndicator, self).__init__(parent)
         self.ui = Ui_UploadProgressIndicator(self)
-        
         self.ui.buttonBox.rejected.connect(self.onCancel)
         
-    def setFileList(self, files):
-        pass
+        self._fileList = []
+        self._destination = ''
+        self._current = 0
+        
+        self.cancelPrompt = None
+        self.completeReviewer = None
+        
+    fileList = property(lambda self:self._fileList)
+    @fileList.setter
+    def fileList(self, files):
+        self.ui.progressBar.setMaximum(len(files))
+        self._fileList = files
     
-    def setDestination(self, server):
-        pass
+    destination = property(lambda self:self._destination)
+    @destination.setter
+    def destination(self, server):
+        self._destination = server
+        self.ui.label_destination.setText(server)
     
+    current = property(lambda self:self._current)
+    @current.setter
+    def current(self, index):
+        self._current = index
+        self.ui.label_current.setText(self.fileList[index])
+        self.ui.progressBar.setValue(index+1)
+        
+    @QtCore.pyqtSlot(int)
     def setCurrent(self, index):
-        pass
-    
+        self.current = index
+        
     def onCancel(self):
+        self.cancelPrompt = UploadCancelPrompt(self)
+        self.cancelPrompt.accepted.connect(self.forceCancel)
+        self.cancelPrompt.delayedAndAccepted.connect(self.cancel)
+        self.cancelPrompt.show()
+        
+    def cancel(self):
+        self.cancelRequested.emit()
+        
+    def forceCancel(self):
+        self.forceCancelRequested.emit()
         self.close()
+    
+    @QtCore.pyqtSlot(int)
+    def onComplete(self, num=-1):
+        if num == -1:
+            num = len(self.fileList)
+        self.close()
+        self.completeReviewer = UploadCompleteReviewer()
+        self.completeReviewer.setFileList(self.fileList[:num])
+        self.completeReviewer.show()
         
-#    def onComplete(self):
-#        self.ui.displayComplete(True)
-        
-    def resizeEvent(self, event):
-        print event
-        return QtGui.QWidget.resizeEvent(self, event)
+#    def resizeEvent(self, event):
+#        return QtGui.QWidget.resizeEvent(self, event)
     
     cancelRequested = QtCore.pyqtSignal()
+    forceCancelRequested = QtCore.pyqtSignal()
         
     retranslate = lambda self:self.ui.retranslateUi()
 
@@ -36,7 +72,6 @@ class Ui_UploadProgressIndicator(object):
     def __init__(self, target):
         assert isinstance(target, UploadProgressIndicator)
         self.target = target
-        self.iscomplete = False
         target.setWindowFlags(target.windowFlags() & ~Qt.WindowCloseButtonHint & ~Qt.WindowMaximizeButtonHint)
         
         target.resize(400, 140)
@@ -81,12 +116,6 @@ class Ui_UploadProgressIndicator(object):
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(target)
     
-    def displayComplete(self, iscomplete):
-        self.iscomplete = iscomplete
-        (self.statusWidget if iscomplete else self.completeWidget).setVisible(False)
-        (self.completeWidget if iscomplete else self.statusWidget).setVisible(True)
-        self.retranslateUi()
-    
     def retranslateUi(self):
         self.target.setWindowTitle(QtGui.QApplication.translate(
                 "UploadProgressIndicator", "Uploading Videos", 
@@ -101,17 +130,41 @@ class Ui_UploadProgressIndicator(object):
                 "UploadProgressIndicator", "Transferring file %v of %m (%p%)", 
                 None, QtGui.QApplication.UnicodeUTF8))
 
-class UploadCancelPrompt(QtGui.QDialog):
-    def __init__(self):
-        super(UploadCancelPrompt, self).__init__()
-#        self.ui = Ui_UploadCancelPrompt(self)
+class UploadCancelPrompt(QtGui.QMessageBox):
+    def __init__(self, parent=None):
+        super(UploadCancelPrompt, self).__init__(QtGui.QMessageBox.Question,
+            QtGui.QApplication.translate(
+                "UploadCancelPrompt", "Cancel Upload", 
+                None, QtGui.QApplication.UnicodeUTF8), 
+                QtGui.QApplication.translate(
+                "UploadCancelPrompt", "Are you sure you want to cancel the current upload?", 
+                None, QtGui.QApplication.UnicodeUTF8),
+            buttons=QtGui.QMessageBox.Yes|QtGui.QMessageBox.No, 
+            parent=parent)
+        self.thirdoption = QtGui.QPushButton(
+                QtGui.QApplication.translate(
+                "UploadCancelPrompt", "Yes, but &finish the current file",
+                None, QtGui.QApplication.UnicodeUTF8))
+        self.addButton(self.thirdoption, QtGui.QMessageBox.YesRole)
         
-#        QtGui.QDialog.
+        self.setDefaultButton(self.Yes)
+        self.setEscapeButton(self.No)
+        
+        self.button(self.Yes).clicked.connect(self.accept)
+        self.button(self.No).clicked.connect(self.reject)
+        self.thirdoption.clicked.connect(self.delayAndAccept)
+        
+    @QtCore.pyqtSlot()
+    def delayAndAccept(self):
+        self.delayedAndAccepted.emit()    
+    
+    delayedAndAccepted = QtCore.pyqtSignal()
 
 class UploadCompleteReviewer(QtGui.QDialog):
     def __init__(self, parent=None):
         super(UploadCompleteReviewer, self).__init__(parent)
         self.ui = Ui_UploadCompleteReviewer(self)
+        self.ui.buttonBox.accepted.connect(self.accept)
     
     def setFileList(self, files):
         self.ui.textEdit_completeStatus.setText("\n".join(files))
@@ -153,10 +206,6 @@ if __name__ == "__main__":
     main.show()
     secondary = UploadCompleteReviewer()
     secondary.show()
-    msgbox = QtGui.QMessageBox(QtGui.QMessageBox.Question,
-            "Cancel Upload", "Are you sure you want to cancel the current upload?", 
-            QtGui.QMessageBox.Yes|QtGui.QMessageBox.No)
-    msgbtn_tertiary = QtGui.QPushButton("Finish the current upload and cancel the rest")
-    msgbox.addButton(msgbtn_tertiary, QtGui.QMessageBox.ActionRole)
-    msgbox.show()
+#    msgbox = UploadCancelPrompt(main)
+#    msgbox.show()
     sys.exit(app.exec_())
