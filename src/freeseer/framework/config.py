@@ -198,7 +198,7 @@ class UploaderServerHistoryConfig(BaseSectionConfig):
     defaults = {'username':'',
                 'server':'',
                 'port':str(const.SFTP_DEFAULT_PORT),
-                'servertype':const.NotSelected}
+                'servertype':str(const.NotSelected)}
     
     username = property(*propertyargs('username'))
     server = property(*propertyargs('server'))
