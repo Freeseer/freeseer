@@ -1,14 +1,10 @@
 TODO list
 
-TODO: test uploader.py to make sure it works
-        - pending response from author of uploader.py
+TODO: test uploader.py to see how much of it actually works
         - need a working ftp and drupal server (or instructions on how to set up a simple one locally)
-    time: 2-6hr
 
 DONE: finish modularization of user interface files
-
-DONE: populate file list (populateFiles slot)
-
+DONE: populate file list
 DONE: load file metadata 
  DONE: create simple plugin system for using different libraries to load metadata
         - add a new class to plugin.py
@@ -19,8 +15,9 @@ DONE: load file metadata
  TODO: (extra) fix sorting by fields for duration and filesize 
  			(add an int field to sort by and a delegate to display the text) 
 
-DONE: select files
-        all/none/invert/filter
+DONE: select files all/none/invert
+ (extra): toggle all/none/invert on currently highlighted files
+ (extra): a filter tool (might not be useful; submit an RFC)
 
 TODO: (extra) maintain a list of favourite directories
         - load from preferences file (loadFavorites slot)
@@ -43,7 +40,7 @@ TODO: actual uploading
         TODO/BLOCKED:
           - pass arguments to uploader.py, execute.
           - uploader.py doesn't work. this task is blocked on its completion, or replacement
-        TODO: 
+        DONE: 
           - make a dialog box to show the current progress
 	  			time: 1-3hr
 	  	TODO: (extra)
@@ -51,37 +48,8 @@ TODO: actual uploading
 	  	  		time: 3-6 hr
 
 DONE: add menu entry to main freeseer window
-        time: .5 hr
 
--------------------
-(misc)
-DONE: wire up close button.
-DONE: make sure tab order is sensible
-
-TODO: make some automated tests
-TODO: make some manual tests
-	time: 2-6 hr
-	
 TODO: add translation settings
-
-Misc notes on translation:
-  - the current translation scheme could use some work; this could be a possible future fosslc/gsoc project
-  - should be converted to whatever the standard for qt is, and get & listen to the system language
-  
-  - or we could continue on our custom organization, and set it up to use mixins.
-  - if I do have time or need to add transation settings, I'll be making a mixin
-    - making the mixin will simply involve moving the translation logic from talkeditor to a new class, 
-       and inheriting that class in talkeditorApp. then inherit that class in videouploaderApp 
-  
-  scratch that, i figured it out.
-  http://www.pyside.org/docs/pyside/PySide/QtCore/QCoreApplication.html#PySide.QtCore.PySide.QtCore.QCoreApplication.installTranslator
-  
-  All we need to do for dynamic translation is 
-   - call QtCore.QCoreApplication.installTranslator() at the beginning
-   - call QTranslator.load() when we want to change the tranlsation
-   - decorate your gui classes with @videouploader.retranslateOnLanguageChange
-     - they must have a retranslate function
-
 
 mandatory tasks remaining: 
 	WORKING uploader code
