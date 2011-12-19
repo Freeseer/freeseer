@@ -310,7 +310,6 @@ class ConfigToolApp(QtGui.QMainWindow):
             self.mainWidgetLayout.removeWidget(self.currentWidget)
             self.currentWidget.hide()
           
-        print self.metadataString, option
         if option == self.generalString:
             self.load_general_widget()
         elif option == self.pluginsString:
