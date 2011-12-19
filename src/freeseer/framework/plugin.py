@@ -25,6 +25,7 @@
 import ConfigParser
 import logging
 import os
+import functools
 
 import pygst
 pygst.require("0.10")
@@ -33,9 +34,20 @@ import gst
 from yapsy.PluginManager import PluginManagerSingleton
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
+from PyQt4 import QtCore, QtGui
 
-class PluginManager:
+class PluginManager(QtCore.QObject):
+    '''
+    @signal pluginActivated(plugin_name, plugin_category)
+    Emitted when a plugin is activated.
+    
+    @signal pluginDectivated(plugin_name, plugin_category)
+    Emitted when a plugin is deactivated.
+    '''
+    
     def __init__(self, configdir):
+        QtCore.QObject.__init__(self)
+        
         self.firstrun = False
         plugman = PluginManagerSingleton().get()
         
@@ -59,12 +71,18 @@ class PluginManager:
             "VideoInput" : IVideoInput,
             "VideoMixer" : IVideoMixer,
             "Output" : IOutput,
+            IMetadataReader.CATEGORY: IMetadataReader
             })
         self.plugmanc.collectPlugins()
         
         # If config was corrupt or did not exist, reset default plugins.
         if self.firstrun == True:
             self.set_default_plugins()
+        else:
+            # activate the default metadata reader plugins if none are active
+            if not any(p.is_activated for p in 
+                       plugman.getPluginsOfCategory(IMetadataReader.CATEGORY)):
+                self._activate_default_metadata_plugins()
             
         for plugin in self.plugmanc.getAllPlugins():
             plugin.plugin_object.set_plugman(self)
@@ -104,7 +122,13 @@ class PluginManager:
         self.activate_plugin("USB Source", "VideoInput")
         self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "USB Source")
         self.activate_plugin("Ogg Output", "Output")
+        self._activate_default_metadata_plugins()
         logging.debug("Default plugins activated.")
+        
+    def _activate_default_metadata_plugins(self):
+        self.activate_plugin("Filename Parser", IMetadataReader.CATEGORY)
+        self.activate_plugin("GstDiscoverer Parser", IMetadataReader.CATEGORY)
+        self.activate_plugin("os.stat Parser", IMetadataReader.CATEGORY)
         
     def save(self):
         with open(self.configfile, 'w') as configfile:
@@ -113,12 +137,21 @@ class PluginManager:
     def activate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
         self.save()
+        self.plugin_activated.emit(plugin_name, plugin_category)
         logging.debug("Plugin %s activated." % plugin_name)
         
     def deactivate_plugin(self, plugin_name, plugin_category):
         self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
         self.save()
+        self.plugin_deactivated.emit(plugin_name, plugin_category)
         logging.debug("Plugin %s deactivated." % plugin_name)
+        
+    # the arguments are plugin_name, plugin_category
+    plugin_activated = QtCore.pyqtSignal(
+            "QString", "QString", name="pluginActivated")
+    plugin_deactivated = QtCore.pyqtSignal(
+            "QString", "QString", name="pluginDectivated")
+    
 
 class IBackendPlugin(IPlugin):
     name = None
@@ -262,3 +295,160 @@ class IOutput(IBackendPlugin):
         Set the metadata if supported by Output plugin. 
         """
         pass
+
+class IMetadataReaderBase(QtCore.QObject):
+    def __init__(self):
+        QtCore.QObject.__init__(self)
+    
+    class header(object):
+        '''
+        defines the data that is being depicted by the metadata
+        @ivar name:Human readable name of the field
+        @ivar type:expected type (not used)
+        @ivar position:where the field should go in relation to the others
+                        (we sort by this value when populating the headers)
+        @ivar visible:if the field is currently visible (get from settings)
+        '''
+        # todo: load visibility from settings.
+        def __init__(self, name, typ=None, pos=0, visible=True):
+            self.name = name
+            self.type = typ
+            self.position = pos
+            self.visible = visible
+            
+    def retrieve_metadata(self, filepath):
+        raise NotImplementedError
+    
+    def retrieve_metadata_batch(self, filepath_list):
+        raise NotImplementedError
+    
+    def get_fields(self):
+        raise NotImplementedError
+            
+    field_visibility_changed = QtCore.pyqtSignal(
+            "QString", bool, name="fieldVisibilityChanged")
+
+strtobool = lambda s:bool(s) and s != str(False)
+class IMetadataReader(IBackendPlugin, IMetadataReaderBase):
+    ## abstract class members/methods
+    # this dict should be of type {string:header}
+    # Don't use externally! use get_fields() instead
+    fields_provided = {}
+    
+    def retrieve_metadata_internal(self, filepath):
+        raise NotImplementedError
+    
+    def retrieve_metadata_batch_begin(self):
+        '''
+        Optional abstract method
+        '''
+    
+    def retrieve_metadata_batch_end(self):
+        '''
+        Optional abstract method
+        '''
+    
+    ## concrete class members/methods
+    CATEGORY = "Metadata"
+    
+    def __init__(self):
+        IBackendPlugin.__init__(self)
+        IMetadataReaderBase.__init__(self)
+        self.checkboxes = {}
+        self.fields = self._get_fields()
+    
+    def retrieve_metadata(self, filepath):
+        '''
+        @return: Dict of field: data
+        '''
+        n = type(self).__name__
+        return dict((".".join((n,k)),v) for (k,v) in 
+                    self.retrieve_metadata_internal(filepath).iteritems())
+    
+    def retrieve_metadata_batch(self, filepath_list):
+        self.retrieve_metadata_batch_begin()
+        for filepath in filepath_list:
+            yield self.retrieve_metadata(filepath)
+        self.retrieve_metadata_batch_end()
+    
+    def load_config(self, plugman):
+        self.plugman = plugman
+        for key in self.fields_provided.iterkeys():
+            try:
+                self.set_visible(key, plugman.plugmanc.readOptionFromPlugin(
+                        self.CATEGORY, self.name, key))
+            except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+                plugman.plugmanc.registerOptionFromPlugin(
+                        self.CATEGORY, self.name, key, 
+                        self.fields[self.localtoglobal(key)].visible)
+#                self.set_visible(key, True)
+    
+    def set_visible(self, option_name, option_value):
+        self.plugman.plugmanc.registerOptionFromPlugin(
+                self.CATEGORY, self.name, option_name, str(option_value))
+        self.plugman.save()
+        self.fields[self.localtoglobal(option_name)].visible = strtobool(option_value)
+        # dispatch signal to notify any slots of changes
+#        self.field_visibility_changed.emit(option_name, option_value)
+        self.field_visibility_changed.emit(
+                self.localtoglobal(option_name),
+                strtobool(option_value))
+        
+#    globaltolocal = lambda field_id: field_id.split(".",1)[1]
+    globaltolocal = lambda self, field_id: field_id[len(type(self).__name__)+1:]
+    localtoglobal = lambda self, option_name: ".".join((type(self).__name__, option_name))
+    
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QVBoxLayout(self.widget)
+            self.widget.setLayout(layout)
+            
+            for key in self.fields_provided:
+                cbox = QtGui.QCheckBox(
+                        self.fields_provided[key].name, self.widget)
+                layout.addWidget(cbox)
+                cbox.toggled.connect(functools.partial(self.set_visible, key))
+                self.checkboxes[key] = cbox
+            
+        return self.widget
+    
+    def widget_load_config(self, plugman):
+        self.load_config(plugman)
+        for key in self.fields_provided:
+            checked = self.plugman.plugmanc.readOptionFromPlugin(
+                self.CATEGORY, self.name, key)
+            self.checkboxes[key].setChecked(strtobool(checked))
+    
+    @classmethod
+    def _get_fields(cls):
+        '''
+        ensures that the field dictionary is unique
+        @return: Dict of field: IMetadataReader.header
+        '''
+        return dict((".".join((cls.__name__,k)),v) for (k,v) in cls.fields_provided.iteritems())
+        #python 2.7+ only
+#        return {".".join((cls.__name__,k)) : v for k in cls.fields_provided.iteritems()} 
+    def get_fields(self):
+        return self.fields
+
+    # the following commented code precaches unique names for fields
+#    ufields_provided = {}
+#    @classmethod
+#    def get_fields(cls):
+#        '''
+#        @return: Dict of field: header
+#        '''
+#        return cls.ufields_provided
+#    
+#    @staticmethod
+#    def setup_ufields_on_subclasses(name, bases, attrs):
+#        cls = type(name, bases, attrs)
+#        
+#        cls.ufields_provided = dict((".".join((name,k)),v) for (k,v) in cls.fields_provided)
+#        #cls.ufields_provided = {".".join((name,k)) : v for k in cls.fields_provided} #python 2.7+ only
+#    __metaclass__ = setup_ufields_on_subclasses
+        
+        
+    

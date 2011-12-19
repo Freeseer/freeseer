@@ -1,0 +1,59 @@
+TODO list
+
+TODO: test uploader.py to see how much of it actually works
+        - need a working ftp and drupal server (or instructions on how to set up a simple one locally)
+
+DONE: finish modularization of user interface files
+DONE: populate file list
+DONE: load file metadata 
+ DONE: create simple plugin system for using different libraries to load metadata
+        - add a new class to plugin.py
+        - OPTIONAL: expose settings to GUI
+ DONE: set visible columns
+        - refactor current proof of concept code to simplify this
+    time: 2-6hr (or more)
+ TODO: (extra) fix sorting by fields for duration and filesize 
+ 			(add an int field to sort by and a delegate to display the text) 
+
+DONE: select files all/none/invert
+ (extra): toggle all/none/invert on currently highlighted files
+ (extra): a filter tool (might not be useful; submit an RFC)
+
+TODO: (extra) maintain a list of favourite directories
+        - load from preferences file (loadFavorites slot)
+        - connect directory favourite signal to populate slot
+        - show a prompt when adding a favourite
+        - allow for management of favourites in preferences dialog
+    Do this last, leave out if time runs out
+    time: 2-6 hr
+
+TODO: (extra)
+	maintain a list of recently used server settings
+	time: 2-6 hr
+
+TODO: actual uploading
+        When upload button is pressed:
+        DONE:
+          - do a simple validation, check that something is in the username, password, server and port fields, and at least one file is selected
+            - collect list of currently checked files
+            - create slot, connect signal
+        TODO/BLOCKED:
+          - pass arguments to uploader.py, execute.
+          - uploader.py doesn't work. this task is blocked on its completion, or replacement
+        DONE: 
+          - make a dialog box to show the current progress
+	  			time: 1-3hr
+	  	TODO: (extra)
+	  	  - make a nice queue manager for the uploads.
+	  	  		time: 3-6 hr
+
+DONE: add menu entry to main freeseer window
+
+TODO: add translation settings
+
+mandatory tasks remaining: 
+	WORKING uploader code
+		the current code at freeseer.framework.uploader doesn't work as expected
+		when it's fixed or replaced, call it in videouploader.UploaderBackendThread.run()
+		time: unknown
+ 

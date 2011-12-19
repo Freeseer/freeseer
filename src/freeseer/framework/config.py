@@ -24,6 +24,7 @@
 
 import ConfigParser
 import os
+from freeseer.framework import const
 
 class Config:
     '''
@@ -41,6 +42,9 @@ class Config:
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
+        self.uploaderfile = os.path.abspath("{}/uploader.conf".format(self.configdir))
+        
+        self.uploader = UploaderConfig(self.uploaderfile)
         
         #
         # Set default settings
@@ -151,6 +155,56 @@ class Config:
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:
             config.write(configfile)
+
+class BaseSubConfig(object):
+    def __init__(self, filename):
+        self.config = ConfigParser.ConfigParser()
+        self.filename = filename
+        self.sections = []
+    
+    def _finishinit(self):
+        try:
+            with open(self.filename) as f:
+                self.config.readfp(f)
+        except IOError:
+            for s in self.sections:
+                s.set_defaults()
+    def write(self):
+        with open(self.filename, 'w') as f:
+            self.config.write(f)
+class BaseSectionConfig(object):
+    defaults = {}
+    section = ''
+    
+    def __init__(self, config):
+        self.config = config
+    
+    def set_defaults(self):
+        self.config.add_section(self.section)
+        for k, v in self.defaults.iteritems():
+            self.config.set(self.section, k, v)
+def propertyargs(option, rtype=lambda x:x):
+    return (lambda self:rtype(self.config.get(self.section, option)),
+            lambda self, value:self.config.set(self.section, option, value))
+
+class UploaderConfig(BaseSubConfig):
+    def __init__(self, filename):
+        BaseSubConfig.__init__(self, filename)
+        self.serverhistory = UploaderServerHistoryConfig(self.config)
+        self.sections = [self.serverhistory,]
+        self._finishinit()
+class UploaderServerHistoryConfig(BaseSectionConfig):
+    section = 'serverhistory'
+    defaults = {'username':'',
+                'server':'',
+                'port':str(const.SFTP_DEFAULT_PORT),
+                'servertype':str(const.NotSelected)}
+    
+    username = property(*propertyargs('username'))
+    server = property(*propertyargs('server'))
+    port = property(*propertyargs('port'))
+    servertype = property(*propertyargs('servertype', int))
+            
             
 # Config class test code
 if __name__ == "__main__":
