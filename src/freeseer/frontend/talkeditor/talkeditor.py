@@ -357,6 +357,7 @@ class TalkEditorApp(QtGui.QMainWindow):
             self.core.export_talks_to_csv(fname)
 
 if __name__ == "__main__":
+    import sys
     app = QtGui.QApplication(sys.argv)
     main = TalkEditorApp()
     main.show()
