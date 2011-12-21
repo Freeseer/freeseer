@@ -42,7 +42,7 @@ class Config:
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
-        self.uploaderfile = os.path.abspath("{}/uploader.conf".format(self.configdir))
+        self.uploaderfile = os.path.abspath("{0}/uploader.conf".format(self.configdir))
         
         self.uploader = UploaderConfig(self.uploaderfile)
         
