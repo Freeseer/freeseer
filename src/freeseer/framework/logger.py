@@ -28,7 +28,7 @@ import logging.config
 import os
 import sys
 import socket
-from logging.handlers import SYSLOG_TCP_PORT
+#from logging.handlers import SYSLOG_TCP_PORT
 
 class Logger():
     '''
