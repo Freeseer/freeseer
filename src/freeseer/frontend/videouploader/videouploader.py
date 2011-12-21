@@ -355,7 +355,7 @@ class UploaderBackendThread(QtCore.QThread):
     
     def run(self):
         current_file = self.files[self.current]
-        logging.info("Uploading {}".format(current_file))
+        logging.info("Uploading {0}".format(current_file))
         
 #        from freeseer.framework import uploader
         # TODO: set global variables (uuuggghh) in uploader and run.
