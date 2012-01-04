@@ -88,6 +88,6 @@ def humantime(value):
     mn = sec / 60
     sec = sec % 60
 #    return "%2dm %2ds %3d" % (mn, sec, ms)
-    return "{:0>2}m {:0>2}s".format(mn, sec)
+    return "{0:0>2}m {1:0>2}s".format(mn, sec)
 
 #    return QtCore.QTime().addMSecs(ms)
