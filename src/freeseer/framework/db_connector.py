@@ -219,6 +219,17 @@ class DB_Connector():
         
         return rooms_matched
         
+    def get_presentation_id_from_talk(self, speaker, title):
+        self.cursor = self.db_connection.cursor()
+        self.cursor.execute('''SELECT Id
+                               FROM presentations
+                               WHERE Speaker='%s'
+                               AND Title='%s'
+                            ''' % (speaker, title))
+        for row in self.cursor:
+            talk_id = row[0]
+            
+        return talk_id
 
     def get_presentation(self, talk_id):
         
