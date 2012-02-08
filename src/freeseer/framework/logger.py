@@ -129,8 +129,8 @@ class Logger():
         
 if __name__ == "__main__":
     logger = Logger(os.path.abspath(os.path.expanduser('~/.freeseer/')))
-    logger.log.debug('This is a debug log')
-    logger.log.critical('This is a critical log')
-    logger.log.error('This is an error log')
-    logger.log.info('This is an info log')
-    logger.log.warning('This is a warning log')
+    logging.debug('This is a debug log')
+    logging.critical('This is a critical log')
+    logging.error('This is an error log')
+    logging.info('This is an info log')
+    logging.warning('This is a warning log')
