@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import os
 
 from setuptools import setup
 setup(name='freeseer',
@@ -23,4 +24,7 @@ Freeseer itself can run on commodity hardware such as a laptop or desktop.',
                             'freeseer.frontend.configtool',
                             'freeseer.frontend.talkeditor',
                             'freeseer.frontend.default'],
-      scripts=['src/freeseer-record', 'src/freeseer-config', 'src/freeseer-talkeditor'])
+      scripts=['src/freeseer-record', 'src/freeseer-config', 'src/freeseer-talkeditor'],
+      data_files=[('share/applications', ['data/freeseer.desktop']),
+                  ('share/applications', ['data/48x48-freeseer.png'])]
+)

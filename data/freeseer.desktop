@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=freeseer
+Comment=Video capture utility
+GenericName=
+Type=Application
+Exec=/usr/bin/freeseer-record
+Icon=freeseer
+Categories=AudioVideo;Recorder;
+
