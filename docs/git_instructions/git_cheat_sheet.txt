@@ -10,7 +10,7 @@ Create a work area using "git clone <your fork url>". Your url will be visible w
 # cd into the directory created by the git clone command
 
 # set up a remote to the upstream and pull
-git remote add upstream git://github.com/fosslc/freeseer.git
+git remote add upstream git://github.com/Freeseer/freeseer.git
 git pull upstream
 
 # create a local branch which parallels development in the upstream repository. Never make changes in this branch and it'll be trivial to keep up to date with "git pull"
