@@ -20,7 +20,7 @@ Curious why Freeseer exists? [Read our history!](http://fosslc.org/drupal/node/5
 
 Users
 -----
-1. Download and install: https://github.com/fosslc/freeseer/downloads
+1. Download and install: https://github.com/Freeseer/freeseer/downloads
 2. Quick Start Guide (coming soon)
 
 **Note:** For the very latest but unstable version, you have to build from the experimental source (see developers section).
@@ -73,12 +73,12 @@ Developers
     Coming soon!
           
 ### 2. Download
-Download the source code as a [zip](https://github.com/fosslc/freeseer/zipball/master)
-or [tarball](https://github.com/fosslc/freeseer/tarball/master).
+Download the source code as a [zip](https://github.com/Freeseer/freeseer/zipball/master)
+or [tarball](https://github.com/Freeseer/freeseer/tarball/master).
 
 Alternatively, you have the option to clone the project with git:
 
-    $ git clone git@github.com:fosslc/freeseer.git  # Clones a copy of the master repo
+    $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
 
 ### 3. Build
 
@@ -97,14 +97,14 @@ Once you have the prerequisite components you can run Freeseer using the followi
 
 Packaging
 ---------
-See [PACKAGE.txt](https://github.com/fosslc/freeseer/blob/master/PACKAGE.txt) for instructions.
+See [PACKAGE.txt](https://github.com/Freeseer/freeseer/blob/master/PACKAGE.txt) for instructions.
 
 
 Bug tracker
 -----------
 Have a bug? Please create an issue here on GitHub!
 
-https://github.com/fosslc/freeseer/issues
+https://github.com/Freeseer/freeseer/issues
 
 
 IRC channel
@@ -149,5 +149,5 @@ http://www.fsf.org/licensing/licenses/gpl.html
 [firewire-wiki]: http://en.wikipedia.org/wiki/FireWire_camera
 [vga-wiki]: http://en.wikipedia.org/wiki/VGA_connector
 [usb-wiki]: http://en.wikipedia.org/wiki/USB_video_device_class
-[license]: https://raw.github.com/fosslc/freeseer/a0497fabdc5a548d0dea4f6fb4925aa41a6d62e8/src/LICENSE
+[license]: https://raw.github.com/Freeseer/freeseer/a0497fabdc5a548d0dea4f6fb4925aa41a6d62e8/src/LICENSE
 
