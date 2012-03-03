@@ -20,8 +20,8 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
 NAME = 'Freeseer'
-VERSION = '2.6'
+VERSION = '3.0.0-alpha'
 URL = 'http://github.com/Freeseer/freeseer'

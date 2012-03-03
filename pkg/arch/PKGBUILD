@@ -4,7 +4,7 @@ pkgver=20121111
 pkgrel=1
 pkgdesc="This project contains code for a video capture utility capable of capturing presentations. It captures vga output and audio and mixes them together to produce a video thus enabling you to capture great presentations, demos, or training material easily."
 arch=('i686' 'x86_64')
-url="http://wiki.github.com/fosslc/freeseer/"
+url="http://wiki.github.com/Freeseer/freeseer/"
 license=('GPLv3')
 groups=()
 depends=(python2 python2-pyqt python2-feedparser gstreamer0.10-python)
@@ -20,7 +20,7 @@ source=()
 noextract=()
 md5sums=() #generate with 'makepkg -g'
 
-_gitroot="git://github.com/fosslc/freeseer.git"
+_gitroot="git://github.com/Freeseer/freeseer.git"
 
 build() {
   git clone $_gitroot 

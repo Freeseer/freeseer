@@ -2,7 +2,7 @@
 GIT
 ===
 
-The Freeseer code repository is hosted on github at http://github.com/fosslc/freeseer.
+The Freeseer code repository is hosted on github at http://github.com/Freeseer/freeseer.
 
 -------------------------------------------
 Downloading Freeseer from github repository
@@ -13,7 +13,7 @@ The Read-Only URL is useful if you simply want to try out the latest Freeseer. I
 contribute to the project it is better to fork the project and grab the read+write URL from
 your fork. The read+write URL will allow you to make changes and push it back to github.
 
-Read-Only URL: git://github.com/fosslc/freeseer.git
+Read-Only URL: git://github.com/Freeseer/freeseer.git
 
 For example:
-``git clone git://github.com/fosslc/freeseer.git``
+``git clone git://github.com/Freeseer/freeseer.git``

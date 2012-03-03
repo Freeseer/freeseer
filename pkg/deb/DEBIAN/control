@@ -5,7 +5,7 @@ Priority: optional
 Depends: python-feedparser,python-qt4
 Maintainer: Andrew Ross <fosslc@gmail.com>
 Architecture: all
-Homepage: https://github.com/fosslc/freeseer/wiki
+Homepage: https://github.com/Freeseer/freeseer/wiki
 Description: Recording and streaming tool
  Freeseer is a video recording and streaming tool. It captures
  audio and video from a variety of sources and makes them available
