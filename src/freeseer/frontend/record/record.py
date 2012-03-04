@@ -41,7 +41,6 @@ from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from RecordingWidget import RecordingWidget
-from freeseer.frontend.videouploader.videouploader import UploaderApp
 
 __version__= project_info.VERSION
 
@@ -60,7 +59,6 @@ class RecordApp(QtGui.QMainWindow):
         self.aboutDialog = AboutDialog()
         self.talks_to_save = []
         self.talks_to_delete = []
-        self.uploader_window = None
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
@@ -108,9 +106,6 @@ class RecordApp(QtGui.QMainWindow):
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         self.actionOpenVideoFolder.setIcon(folderIcon)
         
-        self.actionUploadVideos = QtGui.QAction(self)
-        self.actionUploadVideos.setObjectName(_fromUtf8("actionUploadVideos"))
-        
         exitIcon = QtGui.QIcon.fromTheme("application-exit")
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
@@ -127,7 +122,6 @@ class RecordApp(QtGui.QMainWindow):
         
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
-        self.menuFile.addAction(self.actionUploadVideos)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
         self.menuHelp.addAction(self.actionReport)
@@ -169,7 +163,6 @@ class RecordApp(QtGui.QMainWindow):
 
         # Main Window Connections
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
-        self.actionUploadVideos.triggered.connect(self.open_video_uploader)
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.reportError)
@@ -232,8 +225,6 @@ class RecordApp(QtGui.QMainWindow):
         self.menuHelp.setTitle(self.uiTranslator.translate("RecordApp", "&Help"))
         
         self.actionOpenVideoFolder.setText(self.uiTranslator.translate("RecordApp", "&Open Video Directory"))
-#        self.actionUploadVideos.setText(self.uiTranslator.translate("RecordApp", "&Upload Videos"))
-        self.actionUploadVideos.setText(self.tr("&Upload Videos"))
         self.actionExit.setText(self.uiTranslator.translate("RecordApp", "&Quit"))
         self.actionAbout.setText(self.uiTranslator.translate("RecordApp", "&About"))
         # --- End Menubar
@@ -487,19 +478,6 @@ class RecordApp(QtGui.QMainWindow):
             os.system("xdg-open %s" % self.core.config.videodir)
         else:
             logging.INFO("Error: This command is not supported on the current OS.")
-    
-    def open_video_uploader(self):
-        if self.uploader_window == None:
-            logging.debug("Uploader window opened")
-            self.uploader_window = UploaderApp(self.core)
-            self.uploader_window.destroyed.connect(self.on_video_uploader_close)
-            self.uploader_window.show()
-        else:
-            self.uploader_window.activateWindow()
-    
-    def on_video_uploader_close(self):
-        logging.debug("Uploader window closed")
-        self.uploader_window = None
     
     def closeEvent(self, event):
         logging.info('Exiting freeseer...')
