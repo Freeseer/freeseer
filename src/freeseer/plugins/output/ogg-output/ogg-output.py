@@ -73,7 +73,7 @@ class OggOutput(IOutput):
             bin.add(audiolevel)
             
             audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
-            audiocodec.set_property("quality", self.audio_quality)
+            audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
             
             # Setup metadata
@@ -101,7 +101,7 @@ class OggOutput(IOutput):
             bin.add(videoqueue)
             
             videocodec = gst.element_factory_make("theoraenc", "videocodec")
-            videocodec.set_property("bitrate", self.video_bitrate)
+            videocodec.set_property("bitrate", int(self.video_bitrate))
             bin.add(videocodec)
             
             # Setup ghost pads
