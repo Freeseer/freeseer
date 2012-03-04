@@ -49,15 +49,17 @@ Developers
 
     + python-2.7.2
     + GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
-    + GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 
+    + GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7
+    + setuptools-0.6c11.win32-py2.7 
     + PyQt-Py2.7-x86-gpl-4.8.5-1
-    + pygtk-all-in-one-2.24.0.win32-py2.7 
-    + feedparser-5.0.1 
-    + setuptools-0.6c11.win32-py2.7
+    + pygtk
+    + feedparser
     + yapsy
 
-    To install Yapsy, run:
+    To install FeedParser, PyGTK, and Yapsy, run:
     
+        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py feedparser
+        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py pygtk
         C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
     
     
