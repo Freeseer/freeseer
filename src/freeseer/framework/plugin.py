@@ -63,7 +63,7 @@ class PluginManager(QtCore.QObject):
         pluginpath = "%s/../plugins" % os.path.dirname(os.path.abspath(__file__))
         
         self.plugmanc.setPluginPlaces([pluginpath, 
-                                       "~/.freeseer/plugins", 
+                                       os.path.expanduser("~/.freeseer/plugins"), 
                                        "freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
             "AudioInput" : IAudioInput,
