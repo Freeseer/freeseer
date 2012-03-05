@@ -70,6 +70,11 @@ Developers
     On Windows, add the following paths to your PATH variable:
     
         C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+        
+        
+    Install additional Windows Freeseer plugins by placing the freeseer-plugins-windows repository in your C:\Users\<user>\.freeseer\plugins directory:
+    
+        https://github.com/Freeseer/freeseer-plugins-windows
 
     ### Mac OS X:
     Coming soon!
