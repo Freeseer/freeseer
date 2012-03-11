@@ -4,7 +4,7 @@ Please use the following as a guide to set up your work area and keep it up to d
 
 If you don't have one already, create your github account, upload your public ssh key to automatically authorize your laptop/desktop account to work with the code, and log in
 
-visit http://github.com/fosslc/freeseer , click fork to create your own copy of the project on github.com. You have commit access right away to this. No permission needed.
+visit http://github.com/Freeseer/freeseer , click fork to create your own copy of the project on github.com. You have commit access right away to this. No permission needed.
 
 Create a work area using "git clone <your fork url>". Your url will be visible when you click source. You have a choice of git, ssh, or http URLs. I like to use the ssh one myself.
 # cd into the directory created by the git clone command
