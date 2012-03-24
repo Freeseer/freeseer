@@ -134,8 +134,13 @@ class OggOutput(IOutput):
             
     def load_config(self, plugman):
         self.plugman = plugman
-        self.audio_quality = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Quality")
-        self.video_bitrate = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Video Bitrate")
+        
+        try:
+            self.audio_quality = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Quality")
+            self.video_bitrate = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Video Bitrate")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Quality", self.audio_quality)
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Video Bitrate", self.video_bitrate)
     
     def get_widget(self):
         if self.widget is None:
@@ -175,14 +180,7 @@ class OggOutput(IOutput):
         return self.widget
 
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        
-        try:
-            self.audio_quality = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Quality")
-            self.video_bitrate = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Video Bitrate")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Quality", self.audio_quality)
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Video Bitrate", self.video_bitrate)
+        self.load_config(plugman)
             
         self.spinbox_audio_quality.setValue(float(self.audio_quality))
         self.spinbox_video_quality.setValue(int(self.video_bitrate))
