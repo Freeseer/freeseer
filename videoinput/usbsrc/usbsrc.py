@@ -65,7 +65,7 @@ class USBSrc(IVideoInput):
         bin.add(videosrc)
         
         # Setup ghost pad
-        pad = videoscale_cap.get_pad("src")
+        pad = videosrc.get_pad("src")
         ghostpad = gst.GhostPad("videosrc", pad)
         bin.add_pad(ghostpad)
         
