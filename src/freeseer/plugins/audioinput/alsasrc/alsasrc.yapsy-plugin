@@ -1,9 +1,0 @@
-[Core]
-Name = ALSA Source
-Module = alsasrc
-
-[Documentation]
-Author = Thanh Ha
-Version = 0.2
-Website = http://fosslc.org
-Description = ALSA Sound Source
