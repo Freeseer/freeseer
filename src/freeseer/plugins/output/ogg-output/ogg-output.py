@@ -141,6 +141,9 @@ class OggOutput(IOutput):
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Quality", self.audio_quality)
             self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Video Bitrate", self.video_bitrate)
+        except TypeError:
+            # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
+            pass
     
     def get_widget(self):
         if self.widget is None:
@@ -181,10 +184,9 @@ class OggOutput(IOutput):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-            
+        
         self.spinbox_audio_quality.setValue(float(self.audio_quality))
         self.spinbox_video_quality.setValue(int(self.video_bitrate))
-        print self.audio_quality
 
     def set_audio_quality(self):
         self.audio_quality = self.spinbox_audio_quality.value()
