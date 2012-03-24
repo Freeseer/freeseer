@@ -68,7 +68,11 @@ class AudioPassthrough(IAudioMixer):
 
     def load_config(self, plugman):
         self.plugman = plugman
-        self.input1 = self.plugman.plugmanc.readOptionFromPlugin("AudioMixer", self.name, "Audio Input")
+        
+        try:
+            self.input1 = self.plugman.plugmanc.readOptionFromPlugin("AudioMixer", self.name, "Audio Input")
+        except ConfigParser.NoSectionError:
+            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin("AudioMixer", self.name, "Audio Input", None)
     
     def get_widget(self):
         if self.widget is None:
@@ -86,12 +90,7 @@ class AudioPassthrough(IAudioMixer):
         return self.widget
 
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        
-        try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin("AudioMixer", self.name, "Audio Input")
-        except ConfigParser.NoSectionError:
-            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin("AudioMixer", self.name, "Audio Input", None)
+        self.load_config(plugman)
         
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
