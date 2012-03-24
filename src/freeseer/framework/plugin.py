@@ -108,19 +108,12 @@ class PluginManager(QtCore.QObject):
         """
         
         self.activate_plugin("Audio Passthrough", "AudioMixer")
-        
-        # Set Pulse Source as default if available. Else default to ALSA.
-        try:
-            gst.element_factory_make('pulsesrc', 'testsrc')
-            self.activate_plugin("Pulse Audio Source", "AudioInput")
-            self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "Pulse Audio Source")
-        except:
-            self.activate_plugin("ALSA Source", "AudioInput")
-            self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "ALSA Source")
+        self.activate_plugin("Audio Test Source", "AudioInput")
+        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "Audio Test Source")
             
         self.activate_plugin("Video Passthrough", "VideoMixer")
-        self.activate_plugin("USB Source", "VideoInput")
-        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "USB Source")
+        self.activate_plugin("Video Test Source", "VideoInput")
+        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "Video Test Source")
         self.activate_plugin("Ogg Output", "Output")
         self._activate_default_metadata_plugins()
         logging.debug("Default plugins activated.")
