@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Basics &mdash; Freeseer 3.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="top" title="Freeseer 3.0.0 documentation" href="../index.html" />
+    <link rel="up" title="Contribute" href="index.html" />
+    <link rel="next" title="Best Practices" href="best-practices.html" />
+    <link rel="prev" title="Power User" href="powerusers.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="best-practices.html" title="Best Practices"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="powerusers.html" title="Power User"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Freeseer 3.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Contribute</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/freeseer_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Basics</a><ul>
+<li><a class="reference internal" href="#git-github">Git &amp; GitHub</a></li>
+<li><a class="reference internal" href="#forking-freeseer">Forking Freeseer</a></li>
+<li><a class="reference internal" href="#basic-workflow">Basic Workflow</a></li>
+<li><a class="reference internal" href="#workflow-diagram">Workflow Diagram</a></li>
+<li><a class="reference internal" href="#starting-a-new-task-making-a-new-feature-branch">Starting a new task / Making a new feature branch</a></li>
+<li><a class="reference internal" href="#dealing-with-conflicts">Dealing with Conflicts</a></li>
+<li><a class="reference internal" href="#renaming-your-branch">Renaming your Branch</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="powerusers.html"
+                        title="previous chapter">Power User</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="best-practices.html"
+                        title="next chapter">Best Practices</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/contribute/basics.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="basics">
+<h1>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="git-github">
+<h2>Git &amp; GitHub<a class="headerlink" href="#git-github" title="Permalink to this headline">¶</a></h2>
+<p>Freeseer is hosted on GitHub. GitHub uses Git.
+You&#8217;ll generally encounter both while contributing.</p>
+<p>Git can be complicated for beginners.
+It&#8217;s especially confusing for people who&#8217;ve previously used a version control system that&#8217;s different by design (e.g. Subversion).</p>
+<p>No worries! There are tons of online resources, and if you can&#8217;t find what you&#8217;re looking for with Google, ask us.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">To set up Git and GitHub, and for help with common issues, see <a class="reference external" href="http://help.github.com">help.github.com</a>.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">If you want to learn even more, the free <a class="reference external" href="http://book.git-scm.com">git community book</a> is your friend.</p>
+</div>
+</div>
+<div class="section" id="forking-freeseer">
+<h2>Forking Freeseer<a class="headerlink" href="#forking-freeseer" title="Permalink to this headline">¶</a></h2>
+<p>Once you have a GitHub account and Git installed and configured, the next step is to fork the Freeseer repo.
+&#8220;Forking&#8221; means you use someone&#8217;s project as a starting point for your own.</p>
+<ol class="arabic simple">
+<li>Go to the <a class="reference external" href="https://github.com/Freeseer/freeseer">Freeseer repo</a> on GitHub.</li>
+<li>Fork the &#8220;Freeseer&#8221; repo by clicking the button.</li>
+</ol>
+<img alt="../_images/fork.jpg" src="../_images/fork.jpg" />
+<p>Your fork is now complete! Next you&#8217;ll set up your local repo.</p>
+<ol class="arabic" start="3">
+<li><p class="first">Clone the project. First clone the master branch:</p>
+<div class="highlight-python"><pre>$ git clone git@github.com:username/freeseer.git freeseer # where username is *your* username</pre>
+</div>
+</li>
+<li><p class="first">Also clone the experimental branch <a class="footnote-reference" href="#f1" id="id1">[1]</a>:</p>
+<div class="highlight-python"><pre>$ git clone -b experimental git@github.com:username/freeseer.git freeseer-experimental</pre>
+</div>
+</li>
+<li><p class="first">Configure remotes. Add a remote named <tt class="docutils literal"><span class="pre">upstream</span></tt> to keep track of the original Freeseer repo:</p>
+<div class="highlight-python"><pre>$ cd freeseer
+$ git remote add upstream git://github.com/Freeseer/freeseer.git
+$ git fetch upstream
+$ # Do the same for the experimental directory
+$ cd ../freeseer-experimental
+$ git remote add upstream git://github.com/Freeseer/freeseer.git
+$ git fetch upstream</pre>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="basic-workflow">
+<h2>Basic Workflow<a class="headerlink" href="#basic-workflow" title="Permalink to this headline">¶</a></h2>
+<p><em>TODO:</em> see NumPy&#8217;s docs (Development workflow), ThinkUp&#8217;s docs (Developer), and my Google Doc&#8217;s Freeseer scrap notes!</p>
+<ol class="arabic simple">
+<li>Create a new branch based off the central repo&#8217;s (i.e. Freeseer&#8217;s) experimental branch.</li>
+<li>Fetch any changes for good measure (optional).</li>
+<li>Work on your feature.</li>
+<li>Add and commit files you worked on. Optionally sign-off your commit with -s.</li>
+<li>Push your branch to your remote fork (and automatically create it if it doesn&#8217;t exist yet) on GitHub.</li>
+<li>Send a pull request when your feature is ready to be merged. You can still make additional changes later.</li>
+<li>Delete your local branch (add -r to include remote branch) when you&#8217;re absolutely sure you no longer need it.</li>
+</ol>
+</div>
+<div class="section" id="workflow-diagram">
+<h2>Workflow Diagram<a class="headerlink" href="#workflow-diagram" title="Permalink to this headline">¶</a></h2>
+<p>A visual representation of what a Freeseer contributor’s GitHub/git workflow should look like. (Click to enlarge.)</p>
+<p><em>TODO</em></p>
+</div>
+<div class="section" id="starting-a-new-task-making-a-new-feature-branch">
+<h2>Starting a new task / Making a new feature branch<a class="headerlink" href="#starting-a-new-task-making-a-new-feature-branch" title="Permalink to this headline">¶</a></h2>
+<p>Each new task or set of edits should have its own branch.
+It&#8217;s a lot more organized than having all your work under the same branch (try to avoid this).</p>
+<p>A few reasons why tasks should have their own branches:</p>
+<ul class="simple">
+<li>Less bugs and easier to find and fix the bugs that do exist</li>
+<li>Easier for us (and yourself) to see what you&#8217;re working on</li>
+<li>Easier for us (and yourself) when it&#8217;s time for you to send a pull request</li>
+<li>It&#8217;s an isolated sandbox, so if you screw up, nothing outside that branch is harmed</li>
+<li>Because it&#8217;s a sandbox, it&#8217;s also good for experimenting - maybe you intentionally want to screw up!</li>
+</ul>
+<p>Create a new branch based off Freeseer&#8217;s experimental branch and make it your current branch:</p>
+<div class="highlight-python"><pre>$ git branch new-feature upstream/experimental
+$ git checkout new-feature</pre>
+</div>
+<p>or, as a single command:</p>
+<div class="highlight-python"><pre>$ git checkout -b new-feature upstream/experimental</pre>
+</div>
+<p>Generally, you&#8217;ll want to track your changes to this branch on your public <a class="reference external" href="http://github.com">GitHub</a> fork of Freeseer.
+If you followed the instructions, you should have a link to your <a class="reference external" href="http://github.com">GitHub</a> repo called <cite>origin</cite>.</p>
+<div class="highlight-python"><pre>$ git push origin new-feature</pre>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">You can set up git to have your local new-feature branch track the remote new-feature branch on origin.
+This means you can type <tt class="docutils literal"><span class="pre">git</span> <span class="pre">push</span></tt> instead of <tt class="docutils literal"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">new-feature</span></tt> every time you want to push your commits.
+While <cite>new-feature</cite> is checked out, enter <tt class="docutils literal"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">--set-upstream</span> <span class="pre">origin</span> <span class="pre">new-feature</span></tt> or <tt class="docutils literal"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">-u</span> <span class="pre">origin</span> <span class="pre">new-feature</span></tt>
+for shorthand.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Be descriptive when naming your new branch! See <a class="reference internal" href="best-practices.html#branch-names"><em>branch naming suggestions</em></a>.</p>
+</div>
+</div>
+<div class="section" id="dealing-with-conflicts">
+<h2>Dealing with Conflicts<a class="headerlink" href="#dealing-with-conflicts" title="Permalink to this headline">¶</a></h2>
+<p>You&#8217;ll run into a merge conflict eventually.
+It&#8217;s when something doesn&#8217;t match up between the local and remote copy of a file.
+To be more precise, a merge conflict usually occurs when your current branch and the branch you want to merge into the current branch
+have diverged. That is, you have commits in your current branch which are not in the other branch, and vice versa.</p>
+<p>The secret is to use <tt class="docutils literal"><span class="pre">git</span> <span class="pre">mergetool</span></tt>. Here&#8217;s one way how you can resolve conflicts:</p>
+<div class="highlight-python"><pre>$ git fetch upstream
+$ git rebase upstream/experimental current-local-branch
+... CONFLICT: Merge conflict in &lt;filenames&gt;</pre>
+</div>
+<p>Now you have 3 options:</p>
+<ol class="arabic">
+<li><p class="first">Selectively choose which parts of a file to use (using an external visual diff &amp; merge tool):</p>
+<div class="highlight-python"><pre>$ sudo apt-get install meld  # Install Meld (or at http://meld.sourceforge.net)
+$ git mergetool -t meld  # Some alternatives are kdiff3, opendiff, diffmerge, etc.
+... The visual merge tool is launched.
+... It shows three versions of the file (local, failed merge, remote).
+... You can easily choose code from any and all of them to resolve conflicts.
+... Don't forget to save the file when you're done.</pre>
+</div>
+</li>
+<li><p class="first">Ignore their changes, use your file:</p>
+<div class="highlight-python"><pre>$ git checkout --ours &lt;filename&gt;</pre>
+</div>
+</li>
+<li><p class="first">Ignore your changes, use their file:</p>
+<div class="highlight-python"><pre>$ git checkout --theirs &lt;filename&gt;</pre>
+</div>
+</li>
+</ol>
+<p>Once you&#8217;ve resolved all conflicts:</p>
+<div class="highlight-python"><pre>$ git add &lt;filename&gt;  # Or 'git add .' to mark all files as resolved
+$ git rebase --continue</pre>
+</div>
+<p>To abort the conflict merging process at any time:</p>
+<div class="highlight-python"><pre>$ git rebase --abort</pre>
+</div>
+</div>
+<div class="section" id="renaming-your-branch">
+<h2>Renaming your Branch<a class="headerlink" href="#renaming-your-branch" title="Permalink to this headline">¶</a></h2>
+<p>Want to use a better name for your branch? These steps show you how to rename your local <em>and</em> remote branch.</p>
+<div class="highlight-python"><pre>$ git branch -m old-name new-name  # Rename your local branch
+$ git push origin new-name  # Add the new branch to your origin remote
+$ git push origin :old-name  # Delete the old remote branch</pre>
+</div>
+<p>As far as I know, there&#8217;s no easy way to rename a remote branch.
+Hence the deletion and adding steps.
+If you don&#8217;t have a remote tracking branch yet (i.e. you only have a local branch), then you can skip the last 2 steps.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Depending on the work you&#8217;re doing, you may want to clone the development branch instead.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="best-practices.html" title="Best Practices"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="powerusers.html" title="Power User"
+             >previous</a> |</li>
+        <li><a href="../index.html">Freeseer 3.0.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Contribute</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Dennis Ideler and the Freeseer community.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.
+    </div>
+  </body>
+</html>
