@@ -155,7 +155,7 @@ class VideoPassthrough(IVideoMixer):
             self.input_type = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Input Type")
             self.framerate = int(self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Framerate"))
             self.resolution = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Resolution")
-        except ConfigParser.NoSectionError:
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Video Input", None)
             self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Input Type", self.input_type)
             self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Framerate", self.framerate)
