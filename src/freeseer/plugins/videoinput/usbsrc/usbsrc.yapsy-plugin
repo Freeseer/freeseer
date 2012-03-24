@@ -1,9 +1,0 @@
-[Core]
-Name = USB Source
-Module = usbsrc
-
-[Documentation]
-Author = Thanh Ha
-Version = 0.3
-Website = http://fosslc.org
-Description = Basic USB Source uses v4l2src to record from devices like webcams on Linux.
