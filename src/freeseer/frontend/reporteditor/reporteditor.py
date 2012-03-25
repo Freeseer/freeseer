@@ -169,6 +169,7 @@ class ReportEditorApp(QtGui.QMainWindow):
         #
         self.confirmDBClearTitleString = self.uiTranslator.translate("ReportEditorApp", "Clear Database")
         self.confirmDBClearQuestionString = self.uiTranslator.translate("ReportEditorApp", "Are you sure you want to clear the DB?")
+        self.selectFileString = self.uiTranslator.translate("ReportEditorApp", "Select File")
         # --- End Reusable Strings
         
         #
@@ -324,7 +325,7 @@ class ReportEditorApp(QtGui.QMainWindow):
         self.editorWidget.timeLabel2.setText(p.time)
         
     def export_reports_to_csv(self):
-        fname = QtGui.QFileDialog.getSaveFileName(self,'Select file')
+        fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString)
         if fname:
             self.core.export_reports_to_csv(fname)
 
