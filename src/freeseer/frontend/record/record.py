@@ -468,7 +468,7 @@ class RecordApp(QtGui.QMainWindow):
         logging.info("Report Failure: %s, %s, %s" % (talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i]))
         
         self.core.db.insert_failure(failure)
-        self.close()
+        self.reportWidget.close()
 
     ###
     ### Misc
