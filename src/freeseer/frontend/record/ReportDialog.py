@@ -33,7 +33,6 @@ import logging
 
 from freeseer import project_info
 from freeseer.frontend.qtcommon.Resource import resource_rc
-from freeseer.framework.core import FreeseerCore
 
 __version__= project_info.VERSION
 
