@@ -326,6 +326,6 @@ class ReportEditorApp(QtGui.QMainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    main = TalkEditorApp()
+    main = ReportEditorApp()
     main.show()
     sys.exit(app.exec_())
