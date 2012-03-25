@@ -26,6 +26,8 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+import sys
+
 from PyQt4 import QtCore, QtGui
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -86,7 +88,10 @@ class EditorWidget(QtGui.QWidget):
         
         self.csvLabel = QtGui.QLabel("File")
         self.csvLineEdit = QtGui.QLineEdit()
-        self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
+        if sys.platform == 'win32':
+            self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
+        else:
+            self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
         self.csvLabel.setBuddy(self.csvLineEdit)
         self.csvFileSelectButton = QtGui.QPushButton("Select CSV file")
         self.csvPushButton = QtGui.QPushButton("Load talks from CSV")
