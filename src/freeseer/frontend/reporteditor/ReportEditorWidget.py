@@ -54,7 +54,9 @@ class ReportEditorWidget(QtGui.QWidget):
         
         self.editorLayout.addLayout(self.buttonsLayout)
 
-        
+        boldFont = QtGui.QFont()
+        boldFont.setBold(True)
+
         addIcon = QtGui.QIcon.fromTheme("list-add")
         removeIcon = QtGui.QIcon.fromTheme("list-remove")
         clearIcon = QtGui.QIcon.fromTheme("edit-clear")
@@ -82,28 +84,38 @@ class ReportEditorWidget(QtGui.QWidget):
         self.tableLayout.addWidget(self.editor)
         self.editorLayout.addLayout(self.tableLayout)
         
-        self.infoLayout = QtGui.QVBoxLayout()
+        self.infoLayout = QtGui.QFormLayout()
         self.editorLayout.addLayout(self.infoLayout)
         
         self.titleLabel = QtGui.QLabel("Title :")
+        self.titleLabel2 = QtGui.QLabel()
+        self.titleLabel2.setFont(boldFont)
         self.speakerLabel = QtGui.QLabel("Speaker :")
+        self.speakerLabel2 = QtGui.QLabel()
+        self.speakerLabel2.setFont(boldFont)
         self.descriptionLabel = QtGui.QLabel("Description :")
+        self.descriptionLabel2 = QtGui.QLabel()
+        self.descriptionLabel2.setFont(boldFont)
         self.levelLabel = QtGui.QLabel("Level :")
+        self.levelLabel2 = QtGui.QLabel()
+        self.levelLabel2.setFont(boldFont)
         self.eventLabel = QtGui.QLabel("Event :")
+        self.eventLabel2 = QtGui.QLabel()
+        self.eventLabel2.setFont(boldFont)
         self.roomLabel = QtGui.QLabel("Room :")
+        self.roomLabel2 = QtGui.QLabel()
+        self.roomLabel2.setFont(boldFont)
         self.timeLabel = QtGui.QLabel("Time :")
+        self.timeLabel2 = QtGui.QLabel()
+        self.timeLabel2.setFont(boldFont)
         
-        self.emptyLabel = QtGui.QLabel(" "*80)
-        self.infoLayout.addWidget(self.titleLabel)
-        self.infoLayout.addWidget(self.speakerLabel)
-        self.infoLayout.addWidget(self.descriptionLabel)
-        self.infoLayout.addWidget(self.levelLabel)
-        self.infoLayout.addWidget(self.eventLabel)
-        self.infoLayout.addWidget(self.roomLabel)
-        self.infoLayout.addWidget(self.timeLabel)
-        self.infoLayout.addWidget(self.emptyLabel)
-        self.infoLayout.addStretch(0)
-        
+        self.infoLayout.addRow(self.titleLabel, self.titleLabel2)
+        self.infoLayout.addRow(self.speakerLabel, self.speakerLabel2)
+        self.infoLayout.addRow(self.descriptionLabel, self.descriptionLabel2)
+        self.infoLayout.addRow(self.levelLabel, self.levelLabel2)
+        self.infoLayout.addRow(self.eventLabel, self.eventLabel2)
+        self.infoLayout.addRow(self.roomLabel, self.roomLabel2)
+        self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
         
 if __name__ == "__main__":
     import sys
