@@ -36,6 +36,7 @@ except AttributeError:
 
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
+from freeseer.framework.failure import Failure
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -62,6 +63,8 @@ class RecordApp(QtGui.QMainWindow):
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
+        
+        self.reportWidget = ReportDialog()
         
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
         
@@ -164,7 +167,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.reportError)
+        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
@@ -176,6 +179,11 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
+        
+        #
+        # ReportWidget Connections
+        #
+        self.connect(self.reportWidget.reportButton, QtCore.SIGNAL("clicked()"), self.report)
 
         self.load_settings()
 
@@ -254,6 +262,28 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.dateLabel.setText(self.uiTranslator.translate("RecordApp", "Date"))
         self.mainWidget.talkLabel.setText(self.uiTranslator.translate("RecordApp", "Talk"))
         # --- End RecordingWidget
+        
+        #
+        # ReportWidget
+        #
+        self.reportWidget.titleLabel.setText(self.uiTranslator.translate("RecordApp", "Title:"))
+        self.reportWidget.speakerLabel.setText(self.uiTranslator.translate("RecordApp", "Speaker:"))
+        self.reportWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event:"))
+        self.reportWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room:"))
+        self.reportWidget.timeLabel.setText(self.uiTranslator.translate("RecordApp", "Time:"))
+        self.reportWidget.commentLabel.setText(self.uiTranslator.translate("RecordApp", "Comment"))
+        self.reportWidget.closeButton.setText(self.uiTranslator.translate("RecordApp", "Close"))
+        self.reportWidget.reportButton.setText(self.uiTranslator.translate("RecordApp", "Report"))
+        
+        # Logic for translating the report options
+        noaudio = self.uiTranslator.translate("RecordApp", "No Audio")
+        novideo = self.uiTranslator.translate("RecordApp", "No Video")
+        noaudiovideo = self.uiTranslator.translate("RecordApp", "No Audio/Video")
+        self.reportWidget.options = [noaudio, novideo, noaudiovideo]
+        self.reportWidget.reportCombo.clear()
+        for i in self.reportWidget.options:
+            self.reportWidget.reportCombo.addItem(i)
+        # --- End ReportWidget
         
         self.aboutDialog.retranslate(self.current_language)
         
@@ -416,6 +446,29 @@ class RecordApp(QtGui.QMainWindow):
         
         model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
         self.mainWidget.talkComboBox.setModel(model)
+        
+    ###
+    ###Report Failure
+    ###
+    def show_report_widget(self):
+        p = self.current_presentation()
+        self.reportWidget.titleLabel2.setText(p.title)
+        self.reportWidget.speakerLabel2.setText(p.speaker)
+        self.reportWidget.eventLabel2.setText(p.event)
+        self.reportWidget.roomLabel2.setText(p.room)
+        self.reportWidget.timeLabel2.setText(p.time)
+        self.reportWidget.show()
+    
+    def report(self):
+        talk_id = self.current_presentation_id()
+        presentation = self.current_presentation()
+        i = self.reportWidget.reportCombo.currentIndex()
+        
+        failure = Failure(talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i])
+        logging.info("Report Failure: %s, %s, %s" % (talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i]))
+        
+        self.core.db.insert_failure(failure)
+        self.reportWidget.close()
 
     ###
     ### Misc
@@ -486,13 +539,7 @@ class RecordApp(QtGui.QMainWindow):
     def keyPressEvent(self, event):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
-
-    ###
-    ###Report Failure
-    ###
-    def reportError(self):
-        self.reportDialog = ReportDialog(self.current_presentation(), self.current_presentation_id(), self.core)
-        self.reportDialog.show()
+    
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = RecordApp()

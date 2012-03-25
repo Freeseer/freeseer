@@ -33,8 +33,7 @@ import logging
 
 from freeseer import project_info
 from freeseer.frontend.qtcommon.Resource import resource_rc
-from freeseer.framework.core import FreeseerCore
-from freeseer.framework.failure import *
+
 __version__= project_info.VERSION
 
 
@@ -43,24 +42,18 @@ class ReportDialog(QtGui.QWidget):
     Failure report Dialog for the Freeseer Project. 
 
     """
-    def __init__(self, presentation, talk_ID, core, parent=None):
+    def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        
-        self.current_language = "tr_en_US.qm"
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         
-        self.core = core
-        self.talk_ID = talk_ID
         self.mainWidget = QtGui.QWidget()
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
 
-        self.infoLayout = QtGui.QVBoxLayout()
+        self.infoLayout = QtGui.QFormLayout()
         self.mainLayout.addLayout(self.infoLayout)
         self.reportLayout = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.reportLayout)
@@ -68,25 +61,33 @@ class ReportDialog(QtGui.QWidget):
         self.mainLayout.addLayout(self.buttonLayout)
         
         # Talk infomation
-        self.titleLabel = QtGui.QLabel("Title: %s" % presentation.title)
-        self.speakerLabel = QtGui.QLabel("Speaker: %s" % presentation.speaker)
-        self.eventLabel = QtGui.QLabel("Event: %s" % presentation.event)
-        self.roomLabel = QtGui.QLabel("Room: %s" % presentation.room)
-        self.timeLabel = QtGui.QLabel("Time: %s" % presentation.time)
-        self.infoLayout.addWidget(self.titleLabel)
-        self.infoLayout.addWidget(self.speakerLabel)
-        self.infoLayout.addWidget(self.eventLabel)
-        self.infoLayout.addWidget(self.roomLabel)
-        self.infoLayout.addWidget(self.timeLabel)
+        self.titleLabel = QtGui.QLabel("Title:")
+        self.titleLabel2 = QtGui.QLabel()
+        self.speakerLabel = QtGui.QLabel("Speaker:")
+        self.speakerLabel2 = QtGui.QLabel()
+        self.eventLabel = QtGui.QLabel("Event:")
+        self.eventLabel2 = QtGui.QLabel()
+        self.roomLabel = QtGui.QLabel("Room:")
+        self.roomLabel2 = QtGui.QLabel()
+        self.timeLabel = QtGui.QLabel("Time:")
+        self.timeLabel2 = QtGui.QLabel()
+        self.infoLayout.addRow(self.titleLabel, self.titleLabel2)
+        self.infoLayout.addRow(self.speakerLabel, self.speakerLabel2)
+        self.infoLayout.addRow(self.eventLabel, self.eventLabel2)
+        self.infoLayout.addRow(self.roomLabel, self.roomLabel2)
+        self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
         
         #Report
         self.commentLabel = QtGui.QLabel("Comment")
         self.commentEdit = QtGui.QLineEdit()
         
         self.reportCombo = QtGui.QComboBox()
-        self.options = ['No Audio', 'No Video', 'No Audio/Video']
-        for i in self.options:
-            self.reportCombo.addItem(i)
+        # Prototype for report options. Please define these in the 
+        # record.py logic file under retranslate() so that translations
+        # work.
+#        self.options = ['No Audio', 'No Video', 'No Audio/Video']
+#        for i in self.options:
+#            self.reportCombo.addItem(i)
         
         self.reportLayout.addWidget(self.commentLabel)
         self.reportLayout.addWidget(self.commentEdit)
@@ -99,21 +100,3 @@ class ReportDialog(QtGui.QWidget):
         self.buttonLayout.addWidget(self.closeButton)
         self.buttonLayout.addWidget(self.reportButton)
         self.connect(self.closeButton, QtCore.SIGNAL("clicked()"), self.close)
-        self.connect(self.reportButton, QtCore.SIGNAL("clicked()"), self.report)
-        #self.retranslate()
-    
-    def report(self):
-        i = self.reportCombo.currentIndex()
-        print self.talk_ID
-        print self.commentEdit.text()
-        print self.options[i]
-        failure = Failure(self.talk_ID, self.commentEdit.text(), self.options[i])
-        logging.info("Report failure %s %s %s" % (self.talk_ID, self.commentEdit.text(), self.options[i]))
-        self.core.db.insert_failure(failure)
-        self.close()
-   
-    def retranslate(self, language=None):
-        if language is not None:
-            self.current_language = language
-        
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
