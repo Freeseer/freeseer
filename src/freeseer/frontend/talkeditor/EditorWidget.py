@@ -26,6 +26,8 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+import sys
+
 from PyQt4 import QtCore, QtGui
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -45,10 +47,22 @@ class EditorWidget(QtGui.QWidget):
         self.setLayout(self.mainLayout)
         
         #
+        # Import Layout
+        #
+        self.importLayout = QtGui.QHBoxLayout()
+        self.mainLayout.addLayout(self.importLayout)
+        
+        self.importTypeComboBox = QtGui.QComboBox()
+        self.importTypeComboBox.addItem("RSS")
+        self.importTypeComboBox.addItem("CSV")
+        self.importLayout.addWidget(self.importTypeComboBox)
+        
+        #
         # RSS Layout
         #
+        self.rssWidget = QtGui.QWidget()
         self.rssLayout = QtGui.QHBoxLayout()
-        self.mainLayout.addLayout(self.rssLayout)
+        self.rssWidget.setLayout(self.rssLayout)
         
         self.rssLabel = QtGui.QLabel("URL")
         self.rssLineEdit = QtGui.QLineEdit()
@@ -62,24 +76,32 @@ class EditorWidget(QtGui.QWidget):
         self.rssLayout.addWidget(self.rssLabel)
         self.rssLayout.addWidget(self.rssLineEdit)
         self.rssLayout.addWidget(self.rssPushButton)
+        self.importLayout.addWidget(self.rssWidget)
         
         #
         # CSV Layout
         #
+        self.csvWidget = QtGui.QWidget()
+        self.csvWidget.hide()
         self.csvLayout = QtGui.QHBoxLayout()
-        self.mainLayout.addLayout(self.csvLayout)
+        self.csvWidget.setLayout(self.csvLayout)
         
         self.csvLabel = QtGui.QLabel("File")
         self.csvLineEdit = QtGui.QLineEdit()
-        self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
+        if sys.platform == 'win32':
+            self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
+        else:
+            self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
         self.csvLabel.setBuddy(self.csvLineEdit)
-        self.csvFileSelectButton = QtGui.QPushButton("Select CSV file")
+        self.csvFileSelectButton = QtGui.QToolButton()
+        self.csvFileSelectButton.setText("...")
         self.csvPushButton = QtGui.QPushButton("Load talks from CSV")
         
         self.csvLayout.addWidget(self.csvLabel)
         self.csvLayout.addWidget(self.csvLineEdit)
         self.csvLayout.addWidget(self.csvFileSelectButton)
         self.csvLayout.addWidget(self.csvPushButton)
+        self.importLayout.addWidget(self.csvWidget)
         
         #
         # Editor Layout
@@ -113,6 +135,21 @@ class EditorWidget(QtGui.QWidget):
         self.editor.setAlternatingRowColors(True)
         self.editor.setSortingEnabled(True)
         self.editorLayout.addWidget(self.editor)
+        
+        #
+        # Widget Connections
+        #
+        
+        self.connect(self.importTypeComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.switch_import_plugin)
+        
+    def switch_import_plugin(self, plugin):
+        self.rssWidget.hide()
+        self.csvWidget.hide()
+        
+        if plugin == "RSS":
+            self.rssWidget.show()
+        elif plugin == "CSV":
+            self.csvWidget.show()
 
 if __name__ == "__main__":
     import sys

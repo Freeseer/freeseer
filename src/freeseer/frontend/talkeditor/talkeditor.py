@@ -212,7 +212,6 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.editorWidget.rssLabel.setText(self.uiTranslator.translate("TalkEditorApp", "URL"))
         self.editorWidget.rssPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from RSS"))
         self.editorWidget.csvLabel.setText(self.uiTranslator.translate("TalkEditorApp", "File"))
-        self.editorWidget.csvFileSelectButton.setText(self.uiTranslator.translate("TalkEditorApp", "Select CSV file"))
         self.editorWidget.csvPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from CSV"))
         self.editorWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
         self.editorWidget.removeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Remove"))
