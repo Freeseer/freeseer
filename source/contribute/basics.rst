@@ -114,6 +114,39 @@ If you followed the instructions, you should have a link to your `GitHub <http:/
    Be descriptive when naming your new branch! See :ref:`branch naming suggestions <branch-names>`.
 
 
+Close and Reference Issues with Commit Message
+----------------------------------------------
+
+To reduce overhead and management, we use a single issue tracker for all the
+organization's repositories. It can be found at our main repo:
+`github.com/Freeseer/freeseer/issues <https://github.com/Freeseer/freeseer/issues>`_.
+
+Using a few simple keywords you can close an issue right from a commit
+message, or just leave a note on the issue.
+
+Referencing GitHub issues from the commit message:
+
+* Link: use the issue number
+* Link & close: use a keyword and issue number
+* Link from a repo that's not freeseer.git: explicitly reference Freeseer/freeseer
+
+Examples:
+::
+
+    git commit -m 'closes #35'
+                  'closes gh-35'
+                  'Resolved issue #35'
+                  'See #35 for more info'
+                  'Fixes issues Freeseer/freeseer#35'
+
+.. tip::
+
+  Supported keywords: **close**, **closes**, **closed**, **fixes**, **fixed**, **fix**, **resolved**
+
+  Keywords are not case sensitive.
+
+Anyone with **write access** to the repository may close an issue or leave a note.
+
 Dealing with Conflicts
 ----------------------
 You'll run into a merge conflict eventually.
