@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="nl_NL" sourcelanguage="en_CA">
+<!DOCTYPE TS><TS version="2.0" language="nl_NL" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -47,147 +46,147 @@
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="200"/>
+        <location filename="../../configtool/configtool.py" line="201"/>
         <source>Freeseer ConfigTool</source>
         <translation>Freeseer instrumentenbord</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="205"/>
+        <location filename="../../configtool/configtool.py" line="206"/>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="206"/>
+        <location filename="../../configtool/configtool.py" line="207"/>
         <source>&amp;Options</source>
         <translation>&amp;Opties</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
+        <location filename="../../configtool/configtool.py" line="208"/>
         <source>&amp;Language</source>
         <translation>&amp;Taal</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
+        <location filename="../../configtool/configtool.py" line="209"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="209"/>
+        <location filename="../../configtool/configtool.py" line="210"/>
         <source>&amp;Quit</source>
         <translation>&amp;Sluiten</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="210"/>
+        <location filename="../../configtool/configtool.py" line="211"/>
         <source>&amp;About</source>
         <translation>&amp;Over Freeseer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="234"/>
+        <location filename="../../configtool/configtool.py" line="237"/>
         <source>Close</source>
         <translation>Sluiten</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="240"/>
+        <location filename="../../configtool/configtool.py" line="243"/>
         <source>Audio / Video Settings</source>
         <translation>Audio / Video Instellingen</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="241"/>
+        <location filename="../../configtool/configtool.py" line="244"/>
         <source>Record Audio</source>
         <translation>Audio opnemen</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="242"/>
+        <location filename="../../configtool/configtool.py" line="245"/>
         <source>Audio Mixer</source>
         <translation>Audio mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="246"/>
+        <location filename="../../configtool/configtool.py" line="249"/>
         <source>Setup</source>
         <translation>Voorkeuren</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="244"/>
+        <location filename="../../configtool/configtool.py" line="247"/>
         <source>Record Video</source>
         <translation>Video opnemen</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="245"/>
+        <location filename="../../configtool/configtool.py" line="248"/>
         <source>Video Mixer</source>
         <translation>Video mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="247"/>
+        <location filename="../../configtool/configtool.py" line="250"/>
         <source>Miscellaneous</source>
         <translation>Veelsoortig</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="249"/>
+        <location filename="../../configtool/configtool.py" line="252"/>
         <source>Record Directory</source>
         <translation>Opslaan locatie</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="250"/>
+        <location filename="../../configtool/configtool.py" line="253"/>
         <source>Enable Auto-Hide</source>
         <translation>Automatisch verbergen</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="256"/>
+        <location filename="../../configtool/configtool.py" line="259"/>
         <source>Console Logger</source>
         <translation>Console logboek</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="259"/>
+        <location filename="../../configtool/configtool.py" line="262"/>
         <source>Log Level</source>
         <translation>Logboek niveau</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="258"/>
+        <location filename="../../configtool/configtool.py" line="261"/>
         <source>Syslog Logger</source>
         <translation>Syslog logboek</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="216"/>
+        <location filename="../../configtool/configtool.py" line="217"/>
         <source>General</source>
         <translation>Algemeen</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="217"/>
+        <location filename="../../configtool/configtool.py" line="218"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="218"/>
+        <location filename="../../configtool/configtool.py" line="219"/>
         <source>AudioInput</source>
         <translation>Audio-invoer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="219"/>
+        <location filename="../../configtool/configtool.py" line="220"/>
         <source>AudioMixer</source>
         <translation>Audio mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="220"/>
+        <location filename="../../configtool/configtool.py" line="221"/>
         <source>VideoInput</source>
         <translation>Video-invoer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="221"/>
+        <location filename="../../configtool/configtool.py" line="222"/>
         <source>VideoMixer</source>
         <translation>Video mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="222"/>
+        <location filename="../../configtool/configtool.py" line="223"/>
         <source>Output</source>
         <translation>Uitvoer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="223"/>
+        <location filename="../../configtool/configtool.py" line="224"/>
         <source>Logger</source>
         <translation>Logboek</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="248"/>
+        <location filename="../../configtool/configtool.py" line="251"/>
         <source>Default Language</source>
         <translation>Standaardtaal</translation>
     </message>
@@ -195,119 +194,124 @@
 <context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="184"/>
+        <location filename="../../record/record.py" line="190"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - draagbare presentatie-opname station</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="189"/>
+        <location filename="../../record/record.py" line="195"/>
         <source>Record</source>
         <translation>Opnemen</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="192"/>
+        <location filename="../../record/record.py" line="198"/>
         <source>Stop</source>
         <translation>Stoppen</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="193"/>
+        <location filename="../../record/record.py" line="199"/>
         <source>Hide Main Window</source>
         <translation>Hoofdvenster verbergen</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="194"/>
+        <location filename="../../record/record.py" line="200"/>
         <source>Show Main Window</source>
         <translation>Hoofdvenster weergeven</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="215"/>
+        <location filename="../../record/record.py" line="221"/>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="216"/>
+        <location filename="../../record/record.py" line="222"/>
         <source>&amp;Options</source>
         <translation>&amp;Opties</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="217"/>
+        <location filename="../../record/record.py" line="223"/>
         <source>&amp;Language</source>
         <translation>&amp;Taal</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="224"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="220"/>
+        <location filename="../../record/record.py" line="226"/>
         <source>&amp;Open Video Directory</source>
         <translation>&amp;Video map openen</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="221"/>
+        <location filename="../../record/record.py" line="227"/>
         <source>&amp;Quit</source>
         <translation>&amp;Sluiten</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="222"/>
+        <location filename="../../record/record.py" line="228"/>
         <source>&amp;About</source>
         <translation>&amp;Over Freeseer</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="245"/>
+        <location filename="../../record/record.py" line="252"/>
         <source>Event</source>
         <translation>Programma</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="246"/>
+        <location filename="../../record/record.py" line="253"/>
         <source>Room</source>
         <translation>Zaal</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="247"/>
+        <location filename="../../record/record.py" line="254"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="248"/>
+        <location filename="../../record/record.py" line="255"/>
         <source>Talk</source>
         <translation>Gesprek</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="190"/>
+        <location filename="../../record/record.py" line="196"/>
         <source>Pause</source>
         <translation>Pauzeren</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="198"/>
+        <location filename="../../record/record.py" line="204"/>
         <source>Ready.</source>
         <translation>Gereed.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="199"/>
+        <location filename="../../record/record.py" line="205"/>
         <source>Recording...</source>
         <translation>Opnemen...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="200"/>
+        <location filename="../../record/record.py" line="206"/>
         <source>Recording Paused.</source>
         <translation>Opname gepauzeerd.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="188"/>
+        <location filename="../../record/record.py" line="194"/>
         <source>Standby</source>
         <translation>Stand-by</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="191"/>
+        <location filename="../../record/record.py" line="197"/>
         <source>Resume</source>
         <translation>Hervatten</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="197"/>
+        <location filename="../../record/record.py" line="203"/>
         <source>Idle.</source>
         <translation>Nietsdoend.</translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="229"/>
+        <source>&amp;Report</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -430,7 +434,6 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="190"/>
         <source>&amp;Export to CSV</source>
-        <translatorcomment>gescheiden door lijstscheidingsteken</translatorcomment>
         <translation>&amp;Exporteer naar CSV</translation>
     </message>
     <message>
