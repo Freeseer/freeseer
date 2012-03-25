@@ -28,7 +28,7 @@ For an overview of basic tasks:
 
 * [Sphinx tutorial](http://sphinx.pocoo.org/tutorial.html)
 
-For a brief introduction on reStructuredText (reST) concepts and syntax:
+For a brief introduction on reStructuredText concepts and syntax:
 
 * [reStructuredText Primer](http://sphinx.pocoo.org/rest.html)
 * [Sphinx cheat sheet](http://matplotlib.sourceforge.net/sampledoc/cheatsheet.html)
@@ -38,13 +38,13 @@ Publishing to the Web
 
 Once you've made your changes to the documentation, you'll have to build the
 output files with `make html`. By default the build directory is /build/.
-We want the files in the HTML folder to go to the freeseer.github.com repo.
+We want the files in the HTML folder to go to the
+[freeseer.github.com](https://github.com/Freeseer/freeseer.github.com) repo.
 
 We can either put the output directly in the website repo, for example:
 
     $ sphinx-build -b html source path_to/freeseer.github.com/docs/
-    # Better to do it this way than to modify the build path in make.bat,
-    # since the path could vary by user.
+    # Preferred over modifying the build path in make.bat and using make html; path may vary by user.
 
 or we can build to the default build path and run a script to copy the output
 to the freeseer.github.com repo, commit, and push it for us:
