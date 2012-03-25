@@ -167,7 +167,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.reportWidget.show)
+        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
@@ -428,6 +428,15 @@ class RecordApp(QtGui.QMainWindow):
     ###
     ###Report Failure
     ###
+    def show_report_widget(self):
+        p = self.current_presentation()
+        self.reportWidget.titleLabel2.setText(p.title)
+        self.reportWidget.speakerLabel2.setText(p.speaker)
+        self.reportWidget.eventLabel2.setText(p.event)
+        self.reportWidget.roomLabel2.setText(p.room)
+        self.reportWidget.timeLabel2.setText(p.time)
+        self.reportWidget.show()
+    
     def report(self):
         talk_id = self.current_presentation_id()
         presentation = self.current_presentation()
