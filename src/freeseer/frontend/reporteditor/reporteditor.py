@@ -142,7 +142,7 @@ class ReportEditorApp(QtGui.QMainWindow):
         # Main Window Connections
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-
+        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_reports_to_csv)
         self.connect(self.editorWidget.editor, QtCore.SIGNAL('clicked (const QModelIndex&)'), self.editorSelectionChanged)
 
         # Load default language
@@ -181,7 +181,6 @@ class ReportEditorApp(QtGui.QMainWindow):
         self.actionExportCsv.setText(self.uiTranslator.translate("ReportEditorApp", "&Export to CSV"))
         self.actionExit.setText(self.uiTranslator.translate("ReportEditorApp", "&Quit"))
         self.actionAbout.setText(self.uiTranslator.translate("ReportEditorApp", "&About"))
-        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_reports_to_csv)
         # --- End Menubar
         
         #
