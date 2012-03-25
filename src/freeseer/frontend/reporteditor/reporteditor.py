@@ -162,37 +162,42 @@ class ReportEditorApp(QtGui.QMainWindow):
     ### Translation
     ###
     def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("TalkEditorApp", "Freeseer Talk Editor"))
+        self.setWindowTitle(self.uiTranslator.translate("ReportEditorApp", "Freeseer Report Editor"))
         
         #
         # Reusable Strings
         #
-        self.confirmDBClearTitleString = self.uiTranslator.translate("TalkEditorApp", "Clear Database")
-        self.confirmDBClearQuestionString = self.uiTranslator.translate("TalkEditorApp", "Are you sure you want to clear the DB?")
+        self.confirmDBClearTitleString = self.uiTranslator.translate("ReportEditorApp", "Clear Database")
+        self.confirmDBClearQuestionString = self.uiTranslator.translate("ReportEditorApp", "Are you sure you want to clear the DB?")
         # --- End Reusable Strings
         
         #
         # Menubar
         #
-        self.menuFile.setTitle(self.uiTranslator.translate("TalkEditorApp", "&File"))
-        self.menuOptions.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Options"))
-        self.menuLanguage.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Language"))
-        self.menuHelp.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Help"))
-        self.actionExportCsv.setText(self.uiTranslator.translate("TalkEditorApp", "&Export to CSV"))
-        self.actionExit.setText(self.uiTranslator.translate("TalkEditorApp", "&Quit"))
-        self.actionAbout.setText(self.uiTranslator.translate("TalkEditorApp", "&About"))
+        self.menuFile.setTitle(self.uiTranslator.translate("ReportEditorApp", "&File"))
+        self.menuOptions.setTitle(self.uiTranslator.translate("ReportEditorApp", "&Options"))
+        self.menuLanguage.setTitle(self.uiTranslator.translate("ReportEditorApp", "&Language"))
+        self.menuHelp.setTitle(self.uiTranslator.translate("ReportEditorApp", "&Help"))
+        self.actionExportCsv.setText(self.uiTranslator.translate("ReportEditorApp", "&Export to CSV"))
+        self.actionExit.setText(self.uiTranslator.translate("ReportEditorApp", "&Quit"))
+        self.actionAbout.setText(self.uiTranslator.translate("ReportEditorApp", "&About"))
         self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_reports_to_csv)
         # --- End Menubar
         
         #
         # EditorWidget
         #
-        #self.editorWidget.rssLabel.setText(self.uiTranslator.translate("TalkEditorApp", "URL"))
-        #self.editorWidget.rssPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from RSS"))
-        #self.editorWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
-        self.editorWidget.removeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Remove"))
-        self.editorWidget.clearButton.setText(self.uiTranslator.translate("TalkEditorApp", "Clear"))
-        self.editorWidget.closeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Close"))
+        self.editorWidget.removeButton.setText(self.uiTranslator.translate("ReportEditorApp", "Remove"))
+        self.editorWidget.clearButton.setText(self.uiTranslator.translate("ReportEditorApp", "Clear"))
+        self.editorWidget.closeButton.setText(self.uiTranslator.translate("ReportEditorApp", "Close"))
+        
+        self.editorWidget.titleLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Title:"))
+        self.editorWidget.speakerLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Speaker:"))
+        self.editorWidget.descriptionLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Description:"))
+        self.editorWidget.levelLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Level:"))
+        self.editorWidget.eventLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Event:"))
+        self.editorWidget.roomLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Room:"))
+        self.editorWidget.timeLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Time:"))
         # --- End EditorWidget
         
         self.aboutDialog.retranslate(self.current_language)
@@ -286,7 +291,7 @@ class ReportEditorApp(QtGui.QMainWindow):
     def confirm_reset(self):
         """
         Presents a confirmation dialog to ask the user if they are sure they
-        wish to remove the talk database.
+        wish to remove the report database.
         
         If Yes call the reset() function.
         """
@@ -301,7 +306,7 @@ class ReportEditorApp(QtGui.QMainWindow):
             self.reset()
 
     def closeEvent(self, event):
-        logging.info('Exiting talk database editor...')
+        logging.info('Exiting report editor...')
         self.geometry = self.saveGeometry()
         event.accept()
     
@@ -311,13 +316,13 @@ class ReportEditorApp(QtGui.QMainWindow):
         
     def updatePresentationInfo(self, talkId):
         p = self.core.db.get_presentation(talkId)
-        self.editorWidget.titleLabel.setText("Title: %s" % p.title)
-        self.editorWidget.speakerLabel.setText("Speaker: %s" % p.speaker)
-        self.editorWidget.descriptionLabel.setText("Description: %s" % p.description)
-        self.editorWidget.levelLabel.setText("Level: %s" % p.level)
-        self.editorWidget.eventLabel.setText("Event: %s" % p.event)
-        self.editorWidget.roomLabel.setText("Room: %s" % p.room)
-        self.editorWidget.timeLabel.setText("Time: %s" % p.time)
+        self.editorWidget.titleLabel2.setText(p.title)
+        self.editorWidget.speakerLabel2.setText(p.speaker)
+        self.editorWidget.descriptionLabel2.setText(p.description)
+        self.editorWidget.levelLabel2.setText(p.level)
+        self.editorWidget.eventLabel2.setText(p.event)
+        self.editorWidget.roomLabel2.setText(p.room)
+        self.editorWidget.timeLabel2.setText(p.time)
         
     def export_reports_to_csv(self):
         fname = QtGui.QFileDialog.getSaveFileName(self,'Select file')
