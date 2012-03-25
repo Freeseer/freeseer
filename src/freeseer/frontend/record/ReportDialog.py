@@ -54,7 +54,7 @@ class ReportDialog(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
 
-        self.infoLayout = QtGui.QVBoxLayout()
+        self.infoLayout = QtGui.QFormLayout()
         self.mainLayout.addLayout(self.infoLayout)
         self.reportLayout = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.reportLayout)
@@ -63,15 +63,20 @@ class ReportDialog(QtGui.QWidget):
         
         # Talk infomation
         self.titleLabel = QtGui.QLabel("Title:")
+        self.titleLabel2 = QtGui.QLabel()
         self.speakerLabel = QtGui.QLabel("Speaker:")
+        self.speakerLabel2 = QtGui.QLabel()
         self.eventLabel = QtGui.QLabel("Event:")
+        self.eventLabel2 = QtGui.QLabel()
         self.roomLabel = QtGui.QLabel("Room:")
+        self.roomLabel2 = QtGui.QLabel()
         self.timeLabel = QtGui.QLabel("Time:")
-        self.infoLayout.addWidget(self.titleLabel)
-        self.infoLayout.addWidget(self.speakerLabel)
-        self.infoLayout.addWidget(self.eventLabel)
-        self.infoLayout.addWidget(self.roomLabel)
-        self.infoLayout.addWidget(self.timeLabel)
+        self.timeLabel2 = QtGui.QLabel()
+        self.infoLayout.addRow(self.titleLabel, self.titleLabel2)
+        self.infoLayout.addRow(self.speakerLabel, self.speakerLabel2)
+        self.infoLayout.addRow(self.eventLabel, self.eventLabel2)
+        self.infoLayout.addRow(self.roomLabel, self.roomLabel2)
+        self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
         
         #Report
         self.commentLabel = QtGui.QLabel("Comment")
