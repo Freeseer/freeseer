@@ -118,7 +118,6 @@ class RecordApp(QtGui.QMainWindow):
         
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
-        self.actionReport.setIcon(icon)
         
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
@@ -227,6 +226,7 @@ class RecordApp(QtGui.QMainWindow):
         self.actionOpenVideoFolder.setText(self.uiTranslator.translate("RecordApp", "&Open Video Directory"))
         self.actionExit.setText(self.uiTranslator.translate("RecordApp", "&Quit"))
         self.actionAbout.setText(self.uiTranslator.translate("RecordApp", "&About"))
+        self.actionReport.setText(self.uiTranslator.translate("RecordApp", "&Report"))
         # --- End Menubar
         
         #
