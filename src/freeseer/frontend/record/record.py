@@ -263,6 +263,28 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.talkLabel.setText(self.uiTranslator.translate("RecordApp", "Talk"))
         # --- End RecordingWidget
         
+        #
+        # ReportWidget
+        #
+        self.reportWidget.titleLabel.setText(self.uiTranslator.translate("RecordApp", "Title:"))
+        self.reportWidget.speakerLabel.setText(self.uiTranslator.translate("RecordApp", "Speaker:"))
+        self.reportWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event:"))
+        self.reportWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room:"))
+        self.reportWidget.timeLabel.setText(self.uiTranslator.translate("RecordApp", "Time:"))
+        self.reportWidget.commentLabel.setText(self.uiTranslator.translate("RecordApp", "Comment"))
+        self.reportWidget.closeButton.setText(self.uiTranslator.translate("RecordApp", "Close"))
+        self.reportWidget.reportButton.setText(self.uiTranslator.translate("RecordApp", "Report"))
+        
+        # Logic for translating the report options
+        noaudio = self.uiTranslator.translate("RecordApp", "No Audio")
+        novideo = self.uiTranslator.translate("RecordApp", "No Video")
+        noaudiovideo = self.uiTranslator.translate("RecordApp", "No Audio/Video")
+        self.reportWidget.options = [noaudio, novideo, noaudiovideo]
+        self.reportWidget.reportCombo.clear()
+        for i in self.reportWidget.options:
+            self.reportWidget.reportCombo.addItem(i)
+        # --- End ReportWidget
+        
         self.aboutDialog.retranslate(self.current_language)
         
     def translate(self, action):

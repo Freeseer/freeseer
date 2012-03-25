@@ -83,9 +83,12 @@ class ReportDialog(QtGui.QWidget):
         self.commentEdit = QtGui.QLineEdit()
         
         self.reportCombo = QtGui.QComboBox()
-        self.options = ['No Audio', 'No Video', 'No Audio/Video']
-        for i in self.options:
-            self.reportCombo.addItem(i)
+        # Prototype for report options. Please define these in the 
+        # record.py logic file under retranslate() so that translations
+        # work.
+#        self.options = ['No Audio', 'No Video', 'No Audio/Video']
+#        for i in self.options:
+#            self.reportCombo.addItem(i)
         
         self.reportLayout.addWidget(self.commentLabel)
         self.reportLayout.addWidget(self.commentEdit)
