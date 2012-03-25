@@ -36,6 +36,7 @@ except AttributeError:
 
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
+from freeseer.framework.failure import Failure
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -62,6 +63,8 @@ class RecordApp(QtGui.QMainWindow):
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
+        
+        self.reportWidget = ReportDialog()
         
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
         
@@ -164,7 +167,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.reportError)
+        self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.reportWidget.show)
         
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
@@ -176,6 +179,11 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
+        
+        #
+        # ReportWidget Connections
+        #
+        self.connect(self.reportWidget.reportButton, QtCore.SIGNAL("clicked()"), self.report)
 
         self.load_settings()
 
@@ -416,6 +424,20 @@ class RecordApp(QtGui.QMainWindow):
         
         model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
         self.mainWidget.talkComboBox.setModel(model)
+        
+    ###
+    ###Report Failure
+    ###
+    def report(self):
+        talk_id = self.current_presentation_id()
+        presentation = self.current_presentation()
+        i = self.reportWidget.reportCombo.currentIndex()
+        
+        failure = Failure(talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i])
+        logging.info("Report Failure: %s, %s, %s" % (talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i]))
+        
+        self.core.db.insert_failure(failure)
+        self.close()
 
     ###
     ### Misc
@@ -486,13 +508,7 @@ class RecordApp(QtGui.QMainWindow):
     def keyPressEvent(self, event):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
-
-    ###
-    ###Report Failure
-    ###
-    def reportError(self):
-        self.reportDialog = ReportDialog(self.current_presentation(), self.current_presentation_id(), self.core)
-        self.reportDialog.show()
+    
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = RecordApp()
