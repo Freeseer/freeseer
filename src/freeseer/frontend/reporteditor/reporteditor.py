@@ -45,7 +45,7 @@ __version__ = project_info.VERSION
         
 class ReportEditorApp(QtGui.QMainWindow):
     '''
-    Freeseer talk database editor main gui class
+    Freeseer report editor main gui class
     '''
     def __init__(self, core=None):
         QtGui.QMainWindow.__init__(self)
