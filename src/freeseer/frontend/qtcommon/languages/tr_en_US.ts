@@ -371,6 +371,114 @@
     </message>
 </context>
 <context>
+    <name>ReportEditorApp</name>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="165"/>
+        <source>Freeseer Report Editor</source>
+        <translation>Freeseer Report Editor</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="170"/>
+        <source>Clear Database</source>
+        <translation>Clear Database</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="171"/>
+        <source>Are you sure you want to clear the DB?</source>
+        <translation>Are you sure you want to clear the Database?</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="178"/>
+        <source>&amp;File</source>
+        <translation>&amp;File</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="179"/>
+        <source>&amp;Options</source>
+        <translation>&amp;Options</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="180"/>
+        <source>&amp;Language</source>
+        <translation>&amp;Language</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="181"/>
+        <source>&amp;Help</source>
+        <translation>&amp;Help</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="182"/>
+        <source>&amp;Export to CSV</source>
+        <translation>&amp;Export to CSV</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="183"/>
+        <source>&amp;Quit</source>
+        <translation>&amp;Quit</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="184"/>
+        <source>&amp;About</source>
+        <translation>&amp;About</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="190"/>
+        <source>Remove</source>
+        <translation>Remove</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="191"/>
+        <source>Clear</source>
+        <translation>Clear</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="192"/>
+        <source>Close</source>
+        <translation>Close</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="194"/>
+        <source>Title:</source>
+        <translation>Title:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="195"/>
+        <source>Speaker:</source>
+        <translation>Speaker:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="196"/>
+        <source>Description:</source>
+        <translation>Description:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="197"/>
+        <source>Level:</source>
+        <translation>Level:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="198"/>
+        <source>Event:</source>
+        <translation>Event:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="199"/>
+        <source>Room:</source>
+        <translation>Room:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="200"/>
+        <source>Time:</source>
+        <translation>Time:</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="172"/>
+        <source>Select File</source>
+        <translation type="unfinished">Select File</translation>
+    </message>
+</context>
+<context>
     <name>TalkEditorApp</name>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="174"/>

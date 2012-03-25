@@ -370,6 +370,114 @@
     </message>
 </context>
 <context>
+    <name>ReportEditorApp</name>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="165"/>
+        <source>Freeseer Report Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="170"/>
+        <source>Clear Database</source>
+        <translation type="unfinished">Database vrijmaken</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="171"/>
+        <source>Are you sure you want to clear the DB?</source>
+        <translation type="unfinished">Weet u zeker dat u de database wilt vrijmaken?</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="178"/>
+        <source>&amp;File</source>
+        <translation type="unfinished">&amp;Bestand</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="179"/>
+        <source>&amp;Options</source>
+        <translation type="unfinished">&amp;Opties</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="180"/>
+        <source>&amp;Language</source>
+        <translation type="unfinished">&amp;Taal</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="181"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished">&amp;Help</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="182"/>
+        <source>&amp;Export to CSV</source>
+        <translation type="unfinished">&amp;Exporteer naar CSV</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="183"/>
+        <source>&amp;Quit</source>
+        <translation type="unfinished">&amp;Sluiten</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="184"/>
+        <source>&amp;About</source>
+        <translation type="unfinished">&amp;Over Freeseer</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="190"/>
+        <source>Remove</source>
+        <translation type="unfinished">Verwijderen</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="191"/>
+        <source>Clear</source>
+        <translation type="unfinished">Opruimen</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="192"/>
+        <source>Close</source>
+        <translation type="unfinished">Sluiten</translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="194"/>
+        <source>Title:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="195"/>
+        <source>Speaker:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="196"/>
+        <source>Description:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="197"/>
+        <source>Level:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="198"/>
+        <source>Event:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="199"/>
+        <source>Room:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="200"/>
+        <source>Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../reporteditor/reporteditor.py" line="172"/>
+        <source>Select File</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TalkEditorApp</name>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="174"/>
