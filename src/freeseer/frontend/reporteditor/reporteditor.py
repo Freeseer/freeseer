@@ -152,8 +152,7 @@ class ReportEditorApp(QtGui.QMainWindow):
                 action.setChecked(True)
                 self.translate(action)
                 break
-            
-            
+
         self.load_failures_model()
         self.editorWidget.editor.resizeColumnsToContents()
         self.editorWidget.editor.resizeRowsToContents()
@@ -243,9 +242,7 @@ class ReportEditorApp(QtGui.QMainWindow):
         editor = self.editorWidget.editor
         editor.setModel(self.failureModel)
         editor.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
-        
-    
-        
+
     def hide_add_talk_widget(self):
         self.editorWidget.setHidden(False)
         self.addTalkWidget.setHidden(True)
