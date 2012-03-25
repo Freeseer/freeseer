@@ -46,147 +46,147 @@
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="200"/>
+        <location filename="../../configtool/configtool.py" line="201"/>
         <source>Freeseer ConfigTool</source>
         <translation>Freeseer 配置工具</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="234"/>
+        <location filename="../../configtool/configtool.py" line="237"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="240"/>
+        <location filename="../../configtool/configtool.py" line="243"/>
         <source>Audio / Video Settings</source>
         <translation>音頻 / 視頻 設置</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="241"/>
+        <location filename="../../configtool/configtool.py" line="244"/>
         <source>Record Audio</source>
         <translation>記錄音頻</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="242"/>
+        <location filename="../../configtool/configtool.py" line="245"/>
         <source>Audio Mixer</source>
         <translation>音頻混頻器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="246"/>
+        <location filename="../../configtool/configtool.py" line="249"/>
         <source>Setup</source>
         <translation>設置</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="244"/>
+        <location filename="../../configtool/configtool.py" line="247"/>
         <source>Record Video</source>
         <translation>記錄視頻</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="245"/>
+        <location filename="../../configtool/configtool.py" line="248"/>
         <source>Video Mixer</source>
         <translation>視頻混頻器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="247"/>
+        <location filename="../../configtool/configtool.py" line="250"/>
         <source>Miscellaneous</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="249"/>
+        <location filename="../../configtool/configtool.py" line="252"/>
         <source>Record Directory</source>
         <translation>保存目錄</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="250"/>
+        <location filename="../../configtool/configtool.py" line="253"/>
         <source>Enable Auto-Hide</source>
         <translation>啟用自動隱藏</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="256"/>
+        <location filename="../../configtool/configtool.py" line="259"/>
         <source>Console Logger</source>
         <translation>控制台日誌記錄器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="259"/>
+        <location filename="../../configtool/configtool.py" line="262"/>
         <source>Log Level</source>
         <translation>日誌記錄等級</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="258"/>
+        <location filename="../../configtool/configtool.py" line="261"/>
         <source>Syslog Logger</source>
         <translation>系統日誌記錄器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="205"/>
+        <location filename="../../configtool/configtool.py" line="206"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="206"/>
+        <location filename="../../configtool/configtool.py" line="207"/>
         <source>&amp;Options</source>
         <translation>選項(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
+        <location filename="../../configtool/configtool.py" line="208"/>
         <source>&amp;Language</source>
         <translation>語言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
+        <location filename="../../configtool/configtool.py" line="209"/>
         <source>&amp;Help</source>
         <translation>幫助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="209"/>
+        <location filename="../../configtool/configtool.py" line="210"/>
         <source>&amp;Quit</source>
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="210"/>
+        <location filename="../../configtool/configtool.py" line="211"/>
         <source>&amp;About</source>
         <translation>關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="216"/>
+        <location filename="../../configtool/configtool.py" line="217"/>
         <source>General</source>
         <translation>一般設定</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="217"/>
+        <location filename="../../configtool/configtool.py" line="218"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="218"/>
+        <location filename="../../configtool/configtool.py" line="219"/>
         <source>AudioInput</source>
         <translation>音頻輸入</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="219"/>
+        <location filename="../../configtool/configtool.py" line="220"/>
         <source>AudioMixer</source>
         <translation>音頻混頻器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="220"/>
+        <location filename="../../configtool/configtool.py" line="221"/>
         <source>VideoInput</source>
         <translation>視頻輸入</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="221"/>
+        <location filename="../../configtool/configtool.py" line="222"/>
         <source>VideoMixer</source>
         <translation>視頻混頻器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="222"/>
+        <location filename="../../configtool/configtool.py" line="223"/>
         <source>Output</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="223"/>
+        <location filename="../../configtool/configtool.py" line="224"/>
         <source>Logger</source>
         <translation>日誌</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="248"/>
+        <location filename="../../configtool/configtool.py" line="251"/>
         <source>Default Language</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,118 +194,123 @@
 <context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="184"/>
+        <location filename="../../record/record.py" line="190"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - 便攜式演示錄製站</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="189"/>
+        <location filename="../../record/record.py" line="195"/>
         <source>Record</source>
         <translation>記錄</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="192"/>
+        <location filename="../../record/record.py" line="198"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="193"/>
+        <location filename="../../record/record.py" line="199"/>
         <source>Hide Main Window</source>
         <translation>隱藏主窗口</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="194"/>
+        <location filename="../../record/record.py" line="200"/>
         <source>Show Main Window</source>
         <translation>顯示主窗口</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="215"/>
+        <location filename="../../record/record.py" line="221"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="216"/>
+        <location filename="../../record/record.py" line="222"/>
         <source>&amp;Options</source>
         <translation>選項(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="217"/>
+        <location filename="../../record/record.py" line="223"/>
         <source>&amp;Language</source>
         <translation>語言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="224"/>
         <source>&amp;Help</source>
         <translation>幫助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="220"/>
+        <location filename="../../record/record.py" line="226"/>
         <source>&amp;Open Video Directory</source>
         <translation>打開視頻目錄(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="221"/>
+        <location filename="../../record/record.py" line="227"/>
         <source>&amp;Quit</source>
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="222"/>
+        <location filename="../../record/record.py" line="228"/>
         <source>&amp;About</source>
         <translation>關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="245"/>
+        <location filename="../../record/record.py" line="252"/>
         <source>Event</source>
         <translation>會議</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="246"/>
+        <location filename="../../record/record.py" line="253"/>
         <source>Room</source>
         <translation>會議室</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="247"/>
+        <location filename="../../record/record.py" line="254"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="248"/>
+        <location filename="../../record/record.py" line="255"/>
         <source>Talk</source>
         <translation>演講</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="190"/>
+        <location filename="../../record/record.py" line="196"/>
         <source>Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="198"/>
+        <location filename="../../record/record.py" line="204"/>
         <source>Ready.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="199"/>
+        <location filename="../../record/record.py" line="205"/>
         <source>Recording...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="200"/>
+        <location filename="../../record/record.py" line="206"/>
         <source>Recording Paused.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="188"/>
+        <location filename="../../record/record.py" line="194"/>
         <source>Standby</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="191"/>
+        <location filename="../../record/record.py" line="197"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="197"/>
+        <location filename="../../record/record.py" line="203"/>
         <source>Idle.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="229"/>
+        <source>&amp;Report</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
