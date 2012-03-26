@@ -46,10 +46,13 @@ class DesktopLinuxSrc(IVideoInput):
         videosrc = gst.element_factory_make("ximagesrc", "videosrc")
         bin.add(videosrc)
         
+        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
+        bin.add(colorspace)
+        videosrc.link(colorspace)
+        
         # Setup ghost pad
-        pad = videoscale_cap.get_pad("src")
+        pad = colorspace.get_pad("src")
         ghostpad = gst.GhostPad("videosrc", pad)
         bin.add_pad(ghostpad)
         
         return bin
-
