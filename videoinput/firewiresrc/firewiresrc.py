@@ -74,10 +74,11 @@ class FirewireSrc(IVideoInput):
     
     def load_config(self, plugman):
         self.plugman = plugman
-        self.device = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Video Device")
-        self.input_type = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Input Type")
-        self.framerate = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Framerate")
-        self.resolution = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Resolution")
+        
+        try:
+            self.device = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Video Device")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Video Device", self.device)
         
     def get_widget(self):
         if self.widget is None:
@@ -98,12 +99,7 @@ class FirewireSrc(IVideoInput):
         return self.widget
 
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        
-        try:
-            self.device = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Video Device")
-        except ConfigParser.NoSectionError:
-            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Video Device", self.device)
+        self.load_config(plugman)
                 
         # Load the combobox with inputs
         self.combobox.clear()
