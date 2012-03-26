@@ -30,12 +30,17 @@ import pygst
 pygst.require("0.10")
 import gst
 
+import Xlib.display
+
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IVideoInput
 
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop-Linux Source"
+    
+    # ximagesrc
+    screen = 0
     
     def get_videoinput_bin(self):
         """
@@ -56,3 +61,40 @@ class DesktopLinuxSrc(IVideoInput):
         bin.add_pad(ghostpad)
         
         return bin
+    
+    def load_config(self, plugman):
+        self.plugman = plugman
+        
+        try:
+            self.screen = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Screen")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Screen", self.screen)
+        except TypeError:
+            # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
+            pass
+        
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            
+            self.screenLabel = QtGui.QLabel("Screen")
+            self.screenSpinBox = QtGui.QSpinBox()
+            layout.addRow(self.screenLabel, self.screenSpinBox)
+            
+            # Connections
+            self.widget.connect(self.screenSpinBox, QtCore.SIGNAL('valueChanged(int)'), self.set_screen)
+            
+        return self.widget
+
+    def widget_load_config(self, plugman):
+        self.load_config(plugman)
+                
+        display = Xlib.display.Display()
+        self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
+            
+    def set_screen(self, screen):
+        self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Screen", screen)
+        self.plugman.save()
