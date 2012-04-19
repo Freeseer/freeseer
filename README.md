@@ -50,4 +50,4 @@ or we can build to the default build path and run a script to copy the output
 to the freeseer.github.com repo, commit, and push it for us:
 
     $ make html
-    $ sh copy_commit_push.sh # Note: this script doesn't exist yet
+    $ sh publish.sh
