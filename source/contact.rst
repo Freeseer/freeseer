@@ -47,8 +47,13 @@ You can also find Freeseer community members on various channels across the web:
 * Like `FOSSLC's Facebook Page <https://www.facebook.com/FreeAndOpenSourceSoftwareLearningCentre>`_
 * Read and comment on `FOSSLC's blog <http://www.fosslc.org/drupal/category/community/freeseer>`_
 
-  * The FOSSLC blog doesn't contain *all* Freeseer blog posts. Part of the Freeseer community prefers to blog about Freeseer on their personal blogs.
+.. seealso::
 
+    The FOSSLC blog doesn't contain *all* Freeseer blog posts.
+    Part of the Freeseer community prefers to blog about Freeseer on their
+    personal blogs.
+
+.. TODO: see IRC notes on http://code.google.com/p/google-summer-of-code/wiki/Irc
 
 Toll-free Phone Number
 ----------------------
@@ -62,4 +67,6 @@ We're thinking of setting up a system that forwards these voicemails to our mail
 G+ Hangouts
 -----------
 
-*TODO:* We're considering using Google+ Hangouts to host Freeseer meetups. Anyone will be welcome to join. Stay tuned!
+We're considering using Google+ Hangouts to host public Freeseer meetups.
+Being able to see and hear others is good for community bonding.
+Let us know if you support this idea!
