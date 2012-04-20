@@ -32,6 +32,11 @@ To quickly get started:
     > /nick my-preferred-nickname (optional)
     > /join #freeseer
 
+.. tip::
+
+    Shortcuts exists, such as `/j` instead of `/join`.
+    To block activity messages in the room: `/ignore -channels #freeseer * JOINS
+    PARTS QUITS NICKS`. You can specificy more rooms by comma separating them.
 
 Twitter, Facebook, and Blog
 ---------------------------
