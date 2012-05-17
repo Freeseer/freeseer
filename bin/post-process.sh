@@ -26,23 +26,32 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-BASE_FF_OPTS="-s svga -ab 64k -async 3 -r 24 -aspect 4:3 -qscale 4"
+DIRECTORY=$1
+
+NICE_OPTS="-n 19"
+BASE_FF_OPTS="-s svga -ab 64k -async 3 -r 24 -aspect 4:3 -q 4"
 OGG_FF_OPTS="-acodec libvorbis"
 
-ls *.ogg | \
-while read ORIGINAL
+cd ${DIRECTORY}
+FILELIST=`ls *.ogg`
+for ORIGINAL in ${FILELIST}
 do
+   echo "Processing: ${ORIGINAL}"
    # Set up some useful variables
    MPG="`echo ${ORIGINAL} | sed \"s/.ogg/.mpg/g\"`"
    GLUED="`echo ${ORIGINAL} | sed \"s/.ogg/_glued.mpg/g\"`"
    OUTPUT="`echo ${ORIGINAL} | sed \"s/.ogg/_processed.ogg/g\"`"
 
    # Transcode to mpeg so we can concatenate easily
-   ffmpeg -i ${ORIGINAL} ${BASE_FF_OPTS} ${MPG}
+   nice ${NICE_OPTS} ffmpeg -i ${ORIGINAL} ${BASE_FF_OPTS} ${MPG}
+   echo "ffmpeg copleted with return code: $?"
 
    # Concatenate the intro segment with the video
    cat ../intro.mpg ${MPG} > ${GLUED}
+   echo "cat copleted with return code: $?"
 
    # Transcode to the finished product (an ogg/vorbis video with intro)
-   ffmpeg -i ${GLUED} ${BASE_FF_OPTS} ${OGG_FF_OPTS} ${OUTPUT}
+   nice ${NICE_OPTS} ffmpeg -i ${GLUED} ${BASE_FF_OPTS} ${OGG_FF_OPTS} ${OUTPUT}
+   echo "ffmpeg copleted with return code: $?"
+   echo "Completed processing: ${ORIGINAL}"
 done
