@@ -38,9 +38,11 @@ from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.framework.plugin import IOutput
 
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
+from AVWidget import AVWidget
 from PluginLoaderWidget import PluginLoaderWidget
 from LoggerWidget import LoggerWidget
 
@@ -71,6 +73,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         # Load all ConfigTool Widgets
         self.aboutDialog = AboutDialog()
         self.generalWidget = GeneralWidget()
+        self.avWidget = AVWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
         self.loggerWidget = LoggerWidget()
         
@@ -143,23 +146,39 @@ class ConfigToolApp(QtGui.QMainWindow):
         #
         # general tab connections
         #
-        self.connect(self.generalWidget.recordAudioCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
-        self.connect(self.generalWidget.audioMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
-        self.connect(self.generalWidget.audioMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
-        self.connect(self.generalWidget.recordVideoCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
-        self.connect(self.generalWidget.videoMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
-        self.connect(self.generalWidget.videoMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
         self.connect(self.generalWidget.languageComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_default_language)
         self.connect(self.generalWidget.recordDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.generalWidget.recordDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalWidget.autoHideCheckBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
+        
+        #
+        # AV tab connections
+        #
+        self.connect(self.avWidget.audioGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
+        self.connect(self.avWidget.audioMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
+        self.connect(self.avWidget.audioMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
+        self.connect(self.avWidget.videoGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
+        self.connect(self.avWidget.videoMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
+        self.connect(self.avWidget.videoMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.avWidget.fileGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_record_to_file)
+        self.connect(self.avWidget.fileComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_file_format)
+        self.connect(self.avWidget.fileSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_file_format)
+        self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_record_to_stream)
+        self.connect(self.avWidget.streamComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_stream_format)
+        self.connect(self.avWidget.streamSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_stream_format)
         # GUI Disabling/Enabling Connections
-        self.connect(self.generalWidget.recordAudioCheckbox, QtCore.SIGNAL("toggled(bool)"), self.generalWidget.audioMixerLabel.setEnabled)
-        self.connect(self.generalWidget.recordAudioCheckbox, QtCore.SIGNAL("toggled(bool)"), self.generalWidget.audioMixerComboBox.setEnabled)
-        self.connect(self.generalWidget.recordAudioCheckbox, QtCore.SIGNAL("toggled(bool)"), self.generalWidget.audioMixerSetupPushButton.setEnabled)
-        self.connect(self.generalWidget.recordVideoCheckbox, QtCore.SIGNAL("toggled(bool)"), self.generalWidget.videoMixerLabel.setEnabled)
-        self.connect(self.generalWidget.recordVideoCheckbox, QtCore.SIGNAL("toggled(bool)"), self.generalWidget.videoMixerComboBox.setEnabled)
-        self.connect(self.generalWidget.recordVideoCheckbox, QtCore.SIGNAL("toggled(bool)"), self.generalWidget.videoMixerSetupPushButton.setEnabled)
+        self.connect(self.avWidget.audioGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.audioMixerLabel.setEnabled)
+        self.connect(self.avWidget.audioGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.audioMixerComboBox.setEnabled)
+        self.connect(self.avWidget.audioGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.audioMixerSetupPushButton.setEnabled)
+        self.connect(self.avWidget.videoGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.videoMixerLabel.setEnabled)
+        self.connect(self.avWidget.videoGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.videoMixerComboBox.setEnabled)
+        self.connect(self.avWidget.videoGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.videoMixerSetupPushButton.setEnabled)
+        self.connect(self.avWidget.fileGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.fileLabel.setEnabled)
+        self.connect(self.avWidget.fileGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.fileComboBox.setEnabled)
+        self.connect(self.avWidget.fileGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.fileSetupPushButton.setEnabled)
+        self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamLabel.setEnabled)
+        self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamComboBox.setEnabled)
+        self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamSetupPushButton.setEnabled)
         
         #
         # plugin loader connections
@@ -215,6 +234,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         # ConfigToolWidget
         #
         self.generalString = self.uiTranslator.translate("ConfigToolApp", "General")
+        self.avString = "Recording" #self.uiTranslator.translate("ConfigToolApp", "AV Config")
         self.pluginsString = self.uiTranslator.translate("ConfigToolApp", "Plugins")
         self.audioInputString = self.uiTranslator.translate("ConfigToolApp", "AudioInput")
         self.audioMixerString = self.uiTranslator.translate("ConfigToolApp", "AudioMixer")
@@ -226,13 +246,14 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.metadataString = "Metadata"
         
         self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.pluginsString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(0).setText(0, self.audioInputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(1).setText(0, self.audioMixerString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(2).setText(0, self.videoInputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(3).setText(0, self.videoMixerString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).child(4).setText(0, self.outputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.loggerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.pluginsString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(0).setText(0, self.audioInputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(1).setText(0, self.audioMixerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(2).setText(0, self.videoInputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(3).setText(0, self.videoMixerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(4).setText(0, self.outputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).setText(0, self.loggerString)
         
         self.mainWidget.closePushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
@@ -240,18 +261,23 @@ class ConfigToolApp(QtGui.QMainWindow):
         #
         # GeneralWidget
         #
-        self.generalWidget.AVGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Audio / Video Settings"))
-        self.generalWidget.recordAudioCheckbox.setText(self.uiTranslator.translate("ConfigToolApp", "Record Audio"))
-        self.generalWidget.audioMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Audio Mixer"))
-        self.generalWidget.audioMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
-        self.generalWidget.recordVideoCheckbox.setText(self.uiTranslator.translate("ConfigToolApp", "Record Video"))
-        self.generalWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
-        self.generalWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
         self.generalWidget.MiscGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Miscellaneous"))
         self.generalWidget.languageLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Default Language"))
         self.generalWidget.recordDirLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Record Directory"))
         self.generalWidget.autoHideCheckBox.setText(self.uiTranslator.translate("ConfigToolApp", "Enable Auto-Hide"))
         # --- End GeneralWidget
+        
+        #
+        # AV Widget
+        #
+#        self.avWidget.AudioGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Audio Input"))
+        self.avWidget.audioMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Audio Mixer"))
+        self.avWidget.audioMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
+        
+#        self.avWidget.VideoGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Video Input"))
+        self.avWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
+        self.avWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
+        # --- End AV Widget
         
         #
         # Logger Widget
@@ -312,6 +338,8 @@ class ConfigToolApp(QtGui.QMainWindow):
           
         if option == self.generalString:
             self.load_general_widget()
+        elif option == self.avString:
+            self.load_av_widget()
         elif option == self.pluginsString:
             pass
         elif option == self.audioInputString:
@@ -336,42 +364,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.currentWidget = self.generalWidget
         self.currentWidget.show()
         
-        # Set up Audio
-        if self.config.enable_audio_recoding == True:
-            self.generalWidget.recordAudioCheckbox.setChecked(True)
-        else:
-            self.generalWidget.recordAudioCheckbox.setChecked(False)
-            self.generalWidget.audioMixerComboBox.setEnabled(False)
-            self.generalWidget.audioMixerSetupPushButton.setEnabled(False)
-            
-        n = 0 # Counter for finding Audio Mixer to set as current.
-        self.generalWidget.audioMixerComboBox.clear()
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
-        for plugin in plugins:
-            if plugin.is_activated:
-                self.generalWidget.audioMixerComboBox.addItem(plugin.plugin_object.get_name())
-                if plugin.plugin_object.get_name() == self.config.audiomixer:
-                    self.generalWidget.audioMixerComboBox.setCurrentIndex(n)
-                n += 1
-        
-        # Set up Video
-        if self.config.enable_video_recoding == True:
-            self.generalWidget.recordVideoCheckbox.setChecked(True)
-        else:
-            self.generalWidget.recordVideoCheckbox.setChecked(False)
-            self.generalWidget.videoMixerComboBox.setEnabled(False)
-            self.generalWidget.videoMixerSetupPushButton.setEnabled(False)
-            
-        n = 0 # Counter for finding Video Mixer to set as current.
-        self.generalWidget.videoMixerComboBox.clear()
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
-        for plugin in plugins:
-            if plugin.is_activated:
-                self.generalWidget.videoMixerComboBox.addItem(plugin.plugin_object.get_name())
-                if plugin.plugin_object.get_name() == self.config.videomixer:
-                    self.generalWidget.videoMixerComboBox.setCurrentIndex(n)
-                n += 1
-        
         # Load default language
         i = self.generalWidget.languageComboBox.findData(self.config.default_language)
         self.generalWidget.languageComboBox.setCurrentIndex(i)
@@ -390,33 +382,7 @@ class ConfigToolApp(QtGui.QMainWindow):
             self.generalWidget.autoHideCheckBox.setChecked(True)
         else:
             self.generalWidget.autoHideCheckBox.setChecked(False)
-
-    def toggle_audiomixer_state(self, state):
-        self.config.enable_audio_recoding = state
-        self.config.writeConfig()
-        
-    def change_audiomixer(self, audiomixer):
-        self.config.audiomixer = audiomixer
-        self.config.writeConfig()
-
-    def setup_audio_mixer(self):
-        mixer = str(self.generalWidget.audioMixerComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(mixer, "AudioMixer")
-        plugin.plugin_object.get_dialog()
             
-    def toggle_videomixer_state(self, state):
-        self.config.enable_video_recoding = state
-        self.config.writeConfig()
-        
-    def change_videomixer(self, videomixer):
-        self.config.videomixer = videomixer
-        self.config.writeConfig()
-    
-    def setup_video_mixer(self):
-        mixer = str(self.generalWidget.videoMixerComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(mixer, "VideoMixer")
-        plugin.plugin_object.get_dialog()
-
     def set_default_language(self, language):
         language_file = str(self.generalWidget.languageComboBox.itemData(language).toString())
         self.config.default_language = language_file
@@ -439,6 +405,137 @@ class ConfigToolApp(QtGui.QMainWindow):
     def toggle_autohide(self, state):
         self.config.auto_hide = state
         self.config.writeConfig()
+            
+    ###
+    ### AV Related
+    ###        
+    
+    def load_av_widget(self):
+        self.mainWidgetLayout.addWidget(self.avWidget)
+        self.currentWidget = self.avWidget
+        self.currentWidget.show()
+        
+        #
+        # Set up Audio
+        #
+        if self.config.enable_audio_recoding == True:
+            self.avWidget.audioGroupBox.setChecked(True)
+        else:
+            self.avWidget.audioGroupBox.setChecked(False)
+            self.avWidget.audioMixerComboBox.setEnabled(False)
+            self.avWidget.audioMixerSetupPushButton.setEnabled(False)
+            
+        n = 0 # Counter for finding Audio Mixer to set as current.
+        self.avWidget.audioMixerComboBox.clear()
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
+        for plugin in plugins:
+            if plugin.is_activated:
+                self.avWidget.audioMixerComboBox.addItem(plugin.plugin_object.get_name())
+                if plugin.plugin_object.get_name() == self.config.audiomixer:
+                    self.avWidget.audioMixerComboBox.setCurrentIndex(n)
+                n += 1
+        
+        #
+        # Set up Video
+        #
+        if self.config.enable_video_recoding == True:
+            self.avWidget.videoGroupBox.setChecked(True)
+        else:
+            self.avWidget.videoGroupBox.setChecked(False)
+            self.avWidget.videoMixerComboBox.setEnabled(False)
+            self.avWidget.videoMixerSetupPushButton.setEnabled(False)
+            
+        n = 0 # Counter for finding Video Mixer to set as current.
+        self.avWidget.videoMixerComboBox.clear()
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
+        for plugin in plugins:
+            if plugin.is_activated:
+                self.avWidget.videoMixerComboBox.addItem(plugin.plugin_object.get_name())
+                if plugin.plugin_object.get_name() == self.config.videomixer:
+                    self.avWidget.videoMixerComboBox.setCurrentIndex(n)
+                n += 1
+                
+        #
+        # Set up File Format
+        #
+        if self.config.record_to_file == True:
+            self.avWidget.fileGroupBox.setChecked(True)
+        else:
+            self.avWidget.fileGroupBox.setChecked(False)
+            self.avWidget.fileComboBox.setEnabled(False)
+            self.avWidget.fileSetupPushButton.setEnabled(False)
+            
+        n = 0 # Counter for finding File Format to set as current
+        self.avWidget.fileComboBox.clear()
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("Output")
+        for plugin in plugins:
+            if plugin.plugin_object.get_recordto() == IOutput.FILE:
+                self.avWidget.fileComboBox.addItem(plugin.plugin_object.get_name())
+                if plugin.plugin_object.get_name() == self.config.record_to_file_plugin:
+                    self.avWidget.fileComboBox.setCurrentIndex(n)
+                n += 1
+        
+        #
+        # Set up Stream Format
+        #
+        if self.config.record_to_stream == True:
+            self.avWidget.streamGroupBox.setChecked(True)
+        else:
+            self.avWidget.streamGroupBox.setChecked(False)
+            self.avWidget.streamComboBox.setEnabled(False)
+            self.avWidget.streamSetupPushButton.setEnabled(False)
+
+    def toggle_audiomixer_state(self, state):
+        self.config.enable_audio_recoding = state
+        self.config.writeConfig()
+        
+    def change_audiomixer(self, audiomixer):
+        self.config.audiomixer = audiomixer
+        self.config.writeConfig()
+
+    def setup_audio_mixer(self):
+        mixer = str(self.avWidget.audioMixerComboBox.currentText())
+        plugin = self.plugman.plugmanc.getPluginByName(mixer, "AudioMixer")
+        plugin.plugin_object.get_dialog()
+            
+    def toggle_videomixer_state(self, state):
+        self.config.enable_video_recoding = state
+        self.config.writeConfig()
+        
+    def change_videomixer(self, videomixer):
+        self.config.videomixer = videomixer
+        self.config.writeConfig()
+    
+    def setup_video_mixer(self):
+        mixer = str(self.avWidget.videoMixerComboBox.currentText())
+        plugin = self.plugman.plugmanc.getPluginByName(mixer, "VideoMixer")
+        plugin.plugin_object.get_dialog()
+
+    def toggle_record_to_file(self, state):
+        self.config.record_to_file = state
+        self.config.writeConfig()
+        
+    def change_file_format(self, format):
+        self.config.record_to_file_plugin = format
+        self.config.writeConfig()
+    
+    def setup_file_format(self):
+        output = str(self.avWidget.fileComboBox.currentText())
+        plugin = self.plugman.plugmanc.getPluginByName(output, "Output")
+        plugin.plugin_object.get_dialog()
+        
+    def toggle_record_to_stream(self, state):
+        self.config.record_to_stream = state
+        self.config.writeConfig()
+        
+    def change_stream_format(self, format):
+        self.config.record_to_stream_plugin = format
+        self.config.writeConfig()
+    
+    def setup_stream_format(self):
+        output = str(self.avWidget.streamComboBox.currentText())
+        plugin = self.plugman.plugmanc.getPluginByName(output, "Output")
+        plugin.plugin_object.get_dialog()    
 
     ###
     ### Plugin Loader Related

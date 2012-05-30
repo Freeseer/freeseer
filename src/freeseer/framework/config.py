@@ -59,6 +59,10 @@ class Config:
         self.enable_audio_recoding = True
         self.videomixer = 'Video Passthrough'
         self.audiomixer = 'Audio Passthrough'
+        self.record_to_file = True
+        self.record_to_file_plugin = 'ogg-output'
+        self.record_to_stream = False
+        self.record_to_stream_plugin = None
         self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
 
         # Lastrun
@@ -111,6 +115,10 @@ class Config:
             self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
             self.videomixer = config.get('Global', 'videomixer')
             self.audiomixer = config.get('Global', 'audiomixer')
+            self.record_to_file = config.getboolean('Global', 'record_to_file')
+            self.record_to_file_plugin = config.get('Global', 'record_to_file_plugin')
+            self.record_to_stream = config.getboolean('Global', 'record_to_stream')
+            self.record_to_stream_plugin = config.get('Global', 'record_to_stream_plugin')
             self.default_language = config.get('Global', 'Default Language')
             
             # LastRun Section
@@ -139,6 +147,10 @@ class Config:
         config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
         config.set('Global','videomixer',self.videomixer)
         config.set('Global','audiomixer',self.audiomixer)
+        config.set('Global','record_to_file', self.record_to_file)
+        config.set('Global','record_to_file_plugin', self.record_to_file_plugin)
+        config.set('Global','record_to_stream', self.record_to_stream)
+        config.set('Global','record_to_stream_plugin', self.record_to_stream_plugin)
         config.set('Global', 'Default Language', self.default_language)
         
         config.add_section('lastrun')
