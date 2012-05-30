@@ -66,25 +66,29 @@ class ConfigToolWidget(QtGui.QWidget):
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(0).setText(0, "General")
         
+        # AV
+        item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
+        self.optionsTreeWidget.topLevelItem(1).setText(0, "AV Config")
+        
         # Plugins
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(1).setText(0, "Plugins")
+        self.optionsTreeWidget.topLevelItem(2).setText(0, "Plugins")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(0).setText(0, "AudioInput")
+        self.optionsTreeWidget.topLevelItem(2).child(0).setText(0, "AudioInput")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(1).setText(0, "AudioMixer")
+        self.optionsTreeWidget.topLevelItem(2).child(1).setText(0, "AudioMixer")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(2).setText(0, "VideoInput")
+        self.optionsTreeWidget.topLevelItem(2).child(2).setText(0, "VideoInput")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(3).setText(0, "VideoMixer")
+        self.optionsTreeWidget.topLevelItem(2).child(3).setText(0, "VideoMixer")
         item_1 = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(4).setText(0, "Output")
+        self.optionsTreeWidget.topLevelItem(2).child(4).setText(0, "Output")
         item_m = QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(1).child(5).setText(0, "Metadata")
+        self.optionsTreeWidget.topLevelItem(2).child(5).setText(0, "Metadata")
         
         # Logger
         item_2 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(2).setText(0, "Logger")
+        self.optionsTreeWidget.topLevelItem(3).setText(0, "Logger")
         
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         self.closePushButton = QtGui.QPushButton("Close")
