@@ -191,7 +191,7 @@ class IAudioInput(IBackendPlugin):
         IBackendPlugin.__init__(self)
     
     def get_audioinput_bin(self):
-        pass
+        raise NotImplementedError
     
 class IAudioMixer(IBackendPlugin):
     
@@ -199,7 +199,7 @@ class IAudioMixer(IBackendPlugin):
         IBackendPlugin.__init__(self)
     
     def get_audiomixer_bin(self):
-        pass
+        raise NotImplementedError
     
     def get_inputs(self):
         """
@@ -209,14 +209,14 @@ class IAudioMixer(IBackendPlugin):
         This should be used so that the code that calls it can
         gather the required inputs before calling load_inputs().
         """
-        pass
+        raise NotImplementedError
     
     def load_inputs(self, player, mixer, inputs):
         """
         This method is responsible for loading the inputs needed
         by the mixer.
         """
-        pass
+        raise NotImplementedError
     
 class IVideoInput(IBackendPlugin):
     
@@ -228,7 +228,7 @@ class IVideoInput(IBackendPlugin):
         Returns the Gstreamer Bin for the video input plugin.
         MUST be overridded when creating a video input plugin.
         """
-        pass
+        raise NotImplementedError
     
 class IVideoMixer(IBackendPlugin):
     
@@ -240,7 +240,7 @@ class IVideoMixer(IBackendPlugin):
         Returns the Gstreamer Bin for the video mixer plugin.
         MUST be overridded when creating a video mixer plugin.
         """
-        pass
+        raise NotImplementedError
     
     def get_inputs(self):
         """
@@ -250,14 +250,14 @@ class IVideoMixer(IBackendPlugin):
         This should be used so that the code that calls it can
         gather the required inputs before calling load_inputs().
         """
-        pass
+        raise NotImplementedError
     
     def load_inputs(self, player, mixer, inputs):
         """
         This method is responsible for loading the inputs needed
         by the mixer.
         """
-        pass
+        raise NotImplementedError
 
 class IOutput(IBackendPlugin):
     type = None # Types: audio, video, both
@@ -275,7 +275,7 @@ class IOutput(IBackendPlugin):
         Returns the Gstreamer Bin for the output plugin.
         MUST be overridded when creating an output plugin.
         """
-        pass
+        raise NotImplementedError
     
     def get_extension(self):
         return self.extension
