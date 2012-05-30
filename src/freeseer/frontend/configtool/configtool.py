@@ -229,7 +229,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         # ConfigToolWidget
         #
         self.generalString = self.uiTranslator.translate("ConfigToolApp", "General")
-        self.avString = "Recording" #self.uiTranslator.translate("ConfigToolApp", "AV Config")
+        self.avString = self.uiTranslator.translate("ConfigToolApp", "Recording")
         self.pluginsString = self.uiTranslator.translate("ConfigToolApp", "Plugins")
         self.audioInputString = self.uiTranslator.translate("ConfigToolApp", "AudioInput")
         self.audioMixerString = self.uiTranslator.translate("ConfigToolApp", "AudioMixer")
@@ -237,8 +237,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.videoMixerString = self.uiTranslator.translate("ConfigToolApp", "VideoMixer")
         self.outputString = self.uiTranslator.translate("ConfigToolApp", "Output")
         self.loggerString = self.uiTranslator.translate("ConfigToolApp", "Logger")
-#        self.metadataString = self.uiTranslator.translate("ConfigToolApp", "Metadata")
-        self.metadataString = "Metadata"
+        self.metadataString = self.uiTranslator.translate("ConfigToolApp", "Metadata")
         
         self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
         self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
@@ -265,11 +264,11 @@ class ConfigToolApp(QtGui.QMainWindow):
         #
         # AV Widget
         #
-#        self.avWidget.AudioGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Audio Input"))
+        self.avWidget.audioGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Audio Input"))
         self.avWidget.audioMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Audio Mixer"))
         self.avWidget.audioMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
         
-#        self.avWidget.VideoGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Video Input"))
+        self.avWidget.videoGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Video Input"))
         self.avWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
         self.avWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
         # --- End AV Widget
