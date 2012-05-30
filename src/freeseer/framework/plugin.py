@@ -260,13 +260,24 @@ class IVideoMixer(IBackendPlugin):
         raise NotImplementedError
 
 class IOutput(IBackendPlugin):
+    #
     # static variables
+    #
+    
+    # recordto
     FILE = 0
     STREAM = 1
     
+    # type
+    AUDIO = 0
+    VIDEO = 1
+    BOTH = 2
+    
+    #
     # variables
+    #
     recordto = None # recordto: FILE, STREAM
-    type = None # Types: audio, video, both
+    type = None # Types: AUDIO, VIDEO, BOTH
     extension = None
     location = None
     

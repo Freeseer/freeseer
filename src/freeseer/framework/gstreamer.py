@@ -30,6 +30,8 @@ import pygst
 pygst.require("0.10")
 import gst
 
+from freeseer.framework.plugin import IOutput
+
 class Gstreamer:
     NULL = 0
     RECORD = 1
@@ -145,17 +147,17 @@ class Gstreamer:
             type = plugin.get_type()
             bin = plugin.get_output_bin(record_audio, record_video, metadata)
             
-            if type == "audio":
+            if type == IOutput.AUDIO:
                 if record_audio:
                     self.player.add(bin)
                     self.audio_tee.link(bin)
                     self.output_plugins.append(bin)
-            elif type == "video":
+            elif type == IOutput.VIDEO:
                 if record_video:
                     self.player.add(bin)
                     self.video_tee.link(bin)
                     self.output_plugins.append(bin)
-            elif type == "both":
+            elif type == IOutput.BOTH:
                 self.player.add(bin)
                 if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
                 if record_video: self.video_tee.link_pads("src%d", bin, "videosink")

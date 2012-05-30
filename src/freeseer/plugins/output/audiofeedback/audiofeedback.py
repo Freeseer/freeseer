@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class AudioFeedback(IOutput):
     name = "Audio Feedback"
-    type = "audio"
+    type = IOutput.AUDIO
     
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin(self.name)
