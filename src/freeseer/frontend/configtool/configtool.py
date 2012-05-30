@@ -181,11 +181,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamSetupPushButton.setEnabled)
         
         #
-        # plugin loader connections
-        #
-        self.connect(self.pluginloaderWidget.listWidget, QtCore.SIGNAL('itemChanged(QListWidgetItem *)'), self.set_plugin_state)
-        
-        #
         # Logger Widget Connections
         #
         self.connect(self.loggerWidget.consoleLoggerGroupBox,
@@ -597,21 +592,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.currentWidget.show()
         
         self.load_plugin_list("Metadata")
-
-    def set_plugin_state(self, plugin):
-        
-        plugin_name = str(plugin.text())
-        plugin_category = str(self.optionsTreeWidget.currentItem().text(0))
-        
-        if plugin.checkState() == 2:
-            self.plugman.activate_plugin(plugin_name, plugin_category)
-            self.add_plugin_widget(plugin_name, plugin_category)
-            if plugin_category == "AudioMixer" and self.config.audiomixer == "None":
-                self.change_audiomixer(plugin_name)
-            elif plugin_category == "VideoMixer" and self.config.videomixer == "None":
-                self.change_videomixer(plugin_name)
-        else:
-            self.plugman.deactivate_plugin(plugin_name, plugin_category)
     
     def load_plugin_widgets(self):
         for plugin in self.plugman.plugmanc.getAllPlugins():
