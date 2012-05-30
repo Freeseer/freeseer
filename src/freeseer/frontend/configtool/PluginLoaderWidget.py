@@ -82,17 +82,6 @@ class PluginLoaderWidget(QtGui.QWidget):
                "website" : plugin.website,
                "description" : plugin.description}
         widget.setToolTip(pluginTooltip)
-        
-        # Checkbox, set the proper state on load
-        pluginCheckBox = QtGui.QCheckBox()
-        pluginCheckBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Maximum)
-        
-        if plugin.is_activated:
-            pluginCheckBox.setCheckState(QtCore.Qt.Checked)
-        else:
-            pluginCheckBox.setCheckState(QtCore.Qt.Unchecked)
-        
-        layout.addWidget(pluginCheckBox)
 
         # Plugin Label / Description
         textLayout = QtGui.QVBoxLayout()
@@ -115,15 +104,6 @@ class PluginLoaderWidget(QtGui.QWidget):
         textLayout.addWidget(pluginLabel)
         textLayout.addWidget(pluginDescLabel)
         # --- End Label / Description
-        
-        # Signal to activate/deactivate a plugin.
-        def set_plugin_state():
-            if pluginCheckBox.checkState() == 2:
-                plugman.activate_plugin(plugin_name, plugin_category)
-            else:
-                plugman.deactivate_plugin(plugin_name, plugin_category)
-        
-        widget.connect(pluginCheckBox, QtCore.SIGNAL('clicked()'), set_plugin_state)
         
         # If plugin supports configuration, show a configuration button.
         if plugin.plugin_object.get_widget() is not None:
