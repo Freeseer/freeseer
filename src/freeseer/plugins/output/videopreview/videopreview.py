@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class VideoPreview(IOutput):
     name = "Video Preview"
-    type = "video"
+    type = IOutput.VIDEO
     
     def get_output_bin(self, audio=False, video=True, metadata=None):
         bin = gst.Bin(self.name)
