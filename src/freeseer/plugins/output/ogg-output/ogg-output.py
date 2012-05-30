@@ -34,9 +34,9 @@ from PyQt4 import QtGui, QtCore
 from freeseer.framework.plugin import IOutput
 
 class OggOutput(IOutput):
-    recordto = IOutput.FILE
     name = "Ogg Output"
     type = IOutput.BOTH
+    recordto = IOutput.FILE
     extension = "ogg"
     tags = None
     
