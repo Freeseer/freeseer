@@ -267,6 +267,7 @@ class IOutput(IBackendPlugin):
     # recordto
     FILE = 0
     STREAM = 1
+    OTHER = 2
     
     # type
     AUDIO = 0
@@ -276,7 +277,7 @@ class IOutput(IBackendPlugin):
     #
     # variables
     #
-    recordto = None # recordto: FILE, STREAM
+    recordto = None # recordto: FILE, STREAM, OTHER
     type = None # Types: AUDIO, VIDEO, BOTH
     extension = None
     location = None

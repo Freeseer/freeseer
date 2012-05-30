@@ -350,25 +350,39 @@ class FreeseerCore:
 
     def load_backend(self, presentation):
         logging.debug("Loading Output plugins...")
+        
+        load_plugins = []
+        
+        if self.config.record_to_file:
+            p = self.plugman.plugmanc.getPluginByName(self.config.record_to_file_plugin, "Output")
+            load_plugins.append(p)
+            
+        if self.config.record_to_stream:
+            p = self.plugman.plugmanc.getPluginByName(self.config.record_to_stream_plugin, "Output")
+            load_plugins.append(p)
+            
+        if self.config.video_preview:
+            p = self.plugman.plugmanc.getPluginByName("Video Preview", "Output")
+            load_plugins.append(p)
+                
         plugins = []
-        for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output"):
-            if plugin.is_activated:
-                logging.debug("Loading Output: %s" % plugin.plugin_object.get_name())
-                
-                extension = plugin.plugin_object.get_extension()
+        for plugin in load_plugins:
+            logging.debug("Loading Output: %s" % plugin.plugin_object.get_name())
+            
+            extension = plugin.plugin_object.get_extension()
 
-                #create a filename to record to
-                record_name = self.get_record_name(presentation, extension)
-        
-                #prepare metadata
-                metadata = self.prepare_metadata(presentation)
-                #self.backend.populate_metadata(data)
-        
-                record_location = os.path.abspath(self.config.videodir + '/' + record_name)                
-                plugin.plugin_object.set_recording_location(record_location)
-                
-                plugin.plugin_object.load_config(self.plugman)
-                plugins.append(plugin.plugin_object)
+            #create a filename to record to
+            record_name = self.get_record_name(presentation, extension)
+    
+            #prepare metadata
+            metadata = self.prepare_metadata(presentation)
+            #self.backend.populate_metadata(data)
+    
+            record_location = os.path.abspath(self.config.videodir + '/' + record_name)                
+            plugin.plugin_object.set_recording_location(record_location)
+            
+            plugin.plugin_object.load_config(self.plugman)
+            plugins.append(plugin.plugin_object)
 
         self.backend.load_output_plugins(plugins,
                                          self.config.enable_audio_recoding,

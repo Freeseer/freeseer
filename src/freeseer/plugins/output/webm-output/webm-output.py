@@ -30,9 +30,9 @@ import gst
 from freeseer.framework.plugin import IOutput
 
 class WebMOutput(IOutput):
-    recordto = IOutput.FILE
     name = "WebM Output"
     type = IOutput.BOTH
+    recordto = IOutput.FILE
     extension = "webm"
     tags = None
     
