@@ -424,11 +424,10 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.avWidget.audioMixerComboBox.clear()
         plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
         for plugin in plugins:
-            if plugin.is_activated:
-                self.avWidget.audioMixerComboBox.addItem(plugin.plugin_object.get_name())
-                if plugin.plugin_object.get_name() == self.config.audiomixer:
-                    self.avWidget.audioMixerComboBox.setCurrentIndex(n)
-                n += 1
+            self.avWidget.audioMixerComboBox.addItem(plugin.plugin_object.get_name())
+            if plugin.plugin_object.get_name() == self.config.audiomixer:
+                self.avWidget.audioMixerComboBox.setCurrentIndex(n)
+            n += 1
         
         #
         # Set up Video
@@ -444,11 +443,10 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.avWidget.videoMixerComboBox.clear()
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
         for plugin in plugins:
-            if plugin.is_activated:
-                self.avWidget.videoMixerComboBox.addItem(plugin.plugin_object.get_name())
-                if plugin.plugin_object.get_name() == self.config.videomixer:
-                    self.avWidget.videoMixerComboBox.setCurrentIndex(n)
-                n += 1
+            self.avWidget.videoMixerComboBox.addItem(plugin.plugin_object.get_name())
+            if plugin.plugin_object.get_name() == self.config.videomixer:
+                self.avWidget.videoMixerComboBox.setCurrentIndex(n)
+            n += 1
                 
         #
         # Set up File Format
