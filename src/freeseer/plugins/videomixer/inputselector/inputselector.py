@@ -103,8 +103,7 @@ class InputSelector(IVideoMixer):
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
         for plugin in plugins:
-            if plugin.is_activated:
-                sources.append(plugin.plugin_object.get_name())
+            sources.append(plugin.plugin_object.get_name())
                 
         # Load the combobox with inputs
         self.combobox.clear()

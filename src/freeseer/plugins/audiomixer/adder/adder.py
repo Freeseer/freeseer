@@ -96,8 +96,7 @@ class Adder(IAudioMixer):
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
         for plugin in plugins:
-            if plugin.is_activated:
-                sources.append(plugin.plugin_object.get_name())
+            sources.append(plugin.plugin_object.get_name())
                 
         # Load the combobox with inputs
         self.combobox.clear()

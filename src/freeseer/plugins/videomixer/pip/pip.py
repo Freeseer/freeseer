@@ -155,8 +155,7 @@ class PictureInPicture(IVideoMixer):
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
         for plugin in plugins:
-            if plugin.is_activated:
-                sources.append(plugin.plugin_object.get_name())
+            sources.append(plugin.plugin_object.get_name())
         
         # Load the main combobox with inputs
         self.combobox_maininput.clear()
