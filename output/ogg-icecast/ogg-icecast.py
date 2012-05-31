@@ -35,7 +35,8 @@ from freeseer.framework.plugin import IOutput
 
 class OggIcecast(IOutput):
     name = "Ogg Icecast"
-    type = "both"
+    type = IOutput.BOTH
+    recordto = IOutput.STREAM
     extension = "ogg"
     tags = None
     
