@@ -46,149 +46,169 @@
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="201"/>
+        <location filename="../../configtool/configtool.py" line="215"/>
         <source>Freeseer ConfigTool</source>
         <translation>Freeseer 設定 ツール</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="206"/>
+        <location filename="../../configtool/configtool.py" line="220"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
+        <location filename="../../configtool/configtool.py" line="221"/>
         <source>&amp;Options</source>
         <translation>オプション(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
+        <location filename="../../configtool/configtool.py" line="222"/>
         <source>&amp;Language</source>
         <translation>言語(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="209"/>
+        <location filename="../../configtool/configtool.py" line="223"/>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="210"/>
+        <location filename="../../configtool/configtool.py" line="224"/>
         <source>&amp;Quit</source>
         <translation>終了(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="211"/>
+        <location filename="../../configtool/configtool.py" line="225"/>
         <source>&amp;About</source>
         <translation>アバウト(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="237"/>
+        <location filename="../../configtool/configtool.py" line="252"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="243"/>
         <source>Audio / Video Settings</source>
-        <translation>オーディオ / ビデオ 設定</translation>
+        <translation type="obsolete">オーディオ / ビデオ 設定</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="244"/>
         <source>Record Audio</source>
-        <translation>録音</translation>
+        <translation type="obsolete">録音</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="245"/>
+        <location filename="../../configtool/configtool.py" line="268"/>
         <source>Audio Mixer</source>
         <translation>オーディオ ミキサー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="249"/>
+        <location filename="../../configtool/configtool.py" line="273"/>
         <source>Setup</source>
         <translation>設定する</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="247"/>
         <source>Record Video</source>
-        <translation>録画</translation>
+        <translation type="obsolete">録画</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="248"/>
+        <location filename="../../configtool/configtool.py" line="272"/>
         <source>Video Mixer</source>
         <translation>ビデオ ミキサー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="250"/>
+        <location filename="../../configtool/configtool.py" line="258"/>
         <source>Miscellaneous</source>
         <translation>その他</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="252"/>
+        <location filename="../../configtool/configtool.py" line="260"/>
         <source>Record Directory</source>
         <translation>記録 ディレクトリ</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="253"/>
+        <location filename="../../configtool/configtool.py" line="261"/>
         <source>Enable Auto-Hide</source>
         <translation>自動的に隠す</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="259"/>
+        <location filename="../../configtool/configtool.py" line="279"/>
         <source>Console Logger</source>
         <translation>コンソール ロガー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="262"/>
+        <location filename="../../configtool/configtool.py" line="282"/>
         <source>Log Level</source>
         <translation>ログ レベル</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="261"/>
+        <location filename="../../configtool/configtool.py" line="281"/>
         <source>Syslog Logger</source>
         <translation>システムログ ロガー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="217"/>
+        <location filename="../../configtool/configtool.py" line="231"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="218"/>
+        <location filename="../../configtool/configtool.py" line="233"/>
         <source>Plugins</source>
         <translation>プラグイン</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="219"/>
+        <location filename="../../configtool/configtool.py" line="234"/>
         <source>AudioInput</source>
         <translation>オーディオ入力</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="220"/>
+        <location filename="../../configtool/configtool.py" line="235"/>
         <source>AudioMixer</source>
         <translation>オーディオ ミキサー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="221"/>
+        <location filename="../../configtool/configtool.py" line="236"/>
         <source>VideoInput</source>
         <translation>ビデオ入力</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="222"/>
+        <location filename="../../configtool/configtool.py" line="237"/>
         <source>VideoMixer</source>
         <translation>ビデオ ミキサー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="223"/>
+        <location filename="../../configtool/configtool.py" line="238"/>
         <source>Output</source>
         <translation>出力</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="224"/>
+        <location filename="../../configtool/configtool.py" line="239"/>
         <source>Logger</source>
         <translation>ロガー</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="251"/>
+        <location filename="../../configtool/configtool.py" line="259"/>
         <source>Default Language</source>
         <translation>デフォルトの言語</translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="232"/>
+        <source>Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="240"/>
+        <source>Metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="267"/>
+        <source>Audio Input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="271"/>
+        <source>Video Input</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -372,107 +392,107 @@
 <context>
     <name>ReportEditorApp</name>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="165"/>
+        <location filename="../../reporteditor/reporteditor.py" line="164"/>
         <source>Freeseer Report Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="170"/>
+        <location filename="../../reporteditor/reporteditor.py" line="169"/>
         <source>Clear Database</source>
         <translation type="unfinished">データベースを削除する</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="171"/>
+        <location filename="../../reporteditor/reporteditor.py" line="170"/>
         <source>Are you sure you want to clear the DB?</source>
         <translation type="unfinished">データベースを削除しますか?</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="178"/>
+        <location filename="../../reporteditor/reporteditor.py" line="177"/>
         <source>&amp;File</source>
         <translation type="unfinished">ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="179"/>
+        <location filename="../../reporteditor/reporteditor.py" line="178"/>
         <source>&amp;Options</source>
         <translation type="unfinished">オプション(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="180"/>
+        <location filename="../../reporteditor/reporteditor.py" line="179"/>
         <source>&amp;Language</source>
         <translation type="unfinished">言語(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="181"/>
+        <location filename="../../reporteditor/reporteditor.py" line="180"/>
         <source>&amp;Help</source>
         <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="182"/>
+        <location filename="../../reporteditor/reporteditor.py" line="181"/>
         <source>&amp;Export to CSV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="183"/>
+        <location filename="../../reporteditor/reporteditor.py" line="182"/>
         <source>&amp;Quit</source>
         <translation type="unfinished">終了(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="184"/>
+        <location filename="../../reporteditor/reporteditor.py" line="183"/>
         <source>&amp;About</source>
         <translation type="unfinished">アバウト(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="190"/>
+        <location filename="../../reporteditor/reporteditor.py" line="189"/>
         <source>Remove</source>
         <translation type="unfinished">削除する</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="191"/>
+        <location filename="../../reporteditor/reporteditor.py" line="190"/>
         <source>Clear</source>
         <translation type="unfinished">全削除する</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="192"/>
+        <location filename="../../reporteditor/reporteditor.py" line="191"/>
         <source>Close</source>
         <translation type="unfinished">閉じる</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="194"/>
+        <location filename="../../reporteditor/reporteditor.py" line="193"/>
         <source>Title:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="195"/>
+        <location filename="../../reporteditor/reporteditor.py" line="194"/>
         <source>Speaker:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="196"/>
+        <location filename="../../reporteditor/reporteditor.py" line="195"/>
         <source>Description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="197"/>
+        <location filename="../../reporteditor/reporteditor.py" line="196"/>
         <source>Level:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="198"/>
+        <location filename="../../reporteditor/reporteditor.py" line="197"/>
         <source>Event:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="199"/>
+        <location filename="../../reporteditor/reporteditor.py" line="198"/>
         <source>Room:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="200"/>
+        <location filename="../../reporteditor/reporteditor.py" line="199"/>
         <source>Time:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="172"/>
+        <location filename="../../reporteditor/reporteditor.py" line="171"/>
         <source>Select File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,7 +580,7 @@
         <translation>時刻</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="217"/>
+        <location filename="../../talkeditor/talkeditor.py" line="216"/>
         <source>Add</source>
         <translation>追加する</translation>
     </message>
@@ -580,17 +600,17 @@
         <translation>RSSからトークを読み込む</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="218"/>
+        <location filename="../../talkeditor/talkeditor.py" line="217"/>
         <source>Remove</source>
         <translation>削除する</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="219"/>
+        <location filename="../../talkeditor/talkeditor.py" line="218"/>
         <source>Clear</source>
         <translation>全削除する</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="220"/>
+        <location filename="../../talkeditor/talkeditor.py" line="219"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
@@ -606,11 +626,6 @@
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="215"/>
-        <source>Select CSV file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="216"/>
         <source>Load talks from CSV</source>
         <translation type="unfinished"></translation>
     </message>
@@ -618,7 +633,7 @@
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="248"/>
+        <location filename="../../talkeditor/talkeditor.py" line="247"/>
         <source>Language Display Text</source>
         <translation>日本語</translation>
     </message>
