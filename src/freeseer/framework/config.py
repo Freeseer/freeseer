@@ -60,7 +60,7 @@ class Config:
         self.videomixer = 'Video Passthrough'
         self.audiomixer = 'Audio Passthrough'
         self.record_to_file = True
-        self.record_to_file_plugin = 'ogg-output'
+        self.record_to_file_plugin = 'Ogg Output'
         self.record_to_stream = False
         self.record_to_stream_plugin = None
         self.video_preview = True
