@@ -35,7 +35,8 @@ from freeseer.framework.plugin import IOutput
 
 class AudioFeedback(IOutput):
     name = "Audio Feedback"
-    type = "audio"
+    type = IOutput.AUDIO
+    recordto = IOutput.OTHER
     
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin(self.name)
@@ -57,7 +58,10 @@ class AudioFeedback(IOutput):
     
     def load_config(self, plugman):
         self.plugman = plugman
-        self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Feedback Sink")
+        try:
+            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Feedback Sink")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Feedback Sink", self.previewsink)
         
     def get_widget(self):
         if self.widget is None:

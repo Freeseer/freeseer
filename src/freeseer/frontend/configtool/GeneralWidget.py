@@ -43,47 +43,11 @@ class GeneralWidget(QtGui.QWidget):
         self.setLayout(self.mainLayout)
         
         #
-        # AV
-        #
-        
-        self.AVLayout = QtGui.QGridLayout()
-        self.AVGroupBox = QtGui.QGroupBox("Audio / Video Settings")
-        self.AVGroupBox.setLayout(self.AVLayout)
-        self.mainLayout.addWidget(self.AVGroupBox)
-        
-        self.recordAudioCheckbox = QtGui.QCheckBox("Record Audio")
-        self.AVLayout.addWidget(self.recordAudioCheckbox, 0, 0)
-        
-        self.audioMixerLabel = QtGui.QLabel("Audio Mixer")
-        self.audioMixerLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        self.audioMixerComboBox = QtGui.QComboBox()
-        self.audioMixerLabel.setBuddy(self.audioMixerComboBox)
-        self.audioMixerSetupPushButton = QtGui.QPushButton("Setup")
-        self.audioMixerSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        self.AVLayout.addWidget(self.audioMixerLabel, 1, 0)
-        self.AVLayout.addWidget(self.audioMixerComboBox, 1, 1)
-        self.AVLayout.addWidget(self.audioMixerSetupPushButton, 1, 2)
-        
-        self.recordVideoCheckbox = QtGui.QCheckBox("Record Video")
-        self.AVLayout.addWidget(self.recordVideoCheckbox, 2, 0)
-        
-        self.videoMixerLabel = QtGui.QLabel("Video Mixer")
-        self.videoMixerLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        self.videoMixerComboBox = QtGui.QComboBox()
-        self.videoMixerLabel.setBuddy(self.audioMixerComboBox)
-        self.videoMixerSetupPushButton = QtGui.QPushButton("Setup")
-        self.videoMixerSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        self.AVLayout.addWidget(self.videoMixerLabel, 3, 0)
-        self.AVLayout.addWidget(self.videoMixerComboBox, 3, 1)
-        self.AVLayout.addWidget(self.videoMixerSetupPushButton, 3, 2)
-        
-        
-        #
-        # Misc
+        # General
         #
         
         self.MiscLayout = QtGui.QVBoxLayout()
-        self.MiscGroupBox = QtGui.QGroupBox("Miscellaneous")
+        self.MiscGroupBox = QtGui.QGroupBox("General")
         self.MiscGroupBox.setLayout(self.MiscLayout)
         self.mainLayout.addWidget(self.MiscGroupBox)
         

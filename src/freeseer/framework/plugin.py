@@ -260,12 +260,33 @@ class IVideoMixer(IBackendPlugin):
         raise NotImplementedError
 
 class IOutput(IBackendPlugin):
-    type = None # Types: audio, video, both
+    #
+    # static variables
+    #
+    
+    # recordto
+    FILE = 0
+    STREAM = 1
+    OTHER = 2
+    
+    # type
+    AUDIO = 0
+    VIDEO = 1
+    BOTH = 2
+    
+    #
+    # variables
+    #
+    recordto = None # recordto: FILE, STREAM, OTHER
+    type = None # Types: AUDIO, VIDEO, BOTH
     extension = None
     location = None
     
     def __init__(self):
         IBackendPlugin.__init__(self)
+    
+    def get_recordto(self):
+        return self.recordto
     
     def get_type(self):
         return self.type

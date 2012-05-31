@@ -35,7 +35,11 @@ from freeseer.framework.plugin import IOutput
 
 class VideoPreview(IOutput):
     name = "Video Preview"
-    type = "video"
+    type = IOutput.VIDEO
+    recordto = IOutput.OTHER
+    
+    # Video Preview variables
+    previewsink = "autovideosink"
     
     def get_output_bin(self, audio=False, video=True, metadata=None):
         bin = gst.Bin(self.name)
@@ -57,7 +61,11 @@ class VideoPreview(IOutput):
     
     def load_config(self, plugman):
         self.plugman = plugman
-        self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
+        try:
+            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Preview Sink", self.previewsink)
+
         
     def get_widget(self):
         if self.widget is None:

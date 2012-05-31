@@ -35,7 +35,8 @@ from freeseer.framework.plugin import IOutput
 
 class OggOutput(IOutput):
     name = "Ogg Output"
-    type = "both"
+    type = IOutput.BOTH
+    recordto = IOutput.FILE
     extension = "ogg"
     tags = None
     
