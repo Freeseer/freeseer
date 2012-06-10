@@ -1,4 +1,5 @@
-set(FRAMEWORK_PATH ${CMAKE_CURRENT_LIST_DIR})
+get_filename_component(TMP_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
+set(FRAMEWORK_PATH ${TMP_DIR})
 
 execute_process(COMMAND pyrcc4 ${FRAMEWORK_PATH}/resources/resource.qrc -o ${FRAMEWORK_PATH}/resource_rc.py)
 

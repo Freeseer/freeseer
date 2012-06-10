@@ -1,4 +1,5 @@
-set(CONFIGTOOL_PATH ${CMAKE_CURRENT_LIST_DIR})
+get_filename_component(TMP_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
+set(CONFIGTOOL_PATH ${TMP_DIR})
 
 cmake_minimum_required (VERSION 2.8)
 
