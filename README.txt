@@ -60,14 +60,15 @@ For Windows, install:
 
 Once you have the prerequisite components, build freeseer by changing
 directory into the freeseer directory (above src directory), and run:
-    "mkdir build; cd build; cmake .."
+
+$ ( mkdir -p build; cd build; cmake .. )
 
     NOTE: If you are running on windows you will need an additional option
           for cmake to work. You can run 'cmake -G "MinGW Makefiles" ..'
 
 This will compile the gui files. Once this completes, you can then:
-    "cd ../src"
-    "./freeseer-record"
+
+$ src/freeseer-record
 
 This starts up the Freeseer recording tool GUI.
 
