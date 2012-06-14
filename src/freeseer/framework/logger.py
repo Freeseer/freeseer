@@ -49,7 +49,16 @@ class Logger():
             
         try:
             logging.config.fileConfig(self.logconf)
+
+            # Disable logging if no log handlers are found
+            config = ConfigParser.ConfigParser()
+            config.readfp(open(self.logconf))
+            handlers = config.get("logger_root", "handlers")
+            if handlers is "":
+                logging.disable(logging.INFO)
+            
             logging.info('Logger initialized.')
+            
         except socket.error:
             sys.stderr.write('Logger failed to initialize\n')
         
