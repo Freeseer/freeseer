@@ -672,60 +672,22 @@ class ConfigToolApp(QtGui.QMainWindow):
         # --- End Syslogger
     
     def toggle_console_logger(self, state):
-        config = ConfigParser.ConfigParser()
-        config.readfp(open(self.core.logger.logconf))
-        handlers = config.get("logger_root", "handlers")
-        handler_list = handlers.split(',')
-        
         if self.loggerWidget.consoleLoggerGroupBox.isChecked():
-            new_list = "consoleHandler,"
+            self.core.logger.set_console_logger(True)
         else:
-            new_list = ""
-        
-        for handler in handler_list:
-            if handler == "consoleHandler": continue
-            new_list += handler + ","
-        new_list = new_list.rstrip(',')
-        
-        config.set("logger_root", "handlers", new_list)
-        
-        with open(self.core.logger.logconf, 'w') as configfile:
-            config.write(configfile)
+            self.core.logger.set_console_logger(False)
     
     def change_console_loglevel(self, level):
-        config = ConfigParser.ConfigParser()
-        config.readfp(open(self.core.logger.logconf))
-        config.set("handler_consoleHandler", "level", level)
-        with open(self.core.logger.logconf, 'w') as configfile:
-            config.write(configfile)
+        self.core.logger.set_console_loglevel(level)
             
     def toggle_syslog_logger(self, state):
-        config = ConfigParser.ConfigParser()
-        config.readfp(open(self.core.logger.logconf))
-        handlers = config.get("logger_root", "handlers")
-        handler_list = handlers.split(',')
-        
         if self.loggerWidget.syslogLoggerGroupBox.isChecked():
-            new_list = "syslogHandler,"
+            self.core.logger.set_syslog_logger(True)
         else:
-            new_list = ""
-        
-        for handler in handler_list:
-            if handler == "syslogHandler": continue
-            new_list += handler + ","
-        new_list = new_list.rstrip(',')
-        
-        config.set("logger_root", "handlers", new_list)
-        
-        with open(self.core.logger.logconf, 'w') as configfile:
-            config.write(configfile)
+            self.core.logger.set_syslog_logger(False)
     
     def change_syslog_loglevel(self, level):
-        config = ConfigParser.ConfigParser()
-        config.readfp(open(self.core.logger.logconf))
-        config.set("handler_syslogHandler", "level", level)
-        with open(self.core.logger.logconf, 'w') as configfile:
-            config.write(configfile)
+        self.core.logger.set_syslog_loglevel(level)
 
     # Override
     
