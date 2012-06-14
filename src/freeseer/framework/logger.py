@@ -135,6 +135,70 @@ class Logger():
                 self.socket.close()
         ## Default back to localhost        
         return "('localhost', handlers.SYSLOG_UDP_PORT)"
+    
+    #
+    # Console Logger Methods
+    #
+    
+    def set_console_logger(self, enabled):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        handlers = config.get("logger_root", "handlers")
+        handler_list = handlers.split(',')
+        
+        if enabled:
+            new_list = "consoleHandler,"
+        else:
+            new_list = ""
+        
+        for handler in handler_list:
+            if handler == "consoleHandler": continue
+            new_list += handler + ","
+        new_list = new_list.rstrip(',')
+        
+        config.set("logger_root", "handlers", new_list)
+        
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    def set_console_loglevel(self, level):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        config.set("handler_consoleHandler", "level", level)
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    #
+    # Syslog Logger Methods
+    #
+    
+    def set_syslog_logger(self, enabled):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        handlers = config.get("logger_root", "handlers")
+        handler_list = handlers.split(',')
+        
+        if enabled:
+            new_list = "syslogHandler,"
+        else:
+            new_list = ""
+        
+        for handler in handler_list:
+            if handler == "syslogHandler": continue
+            new_list += handler + ","
+        new_list = new_list.rstrip(',')
+        
+        config.set("logger_root", "handlers", new_list)
+        
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    def set_syslog_loglevel(self, level):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        config.set("handler_syslogHandler", "level", level)
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
         
 if __name__ == "__main__":
     logger = Logger(os.path.abspath(os.path.expanduser('~/.freeseer/')))
