@@ -1,0 +1,43 @@
+                        ##### FreeSeer Help #####
+
+		           >>> Config Tool <<<
+
+Description> This CLI tool allows the user to perform all the task related to the FreeSeer config editor. The user can perform all tasks suported by FreeSeer config editor by handling one of the available modes described below.
+
+Config Modes> These are the available talk modes
+
+	# show: Lists all configuration settings and current value. e.g. videos and audio settings, streaming, hotkeys, outputdirectory. Usage: 'config show --all'
+	# video show: Shows a brief numbered list of available video sources or aditional infos about a specific video source. The numbered list is sensed/calculated and the order/number must be deterministic. Usage: 'config video show [--all] [-i #]
+	# video set: Selects that video source index (indexes provided by 'video show' mode) for capture. Usage: 'config video set -i #'
+	# video on/off: Turns video on or off. Usage: 'config video [on][off]'
+	# video resolution show : Shows a brief list of available resolutions. The list is sensed/calculated and the order/number must be deterministic. Usage: config video resolution show
+	# video resolution set: Sets the video recording resolution. Usage: 'config video resolution set #'
+	# audio show: Shows a brief numbered list of available audio sources or aditional infos about a specific audio source. The numbered list is sensed/calculated and the order/number must be deterministic. Usage: 'config audio show [--all] [-i #]
+	# audio set: Selects that audio source index (indexes provided by 'audio show' mode) for capture. Usage: 'config audio set -i #'
+	# audio on/off: Turns audio on or off. Usage: 'config audio [on][off]'
+	# streaming show: Shows the current streaming settings. Usage: 'config streaming show'
+	# streaming on/off: Turns streaming on or off. Usage: 'config streaming [on][off]'
+	# streaming <property> show: Shows the current value of the specified <property> (see available properties values below) . Usage: 'config <property> show'
+	# streaming <property> set: Sets the specific property to the defined value (see available options below). Usage: 'config streaming <property> set <option> value'
+	# dir show: Shows the current output directory. Usage: 'config dir show'
+	# dir set: Sets the output directory to the provided one. Automatically checks that it exists and is writable. Errors if not.
+
+Config properties> These are the streaming available properties
+
+	# port: The port used by the streaming
+	# url: The streaming url
+	# mount: The streaming mount
+	# password: The streaming password
+	# resolution: The streaming resolution
+
+
+Config extra options> These are the available options
+	
+	# --all: Used to inform the set of presentations which will be affected by the list operation
+	# -i: The config index
+	# -u: The streaming url
+	# -p: The streaming password
+	# -d: The output directory
+	# -f: The streaming mount filename
+	
+
