@@ -74,6 +74,11 @@ class RecordApp(QtGui.QMainWindow):
         self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
         self.config = self.core.get_config()
         
+        # Set timer for recording how much time elapsed during a recording
+        self.reset_timer()
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.update_timer)
+        
         #
         # Translator
         #
@@ -382,6 +387,9 @@ class RecordApp(QtGui.QMainWindow):
 
             self.mainWidget.statusLabel.setText(self.recordingString)
             
+            # Start Timer
+            self.timer.start(1000)
+            
         else: # Stop Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo.png")
             sysIcon = QtGui.QIcon(logo_rec)
@@ -394,6 +402,10 @@ class RecordApp(QtGui.QMainWindow):
             
             # Finally set the standby button back to unchecked position.
             self.mainWidget.standbyPushButton.setChecked(False)
+            
+            # Stop Timer
+            self.timer.stop()
+            self.reset_timer()
             
             # Select next talk if there is one within 15 minutes
             starttime = QtCore.QDateTime().currentDateTime()
@@ -411,17 +423,38 @@ class RecordApp(QtGui.QMainWindow):
             logging.info("Recording paused.")
             self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
+            self.timer.stop()
         else:
             if self.mainWidget.recordPushButton.isChecked():
                 self.core.record()
                 logging.info("Recording unpaused.")
                 self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
                 self.mainWidget.statusLabel.setText(self.recordingString)
+                self.timer.start(1000)
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
         
         self.core.load_backend(self.current_presentation())
+        
+    def update_timer(self):
+        """
+        Update the Elapsed Time display, uses the statusLabel for the display
+        """
+        time = "%d:%02d" % (self.time_minutes, self.time_seconds)
+        self.time_seconds += 1
+        if self.time_seconds == 60:
+            self.time_seconds = 0
+            self.time_minutes += 1
+            
+        self.mainWidget.statusLabel.setText("Elapsed Time: " + time)
+        
+    def reset_timer(self):
+        """
+        Resets the Elapsed Time
+        """
+        self.time_minutes = 0
+        self.time_seconds = 0
 
     ###
     ### Talk Related
