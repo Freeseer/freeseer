@@ -295,6 +295,21 @@ class QtDBConnector():
             
         return self.talksModel
     
+    def get_talk_between_time(self, event, room, starttime, endtime):
+        """
+        Returns the talkID of the first talk found between a starttime, and endtime for a specified event/room.
+        Else return None
+        """
+        query = QtSql.QSqlQuery("SELECT Id, Time FROM presentations \
+                                 WHERE Event='%s' AND Room='%s' \
+                                 AND Time BETWEEN '%s' \
+                                              AND '%s' ORDER BY Time ASC" % (event, room, starttime, endtime))
+        query.next()
+        if query.isValid():
+            return query.value(0)
+        else:
+            return None
+    
 """
 Test code to independently test the methods in the QtDBConnector() class.    
 """    

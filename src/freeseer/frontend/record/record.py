@@ -395,6 +395,16 @@ class RecordApp(QtGui.QMainWindow):
             # Finally set the standby button back to unchecked position.
             self.mainWidget.standbyPushButton.setChecked(False)
             
+            # Select next talk if there is one within 15 minutes
+            starttime = QtCore.QDateTime().currentDateTime()
+            stoptime = starttime.addSecs(900)
+            talkid = self.core.db.get_talk_between_time(self.current_event, self.current_room, 
+                                                        starttime.toString(), stoptime.toString())
+            if talkid is not None:
+                for i in range(self.mainWidget.talkComboBox.count()):
+                    if talkid == self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString():
+                        self.mainWidget.talkComboBox.setCurrentIndex(i)
+            
     def pause(self, state):
         if (state): # Pause Recording.
             self.core.pause()
