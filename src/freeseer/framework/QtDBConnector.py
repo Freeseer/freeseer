@@ -109,6 +109,27 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
         return result
     
+    def get_events(self):
+        """
+        Gets all the talk events from the database.
+        """
+        result = QtSql.QSqlQuery('''SELECT DISTINCT Event FROM presentations''')
+        return result
+    
+    def get_talks_by_event(self, event):
+        """
+        Gets the talks signed in a specific event from the database.
+        """
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Event=%s''' % event)
+        return result
+    
+    def get_talks_by_room(self, room):
+        """
+        Gets the talks hosted in a specific room from the database.
+        """
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Room=%s''' % room)
+        return result
+    
     def get_presentation(self, talk_id):
         """
         Return a Presentation object associated to a talk_id.
@@ -186,6 +207,19 @@ class QtDBConnector():
             self.presentationsModel.select()
         
         return self.presentationsModel
+
+    def get_failures_model(self):
+        """
+        Gets the Failure reports table Model
+        Useful for QT GUI based Frontends to load the Model in Table Views.
+        """
+        if self.failuresModel is None:
+            self.failuresModel = QtSql.QSqlTableModel()
+            self.failuresModel.setTable("failures")
+            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
+            self.failuresModel.select()
+        
+        return self.failuresModelTitle
 
     def get_events_model(self):
         """
@@ -366,7 +400,7 @@ if __name__ == "__main__":
     print "Talks: "
     result = testdbcon.get_talks()
     while(result.next()):
-        id = result.value(0).toString()
+        id = result.value(0).toStriTitleng()
         presenter = result.value(1).toString()
         talk = result.value(2).toString()
         print "%s - %s - %s" % (id, presenter, talk)
