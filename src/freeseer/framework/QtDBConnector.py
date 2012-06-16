@@ -89,18 +89,6 @@ class QtDBConnector():
                                         Time timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
         
-    def __create_failures_table(self):
-        """
-        Create the failures table in the database 
-        Should be used to initialize a new table.
-        """
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
-                                        (Id INTERGER PRIMARY KEY,
-                                        Comments TEXT,
-                                        Indicator TEXT,
-                                        Release INTEGER,
-                                        UNIQUE (ID) ON CONFLICT REPLACE)''')
-        
     def __insert_default_talk(self):
         """
         Insert the default talk data into the database.
@@ -137,22 +125,6 @@ class QtDBConnector():
             
             return p
         
-    def get_reports(self):
-        """
-        Return a list of failures in Report format.
-        """
-        result = QtSql.QSqlQuery('''Select * FROM failures''')
-        #return result
-        list = []
-        while(result.next()):
-            failure = Failure(unicode(result.value(0).toString()),    # id
-                              unicode(result.value(1).toString()),    # comment
-                              unicode(result.value(2).toString()),    # indicator
-                              bool(result.value(3))),                 # release
-            p = self.get_presentation(failure.talkId)
-            r = Report(p, failure)
-            list.append(r)
-        return list
     #
     # Presentation Create, Update, Delete
     #
@@ -197,34 +169,6 @@ class QtDBConnector():
         query = QtSql.QSqlQuery('''DELETE FROM presentations''')
         logging.info("Database cleared.")
     
-    def insert_failure(self, failure):
-        """
-        Insert a failure into the database.
-        """
-        
-        query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
-                           (int(failure.talkId), failure.comment, failure.indicator, failure.release))
-        logging.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
-    
-    def update_failure(self, talk_id, failure):
-        """
-        Update an existing Failure in the database.
-        """
-        
-        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
-                           (failure.comment,
-                            failure.indicator,
-                            failure.release,
-                            failure.talkId))
-        logging.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
-    
-    def delete_failure(self, talk_id):
-        """
-        Removes a Presentation from the database
-        """
-        query = QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
-        logging.info("Failure %s deleted." % talk_id) 
-    
     #
     # Data Model Retrieval 
     #
@@ -240,18 +184,7 @@ class QtDBConnector():
             self.presentationsModel.select()
         
         return self.presentationsModel
-    def get_failures_model(self):
-        """
-        Gets the Failure reports table Model
-        Useful for QT GUI based Frontends to load the Model in Table Views.
-        """
-        if self.failuresModel is None:
-            self.failuresModel = QtSql.QSqlTableModel()
-            self.failuresModel.setTable("failures")
-            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
-            self.failuresModel.select()
-        
-        return self.failuresModel
+
     def get_events_model(self):
         """
         Gets the Events Model.
@@ -312,6 +245,81 @@ class QtDBConnector():
             return query.value(0)
         else:
             return None
+        
+        
+    #
+    # Reporting Feature
+    #
+    
+    def __create_failures_table(self):
+        """
+        Create the failures table in the database 
+        Should be used to initialize a new table.
+        """
+        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
+                                        (Id INTERGER PRIMARY KEY,
+                                        Comments TEXT,
+                                        Indicator TEXT,
+                                        Release INTEGER,
+                                        UNIQUE (ID) ON CONFLICT REPLACE)''')
+        
+    def get_reports(self):
+        """
+        Return a list of failures in Report format.
+        """
+        result = QtSql.QSqlQuery('''Select * FROM failures''')
+        #return result
+        list = []
+        while(result.next()):
+            failure = Failure(unicode(result.value(0).toString()),    # id
+                              unicode(result.value(1).toString()),    # comment
+                              unicode(result.value(2).toString()),    # indicator
+                              bool(result.value(3))),                 # release
+            p = self.get_presentation(failure.talkId)
+            r = Report(p, failure)
+            list.append(r)
+        return list
+    
+    def insert_failure(self, failure):
+        """
+        Insert a failure into the database.
+        """
+        
+        query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
+                           (int(failure.talkId), failure.comment, failure.indicator, failure.release))
+        logging.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
+    
+    def update_failure(self, talk_id, failure):
+        """
+        Update an existing Failure in the database.
+        """
+        
+        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
+                           (failure.comment,
+                            failure.indicator,
+                            failure.release,
+                            failure.talkId))
+        logging.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
+    
+    def delete_failure(self, talk_id):
+        """
+        Removes a Presentation from the database
+        """
+        query = QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
+        logging.info("Failure %s deleted." % talk_id)
+        
+    def get_failures_model(self):
+        """
+        Gets the Failure reports table Model
+        Useful for QT GUI based Frontends to load the Model in Table Views.
+        """
+        if self.failuresModel is None:
+            self.failuresModel = QtSql.QSqlTableModel()
+            self.failuresModel.setTable("failures")
+            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
+            self.failuresModel.select()
+        
+        return self.failuresModel 
     
 """
 Test code to independently test the methods in the QtDBConnector() class.    
