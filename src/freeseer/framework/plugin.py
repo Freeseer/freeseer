@@ -149,6 +149,7 @@ class PluginManager(QtCore.QObject):
 class IBackendPlugin(IPlugin):
     name = None
     widget = None
+    category = "Undefined"
     
     def __init__(self):
         IPlugin.__init__(self)
@@ -186,6 +187,7 @@ class IBackendPlugin(IPlugin):
         pass
 
 class IAudioInput(IBackendPlugin):
+    CATEGORY = "AudioInput"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -194,6 +196,7 @@ class IAudioInput(IBackendPlugin):
         raise NotImplementedError
     
 class IAudioMixer(IBackendPlugin):
+    CATEGORY = "AudioMixer"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -219,6 +222,7 @@ class IAudioMixer(IBackendPlugin):
         raise NotImplementedError
     
 class IVideoInput(IBackendPlugin):
+    CATEGORY = "VideoInput"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -231,6 +235,7 @@ class IVideoInput(IBackendPlugin):
         raise NotImplementedError
     
 class IVideoMixer(IBackendPlugin):
+    CATEGORY = "VideoMixer"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -263,6 +268,7 @@ class IOutput(IBackendPlugin):
     #
     # static variables
     #
+    CATEGORY = "Output"
     
     # recordto
     FILE = 0
