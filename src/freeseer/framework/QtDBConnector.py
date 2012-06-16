@@ -114,7 +114,7 @@ class QtDBConnector():
         Return a Presentation object associated to a talk_id.
         """
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
-        while(result.next()):
+        if result.next():
             p = Presentation(unicode(result.value(1).toString()),    # title
                              unicode(result.value(2).toString()),    # speaker
                              unicode(result.value(3).toString()),    # description
@@ -122,8 +122,10 @@ class QtDBConnector():
                              unicode(result.value(5).toString()),    # event
                              unicode(result.value(6).toString()),    # room
                              unicode(result.value(7).toString()))    # time
+        else:
+            p = None
             
-            return p
+        return p
         
     #
     # Presentation Create, Update, Delete
