@@ -96,10 +96,13 @@ class ReportDialog(QtGui.QWidget):
 #        self.options = ['No Audio', 'No Video', 'No Audio/Video']
 #        for i in self.options:
 #            self.reportCombo.addItem(i)
+
+        self.releaseCheckBox = QtGui.QCheckBox("Release Received")
         
         self.reportLayout.addWidget(self.commentLabel)
         self.reportLayout.addWidget(self.commentEdit)
         self.reportLayout.addWidget(self.reportCombo)
+        self.reportLayout.addWidget(self.releaseCheckBox)
         
         #Buttons
         self.reportButton = QtGui.QPushButton("Report")

@@ -277,14 +277,16 @@ class RecordApp(QtGui.QMainWindow):
         self.reportWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room:"))
         self.reportWidget.timeLabel.setText(self.uiTranslator.translate("RecordApp", "Time:"))
         self.reportWidget.commentLabel.setText(self.uiTranslator.translate("RecordApp", "Comment"))
+        self.reportWidget.releaseCheckBox.setText(self.uiTranslator.translate("RecordApp", "Release Received"))
         self.reportWidget.closeButton.setText(self.uiTranslator.translate("RecordApp", "Close"))
         self.reportWidget.reportButton.setText(self.uiTranslator.translate("RecordApp", "Report"))
         
         # Logic for translating the report options
+        noissues = self.uiTranslator.translate("RecordApp", "No Issues")
         noaudio = self.uiTranslator.translate("RecordApp", "No Audio")
         novideo = self.uiTranslator.translate("RecordApp", "No Video")
         noaudiovideo = self.uiTranslator.translate("RecordApp", "No Audio/Video")
-        self.reportWidget.options = [noaudio, novideo, noaudiovideo]
+        self.reportWidget.options = [noissues, noaudio, novideo, noaudiovideo]
         self.reportWidget.reportCombo.clear()
         for i in self.reportWidget.options:
             self.reportWidget.reportCombo.addItem(i)
@@ -507,7 +509,7 @@ class RecordApp(QtGui.QMainWindow):
         presentation = self.current_presentation()
         i = self.reportWidget.reportCombo.currentIndex()
         
-        failure = Failure(talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i])
+        failure = Failure(talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i], self.reportWidget.releaseCheckBox.isChecked())
         logging.info("Report Failure: %s, %s, %s" % (talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i]))
         
         self.core.db.insert_failure(failure)

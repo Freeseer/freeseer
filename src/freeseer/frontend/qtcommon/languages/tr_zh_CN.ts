@@ -214,178 +214,188 @@
 <context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="198"/>
+        <location filename="../../record/record.py" line="203"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - 便携式演示录制站</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="203"/>
+        <location filename="../../record/record.py" line="208"/>
         <source>Record</source>
         <translation>记录</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="206"/>
+        <location filename="../../record/record.py" line="211"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="207"/>
+        <location filename="../../record/record.py" line="212"/>
         <source>Hide Main Window</source>
         <translation>隐藏主窗口</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="208"/>
+        <location filename="../../record/record.py" line="213"/>
         <source>Show Main Window</source>
         <translation>显示主窗口</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="229"/>
+        <location filename="../../record/record.py" line="234"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="230"/>
+        <location filename="../../record/record.py" line="235"/>
         <source>&amp;Options</source>
         <translation>选项(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="231"/>
+        <location filename="../../record/record.py" line="236"/>
         <source>&amp;Language</source>
         <translation>语言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="232"/>
+        <location filename="../../record/record.py" line="237"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="234"/>
+        <location filename="../../record/record.py" line="239"/>
         <source>&amp;Open Video Directory</source>
         <translation>打开视频目录(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="235"/>
+        <location filename="../../record/record.py" line="240"/>
         <source>&amp;Quit</source>
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="236"/>
+        <location filename="../../record/record.py" line="241"/>
         <source>&amp;About</source>
         <translation>关于(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="260"/>
+        <location filename="../../record/record.py" line="265"/>
         <source>Event</source>
         <translation>会议</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="261"/>
+        <location filename="../../record/record.py" line="266"/>
         <source>Room</source>
         <translation>会议室</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="262"/>
+        <location filename="../../record/record.py" line="267"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="263"/>
+        <location filename="../../record/record.py" line="268"/>
         <source>Talk</source>
         <translation>演讲</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="204"/>
+        <location filename="../../record/record.py" line="209"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="212"/>
+        <location filename="../../record/record.py" line="217"/>
         <source>Ready.</source>
         <translation>准备就绪.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="213"/>
+        <location filename="../../record/record.py" line="218"/>
         <source>Recording...</source>
         <translation>记录...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="214"/>
+        <location filename="../../record/record.py" line="219"/>
         <source>Recording Paused.</source>
         <translation>记录暂停.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="202"/>
+        <location filename="../../record/record.py" line="207"/>
         <source>Standby</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="205"/>
+        <location filename="../../record/record.py" line="210"/>
         <source>Resume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="211"/>
+        <location filename="../../record/record.py" line="216"/>
         <source>Idle.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="237"/>
+        <location filename="../../record/record.py" line="242"/>
         <source>&amp;Report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="269"/>
+        <location filename="../../record/record.py" line="274"/>
         <source>Title:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="270"/>
+        <location filename="../../record/record.py" line="275"/>
         <source>Speaker:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="271"/>
+        <location filename="../../record/record.py" line="276"/>
         <source>Event:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="272"/>
+        <location filename="../../record/record.py" line="277"/>
         <source>Room:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="273"/>
+        <location filename="../../record/record.py" line="278"/>
         <source>Time:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="274"/>
+        <location filename="../../record/record.py" line="279"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="275"/>
+        <location filename="../../record/record.py" line="281"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="276"/>
+        <location filename="../../record/record.py" line="282"/>
         <source>Report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="279"/>
+        <location filename="../../record/record.py" line="286"/>
         <source>No Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="280"/>
+        <location filename="../../record/record.py" line="287"/>
         <source>No Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="281"/>
+        <location filename="../../record/record.py" line="288"/>
         <source>No Audio/Video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="280"/>
+        <source>Release Received</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="285"/>
+        <source>No Issues</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

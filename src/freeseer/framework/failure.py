@@ -30,7 +30,7 @@ class Failure():
     and its database related operations
     '''
 
-    def __init__(self, talkID, comment, indicator):
+    def __init__(self, talkID, comment, indicator, release=False):
         
         '''
         Initialize a failure report instance
@@ -38,6 +38,7 @@ class Failure():
         self.talkId = talkID
         self.comment = comment
         self.indicator = indicator
+        self.release = release
 
 class Report():
     def __init__(self, presentation, failure):    
