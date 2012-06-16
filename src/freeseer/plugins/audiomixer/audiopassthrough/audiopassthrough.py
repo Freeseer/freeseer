@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -70,9 +70,9 @@ class AudioPassthrough(IAudioMixer):
         self.plugman = plugman
         
         try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin("AudioMixer", self.name, "Audio Input")
+            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input")
         except ConfigParser.NoSectionError:
-            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin("AudioMixer", self.name, "Audio Input", None)
+            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
     
     def get_widget(self):
         if self.widget is None:
@@ -107,5 +107,5 @@ class AudioPassthrough(IAudioMixer):
             n = n +1
 
     def set_input(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin("AudioMixer", self.name, "Audio Input", input)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", input)
         self.plugman.save()

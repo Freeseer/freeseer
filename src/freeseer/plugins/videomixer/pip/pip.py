@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -117,8 +117,12 @@ class PictureInPicture(IVideoMixer):
     
     def load_config(self, plugman):
         self.plugman = plugman
-        self.input1 = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Main Source")
-        self.input2 = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "PIP Source")
+        try:
+            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source")
+            self.input2 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", self.input1)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", self.input2)
     
     def get_widget(self):
         
@@ -150,15 +154,7 @@ class PictureInPicture(IVideoMixer):
         return self.widget
     
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        
-        try:
-            mainsrc = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source")
-            pipsrc = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source")
-        except ConfigParser.NoSectionError:
-            # Likely first run.
-            mainsrc = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", None)
-            pipsrc = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", None)
+        self.load_config(plugman)
         
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
@@ -170,7 +166,7 @@ class PictureInPicture(IVideoMixer):
         n = 0
         for i in sources:
             self.mainInputComboBox.addItem(i)
-            if i == mainsrc: # Find the current main input source and set it
+            if i == self.input1: # Find the current main input source and set it
                 self.mainInputComboBox.setCurrentIndex(n)
             n = n +1
         
@@ -179,7 +175,7 @@ class PictureInPicture(IVideoMixer):
         n = 0
         for i in sources:
             self.pipInputComboBox.addItem(i)
-            if i == pipsrc: # Find the current pip input source and set it
+            if i == self.input2: # Find the current pip input source and set it
                 self.pipInputComboBox.setCurrentIndex(n)
             n = n +1
         

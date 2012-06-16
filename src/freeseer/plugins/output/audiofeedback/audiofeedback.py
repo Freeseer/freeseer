@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -38,6 +38,9 @@ class AudioFeedback(IOutput):
     type = IOutput.AUDIO
     recordto = IOutput.OTHER
     
+    # variables
+    self.feedbacksink = "autoaudiosink"
+    
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin(self.name)
         
@@ -59,9 +62,9 @@ class AudioFeedback(IOutput):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Feedback Sink")
+            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Feedback Sink", self.previewsink)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
         
     def get_widget(self):
         if self.widget is None:
@@ -83,16 +86,11 @@ class AudioFeedback(IOutput):
         return self.widget
     
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        try:
-            self.feedbacksink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Audio Feedback Sink")
-            self.a = ""
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.feedbacksink = "autoaudiosink"
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Feedback Sink", self.feedbacksink)
+        self.load_config(plugman)
+        
         feedbackIndex = self.feedbackComboBox.findText(self.feedbacksink)
         self.feedbackComboBox.setCurrentIndex(feedbackIndex)
             
     def set_feedbacksink(self, feedbacksink):
-        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Audio Feedback Sink", feedbacksink)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
         self.plugman.save()
