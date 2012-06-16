@@ -263,6 +263,22 @@ class QtDBConnector():
                                         Release INTEGER,
                                         UNIQUE (ID) ON CONFLICT REPLACE)''')
         
+    def get_report(self, talkid):
+        """
+        Return a failure from a given talkid
+        
+        Returned value is a Failure object
+        """
+        result = QtSql.QSqlQuery('''SELECT * FROM failures WHERE Id = "%s"''' % talkid)
+        if result.next():
+            failure = Failure(unicode(result.value(0).toString()),  # id
+                              unicode(result.value(1).toString()),  # comment
+                              unicode(result.value(2).toString()),  # indicator
+                              bool(result.value(3)))                # release
+        else:
+            failure = None
+        return failure
+        
     def get_reports(self):
         """
         Return a list of failures in Report format.

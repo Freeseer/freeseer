@@ -502,6 +502,20 @@ class RecordApp(QtGui.QMainWindow):
         self.reportWidget.eventLabel2.setText(p.event)
         self.reportWidget.roomLabel2.setText(p.room)
         self.reportWidget.timeLabel2.setText(p.time)
+        
+        # get existing report if there is one
+        talk_id = self.current_presentation_id()
+        f = self.core.db.get_report(talk_id)
+        if f is not None:
+            self.reportWidget.commentEdit.setText(f.comment)
+            i = self.reportWidget.reportCombo.findText(f.indicator)
+            self.reportWidget.reportCombo.setCurrentIndex(i)
+            self.reportWidget.releaseCheckBox.setChecked(f.release)
+        else:
+            self.reportWidget.commentEdit.setText("")
+            self.reportWidget.reportCombo.setCurrentIndex(0)
+            self.reportWidget.releaseCheckBox.setChecked(False)
+        
         self.reportWidget.show()
     
     def report(self):
