@@ -313,13 +313,22 @@ class ReportEditorApp(QtGui.QMainWindow):
         
     def updatePresentationInfo(self, talkId):
         p = self.core.db.get_presentation(talkId)
-        self.editorWidget.titleLabel2.setText(p.title)
-        self.editorWidget.speakerLabel2.setText(p.speaker)
-        self.editorWidget.descriptionLabel2.setText(p.description)
-        self.editorWidget.levelLabel2.setText(p.level)
-        self.editorWidget.eventLabel2.setText(p.event)
-        self.editorWidget.roomLabel2.setText(p.room)
-        self.editorWidget.timeLabel2.setText(p.time)
+        if p is not None:
+            self.editorWidget.titleLabel2.setText(p.title)
+            self.editorWidget.speakerLabel2.setText(p.speaker)
+            self.editorWidget.descriptionLabel2.setText(p.description)
+            self.editorWidget.levelLabel2.setText(p.level)
+            self.editorWidget.eventLabel2.setText(p.event)
+            self.editorWidget.roomLabel2.setText(p.room)
+            self.editorWidget.timeLabel2.setText(p.time)
+        else:
+            self.editorWidget.titleLabel2.setText("Talk not found")
+            self.editorWidget.speakerLabel2.setText("Talk not found")
+            self.editorWidget.descriptionLabel2.setText("Talk not found")
+            self.editorWidget.levelLabel2.setText("Talk not found")
+            self.editorWidget.eventLabel2.setText("Talk not found")
+            self.editorWidget.roomLabel2.setText("Talk not found")
+            self.editorWidget.timeLabel2.setText("Talk not found")
         
     def export_reports_to_csv(self):
         fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString)
