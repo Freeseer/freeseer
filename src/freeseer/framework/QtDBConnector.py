@@ -264,6 +264,11 @@ class QtDBConnector():
                                         Indicator TEXT,
                                         Release INTEGER,
                                         UNIQUE (ID) ON CONFLICT REPLACE)''')
+    def clear_report_db(self):
+        """
+        Drops the failures (reports) table from the database
+        """
+        query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS failures''')
         
     def get_report(self, talkid):
         """
