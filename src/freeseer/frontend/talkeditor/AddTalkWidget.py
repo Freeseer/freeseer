@@ -77,16 +77,20 @@ class AddTalkWidget(QtGui.QWidget):
         self.addTalkLayout.addRow(self.roomLabel, self.roomLineEdit)
         
         # Date 
+        current_date = QtCore.QDate()
         self.dateLabel = QtGui.QLabel("Date")
         self.dateEdit = QtGui.QDateEdit()
+        self.dateEdit.setDate(current_date.currentDate())
         self.dateLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.dateLabel, self.dateEdit)
         
         self.dateEdit.setCalendarPopup(True)
         
         # Time
+        current_time = QtCore.QTime()
         self.timeLabel = QtGui.QLabel("Time")
         self.timeEdit = QtGui.QTimeEdit()
+        self.timeEdit.setTime(current_time.currentTime())
         self.timeLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.timeLabel, self.timeEdit)
         
