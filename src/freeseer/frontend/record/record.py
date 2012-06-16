@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -510,7 +510,10 @@ class RecordApp(QtGui.QMainWindow):
         i = self.reportWidget.reportCombo.currentIndex()
         
         failure = Failure(talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i], self.reportWidget.releaseCheckBox.isChecked())
-        logging.info("Report Failure: %s, %s, %s" % (talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i]))
+        logging.info("Report Failure: %s, %s, %s, release form? %s" % (talk_id,
+                                                                       self.reportWidget.commentEdit.text(),
+                                                                       self.reportWidget.options[i],
+                                                                       self.reportWidget.releaseCheckBox.isChecked()))
         
         self.core.db.insert_failure(failure)
         self.reportWidget.close()
