@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -403,6 +403,7 @@ class FreeseerCore:
                 for i in audioinputs:
                     logging.debug("Loading Audio Mixer Input: " + i)
                     audio_input = self.plugman.plugmanc.getPluginByName(i, "AudioInput").plugin_object
+                    audio_input.load_config(self.plugman)
                     audiomixer_inputs.append(audio_input.get_audioinput_bin())
                 
                 self.backend.load_audiomixer(audiomixer, audiomixer_inputs)
@@ -420,6 +421,7 @@ class FreeseerCore:
                 for i in videoinputs:
                     logging.debug("Loading Video Mixer Input: " + i)
                     video_input = self.plugman.plugmanc.getPluginByName(i, "VideoInput").plugin_object
+                    video_input.load_config(self.plugman)
                     videomixer_inputs.append(video_input.get_videoinput_bin())
                 
                 self.backend.load_videomixer(videomixer, videomixer_inputs)
