@@ -37,7 +37,7 @@ from freeseer.frontend.qtcommon.Resource import resource_rc
 __version__= project_info.VERSION
 
 
-class ReportDialog(QtGui.QWidget):
+class ReportDialog(QtGui.QDialog):
     """
     Failure report Dialog for the Freeseer Project. 
 
