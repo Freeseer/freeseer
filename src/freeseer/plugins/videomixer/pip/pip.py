@@ -125,19 +125,27 @@ class PictureInPicture(IVideoMixer):
         if self.widget is None:
             self.widget = QtGui.QWidget()
             
-            layout = QtGui.QFormLayout()
+            layout = QtGui.QGridLayout()
             self.widget.setLayout(layout)
             
-            self.label_maininput = QtGui.QLabel("Main Source")
-            self.combobox_maininput = QtGui.QComboBox()
-            layout.addRow(self.label_maininput, self.combobox_maininput)
+            self.mainInputLabel = QtGui.QLabel("Main Source")
+            self.mainInputComboBox = QtGui.QComboBox()
+            self.mainInputSetupButton = QtGui.QPushButton("Setup")
+            layout.addWidget(self.mainInputLabel, 0, 0)
+            layout.addWidget(self.mainInputComboBox, 0, 1)
+            layout.addWidget(self.mainInputSetupButton, 0, 2)
             
-            self.label_pipinput = QtGui.QLabel("PIP Source")
-            self.combobox_pipinput = QtGui.QComboBox()
-            layout.addRow(self.label_pipinput, self.combobox_pipinput)
+            self.pipInputLabel = QtGui.QLabel("PIP Source")
+            self.pipInputComboBox = QtGui.QComboBox()
+            self.pipInputSetupButton = QtGui.QPushButton("Setup")
+            layout.addWidget(self.pipInputLabel, 1, 0)
+            layout.addWidget(self.pipInputComboBox, 1, 1)
+            layout.addWidget(self.pipInputSetupButton, 1, 2)
             
-            self.widget.connect(self.combobox_maininput, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_maininput)
-            self.widget.connect(self.combobox_pipinput, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_pipinput)
+            self.widget.connect(self.mainInputComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_maininput)
+            self.widget.connect(self.mainInputSetupButton, QtCore.SIGNAL('clicked()'), self.open_mainInputSetup)
+            self.widget.connect(self.pipInputComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_pipinput)
+            self.widget.connect(self.pipInputSetupButton, QtCore.SIGNAL('clicked()'), self.open_pipInputSetup)
             
         return self.widget
     
@@ -145,12 +153,12 @@ class PictureInPicture(IVideoMixer):
         self.plugman = plugman
         
         try:
-            mainsrc = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Main Source")
-            pipsrc = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "PIP Source")
+            mainsrc = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source")
+            pipsrc = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source")
         except ConfigParser.NoSectionError:
             # Likely first run.
-            mainsrc = self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Main Source", None)
-            pipsrc = self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "PIP Source", None)
+            mainsrc = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", None)
+            pipsrc = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", None)
         
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
@@ -158,28 +166,40 @@ class PictureInPicture(IVideoMixer):
             sources.append(plugin.plugin_object.get_name())
         
         # Load the main combobox with inputs
-        self.combobox_maininput.clear()
+        self.mainInputComboBox.clear()
         n = 0
         for i in sources:
-            self.combobox_maininput.addItem(i)
+            self.mainInputComboBox.addItem(i)
             if i == mainsrc: # Find the current main input source and set it
-                self.combobox_maininput.setCurrentIndex(n)
+                self.mainInputComboBox.setCurrentIndex(n)
             n = n +1
         
         # Load the pip combobox with inputs
-        self.combobox_pipinput.clear()
+        self.pipInputComboBox.clear()
         n = 0
         for i in sources:
-            self.combobox_pipinput.addItem(i)
+            self.pipInputComboBox.addItem(i)
             if i == pipsrc: # Find the current pip input source and set it
-                self.combobox_pipinput.setCurrentIndex(n)
+                self.pipInputComboBox.setCurrentIndex(n)
             n = n +1
         
             
     def set_maininput(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Main Source", input)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", input)
         self.plugman.save()
         
+    def open_mainInputSetup(self):
+        plugin_name = str(self.mainInputComboBox.currentText())
+        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
+        plugin.plugin_object.set_instance(0)
+        plugin.plugin_object.get_dialog()
+        
     def set_pipinput(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "PIP Source", input)
-        self.plugman.save()    
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", input)
+        self.plugman.save()
+        
+    def open_pipInputSetup(self):
+        plugin_name = str(self.pipInputComboBox.currentText())
+        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
+        plugin.plugin_object.set_instance(1)
+        plugin.plugin_object.get_dialog()

@@ -147,6 +147,7 @@ class PluginManager(QtCore.QObject):
     
 
 class IBackendPlugin(IPlugin):
+    instance = 0
     name = None
     widget = None
     category = "Undefined"
@@ -157,11 +158,17 @@ class IBackendPlugin(IPlugin):
     def get_name(self):
         return self.name
     
+    def get_config_name(self):
+        return "%s-%s" % (self.name, self.instance)
+    
     def load_config(self, plugman):
         pass
     
     def set_plugman(self, plugman):
         self.plugman = plugman
+        
+    def set_instance(self, instance=0):
+        self.instance = instance
         
     def set_gui(self, gui):
         self.gui = gui
