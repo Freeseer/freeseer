@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -62,9 +62,9 @@ class VideoPreview(IOutput):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
+            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Preview Sink", self.previewsink)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
 
         
     def get_widget(self):
@@ -89,16 +89,11 @@ class VideoPreview(IOutput):
         return self.widget
     
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        try:
-            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Preview Sink")
-            self.a = ""
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.previewsink = "autovideosink"
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Preview Sink", self.previewsink)
+        self.load_config(plugman)
+        
         previewIndex = self.previewComboBox.findText(self.previewsink)
         self.previewComboBox.setCurrentIndex(previewIndex)
             
     def set_previewsink(self, previewsink):
-        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Preview Sink", previewsink)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
         self.plugman.save()

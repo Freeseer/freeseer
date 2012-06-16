@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -109,11 +109,11 @@ class PluginManager(QtCore.QObject):
         
         self.activate_plugin("Audio Passthrough", "AudioMixer")
         self.activate_plugin("Audio Test Source", "AudioInput")
-        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough", "Audio Input", "Audio Test Source")
+        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
             
         self.activate_plugin("Video Passthrough", "VideoMixer")
         self.activate_plugin("Video Test Source", "VideoInput")
-        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough", "Video Input", "Video Test Source")
+        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.activate_plugin("Ogg Output", "Output")
         self._activate_default_metadata_plugins()
         logging.debug("Default plugins activated.")

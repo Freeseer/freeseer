@@ -97,15 +97,15 @@ class VideoPassthrough(IVideoMixer):
         self.plugman = plugman
         
         try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Video Input")
-            self.input_type = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Input Type")
-            self.framerate = int(self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Framerate"))
-            self.resolution = self.plugman.plugmanc.readOptionFromPlugin("VideoMixer", self.name, "Resolution")
+            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Input")
+            self.input_type = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type")
+            self.framerate = int(self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate"))
+            self.resolution = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Video Input", None)
-            self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Input Type", self.input_type)
-            self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Framerate", self.framerate)
-            self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Resolution", self.resolution)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Input", self.input1)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type", self.input_type)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", self.framerate)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution", self.resolution)
     
     def get_widget(self):
         if self.widget is None:
@@ -177,13 +177,13 @@ class VideoPassthrough(IVideoMixer):
         self.framerateSlider.setValue(self.framerate)
 
     def set_input(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Video Input", input)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Input", input)
         self.plugman.save()
         
     def set_videocolour(self, input_type):
-        self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Input Type", input_type)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
         self.plugman.save()
         
     def set_framerate(self, framerate):
-        self.plugman.plugmanc.registerOptionFromPlugin("VideoMixer", self.name, "Framerate", str(framerate))
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
         self.plugman.save()
