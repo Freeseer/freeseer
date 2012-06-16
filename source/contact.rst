@@ -64,9 +64,15 @@ If Andrew (our project leader) isn't available to answer the call, then you'll b
 We're thinking of setting up a system that forwards these voicemails to our mailing list. Stay tuned! 
 
 
-G+ Hangouts
+Google+ Hangouts
 -----------
 
-We're considering using Google+ Hangouts to host public Freeseer meetups.
-Being able to see and hear others is good for community bonding.
-Let us know if you support this idea!
+We occasionally use `Google+ Hangouts
+<http://www.google.com/+/learnmore/hangouts/>`_ for Freeseer meetings.
+
+Here's some tips for joining our next video chat:
+
+* Add `Andrew Ross <http://gplus.to/aross>`_ to your G+ circles, he leads the
+  discussion and starts the hangout.
+* Have a working webcam.
+* Have a headset (a dedicated microphone and headphones greatly improves audio quality).
