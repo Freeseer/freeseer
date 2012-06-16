@@ -58,6 +58,7 @@ class RecordApp(QtGui.QMainWindow):
         self.resize(550, 450)
         
         self.aboutDialog = AboutDialog()
+        self.aboutDialog.setModal(True)
         self.talks_to_save = []
         self.talks_to_delete = []
         
@@ -65,6 +66,7 @@ class RecordApp(QtGui.QMainWindow):
         self.setCentralWidget(self.mainWidget)
         
         self.reportWidget = ReportDialog()
+        self.reportWidget.setModal(True)
         
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
         
