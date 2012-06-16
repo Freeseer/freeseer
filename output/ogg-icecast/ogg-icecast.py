@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -131,10 +131,17 @@ class OggIcecast(IOutput):
 
     def load_config(self, plugman):
         self.plugman = plugman
-        self.ip = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "IP")
-        self.port = int(self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Port"))
-        self.password = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Password")
-        self.mount = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Mount")
+        
+        try:
+            self.ip = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "IP")
+            self.port = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Port")
+            self.password = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Password")
+            self.mount = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Mount")
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "IP", self.ip)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Port", self.port)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Password", self.password)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Mount", self.mount)
     
     def get_widget(self):
         if self.widget is None:
@@ -167,18 +174,7 @@ class OggIcecast(IOutput):
         return self.widget
 
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        
-        try:
-            self.ip = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "IP")
-            self.port = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Port")
-            self.password = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Password")
-            self.mount = self.plugman.plugmanc.readOptionFromPlugin("Output", self.name, "Mount")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "IP", self.ip)
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Port", self.port)
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Password", self.password)
-            self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Mount", self.mount)
+        self.load_config(plugman)
             
         self.lineedit_ip.setText(self.ip)
         self.lineedit_port.setText(self.port)
@@ -187,20 +183,20 @@ class OggIcecast(IOutput):
 
     def set_ip(self):
         ip = str(self.lineedit_ip.text())
-        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "IP", ip)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "IP", ip)
         self.plugman.save()
         
     def set_port(self):
         port = str(self.lineedit_port.text())
-        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Port", port)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Port", port)
         self.plugman.save()
         
     def set_password(self):
         password = str(self.lineedit_password.text())
-        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Password", password)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Password", password)
         self.plugman.save()
         
     def set_mount(self):
         mount = str(self.lineedit_mount.text())
-        self.plugman.plugmanc.registerOptionFromPlugin("Output", self.name, "Mount", mount)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Mount", mount)
         self.plugman.save()
