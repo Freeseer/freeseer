@@ -96,8 +96,9 @@ class QtDBConnector():
         """
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
                                         (Id INTERGER PRIMARY KEY,
-                                        Comments text,
-                                        Indicator text,
+                                        Comments TEXT,
+                                        Indicator TEXT,
+                                        Release INTEGER,
                                         UNIQUE (ID) ON CONFLICT REPLACE)''')
         
     def __insert_default_talk(self):
@@ -145,8 +146,9 @@ class QtDBConnector():
         list = []
         while(result.next()):
             failure = Failure(unicode(result.value(0).toString()),    # id
-                             unicode(result.value(1).toString()),    # comment
-                             unicode(result.value(2).toString()))    # indicator
+                              unicode(result.value(1).toString()),    # comment
+                              unicode(result.value(2).toString()),    # indicator
+                              bool(result.value(3))),                 # release
             p = self.get_presentation(failure.talkId)
             r = Report(p, failure)
             list.append(r)
@@ -200,8 +202,8 @@ class QtDBConnector():
         Insert a failure into the database.
         """
         
-        query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s")''' %
-                           (int(failure.talkId), failure.comment, failure.indicator))
+        query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
+                           (int(failure.talkId), failure.comment, failure.indicator, failure.release))
         logging.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
     
     def update_failure(self, talk_id, failure):
@@ -209,9 +211,10 @@ class QtDBConnector():
         Update an existing Failure in the database.
         """
         
-        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s" WHERE Id="%s"''' %
+        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
                            (failure.comment,
                             failure.indicator,
+                            failure.release,
                             failure.talkId))
         logging.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
     
