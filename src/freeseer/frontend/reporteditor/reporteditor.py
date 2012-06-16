@@ -282,7 +282,7 @@ class ReportEditorApp(QtGui.QMainWindow):
         self.failureModel.select()
         
     def reset(self):
-        self.core.db.clear_database()
+        self.core.db.clear_report_db()
         self.failureModel.select()
         
     def confirm_reset(self):
