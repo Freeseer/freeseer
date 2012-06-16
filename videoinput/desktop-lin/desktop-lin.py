@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -66,9 +66,9 @@ class DesktopLinuxSrc(IVideoInput):
         self.plugman = plugman
         
         try:
-            self.screen = self.plugman.plugmanc.readOptionFromPlugin("VideoInput", self.name, "Screen")
+            self.screen = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Screen")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Screen", self.screen)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
         except TypeError:
             # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
             pass
@@ -96,5 +96,5 @@ class DesktopLinuxSrc(IVideoInput):
         self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
             
     def set_screen(self, screen):
-        self.plugman.plugmanc.registerOptionFromPlugin("VideoInput", self.name, "Screen", screen)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Screen", screen)
         self.plugman.save()
