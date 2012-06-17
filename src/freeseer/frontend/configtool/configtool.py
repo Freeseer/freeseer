@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -203,7 +203,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.load_plugin_widgets()
         
         # Start off with displaying the General Settings
-        items = self.mainWidget.optionsTreeWidget.findItems("General", QtCore.Qt.MatchExactly)
+        items = self.mainWidget.optionsTreeWidget.findItems(self.generalString, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
             self.mainWidget.optionsTreeWidget.setCurrentItem(item)
@@ -319,6 +319,14 @@ class ConfigToolApp(QtGui.QMainWindow):
             
             if self.current_language == str(language).strip("tr_").rstrip(".qm"):
                 languageAction.setChecked(True)
+                
+        # Load default language
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.config.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
 
     ###
     ### General
