@@ -67,10 +67,10 @@ class Gstreamer:
     ##
     def on_message(self, bus, message):
         t = message.type
-      
+
         if t == gst.MESSAGE_EOS:
             self.stop()
-            pass
+
         elif t == gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
             #self.core.logger.log.debug('Error: ' + str(err) + str(debug))

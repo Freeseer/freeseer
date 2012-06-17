@@ -56,10 +56,7 @@ class FreeseerCore:
 
         # Start Freeseer Recording Backend
         self.backend = gstreamer.Gstreamer(window_id, audio_feedback)
-
-        self.feedback = False
-        self.spaces = False
-      
+        
         logging.info(u"Core initialized")   
 
     def get_config(self):
