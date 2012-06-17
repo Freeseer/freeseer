@@ -63,6 +63,7 @@ class Config:
         self.record_to_file_plugin = 'Ogg Output'
         self.record_to_stream = False
         self.record_to_stream_plugin = None
+        self.audio_feedback = False
         self.video_preview = True
         self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
 
