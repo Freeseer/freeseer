@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="ja_JP" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="ja_JP">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -193,22 +194,22 @@
     <message>
         <location filename="../../configtool/configtool.py" line="232"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディング</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="240"/>
         <source>Metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>メタデータ</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="267"/>
         <source>Audio Input</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ入力</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="271"/>
         <source>Video Input</source>
-        <translation type="unfinished"></translation>
+        <translation>ビデオ入力</translation>
     </message>
 </context>
 <context>
@@ -316,87 +317,87 @@
     <message>
         <location filename="../../record/record.py" line="207"/>
         <source>Standby</source>
-        <translation type="unfinished"></translation>
+        <translation>スタンバイ</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="210"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>再開する</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="216"/>
         <source>Idle.</source>
-        <translation type="unfinished"></translation>
+        <translation>アイドル.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="242"/>
         <source>&amp;Report</source>
-        <translation type="unfinished"></translation>
+        <translation>報告(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="274"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトル:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="275"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>演者:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="276"/>
         <source>Event:</source>
-        <translation type="unfinished"></translation>
+        <translation>イベント:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="277"/>
         <source>Room:</source>
-        <translation type="unfinished"></translation>
+        <translation>会議室:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="278"/>
         <source>Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>時刻:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="279"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>コメント</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="281"/>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="282"/>
         <source>Report</source>
-        <translation type="unfinished"></translation>
+        <translation>報告</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="286"/>
         <source>No Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオない</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="287"/>
         <source>No Video</source>
-        <translation type="unfinished"></translation>
+        <translation>ビデオない</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="288"/>
         <source>No Audio/Video</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ / ビデオ ない</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="280"/>
         <source>Release Received</source>
-        <translation type="unfinished"></translation>
+        <translation>リリース フォームを受けた</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="285"/>
         <source>No Issues</source>
-        <translation type="unfinished"></translation>
+        <translation>問題ない</translation>
     </message>
 </context>
 <context>
@@ -404,107 +405,107 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="164"/>
         <source>Freeseer Report Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer 報告 エディタ</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="169"/>
         <source>Clear Database</source>
-        <translation type="unfinished">データベースを削除する</translation>
+        <translation>データベースを削除する</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="170"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished">データベースを削除しますか?</translation>
+        <translation>データベースを削除しますか?</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="177"/>
         <source>&amp;File</source>
-        <translation type="unfinished">ファイル(&amp;F)</translation>
+        <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="178"/>
         <source>&amp;Options</source>
-        <translation type="unfinished">オプション(&amp;O)</translation>
+        <translation>オプション(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="179"/>
         <source>&amp;Language</source>
-        <translation type="unfinished">言語(&amp;L)</translation>
+        <translation>言語(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="180"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">ヘルプ(&amp;H)</translation>
+        <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="181"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>CSVを出力(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="182"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished">終了(&amp;Q)</translation>
+        <translation>終了(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="183"/>
         <source>&amp;About</source>
-        <translation type="unfinished">アバウト(&amp;A)</translation>
+        <translation>アバウト(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="189"/>
         <source>Remove</source>
-        <translation type="unfinished">削除する</translation>
+        <translation>削除する</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="190"/>
         <source>Clear</source>
-        <translation type="unfinished">全削除する</translation>
+        <translation>全削除する</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="191"/>
         <source>Close</source>
-        <translation type="unfinished">閉じる</translation>
+        <translation>閉じる</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="193"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>タイトル:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="194"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>演者:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="195"/>
         <source>Description:</source>
-        <translation type="unfinished"></translation>
+        <translation>説明:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="196"/>
         <source>Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>レベル:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="197"/>
         <source>Event:</source>
-        <translation type="unfinished"></translation>
+        <translation>イベント:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="198"/>
         <source>Room:</source>
-        <translation type="unfinished"></translation>
+        <translation>会議室:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="199"/>
         <source>Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>時刻:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="171"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルを選択</translation>
     </message>
 </context>
 <context>
@@ -627,17 +628,17 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="190"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>CSVで出力(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="215"/>
         <source>Load talks from CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>CSVからトークを読み込む</translation>
     </message>
 </context>
 <context>
