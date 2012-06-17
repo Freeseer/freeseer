@@ -39,7 +39,7 @@ class AudioFeedback(IOutput):
     recordto = IOutput.OTHER
     
     # variables
-    self.feedbacksink = "autoaudiosink"
+    feedbacksink = "autoaudiosink"
     
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin(self.name)
@@ -47,7 +47,7 @@ class AudioFeedback(IOutput):
         audioqueue = gst.element_factory_make("queue", "audioqueue")
         bin.add(audioqueue)
         
-        audiosink = gst.element_factory_make(self.previewsink, "audiosink")
+        audiosink = gst.element_factory_make(self.feedbacksink, "audiosink")
         bin.add(audiosink)
         
         # Setup ghost pad
@@ -62,7 +62,7 @@ class AudioFeedback(IOutput):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
+            self.feedbacksink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
         
