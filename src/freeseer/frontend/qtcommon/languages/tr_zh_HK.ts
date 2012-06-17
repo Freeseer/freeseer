@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -20,7 +21,7 @@
     <message>
         <location filename="../AboutDialog.py" line="105"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;,without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
-        <translation>Freeseer授權許可於通用公共授權GPL v3。此軟件不提供任何明確的或隱含的擔保或保證。作者在任何情況下均不就因用戶使用本軟件而發生的任何損失承擔責任。</translation>
+        <translation>Freeseer授權於通用公共授權GPL v3。此軟件不提供任何明確的或隱含的擔保或保證。作者在任何情況下均不就因用戶使用本軟件而發生的任何損失承擔責任。</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="110"/>
@@ -188,27 +189,27 @@
     <message>
         <location filename="../../configtool/configtool.py" line="259"/>
         <source>Default Language</source>
-        <translation type="unfinished"></translation>
+        <translation>默認語言</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="232"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>記錄</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="240"/>
         <source>Metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>元數據</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="267"/>
         <source>Audio Input</source>
-        <translation type="unfinished"></translation>
+        <translation>音頻輸入</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="271"/>
         <source>Video Input</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻輸入</translation>
     </message>
 </context>
 <context>
@@ -296,107 +297,107 @@
     <message>
         <location filename="../../record/record.py" line="209"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>暫停</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="217"/>
         <source>Ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>準備就緒.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="218"/>
         <source>Recording...</source>
-        <translation type="unfinished"></translation>
+        <translation>記錄...</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="219"/>
         <source>Recording Paused.</source>
-        <translation type="unfinished"></translation>
+        <translation>記錄暫停.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="207"/>
         <source>Standby</source>
-        <translation type="unfinished"></translation>
+        <translation>待機</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="210"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>繼續</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="216"/>
         <source>Idle.</source>
-        <translation type="unfinished"></translation>
+        <translation>閒置.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="242"/>
         <source>&amp;Report</source>
-        <translation type="unfinished"></translation>
+        <translation>故障報告(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="274"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>標題:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="275"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>演講者:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="276"/>
         <source>Event:</source>
-        <translation type="unfinished"></translation>
+        <translation>會議:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="277"/>
         <source>Room:</source>
-        <translation type="unfinished"></translation>
+        <translation>會議室:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="278"/>
         <source>Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>時間:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="279"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>備註</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="281"/>
         <source>Close</source>
-        <translation type="unfinished">關閉</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="282"/>
         <source>Report</source>
-        <translation type="unfinished"></translation>
+        <translation>故障報告</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="286"/>
         <source>No Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>無音頻</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="287"/>
         <source>No Video</source>
-        <translation type="unfinished"></translation>
+        <translation>無視頻</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="288"/>
         <source>No Audio/Video</source>
-        <translation type="unfinished"></translation>
+        <translation>無音頻/視頻</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="280"/>
         <source>Release Received</source>
-        <translation type="unfinished"></translation>
+        <translation>收到授權</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="285"/>
         <source>No Issues</source>
-        <translation type="unfinished"></translation>
+        <translation>無故障</translation>
     </message>
 </context>
 <context>
@@ -404,107 +405,107 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="164"/>
         <source>Freeseer Report Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer 故障報告編輯器</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="169"/>
         <source>Clear Database</source>
-        <translation type="unfinished">清除數據庫</translation>
+        <translation>清除數據庫</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="170"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished">確實要清除數據庫麼?</translation>
+        <translation>確實要清除數據庫麼?</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="177"/>
         <source>&amp;File</source>
-        <translation type="unfinished">文件(&amp;F)</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="178"/>
         <source>&amp;Options</source>
-        <translation type="unfinished">選項(&amp;O)</translation>
+        <translation>選項(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="179"/>
         <source>&amp;Language</source>
-        <translation type="unfinished">語言(&amp;L)</translation>
+        <translation>語言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="180"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">幫助(&amp;H)</translation>
+        <translation>幫助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="181"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>輸出到CSV(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="182"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished">退出(&amp;Q)</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="183"/>
         <source>&amp;About</source>
-        <translation type="unfinished">關於(&amp;A)</translation>
+        <translation>關於(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="189"/>
         <source>Remove</source>
-        <translation type="unfinished">刪除</translation>
+        <translation>移除</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="190"/>
         <source>Clear</source>
-        <translation type="unfinished">清除全部</translation>
+        <translation>清除全部</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="191"/>
         <source>Close</source>
-        <translation type="unfinished">關閉</translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="193"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>標題:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="194"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>演講者:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="195"/>
         <source>Description:</source>
-        <translation type="unfinished"></translation>
+        <translation>描述:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="196"/>
         <source>Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>演講級別:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="197"/>
         <source>Event:</source>
-        <translation type="unfinished"></translation>
+        <translation>會議:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="198"/>
         <source>Room:</source>
-        <translation type="unfinished"></translation>
+        <translation>會議室:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="199"/>
         <source>Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>時間:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="171"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>選擇文件</translation>
     </message>
 </context>
 <context>
@@ -627,17 +628,17 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="190"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>輸出到CSV(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>文件</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="215"/>
         <source>Load talks from CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>從CSV載入演講</translation>
     </message>
 </context>
 <context>
