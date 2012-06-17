@@ -5,7 +5,12 @@ Here's everything you need to know to get Freeseer up and running.
 
 Prerequisites
 -------------
-*TODO*
+* Python 2.7
+* Sqlite3
+* PyQt4
+* python-feedparser
+* python-setuptools
+* yapsy (needs setuptools to install)
 
 
 Installers
