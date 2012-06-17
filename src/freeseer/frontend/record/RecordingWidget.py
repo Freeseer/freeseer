@@ -63,6 +63,8 @@ class RecordingWidget(QtGui.QWidget):
         self.stopIcon =  QtGui.QIcon.fromTheme("media-playback-stop", stopFallbackIcon)
         self.pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
         self.resumeIcon = QtGui.QIcon.fromTheme("media-playback-start")
+        self.headphoneIcon = QtGui.QIcon()
+        self.headphoneIcon.addPixmap(QtGui.QPixmap(":/multimedia/headphones.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         
         self.standbyPushButton = QtGui.QPushButton("Standby")
         self.standbyPushButton.setToolTip("Standby")
@@ -146,6 +148,13 @@ class RecordingWidget(QtGui.QWidget):
         
         self.statusLabel = QtGui.QLabel()
         self.mainLayout.addWidget(self.statusLabel)
+        
+        # Audio Feedback Checkbox
+        self.audioFeedbackCheckbox = QtGui.QCheckBox()
+        self.audioFeedbackCheckbox.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.audioFeedbackCheckbox.setIcon(self.headphoneIcon)
+        self.audioFeedbackCheckbox.setToolTip("Enable Audio Feedback")
+        self.mainLayout.addWidget(self.audioFeedbackCheckbox)
         
     def setRecordIcon(self, state):
         if state:

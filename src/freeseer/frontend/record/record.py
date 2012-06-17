@@ -169,6 +169,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.standby)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.record)
         self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
+        self.connect(self.mainWidget.audioFeedbackCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_feedback)
 
         # Main Window Connections
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
@@ -186,6 +187,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
+        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.audioFeedbackCheckbox.setDisabled)
         
         #
         # ReportWidget Connections
@@ -459,6 +461,9 @@ class RecordApp(QtGui.QMainWindow):
         """
         self.time_minutes = 0
         self.time_seconds = 0
+        
+    def toggle_audio_feedback(self, enabled):
+        self.config.audio_feedback = enabled
 
     ###
     ### Talk Related

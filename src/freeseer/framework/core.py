@@ -361,6 +361,10 @@ class FreeseerCore:
             p = self.plugman.plugmanc.getPluginByName(self.config.record_to_stream_plugin, "Output")
             load_plugins.append(p)
             
+        if self.config.audio_feedback:
+            p = self.plugman.plugmanc.getPluginByName("Audio Feedback", "Output")
+            load_plugins.append(p)
+            
         if self.config.video_preview:
             p = self.plugman.plugmanc.getPluginByName("Video Preview", "Output")
             load_plugins.append(p)
