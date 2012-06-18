@@ -281,7 +281,7 @@ class QtDBConnector():
             failure = Failure(unicode(result.value(0).toString()),  # id
                               unicode(result.value(1).toString()),  # comment
                               unicode(result.value(2).toString()),  # indicator
-                              bool(result.value(3)))                # release
+                              result.value(3).toBool())             # release
         else:
             failure = None
         return failure
