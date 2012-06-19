@@ -3,82 +3,16 @@ Created on Jun 4, 2012
 
 @author: borasabuncu
 '''
-from PyQt4 import QtNetwork, QtCore, QtGui
-from PyQt4.QtNetwork import QTcpSocket, QAbstractSocket
-from PyQt4.QtNetwork import QHostAddress
-from PyQt4.QtCore import QObject, QDataStream
 import sys
 
+from PyQt4 import QtNetwork, QtCore, QtGui
+
+from PyQt4.QtNetwork import QTcpSocket, QAbstractSocket
+
 PORT = 56763
-class Client(QtCore.QObject):
-    socket = None
-    addr = None
-    port = None
-    blockSize = None
-    currentFortune = ''
-    def __init__(self, addr, portin):
-        print 'Starting client'
-        self.socket = QTcpSocket() 
-        #self.connect(self.socket, QtCore.SIGNAL('connected()'), self.requestNewFortune)
-        #self.connect(self.socket, QtCore.SIGNAL('readyRead()'), self.readFortune)
-        self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
-        self.addr = addr
-        self.port = portin
-        
-    def readFortune(self):
-        print 'Reading fortune'
-        datain = QtCore.QDataStream(self.socket)
-        datain.setVersion(QtCore.QDataStream.Qt_4_0)
-        
-        if self.blockSize == 0:
-            #if self.socket.bytesAvailable() < int(len(quint16)):
-                #return
-            datain.writeInt(self.blockSize)
-        if self.socket.bytesAvailable() < self.blockSize:
-            return
-        nextFortune = QtCore.QString()
-        datain.writeString(nextFortune)
-        self.currentFortune = nextFortune
-        print self.socket.read(1024)
-        print 'End reading fortune'
-        
-        
-    
-    def requestNewFortune(self):
-        print 'Requesting new fortune'
-        self.blockSize = 0
-        self.socket.abort()
-        print 'Connecting to ', self.addr, self.port
-        self.connectTo('address', 2000)
-        print 'End requesting new fortune'
-        
-        
-    def connectTo(self, address, portin):
-        addr = QHostAddress(self.addr)
-        print 'Trying to connect to ', self.addr, self.port
-        self.socket.connectToHost(addr, self.port)
-        if self.socket.waitForConnected(1000) is False :
-            print 'Socket creation failed: ', self.socket.errorString()
-        else:
-            print 'Connected'
-            print self.socket.state()
-        
-    def displayError(self, socketError):
-        if socketError == QAbstractSocket.HostNotFoundError:
-            print 'The host was not found'
-        elif socketError == QAbstractSocket.ConnectionRefusedError:
-            print 'The connection was refused'
-        else:
-            print 'Unknown error'
-    
-    def close(self):
-        self.socket.close()
 
-
-
-
-        
 class ClientG(QtGui.QWidget):
+    
     pushButton = None
     connectButton = None
     label = None
@@ -93,14 +27,12 @@ class ClientG(QtGui.QWidget):
     blockSize = None
     currentFortune = ''
     passPhraseEdit = None
+    
     def __init__(self,):
         super(ClientG, self).__init__()
         print 'Starting client'
         
         self.socket = QTcpSocket() 
-        self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
-        self.connect(self.socket, QtCore.SIGNAL('readyRead()'), self.readMessage)
-        self.connect(self.socket, QtCore.SIGNAL('connected()'), self.connected)
         
         self.label = QtGui.QLabel('Client status:' + self.status, self)
         self.label.move(10, 20)
@@ -114,22 +46,25 @@ class ClientG(QtGui.QWidget):
         label3 = QtGui.QLabel('Port:', self)
         label3.move(10, 105)
         
-        
         self.portLabelEdit = QtGui.QLineEdit('55441',self)
         self.portLabelEdit.move(10, 125)
         
-        self.pushButton = QtGui.QPushButton('Connect', self)
+        self.pushButton = QtGui.QPushButton('Start', self)
         self.pushButton.move(10, 175)  
-        self.connect(self.pushButton, QtCore.SIGNAL('pressed()'), self.startClient)
          
         self.connectButton = QtGui.QPushButton('Connect', self)
         self.connectButton.move(100, 175)
         #self.connectButton.setEnabled(False)
-        self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
         
         self.passPhraseEdit = QtGui.QLineEdit(self)
         self.passPhraseEdit.move(250, 125)
         #self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
+        
+        self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
+        self.connect(self.socket, QtCore.SIGNAL('readyRead()'), self.readMessage)
+        self.connect(self.socket, QtCore.SIGNAL('connected()'), self.connected)
+        self.connect(self.pushButton, QtCore.SIGNAL('pressed()'), self.startClient)
+        self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
         
         self.setGeometry(300, 300, 450, 250)
         self.setWindowTitle('Client')
@@ -155,7 +90,7 @@ class ClientG(QtGui.QWidget):
         print 'Server said:', message
     
     def connectTo(self):
-        addr = QHostAddress(self.addr)
+        addr = QtNetwork.QHostAddress(self.addr)
         print 'Trying to connect to ', self.addr, self.port
         self.socket.connectToHost(addr, self.port)
         if self.socket.waitForConnected(1000) is False :
@@ -198,9 +133,10 @@ class ClientG(QtGui.QWidget):
     
     def close(self):
         self.socket.close()
+    
 def Main():
     app = QtGui.QApplication(sys.argv)
     c = ClientG()
     return app.exec_()
-
-Main()
+if __name__ == "__main__":
+    Main()
