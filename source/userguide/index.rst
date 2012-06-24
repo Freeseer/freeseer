@@ -15,8 +15,10 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
 
    record
    talkeditor
+   reporteditor
    config/index
    config/plugins/index
 .. freeseer-record = Record
    freeseer-talkeditor = Manage Talks
+   freeseer-reporteditor = Report Editor
    freeseer-config = Settings
