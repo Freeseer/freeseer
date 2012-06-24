@@ -275,6 +275,7 @@ class RecordApp(QtGui.QMainWindow):
         #
         # ReportWidget
         #
+        self.reportWidget.setWindowTitle(self.uiTranslator.translate("RecordApp", "Reporting Tool"))
         self.reportWidget.titleLabel.setText(self.uiTranslator.translate("RecordApp", "Title:"))
         self.reportWidget.speakerLabel.setText(self.uiTranslator.translate("RecordApp", "Speaker:"))
         self.reportWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event:"))
