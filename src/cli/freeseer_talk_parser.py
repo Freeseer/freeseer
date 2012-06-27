@@ -85,10 +85,11 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                 if(namespace.presentation != None and namespace.remove_all):
                     print "*** Error: Please specify only one option"
                 else:
+                    print namespace.remove_all
                     if(namespace.presentation):
                         self.remove_talk(namespace.presentation)
                     elif namespace.remove_all:
-                        self.clear_database()   
+                        self.remove_all_talks()   
                                              
         elif(mode == "add talk"):
             self.add_talk_by_prompt()
@@ -159,12 +160,11 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
             print "#########################################################################"
-            count+=1
-        
-      
+            count+=1      
                 
     def remove_talk(self, id):
-        if int(id) in self.db_connector.get_talks_ids():
+        presentation = self.db_connector.get_presentation(id)
+        if presentation:
             self.show_talk_by_id(id)
             answer = raw_input("This will remove this presentation.Continue? (yes/no) ")
             
@@ -172,7 +172,8 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                 answer = raw_input("Please provide an available answer.Do you want to remove this presentation? (yes/no) ")
             else:
                 if answer == "yes":
-                    self.db_connector.delete_talk(id)
+                    self.db_connector.delete_presentation(id)
+                    print "Talk removed"
         else:
             print "There's no such presentation"
             
@@ -180,7 +181,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         answer = raw_input("WARNING: This will remove ALL presentations.Continue? (yes/no) ")
         
         while answer != "yes" and answer != "no":
-            answer = raw_input("Please provide an available answer.Do you want to remove ALL presentations? (yes/no) ")
+            answer = raw_input("Please provide an available answer. Do you want to remove ALL presentations? (yes/no) ")
         
         if answer == "yes":
                 self.db_connector.clear_database()
@@ -203,57 +204,50 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             else:
                 break
              
-        if not self.db_connector.db_contains(presentation):
-            self.db_connector.add_talk(presentation)
+        if not self.db_connector.presentation_exists(presentation):
+            self.db_connector.insert_presentation(presentation)
             print "###################### Talk Added ############################"
         else:
             print "############### Error: Talk Already Exists ###################"
 
-    def update_talk_by_prompt(self, id):        
-        print "#### You have choose to edit the following talk ###"
-        for talk_data in self.db_connector.get_talk_titles():            
-            if str(talk_data[5])  == str(id): 
-                title = unicode(talk_data[1])
-                speaker = unicode(talk_data[0])
-                room = unicode(talk_data[2])
-                event = unicode(talk_data[3])
-                talk_id = unicode(talk_data[5])
-                print "#########################################################################"  
-                print "Talk Title: " + title
-                print "Talk Speaker: " + speaker
-                print "Talk Room: " + room
-                print "Talk Event " + event
-                print "#########################################################################"              
+    def update_talk_by_prompt(self, id): 
+        print id 
+        presentation = self.db_connector.get_presentation(id)
+        print presentation
+        if presentation:                  
+            print "#### You have choosen to edit the following talk ###"
+            self.show_talk_by_id(id)                         
+            new_title = raw_input("Type the new presentation title (<ENTER> to keep old data): ")
+            if(len(new_title) > 0):
+                title = new_title
                 
-                   
-                   
-        new_title = raw_input("Type the new presentation title (<ENTER> to keep old data): ")
-        if(len(new_title) > 0):
-            title = new_title
+            new_speaker = raw_input("Type the new presentation speaker (<ENTER> to keep old data): ")
+            if(len(new_speaker) > 0):
+                speaker = new_speaker
+                
+            new_event = raw_input("Type the new event that held the presentation (<ENTER> to keep old data): ")
+            if(len(new_event) > 0):
+                event = new_event
+                
+            new_room = raw_input("Type the new room where the presentation will be performed (<ENTER> to keep old data): ")  
+            if(len(new_room) > 0):
+                room = new_room
+                
+            new_presentation = Presentation("")
             
-        new_speaker = raw_input("Type the new presentation speaker (<ENTER> to keep old data): ")
-        if(len(new_speaker) > 0):
-            speaker = new_speaker
+            new_presentation.talk_id = talk_id
+            new_presentation.title = new_title
+            new_presentation.speaker = new_speaker
+            new_presentation.event = new_event
+            new_presentation.room = new_room
             
-        new_event = raw_input("Type the new event that held the presentation (<ENTER> to keep old data): ")
-        if(len(new_event) > 0):
-            event = new_event
+            self.db_connector.update_talk(talk_id, speaker, title, room, event, "")
             
-        new_room = raw_input("Type the new room where the presentation will be performed (<ENTER> to keep old data): ")  
-        if(len(new_room) > 0):
-            room = new_room
+            print "### Talk Updated! ###"
             
-        new_presentation = Presentation("")
-        
-        new_presentation.talk_id = talk_id
-        new_presentation.title = new_title
-        new_presentation.speaker = new_speaker
-        new_presentation.event = new_event
-        new_presentation.room = new_room
-        
-        self.db_connector.update_talk(talk_id, speaker, title, room, event, "")
-        
-        print "### Talk Updated! ###"
+        else:
+            print "There's no such presentation"
+            
         
     def _is_date_format(self, value):
         if(re.match("[0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9] [0-2][0-9]:[0-5][0-9]", value)):
@@ -276,9 +270,3 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             count+=1
         
         return count
-
-                
-            
-        
-             
-    
