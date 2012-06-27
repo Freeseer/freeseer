@@ -26,10 +26,7 @@ import argparse
 
 import sys,os
 import re
-import freeseer.framework.presentation
 import getpass
-
-
 
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
@@ -359,18 +356,4 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         mode = ""
         for item in mode_list:
             mode += item + " "
-        return mode[0:len(mode)-1]
-        
-    
-        
-            
-                    
-            
-        
-            
-            
-    
-            
-        
-            
-         
+        return mode[0:len(mode)-1]        

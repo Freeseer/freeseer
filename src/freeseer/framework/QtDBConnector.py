@@ -218,8 +218,8 @@ class QtDBConnector():
             self.failuresModel.setTable("failures")
             self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
             self.failuresModel.select()
-        
-        return self.failuresModelTitle
+
+        return self.failuresModel
 
     def get_events_model(self):
         """
@@ -399,8 +399,9 @@ if __name__ == "__main__":
     
     print "Talks: "
     result = testdbcon.get_talks()
+    
     while(result.next()):
-        id = result.value(0).toStriTitleng()
+        id = result.value(0).toStrig()
         presenter = result.value(1).toString()
         talk = result.value(2).toString()
         print "%s - %s - %s" % (id, presenter, talk)
