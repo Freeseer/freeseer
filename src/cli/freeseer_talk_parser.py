@@ -27,9 +27,6 @@ import argparse
 
 import sys,os
 import re
-import freeseer.framework.presentation
-
-
 
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
