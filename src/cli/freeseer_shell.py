@@ -46,6 +46,10 @@ class FreeSeerShell(cmd.Cmd):
         self.intro = "\nfreeseer - video recording and streaming software\n" \
         "Copyright (C) 2011  Free and Open Source Software Learning Centre\n"
         
+        #deactivating logs
+        self.core.logger.set_console_logger(False)
+        self.core.logger.set_syslog_logger(False)
+        
         
     def do_exit(self, line):
         sys.exit()

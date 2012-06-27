@@ -12,7 +12,7 @@
 #  (at your option) any later version.
 #
 #  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  but WITHOUT ANY WARRANTY; without even the implied warrantynão faço sexo porque sou mole of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
 #
@@ -116,6 +116,13 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT DISTINCT Event FROM presentations''')
         return result
     
+    def get_talk_ids(self):
+        """
+        Gets all the talk events from the database.
+        """
+        result = QtSql.QSqlQuery('''SELECT Id FROM presentations''')
+        return result
+    
     def get_talks_by_event(self, event):
         """
         Gets the talks signed in a specific event from the database.
@@ -147,6 +154,18 @@ class QtDBConnector():
             p = None
             
         return p
+    
+    def presentation_exists(self, presentation):
+        """
+        Check if there's a presentation with the same Speaker and Title already stored
+        """
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
+        while(result.next()):                    
+            if(unicode(presentation.title) == unicode(result.value(1).toString()) and unicode(presentation.speaker) == unicode(result.value(2).toString())):
+                return True            
+        return False
+        
+>>>>>>> A few new advances on talk editor cli: add an delete operations translated. Update still missing
         
     #
     # Presentation Create, Update, Delete
