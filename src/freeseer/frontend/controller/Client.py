@@ -87,7 +87,7 @@ class ClientG(QtGui.QWidget):
     def connected(self):
         print 'Connected'
         self.connectButton.setText("Disconnect")
-        self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
+        #self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnect)
         
     def sendMessage(self):
