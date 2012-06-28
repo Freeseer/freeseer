@@ -43,6 +43,8 @@ from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from RecordingWidget import RecordingWidget
 
+from freeseer.frontend.controller.Client import ClientG
+
 __version__= project_info.VERSION
 
 class RecordApp(QtGui.QMainWindow):
@@ -63,7 +65,7 @@ class RecordApp(QtGui.QMainWindow):
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
-        
+        self.clientWidget = ClientG()
         self.reportWidget = ReportDialog()
         
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
@@ -122,8 +124,12 @@ class RecordApp(QtGui.QMainWindow):
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
         
+        self.actionClient = QtGui.QAction(self)
+        self.actionClient.setObjectName(_fromUtf8("actionClient"))
+        self.actionClient.setIcon(icon)
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
+        self.menuFile.addAction(self.actionClient)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
         self.menuHelp.addAction(self.actionReport)
@@ -168,6 +174,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
+        self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
         
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
@@ -179,6 +186,9 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
+        
+        #Client Connections
+        self.connect(self.clientWidget.socket, QtCore.SIGNAL('readyRead()'), self.getAction)
         
         #
         # ReportWidget Connections
@@ -469,7 +479,7 @@ class RecordApp(QtGui.QMainWindow):
         
         self.core.db.insert_failure(failure)
         self.reportWidget.close()
-
+    
     ###
     ### Misc
     ###
@@ -540,6 +550,18 @@ class RecordApp(QtGui.QMainWindow):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
     
+    ###
+    ### Client function
+    ###
+    def show_client_widget(self):
+        p = self.current_presentation()
+        #self.clientWidget.titleLabel2.setText(p.title)
+        self.clientWidget.show()
+    
+    def getAction(self):
+        message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
+        print 'Server said:', message
+        
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = RecordApp()
