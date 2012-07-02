@@ -85,7 +85,7 @@ class ClientG(QtGui.QWidget):
         print 'State changed'
     
     def connected(self):
-        print 'Connected'
+        logging.info("Connected to %s %s", self.addr, self.port)
         self.connectButton.setText("Disconnect")
         #self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnect)
@@ -107,9 +107,6 @@ class ClientG(QtGui.QWidget):
         self.socket.connectToHost(addr, self.port)
         if self.socket.waitForConnected(1000) is False :
             logging.error("Socket error %s", self.socket.errorString())
-        else:
-            logging.info("Connected successful to %s", self.addr)
-    
         
         
     def displayError(self, socketError):
