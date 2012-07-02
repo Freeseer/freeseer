@@ -622,6 +622,7 @@ class RecordApp(QtGui.QMainWindow):
     def getAction(self):
         message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
         print 'Server said:', message
+        #if message == 'Record':
         
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

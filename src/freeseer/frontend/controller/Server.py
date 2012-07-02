@@ -23,7 +23,6 @@ class ServerWidget(QtGui.QWidget):
     clients = []
     
     def __init__(self):
-        #super(ServerG, self).__init__()
         QtGui.QWidget.__init__(self) 
         self.resize(400, 400)
         
@@ -60,21 +59,23 @@ class ServerWidget(QtGui.QWidget):
         self.qListWidget.move(25, 140)
         self.qListWidget.resize(256, 192)
         
-        self.recordButton = QtGui.QPushButton('Start Recording', self)
-        self.recordButton.move(300, 100)
+        self.startRecordButton = QtGui.QPushButton('Start Recording', self)
+        self.startRecordButton.move(300, 100)
         
-        self.recordButton = QtGui.QPushButton('Pause Recording', self)
-        self.recordButton.move(300, 150)
+        self.pauseRecordButton = QtGui.QPushButton('Pause Recording', self)
+        self.pauseRecordButton.move(300, 150)
         
-        self.recordButton = QtGui.QPushButton('Stop Recording', self)
-        self.recordButton.move(300, 200)
+        self.stopRecordButton = QtGui.QPushButton('Stop Recording', self)
+        self.stopRecordButton.move(300, 200)
         
         #Connections
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
         self.connect(self.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
         self.connect(self.messageLine, QtCore.SIGNAL('textEdited(QString)'), self.enableMessageButton)
         self.connect(self.messageButton, QtCore.SIGNAL('pressed()'), self.sendCustomMessage)
-        
+        self.connect(self.qListWidget, QtCore.SIGNAL('itemClicked(QListWidgetItem *)'), self.listHandler)
+        self.connect(self.startRecordButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
+    
     def startServer(self):    
         if self.status == 'Off':
             self.server.listen(QHostAddress.Any, PORT)    
@@ -140,12 +141,26 @@ class ServerWidget(QtGui.QWidget):
         self.qListWidget.clear()
         for i in range(0, len(self.clients)):
             client = self.clients[i]
-            listItem = QtGui.QListWidgetItem(client.localAddress().toString())
+            listItem = ServerListWidget(client)
+            #listItem = QtGui.QListWidgetItem(client.localAddress().toString())
             self.qListWidget.addItem(listItem)
-            self.qListWidget.setItemWidget(listItem, QtGui.QCheckBox())
+            #self.qListWidget.setItemWidget(listItem, QtGui.QCheckBox())
             clientLabel = QtGui.QLabel('F1', self)
             clientLabel.move(5 + (i * 20), 150)
-            
+    def listHandler(self):
+        print 'list select'
+         
+    def sendRecordCommand (self):
+        print 'Record sent to', 
+        for i in range(0, len(self.qListWidget.selectedItems())):
+            client = self.qListWidget.selectedItems()[i].client
+            self.sendMessage(client, 'Record')
+    def getClientFromList(self, ip):
+        for i in range(0, len(self.clients)):
+            if self.clients[i].localAddress().toString() == ip:
+                self.sendMessage(self.clients[i], 'Record')
+                
+        
 class ServerG(QtGui.QMainWindow):
     
     def __init__(self):
@@ -209,7 +224,13 @@ class ServerG(QtGui.QMainWindow):
         self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
         
         self.retranslate()
-    
+class ServerListWidget(QtGui.QListWidgetItem):
+    def __init__(self, client):
+        QtGui.QWidgetItem.__init__(self)
+        self.client = client
+        self.setText(self.client.localAddress().toString())
+        
+        
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = ServerG()
