@@ -32,10 +32,11 @@ from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 
 class FreeSeerConfigParser(argparse.ArgumentParser):
-    def __init__(self):
+    def __init__(self, core):
         argparse.ArgumentParser.__init__(self)
         
-        self.core = FreeseerCore(self)  
+        self.core = core 
+        self.plugman = self.core.get_plugin_manager()
         self.db_connector = self.core.db 
         self.config = self.core.config 
         
@@ -178,30 +179,39 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
     def show_all_configs(self):
         print "-------------------------- Settings --------------------------------"
         print " ###################### Video Settings ############################"
-        print "Available Video Sources: "
-        for videosrc in self.core.get_video_sources():
-            print ">>> " + videosrc
-        print "Current Video Source: " + self.config.videosrc
+        print "Current Video Mixer: " + self.config.videomixer
+        print "Available Video Mixers Plugins: "
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+            print "> " + video_mixer.name
+        print "Available Video Input Plugins: "
+        for video_input in self.plugman.plugmanc.getPluginsOfCategory("VideoInput"):
+            print "> " + video_input.name        
         print "Current Video Resolution " + self.config.resolution
+        print "Available Video Resolutions: "
+        for key in self.config.resmap:
+            print "> %s - %s" % (key, self.config.resmap[key])
         print " ###################### Audio Settings ############################"
         print "Available Audio Sources: "
-        for audiosrc in self.core.get_audio_sources():
-            print ">>> " + audiosrc
-        print "Current Audio Source: " + self.config.audiosrc
-        print "Audio Feedback Activated: " + self.config.audiofb
-        print " ##################### General Settings ###########################"
-        print "Current record hotkey: "+ self.config.key_rec
-        print "Current stop hotkey: " + self.config.key_stop
-        print "Current video dir: " + self.config.videodir
-        print "Current config file " + self.config.configfile
-        print "Auto-Hide enabled: " + str(self.config.auto_hide)
-        print " #################### Streaming Settings ##########################"
-        print "Streaming enabled: " + str(self.config.enable_streaming)
-        print "Streaming resolution: " + self.config.streaming_resolution
-        print "Streaming mount: " + self.config.streaming_mount
-        print "Streaming port: " + self.config.streaming_port
-        print "Streaming password: " + self.config.streaming_password
-        print "Streaming url: " + self.config.streaming_url
+        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
+            print "> " + audio_mixer.name
+        print "Current Audio Mixer: " + self.config.audiomixer
+        #print "Audio Feedback Activated: " + self.config.audiofb
+        #print " ##################### General Settings ###########################"
+        #print "Current record hotkey: "+ self.config.key_rec
+        #print "Current stop hotkey: " + self.config.key_stop
+        #print "Current video dir: " + self.config.videodir
+        #print "Current config file " + self.config.configfile
+        print "Auto-Hide enabled: Yes" if self.config.auto_hide else "Auto-Hide enabled: No"
+        #print " #################### Streaming Settings ##########################"
+        #print "Streaming enabled: " + str(self.config.enable_streaming)
+        #print "Streaming resolution: " + self.config.streaming_resolution
+        #print "Streaming mount: " + self.config.streaming_mount
+        #print "Streaming port: " + self.config.streaming_port
+        #print "Streaming password: " + self.config.streaming_password
+        #print "Streaming url: " + self.config.streaming_url
+        print " ###################### Other Settings ############################"
+        print "Current Language: " + self.config.default_language
+        print "Video Directory: " + self.config.videodir 
         
     def show_all_video_configs(self):
         count = 1
