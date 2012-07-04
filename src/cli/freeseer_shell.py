@@ -76,7 +76,7 @@ class FreeSeerShell(cmd.Cmd):
     
     #TODO          
     def do_config(self, line):
-        parser = FreeSeerConfigParser()
+        parser = FreeSeerConfigParser(self.core)
         parser.analyse_command(line)
         
     def do_help(self, line):
