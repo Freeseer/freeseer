@@ -561,7 +561,13 @@ class RecordApp(QtGui.QMainWindow):
     def getAction(self):
         message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
         print 'Server said:', message
-        #if message == 'Record':
+        if message == 'Record':
+            self.mainWidget.recordPushButton.toggle()
+            self.clientWidget.sendMessage('Started recording')
+        elif message == 'Stop':
+            self.mainWidget.recordPushButton.toggle()
+        elif message == 'Pause':
+            self.mainWidget.pauseToolButton.toggle()
         
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

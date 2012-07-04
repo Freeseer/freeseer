@@ -19,7 +19,6 @@ class ClientG(QtGui.QWidget):
     
     
     def __init__(self):
-        #super(ClientG, self).__init__()
         QtGui.QWidget.__init__(self) 
         
         self.socket = QTcpSocket() 
@@ -58,11 +57,13 @@ class ClientG(QtGui.QWidget):
          
         self.connectButton = QtGui.QPushButton('Connect', self)
         self.connectButton.move(100, 175)
+        self.connectButton.setEnabled(False)
         self.mainLayout.addWidget(self.connectButton)
         
         self.passPhraseEdit = QtGui.QLineEdit(self)
         self.passPhraseEdit.move(250, 125)
         self.mainLayout.addWidget(self.passPhraseEdit)
+        
         
         #Connections
         self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
@@ -70,13 +71,13 @@ class ClientG(QtGui.QWidget):
         self.connect(self.socket, QtCore.SIGNAL('connected()'), self.connected)
         self.connect(self.startButton, QtCore.SIGNAL('pressed()'), self.startClient)
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
-        #self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
+        self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         
         self.resize(300, 300)
         self.hide()
     
     def enableConnectButton(self):
-        if self.connectButton.isEnabled():
+        if self.passPhraseEdit.text() == '':
             self.connectButton.setEnabled(False)
         else:
             self.connectButton.setEnabled(True)
@@ -86,16 +87,22 @@ class ClientG(QtGui.QWidget):
     
     def connected(self):
         logging.info("Connected to %s %s", self.addr, self.port)
+        self.sendPassphrase()
         self.connectButton.setText("Disconnect")
-        #self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
-        self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnect)
+        self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo) 
+        self.disconnect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
+        self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
+        self.connect(self.socket, QtCore.SIGNAL("disconnected()"), self.disconnectFromHost)
         
-    def sendMessage(self):
+    def sendMessage(self, message):
         print 'Sending message!'
         block = QtCore.QByteArray()
-        block.append('sagas')
+        block.append(message)
         self.socket.write(block)
-        
+    
+    def sendPassphrase(self):
+        self.sendMessage(self.passPhraseEdit.text())    
+    
     def readMessage(self):
         message = self.socket.read(self.socket.bytesAvailable())   
         #print 'Server said:', message
@@ -140,9 +147,13 @@ class ClientG(QtGui.QWidget):
             self.startButton.setText(QtCore.QString('Start'))
         self.updateStatus()
     
-    def disconnect(self):
+    def disconnectFromHost(self):
         print 'Disconnected'
         self.socket.disconnectFromHost()
+        self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost) 
+        self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectTo)
+        self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
+        self.connectButton.setText('Connect')
     
     def close(self):
         self.socket.close()
