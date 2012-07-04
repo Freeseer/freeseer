@@ -186,7 +186,6 @@ class QtDBConnector():
         """
         Update an existing Presentation in the database.
         """
-        print "Chegou " + presentation.speaker
         query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
                             (presentation.title,
                              presentation.speaker,
