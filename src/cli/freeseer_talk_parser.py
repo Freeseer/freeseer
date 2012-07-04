@@ -190,8 +190,16 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         print "------------------------------ Adding a Talk -------------------------------\n"
         presentation = Presentation("")
         
-        presentation.title = raw_input("Type the presentation title or press <ENTER> to pass: ")
-        presentation.speaker = raw_input("Type the presentation speaker or press <ENTER> to pass: ")
+        presentation.title = raw_input("Type the presentation title: ")
+        
+        while(not len(presentation.title) > 0):
+            presentation.title = raw_input("Please, type the presentation title: ")            
+        
+        presentation.speaker = raw_input("Type the presentation speaker: ")
+        
+        while(not len(presentation.speaker) > 0):
+            presentation.speaker = raw_input("Please, type the presentation speaker: ")
+        
         presentation.description = raw_input("Type the presentation description or press <ENTER> to pass: ")
         presentation.level = raw_input("Type the speaker level or press <ENTER> to pass: ")
         presentation.event = raw_input("Type the event that held the presentation or press <ENTER> to pass: ")
@@ -211,37 +219,33 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             print "############### Error: Talk Already Exists ###################"
 
     def update_talk_by_prompt(self, id): 
-        print id 
         presentation = self.db_connector.get_presentation(id)
-        print presentation
         if presentation:                  
             print "#### You have choosen to edit the following talk ###"
-            self.show_talk_by_id(id)                         
+            
+            self.show_talk_by_id(id)     
+                                
             new_title = raw_input("Type the new presentation title (<ENTER> to keep old data): ")
-            if(len(new_title) > 0):
-                title = new_title
+            title = new_title if len(new_title) > 0 else presentation.title
                 
             new_speaker = raw_input("Type the new presentation speaker (<ENTER> to keep old data): ")
-            if(len(new_speaker) > 0):
-                speaker = new_speaker
+            speaker = new_speaker if len(new_speaker) > 0 else presentation.speaker
                 
             new_event = raw_input("Type the new event that held the presentation (<ENTER> to keep old data): ")
-            if(len(new_event) > 0):
-                event = new_event
+            event = new_event if len(new_event) > 0 else presentation.event
                 
             new_room = raw_input("Type the new room where the presentation will be performed (<ENTER> to keep old data): ")  
-            if(len(new_room) > 0):
-                room = new_room
-                
+            room = new_room if len(new_room) > 0 else presentation.room
+            
             new_presentation = Presentation("")
             
-            new_presentation.talk_id = talk_id
-            new_presentation.title = new_title
-            new_presentation.speaker = new_speaker
-            new_presentation.event = new_event
-            new_presentation.room = new_room
+            new_presentation.talk_id = id
+            new_presentation.title = title
+            new_presentation.speaker = speaker
+            new_presentation.event = event
+            new_presentation.room = room
             
-            self.db_connector.update_talk(talk_id, speaker, title, room, event, "")
+            self.db_connector.update_presentation(id, new_presentation)
             
             print "### Talk Updated! ###"
             
