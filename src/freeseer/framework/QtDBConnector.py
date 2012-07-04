@@ -165,8 +165,6 @@ class QtDBConnector():
                 return True            
         return False
         
->>>>>>> A few new advances on talk editor cli: add an delete operations translated. Update still missing
-        
     #
     # Presentation Create, Update, Delete
     #
@@ -188,6 +186,7 @@ class QtDBConnector():
         """
         Update an existing Presentation in the database.
         """
+        print "Chegou " + presentation.speaker
         query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
                             (presentation.title,
                              presentation.speaker,
