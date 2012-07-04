@@ -21,7 +21,7 @@ class ServerWidget(QtGui.QWidget):
     
     status = 'Off' 
     clients = []
-    
+    passPhrase = 'pass'
     def __init__(self):
         QtGui.QWidget.__init__(self) 
         self.resize(400, 400)
@@ -30,6 +30,9 @@ class ServerWidget(QtGui.QWidget):
         
         self.startButton = QtGui.QPushButton('Start', self)
         self.startButton.move(35, 70)
+        
+        self.passPhraseLabel = QtGui.QLabel('Passphrase:' + self.passPhrase, self)
+        self.passPhraseLabel.move(200, 70)
         
         self.statusLabel = QtGui.QLabel('Server status:' + self.status, self)
         self.statusLabel.move(25, 20)
@@ -98,7 +101,8 @@ class ServerWidget(QtGui.QWidget):
     
     def startRead(self):
         #self.client.writeData('Hello Client!')
-        message = self.client.read(self.client.bytesAvailable())   
+        client = QtCore.QObject.sender(self)
+        message = client.read(client.bytesAvailable())   
         logging.info("Client said: %s", message)
         print 'Client said:', message
         return message
@@ -123,12 +127,33 @@ class ServerWidget(QtGui.QWidget):
     def readMessage(self):
         client = self.server.nextPendingConnection()
         passPhrase = client.read(client.bytesAvailable())
+        print passPhrase
+    
+    def readPassPhrase(self):
+        #self.client.writeData('Hello Client!')
+        #when successful disconnect and connect
+        client = QtCore.QObject.sender(self)
+        message = client.read(client.bytesAvailable())   
+        logging.info("Client said: %s", message)
+        print 'Client said:', message
+        if message != self.passPhrase:
+            client.disconnectFromHost()
+            print 'Client rejected'
+        else:
+            self.clients.append(client)
+            self.updateList()
+            print 'Client accepted'
+            self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
+            self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+        return message
     
     def acceptConnection(self):
-        client = self.server.nextPendingConnection() 
-        self.clients.append(client)
+        client = self.server.nextPendingConnection()
         self.connect(client, QtCore.SIGNAL("disconnected()"), self.clientDisconnected)
-        self.updateList()
+        self.connect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
+        #self.clients.append(client)
+        #self.updateList()
+        
     
     def clientDisconnected(self):
         print 'Client Disconnected'
@@ -155,6 +180,19 @@ class ServerWidget(QtGui.QWidget):
         for i in range(0, len(self.qListWidget.selectedItems())):
             client = self.qListWidget.selectedItems()[i].client
             self.sendMessage(client, 'Record')
+    
+    def sendPauseCommand (self):
+        print 'Record sent to', 
+        for i in range(0, len(self.qListWidget.selectedItems())):
+            client = self.qListWidget.selectedItems()[i].client
+            self.sendMessage(client, 'Pause')
+    
+    def sendStopCommand (self):
+        print 'Record sent to', 
+        for i in range(0, len(self.qListWidget.selectedItems())):
+            client = self.qListWidget.selectedItems()[i].client
+            self.sendMessage(client, 'Stop')
+    
     def getClientFromList(self, ip):
         for i in range(0, len(self.clients)):
             if self.clients[i].localAddress().toString() == ip:
