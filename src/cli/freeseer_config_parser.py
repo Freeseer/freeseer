@@ -40,7 +40,13 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.db_connector = self.core.db 
         self.config = self.core.config 
         
-        self.RESOLUTION_LIST = ['240p','360p','480p','720p','1080p']
+        self.RESOLUTION_LIST = ['480p','360p','1080p','240p','720p']
+        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")]
+        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")]
+        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoInput")]
+        self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioInput")]
+        self.OUTPUT_PLUGINS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output")]
+        
         
         self.add_argument('mode',nargs = '+', metavar='talk mode')
         
@@ -60,7 +66,8 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         '''     
         namespace = self.parse_args(command.split())   
         
-        mode = self._get_mode(namespace.mode)     
+        mode = self._get_mode(namespace.mode)    
+        print mode 
         
         if(mode == "show"):
             if(namespace.all):
@@ -78,7 +85,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                 
         elif (mode == "video set"):
             if(namespace.index):
-                self.set_video_source(int(namespace.index))     
+                self.set_video_mixer(int(namespace.index))     
             else:
                 print "*** Option missing" 
                 
@@ -104,6 +111,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                 self.set_audio_source(int(namespace.index))     
             else:
                 print "*** Option missing"
+                
                 
         elif (mode == "streaming show"):
             self.show_streaming_settings()
@@ -164,92 +172,53 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         elif (mode == "audio off"):
             self.turn_audio_off()
             
+        elif(mode == "audio feedback off"):
+            self.turn_audiofeedback_off()
+            
+        elif(mode == "audio feedback on"):
+            self.turn_audiofeedback_on()
+            
         elif (mode == "video on"):
             self.turn_video_on()
             
         elif (mode == "video off"):
             self.turn_video_off()
+            
+        elif (mode == "file on"):
+            self.turn_file_record_off()
+        
+        elif (mode == "file off"):
+            self.turn_file_record_on()
+        
+        elif (mode == "streaming on"):
+            print "veio"
+            self.turn_streaming_on()
+            
+        elif (mode == "streaming off"):
+            self.turn_streaming_off()
                 
         else:
             print "*** Unknown mode, please type one of the available modes or type 'help talk' to see all available modes"
-             
-            
-
-                
+                           
     def show_all_configs(self):
-        print "-------------------------- Settings --------------------------------"
-        print " ###################### Video Settings ############################"
-        print "Current Video Mixer: " + self.config.videomixer
-        print "Available Video Mixers Plugins: "
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
-            print "> " + video_mixer.name
-        print "Available Video Input Plugins: "
-        for video_input in self.plugman.plugmanc.getPluginsOfCategory("VideoInput"):
-            print "> " + video_input.name        
-        print "Current Video Resolution " + self.config.resolution
-        print "Available Video Resolutions: "
-        for key in self.config.resmap:
-            print "> %s - %s" % (key, self.config.resmap[key])
-        print " ###################### Audio Settings ############################"
-        print "Available Audio Sources: "
-        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
-            print "> " + audio_mixer.name
-        print "Current Audio Mixer: " + self.config.audiomixer
-        #print "Audio Feedback Activated: " + self.config.audiofb
-        #print " ##################### General Settings ###########################"
-        #print "Current record hotkey: "+ self.config.key_rec
-        #print "Current stop hotkey: " + self.config.key_stop
-        #print "Current video dir: " + self.config.videodir
-        #print "Current config file " + self.config.configfile
-        print "Auto-Hide enabled: Yes" if self.config.auto_hide else "Auto-Hide enabled: No"
-        #print " #################### Streaming Settings ##########################"
-        #print "Streaming enabled: " + str(self.config.enable_streaming)
-        #print "Streaming resolution: " + self.config.streaming_resolution
-        #print "Streaming mount: " + self.config.streaming_mount
-        #print "Streaming port: " + self.config.streaming_port
-        #print "Streaming password: " + self.config.streaming_password
-        #print "Streaming url: " + self.config.streaming_url
-        print " ###################### Other Settings ############################"
-        print "Current Language: " + self.config.default_language
-        print "Video Directory: " + self.config.videodir 
+        self._show_video_configs()
+        self._show_audio_config()
+        self._show_output_configs()
         
     def show_all_video_configs(self):
-        count = 1
-        print "################## Available Video Sources ##################"
-        for videosrc in self.core.get_video_sources():
-            print "#" + str(count) + " " + videosrc
-            count+=1
+        self._show_video_configs()
             
-    def show_video_source_info(self, index):
-        try:
-            videosrc_selected = self.core.get_video_sources()[index-1]
         
-            if(videosrc_selected == "desktop"):
-                print "############ Video Source Selected: Desktop ############"
-                print "Get Desktop Info"
-            elif(videosrc_selected == "usb"):
-                print "############ Video Source Selected: USB ############"
-                print "GetUSB Info"
-            elif(videosrc_selected == "firewire"):
-                print "############ Video Source Selected: Firewire ############"
-                print "Get Firewire Info"
-        except:
-            print "There's no video source with this specified index" 
-        
-    def set_video_source(self, index):
+    def set_video_mixer(self, index):
         try:
-            videosrc_selected = self.core.get_video_sources()[index-1]
-            self.config.videosrc = videosrc_selected
+            video_mixer_selected = self.VIDEO_MIXERS[index-1]
+            self.config.videomixer = video_mixer_selected
             self.config.writeConfig()
         except:
-            print "There's no video source with this specified index" 
+            print "There's no video mixer plugin with this specified index" 
             
     def show_all_resolutions(self):
-        count = 1
-        print "############## Screen Resolutions #################"
-        for res in self.config.resmap.keys():
-            print "#" + str(count) + " " + res + ": " + self.config.resmap[res]
-            count+=1
+        self._show_resolutions()
     
     def set_video_resolution(self, index):
         resolution_selected = self.config.resmap[self.RESOLUTION_LIST[index-1]]
@@ -257,11 +226,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.config.writeConfig()
         
     def show_all_audio_configs(self):
-        count = 1
-        print "################## Available Audio Sources ##################"
-        for videosrc in self.core.get_audio_sources():
-            print "#" + str(count) + " " + videosrc
-            count+=1
+        self._show_audio_config()
             
     def show_audio_source_info(self, index):
         try:
@@ -270,7 +235,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             if(videosrc_selected == "pulsesrc"):
                 print "########## Audio Source Selected: PulseSrc ##########"
                 print "Get pulsesrc Info"
-            elif(videosrc_selected == "alsasrc"):
+            elif(videosrc_selected == "alsvideo_mixer_selectedasrc"):
                 print "########### Audio Source Selected: AlsaSrc ##########"
                 print "Get alsasrc Info"
             elif(videosrc_selected == "autoaudiosrc"):
@@ -279,10 +244,10 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         except:
             print "There's no audio source with this specified index" 
             
-    def set_audio_source(self, index):
+    def set_audio_mixer(self, index):
         try:
-            audiosrc_selected = self.core.get_audio_sources()[index-1]
-            self.config.audiosrc = audiosrc_selected
+            audio_mixer_selected = self.AUDIO_MIXERS[index-1]
+            self.config.audio = audio_mixer_selected
             self.config.writeConfig()
         except:
             print "There's no video source with this specified index"
@@ -352,15 +317,93 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.config.writeConfig()
         
     def turn_video_on(self):
-        self.config.enable_video_recoding_recoding = True
+        self.config.enable_video_recoding = True
         self.config.writeConfig()
         
     def turn_video_off(self):
-        self.config.enable_video_recoding_recoding = False    
-        self.config.writeConfig()  
+        self.config.enable_video_recoding = False
+        self.config.writeConfig() 
+        
+    def turn_audiofeedback_off(self):
+        self.config.audio_feedback = False
+        self.config.writeConfig() 
+        
+    def turn_audiofeedback_on(self):
+        self.config.audio_feedback = True
+        self.config.writeConfig() 
+        
+    def turn_file_record_on(self):
+        self.config.record_to_file = True
+        self.config.writeConfig()
+        
+    def turn_file_record_off(self):
+        self.config.record_to_file = False
+        self.config.writeConfig()
     
+    def turn_streaming_on(self):
+        self.config.record_to_stream = True
+        self.config.writeConfig()
+        
+    def turn_streaming_off(self): 
+        self.config.record_to_stream = False
+        self.config.writeConfig()   
+    
+    
+    def _show_video_configs(self):
+        print "-------------------------- Settings --------------------------------"
+        print " ###################### Video Settings ############################"
+        print "Video recoding enabled: Yes" if self.config.enable_video_recoding else "Video recoding enabled: No"
+        print "Current Video Mixer: " + self.config.videomixer
+        print "Available Video Mixers Plugins: "
+        count = 1
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+            print "%d - %s" % (count, video_mixer.name)
+            count += 1
+        count = 1    
+        print "Available Video Input Plugins: "
+        for video_input in self.plugman.plugmanc.getPluginsOfCategory("VideoInput"):
+            print "%d - %s" % (count, video_input.name)  
+            count += 1      
+        print "Current Video Resolution " + self.config.resolution
+        print "Available Video Resolutions: "
+        self._show_resolutions()
+        print "Video preview enabled: Yes" if self.config.video_preview else "Video preview enabled: No"
+        
+    def _show_audio_config(self):
+        print " ###################### Audio Settings ############################"        
+        print "Audio recoding enabled: Yes" if self.config.enable_audio_recoding else "Audio recoding enabled: No"
+        print "Available Audio Mixers: " 
+        count = 1       
+        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
+            print "%d - %s" % (count, audio_mixer.name)  
+            count += 1
+        print "Current Audio Mixer: " + self.config.audiomixer
+        print "Audio feedback enabled: Yes" if self.config.audio_feedback else "Audio feedback enabled: No"        
+        
+    def _show_output_configs(self):           
+        print " ###################### Output Settings ############################"      
+        print "Video Directory: " + self.config.videodir   
+        print "Recording to File: Yes" if self.config.record_to_file else "Recording to File: No" 
+        if self.config.record_to_file:
+            print "Current record to file plugin: " + self.config.record_to_file_plugin
+        count = 1
+        print "Streaming: Yes" if self.config.record_to_stream else "Streaming: No"
+        if self.config.record_to_stream:
+            print "Current record to stream plugin: " + self.config.record_to_stream_plugin
+        
+    def _show_resolutions(self):
+        count = 1
+        for key in self.config.resmap:
+             print "%d - %s:%s" % (count, key, self.config.resmap[key])
+             count += 1
+    def _show_video_mixers(self):
+        count = 1
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+            print "%d - %s" % (count, video_mixer.name)
+            count += 1
+        
     def _is_valid_path(self, path):
-        return os.path.exists(os.path.expanduser(os.path.dirname(path)))
+        return os.path.exists(os.path.expanduser(path))
     
     def _get_mode(self, mode_list):
         mode = ""
