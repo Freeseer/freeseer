@@ -1,6 +1,8 @@
 @setlocal enableextensions
 @cd /d "%~dp0"
 
+cd Freeseer-for-Windows
+
 :: Remove dependencies
 del /q deps
 
@@ -39,29 +41,9 @@ python C:\Python27\Lib\site-packages\easy_install.py feedparser
 python C:\Python27\Lib\site-packages\easy_install.py pygtk
 python C:\Python27\Lib\site-packages\easy_install.py yapsy
 
-:: Freeseer's download and installation below is commented.
-:: del freeseer
-:: mkdir freeseer
-:: cd freeseer
-
-:: Download of Freeseer itself
-:: ..\wget http://dl.dropbox.com/u/5695800/freeseer/freeseer-2.5.3.win32.exe
-
-:: Install Freeseer
-:: freeseer-2.5.3.win32.exe
-
-:: cd ..
-
 :: Change Python 2.6 => Python 2.7 on Gstreamer
 xcopy /y /s "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\sdk\bindings\python\v2.7\lib" "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\lib\"
 xcopy /y /s "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\lib\site-packages" "C:\Python27\Lib\site-packages"
 
 :: TODO Delete the dependencies installers.
 del /q deps
-
-:: Create shortcuts to freeseer on Start Menu
-mkdir "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Freeseer"
-echo python C:\Python27\Scripts\freeseer-config > "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Freeseer\freeseer-config.bat"
-echo python C:\Python27\Scripts\freeseer-record > "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Freeseer\freeseer-record.bat"
-echo python C:\Python27\Scripts\freeseer-talkeditor > "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Freeseer\freeseer-talkeditor.bat"
-
