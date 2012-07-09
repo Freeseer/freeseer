@@ -5,6 +5,7 @@ Created on Jun 4, 2012
 '''
 import logging
 import sys
+import base64
 
 from PyQt4 import QtCore, QtGui, QtNetwork
 
@@ -22,10 +23,10 @@ class ServerWidget(QtGui.QWidget):
     status = 'Off' 
     clients = []
     passPhrase = 'pass'
+    
     def __init__(self):
         QtGui.QWidget.__init__(self) 
         self.resize(400, 400)
-        
         self.server = QTcpServer(self)
         
         self.startButton = QtGui.QPushButton('Start', self)
@@ -71,6 +72,9 @@ class ServerWidget(QtGui.QWidget):
         self.stopRecordButton = QtGui.QPushButton('Stop Recording', self)
         self.stopRecordButton.move(300, 200)
         
+        self.disconnectButton = QtGui.QPushButton('Disconnect', self)
+        self.disconnectButton.move(300, 250)
+          
         #Connections
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
         self.connect(self.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
@@ -78,7 +82,8 @@ class ServerWidget(QtGui.QWidget):
         self.connect(self.messageButton, QtCore.SIGNAL('pressed()'), self.sendCustomMessage)
         self.connect(self.qListWidget, QtCore.SIGNAL('itemClicked(QListWidgetItem *)'), self.listHandler)
         self.connect(self.startRecordButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
-    
+        self.connect(self.disconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
+        
     def startServer(self):    
         if self.status == 'Off':
             self.server.listen(QHostAddress.Any, PORT)    
@@ -153,7 +158,6 @@ class ServerWidget(QtGui.QWidget):
         self.connect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
         #self.clients.append(client)
         #self.updateList()
-        
     
     def clientDisconnected(self):
         print 'Client Disconnected'
@@ -197,7 +201,11 @@ class ServerWidget(QtGui.QWidget):
         for i in range(0, len(self.clients)):
             if self.clients[i].localAddress().toString() == ip:
                 self.sendMessage(self.clients[i], 'Record')
-                
+    
+    def disconnectClients(self):
+        for i in range(0, len(self.qListWidget.selectedItems())):
+            client = self.qListWidget.selectedItems()[i].client
+            client.disconnectFromHost()          
         
 class ServerG(QtGui.QMainWindow):
     

@@ -125,7 +125,7 @@ class RecordApp(QtGui.QMainWindow):
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
         
         self.actionClient = QtGui.QAction(self)
-        self.actionClient.setObjectName(_fromUtf8("actionClient"))
+        self.actionClient.setText("Connect to server")
         self.actionClient.setIcon(icon)
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
