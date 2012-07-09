@@ -5,3 +5,6 @@
     - Download an archiver (WinRAR trial version can be downloaded here: http://www.rarlab.com/download.htm)
     - Install the archiver
     - Right click Freeseer-for-Windows folder and click "Add to Freeseer-for-Windows.rar" (or add it to .zip, if you prefer)
+
+- To install dependencies and Freeseer:
+    - Run setup.bat inside Freeseer-for-Windows folder
