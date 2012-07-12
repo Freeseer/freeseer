@@ -41,13 +41,17 @@ output files with `make html`. By default the build directory is /build/.
 We want the files in the HTML folder to go to the
 [freeseer.github.com](https://github.com/Freeseer/freeseer.github.com) repo.
 
-We can either put the output directly in the website repo, for example:
 
-    $ sphinx-build -b html source path_to/freeseer.github.com/docs/
-    # Preferred over modifying the build path in make.bat and using make html; path may vary by user.
+A script ([build_and_publish](https://github.com/Freeseer/freeseer-docs/blob/master/publish.sh))
+is provided to easily build and publish the documentation online:
 
-or we can build to the default build path and run a script to copy the output
-to the freeseer.github.com repo, commit, and push it for us:
+    $ ./build_and_publish
 
-    $ make html
-    $ sh publish.sh
+To add your own one-liner commit message, add it as an argument:
+
+    $ ./build_and_publish 'Fix a typo.'
+
+Or for a more manual approach, you can place the output directly in your local freeseer.github.com repo:
+
+    $ sphinx-build -b html source path/to/freeseer.github.com/docs/
+    # Don't forget to commit and push the changes in freeseer.github.com!
