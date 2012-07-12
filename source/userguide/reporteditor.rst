@@ -3,18 +3,24 @@
 Report Editor
 =============
 
-Freeseer provides a Report Editor which will allow the organizer after an event to quickly browse reports on the video
-files to find problematic files.
+After an event, the organizer can use the Report Editor in Freeseer
+to quickly browse issue reports from recordings to find problematic files.
 
-.. image:: /images/reporteditor.png
-   :width: 500
+.. figure:: /images/reporteditor.png
+    :align: center
 
-The editor provides a simple interface which displays all submitted reports found in the database. Selecting a report
-will show the full details on which talk applies to the selected report on the right. 
+    The editor provides a simple interface which displays all submitted reports
+    found in the database.
 
-There are a few actions which can be done with this interface.
+Using the Report Editor
+***********************
 
-* Double clicking a cell will allow the user to modify the data of that cell
-* Clicking **Remove** will remove the currently selected row from the database
-* Clicking **Clear** will clear the entire report database after the user confirms via confirmation dialog box
-* Clicking **Close** will close the Report Editor
+Selecting a report will show all the given details belonging to the
+talk, on the right pane of the window. 
+
+There are a few operations which can be performed from this interface:
+
+* **Modify** the data of a cell (by double clicking it)
+* **Remove** the currently selected row from the database
+* **Clear** the entire report database (a confirmation dialog box will appear)
+* **Close** the Report Editor
