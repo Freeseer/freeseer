@@ -25,7 +25,11 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.viewcode']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.viewcode', 'sphinx.ext.todo']
+
+# If True, the todo and todolist directives will produce output.
+# http://sphinx.pocoo.org/ext/todo.html#module-sphinx.ext.todo
+todo_include_todos=True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -41,7 +45,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Freeseer'
-copyright = u'2011-2012, Dennis Ideler and the Freeseer community'
+copyright = u'2011-2012  Free and Open Source Software Learning Centre'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -179,7 +183,7 @@ htmlhelp_basename = 'Freeseerdoc'
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'Freeseer.tex', u'Freeseer Documentation',
-   u'Dennis Ideler and the Freeseer community', 'manual'),
+   u'Free and Open Source Software Learning Centre', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -212,5 +216,5 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'freeseer', u'Freeseer Documentation',
-     [u'Dennis Ideler and Freeseer community'], 1)
+     [u'Free and Open Source Software Learning Centre'], 1)
 ]
