@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-# Copies the HTML documentations files created by Sphinx,
-# from the freeseer-docs repo to the freeseer.github.com repo.
-# Then publishes the updated documentation by staging the files,
-# commiting, and pushing them.
+# Builds the HTML documentation files from the reStructuredText source,
+# then copies the HTML files created by Sphinx, from the 'freeseer-docs' repo
+# to the 'freeseer.github.com' repo. Finally, publishes the updated
+# documentation by staging the files, commiting, and pushing them.
+#
+# A one-line commit message for git is an optional argument.
 #
 # Author(s):
 # Dennis Ideler <ideler.dennis at gmail.com>
@@ -33,6 +35,8 @@ set -o errexit
 # Verify all parameters are set.
 #set -o nounset
 
+make html
+
 echo "Locating freeseer.github.com repository..."
 REPO=$(find $HOME -type d -name freeseer.github.com)
 
@@ -50,7 +54,14 @@ cp -rp $DOCS/build/html/* .
 
 echo "Publishing docs..."
 git add .
-git commit -m 'Updating docs'
+
+# Use custom commit message if provided.
+if [ -n "$1" ]; then
+  git commit -m "$1"
+else
+  git commit -m 'Updating docs'
+fi
+
 git push # May require user's GitHub password.
 
 # Silently switch back to the original directory.
