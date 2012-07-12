@@ -31,7 +31,8 @@ For an overview of basic tasks:
 For a brief introduction on reStructuredText concepts and syntax:
 
 * [reStructuredText Primer](http://sphinx.pocoo.org/rest.html)
-* [Sphinx cheat sheet](http://matplotlib.sourceforge.net/sampledoc/cheatsheet.html)
+* [Sphinx cheat](http://matplotlib.sourceforge.net/sampledoc/cheatsheet.html)
+  [sheet](http://openalea.gforge.inria.fr/doc/openalea/doc/_build/html/source/sphinx/rest_syntax.html)
 
 Publishing to the Web
 ---------------------
