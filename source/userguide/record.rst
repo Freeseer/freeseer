@@ -1,7 +1,7 @@
 Record
 ======
 
-*TODO: freeseer-record*
+.. todo:: document freeseer-record
 
 Report Tool
 -----------
@@ -24,9 +24,11 @@ To access the report tool:
 1. Open **freeseer-record**
 2. Click **Help** > **Report**
 
-A basic form will open for the currently selected talk:
 
-.. image:: /images/reporttool.png
+.. figure:: /images/reporttool.png
+    :align: center
+
+    A basic form will open for the currently selected talk.
 
 The form has 3 fields which need to be assessed by the reporter.
 
