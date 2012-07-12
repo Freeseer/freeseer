@@ -37,20 +37,19 @@ For a brief introduction on reStructuredText concepts and syntax:
 Publishing to the Web
 ---------------------
 
-Once you've made your changes to the documentation, you'll have to build the
-output files with `make html`. By default the build directory is /build/.
-We want the files in the HTML folder to go to the
+Once you've made your changes to the documentation, rebuild the
+output files with `make html`. The default build directory is `./build/`.
+We want the files in `./build/html/` to go to the
 [freeseer.github.com](https://github.com/Freeseer/freeseer.github.com) repo.
 
+A [script is provided](https://github.com/Freeseer/freeseer-docs/blob/master/publish.sh)
+to easily build and publish the documentation online:
 
-A script ([build_and_publish](https://github.com/Freeseer/freeseer-docs/blob/master/publish.sh))
-is provided to easily build and publish the documentation online:
-
-    $ ./build_and_publish
+    $ ./publish
 
 To add your own one-liner commit message, add it as an argument:
 
-    $ ./build_and_publish 'Fix a typo.'
+    $ ./publish 'Fix a typo.'
 
 Or for a more manual approach, you can place the output directly in your local freeseer.github.com repo:
 
