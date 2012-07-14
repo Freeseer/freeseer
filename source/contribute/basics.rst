@@ -4,21 +4,41 @@ Basics
 Git & GitHub
 ------------
 
-Freeseer is hosted on GitHub. GitHub uses Git.
-You'll generally encounter both while contributing.
+Freeseer is hosted on `GitHub <http://github.com>`_, which uses `Git
+<http://git-scm.com/>`_. You'll generally encounter both while contributing.
 
-Git can be complicated for beginners.
-It's especially confusing for people who've previously used a version control system that's different by design (e.g. Subversion).
+Git allows groups of people to work on the same documents (often code) at the
+same time, and without stepping on each other's toes. It's a distributed version
+control system. Git can be complicated for beginners or for people who have
+previously used a version control system that's different by design (e.g. Subversion).
 
-No worries! There are tons of online resources, and if you can't find what you're looking for with Google, ask us.
+No worries, there are tons of online resources. If you can't find what you're
+looking for, please ask us!
 
 .. seealso::
 
-   To set up Git and GitHub, and for help with common issues, see `help.github.com <http://help.github.com>`_.
+   * Set up Git and your GitHub account
+     :math:`\rightarrow` `help.github.com <http://help.github.com>`_
+   
+   * Learn by doing
+     :math:`\rightarrow` `Try Git <http://try.github.com/>`_
+   
+   * Learn by watching
+     :math:`\rightarrow` `Git Videos <http://git-scm.com/videos>`_
 
-.. seealso::
+   * Learn by reading
+     :math:`\rightarrow` `Pro Git book <http://book.git-scm.com>`_ (free)
 
-   If you want to learn even more, the free `git community book <http://book.git-scm.com>`_ is your friend.
+   * Forgetful?
+     :math:`\rightarrow` `Git Cheat Sheet <https://na1.salesforce.com/help/doc/en/salesforce_git_developer_cheatsheet.pdf>`_
+
+   * Eclipse is your favourite IDE?
+     :math:`\rightarrow` `Eclipse Git Plugin <https://github.com/blog/1181-eclipse-git-plugin-2-0-released>`_
+
+   * Prefer GUIs over CLIs?
+     :math:`\rightarrow` `GitHub for Windows <http://windows.github.com/>`_ or
+     `GitHub for Mac <http://mac.github.com/>`_
+
 
 
 Forking Freeseer
@@ -56,7 +76,7 @@ Your fork is now complete! Next you'll set up your local repo.
 Basic Workflow
 --------------
 
-*TODO:* see NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
+.. todo:: See NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
 
 1. Create a new branch based off the central repo's (i.e. Freeseer's) experimental branch.
 2. Fetch any changes for good measure (optional).
@@ -70,7 +90,7 @@ Workflow Diagram
 ----------------
 A visual representation of what a Freeseer contributor’s GitHub/git workflow should look like. (Click to enlarge.)
 
-*TODO*
+.. todo:: Finish diagram
 
 
 Starting a new task / Making a new feature branch
