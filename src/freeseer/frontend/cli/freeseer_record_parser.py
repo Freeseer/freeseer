@@ -29,9 +29,13 @@ import sys,os
 from freeseer.framework.core import FreeseerCore
 
 class FreeSeerRecordParser(argparse.ArgumentParser):
-    def __init__(self):  
-        self.core = FreeseerCore(self)          
+    def __init__(self, core):
         
+        self.core = core  
+        self.core.config.video_preview  = False
+        self.core.config.writeConfig()
+        self.db_connector = self.core.db
+     
         argparse.ArgumentParser.__init__(self)
         
         # command line arguments supported
@@ -52,9 +56,6 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         '''
         Perform the specific task typed by the user
         '''
-        
-        self.load_settings()        
-           
         if(namespace.id):
             self.record_by_id(namespace.id)
         elif(namespace.path):
@@ -65,7 +66,8 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
     def default_record(self):    
         '''
         Records to the default video folder a default filename
-        '''                    
+        '''       
+        self.core.load_backend()             
         self.core.record()
         print "\n Recording on progress, press <space> to stop \n"   
         
@@ -80,7 +82,8 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         '''        
         prs = self.db_connector.get_presentation(id)  
         if(prs):
-            self.core.record(presentation=prs)   
+            self.core.load_backend(presentation=prs)
+            self.core.record()
             print "\n Recording on progress, press <space> to stop \n"          
       
             while(self.getchar() != " "):            
@@ -133,46 +136,3 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
-        
-    def load_settings(self): 
-        '''
-        Loads the video e audio settings required by the recording
-        '''
-        
-        self.core.logger.log.info('loading setting...')
-
-        #load the config file
-        self.core.config.readConfig()
-
-        #load enable_video_recoding setting
-        if self.core.config.enable_video_recoding == False:
-            self.core.set_video_mode(False)
-        else:
-            self.core.set_video_mode(True)
-                        
-            # load video source setting
-            vidsrcs = self.core.get_video_sources()
-            src = self.core.config.videosrc
-            if src in vidsrcs:
-                if (src == 'desktop'):
-                    self.videosrc = 'desktop'
-                    self.core.change_videosrc(self.videosrc, self.core.config.videodev)
-
-                elif (src == 'usb'):
-                    self.videosrc = 'usb'
-
-                elif (src == 'firewire'):
-                    self.videosrc = 'fireware'
-                else:
-                    self.core.logger.log.debug('Can NOT find video source: '+ src)
-    
-                if src == 'usb' or src == 'fireware':
-                    dev = self.core.config.videodev
-                    viddevs = self.core.get_video_devices(self.videosrc)
-
-                    if dev in viddevs:
-                        self.core.change_videosrc(self.videosrc, self.core.config.videodev)
-
-                    else:
-                        self.core.logger.log.debug('Can NOT find video device: '+ dev)
-            self.core.set_audio_mode(False)

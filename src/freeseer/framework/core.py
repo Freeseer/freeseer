@@ -81,19 +81,21 @@ class FreeseerCore:
         '''
         Returns the filename to use when recording.
         '''
-        recordname = self.make_record_name(presentation)
-                
-        count = 0
-        tempname = recordname
         
-        # check if this record name already exists in this directory and add "-NN" ending if so.
-        while(self.duplicate_exists("%s.%s" % (tempname, extension))):
-            tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
-            count+=1
+        if presentation:
+            recordname = self.make_record_name(presentation)
+                    
+            count = 0
+            tempname = recordname
+            
+            # check if this record name already exists in this directory and add "-NN" ending if so.
+            while(self.duplicate_exists("%s.%s" % (tempname, extension))):
+                tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+                count+=1
 
-        recordname = "%s.%s" % (tempname, extension)
+        recordname = "%s.%s" % (tempname if presentation else "default", extension)
                      
-        logging.debug('Set record name to ' + recordname)        
+        logging.debug('Set record name to ' + recordname if presentation else "default.%s" % extension)        
         
         return recordname
 
@@ -166,6 +168,7 @@ class FreeseerCore:
 
     def make_shortname(self, providedString):
         '''
+        metadata = self.prepare_metadata(presentation)
         Returns the first 6 characters of a string.
         Strip out non alpha-numeric characters, spaces, and most punctuation
         '''
@@ -346,7 +349,7 @@ class FreeseerCore:
                  "comment" : presentation.description}
 
 
-    def load_backend(self, presentation):
+    def load_backend(self, presentation=None):
         logging.debug("Loading Output plugins...")
         
         load_plugins = []
@@ -377,7 +380,7 @@ class FreeseerCore:
             record_name = self.get_record_name(presentation, extension)
     
             #prepare metadata
-            metadata = self.prepare_metadata(presentation)
+            metadata = self.prepare_metadata(presentation) if presentation != None else {}
             #self.backend.populate_metadata(data)
     
             record_location = os.path.abspath(self.config.videodir + '/' + record_name)                

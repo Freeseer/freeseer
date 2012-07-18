@@ -40,7 +40,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.db_connector = self.core.db 
         self.config = self.core.config 
         
-        self.RESOLUTION_LIST = ['480p','360p','1080p','240p','720p']
+        self.RESOLUTION_LIST = self._get_resolution_list(self.core.config.resmap)
         self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")]
         self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")]
         self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoInput")]
@@ -67,8 +67,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         namespace = self.parse_args(command.split())   
         
         mode = self._get_mode(namespace.mode)    
-        print mode 
-        
+       
         if(mode == "show"):
             if(namespace.all):
                 self.show_all_configs()
@@ -76,12 +75,8 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                 print "*** Option missing"  
             
         elif (mode == "video show"):
-            if(namespace.all):
-                self.show_all_video_configs()
-            elif(namespace.index):
-                self.show_video_source_info(int(namespace.index))     
-            else:
-                print "*** Option missing"  
+            self.show_all_video_configs()
+
                 
         elif (mode == "video set"):
             if(namespace.index):
@@ -99,64 +94,15 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                 print "*** Please specify the resolution index" 
                 
         elif (mode == "audio show"):
-            if(namespace.all):
-                self.show_all_audio_configs()
-            elif(namespace.index):
-                self.show_audio_source_info(int(namespace.index))     
-            else:
-                print "*** Option missing"  
+            self.show_all_audio_configs()
+
                 
         elif (mode == "audio set"):
             if(namespace.index):
                 self.set_audio_source(int(namespace.index))     
             else:
                 print "*** Option missing"
-                
-                
-        elif (mode == "streaming show"):
-            self.show_streaming_settings()
-            
-        elif (mode == "streaming port show"):
-            self.show_streaming_port()
-            
-        elif (mode == "streaming port set"):
-            if(namespace.index):
-                self.set_streaming_port(int(namespace.index))     
-            else:
-                print "*** Option missing"
-                
-        elif (mode == "streaming url show"):
-            self.show_streaming_url()
-            
-        elif (mode == "streaming port set"):
-            if(namespace.url):
-                self.set_streaming_url((namespace.url))     
-            else:
-                print "*** Option missing"
-                
-        elif (mode == "streaming mount show"):
-            self.show_streaming_mount()
-            
-        elif (mode == "streaming mount set"):
-            if(namespace.filename):
-                self.set_streaming_mount((namespace.filename))     
-            else:
-                print "*** Option missing"
-                
-        elif (mode == "streaming password show"):
-            self.show_streaming_password()
-            
-        elif (mode == "streaming password set"):
-            self.set_streaming_password()  
-            
-        elif (mode == "streaming resolution show"):
-            self.show_streaming_resolution()
-            
-        elif (mode == "streaming resolution set"):
-            if(namespace.index):
-                self.set_streaming_resolution((namespace.index))     
-            else:
-                print "*** Option missing"  
+
         
         elif (mode == "dir show"):
             self.show_output_dir()
@@ -185,13 +131,12 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             self.turn_video_off()
             
         elif (mode == "file on"):
-            self.turn_file_record_off()
-        
-        elif (mode == "file off"):
             self.turn_file_record_on()
         
+        elif (mode == "file off"):
+            self.turn_file_record_off()
+        
         elif (mode == "streaming on"):
-            print "veio"
             self.turn_streaming_on()
             
         elif (mode == "streaming off"):
@@ -228,21 +173,6 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
     def show_all_audio_configs(self):
         self._show_audio_config()
             
-    def show_audio_source_info(self, index):
-        try:
-            videosrc_selected = self.core.get_audio_sources()[index-1]
-        
-            if(videosrc_selected == "pulsesrc"):
-                print "########## Audio Source Selected: PulseSrc ##########"
-                print "Get pulsesrc Info"
-            elif(videosrc_selected == "alsvideo_mixer_selectedasrc"):
-                print "########### Audio Source Selected: AlsaSrc ##########"
-                print "Get alsasrc Info"
-            elif(videosrc_selected == "autoaudiosrc"):
-                print "######## Audio Source Selected: AutoAudiorc #########"
-                print "Get autoaudiosrc Info"
-        except:
-            print "There's no audio source with this specified index" 
             
     def set_audio_mixer(self, index):
         try:
@@ -396,6 +326,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         for key in self.config.resmap:
              print "%d - %s:%s" % (count, key, self.config.resmap[key])
              count += 1
+             
     def _show_video_mixers(self):
         count = 1
         for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
@@ -409,4 +340,11 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         mode = ""
         for item in mode_list:
             mode += item + " "
-        return mode[0:len(mode)-1]        
+        return mode[0:len(mode)-1]     
+    
+    def _get_resolution_list(self, resmap):
+        list = []
+        for key in self.config.resmap:
+            list.append(key)
+        return list
+           

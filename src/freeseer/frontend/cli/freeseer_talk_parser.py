@@ -85,7 +85,6 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                 if(namespace.presentation != None and namespace.remove_all):
                     print "*** Error: Please specify only one option"
                 else:
-                    print namespace.remove_all
                     if(namespace.presentation):
                         self.remove_talk(namespace.presentation)
                     elif namespace.remove_all:
@@ -192,19 +191,19 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         
         presentation.title = raw_input("Type the presentation title: ")
         
-        while(not len(presentation.title) > 0):
+        while(not len(presentation.title.strip()) > 0):
             presentation.title = raw_input("Please, type the presentation title: ")            
         
         presentation.speaker = raw_input("Type the presentation speaker: ")
         
-        while(not len(presentation.speaker) > 0):
+        while(not len(presentation.speaker.strip()) > 0):
             presentation.speaker = raw_input("Please, type the presentation speaker: ")
         
-        presentation.description = raw_input("Type the presentation description or press <ENTER> to pass: ")
-        presentation.level = raw_input("Type the speaker level or press <ENTER> to pass: ")
-        presentation.event = raw_input("Type the event that held the presentation or press <ENTER> to pass: ")
-        presentation.room = raw_input("Type the room where the presentation will be performed or press <ENTER> to pass: ")        
-        data = raw_input("Type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ")
+        presentation.description = raw_input("Type the presentation description or press <ENTER> to pass: ").strip()
+        presentation.level = raw_input("Type the speaker level or press <ENTER> to pass: ").strip()
+        presentation.event = raw_input("Type the event that held the presentation or press <ENTER> to pass: ").strip()
+        presentation.room = raw_input("Type the room where the presentation will be performed or press <ENTER> to pass: ").strip()     
+        data = raw_input("Type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ").strip()
         
         while(not self._is_date_format(data)):
             if(len(data) > 0):
