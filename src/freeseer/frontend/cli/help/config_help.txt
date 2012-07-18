@@ -1,0 +1,31 @@
+                        ##### FreeSeer Help #####
+
+		           >>> Config Tool <<<
+
+Description> This CLI tool allows the user to perform all the task related to the FreeSeer config editor. The user can perform all tasks suported by FreeSeer config editor by handling one of the available modes described below.
+
+Config Modes> These are the available talk modes
+
+	# show: Lists all configuration settings and current value. e.g. video and audio settings, output directory. Usage: 'config show --all'
+	# video show: Shows all video configurations and a brief numbered list of available video mixers. The numbered list is sensed/calculated and the order/number must be deterministic. Usage: 'config video show'
+	# video set: Selects that video source index (indexes provided by 'video show' mode) for capture. Usage: 'config video set -i #'
+	# video on/off: Turns video on or off. Usage: 'config video [on][off]'
+	# video resolution show : Shows a brief list of available resolutions. The list is sensed/calculated and the order/number must be deterministic. Usage: config video resolution show
+	# video resolution set: Sets the video recording resolution. Usage: 'config video resolution set #'
+	# audio show: Shows all audio configurations and a brief numbered list of available audio mixers. The numbered list is sensed/calculated and the order/number must be deterministic. Usage: 'config audio show'
+	# audio set: Selects that audio source index (indexes provided by 'audio show' mode) for capture. Usage: 'config audio set -i #'
+	# audio on/off: Turns audio on or off. Usage: 'config audio [on][off]'
+	# audio feedback on/off: Turns audio feedback on or off. Usage: 'config audio feedback [on][off]'
+	# dir show: Shows the current output directory. Usage: 'config dir show'
+	# dir set: Sets the output directory to the provided one. Automatically checks that it exists and is writable. Errors if not.
+	# file on/off: Turns file plugin on or off. Usage: 'config file [on][off]'
+	# streaming on/off: Turns streaming on or off. Usage: 'config streaming [on][off]'
+
+Config extra options> These are the available options
+	
+	# --all: Used to inform the set of configurations which will be affected by the list operation
+	# -i: The config index
+	# -d: The output directory
+	# -f: The streaming mount filename
+	
+

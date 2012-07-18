@@ -418,7 +418,7 @@ if __name__ == "__main__":
     result = testdbcon.get_talks()
     
     while(result.next()):
-        id = result.value(0).toStrig()
+        id = result.value(0).toString()
         presenter = result.value(1).toString()
         talk = result.value(2).toString()
         print "%s - %s - %s" % (id, presenter, talk)

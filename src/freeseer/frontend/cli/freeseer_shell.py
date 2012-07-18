@@ -39,26 +39,31 @@ class FreeSeerShell(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
         
-        self.core = FreeseerCore(self)          
+        
+        
+        self.core = FreeseerCore(self)   
+       
+        #Not working. TODO Check why
+        self._set_loggers(False)
+               
         self.db_connector = self.core.db  
         
         self.prompt = "freeseer> "
         self.intro = "\nfreeseer - video recording and streaming software\n" \
         "Copyright (C) 2011  Free and Open Source Software Learning Centre\n"
         
-        #deactivating logs
-        self.core.logger.set_console_logger(False)
-        self.core.logger.set_syslog_logger(False)
+        
         
         
     def do_exit(self, line):
+        self._set_loggers(True)
         sys.exit()
         
     def do_quit(self, line):
         sys.exit()
         
     def do_record(self, line):
-        parser = FreeSeerRecordParser()
+        parser = FreeSeerRecordParser(self.core)
         parser.analyse_command(line)
 
     #TODO   
@@ -95,3 +100,9 @@ class FreeSeerShell(cmd.Cmd):
         
     def run(self):
         self.cmdloop()
+        
+    def _set_loggers(self, enabled):
+        self.core.logger.set_console_logger(enabled)
+        self.core.logger.set_syslog_logger(enabled)
+
+        

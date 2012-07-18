@@ -82,17 +82,19 @@ class FreeseerCore:
         If a record name with a .None extension is returned, the record name
         will just be ignored by the output plugin (e.g. Video Preview plugin).
         """
-        recordname = self.make_record_name(presentation)
-                
-        count = 0
-        tempname = recordname
         
+        if presentation:
+            recordname = self.make_record_name(presentation)
+                    
+            count = 0
+            tempname = recordname
+            
         # Add "-NN" to the end of a duplicate record name to make it unique.
-        while (self.duplicate_exists("%s.%s" % (tempname, extension))):
-            tempname = "{}-{}".format(recordname, self.make_id_from_string(count, "0123456789"))
-            count += 1
+            while(self.duplicate_exists("%s.%s" % (tempname, extension))):
+                tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+                count+=1
 
-        recordname = "%s.%s" % (tempname, extension)
+        recordname = "%s.%s" % (tempname if presentation else "default", extension)
                      
         if extension is not None:
             logging.debug('Set record name to %s', recordname)        
@@ -347,7 +349,7 @@ class FreeseerCore:
                  "comment" : presentation.description }
 
 
-    def load_backend(self, presentation):
+    def load_backend(self, presentation=None):
         logging.debug("Loading Output plugins...")
         
         load_plugins = []
@@ -378,7 +380,7 @@ class FreeseerCore:
             record_name = self.get_record_name(presentation, extension)
     
             # Prepare metadata.
-            metadata = self.prepare_metadata(presentation)
+            metadata = self.prepare_metadata(presentation) if presentation != None else {}
             #self.backend.populate_metadata(data)
     
             record_location = os.path.abspath(self.config.videodir + '/' + record_name)                

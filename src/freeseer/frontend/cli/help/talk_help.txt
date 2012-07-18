@@ -10,7 +10,7 @@ Talk Modes> These are the available talk modes
 	# show talks: This mode allows the user to list all the presentation which are registered no FreeSeer local database file. Usage: 'talk show talks'
 	# show talk: This mode allows the user to list the metadata of a specific presentation. The presentation id/room/event must be specified through the available options (see options below). Usage 'talk show talk [-p #] [-r #] [-e #]'
 	# remove talk: This mode allows the user to delete a talk from the database. The user can remove a specific talk by passing the talk id as argument or even delete all talks from the database. Usage: 'talk remove talk [-p #] [--all]'
-	# add talk: This mode allows the user to add a talk by typing all informations required. Usage: 'talk add talk --prompt'
+	# add talk: This mode allows the user to add a talk by typing all informations required. Usage: 'talk add talk -prompt'
 	# update: This mode allows the user to update the talk metadata by typing the new data. Usage: 'talk update -p #'
 
 Talk extra options> These are the available options

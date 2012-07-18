@@ -7,6 +7,5 @@ Description> This CLI tool allows the user to perform record operations through 
 
 Available Modes> These are the record tasks available
 		
-	# 'record': it records the desktop to a file called 'default.ogg' on the video folder
+	# 'record': it records the current video input to a file called 'default.ogg' on the video folder
 	# 'record -p #': it records the presentation with the specified id to its respective file on the user video folder
-	# 'record -o <file>': it records the desktop to the specified file.
