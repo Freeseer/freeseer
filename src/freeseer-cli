@@ -22,8 +22,8 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-import cli.freeseer_shell
+from freeseer.frontend.cli.freeseer_shell import FreeSeerShell
 
 if __name__ == "__main__":
-    shell =  cli.freeseer_shell.FreeSeerShell()
+    shell =  FreeSeerShell()
     shell.run()
