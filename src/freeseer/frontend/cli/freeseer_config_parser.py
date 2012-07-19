@@ -141,9 +141,29 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             
         elif (mode == "streaming off"):
             self.turn_streaming_off()
-                
+              
+        #plugin support
+        
         else:
-            print "*** Unknown mode, please type one of the available modes or type 'help talk' to see all available modes"
+            args = mode.split(" ")
+            plugin = self.plugman.plugmanc.getPluginByName(args[1], category=args[0])
+            plugin.plugin_object.load_config(self.plugman)
+            if(len(args) == 2):                
+                try:
+                    for property in plugin.plugin_object.get_properties():
+                        print property
+                except NotImplementedError:
+                    print "This plugin is not supported by CLI"
+            if(len(args) == 3):
+                try:
+                    print plugin.plugin_object.get_property_value(args[2])
+                except NotImplementedError:
+                    print "This plugin is not supported by CLI"
+            if(len(args) == 4):
+                try:
+                    plugin.plugin_object.set_property_value(args[2], args[3])
+                except NotImplementedError:
+                    print "This plugin is not supported by CLI"
                            
     def show_all_configs(self):
         self._show_video_configs()

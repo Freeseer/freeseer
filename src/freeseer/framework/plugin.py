@@ -192,6 +192,21 @@ class IBackendPlugin(IPlugin):
         to load any required configurations for the plugin widget.
         """
         pass
+    
+    # CLI Functions
+    
+    """
+    These 3 following methods must be implemented if it's expected from a plugin to be
+    handled through CLI
+    """    
+    def get_properties(self):
+        raise NotImplementedError("Plugins supported by CLI should implement this!")
+    
+    def get_property_value(self, property):
+        pass
+    
+    def set_property_value(self, property, value):
+        pass
 
 class IAudioInput(IBackendPlugin):
     CATEGORY = "AudioInput"

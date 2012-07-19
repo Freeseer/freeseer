@@ -1,5 +1,5 @@
 [Core]
-Name = Video Passthrough
+Name = VideoPassthrough
 Module = videopassthrough
 
 [Documentation]
