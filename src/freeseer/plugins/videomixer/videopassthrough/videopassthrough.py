@@ -34,7 +34,7 @@ from PyQt4 import QtGui, QtCore
 from freeseer.framework.plugin import IVideoMixer
 
 class VideoPassthrough(IVideoMixer):
-    name = "Video Passthrough"
+    name = "VideoPassthrough"
     input1 = None
     widget = None
     
@@ -187,3 +187,48 @@ class VideoPassthrough(IVideoMixer):
     def set_framerate(self, framerate):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
         self.plugman.save()
+        
+    def set_resolultion(self, resolution):
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution", str(resolution))
+        self.plugman.save()
+        
+    def get_properties(self):
+        return self.properties.keys()
+    
+    def get_property_value(self, property):
+        if property == "InputType":
+            return self.input_type
+        elif property == "Input1":
+            return self.input1
+        elif property == "Framerate":    
+            return self.framerate
+        elif property == "Resolution":
+            return self.resolution  
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if(property == "Framerate"):
+            try:
+                int_value = int(value)
+                self.set_framerate(int_value)
+            except:
+                print "Failed"
+        elif(property == "InputType"):
+            try:
+                self.set_videocolour(value)
+            except:
+                print "Failed"
+        elif(property == "Input1"):
+            if(value == "USB"):
+                self.set_input("USB Source")
+            elif(value == "Firewire"):
+                self.set_input("Firewire Source")
+            elif(value == "Desktop"):
+                self.set_input("Desktop-Linux Source")
+            elif(value == "VideoTest"):
+                self.set_input("Video Test Source")
+            else:
+                print "Choose an available Inṕut"
+                #TODO List available options        
+            
