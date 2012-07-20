@@ -34,7 +34,7 @@ from PyQt4 import QtGui, QtCore
 from freeseer.framework.plugin import IOutput
 
 class OggOutput(IOutput):
-    name = "Ogg Output"
+    name = "OggOutput"
     type = IOutput.BOTH
     recordto = IOutput.FILE
     extension = "ogg"
@@ -198,4 +198,23 @@ class OggOutput(IOutput):
         self.video_bitrate = self.spinbox_video_quality.value()
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
         self.plugman.save()
+        
+    def get_properties(self):
+        return ['AudioQuality', 'VideoBitrate']
+    
+    def get_property_value(self, property):
+        if property == "AudioQuality":
+            return self.audio_quality
+        elif property == "VideoBitrate":
+            return self.video_bitrate
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if property == "AudioQuality":
+            return self.set_audio_quality(value)
+        elif property == "VideoBitrate":
+            return self.set_video_bitrate(value)
+        else:
+            return "Error: There's no property with such name" 
 
