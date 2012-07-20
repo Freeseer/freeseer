@@ -199,3 +199,42 @@ class PictureInPicture(IVideoMixer):
         plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
+        
+    def get_properties(self):
+        return ['MainInput', "PIPInput"]
+    
+    def get_property_value(self, property):
+        if property == "MainInput":
+            return self.input1
+        elif property == "PIPInput":
+            return self.input2
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if(property == "MainInput"):
+            if(value == "USB"):
+                self.set_maininput("USB Source")
+            elif(value == "Firewire"):
+                self.set_maininput("Firewire Source")
+            elif(value == "Desktop"):
+                self.set_maininput("Desktop-Linux Source")
+            elif(value == "VideoTest"):
+                self.set_maininput("Video Test Source")
+            else:
+                print "Choose an available Input"
+                #TODO List available options   
+        if(property == "PIPInput"):
+            if(value == "USB"):
+                self.set_pipinput("USB Source")
+            elif(value == "Firewire"):
+                self.set_pipinput("Firewire Source")
+            elif(value == "Desktop"):
+                self.set_pipinput("Desktop-Linux Source")
+            elif(value == "VideoTest"):
+                self.set_pipinput("Video Test Source")
+            else:
+                print "Choose an available Input"
+                #TODO List available options               
+        else:
+            return "Error: There's no property with such name" 

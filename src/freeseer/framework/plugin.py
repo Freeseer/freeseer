@@ -195,10 +195,10 @@ class IBackendPlugin(IPlugin):
         raise NotImplementedError("Plugins supported by CLI should implement this!")
     
     def get_property_value(self, property):
-        pass
+        raise NotImplementedError("Plugins supported by CLI should implement this!")
     
     def set_property_value(self, property, value):
-        pass
+        raise NotImplementedError("Plugins supported by CLI should implement this!")
 
 class IAudioInput(IBackendPlugin):
     CATEGORY = "AudioInput"
