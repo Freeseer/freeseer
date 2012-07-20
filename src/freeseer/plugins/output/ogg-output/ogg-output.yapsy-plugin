@@ -1,5 +1,5 @@
 [Core]
-Name = Ogg Output
+Name = OggOutput
 Module = ogg-output
 
 [Documentation]

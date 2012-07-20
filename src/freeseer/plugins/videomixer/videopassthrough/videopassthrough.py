@@ -188,12 +188,8 @@ class VideoPassthrough(IVideoMixer):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
         self.plugman.save()
         
-    def set_resolultion(self, resolution):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution", str(resolution))
-        self.plugman.save()
-        
     def get_properties(self):
-        return self.properties.keys()
+        return ['InputType', 'Input1', 'Framerate']
     
     def get_property_value(self, property):
         if property == "InputType":
@@ -229,6 +225,8 @@ class VideoPassthrough(IVideoMixer):
             elif(value == "VideoTest"):
                 self.set_input("Video Test Source")
             else:
-                print "Choose an available Inṕut"
-                #TODO List available options        
+                print "Choose an available Input"
+                #TODO List available options     
+        else:
+            return "Error: There's no property with such name"   
             

@@ -1,5 +1,5 @@
 [Core]
-Name = Video Test Source
+Name = VideoTestSource
 Module = videotestsrc
 
 [Documentation]

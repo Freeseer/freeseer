@@ -97,3 +97,18 @@ class VideoPreview(IOutput):
     def set_previewsink(self, previewsink):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
         self.plugman.save()
+        
+    def get_properties(self):
+        return ['PreviewSink']
+    
+    def get_property_value(self, property):
+        if property == 'PreviewSink':
+            return self.previewsink
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if property == 'PreviewSink':
+            self.set_previewsink(value)
+        else:
+            return "Error: There's no property with such name" 
