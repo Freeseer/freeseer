@@ -15,7 +15,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-if [ -f README.txt ] 
+if [ -f README.md ] 
 then
     cwd=`pwd`
 else
@@ -68,7 +68,7 @@ then
 fi
 
 # Copy the icon
-cp -R ${SRCROOT}/freeseer/framework/resources/freeseer_logo.png ${PKGROOT_PIXMAPS_PATH}
+cp -R ${SRCROOT}/freeseer/frontend/qtcommon/images/freeseer_logo.png ${PKGROOT_PIXMAPS_PATH}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
@@ -95,12 +95,15 @@ fi
 # TODO: do a one-linder to update the version in the template files
 
 echo "Generating debian package."
-dpkg --build freeseer freeseer_2.5.3_all.deb
+dpkg --build freeseer freeseer_3.0.0_all.deb
 if [ $? -ne 0 ]
 then
     echo "dpkg failed. Review the output to debug."
     exit 1 
 fi
+
+echo "Removing temporary files"
+rm -rf freeseer
 
 echo "Packaging completed successfully."
 
