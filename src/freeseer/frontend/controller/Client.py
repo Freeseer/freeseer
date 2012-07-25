@@ -1,17 +1,36 @@
-'''
-Created on Jun 4, 2012
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-@author: borasabuncu
-'''
+# freeseer - vga/presentation capture software
+#
+#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  http://fosslc.org
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# For support, questions, suggestions or any other inquiries, visit:
+# http://wiki.github.com/Freeseer/freeseer/
+
 import logging
 import sys
 import base64
+import sqlite3
 
 from PyQt4 import QtNetwork, QtCore, QtGui
 
 from PyQt4.QtNetwork import QTcpSocket
 
-PORT = 56763
     
 class ClientG(QtGui.QWidget):
     
@@ -23,6 +42,9 @@ class ClientG(QtGui.QWidget):
         QtGui.QWidget.__init__(self) 
         
         self.socket = QTcpSocket() 
+        
+        self.addr = ''
+        self.port = 0
         
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
@@ -42,12 +64,11 @@ class ClientG(QtGui.QWidget):
         self.hostLabelEdit.move(10,75)
         self.mainLayout.addWidget(self.hostLabelEdit)
         
-        
         self.portLabel = QtGui.QLabel('Port:', self)
         self.portLabel.move(10, 105)
         self.mainLayout.addWidget(self.portLabel)
         
-        self.portLabelEdit = QtGui.QLineEdit('55441',self)
+        self.portLabelEdit = QtGui.QLineEdit('0',self)
         self.portLabelEdit.move(10, 125)
         self.mainLayout.addWidget(self.portLabelEdit)
         
@@ -72,17 +93,18 @@ class ClientG(QtGui.QWidget):
         self.serverListLabel.move(300, 150)
         self.mainLayout.addWidget(self.serverListLabel)
         
-        self.serverListWidget = QtGui.QListWidget(self)
-        self.serverListWidget.move(300, 125)
-        self.mainLayout.addWidget(self.serverListWidget)
+        self.recentListWidget = QtGui.QListWidget(self)
+        self.recentListWidget.move(300, 125)
+        self.mainLayout.addWidget(self.recentListWidget)
         
         #Connections
         self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
-        #self.connect(self.socket, QtCore.SIGNAL('readyRead()'), self.readMessage)
         self.connect(self.socket, QtCore.SIGNAL('connected()'), self.connected)
         self.connect(self.startButton, QtCore.SIGNAL('pressed()'), self.startClient)
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer) 
         self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
+        self.connect(self.recentListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.recentListHandler)
+        
         
         self.resize(300, 300)
         self.hide()
@@ -106,7 +128,7 @@ class ClientG(QtGui.QWidget):
         self.connect(self.socket, QtCore.SIGNAL("disconnected()"), self.disconnectFromHost)
         
     def sendMessage(self, message):
-        print 'Sending message!'
+        logging.info("Sending message: %s", message)
         block = QtCore.QByteArray()
         block.append(message)
         self.socket.write(block)
@@ -115,11 +137,14 @@ class ClientG(QtGui.QWidget):
         self.sendMessage(self.passPhraseEdit.text())
         
     def readMessage(self):
-        message = self.socket.read(self.socket.bytesAvailable())   
+        message = self.socket.read(self.socket.bytesAvailable()) 
+        logging("Server said:%s", message)  
         #print 'Server said:', message
         return message
     
     def connectToServer(self):
+        self.addr = self.hostLabelEdit.text()
+        self.port = int(self.portLabelEdit.text())
         addr = QtNetwork.QHostAddress(self.addr)
         logging.info("Connecting to %s %s", self.addr, self.port)
         self.socket.connectToHost(addr, self.port)
@@ -152,22 +177,80 @@ class ClientG(QtGui.QWidget):
         if self.status == 'Not connected':
             self.addr = self.hostLabelEdit.text()
             self.port = int(self.portLabelEdit.text())
-            self.startButton.setText(QtCore.QString('Stop'))      
+            self.startButton.setText(QtCore.QString('Stop'))
+            self.getRecentConnections()      
         elif self.status != 'Not connected':
             self.close()
             self.startButton.setText(QtCore.QString('Start'))
         self.updateStatus()
     
     def disconnectFromHost(self):
-        print 'Disconnected'
+        logging.info("Disconnected from host")
         self.socket.disconnectFromHost()
         self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost) 
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer)
         self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connectButton.setText('Connect')
+        self.addToRecentConnections()
     
     def close(self):
         self.socket.close()
+        
+    def getRecentConnections(self):
+        logging.info("Getting recent connections from database")
+        con = sqlite3.connect('test.db')
+        with con:
+            cur = con.cursor()
+            cur.execute('select * from recentConnections')
+            data = cur.fetchone()
+            if data is not None:
+                listItem = ClientListWidget(data[0], data[1], data[2])
+                self.recentListWidget.addItem(listItem)
+            
+    def addToRecentConnections(self):
+        con = sqlite3.connect('test.db')
+        with con:
+            cur = con.cursor()
+            cur.execute('''SELECT * FROM recentconnections WHERE ip = "%s" and port = "%d" and passphrase = "%s" ''' %
+                            (self.addr,
+                             self.port,
+                             self.passPhraseEdit.text()
+                             )
+                        )
+            data = cur.fetchone()
+            print data
+            return
+            if data is not None:
+                logging.info("Connection already exists")
+                return
+            else:
+                cur.execute('''INSERT INTO recentConnections VALUES("%s" , "%d", "%s")''' %
+                        (self.addr,
+                         self.port,
+                         self.passPhraseEdit.text()))
+                logging.info("Recent connection %s %d added ", self.addr, self.port)
+                self.getRecentConnections()
+        
+    
+    def recentListHandler(self):
+        self.hostLabelEdit.setText(self.recentListWidget.selectedItems()[0].ip)
+        port = str(self.recentListWidget.selectedItems()[0].port)
+        self.portLabelEdit.setText(port)
+        self.passPhraseEdit.setText(self.recentListWidget.selectedItems()[0].passPhrase)
+        
+#
+#Custom QListWidgetItem 
+#
+class ClientListWidget(QtGui.QListWidgetItem):
+    
+    def __init__(self, ip, port, passPhrase):
+        QtGui.QWidgetItem.__init__(self)
+        self.ip = ip
+        self.port = port
+        self.passPhrase = passPhrase
+        self.setText(self.ip + ' '  + str(port))
+        
+       
 def Main(self):
     app = QtGui.QApplication(sys.argv)
     c = ClientG()
