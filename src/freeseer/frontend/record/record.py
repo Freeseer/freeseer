@@ -189,6 +189,7 @@ class RecordApp(QtGui.QMainWindow):
         
         #Client Connections
         self.connect(self.clientWidget.socket, QtCore.SIGNAL('readyRead()'), self.getAction)
+        self.connect(self.clientWidget.startButton, QtCore.SIGNAL('pressed()'), self.toggleStandby)
         
         #
         # ReportWidget Connections
@@ -551,7 +552,7 @@ class RecordApp(QtGui.QMainWindow):
         self.core.backend.keyboard_event(event.key())
     
     ###
-    ### Client function
+    ### Client functions
     ###
     def show_client_widget(self):
         p = self.current_presentation()
@@ -568,7 +569,11 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.recordPushButton.toggle()
         elif message == 'Pause':
             self.mainWidget.pauseToolButton.toggle()
-        
+    
+    def toggleStandby(self):
+        self.mainWidget.standbyPushButton.toggle()
+        self.disconnect(self.clientWidget.startButton. QtCore.SIGNAL('pressed()'), self.toggleStandby)
+    
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     main = RecordApp()
