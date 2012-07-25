@@ -41,7 +41,7 @@ class ServerWidget(QtGui.QWidget):
     
     status = 'Off' 
     clients = []
-    passPhrase = 'pass'
+    passPhrase = ''
     
     def __init__(self):
         QtGui.QWidget.__init__(self) 
@@ -71,6 +71,9 @@ class ServerWidget(QtGui.QWidget):
         
         self.passPhraseEdit = QtGui.QLineEdit(self)
         self.passPhraseEdit.move(190, 60)
+        
+        self.passPhraseEdit.setText('pass')
+        self.setPassPhrase()
         
         self.passPhraseButton = QtGui.QPushButton('Set Passphrase', self)
         self.passPhraseButton.setEnabled(False)
@@ -120,7 +123,7 @@ class ServerWidget(QtGui.QWidget):
             self.startButton.setText(QtCore.QString('Stop Server'))
             self.status = 'Running' 
             string = 'IP:' + self.server.serverAddress().toString() + ' Port:' + str(self.server.serverPort())
-            logging.info("Started server IP:%s Port:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
+            logging.info(u"Started server IP:%s Port:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
             self.statusLabel2.setText(QtCore.QString(string))
         elif self.status == 'Running':
             self.server.close()
@@ -195,12 +198,14 @@ class ServerWidget(QtGui.QWidget):
         logging.info ("Passphrase changed to %s", self.passPhraseEdit.text())
         self.passPhraseLabel.setText("Passphrase:" + self.passPhrase)
         self.passPhraseEdit.clear()
-    
+        passPhrase = base64.b64encode(self.passPhrase)
+        self.passPhrase = passPhrase
+        
     def readPassPhrase(self):
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
         logging.info(u"Client said: %s", message)
-        if message != self.passPhrase:
+        if base64.b64decode(message) != base64.b64decode(self.passPhrase):
             client.disconnectFromHost()
             print 'Client rejected'
         else:
