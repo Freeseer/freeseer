@@ -104,8 +104,7 @@ class ClientG(QtGui.QWidget):
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer) 
         self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.recentListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.recentListHandler)
-        
-        
+         
         self.resize(300, 300)
         self.hide()
     
@@ -134,8 +133,10 @@ class ClientG(QtGui.QWidget):
         self.socket.write(block)
     
     def sendPassphrase(self):
-        self.sendMessage(self.passPhraseEdit.text())
-        
+        passPhrase = base64.b64encode(self.passPhraseEdit.text())
+        #self.sendMessage(self.passPhraseEdit.text())
+        self.sendMessage(passPhrase)
+    
     def readMessage(self):
         message = self.socket.read(self.socket.bytesAvailable()) 
         logging("Server said:%s", message)  
@@ -197,16 +198,17 @@ class ClientG(QtGui.QWidget):
         self.socket.close()
         
     def getRecentConnections(self):
-        logging.info("Getting recent connections from database")
+        logging.info(u"Getting recent connections from database")
         con = sqlite3.connect('test.db')
         with con:
             cur = con.cursor()
             cur.execute('select * from recentConnections')
             data = cur.fetchone()
             if data is not None:
+                print 'Decoding passphrase', base64.b64decode(data[2])
                 listItem = ClientListWidget(data[0], data[1], data[2])
                 self.recentListWidget.addItem(listItem)
-            
+        
     def addToRecentConnections(self):
         con = sqlite3.connect('test.db')
         with con:
@@ -218,17 +220,17 @@ class ClientG(QtGui.QWidget):
                              )
                         )
             data = cur.fetchone()
-            print data
-            return
             if data is not None:
-                logging.info("Connection already exists")
+                logging.info(u"Connection already exists")
                 return
-            else:
+            elif data is None:
                 cur.execute('''INSERT INTO recentConnections VALUES("%s" , "%d", "%s")''' %
-                        (self.addr,
-                         self.port,
-                         self.passPhraseEdit.text()))
-                logging.info("Recent connection %s %d added ", self.addr, self.port)
+                            (self.addr,
+                             self.port,
+                             self.passPhraseEdit.text()
+                             )
+                            )
+                logging.info(u"Recent connection %s %d added ", self.addr, self.port)
                 self.getRecentConnections()
         
     
