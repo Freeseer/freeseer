@@ -189,7 +189,6 @@ class RecordApp(QtGui.QMainWindow):
         
         #Client Connections
         self.connect(self.clientWidget.socket, QtCore.SIGNAL('readyRead()'), self.getAction)
-        self.connect(self.clientWidget.startButton, QtCore.SIGNAL('pressed()'), self.toggleStandby)
         
         #
         # ReportWidget Connections
@@ -556,23 +555,22 @@ class RecordApp(QtGui.QMainWindow):
     ###
     def show_client_widget(self):
         p = self.current_presentation()
-        #self.clientWidget.titleLabel2.setText(p.title)
         self.clientWidget.show()
     
+    #
+    #This function is for handling commands sent from the server to the client.
+    # 
     def getAction(self):
         message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
         print 'Server said:', message
         if message == 'Record':
+            self.mainWidget.standbyPushButton.toggle()
             self.mainWidget.recordPushButton.toggle()
             self.clientWidget.sendMessage('Started recording')
         elif message == 'Stop':
             self.mainWidget.recordPushButton.toggle()
-        elif message == 'Pause':
+        elif message == 'Pause' or 'Resume':
             self.mainWidget.pauseToolButton.toggle()
-    
-    def toggleStandby(self):
-        self.mainWidget.standbyPushButton.toggle()
-        self.disconnect(self.clientWidget.startButton. QtCore.SIGNAL('pressed()'), self.toggleStandby)
     
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

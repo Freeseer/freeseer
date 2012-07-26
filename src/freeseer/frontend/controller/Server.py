@@ -82,7 +82,7 @@ class ServerWidget(QtGui.QWidget):
         self.ipLabel = QtGui.QLabel('IP Address', self)
         self.ipLabel.move(25, 110)
         
-        self.connectionLabel = QtGui.QLabel('Connection', self)
+        self.connectionLabel = QtGui.QLabel('Status', self)
         self.connectionLabel.move(115, 110)
         
         self.controlLabel = QtGui.QLabel('Control', self)
@@ -115,7 +115,7 @@ class ServerWidget(QtGui.QWidget):
         self.connect(self.startRecordButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
         self.connect(self.stopRecordButton, QtCore.SIGNAL('pressed()'), self.sendStopCommand)
         self.connect(self.disconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
-        self.connect(self.qListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.enableDisconnectButton)
+        self.connect(self.qListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.updateButtons)
         
     def startServer(self):    
         if self.status == 'Off':
@@ -143,7 +143,7 @@ class ServerWidget(QtGui.QWidget):
         else:
             self.passPhraseButton.setEnabled(True)
     
-    def enableDisconnectButton(self):
+    def updateButtons(self):
         #Use the status 
         if len(self.qListWidget.selectedItems()) > 0:
             self.disconnectButton.setEnabled(True)
@@ -162,10 +162,13 @@ class ServerWidget(QtGui.QWidget):
                     self.startRecordButton.setText('Resume Recording')
                     self.stopRecordButton.setEnabled(True)
         else:
-            self.disconnectButton.setEnabled(False) 
+            self.disconnectButton.setEnabled(False)
+            self.startRecordButton.setEnabled(False)
+            self.startRecordButton.setText('Start Recording')
+            self.stopRecordButton.setEnabled(False) 
+            self.stopRecordButton.setText('Stop Recording')
     
     def startRead(self):
-        #self.client.writeData('Hello Client!')
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
         logging.info("Client said: %s", message)
@@ -188,11 +191,9 @@ class ServerWidget(QtGui.QWidget):
             self.sendMessage(client, self.messageLine.text())
             #client.write(block)
     
-    def readMessage(self):
-        client = self.server.nextPendingConnection()
-        passPhrase = client.read(client.bytesAvailable())
-        print passPhrase
-    
+    #
+    #This function is for changing the passphrase. It saves the new passphrase in the self.passPhrase after encoding it.
+    #
     def setPassPhrase(self):
         self.passPhrase = self.passPhraseEdit.text()
         logging.info ("Passphrase changed to %s", self.passPhraseEdit.text())
@@ -200,7 +201,11 @@ class ServerWidget(QtGui.QWidget):
         self.passPhraseEdit.clear()
         passPhrase = base64.b64encode(self.passPhrase)
         self.passPhrase = passPhrase
-        
+    
+    #
+    #This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
+    #Client is accepted if the passphrases match. Otherwise client is rejected
+    #    
     def readPassPhrase(self):
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
@@ -228,11 +233,10 @@ class ServerWidget(QtGui.QWidget):
     def clientDisconnected(self):
         client = QtCore.QObject.sender(self)
         logging.info("Client disconnected")
-        #self.removeClientFromTheList(client)
         self.clients.remove(client)
         self.updateList()
-        
-        #self.updateList()
+        self.updateButtons()
+    
     #
     #This method is to update the 
     #
@@ -260,19 +264,21 @@ class ServerWidget(QtGui.QWidget):
     #     
     def sendRecordCommand (self):
         buttonText = self.startRecordButton.text()
-        if buttonText == 'Start Recording' or 'Resume Recording':
+        if buttonText == 'Start Recording':
             command = 'Record'
-        else:
+        elif buttonText == 'Pause Recording':
             command = 'Pause'
-        print command, ' sent to',
-        logging.info(command + u" send to") 
+        elif buttonText == 'Resume Recording':
+            command = 'Resume'
+        logging.info(command + " send to") 
         for i in range(0, len(self.qListWidget.selectedItems())):
             client = self.qListWidget.selectedItems()[i].client
             self.sendMessage(client, command)
-            if command == 'Record':
+            if command == 'Record' or command == 'Resume':
                 self.qListWidget.selectedItems()[i].changeStatus('Recording')
             elif command == 'Pause':
                 self.qListWidget.selectedItems()[i].changeStatus('Paused')
+        self.updateButtons()
     
     #
     #Sends a stop command to selected clients
@@ -283,6 +289,7 @@ class ServerWidget(QtGui.QWidget):
             client = self.qListWidget.selectedItems()[i].client
             self.sendMessage(client, 'Stop')
             self.qListWidget.selectedItems()[i].changeStatus('Idle')
+        self.updateButtons()
     
     def getClientFromList(self, ip):
         for i in range(0, len(self.clients)):
