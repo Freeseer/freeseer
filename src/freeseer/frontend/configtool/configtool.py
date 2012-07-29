@@ -238,7 +238,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.videoMixerString = self.uiTranslator.translate("ConfigToolApp", "VideoMixer")
         self.outputString = self.uiTranslator.translate("ConfigToolApp", "Output")
         self.loggerString = self.uiTranslator.translate("ConfigToolApp", "Logger")
-        self.metadataString = self.uiTranslator.translate("ConfigToolApp", "Metadata")
         
         self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
         self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
@@ -357,8 +356,6 @@ class ConfigToolApp(QtGui.QMainWindow):
             self.load_option_output_plugins()
         elif option == self.loggerString:
             self.load_logger_widget()
-        elif option == self.metadataString:
-            self.load_option_metadata_plugins()
         else:
             pass
         
@@ -585,13 +582,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.currentWidget.show()
         
         self.load_plugin_list("Output")
-        
-    def load_option_metadata_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-        
-        self.load_plugin_list("Metadata")
     
     def load_plugin_widgets(self):
         for plugin in self.plugman.plugmanc.getAllPlugins():
