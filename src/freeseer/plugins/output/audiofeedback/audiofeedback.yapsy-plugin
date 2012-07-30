@@ -1,5 +1,5 @@
 [Core]
-Name = AudioFeedback
+Name = Audio Feedback
 Module = audiofeedback
 
 [Documentation]

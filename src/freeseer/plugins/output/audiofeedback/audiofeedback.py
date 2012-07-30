@@ -34,7 +34,7 @@ from PyQt4 import QtGui, QtCore
 from freeseer.framework.plugin import IOutput
 
 class AudioFeedback(IOutput):
-    name = "AudioFeedback"
+    name = "Audio Feedback"
     type = IOutput.AUDIO
     recordto = IOutput.OTHER
     

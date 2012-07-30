@@ -1,5 +1,5 @@
 [Core]
-Name = AudioPassthrough
+Name = Audio Passthrough
 Module = audiopassthrough
 
 [Documentation]
