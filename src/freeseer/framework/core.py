@@ -94,7 +94,7 @@ class FreeseerCore:
                 tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
                 count+=1
 
-        recordname = "%s.%s" % (tempname if presentation else "default", extension)
+        recordname = "%s.%s" % (tempname, extension)
                      
         if extension is not None:
             logging.debug('Set record name to %s', recordname)        
@@ -350,7 +350,7 @@ class FreeseerCore:
                  "comment" : presentation.description }
 
 
-    def load_backend(self, presentation=None):
+    def load_backend(self, presentation):
         logging.debug("Loading Output plugins...")
         
         load_plugins = []
@@ -381,7 +381,7 @@ class FreeseerCore:
             record_name = self.get_record_name(presentation, extension)
     
             # Prepare metadata.
-            metadata = self.prepare_metadata(presentation) if presentation != None else {}
+            metadata = self.prepare_metadata(presentation)
             #self.backend.populate_metadata(data)
     
             record_location = os.path.abspath(self.config.videodir + '/' + record_name)                

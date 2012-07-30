@@ -63,18 +63,6 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         else:
             self.default_record()
             
-    def default_record(self):    
-        '''
-        Records to the default video folder a default filename
-        '''       
-        self.core.load_backend()             
-        self.core.record()
-        print "\n Recording on progress, press <space> to stop \n"   
-        
-        while(self.getchar() != " "):            
-            continue
-        
-        self.core.stop();
     
     def record_by_id(self,id):
         '''
@@ -82,7 +70,7 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         '''        
         prs = self.db_connector.get_presentation(id)  
         if(prs):
-            self.core.load_backend(presentation=prs)
+            self.core.load_backend(prs)
             self.core.record()
             print "\n Recording on progress, press <space> to stop \n"          
       
@@ -94,18 +82,7 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         else:
             print "\n*** Error: There's no presentation with such id\n"
         
-    def record_by_path(self,path):
-        '''
-        Records to the specific path
-        '''        
-        if self._is_valid_filename(path):
-            self.core.record(record_location=path)
-            print "\n Recording on progress, press <space> to stop \n"   
-
-            while(self.getchar() != " "):            
-                continue
-        
-            self.core.stop();                 
+         
           
     def _is_valid_filename(self, path):
         if not path.endswith(".ogg"):
