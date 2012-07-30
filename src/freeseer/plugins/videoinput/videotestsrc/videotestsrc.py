@@ -34,7 +34,7 @@ from PyQt4 import QtGui, QtCore
 from freeseer.framework.plugin import IVideoInput
 
 class VideoTestSrc(IVideoInput):
-    name = "VideoTestSource"
+    name = "Video Test Source"
     
     # variables
     live = False

@@ -1,5 +1,5 @@
 [Core]
-Name = AudioTestSource
+Name = Audio Test Source
 Module = audiotestsrc
 
 [Documentation]

@@ -1,5 +1,5 @@
 [Core]
-Name = AutoAudioSource
+Name = Auto Audio Source
 Module = autoaudiosrc
 
 [Documentation]
