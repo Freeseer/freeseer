@@ -18,21 +18,44 @@ Installers
 
 Visit our `download page <https://github.com/Freeseer/freeseer/downloads>`_ for installers for Debian/Ubuntu and Windows.
 
-*TODO: Add note about potential error message on Linux*
-
-*TODO: Add image of download page*
-
-
 Build from Source
 -----------------
 
 Download the source code as a `zip <https://github.com/Freeseer/freeseer/zipball/master>`_ or
-`tarball <https://github.com/fosslc/freeseer/tarball/master>`_.
+`tarball <https://github.com/Freeseer/freeseer/tarball/master>`_.
 
 Alternatively, potential contributors can clone the project with git:
 
 ::
 
-    $ git clone git@github.com:fosslc/freeseer.git  # Clones a copy of the master repo
+    $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
 
-*TODO: Add build instructions (make not required)*
+.. todo:: Add build instructions (or just link to readme)
+
+OS-Specific Plugins
+-------------------
+
+Plugins offer extra functionaltiy, so you'll want to download them.
+
+We have OS-specific repositories to simplify the organization of Freeseer plugins.
+
+Clone the OS-specific plugins to your `~/.freeseer/plugins` directory
+and Freeseer should detect them.
+
+`Linux Plugins <https://github.com/Freeseer/freeseer-plugins-linux>`_
+**************
+
+::
+
+    $ git clone git@github.com:Freeseer/freeseer-plugins-linux.git ~/.freeseer/plugins
+
+
+`Windows Plugins <https://github.com/Freeseer/freeseer-plugins-windows>`_
+****************
+
+::
+
+    $ git clone git@github.com:Freeseer/freeseer-plugins-windows.git ~/.freeseer/plugins
+
+.. note:: On both platforms the `.freeseer` directory is in the user's HOME
+          folder. On Windows this is `C:\\Users\\username\\.freeseer\\`.
