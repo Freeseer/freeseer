@@ -46,10 +46,7 @@ from RecordingWidget import RecordingWidget
 __version__= project_info.VERSION
 
 class RecordApp(QtGui.QMainWindow):
-    '''
-    Freeseer main gui class
-    '''
-
+    """Freeseer's main GUI class."""
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         icon = QtGui.QIcon()
@@ -196,7 +193,7 @@ class RecordApp(QtGui.QMainWindow):
 
         self.load_settings()
 
-        # setup spacebar key
+        # Setup spacebar key.
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
         self.mainWidget.recordPushButton.setFocus()
 
@@ -300,10 +297,11 @@ class RecordApp(QtGui.QMainWindow):
         self.aboutDialog.retranslate(self.current_language)
         
     def translate(self, action):
-        '''
-        When a language is selected from the language menu this function is called
-        The language to be changed to is retrieved
-        '''
+        """Translates the GUI.
+
+        When a language is selected from the language menu, this function is
+        called and the language to be changed to is retrieved.
+        """
         self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
         
         logging.info("Switching language to: %s" % action.text())
@@ -315,11 +313,11 @@ class RecordApp(QtGui.QMainWindow):
         languages = QtCore.QDir(":/languages").entryList()
         
         if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
+            self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
             logging.debug("Detected user's locale as %s" % self.current_language)
         
         for language in languages:
-            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
+            translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.
             translator.load(":/languages/%s" % language)
             language_display_text = translator.translate("Translation", "Language Display Text")
             
@@ -339,7 +337,7 @@ class RecordApp(QtGui.QMainWindow):
     def load_settings(self): 
         logging.info('Loading settings...')
         
-        # Load default language
+        # Load default language.
         actions = self.menuLanguage.actions()
         for action in actions:
             if action.data().toString() == self.config.default_language:
@@ -347,21 +345,20 @@ class RecordApp(QtGui.QMainWindow):
                 self.translate(action)
                 break
         
-        # Load Talks as a SQL Data Model
+        # Load Talks as a SQL Data Model.
         self.load_event_list()
 
     def current_presentation(self):
-        '''
-        Creates a presentation object from the currently selected title on the GUI
-        '''
+        """Creates a presentation object of the current presentation.
+        
+        Current presentation is the currently selected title on the GUI.
+        """
         #i = self.mainWidget.talkComboBox.currentIndex()
         #p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
         return self.core.db.get_presentation(self.current_presentation_id())
     
     def current_presentation_id(self):
-        '''
-        Return the current selected presentation ID
-        '''
+        """Returns the current selected presentation ID."""
         i = self.mainWidget.talkComboBox.currentIndex()
         return self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
     
@@ -372,9 +369,7 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.statusLabel.setText(self.readyString)
 
     def record(self, state):
-        '''
-        Function for recording and stopping recording.
-        '''
+        """The logic for recording and stopping recording."""
 
         if (state): # Start Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
@@ -384,7 +379,8 @@ class RecordApp(QtGui.QMainWindow):
             self.core.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
-            # check if auto-hide is set and if so hide
+
+            # Hide if auto-hide is set.
             if(self.core.config.auto_hide == True):
                 self.hide_window()
                 self.visibilityAction.setText(self.showWindowString)
@@ -394,7 +390,7 @@ class RecordApp(QtGui.QMainWindow):
 
             self.mainWidget.statusLabel.setText(self.recordingString)
             
-            # Start Timer
+            # Start timer.
             self.timer.start(1000)
             
         else: # Stop Recording.
@@ -410,11 +406,11 @@ class RecordApp(QtGui.QMainWindow):
             # Finally set the standby button back to unchecked position.
             self.mainWidget.standbyPushButton.setChecked(False)
             
-            # Stop Timer
+            # Stop and reset timer.
             self.timer.stop()
             self.reset_timer()
             
-            # Select next talk if there is one within 15 minutes
+            # Select next talk if there is one within 15 minutes.
             starttime = QtCore.QDateTime().currentDateTime()
             stoptime = starttime.addSecs(900)
             talkid = self.core.db.get_talk_between_time(self.current_event, self.current_room, 
@@ -431,13 +427,12 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
             self.timer.stop()
-        else:
-            if self.mainWidget.recordPushButton.isChecked():
-                self.core.record()
-                logging.info("Recording unpaused.")
-                self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
-                self.mainWidget.statusLabel.setText(self.recordingString)
-                self.timer.start(1000)
+        elif self.mainWidget.recordPushButton.isChecked():
+            self.core.record()
+            logging.info("Recording unpaused.")
+            self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
+            self.mainWidget.statusLabel.setText(self.recordingString)
+            self.timer.start(1000)
             
     def load_backend(self, talk=None):
         if talk is not None: self.core.stop()
@@ -445,8 +440,9 @@ class RecordApp(QtGui.QMainWindow):
         self.core.load_backend(self.current_presentation())
         
     def update_timer(self):
-        """
-        Update the Elapsed Time display, uses the statusLabel for the display
+        """Updates the Elapsed Time displayed.
+        
+        Uses the statusLabel for the display.
         """
         time = "%d:%02d" % (self.time_minutes, self.time_seconds)
         self.time_seconds += 1
@@ -457,9 +453,7 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.statusLabel.setText("Elapsed Time: " + time)
         
     def reset_timer(self):
-        """
-        Resets the Elapsed Time
-        """
+        """Resets the Elapsed Time."""
         self.time_minutes = 0
         self.time_seconds = 0
         
@@ -501,7 +495,7 @@ class RecordApp(QtGui.QMainWindow):
         self.mainWidget.talkComboBox.setModel(model)
         
     ###
-    ###Report Failure
+    ### Report Failure
     ###
     def show_report_widget(self):
         p = self.current_presentation()
@@ -511,7 +505,7 @@ class RecordApp(QtGui.QMainWindow):
         self.reportWidget.roomLabel2.setText(p.room)
         self.reportWidget.timeLabel2.setText(p.time)
         
-        # get existing report if there is one
+        # Get existing report if there is one.
         talk_id = self.current_presentation_id()
         f = self.core.db.get_report(talk_id)
         if f is not None:
@@ -541,7 +535,7 @@ class RecordApp(QtGui.QMainWindow):
         self.reportWidget.close()
 
     ###
-    ### Misc
+    ### Misc.
     ###
     
 #    def area_select(self):
@@ -579,10 +573,7 @@ class RecordApp(QtGui.QMainWindow):
         
         
     def toggle_window_visibility(self):
-        """
-        This function is used to toggle the visibility of the Recording
-        Main Window.
-        """
+        """Toggles the visibility of the Recording Main Window."""
         if self.isHidden():
             self.show_window()
             self.visibilityAction.setText(self.hideWindowString)
@@ -600,7 +591,7 @@ class RecordApp(QtGui.QMainWindow):
         if sys.platform.startswith("linux"):
             os.system("xdg-open %s" % self.core.config.videodir)
         else:
-            logging.INFO("Error: This command is not supported on the current OS.")
+            logging.info("Error: This command is not supported on the current OS.")
     
     def closeEvent(self, event):
         logging.info('Exiting freeseer...')
