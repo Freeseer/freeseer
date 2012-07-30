@@ -42,4 +42,4 @@ class MinimalistCore(object):
         self.config = Config(configdir)
         self.logger = Logger(configdir)
         self.plugman = PluginManager(configdir)
-        logging.info(u"Mock Core initialized")   
+        logging.info("Mock Core initialized")   
