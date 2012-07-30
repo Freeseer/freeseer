@@ -41,10 +41,11 @@ from plugin import PluginManager
 __version__= project_info.VERSION
 
 class FreeseerCore:
-    '''
-    Freeseer core logic code.  Used to link a GUI frontend with a recording
-    backend such as backend.gstreamer
-    '''
+    """Freeseer's core logic code.
+    
+    Used to link a GUI frontend with a recording backend, such as
+    backend.gstreamer.
+    """
     def __init__(self, window_id=None, audio_feedback=None):
         
         # Read in config information
@@ -57,7 +58,7 @@ class FreeseerCore:
         # Start Freeseer Recording Backend
         self.backend = gstreamer.Gstreamer(window_id, audio_feedback)
         
-        logging.info(u"Core initialized")   
+        logging.info("Core initialized")   
 
     def get_config(self):
         return self.config
@@ -66,9 +67,7 @@ class FreeseerCore:
         return self.plugman
 
     def duplicate_exists(self, recordname):
-        '''
-        Checks to see if a record name already exists in the directory.
-        '''
+        """Checks to see if a record name already exists in the directory."""
         filename = self.config.videodir + '/' + recordname
         try:
             result = open(filename, 'r')
@@ -78,81 +77,80 @@ class FreeseerCore:
 
 
     def get_record_name(self, presentation, extension):
-        '''
-        Returns the filename to use when recording.
-        '''
+        """Returns the filename to use when recording."""
         recordname = self.make_record_name(presentation)
                 
         count = 0
         tempname = recordname
         
         # check if this record name already exists in this directory and add "-NN" ending if so.
-        while(self.duplicate_exists("%s.%s" % (tempname, extension))):
+        while (self.duplicate_exists("%s.%s" % (tempname, extension))):
             tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
-            count+=1
+            count += 1
 
         recordname = "%s.%s" % (tempname, extension)
                      
-        logging.debug('Set record name to ' + recordname)        
+        logging.debug('Set record name to %s', recordname)        
         
         return recordname
 
 
     def make_record_name(self, presentation):
-        '''
-        Create an 'EVENT-ROOM-SPEAKER-TITLE' record name
+        """Create an 'EVENT-ROOM-SPEAKER-TITLE' record name.
+
         If any information is missing, we blank it out intelligently
         And if we have nothing for some reason, we use "default"
-        '''	
+        """	
         event = self.make_shortname(presentation.event)
         title = self.make_shortname(presentation.title)
         room = self.make_shortname(presentation.room)
         speaker = self.make_shortname(presentation.speaker)
 
-        recordname=""
+        recordname = ""  # TODO: add substrings to a list then ''.join(list) -- better practice
             
-        if(event!=""):
-            if(recordname!=""):
-                recordname=recordname+"-"+event
+        if event != "": # TODO: empty strings are falsy, use 'if not string:'
+            if recordname != "":
+                recordname = recordname + "-" + event
             else:
-                recordname=event
+                recordname = event
         
-        if(room!=""):
-            if(recordname!=""):
-                recordname=recordname+"-"+room
+        if room != "":
+            if recordname != "":
+                recordname = recordname + "-" + room
             else:
-                recordname=room
+                recordname = room
         
-        if(speaker!=""):
-            if(recordname!=""):
-                recordname=recordname+"-"+speaker
+        if speaker != "":
+            if recordname != "":
+                recordname = recordname + "-" + speaker
             else:
-                recordname=speaker
+                recordname = speaker
                 
-        if(title!=""):
-            if(recordname!=""):
-                recordname=recordname+"-"+title
+        if title != "":
+            if recordname != "":
+                recordname = recordname + "-" + title
             else:
-                recordname=title
+                recordname = title
            
         # Convert unicode filenames to their equivalent ascii so that
-        # we don't run into issues with gstreamer or filesystems
-        recordname=unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
+        # we don't run into issues with gstreamer or filesystems.
+        recordname = unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
                 
-        if(recordname!=""):
+        if recordname != "":
             return recordname
                     
         return "default"
 
     def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
-        '''
-        Returns an "NN" id given an integer and a string of valid characters for the id
-        ('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for UNIQUE in a record name)
-        '''
+        """Returns a 2-character id from a string of valid characters.
+        
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for
+        UNIQUE in a record name.
+        """
         index1 = position % string.__len__()
         index0 = int( position / string.__len__() )
 
-        if(index0 >= string.__len__() ):
+        if index0 >= string.__len__():
             logging.debug('WARNING: Unable to generate unique filename.')
             # Return a unique 2 character string which will not overwrite previous files.
             # There is a possibility of infinite looping on testing duplicates once
@@ -161,26 +159,24 @@ class FreeseerCore:
             # (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
             return "##" 
 
-        return string[index0]+string[index1]
+        return string[index0] + string[index1]
 
 
-    def make_shortname(self, providedString):
-        '''
-        Returns the first 6 characters of a string.
-        Strip out non alpha-numeric characters, spaces, and most punctuation
-        '''
+    def make_shortname(self, string):
+        """Returns the first 6 characters of a string in uppercase.
+
+        Strip out non alpha-numeric characters, spaces, and most punctuation.
+        """
                 
         bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
-        providedString="".join(ch for ch in providedString if ch not in bad_chars)
-        return providedString[0:6].upper()
+        string = "".join(ch for ch in string if ch not in bad_chars)
+        return string[0:6].upper()
 
     ##
     ## Database Functions
     ##
     def add_talks_from_rss(self, rss):
-        '''
-        Add talks from rss feed
-        '''
+        """Adds talks from an rss feed."""
         entry = str(rss)
         feedparser = FeedParser(entry)
 
@@ -199,9 +195,10 @@ class FreeseerCore:
                 self.db.insert_presentation(talk)
     
     def add_talks_from_csv(self, fname):
-        '''
-        Add talks from a csv file, title and speaker must be present
-        '''
+        """Adds talks from a csv file.
+        
+        Title and speaker must be present.
+        """
         file = open(fname,'r')
         try:
             reader = csv.DictReader(file)
@@ -210,11 +207,11 @@ class FreeseerCore:
                     title = row['Title']
                     speaker = row['Speaker']
                 except KeyError:
-                    logging.error("Missing Key in Row: %s" % row)
+                    logging.error("Missing Key in Row: %s", row)
                     return
                     
                 try:
-                    abstract = row['Abstract'] #Description
+                    abstract = row['Abstract'] # Description
                 except KeyError:
                     abstract = ''
                 
@@ -248,7 +245,7 @@ class FreeseerCore:
                 self.db.insert_presentation(talk)
             
         except IOError:
-            logging.error("CSV: File %s not found" % file)
+            logging.error("CSV: File %s not found", file)
         
         finally:
             file.close()
@@ -271,7 +268,7 @@ class FreeseerCore:
             writer.writerow(headers)
             
             result = self.db.get_talks()
-            while(result.next()):
+            while result.next():
                 #print unicode(result.value(1).toString())
                 writer.writerow({'Title':unicode(result.value(1).toString()),
                                  'Speaker':unicode(result.value(2).toString()),
@@ -320,29 +317,29 @@ class FreeseerCore:
     def set_recording_area(self, x1, y1, x2, y2):
         # gstreamer backend needs to have the lower x/y coordinates
         # sent first.
-        if (x2 < x1):
-            if (y2 < y1):
+        if x2 < x1:
+            if y2 < y1:
                 self.backend.set_recording_area(x2, y2, x1, y1)
             else:
                 self.backend.set_recording_area(x2, y1, x1, y2)
         else:
-            if (y2 < y1):
+            if y2 < y1:
                 self.backend.set_recording_area(x1, y2, x2, y1)
             else:
                 self.backend.set_recording_area(x1, y1, x2, y2)
 
     def prepare_metadata(self, presentation):
-        '''
-        Returns a dictionary of tags and tag values to be used
-        to populate the current recording's file metadata.
-        '''
+        """Returns a dictionary of tags and tag values.
+        
+        To be used for populating the current recording's file metadata.
+        """
         return { "title" : presentation.title,
                  "artist" : presentation.speaker,
                  "performer" : presentation.speaker,
                  "album" : presentation.event,
                  "location" : presentation.room,
                  "date" : str(datetime.date.today()),
-                 "comment" : presentation.description}
+                 "comment" : presentation.description }
 
 
     def load_backend(self, presentation):
@@ -368,14 +365,14 @@ class FreeseerCore:
                 
         plugins = []
         for plugin in load_plugins:
-            logging.debug("Loading Output: %s" % plugin.plugin_object.get_name())
+            logging.debug("Loading Output: %s", plugin.plugin_object.get_name())
             
             extension = plugin.plugin_object.get_extension()
 
-            #create a filename to record to
+            # Create a filename to record to.
             record_name = self.get_record_name(presentation, extension)
     
-            #prepare metadata
+            # Prepare metadata.
             metadata = self.prepare_metadata(presentation)
             #self.backend.populate_metadata(data)
     
@@ -396,12 +393,12 @@ class FreeseerCore:
             if audiomixer is not None:
                 audiomixer.load_config(self.plugman)
                 
-                # Get audio mixer inputs bins
+                # Get audio mixer inputs bins.
                 audiomixer_inputs = []
                 
                 audioinputs = audiomixer.get_inputs()
                 for i in audioinputs:
-                    logging.debug("Loading Audio Mixer Input: " + i)
+                    logging.debug("Loading Audio Mixer Input: %s", i)
                     audio_input = self.plugman.plugmanc.getPluginByName(i, "AudioInput").plugin_object
                     audio_input.load_config(self.plugman)
                     audiomixer_inputs.append(audio_input.get_audioinput_bin())
@@ -414,12 +411,12 @@ class FreeseerCore:
             if videomixer is not None:
                 videomixer.load_config(self.plugman)
                 
-                # Get video mixer inputs bins
+                # Get video mixer inputs bins.
                 videomixer_inputs = []
                 
                 videoinputs = videomixer.get_inputs()
                 for i in videoinputs:
-                    logging.debug("Loading Video Mixer Input: " + i)
+                    logging.debug("Loading Video Mixer Input: %s", i)
                     video_input = self.plugman.plugmanc.getPluginByName(i, "VideoInput").plugin_object
                     video_input.load_config(self.plugman)
                     videomixer_inputs.append(video_input.get_videoinput_bin())
@@ -429,19 +426,13 @@ class FreeseerCore:
         self.pause()
 
     def record(self):
-        '''
-        Informs backend to begin recording presentation.
-        '''
+        """Informs backend to begin recording presentation."""
         self.backend.record()
 
     def pause(self):
-        """
-        Sets the pipeline up in paused state.
-        """
+        """Sets the pipeline up in paused state."""
         self.backend.pause()
 
     def stop(self):
-        '''
-        Informs backend to stop recording.
-        '''
+        """Informs backend to stop recording."""
         self.backend.stop()
