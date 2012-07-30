@@ -30,7 +30,7 @@ import gst
 from freeseer.framework.plugin import IAudioInput
 
 class ALSASrc(IAudioInput):
-    name = "AutoAudioSource"
+    name = "Auto Audio Source"
     
     def get_audioinput_bin(self):
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
