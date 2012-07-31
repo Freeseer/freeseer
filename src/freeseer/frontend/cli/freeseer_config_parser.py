@@ -39,6 +39,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.plugman = self.core.get_plugin_manager()
         self.db_connector = self.core.db 
         self.config = self.core.config 
+        self.plugins = self._get_plugins()
         
         self.RESOLUTION_LIST = self._get_resolution_list(self.core.config.resmap)
         self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")]
@@ -146,24 +147,28 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         
         else:
             args = mode.split(" ")
-            plugin = self.plugman.plugmanc.getPluginByName(args[1], category=args[0])
-            plugin.plugin_object.load_config(self.plugman)
-            if(len(args) == 2):                
-                try:
-                    for property in plugin.plugin_object.get_properties():
-                        print property
-                except NotImplementedError:
-                    print "This plugin is not supported by CLI"
-            if(len(args) == 3):
-                try:
-                    print plugin.plugin_object.get_property_value(args[2])
-                except NotImplementedError:
-                    print "This plugin is not supported by CLI"
-            if(len(args) == 4):
-                try:
-                    plugin.plugin_object.set_property_value(args[2], args[3])
-                except NotImplementedError:
-                    print "This plugin is not supported by CLI"
+            plugin_name = self._get_plugin_name(args[1])
+            plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[0])
+            if plugin:
+                plugin.plugin_object.load_config(self.plugman)
+                if(len(args) == 2):                
+                    try:
+                        for property in plugin.plugin_object.get_properties():
+                            print property
+                    except NotImplementedError:
+                        print "This plugin is not supported by CLI"
+                if(len(args) == 3):
+                    try:
+                        print plugin.plugin_object.get_property_value(args[2])
+                    except NotImplementedError:
+                        print "This plugin is not supported by CLI"
+                if(len(args) == 4):
+                    try:
+                        plugin.plugin_object.set_property_value(args[2], args[3])
+                    except NotImplementedError:
+                        print "This plugin is not supported by CLI"
+            else:
+                print "There's no plugin with such informations"
                            
     def show_all_configs(self):
         self._show_video_configs()
@@ -274,7 +279,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.config.enable_video_recoding = False
         self.config.writeConfig() 
         
-    def turn_audiofeedback_off(self):
+    def turn_audiofeedback_off(self):List the talks filtered with the respective mode/value typed. 
         self.config.audio_feedback = False
         self.config.writeConfig() 
         
@@ -367,4 +372,29 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         for key in self.config.resmap:
             list.append(key)
         return list
-           
+    
+    def _get_plugins(self):
+        plugins = self.plugman.plugmanc.getAllPlugins()
+        plugins_data = []
+        
+        for plugin in plugins:
+            plugin_info = []
+            plugin_info.append(plugin.name.replace(" ",""))
+            plugin_info.append(plugin.name)
+            properties = []
+            try:
+                for property in plugin.plugin_object.get_properties():
+                    properties.append(property)
+            except:
+                pass
+            plugin_info.append(properties)
+            plugins_data.append(plugin_info)
+            
+        return plugins_data
+
+    def _get_plugin_name(self, plugin_replaced):
+        for entry in self.plugins:
+            if entry[0] == plugin_replaced:
+                return entry[1]
+        return None
+        

@@ -86,13 +86,20 @@ class FreeSeerShell(cmd.Cmd):
         
     def do_help(self, line):
         if(line == "record"):
-            subprocess.call(["vim","-R",os.getcwd() + "/freeseer/frontend/cli/help/record_help.txt"])
+            content = open(os.path.join("freeseer","frontend","cli","help","record.txt"), 'r').read()
+            print content
         elif(line == "talk"):
-            subprocess.call(["vim","-R",os.getcwd() + "/freeseer/frontend/cli/help/talk_help.txt"])
+            content = open(os.path.join("freeseer","frontend","cli","help","talkeditor.txt"), 'r').read()
+            print content
         elif(line == "config"):
-            subprocess.call(["vim","-R",os.getcwd() + "/freeseer/frontend/cli/help/config_help.txt"])
+            content = open(os.path.join("freeseer","frontend","cli","help","config.txt"), 'r').read()
+            print content
+        elif(len(line.replace(" ","")) == 0):
+            curpath = os.path.abspath(os.curdir)
+            content = open(os.path.join("freeseer","frontend","cli","help","help.txt"), 'r').read()
+            print content
         else:
-            print "The '" + line + "' topic is not known" 
+            print "The topic '" + line + "' is not known" 
 
     #TODO   
     def complete_config(self, text, line, start_index, end_index):        
