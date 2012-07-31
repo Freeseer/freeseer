@@ -66,5 +66,5 @@ python C:\Python27\Lib\site-packages\easy_install.py yapsy
 xcopy /y /s "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\sdk\bindings\python\v2.7\lib" "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\lib\"
 xcopy /y /s "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\lib\site-packages" "C:\Python27\Lib\site-packages"
 
-:: TODO Delete the dependencies installers.
+:: Delete the dependencies installers.
 del /q deps
