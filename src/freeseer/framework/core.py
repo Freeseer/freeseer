@@ -77,20 +77,25 @@ class FreeseerCore:
 
 
     def get_record_name(self, presentation, extension):
-        """Returns the filename to use when recording."""
+        """Returns the filename to use when recording.
+        
+        If a record name with a .None extension is returned, the record name
+        will just be ignored by the output plugin (e.g. Video Preview plugin).
+        """
         recordname = self.make_record_name(presentation)
                 
         count = 0
         tempname = recordname
         
-        # check if this record name already exists in this directory and add "-NN" ending if so.
+        # Add "-NN" to the end of a duplicate record name to make it unique.
         while (self.duplicate_exists("%s.%s" % (tempname, extension))):
-            tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+            tempname = "{}-{}".format(recordname, self.make_id_from_string(count, "0123456789"))
             count += 1
 
         recordname = "%s.%s" % (tempname, extension)
                      
-        logging.debug('Set record name to %s', recordname)        
+        if extension is not None:
+            logging.debug('Set record name to %s', recordname)        
         
         return recordname
 
@@ -389,7 +394,7 @@ class FreeseerCore:
                                          metadata)
         
         if self.config.enable_audio_recoding:
-            logging.debug("Loading Audio recording plugins...")
+            logging.debug("Loading Audio Recording plugins...")
             audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
             if audiomixer is not None:
                 audiomixer.load_config(self.plugman)
@@ -407,7 +412,7 @@ class FreeseerCore:
                 self.backend.load_audiomixer(audiomixer, audiomixer_inputs)
         
         if self.config.enable_video_recoding:
-            logging.debug("Loading Video recording plugins...")
+            logging.debug("Loading Video Recording plugins...")
             videomixer = self.plugman.plugmanc.getPluginByName(self.config.videomixer, "VideoMixer").plugin_object
             if videomixer is not None:
                 videomixer.load_config(self.plugman)
