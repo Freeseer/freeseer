@@ -1,0 +1,16 @@
+FreeSeer Shell, version 1.0
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+
+Talk Editor Tool Command Line Interface
+This CLI defines all commands provided by the talk editor tool on FreeSeer.
+The following commands are supported:
+
+> talk show talks [mode] [value] > Lists all talks stored on database. If mode/value are provided, the talks are filtered. The available modes are:
+    >> -e > Talk Event Filter
+    >> -p > Talk Id Filter
+    >> -r > Talk Room Filter
+> talk show events > Lists all different events with presentations assigned to
+> talk show talk -p #: > List the talk with the specified id
+> talk remove talk -p # > Removes a presentation with the respective id. If --all option is added instead of the talk id, the database is cleaned.
+> talk add talk > Allows the user to add a new talk by providing its informations
+> talk update -p # > Allows the user to update an existent talk by providing its news informations

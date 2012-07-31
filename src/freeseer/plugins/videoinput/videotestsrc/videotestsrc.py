@@ -73,7 +73,7 @@ class VideoTestSrc(IVideoInput):
         except TypeError:
             # Temp fix for issue where reading checkbox the 2nd time causes TypeError.
             pass
-    
+        
     def get_widget(self):
         if self.widget is None:
             self.widget = QtGui.QWidget()
@@ -121,3 +121,27 @@ class VideoTestSrc(IVideoInput):
         self.pattern = pattern
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
         self.plugman.save()
+        
+    def get_properties(self):
+        return ['Live','Pattern']
+    
+    def get_property_value(self, property):
+        if property == 'Live':
+            return self.live
+        elif property == 'Pattern':
+            return self.pattern
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if property == 'Live':
+            if(value == "ON"):                
+                self.set_live(True)
+            elif(value == "OFF"):
+                self.set_live(False)
+            else:
+                return "Please choose one of the acceptable variable values: ON or OFF"
+        elif property == "Pattern":
+            self.set_pattern(value)            
+        else:
+            return "Error: There's no property with such name" 

@@ -81,15 +81,17 @@ class FreeseerCore:
         '''
         Returns the filename to use when recording.
         '''
-        recordname = self.make_record_name(presentation)
-                
-        count = 0
-        tempname = recordname
         
-        # check if this record name already exists in this directory and add "-NN" ending if so.
-        while(self.duplicate_exists("%s.%s" % (tempname, extension))):
-            tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
-            count+=1
+        if presentation:
+            recordname = self.make_record_name(presentation)
+                    
+            count = 0
+            tempname = recordname
+            
+            # check if this record name already exists in this directory and add "-NN" ending if so.
+            while(self.duplicate_exists("%s.%s" % (tempname, extension))):
+                tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+                count+=1
 
         recordname = "%s.%s" % (tempname, extension)
                      
@@ -166,6 +168,7 @@ class FreeseerCore:
 
     def make_shortname(self, providedString):
         '''
+        metadata = self.prepare_metadata(presentation)
         Returns the first 6 characters of a string.
         Strip out non alpha-numeric characters, spaces, and most punctuation
         '''

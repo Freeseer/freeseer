@@ -1,0 +1,29 @@
+FreeSeer Shell, version 1.0
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+
+Configuration Tool Command Line Interface
+This CLI defines all commands provided by the configtool on FreeSeer.
+The following commands are supported:
+
+> config show --all > Lists all available configurations and they respective values
+> config video show > List all available video configurations and they respective values
+> config video set -i # > Sets the current video mixer to the specified index. The list of available mixers can be obtained in the 'config video show' command
+> config video on/off > Turns video on/off
+> config video resolution show > Lists all available resolutions
+> config video resolution set # > Sets the current resolution to the specified index
+> config audio show > List all available audio configurations and they respective values
+> config audio set # > Sets the current audio mixer to the specified index. The list of available mixers can be obtained in the 'config audio show' command
+> config audio on/off > Turns audio on/off
+> config audio feedback on/off > Turns audio feedback on/off.
+> config dir show > Shows the current output directory
+> config dir set -d <path> > Sets the output directory to the provided one. Automatically checks that it exists and is writable. Errors if not.
+> config file on/off > Turns file plugin on/off
+> config streaming on/off: Turns streaming plugin on or off
+
+>>> Command line plugin support <<<
+
+FreeSeer plugins can also be managed via config tool CLI. The general syntax used to perform such job is described as follows:
+
+> config <PLUGIN CATEGORY> <PLUGIN NAME> [<PLUGIN PROPERTY>] [<PLUGIN VALUE>]
+
+In case neither plugin property or plugin value are provided, a list of available properties is shown. In case only plugin property are provided, the current property value is shown. Finally, in case both plugin property and plugin value are provided, the property is set to the respective value

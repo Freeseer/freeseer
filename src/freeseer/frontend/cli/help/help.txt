@@ -1,0 +1,6 @@
+FreeSeer Shell, version 1.0
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+
+FreeSeer Command Line Interface
+
+Type 'help <tool name>' to find out more about this tool. <tool name> can be 'talk', 'config' or 'record'

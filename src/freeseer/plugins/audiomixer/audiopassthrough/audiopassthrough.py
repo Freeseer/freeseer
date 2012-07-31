@@ -109,3 +109,32 @@ class AudioPassthrough(IAudioMixer):
     def set_input(self, input):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", input)
         self.plugman.save()
+        
+    def get_properties(self):
+        return ['Input1']
+    
+    def get_property_value(self, property):
+        if property == "Input1":
+            return self.input1
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if(property == "Input1"):
+            if(value == "AudioTest"):
+                self.set_input("Audio Test Source")
+            elif(value == "AutoAudio"):
+                self.set_input("Auto Audio Source")
+            elif(value == "Pulse"):
+                self.set_input("Pulse Audio Source")
+            elif(value == "Jack"):
+                self.set_input("Jack Audio Source")
+            elif(value == "Alsa"):
+                self.set_input("ALSA Audio Source")
+            else:
+                print "Choose an available Input"
+                #TODO List available options              
+        else:
+            return "Error: There's no property with such name"   
+        
+        
