@@ -7,10 +7,10 @@ Maintainer: Andrew Ross <fosslc@gmail.com>
 Architecture: all
 Homepage: https://github.com/Freeseer/freeseer/wiki
 Description: Freeseer is a tool for capturing or streaming video.
-It enables you to capture great presentations, demos, training material,
-and other videos. It handles desktop screen-casting with ease.
-Freeseer is one of a few such tools that can also record vga output
-or video from external sources such as firewire, usb, s-video, or rca.
-It is particularly good at handling very large conferences with hundreds 
-of talks and speakers using varied hardware and operating systems.
-Freeseer itself can run on commodity hardware such as a laptop or desktop.
+ It enables you to capture great presentations, demos, training material,
+ and other videos. It handles desktop screen-casting with ease.
+ Freeseer is one of a few such tools that can also record vga output
+ or video from external sources such as firewire, usb, s-video, or rca.
+ It is particularly good at handling very large conferences with hundreds 
+ of talks and speakers using varied hardware and operating systems.
+ Freeseer itself can run on commodity hardware such as a laptop or desktop.
