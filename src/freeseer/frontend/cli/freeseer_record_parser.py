@@ -41,9 +41,6 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         # command line arguments supported
         self.add_argument('-p',dest='id',type=int,
                           help='starts recording the talk with the specified presentation id')
-        self.add_argument('-o',dest='path',type=str,
-                          help="records the currently set video source (default:desktop) to a video file called" \
-                          "myvideo.ogg in the /mypath directory.")
         
     def analyse_command(self, command):  
         '''
@@ -58,11 +55,8 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         '''
         if(namespace.id):
             self.record_by_id(namespace.id)
-        elif(namespace.path):
-            self.record_by_path(namespace.path)
         else:
-            self.default_record()
-            
+            print "Please specify the talk id"
     
     def record_by_id(self,id):
         '''
@@ -70,14 +64,18 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         '''        
         prs = self.db_connector.get_presentation(id)  
         if(prs):
-            self.core.load_backend(prs)
-            self.core.record()
-            print "\n Recording on progress, press <space> to stop \n"          
-      
-            while(self.getchar() != " "):            
-                continue
-        
-            self.core.stop();
+            try:
+                self.core.load_backend(prs)
+                self.core.record()
+                print "\n Recording on progress, press <space> to stop \n"          
+          
+                while(self.getchar() != " "):            
+                    continue
+            
+                self.core.stop();
+            except Exception, e:
+                #TODO Try to provide more details about the error
+                print "Error while recording"
         
         else:
             print "\n*** Error: There's no presentation with such id\n"

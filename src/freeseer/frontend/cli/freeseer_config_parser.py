@@ -146,29 +146,32 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         #plugin support
         
         else:
-            args = mode.split(" ")
-            plugin_name = self._get_plugin_name(args[1])
-            plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[0])
-            if plugin:
-                plugin.plugin_object.load_config(self.plugman)
-                if(len(args) == 2):                
-                    try:
-                        for property in plugin.plugin_object.get_properties():
-                            print property
-                    except NotImplementedError:
-                        print "This plugin is not supported by CLI"
-                if(len(args) == 3):
-                    try:
-                        print plugin.plugin_object.get_property_value(args[2])
-                    except NotImplementedError:
-                        print "This plugin is not supported by CLI"
-                if(len(args) == 4):
-                    try:
-                        plugin.plugin_object.set_property_value(args[2], args[3])
-                    except NotImplementedError:
-                        print "This plugin is not supported by CLI"
-            else:
-                print "There's no plugin with such informations"
+            try:
+                args = mode.split(" ")
+                plugin_name = self._get_plugin_name(args[1])
+                plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[0])
+                if plugin:
+                    plugin.plugin_object.load_config(self.plugman)
+                    if(len(args) == 2):                
+                        try:
+                            for property in plugin.plugin_object.get_properties():
+                                print property
+                        except NotImplementedError:
+                            print "This plugin is not supported by CLI"
+                    if(len(args) == 3):
+                        try:
+                            print plugin.plugin_object.get_property_value(args[2])
+                        except NotImplementedError:
+                            print "This plugin is not supported by CLI"
+                    if(len(args) == 4):
+                        try:
+                            plugin.plugin_object.set_property_value(args[2], args[3])
+                        except NotImplementedError:
+                            print "This plugin is not supported by CLI"
+                else:
+                    print "There's no plugin with such informations"
+            except:
+                print "Invalid Syntax"
                            
     def show_all_configs(self):
         self._show_video_configs()
