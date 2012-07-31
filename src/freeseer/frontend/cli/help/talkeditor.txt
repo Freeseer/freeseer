@@ -11,6 +11,6 @@ The following commands are supported:
     >> -r > Talk Room Filter
 > talk show events > Lists all different events with presentations assigned to
 > talk show talk -p #: > List the talk with the specified id
-> talk remove talk -p # > Removes a presentation with the respective id
+> talk remove talk -p # > Removes a presentation with the respective id. If --all option is added instead of the talk id, the database is cleaned.
 > talk add talk > Allows the user to add a new talk by providing its informations
 > talk update -p # > Allows the user to update an existent talk by providing its news informations
