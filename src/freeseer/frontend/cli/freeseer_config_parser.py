@@ -279,7 +279,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         self.config.enable_video_recoding = False
         self.config.writeConfig() 
         
-    def turn_audiofeedback_off(self):List the talks filtered with the respective mode/value typed. 
+    def turn_audiofeedback_off(self):
         self.config.audio_feedback = False
         self.config.writeConfig() 
         
