@@ -66,10 +66,10 @@ mkdir freeseer
 cd freeseer
 
 :: Download of Freeseer itself
-..\wget http://dl.dropbox.com/u/5695800/freeseer/freeseer-3.0.0.linux-i686.exe
+..\wget http://dl.dropbox.com/u/5695800/freeseer/freeseer-3.0.0.win32.exe
 
 :: Install Freeseer
-freeseer-3.0.0.linux-i686.exe
+freeseer-3.0.0.win32.exe
 
 cd ..
 
