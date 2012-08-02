@@ -75,7 +75,6 @@ class ClientG(QtGui.QWidget):
         self.startButton.move(10, 175)  
         self.mainLayout.addWidget(self.startButton)
         
-         
         self.connectButton = QtGui.QPushButton('Connect', self)
         self.connectButton.move(100, 175)
         self.connectButton.setEnabled(False)
@@ -96,6 +95,15 @@ class ClientG(QtGui.QWidget):
         self.recentListWidget.move(300, 125)
         self.mainLayout.addWidget(self.recentListWidget)
         
+        self.propertyLabel = QtGui.QTextEdit(self)
+        self.propertyLabel.move(25, 350)
+        self.propertyLabel.resize(256, 80)
+        self.propertyLabel.setText('Host Instance:\nIP:\nPort:\nPassphrase:')
+        self.mainLayout.addWidget(self.propertyLabel)
+        
+        self.pushButton = QtGui.QPushButton('Add Properties',self)
+        self.mainLayout.addWidget(self.pushButton)
+        
         #Connections
         self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
         self.connect(self.socket, QtCore.SIGNAL('connected()'), self.connected)
@@ -104,12 +112,29 @@ class ClientG(QtGui.QWidget):
         self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.portLabelEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.hostLabelEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
-        
         self.connect(self.recentListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.recentListHandler)
+        self.connect(self.pushButton, QtCore.SIGNAL('pressed()'), self.addProperties)
          
         self.resize(300, 300)
         self.hide()
     
+    def addProperties(self):
+        input = self.propertyLabel.toPlainText()
+        list = input.split("\n")
+        ip = list[1].split(":")[1]
+        port = list[2].split(":")[1]
+        passPhrase =  list[3].split(":")[1]
+        
+        if ip is not None:
+            self.hostLabelEdit.setText(ip)
+        if port is not None:
+            self.portLabelEdit.setText(port)
+        if passPhrase is not None:
+            self.passPhraseEdit.setText(passPhrase)
+        
+        
+    
+        
     def enableConnectButton(self):
         if self.passPhraseEdit.text() == '' or self.hostLabelEdit.text() == '' or self.portLabelEdit.text() == '':
             self.connectButton.setEnabled(False)
@@ -125,26 +150,26 @@ class ClientG(QtGui.QWidget):
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
         self.connect(self.socket, QtCore.SIGNAL("disconnected()"), self.disconnectFromHost)
     
-    #
-    #Function for sending message to the connected server
-    #    
+    '''
+    Function for sending message to the connected server
+    '''  
     def sendMessage(self, message):
         logging.info("Sending message: %s", message)
         block = QtCore.QByteArray()
         block.append(message)
         self.socket.write(block)
     
-    #
-    #This function is for sending the passphrase to the server. It uses the sendMessage function
-    #
+    '''
+    This function is for sending the passphrase to the server. It uses the sendMessage function
+    '''
     def sendPassphrase(self):
         passPhrase = base64.b64encode(self.passPhraseEdit.text())
         #self.sendMessage(self.passPhraseEdit.text())
         self.sendMessage(passPhrase)
     
-    #
-    #This function is for reading message from the server
-    #
+    '''
+    This function is for reading message from the server
+    '''
     def readMessage(self):
         message = self.socket.read(self.socket.bytesAvailable()) 
         logging("Server said:%s", message)  
@@ -159,17 +184,17 @@ class ClientG(QtGui.QWidget):
         if self.socket.waitForConnected(1000) is False :
             logging.error("Socket error %s", self.socket.errorString())
         
-    #
-    #When there is a socket error this function is called to show the error in a QMessageBox
-    #    
+    '''
+    When there is a socket error this function is called to show the error in a QMessageBox
+    '''    
     def displayError(self, socketError):
         messageBox = QtGui.QMessageBox.critical(self, QtCore.QString('Error!'), 
                                                    QtCore.QString(self.socket.errorString()))
         logging.error("Socket error %s" % self.socket.errorString())
     
-    #
-    #This function is for updating the sockets status and the statusLabel. It's called when a stateChanged signal is triggered.
-    #
+    '''
+    This function is for updating the sockets status and the statusLabel. It's called when a stateChanged signal is triggered.
+    '''
     def updateStatus(self):
         state = self.socket.state()
         if state == 0:
@@ -200,9 +225,9 @@ class ClientG(QtGui.QWidget):
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
         
     
-    #
-    #Function for disconnecting the client from the host.
-    #
+    '''
+    Function for disconnecting the client from the host.
+    '''
     def disconnectFromHost(self):
         logging.info("Disconnected from host")
         self.socket.disconnectFromHost()
@@ -215,9 +240,9 @@ class ClientG(QtGui.QWidget):
     def close(self):
         self.socket.close()
     
-    #
-    #This function is for getting the recent connections from the database and load it to the list
-    #    
+    '''
+    This function is for getting the recent connections from the database and load it to the list
+    '''    
     def getRecentConnections(self):
         logging.info("Getting recent connections from database")
         con = sqlite3.connect('test.db')
@@ -230,9 +255,9 @@ class ClientG(QtGui.QWidget):
                 listItem = ClientListWidget(data[0], data[1], data[2])
                 self.recentListWidget.addItem(listItem)
     
-    #
-    #This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
-    #   
+    '''
+    This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
+    '''   
     def addToRecentConnections(self):
         con = sqlite3.connect('test.db')
         with con:
@@ -257,19 +282,19 @@ class ClientG(QtGui.QWidget):
                 logging.info("Recent connection %s %d added ", self.addr, self.port)
                 self.getRecentConnections()
         
-    #
-    #Handler for the recent connections list. When you click on a recent connection the details of the connection are loaded 
-    #
+    '''
+    Handler for the recent connections list. When you click on a recent connection the details of the connection are loaded 
+    '''
     def recentListHandler(self):
         self.hostLabelEdit.setText(self.recentListWidget.selectedItems()[0].ip)
         port = str(self.recentListWidget.selectedItems()[0].port)
         self.portLabelEdit.setText(port)
         self.passPhraseEdit.setText(self.recentListWidget.selectedItems()[0].passPhrase)
         
-#
-#Custom QListWidgetItem
-#It is used for the recent connections list. 
-#
+'''
+Custom QListWidgetItem
+It is used for the recent connections list. 
+'''
 class ClientListWidget(QtGui.QListWidgetItem):
     
     def __init__(self, ip, port, passPhrase):
