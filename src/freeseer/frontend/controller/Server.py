@@ -66,6 +66,12 @@ class ServerWidget(QtGui.QWidget):
         self.messageButton.setEnabled(False)
         self.messageButton.move(320, 10)
         
+        self.propertyLabel = QtGui.QTextEdit(self)
+        self.propertyLabel.move(25, 350)
+        self.propertyLabel.resize(256, 80)
+        self.propertyLabel.setReadOnly(True)
+        self.propertyLabel.setText('Host Instance:\nIP:\nPort:\nPassphrase:')
+        
         self.passPhraseLabel = QtGui.QLabel('Passphrase:' + self.passPhrase, self)
         self.passPhraseLabel.move(190, 40)
         
@@ -104,7 +110,7 @@ class ServerWidget(QtGui.QWidget):
         self.disconnectButton = QtGui.QPushButton('Disconnect', self)
         self.disconnectButton.move(300, 290)
         self.disconnectButton.setEnabled(False)
-          
+        
         #Connections
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
         self.connect(self.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
@@ -123,14 +129,21 @@ class ServerWidget(QtGui.QWidget):
             self.startButton.setText(QtCore.QString('Stop Server'))
             self.status = 'Running' 
             string = 'IP:' + self.server.serverAddress().toString() + ' Port:' + str(self.server.serverPort())
-            logging.info(u"Started server IP:%s Port:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
+            logging.info("Started server IP:%s Port:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
             self.statusLabel2.setText(QtCore.QString(string))
+            self.updateProperties()
         elif self.status == 'Running':
             self.server.close()
             self.startButton.setText(QtCore.QString('Start Server'))
             self.status = 'Off'
         self.statusLabel.setText('Server status:' + self.status)
     
+    def updateProperties(self):
+        passPhrase = base64.b64decode(self.passPhrase)
+        self.propertyLabel.setText('Host Instance:\nIP:' + self.server.serverAddress().toString() + '\nPort:' + str(self.server.serverPort())
+                                    + '\nPassphrase:' + base64.b64decode(self.passPhrase))
+        print passPhrase
+        
     def enableMessageButton(self):
         if self.messageLine == '':
             self.messageButton.setEnabled(False)
@@ -191,9 +204,9 @@ class ServerWidget(QtGui.QWidget):
             self.sendMessage(client, self.messageLine.text())
             #client.write(block)
     
-    #
-    #This function is for changing the passphrase. It saves the new passphrase in the self.passPhrase after encoding it.
-    #
+    '''
+    This function is for changing the passphrase. It saves the new passphrase in the self.passPhrase after encoding it.
+    '''
     def setPassPhrase(self):
         self.passPhrase = self.passPhraseEdit.text()
         logging.info ("Passphrase changed to %s", self.passPhraseEdit.text())
@@ -201,11 +214,13 @@ class ServerWidget(QtGui.QWidget):
         self.passPhraseEdit.clear()
         passPhrase = base64.b64encode(self.passPhrase)
         self.passPhrase = passPhrase
+        print self.passPhrase
+        self.updateProperties()
     
-    #
-    #This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
-    #Client is accepted if the passphrases match. Otherwise client is rejected
-    #    
+    '''
+    This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
+    Client is accepted if the passphrases match. Otherwise client is rejected
+    '''  
     def readPassPhrase(self):
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
@@ -220,9 +235,9 @@ class ServerWidget(QtGui.QWidget):
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
         
-    #
-    #This is the function to handle a new connection.
-    #
+    '''
+    This is the function to handle a new connection.
+    '''
     def acceptConnection(self):
         client = self.server.nextPendingConnection()
         self.connect(client, QtCore.SIGNAL("disconnected()"), self.clientDisconnected)
@@ -237,9 +252,9 @@ class ServerWidget(QtGui.QWidget):
         self.updateList()
         self.updateButtons()
     
-    #
-    #This method is to update the 
-    #
+    '''
+    This method is to update the list
+    '''
     def updateList(self):
         self.qListWidget.clear()
         for i in range(0, len(self.clients)):
@@ -259,9 +274,9 @@ class ServerWidget(QtGui.QWidget):
         self.clients.remove(client)
         self.updateList()
 
-    #
-    #Sends a record command to the selected clients
-    #     
+    '''
+    Sends a record command to the selected clients
+    '''     
     def sendRecordCommand (self):
         buttonText = self.startRecordButton.text()
         if buttonText == 'Start Recording':
@@ -280,9 +295,9 @@ class ServerWidget(QtGui.QWidget):
                 self.qListWidget.selectedItems()[i].changeStatus('Paused')
         self.updateButtons()
     
-    #
-    #Sends a stop command to selected clients
-    #
+    '''
+    Sends a stop command to selected clients
+    '''
     def sendStopCommand (self):
         logging.info("Stop record send to")
         for i in range(0, len(self.qListWidget.selectedItems())):
@@ -295,9 +310,9 @@ class ServerWidget(QtGui.QWidget):
         for i in range(0, len(self.clients)):
             if self.clients[i].localAddress().toString() == ip:
                 self.sendMessage(self.clients[i], 'Record')
-    #
-    #Method to disconnect all clients selected from the list
-    #
+    '''
+    Method to disconnect all clients selected from the list
+    '''
     def disconnectClients(self):
         for i in range(0, len(self.qListWidget.selectedItems())):
             client = self.qListWidget.selectedItems()[i].client
@@ -367,8 +382,10 @@ class ServerG(QtGui.QMainWindow):
         
         self.retranslate()
 
-#Custom QListWidgetItem class
-#Additionally it includes a client object
+'''
+Custom QListWidgetItem class
+Additionally it includes a client object
+'''
 class ServerListWidget(QtGui.QListWidgetItem):
     
     def __init__(self, client):
