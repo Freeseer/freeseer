@@ -22,6 +22,27 @@
 @setlocal enableextensions
 @cd /d "%~dp0"
 
+@echo off
+
+SET "sep=^&"
+SET "linebreak=VBNewLine"
+SET msg1="You are about to install the requirements to run Freeseer. Please notice we are on an experimental stage, so we aren't held liable if you install something that isn't really needed to run the application. The applications to be installed are listed below:"
+SET msg2="Do you want to proceed with the installation?"
+SET req1="- GStreamer Beta04-0.10.7"
+SET req2="- Python 2.7.2"
+SET req3="- Python setuptools 0.6c11"
+SET req4="- PyQt4"
+SET req5="- PyGObject-2.28.3"
+SET title="Install Freeseer's dependencies?"
+
+ECHO WScript.Quit  MsgBox((%MSG1%%SEP%%LINEBREAK%%SEP%%LINEBREAK%%SEP%%REQ1%%SEP%%LINEBREAK%%SEP%%REQ2%%SEP%%LINEBREAK%%SEP%%REQ3%%SEP%%LINEBREAK%%SEP%%REQ4%%SEP%%LINEBREAK%%SEP%%REQ5%%SEP%%LINEBREAK%%SEP%%LINEBREAK%%SEP%%MSG2%), vbYesNo + vbExclamation , %TITLE%) = vbYes > #.vbs
+@#.vbs || goto end
+EXIT
+:end
+@del #.vbs
+
+@echo on
+
 cd Freeseer-for-Windows
 
 :: Remove dependencies
