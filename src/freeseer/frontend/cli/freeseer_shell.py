@@ -47,7 +47,7 @@ class FreeSeerShell(cmd.Cmd):
         
         self.prompt = "freeseer> "
         self.intro = "\nfreeseer - video recording and streaming software\n" \
-        "Copyright (C) 2011  Free and Open Source Software Learning Centre\n"       
+        "Copyright (C) 2011-2012  Free and Open Source Software Learning Centre\n"       
         
     def do_exit(self, line):
         """
