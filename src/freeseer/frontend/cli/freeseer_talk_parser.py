@@ -120,6 +120,8 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
+            print "Talk Event: " + unicode(query.value(5).toString())
+            print "Talk Room: " + unicode(query.value(6).toString())
             print "#########################################################################"
             count+=1
         print "-----------------------------------------------------------------------------\n"
@@ -140,12 +142,13 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
     def show_talk_by_event(self, event):
         count = 1
         query = self.db_connector.get_talks_by_event(event)
-        
         while query.next():
             print "Talk #" + str(count)
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
+            print "Talk Event: " + unicode(query.value(5).toString())
+            print "Talk Room: " + unicode(query.value(6).toString())
             print "#########################################################################"
             count+=1
                 
@@ -158,6 +161,8 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
+            print "Talk Event: " + unicode(query.value(5).toString())
+            print "Talk Room: " + unicode(query.value(6).toString())
             print "#########################################################################"
             count+=1      
                 
@@ -229,9 +234,9 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                 
             new_speaker = raw_input("Type the new presentation speaker (<ENTER> to keep old data): ")
             speaker = new_speaker if len(new_speaker) > 0 else presentation.speaker
-            
+                
             new_room = raw_input("Type the new room where the presentation will be performed (<ENTER> to keep old data): ")  
-            room = new_room if len(new_room) > 0 else presentation.room    
+            room = new_room if len(new_room) > 0 else presentation.room
             
             new_event = raw_input("Type the new event that held the presentation (<ENTER> to keep old data): ")
             event = new_event if len(new_event) > 0 else presentation.event
