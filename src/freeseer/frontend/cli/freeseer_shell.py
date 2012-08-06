@@ -37,10 +37,7 @@ class FreeSeerShell(cmd.Cmd):
     Freeseer Shell. Used to provide an interface to the CLI frontend
     '''
     def __init__(self):
-        cmd.Cmd.__init__(self)
-        
-        
-        
+        cmd.Cmd.__init__(self)        
         self.core = FreeseerCore(self)   
        
         #Not working. TODO Check why
@@ -50,12 +47,12 @@ class FreeSeerShell(cmd.Cmd):
         
         self.prompt = "freeseer> "
         self.intro = "\nfreeseer - video recording and streaming software\n" \
-        "Copyright (C) 2011  Free and Open Source Software Learning Centre\n"
-        
-        
-        
+        "Copyright (C) 2011  Free and Open Source Software Learning Centre\n"       
         
     def do_exit(self, line):
+        """
+        Exits the interpreter.
+        """
         self._set_loggers(True)
         sys.exit()
         
@@ -65,6 +62,10 @@ class FreeSeerShell(cmd.Cmd):
     def do_record(self, line):
         parser = FreeSeerRecordParser(self.core)
         parser.analyse_command(line)
+    
+    def help_record(self):
+        print open(os.path.join("freeseer","frontend","cli","help","record.txt"), 'r').read()
+
 
     #TODO   
     def complete_record(self, text, line, start_index, end_index):        
@@ -74,6 +75,9 @@ class FreeSeerShell(cmd.Cmd):
     def do_talk(self, line):
         parser = FreeSeerTalkParser(self.core)
         parser.analyse_command(line)
+    
+    def help_talk(self):
+        print open(os.path.join("freeseer","frontend","cli","help","talkeditor.txt"), 'r').read()
 
     #TODO   
     def complete_talk(self, text, line, start_index, end_index):        
@@ -83,23 +87,9 @@ class FreeSeerShell(cmd.Cmd):
     def do_config(self, line):
         parser = FreeSeerConfigParser(self.core)
         parser.analyse_command(line)
-        
-    def do_help(self, line):
-        if(line == "record"):
-            content = open(os.path.join("freeseer","frontend","cli","help","record.txt"), 'r').read()
-            print content
-        elif(line == "talk"):
-            content = open(os.path.join("freeseer","frontend","cli","help","talkeditor.txt"), 'r').read()
-            print content
-        elif(line == "config"):
-            content = open(os.path.join("freeseer","frontend","cli","help","config.txt"), 'r').read()
-            print content
-        elif(len(line.replace(" ","")) == 0):
-            curpath = os.path.abspath(os.curdir)
-            content = open(os.path.join("freeseer","frontend","cli","help","help.txt"), 'r').read()
-            print content
-        else:
-            print "The topic '" + line + "' is not known" 
+    
+    def help_config(self):
+        print open(os.path.join("freeseer","frontend","cli","help","config.txt"), 'r').read()
 
     #TODO   
     def complete_config(self, text, line, start_index, end_index):        
