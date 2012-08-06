@@ -229,12 +229,14 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                 
             new_speaker = raw_input("Type the new presentation speaker (<ENTER> to keep old data): ")
             speaker = new_speaker if len(new_speaker) > 0 else presentation.speaker
-                
+            
+            new_room = raw_input("Type the new room where the presentation will be performed (<ENTER> to keep old data): ")  
+            room = new_room if len(new_room) > 0 else presentation.room    
+            
             new_event = raw_input("Type the new event that held the presentation (<ENTER> to keep old data): ")
             event = new_event if len(new_event) > 0 else presentation.event
                 
-            new_room = raw_input("Type the new room where the presentation will be performed (<ENTER> to keep old data): ")  
-            room = new_room if len(new_room) > 0 else presentation.room
+            
             
             new_presentation = Presentation("")
             
