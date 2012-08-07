@@ -26,23 +26,23 @@ import cmd
 import sys
 import subprocess
 import os
+import logging
 
 from freeseer.framework.core import FreeseerCore
 from freeseer_record_parser import FreeSeerRecordParser
 from freeseer_talk_parser import FreeSeerTalkParser
 from freeseer_config_parser import FreeSeerConfigParser
+from help import Help
 
 class FreeSeerShell(cmd.Cmd):
     '''
     Freeseer Shell. Used to provide an interface to the CLI frontend
     '''
-    def __init__(self):
-        cmd.Cmd.__init__(self)        
-        self.core = FreeseerCore(self)   
-       
-        #Not working. TODO Check why
-        self._set_loggers(False)
-               
+    def __init__(self):        
+        cmd.Cmd.__init__(self)  
+        
+        self._disable_loggers()       
+        self.core = FreeseerCore(self)                
         self.db_connector = self.core.db  
         
         self.prompt = "freeseer> "
@@ -53,7 +53,6 @@ class FreeSeerShell(cmd.Cmd):
         """
         Exits the interpreter.
         """
-        self._set_loggers(True)
         sys.exit()
         
     def do_quit(self, line):
@@ -61,10 +60,16 @@ class FreeSeerShell(cmd.Cmd):
         
     def do_record(self, line):
         parser = FreeSeerRecordParser(self.core)
-        parser.analyse_command(line)
+        if (line.split()[0] == "help"):
+            help_topic = line.replace("help ", "")
+            if (help_topic == 'record'):
+                print Help.RECORD_HELP
+            
+        else:
+            parser.analyse_command(line)
     
     def help_record(self):
-        print open(os.path.join("freeseer","frontend","cli","help","record.txt"), 'r').read()
+        print Help.RECORD_GENERAL_HELP
 
 
     #TODO   
@@ -74,11 +79,27 @@ class FreeSeerShell(cmd.Cmd):
     #TODO         
     def do_talk(self, line):
         parser = FreeSeerTalkParser(self.core)
-        parser.analyse_command(line)
+        if (line.split()[0] == "help"):
+            help_topic = line.replace("help ", "")
+            if (help_topic == 'show'):
+                print Help.TALK_SHOW_TALKS
+            elif (help_topic == 'show events'):
+                print Help.TALK_SHOW_EVENTS
+            elif (help_topic == 'remove'):
+                print Help.TALK_REMOVE
+            elif (help_topic == 'add'):
+                print Help.TALK_ADD
+            elif (help_topic == 'update'):
+                print Help.TALK_UPDATE            
+            else:
+                print "Unknow %s topic" % (help_topic)
+            
+        else:
+            parser.analyse_command(line)
     
     def help_talk(self):
-        print open(os.path.join("freeseer","frontend","cli","help","talkeditor.txt"), 'r').read()
-
+        print Help.TALK_GENERAL_HELP
+        
     #TODO   
     def complete_talk(self, text, line, start_index, end_index):        
         pass
@@ -86,10 +107,37 @@ class FreeSeerShell(cmd.Cmd):
     #TODO          
     def do_config(self, line):
         parser = FreeSeerConfigParser(self.core)
-        parser.analyse_command(line)
-    
+        if (line.split()[0] == "help"):
+            help_topic = line.replace("help ", "")
+            if (help_topic == 'show'):
+                print Help.CONFIG_SHOW
+            elif (help_topic == 'set audio'):
+                print Help.CONFIG_AUDIO_SET
+            elif (help_topic == 'set video'):
+                print Help.CONFIG_VIDEO_SET
+            elif (help_topic == 'set video resolution'):
+                print Help.CONFIG_VIDEO_RESOLUTION_SET
+            elif (help_topic == 'set dir'):
+                print Help.CONFIG_DIR_SET
+            elif (help_topic == 'set audio'):
+                print Help.CONFIG_SET_AUDIO
+            elif (help_topic == 'set streaming'):
+                print Help.CONFIG_SET_STREAMING
+            elif (help_topic == 'set file'):
+                print Help.CONFIG_SET_FILE
+            elif (help_topic == 'set audio feedback'):
+                print Help.CONFIG_SET_AUDIO_FEEDBACK
+            elif (help_topic == 'set'):
+                print Help.CONFIG_SET
+            else:
+                "Unknow %s topic" % (help_topic)
+            
+        else:
+            parser.analyse_command(line)
+            
+
     def help_config(self):
-        print open(os.path.join("freeseer","frontend","cli","help","config.txt"), 'r').read()
+        print Help.CONFIG_GENERAL_HELP
 
     #TODO   
     def complete_config(self, text, line, start_index, end_index):        
@@ -98,8 +146,7 @@ class FreeSeerShell(cmd.Cmd):
     def run(self):
         self.cmdloop()
         
-    def _set_loggers(self, enabled):
-        self.core.logger.set_console_logger(enabled)
-        self.core.logger.set_syslog_logger(enabled)
-
+    def _disable_loggers(self):
+        logging.disable(logging.INFO)
+        logging.disable(logging.DEBUG)
         
