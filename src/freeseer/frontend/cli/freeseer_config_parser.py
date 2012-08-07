@@ -67,8 +67,8 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         '''     
         namespace = self.parse_args(command.split())   
         
-        mode = self._get_mode(namespace.mode)    
-       
+        mode = self._get_mode(namespace.mode)        
+        
         if(mode == "show"):
             if(namespace.all):
                 self.show_all_configs()
