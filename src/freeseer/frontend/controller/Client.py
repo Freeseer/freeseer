@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import os
 import logging
 import sys
 import base64
@@ -30,7 +31,7 @@ import sqlite3
 from PyQt4 import QtNetwork, QtCore, QtGui
 
 from PyQt4.QtNetwork import QTcpSocket
-
+from PyQt4.QtNetwork import QSslSocket
     
 class ClientG(QtGui.QWidget):
     
@@ -132,9 +133,6 @@ class ClientG(QtGui.QWidget):
         if passPhrase is not None:
             self.passPhraseEdit.setText(passPhrase)
         
-        
-    
-        
     def enableConnectButton(self):
         if self.passPhraseEdit.text() == '' or self.hostLabelEdit.text() == '' or self.portLabelEdit.text() == '':
             self.connectButton.setEnabled(False)
@@ -158,7 +156,7 @@ class ClientG(QtGui.QWidget):
         block = QtCore.QByteArray()
         block.append(message)
         self.socket.write(block)
-    
+        
     '''
     This function is for sending the passphrase to the server. It uses the sendMessage function
     '''
@@ -181,6 +179,7 @@ class ClientG(QtGui.QWidget):
         addr = QtNetwork.QHostAddress(self.addr)
         logging.info("Connecting to %s %s", self.addr, self.port)
         self.socket.connectToHost(addr, self.port)
+        #self.socket.connectToHostEncrypted (self.addr, self.port)
         if self.socket.waitForConnected(1000) is False :
             logging.error("Socket error %s", self.socket.errorString())
         
@@ -245,15 +244,23 @@ class ClientG(QtGui.QWidget):
     '''    
     def getRecentConnections(self):
         logging.info("Getting recent connections from database")
-        con = sqlite3.connect('test.db')
-        with con:
-            cur = con.cursor()
-            cur.execute('select * from recentConnections')
-            data = cur.fetchone()
-            if data is not None:
-                print 'Decoding passphrase', base64.b64decode(data[2])
-                listItem = ClientListWidget(data[0], data[1], data[2])
-                self.recentListWidget.addItem(listItem)
+        if os.path.isfile('test.db') is False:
+            logging.info("Database doesn't exist, creating database")
+            con = sqlite3.connect('test.db')
+            with con:
+                cur = con.cursor()
+                cur.execute('create table recentconnections(ip varchar(15), port int, passphrase varchar(150))') 
+        else:
+            con = sqlite3.connect('test.db')
+            with con:
+                cur = con.cursor()
+                cur.execute('select * from recentConnections')
+                data = cur.fetchone()
+                if data is not None:
+                    print 'Decoding passphrase', base64.b64decode(data[2])
+                    listItem = ClientListWidget(data[0], data[1], data[2])
+                    self.recentListWidget.addItem(listItem)
+                
     
     '''
     This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
@@ -305,7 +312,7 @@ class ClientListWidget(QtGui.QListWidgetItem):
         self.setText(self.ip + ' '  + str(port))
         
        
-def Main(self):
+def Main():
     app = QtGui.QApplication(sys.argv)
     c = ClientG()
     sys.exit(app.exec_())
