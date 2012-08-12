@@ -30,8 +30,7 @@ import sqlite3
 
 from PyQt4 import QtNetwork, QtCore, QtGui
 
-from PyQt4.QtNetwork import QTcpSocket
-from PyQt4.QtNetwork import QSslSocket
+from PyQt4.QtNetwork import QTcpSocket, QSslSocket
     
 class ClientG(QtGui.QWidget):
     
@@ -41,7 +40,6 @@ class ClientG(QtGui.QWidget):
         QtGui.QWidget.__init__(self) 
         
         self.socket = QTcpSocket() 
-        
         self.addr = ''
         self.port = 0
         self.status = 'Not connected'
@@ -105,6 +103,9 @@ class ClientG(QtGui.QWidget):
         self.pushButton = QtGui.QPushButton('Add Properties',self)
         self.mainLayout.addWidget(self.pushButton)
         
+        self.infoButton = QtGui.QPushButton('Info About Properties', self)
+        self.mainLayout.addWidget(self.infoButton)
+          
         #Connections
         self.connect(self.socket, QtCore.SIGNAL('error(QAbstractSocket::SocketError)'), self.displayError)
         self.connect(self.socket, QtCore.SIGNAL('connected()'), self.connected)
@@ -115,24 +116,11 @@ class ClientG(QtGui.QWidget):
         self.connect(self.hostLabelEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.recentListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.recentListHandler)
         self.connect(self.pushButton, QtCore.SIGNAL('pressed()'), self.addProperties)
-         
+        self.connect(self.infoButton, QtCore.SIGNAL('pressed()'), self.showPropertiesInfo)
+        
         self.resize(300, 300)
         self.hide()
     
-    def addProperties(self):
-        input = self.propertyLabel.toPlainText()
-        list = input.split("\n")
-        ip = list[1].split(":")[1]
-        port = list[2].split(":")[1]
-        passPhrase =  list[3].split(":")[1]
-        
-        if ip is not None:
-            self.hostLabelEdit.setText(ip)
-        if port is not None:
-            self.portLabelEdit.setText(port)
-        if passPhrase is not None:
-            self.passPhraseEdit.setText(passPhrase)
-        
     def enableConnectButton(self):
         if self.passPhraseEdit.text() == '' or self.hostLabelEdit.text() == '' or self.portLabelEdit.text() == '':
             self.connectButton.setEnabled(False)
@@ -147,12 +135,14 @@ class ClientG(QtGui.QWidget):
         self.disconnect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
         self.connect(self.socket, QtCore.SIGNAL("disconnected()"), self.disconnectFromHost)
+        self.sendMessage('Hello Server')
     
     '''
     Function for sending message to the connected server
     '''  
     def sendMessage(self, message):
         logging.info("Sending message: %s", message)
+        print 'Sending message'
         block = QtCore.QByteArray()
         block.append(message)
         self.socket.write(block)
@@ -179,7 +169,6 @@ class ClientG(QtGui.QWidget):
         addr = QtNetwork.QHostAddress(self.addr)
         logging.info("Connecting to %s %s", self.addr, self.port)
         self.socket.connectToHost(addr, self.port)
-        #self.socket.connectToHostEncrypted (self.addr, self.port)
         if self.socket.waitForConnected(1000) is False :
             logging.error("Socket error %s", self.socket.errorString())
         
@@ -297,6 +286,31 @@ class ClientG(QtGui.QWidget):
         port = str(self.recentListWidget.selectedItems()[0].port)
         self.portLabelEdit.setText(port)
         self.passPhraseEdit.setText(self.recentListWidget.selectedItems()[0].passPhrase)
+    
+    '''
+    This function is for handling the properties input.
+    '''
+    def addProperties(self):
+        input = self.propertyLabel.toPlainText()
+        list = input.split("\n")
+        ip = list[1].split(":")[1]
+        port = list[2].split(":")[1]
+        passPhrase =  list[3].split(":")[1]
+        
+        if ip is not None:
+            self.hostLabelEdit.setText(ip)
+        if port is not None:
+            self.portLabelEdit.setText(port)
+        if passPhrase is not None:
+            self.passPhraseEdit.setText(passPhrase)
+        
+    '''
+    This shows a messagebox explaining the properties box
+    '''
+    def showPropertiesInfo(self):
+        infoString = 'This box is for entering the connection details\n by copy-paste.\nThe properties can be copied from the server\n and used in this case'
+        QtGui.QMessageBox.information(self, QtCore.QString('Properties Info'), QtCore.QString(infoString))
+        
         
 '''
 Custom QListWidgetItem
@@ -315,6 +329,7 @@ class ClientListWidget(QtGui.QListWidgetItem):
 def Main():
     app = QtGui.QApplication(sys.argv)
     c = ClientG()
+    c.show()
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
