@@ -30,10 +30,9 @@ import sqlite3
 
 from PyQt4 import QtNetwork, QtCore, QtGui
 
-from PyQt4.QtNetwork import QTcpSocket, QSslSocket
+from PyQt4.QtNetwork import QTcpSocket
     
 class ClientG(QtGui.QWidget):
-    
     
     
     def __init__(self):
@@ -142,7 +141,6 @@ class ClientG(QtGui.QWidget):
     '''  
     def sendMessage(self, message):
         logging.info("Sending message: %s", message)
-        print 'Sending message'
         block = QtCore.QByteArray()
         block.append(message)
         self.socket.write(block)
@@ -152,7 +150,6 @@ class ClientG(QtGui.QWidget):
     '''
     def sendPassphrase(self):
         passPhrase = base64.b64encode(self.passPhraseEdit.text())
-        #self.sendMessage(self.passPhraseEdit.text())
         self.sendMessage(passPhrase)
     
     '''
@@ -162,7 +159,9 @@ class ClientG(QtGui.QWidget):
         message = self.socket.read(self.socket.bytesAvailable()) 
         logging("Server said:%s", message)  
         return message
-    
+    '''
+    Function that is called when connect button is pressed.
+    '''
     def connectToServer(self):
         self.addr = self.hostLabelEdit.text()
         self.port = int(self.portLabelEdit.text())
@@ -208,11 +207,10 @@ class ClientG(QtGui.QWidget):
             self.startButton.setText(QtCore.QString('Stop'))
             self.getRecentConnections()      
         elif self.status != 'Not connected':
-            self.close()
+            self.socket.close()
             self.startButton.setText(QtCore.QString('Start'))
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
         
-    
     '''
     Function for disconnecting the client from the host.
     '''
@@ -224,9 +222,6 @@ class ClientG(QtGui.QWidget):
         self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connectButton.setText('Connect')
         self.addToRecentConnections()
-    
-    def close(self):
-        self.socket.close()
     
     '''
     This function is for getting the recent connections from the database and load it to the list
@@ -246,11 +241,9 @@ class ClientG(QtGui.QWidget):
                 cur.execute('select * from recentConnections')
                 data = cur.fetchone()
                 if data is not None:
-                    print 'Decoding passphrase', base64.b64decode(data[2])
                     listItem = ClientListWidget(data[0], data[1], data[2])
                     self.recentListWidget.addItem(listItem)
                 
-    
     '''
     This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
     '''   
@@ -325,7 +318,6 @@ class ClientListWidget(QtGui.QListWidgetItem):
         self.passPhrase = passPhrase
         self.setText(self.ip + ' '  + str(port))
         
-       
 def Main():
     app = QtGui.QApplication(sys.argv)
     c = ClientG()

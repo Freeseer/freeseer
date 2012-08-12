@@ -550,19 +550,18 @@ class RecordApp(QtGui.QMainWindow):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
     
-    ###
-    ### Client functions
-    ###
+    '''
+    Client functions
+    '''
     def show_client_widget(self):
-        p = self.current_presentation()
+        self.current_presentation()
         self.clientWidget.show()
     
-    #
-    #This function is for handling commands sent from the server to the client.
-    # 
+    '''
+    This function is for handling commands sent from the server to the client
+    '''
     def getAction(self):
         message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
-        print 'Server said:', message
         if message == 'Record':
             self.mainWidget.standbyPushButton.toggle()
             self.mainWidget.recordPushButton.toggle()
