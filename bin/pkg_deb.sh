@@ -55,6 +55,7 @@ for exec in "freeseer-record" "freeseer-config" "freeseer-talkeditor"
 do
   echo "#!/bin/sh\n${PYTHON_PATH}/${exec}" > "${PKGROOT_BIN_PATH}/${exec}"
   chmod 755 "${PKGROOT_BIN_PATH}/${exec}"
+  chmod 755 "${PKGROOT_PYTHON_PATH}/${exec}"
 done
 
 echo "Copying files to our packaging root."

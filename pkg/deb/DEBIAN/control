@@ -2,7 +2,7 @@ Package: freeseer
 Version: 3.0.0
 Section: video
 Priority: optional
-Depends: build-essential,qt4-qmake,pyqt4-dev-tools,libqt4-dev,libqt4-sql,libqt4-sql-sqlite,python-qt4,python-qt4-dev,python-qt4-sql,python2.6-dev,python-feedparser,python-setuptools
+Depends: build-essential,qt4-qmake,pyqt4-dev-tools,libqt4-dev,libqt4-sql,libqt4-sql-sqlite,python-qt4,python-qt4-dev,python-qt4-sql,python2.7-dev,python-feedparser,python-setuptools
 Maintainer: Andrew Ross <fosslc@gmail.com>
 Architecture: all
 Homepage: https://github.com/Freeseer/freeseer/wiki
