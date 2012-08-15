@@ -37,8 +37,8 @@ class Help():
     # Talk Help
     TALK_SHOW_TALKS = '\tLists all talks stored on database. If mode/value are ' \
     'provided, the talks are filtered. \n\n' \
-    '\n\tAvailable modes:\n\t\t-e: Talk Event\n\t\t-r: Talk Room' \
-     '\n\n\tUSAGE: talk show talks [<mode> <value>]'
+    '\n\tAvailable modes:\n\t\tevent: Talk Event\n\t\troom: Talk Room\n\t\tid: Talk Id\n\t\tall: All talks' \
+     '\n\n\tUSAGE: talk show [<mode> [<value>]]'
      
     TALK_SHOW_EVENTS = '\tLists all different events with presentations assigned to' \
     '\n\tUSAGE:talk show events'

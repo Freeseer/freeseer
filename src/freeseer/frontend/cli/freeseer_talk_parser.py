@@ -58,38 +58,38 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             return
         
         mode = self._get_mode(namespace.mode) 
+        talk_mode = mode.split(" ")[0]
         
-        if(mode == "show events"):
-            self.show_all_events()
-            
-        elif(mode == "show"):
-            if(namespace.presentation == None and namespace.event == None and namespace.room == None):
+        if(talk_mode == "show"):  
+            try:
+                show_mode = mode.split(" ")[1]
+            except:
+                print "*** Please provide the show mode. To see all available mode type'talk help show'"
+                return            
+            if (show_mode == "events"):
+                self.show_all_events()         
+            elif(show_mode == "event"):
+                self.show_talk_by_event(mode.split(" ")[2])
+            elif(show_mode == "room" ):
+                self.show_talk_by_room(mode.split(" ")[2])
+            elif(show_mode == "id"):
+                self.show_talk_by_id(mode.split(" ")[2]) 
+            elif(show_mode == "all"):
                 self.show_all_talks()
-            elif(namespace.event):
-                self.show_talk_by_event(self._get_mode(namespace.event))
-            elif(namespace.room):
-                self.show_talk_by_room(self._get_mode(namespace.room))
-            elif(namespace.presentation):
-                self.show_talk_by_id(namespace.presentation) 
             
                                    
-        elif(mode == "remove"):            
-            if(namespace.presentation == None and namespace.remove_all == None):
-                print "*** Error: Please specify the talk id or the -all argument"
-            else:  
-                if(namespace.presentation != None and namespace.remove_all):
-                    print "*** Error: Please specify only one option"
-                else:
-                    if(namespace.presentation):
-                        self.remove_talk(namespace.presentation)
-                    elif namespace.remove_all:
-                        self.remove_all_talks()   
+        elif(talk_mode == "remove"):
+            remove_mode = mode.split(" ")[1]
+            if(remove_mode == "id"):
+                self.remove_talk(int(mode.split(" ")[2]))
+            elif (remove_mode == "all"):
+                self.remove_all_talks()   
                                              
-        elif(mode == "add"):
+        elif(talk_mode == "add"):
             self.add_talk_by_prompt()
 
 
-        elif(mode == "update"):
+        elif(talk_mode == "update"):
             self.update_talk_by_prompt(namespace.presentation)               
                 
         else:
