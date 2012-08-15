@@ -147,5 +147,5 @@ class FreeSeerShell(cmd.Cmd):
         self.cmdloop()
         
     def _disable_loggers(self):
-        logging.disable(logging.CRITICAL)
+        logging.disable(logging.INFO)
         
