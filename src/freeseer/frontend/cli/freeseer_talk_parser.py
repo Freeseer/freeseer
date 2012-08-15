@@ -62,23 +62,18 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         if(mode == "show events"):
             self.show_all_events()
             
-        elif(mode == "show talks"):
+        elif(mode == "show"):
             if(namespace.presentation == None and namespace.event == None and namespace.room == None):
                 self.show_all_talks()
             elif(namespace.event):
                 self.show_talk_by_event(self._get_mode(namespace.event))
             elif(namespace.room):
                 self.show_talk_by_room(self._get_mode(namespace.room))
-            
-        elif(mode == "show talk"):
-            #TODO Search how to get arguments with space
-            if(namespace.presentation == None):
-                print "*** Error: Please specify the talk id"
-            else:
-                self.show_talk_by_id(namespace.presentation)  
+            elif(namespace.presentation):
+                self.show_talk_by_id(namespace.presentation) 
             
                                    
-        elif(mode == "remove talk"):            
+        elif(mode == "remove"):            
             if(namespace.presentation == None and namespace.remove_all == None):
                 print "*** Error: Please specify the talk id or the -all argument"
             else:  
@@ -90,7 +85,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                     elif namespace.remove_all:
                         self.remove_all_talks()   
                                              
-        elif(mode == "add talk"):
+        elif(mode == "add"):
             self.add_talk_by_prompt()
 
 
@@ -116,7 +111,6 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         query = self.db_connector.get_talks()
         
         while query.next():
-            print "Talk #" + str(count)
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
@@ -143,7 +137,6 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         count = 1
         query = self.db_connector.get_talks_by_event(event)
         while query.next():
-            print "Talk #" + str(count)
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
@@ -157,7 +150,6 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         query = self.db_connector.get_talks_by_room(room)
         
         while query.next():
-            print "Talk #" + str(count)
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
             print "Talk Speaker: " + unicode(query.value(2).toString())
