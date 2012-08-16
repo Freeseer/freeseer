@@ -31,7 +31,7 @@ from PyQt4 import QtCore, QtGui, QtNetwork
 
 from PyQt4.QtNetwork import QTcpServer, QHostAddress
 
-from src.freeseer.framework.logger import Logger
+from freeseer.framework.logger import Logger
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
