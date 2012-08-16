@@ -23,12 +23,15 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import logging
+import os
 import sys
 import base64
 
 from PyQt4 import QtCore, QtGui, QtNetwork
 
 from PyQt4.QtNetwork import QTcpServer, QHostAddress
+
+from src.freeseer.framework.logger import Logger
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -47,7 +50,12 @@ class ServerWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self) 
         self.resize(400, 400)
         
+        configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
+        self.logger = Logger(configdir)
+        logging.info("Logger initialized")
+        
         self.server = QTcpServer(self)
+        logging.info("Starting Freeseer Server")
         self.startButton = QtGui.QPushButton('Start Server', self)
         self.startButton.move(25, 70)
        
