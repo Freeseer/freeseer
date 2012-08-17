@@ -67,82 +67,81 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         '''     
         namespace = self.parse_args(command.split())   
         
-        mode = self._get_mode(namespace.mode)        
+        mode = self._get_mode(namespace.mode)
+        config_mode = mode.split(" ")[0]        
         
-        if(mode == "show"):
-            if(namespace.all):
+        if(config_mode == "show"):
+            try:
+                show_mode = mode.split(" ")[1]
+            except:
+                print "*** Please provide the show mode. To see all available modes type'config help show'"
+                return 
+            
+            if(show_mode == "all"):
                 self.show_all_configs()
+            elif(show_mode == "video"):
+                self.show_all_video_configs()
+            elif(show_mode == "audio"):
+                self.show_all_audio_configs()                
             else:
-                print "*** Option missing"  
+                print "*** Unavailable show mode, to see all available modes type'config help show'" 
             
-        elif (mode == "video show"):
-            self.show_all_video_configs()
+        elif(config_mode == "set"):
+            try:
+                set_mode = mode.split(" ")[1]
+            except:
+                print "*** Please provide the set mode. To see all available modes type'config help set'"
+                return 
+            try:
+                set_value = mode.split(" ")[2]
+            except:
+                print "*** Please provide the set value"
+                return 
+            
 
+            if (set_mode == "video" ):
+                try:
+                    self.set_video_mixer(int(set_value))
+                except:
+                    if(set_value == "on"):
+                        self.turn_video_on()                
+                    elif (set_value == "off"):
+                        self.turn_video_off()
                 
-        elif (mode == "video set"):
-            if(namespace.index):
-                self.set_video_mixer(int(namespace.index))     
-            else:
-                print "*** Option missing" 
+            elif (set_mode == "resolution"):                
+                self.set_video_resolution(int(set_value)) 
                 
-        elif (mode == "video resolution show"):
-            self.show_all_resolutions()
-            
-        elif (mode == "video resolution set"):
-            if(namespace.index):
-                self.set_video_resolution(int(namespace.index))     
-            else:
-                print "*** Please specify the resolution index" 
-                
-        elif (mode == "audio show"):
-            self.show_all_audio_configs()
 
+            elif (set_mode == "audio"):
+                try:
+                    self.set_audio_source(set_value)
+                except:
+                    if(set_value == "on"):
+                        self.turn_audio_on()                
+                    elif (set_value == "off"):
+                        self.turn_audio_off()
                 
-        elif (mode == "audio set"):
-            if(namespace.index):
-                self.set_audio_source(int(namespace.index))     
-            else:
-                print "*** Option missing"
-
-        
-        elif (mode == "dir show"):
-            self.show_output_dir()
-        elif (mode == "dir set"):
-            if(namespace.directory):
-                self.set_output_dir(namespace.directory)    
-            else:
-                print "*** Option missing" 
+            elif (set_mode == "dir"):
+                self.set_output_dir(set_value) 
                 
-        elif (mode == "audio on"):
-            self.turn_audio_on()
-            
-        elif (mode == "audio off"):
-            self.turn_audio_off()
-            
-        elif(mode == "audio feedback off"):
-            self.turn_audiofeedback_off()
-            
-        elif(mode == "audio feedback on"):
-            self.turn_audiofeedback_on()
-            
-        elif (mode == "video on"):
-            self.turn_video_on()
-            
-        elif (mode == "video off"):
-            self.turn_video_off()
-            
-        elif (mode == "file on"):
-            self.turn_file_record_on()
-        
-        elif (mode == "file off"):
-            self.turn_file_record_off()
-        
-        elif (mode == "streaming on"):
-            self.turn_streaming_on()
-            
-        elif (mode == "streaming off"):
-            self.turn_streaming_off()
-              
+            elif (set_mode == "feedback"):
+                if(set_value == "on"):
+                    self.turn_audiofeedback_on()                
+                elif (set_value == "off"):
+                    self.turn_audiofeedback_off()
+                    
+            elif (set_mode == "file"):
+                if(set_value == "on"):
+                    self.turn_file_on()                
+                elif (set_value == "off"):
+                    self.turn_file_off()
+                    
+            elif (set_mode == "streaming"):
+                if(set_value == "on"):
+                    self.turn_streaming_on()                
+                elif (set_value == "off"):
+                    self.turn_streaming_off()
+     
         #plugin support
         
         else:
