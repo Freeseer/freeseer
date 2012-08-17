@@ -64,7 +64,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             try:
                 show_mode = mode.split(" ")[1]
             except:
-                print "*** Please provide the show mode. To see all available mode type'talk help show'"
+                print "*** Please provide the show mode. To see all available modes type'talk help show'"
                 return            
             if (show_mode == "events"):
                 self.show_all_events()         
@@ -76,6 +76,8 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
                 self.show_talk_by_id(mode.split(" ")[2]) 
             elif(show_mode == "all"):
                 self.show_all_talks()
+            else:
+                print "*** Unavailable show mode, to see all available modes type'talk help show'"
             
                                    
         elif(talk_mode == "remove"):
