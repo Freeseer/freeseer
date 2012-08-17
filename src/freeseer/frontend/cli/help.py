@@ -58,7 +58,7 @@ class Help():
     
     CONFIG_SHOW = '\tLists all available configurations and their respective values.' \
     '\n\n\tAvailable options:\n\t\tvideo: Video configuration\n\t\taudio: Audio configurations' \
-    '\n\t\t--all: All configurations \n\n\tUSAGE: config show [video] [audio] [--all]'
+    '\n\t\tall: All configurations \n\n\tUSAGE: config show [video] [audio] [all]'
     
     CONFIG_AUDIO_SET = '\tSets the current audio mixer to the specified index.' \
     'The list of availablLINEe mixers can be obtained in the "config show audio" command' \
