@@ -84,7 +84,32 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             elif(show_mode == "audio"):
                 self.show_all_audio_configs()                
             else:
-                print "*** Unavailable show mode, to see all available modes type'config help show'" 
+                try:
+                    args = mode.split(" ")
+                    plugin_name = self._get_plugin_name(args[2])
+                    plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
+                    if plugin:
+                        plugin.plugin_object.load_config(self.plugman)
+                        if(len(args) == 3):                
+                            try:
+                                for property in plugin.plugin_object.get_properties():
+                                    print property
+                            except NotImplementedError:
+                                print "This plugin is not supported by CLI"
+                        if(len(args) == 4):
+                            try:
+                                print plugin.plugin_object.get_property_value(args[3])
+                            except NotImplementedError:
+                                print "This plugin is not supported by CLI"
+                        if(len(args) == 5):
+                            try:
+                                plugin.plugin_object.set_property_value(args[3], args[4])
+                            except NotImplementedError:
+                                print "This plugin is not supported by CLI"
+                    else:
+                        print "There's no plugin with such informations"
+                except:
+                    print "Invalid Syntax"
             
         elif(config_mode == "set"):
             try:
@@ -141,6 +166,23 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                     self.turn_streaming_on()                
                 elif (set_value == "off"):
                     self.turn_streaming_off()
+            
+            else:
+                try:
+                    args = mode.split(" ")
+                    plugin_name = self._get_plugin_name(args[2])
+                    plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
+                    if plugin:
+                        plugin.plugin_object.load_config(self.plugman)
+                        if(len(args) == 5):
+                            try:
+                                plugin.plugin_object.set_property_value(args[3], args[4])
+                            except NotImplementedError:
+                                print "This plugin is not supported by CLI"
+                    else:
+                        print "There's no plugin with such informations"
+                except:
+                    print "Invalid Syntax"
      
         #plugin support
         
