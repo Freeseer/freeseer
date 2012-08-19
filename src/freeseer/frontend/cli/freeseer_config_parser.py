@@ -132,6 +132,8 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                         self.turn_video_on()                
                     elif (set_value == "off"):
                         self.turn_video_off()
+                    else:
+                        print "*** Please provide property value as on/off"
                 
             elif (set_mode == "resolution"):                
                 self.set_video_resolution(int(set_value)) 
@@ -145,6 +147,8 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                         self.turn_audio_on()                
                     elif (set_value == "off"):
                         self.turn_audio_off()
+                    else:
+                        print "*** Please provide property value as on/off"
                 
             elif (set_mode == "dir"):
                 self.set_output_dir(set_value) 
@@ -154,18 +158,24 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                     self.turn_audiofeedback_on()                
                 elif (set_value == "off"):
                     self.turn_audiofeedback_off()
+                else:
+                    print "*** Please provide property value as on/off"
                     
             elif (set_mode == "file"):
                 if(set_value == "on"):
-                    self.turn_file_on()                
+                    self.turn_file_record_on()                
                 elif (set_value == "off"):
-                    self.turn_file_off()
+                    self.turn_file_record_off()
+                else:
+                    print "*** Please provide property value as on/off"
                     
             elif (set_mode == "streaming"):
                 if(set_value == "on"):
                     self.turn_streaming_on()                
                 elif (set_value == "off"):
                     self.turn_streaming_off()
+                else:
+                    print "*** Please provide property value as on/off"
             
             else:
                 try:
