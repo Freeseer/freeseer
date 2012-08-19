@@ -32,7 +32,7 @@ class Help():
     
     # Record help
     RECORD_HELP = '\tRecords the presentation with the respective id using ' \
-    'the current settings\n\tUSAGE: record -p <id>'
+    'the current settings\n\tUSAGE: record <id>'
     
     # Talk Help
     TALK_SHOW_TALKS = '\tLists all talks stored on database. If mode/value are ' \
