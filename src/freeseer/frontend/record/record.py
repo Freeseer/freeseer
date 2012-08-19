@@ -566,10 +566,16 @@ class RecordApp(QtGui.QMainWindow):
             self.mainWidget.standbyPushButton.toggle()
             self.mainWidget.recordPushButton.toggle()
             self.clientWidget.sendMessage('Started recording')
+            logging.info("Started recording by server's request")
         elif message == 'Stop':
             self.mainWidget.recordPushButton.toggle()
+            logging.info("Stopping recording by server's request")
         elif message == 'Pause' or 'Resume':
             self.mainWidget.pauseToolButton.toggle()
+            if message == 'Pause':
+                logging.info("Paused recording by server's request")
+            elif message == 'Resume':
+                logging.info("Resumed recording by server's request")
     
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
