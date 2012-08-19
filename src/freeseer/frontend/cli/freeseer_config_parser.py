@@ -82,10 +82,16 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             elif(show_mode == "video"):
                 self.show_all_video_configs()
             elif(show_mode == "audio"):
-                self.show_all_audio_configs()                
+                self.show_all_audio_configs()      
+                          
+            #Plugin support
             else:
-                try:
-                    args = mode.split(" ")
+                args = mode.split(" ")                
+                try:     
+                    if(len(args) == 2):
+                            for plugin in self.plugman.plugmanc.getPluginsOfCategory(args[1]):
+                                print plugin.name.replace(" ","")
+                            return               
                     plugin_name = self._get_plugin_name(args[2])
                     plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
                     if plugin:
@@ -96,20 +102,22 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                                     print property
                             except NotImplementedError:
                                 print "This plugin is not supported by CLI"
-                        if(len(args) == 4):
+                        elif(len(args) == 4):
                             try:
                                 print plugin.plugin_object.get_property_value(args[3])
                             except NotImplementedError:
                                 print "This plugin is not supported by CLI"
-                        if(len(args) == 5):
+                        elif(len(args) == 5):
                             try:
                                 plugin.plugin_object.set_property_value(args[3], args[4])
                             except NotImplementedError:
                                 print "This plugin is not supported by CLI"
                     else:
                         print "There's no plugin with such informations"
-                except:
-                    print "Invalid Syntax"
+                except IndexError:
+                    print "*** Invalid Syntax"
+                except KeyError:
+                    print "*** There's no category with such name"
             
         elif(config_mode == "set"):
             try:
