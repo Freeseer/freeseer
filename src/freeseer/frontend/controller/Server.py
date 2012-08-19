@@ -25,13 +25,14 @@
 import logging
 import os
 import sys
-import base64
 
-from PyQt4 import QtCore, QtGui, QtNetwork
+from PyQt4 import QtCore, QtGui, QtNetwork 
 
-from PyQt4.QtNetwork import QTcpServer, QHostAddress
+from PyQt4.QtNetwork import QTcpServer, QHostAddress, QNetworkInterface
 
 from freeseer.framework.logger import Logger
+
+from passlib.apps import custom_app_context as pwd_context
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -156,7 +157,8 @@ class ServerWidget(QtGui.QWidget):
     '''
     def updateProperties(self):
         self.propertyLabel.setText('Host Instance:\nIP:' + self.server.serverAddress().toString() + '\nPort:' + str(self.server.serverPort())
-                                    + '\nPassphrase:' + base64.b64decode(self.passPhrase))
+                                    + '\nPassphrase:' + self.passPhrase2)
+        
     
     def enableMessageButton(self):
         if self.messageLine == '':
@@ -219,8 +221,12 @@ class ServerWidget(QtGui.QWidget):
         logging.info ("Passphrase changed to %s", self.passPhraseEdit.text())
         self.passPhraseLabel.setText("Passphrase:" + self.passPhrase)
         self.passPhraseEdit.clear()
-        self.passPhrase = base64.b64encode(self.passPhrase)
+        #self.passPhrase = base64.b64encode(self.passPhrase)
+        self.passPhrase = str(self.passPhrase)
+        self.passPhrase2 = self.passPhrase
+        self.passPhrase = pwd_context.encrypt(self.passPhrase)
         self.updateProperties()
+        
     
     '''
     This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
@@ -230,7 +236,7 @@ class ServerWidget(QtGui.QWidget):
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
         logging.info("Client said: %s", message)
-        if base64.b64decode(message) != base64.b64decode(self.passPhrase):
+        if pwd_context.verify(message, self.passPhrase) is False:
             client.disconnectFromHost()
             logging.info("Client rejected")
         else:
