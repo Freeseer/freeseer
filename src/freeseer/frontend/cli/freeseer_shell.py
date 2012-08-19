@@ -60,6 +60,9 @@ class FreeSeerShell(cmd.Cmd):
         
     def do_record(self, line):
         parser = FreeSeerRecordParser(self.core)
+        if(len(line.split()) == 0):
+            print "*** Invalid Syntax"
+            return
         if (line.split()[0] == "help"):
             help_topic = line.replace("help ", "")
             if (help_topic == 'record'):
@@ -79,7 +82,10 @@ class FreeSeerShell(cmd.Cmd):
     #TODO         
     def do_talk(self, line):
         parser = FreeSeerTalkParser(self.core)
-        if (line.split()[0] == "help"):
+        if(len(line.split()) == 0):
+            print "*** Invalid Syntax" 
+            return       
+        elif (line.split()[0] == "help"):
             help_topic = line.replace("help ", "")
             if (help_topic == 'show'):
                 print Help.TALK_SHOW_TALKS
@@ -107,6 +113,9 @@ class FreeSeerShell(cmd.Cmd):
     #TODO          
     def do_config(self, line):
         parser = FreeSeerConfigParser(self.core)
+        if(len(line.split()) == 0):
+            print "*** Invalid Syntax"
+            return
         if (line.split()[0] == "help"):
             help_topic = line.replace("help ", "")
             if (help_topic == 'show'):
