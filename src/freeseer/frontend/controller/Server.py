@@ -150,6 +150,7 @@ class ServerWidget(QtGui.QWidget):
             self.server.close()
             self.startButton.setText(QtCore.QString('Start Server'))
             self.status = 'Off'
+            self.disconnectAllClients()
         self.statusLabel.setText('Server status:' + self.status)
     
     '''
@@ -324,7 +325,15 @@ class ServerWidget(QtGui.QWidget):
     def disconnectClients(self):
         for i in range(0, len(self.qListWidget.selectedItems())):
             client = self.qListWidget.selectedItems()[i].client
-            client.disconnectFromHost()      
+            client.disconnectFromHost()  
+    
+    '''
+    Method to disconnect all clients that are connected
+    '''
+    def disconnectAllClients(self):
+        for i in range(0, self.qListWidget.count()):
+            client = self.qListWidget.item(i).client
+            client.disconnectFromHost()    
     
     '''
     This shows a messagebox explaining the properties box
