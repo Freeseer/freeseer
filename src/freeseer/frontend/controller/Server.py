@@ -46,10 +46,11 @@ class ServerWidget(QtGui.QWidget):
     status = 'Off' 
     clients = []
     passPhrase = ''
-        
+    ipAddress = None
+    
     def __init__(self):
         QtGui.QWidget.__init__(self) 
-        self.resize(400, 400)
+        self.resize(400, 420)
         
         configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
         self.logger = Logger(configdir)
@@ -58,11 +59,23 @@ class ServerWidget(QtGui.QWidget):
         self.server = QTcpServer(self)
         logging.info("Starting Freeseer Server")
         self.startButton = QtGui.QPushButton('Start Server', self)
-        self.startButton.move(25, 70)
+        self.startButton.move(25, 90)
        
         self.statusLabel = QtGui.QLabel('Server status:' + self.status, self)
-        self.statusLabel.move(25, 20)
-        self.statusLabel.resize(200, 10)
+        self.statusLabel.move(25, 15)
+        self.statusLabel.resize(200, 25)
+        
+        self.iLabel = QtGui.QLabel('IP:', self)
+        self.iLabel.move(25, 40)
+        
+        self.ipComboBox = QtGui.QComboBox(self)
+        self.ipComboBox.addItem(QtCore.QString("0.0.0.0"))
+        self.ipComboBox.move(50, 35)
+        self.ipComboBox.resize(100, 35)
+        
+        self.portLabel = QtGui.QLabel('Port:', self)
+        self.portLabel.move(25, 57)
+        self.portLabel.resize(100, 40)
         
         self.statusLabel2 = QtGui.QLabel('', self)
         self.statusLabel2.move(25, 45)
@@ -76,14 +89,14 @@ class ServerWidget(QtGui.QWidget):
         self.messageButton.move(320, 10)
         
         self.propertiesLabel = QtGui.QLabel('Properties:', self)
-        self.propertiesLabel.move(25, 335)
+        self.propertiesLabel.move(25, 355)
         
         self.propertiesInfoButton = QtGui.QPushButton('?', self)
-        self.propertiesInfoButton.move(120, 332)
+        self.propertiesInfoButton.move(120, 352)
         self.propertiesInfoButton.resize(20, 20)
         
         self.propertyLabel = QtGui.QTextEdit(self)
-        self.propertyLabel.move(25, 355)
+        self.propertyLabel.move(25, 375)
         self.propertyLabel.resize(256, 80)
         self.propertyLabel.setReadOnly(True)
         self.propertyLabel.setText('Host Instance:\nIP:\nPort:\nPassphrase:')
@@ -102,26 +115,26 @@ class ServerWidget(QtGui.QWidget):
         self.passPhraseButton.move(320, 60)
         
         self.ipLabel = QtGui.QLabel('IP Address', self)
-        self.ipLabel.move(25, 110)
+        self.ipLabel.move(25, 130)
         
         self.connectionLabel = QtGui.QLabel('Status', self)
-        self.connectionLabel.move(115, 110)
+        self.connectionLabel.move(115, 130)
         
         self.qListWidget = QtGui.QListWidget(self)
         self.qListWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-        self.qListWidget.move(25, 140)
+        self.qListWidget.move(25, 160)
         self.qListWidget.resize(256, 192)
         
         self.startRecordButton = QtGui.QPushButton('Start Recording', self)
-        self.startRecordButton.move(300, 140)
+        self.startRecordButton.move(300, 160)
         self.startRecordButton.setEnabled(False)
         
         self.stopRecordButton = QtGui.QPushButton('Stop Recording', self)
-        self.stopRecordButton.move(300, 190)
+        self.stopRecordButton.move(300, 210)
         self.stopRecordButton.setEnabled(False)
         
         self.disconnectButton = QtGui.QPushButton('Disconnect', self)
-        self.disconnectButton.move(300, 290)
+        self.disconnectButton.move(300, 310)
         self.disconnectButton.setEnabled(False)
         
         #Connections
@@ -136,21 +149,27 @@ class ServerWidget(QtGui.QWidget):
         self.connect(self.disconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
         self.connect(self.qListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.updateButtons)
         self.connect(self.propertiesInfoButton, QtCore.SIGNAL('pressed()'), self.showPropertiesInfo)
+        self.connect(self.ipComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.ipComboBoxHandler)
         
     def startServer(self):    
         if self.status == 'Off':
-            self.server.listen(QHostAddress.Any, PORT)    
+            if self.ipAddress is None:
+                self.ipAddress = QHostAddress(self.ipComboBox.currentText())
+            self.server.listen(self.ipAddress, PORT)    
             self.startButton.setText(QtCore.QString('Stop Server'))
             self.status = 'Running' 
             string = 'IP:' + self.server.serverAddress().toString() + ' Port:' + str(self.server.serverPort())
+            self.portLabel.setText("Port:" + str(self.server.serverPort()))
             logging.info("Started server IP:%s Port:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
-            self.statusLabel2.setText(QtCore.QString(string))
+            self.ipComboBox.setEnabled(False)
             self.updateProperties()
         elif self.status == 'Running':
             self.server.close()
             self.startButton.setText(QtCore.QString('Start Server'))
             self.status = 'Off'
             self.disconnectAllClients()
+            self.ipComboBox.setEnabled(True)
+            self.ipAddress = None
         self.statusLabel.setText('Server status:' + self.status)
     
     '''
@@ -343,6 +362,12 @@ class ServerWidget(QtGui.QWidget):
         QtGui.QMessageBox.information(self, QtCore.QString('Properties Info'), QtCore.QString(infoString))
         
     
+    def ipComboBoxHandler(self):
+        self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
+        logging.info("Server IP changed to:%s", self.ipAddress.toString())
+        
+        
+    
 class ServerG(QtGui.QMainWindow):
     
     def __init__(self):
@@ -363,7 +388,7 @@ class ServerG(QtGui.QMainWindow):
         self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
         # --- Translator
         
-        self.setGeometry(300, 300, 450, 450)
+        self.setGeometry(300, 300, 450, 470)
         self.retranslate()
         
         self.mainWidget = ServerWidget()
