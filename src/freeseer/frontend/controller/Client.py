@@ -25,12 +25,13 @@
 import os
 import logging
 import sys
-import base64
 import sqlite3
 
 from PyQt4 import QtNetwork, QtCore, QtGui
 
 from PyQt4.QtNetwork import QTcpSocket
+
+from passlib.apps import custom_app_context as pwd_context
     
 class ClientG(QtGui.QWidget):
     
@@ -133,9 +134,8 @@ class ClientG(QtGui.QWidget):
         self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer) 
         self.disconnect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
-        self.connect(self.socket, QtCore.SIGNAL("disconnected()"), self.disconnectFromHost)
-        self.sendMessage('Hello Server')
-    
+        self.connect(self.socket, QtCore.SIGNAL("disconnected()"), self.disconnectedFromHost)
+        
     '''
     Function for sending message to the connected server
     '''  
@@ -149,8 +149,7 @@ class ClientG(QtGui.QWidget):
     This function is for sending the passphrase to the server. It uses the sendMessage function
     '''
     def sendPassphrase(self):
-        passPhrase = base64.b64encode(self.passPhraseEdit.text())
-        self.sendMessage(passPhrase)
+        self.sendMessage(self.passPhraseEdit.text())
     
     '''
     This function is for reading message from the server
@@ -210,36 +209,40 @@ class ClientG(QtGui.QWidget):
             self.socket.close()
             self.startButton.setText(QtCore.QString('Start'))
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
+    
+    def disconnectFromHost(self):
+        self.socket.disconnectFromHost()
         
     '''
     Function for disconnecting the client from the host.
     '''
-    def disconnectFromHost(self):
+    def disconnectedFromHost(self):
         logging.info("Disconnected from host")
-        self.socket.disconnectFromHost()
         self.disconnect(self.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost) 
         self.connect(self.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer)
         self.connect(self.passPhraseEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connectButton.setText('Connect')
         self.addToRecentConnections()
+        
     
     '''
     This function is for getting the recent connections from the database and load it to the list
     '''    
     def getRecentConnections(self):
         logging.info("Getting recent connections from database")
-        if os.path.isfile('test.db') is False:
+        if os.path.isfile('recentconnections.db') is False:
             logging.info("Database doesn't exist, creating database")
-            con = sqlite3.connect('test.db')
+            con = sqlite3.connect('recentconnections.db')
             with con:
                 cur = con.cursor()
                 cur.execute('create table recentconnections(ip varchar(15), port int, passphrase varchar(150))') 
         else:
-            con = sqlite3.connect('test.db')
+            con = sqlite3.connect('recentconnections.db')
             with con:
                 cur = con.cursor()
                 cur.execute('select * from recentConnections')
                 data = cur.fetchone()
+                self.recentListWidget.clear()
                 if data is not None:
                     listItem = ClientListWidget(data[0], data[1], data[2])
                     self.recentListWidget.addItem(listItem)
@@ -248,7 +251,7 @@ class ClientG(QtGui.QWidget):
     This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
     '''   
     def addToRecentConnections(self):
-        con = sqlite3.connect('test.db')
+        con = sqlite3.connect('recentconnections.db')
         with con:
             cur = con.cursor()
             cur.execute('''SELECT * FROM recentconnections WHERE ip = "%s" and port = "%d" and passphrase = "%s" ''' %
@@ -259,7 +262,7 @@ class ClientG(QtGui.QWidget):
                         )
             data = cur.fetchone()
             if data is not None:
-                logging.info("Connection already exists")
+                logging.info("Connection already exists in the database")
                 return
             elif data is None:
                 cur.execute('''INSERT INTO recentConnections VALUES("%s" , "%d", "%s")''' %
@@ -268,7 +271,7 @@ class ClientG(QtGui.QWidget):
                              self.passPhraseEdit.text()
                              )
                             )
-                logging.info("Recent connection %s %d added ", self.addr, self.port)
+                logging.info("Recent connection %s %d added to the database ", self.addr, self.port)
                 self.getRecentConnections()
         
     '''
