@@ -50,16 +50,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
         
         
         self.add_argument('mode',nargs = '+', metavar='talk mode')
-        
-        self.add_argument('-i', dest='index',type=str)
-        self.add_argument('-u', dest='url', type=str)
-        self.add_argument('-f', dest='filename', type=str)
-        self.add_argument('-p', dest='password', type=str)
-        self.add_argument('-d', dest='directory', type=str)
-        
-        self.add_argument('--all', dest='all', action='store_const',const=True, default=False)  
-          
-        
+
     
     def analyse_command(self, command):  
         '''

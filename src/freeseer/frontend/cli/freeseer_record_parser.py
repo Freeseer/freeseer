@@ -37,26 +37,25 @@ class FreeSeerRecordParser(argparse.ArgumentParser):
         self.db_connector = self.core.db
      
         argparse.ArgumentParser.__init__(self)
-        
-        # command line arguments supported
-        self.add_argument('-p',dest='id',type=int,
-                          help='starts recording the talk with the specified presentation id')
-        
+
     def analyse_command(self, command):  
         '''
         Analyses the command typed by the user
         ''' 
-        namespace = self.parse_args(command.split())
-        self.perform_task(namespace)
+        mode = command.split(" ")
+        self.perform_task(mode)
             
-    def perform_task(self, namespace):
+    def perform_task(self, mode):
         '''
         Perform the specific task typed by the user
         '''
-        if(namespace.id):
-            self.record_by_id(namespace.id)
+        if(len(mode) == 1):
+            try:
+                self.record_by_id(int(mode[0]))
+            except ValueError:
+                print "*** Please provide a numeric value as id"
         else:
-            print "Please specify the talk id"
+            print "*** Invalid Syntax"
     
     def record_by_id(self,id):
         '''
