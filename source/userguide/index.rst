@@ -16,6 +16,7 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
    record
    talkeditor
    reporteditor
+   server
    config/index
    config/plugins/index
 .. freeseer-record = Record
