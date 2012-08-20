@@ -1,0 +1,8 @@
+#!/bin/sh
+
+PYTHON_PATH="/usr/shared/pyshared"
+
+for exec in "freeseer-record" "freeseer-config" "freeseer-talkeditor"
+do
+  sudo chmod 755 "${PYTHON_PATH}/${exec}"
+done
