@@ -55,7 +55,6 @@ for exec in "freeseer-record" "freeseer-config" "freeseer-talkeditor"
 do
   echo "#!/bin/sh\n${PYTHON_PATH}/${exec}" > "${PKGROOT_BIN_PATH}/${exec}"
   chmod 755 "${PKGROOT_BIN_PATH}/${exec}"
-  chmod 755 "${PKGROOT_PYTHON_PATH}/${exec}"
 done
 
 echo "Copying files to our packaging root."
@@ -65,6 +64,7 @@ cp -R ${WAROOT}/pkg/desktop/freeseer.desktop ${PKGROOT_DESKTOP_PATH}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    rm -rf freeseer
     exit 1 
 fi
 
@@ -73,6 +73,7 @@ cp -R ${SRCROOT}/freeseer/frontend/qtcommon/images/freeseer_logo.png ${PKGROOT_P
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    rm -rf freeseer
     exit 1 
 fi
 
@@ -82,6 +83,7 @@ cp -R ${SRCROOT}/* ${PKGROOT_PYTHON_PATH}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    rm -rf freeseer
     exit 1 
 fi
 
@@ -90,6 +92,7 @@ cp -R ${PKGTEMPLATE}/* ${PKGROOT}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${PKGTEMPLATE} to ${PKGROOT}"
+    rm -rf freeseer
     exit 1 
 fi
 
@@ -100,6 +103,7 @@ dpkg --build freeseer freeseer_3.0.0_all.deb
 if [ $? -ne 0 ]
 then
     echo "dpkg failed. Review the output to debug."
+    rm -rf freeseer
     exit 1 
 fi
 
