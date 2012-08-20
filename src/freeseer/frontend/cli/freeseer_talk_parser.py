@@ -196,7 +196,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         presentation.speaker = raw_input("Type the presentation speaker: ").strip()
         
         while(not len(presentation.speaker) > 0):
-            presentation.speaker = raw_input("Please, type the presentation speaker: ")
+            presentation.speaker = raw_input("Please, type the presentation speaker: ").strip()
         
         presentation.description = raw_input("Type the presentation description or press <ENTER> to pass: ").strip()
         presentation.level = raw_input("Type the speaker level or press <ENTER> to pass: ").strip()

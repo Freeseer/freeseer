@@ -418,7 +418,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
 
     def _get_plugin_name(self, plugin_replaced):
         for entry in self.plugins:
-            if entry[0] == plugin_replaced:
+            if entry[0].upper() == plugin_replaced.upper():
                 return entry[1]
         return None
         
