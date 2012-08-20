@@ -11,16 +11,23 @@ Instead, base your development branch off Freeseer's experimental or development
 
 .. _branch-names:
 
-Branch Names
-------------
+Name Your Branch After an Issue or Task
+---------------------------------------
 
-Try naming your development branch after the `issue <http://github.com/Freeseer/freeseer/issues>`_ you're working on.
-Name it by issue # and description. For example, if you’re working on Issue #100, a new logo, your development branch should be called 100-new-logo.
+If an `issue exists <http://github.com/Freeseer/freeseer/issues>`_ for the task
+you're going to work on, name your new branch after the issue # and description.
+For example, if you’re working on Issue #100, a new logo, your branch name would
+be "100-new-logo".
 
-.. seealso:: Want to `rename your branch <basics.html#renaming-your-branch>`_?
+If you'll be working on a task which no issue exists for, consider creating an
+issue for it. If you decide to go issue-less, at least give your branch a
+descriptive name that matches the task you'll be working on.
 
-Starting a New Task
--------------------
+.. seealso:: Could your branch name be improved?
+             `Rename your branch! <basics.html#renaming-your-branch>`_
+
+Start a New Task on a New Branch
+--------------------------------
 
 Using git requires a certain mindset:
 
@@ -39,3 +46,26 @@ Each new task should have its own branch. Why?
 - Reduces the risk of introducing new bugs
 - Easier to isolate and fix new bugs
 - Good for experimenting as nothing outside that branch is harmed
+
+Properly Style Your Commit Messages
+-----------------------------------
+
+To help keep the style of our commit messages consistent and for easier viewing
+on GitHub, please write your commit messages in accordance with this style::
+    
+    Capitalized and concise (70 chars or less) summary of your commit
+
+    More detailed explanatory text if necessary. Wrap at 72 characters.
+    Notice that the above summary message does not end with a period,
+    and there's a blank line between the summary and body text.
+
+    - Bullet points (hyphens or asterisks) are allowed
+
+    - No ending period needed and wrap at 72 chars
+
+    - Put a space after bullet points and blank lines between them
+
+If you can describe your commit with just a summary line, you may use
+git commit's message argument::
+
+    git commit -m "Summary of your commit (70 chars or less)"

@@ -93,8 +93,8 @@ A visual representation of what a Freeseer contributor’s GitHub/git workflow s
 .. todo:: Finish diagram
 
 
-Make Issue-Specific Branches
-----------------------------
+Create Issue-Specific Branches
+------------------------------
 
 Create a new branch based off Freeseer's experimental branch and make it your current branch::
 
