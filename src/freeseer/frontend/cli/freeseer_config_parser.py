@@ -83,7 +83,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
                             for plugin in self.plugman.plugmanc.getPluginsOfCategory(args[1]):
                                 print plugin.name.replace(" ","")
                             return               
-                    plugin_name = self._get_plugin_name(args[2])
+                    plugin_name = self.get_plugin_name(args[2])
                     plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
                     if plugin:
                         plugin.plugin_object.load_config(self.plugman)
@@ -179,7 +179,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             else:
                 try:
                     args = mode.split(" ")
-                    plugin_name = self._get_plugin_name(args[2])
+                    plugin_name = self.get_plugin_name(args[2])
                     plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
                     if plugin:
                         plugin.plugin_object.load_config(self.plugman)
@@ -416,7 +416,7 @@ class FreeSeerConfigParser(argparse.ArgumentParser):
             
         return plugins_data
 
-    def _get_plugin_name(self, plugin_replaced):
+    def get_plugin_name(self, plugin_replaced):
         for entry in self.plugins:
             if entry[0].upper() == plugin_replaced.upper():
                 return entry[1]
