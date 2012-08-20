@@ -206,7 +206,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         
         while(not self._is_date_format(presentation.time)):
             if(len(presentation.time) > 0):
-                presentation.data = raw_input("Wrong date format, please type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ")
+                presentation.time = raw_input("Wrong date format, please type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ")
             else:
                 break
              
