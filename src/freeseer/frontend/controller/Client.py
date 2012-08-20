@@ -30,8 +30,6 @@ import sqlite3
 from PyQt4 import QtNetwork, QtCore, QtGui
 
 from PyQt4.QtNetwork import QTcpSocket
-
-from passlib.apps import custom_app_context as pwd_context
     
 class ClientG(QtGui.QWidget):
     
