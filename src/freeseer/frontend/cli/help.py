@@ -44,8 +44,8 @@ class Help():
     '\n\tUSAGE:talk show events'
     
     TALK_REMOVE = '\tRemoves a presentation from database.' \
-    '\n\n\tAvailable options:\n\t\t-p: Talk Id\n\t\t--all: All talks' \
-    '\n\n\tUSAGE: talk remove [-p <id] [--all]'
+    '\n\n\tAvailable options:all: All talks' \
+    '\n\n\tUSAGE: talk remove <id>|all'
     
     TALK_ADD = '\tAllows the user to add a new talk by providing its informations' \
     '\n\n\tUSAGE: talk add'
