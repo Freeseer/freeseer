@@ -188,14 +188,14 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         print "------------------------------ Adding a Talk -------------------------------\n"
         presentation = Presentation("")
         
-        presentation.title = raw_input("Type the presentation title: ")
+        presentation.title = raw_input("Type the presentation title: ").strip()
         
-        while(not len(presentation.title.strip()) > 0):
-            presentation.title = raw_input("Please, type the presentation title: ")            
+        while(not len(presentation.title) > 0):
+            presentation.title = raw_input("Please, type the presentation title: ").strip() 
         
-        presentation.speaker = raw_input("Type the presentation speaker: ")
+        presentation.speaker = raw_input("Type the presentation speaker: ").strip()
         
-        while(not len(presentation.speaker.strip()) > 0):
+        while(not len(presentation.speaker) > 0):
             presentation.speaker = raw_input("Please, type the presentation speaker: ")
         
         presentation.description = raw_input("Type the presentation description or press <ENTER> to pass: ").strip()
