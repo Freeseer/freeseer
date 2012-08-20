@@ -43,6 +43,8 @@ from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from RecordingWidget import RecordingWidget
 
+from freeseer.frontend.controller.Client import ClientG
+
 __version__= project_info.VERSION
 
 class RecordApp(QtGui.QMainWindow):
@@ -61,7 +63,7 @@ class RecordApp(QtGui.QMainWindow):
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
-        
+        self.clientWidget = ClientG()
         self.reportWidget = ReportDialog()
         self.reportWidget.setModal(True)
         
@@ -126,8 +128,12 @@ class RecordApp(QtGui.QMainWindow):
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
         
+        self.actionClient = QtGui.QAction(self)
+        self.actionClient.setText("Connect to server")
+        self.actionClient.setIcon(icon)
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
+        self.menuFile.addAction(self.actionClient)
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
         self.menuHelp.addAction(self.actionReport)
@@ -173,6 +179,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
+        self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
         
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
@@ -185,6 +192,9 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
         self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.audioFeedbackCheckbox.setDisabled)
+        
+        #Client Connections
+        self.connect(self.clientWidget.socket, QtCore.SIGNAL('readyRead()'), self.getAction)
         
         #
         # ReportWidget Connections
@@ -533,7 +543,7 @@ class RecordApp(QtGui.QMainWindow):
         
         self.core.db.insert_failure(failure)
         self.reportWidget.close()
-
+    
     ###
     ### Misc.
     ###
@@ -600,6 +610,33 @@ class RecordApp(QtGui.QMainWindow):
     def keyPressEvent(self, event):
         logging.debug("Keypressed: %s" % event.key())
         self.core.backend.keyboard_event(event.key())
+    
+    '''
+    Client functions
+    '''
+    def show_client_widget(self):
+        self.current_presentation()
+        self.clientWidget.show()
+    
+    '''
+    This function is for handling commands sent from the server to the client
+    '''
+    def getAction(self):
+        message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
+        if message == 'Record':
+            self.mainWidget.standbyPushButton.toggle()
+            self.mainWidget.recordPushButton.toggle()
+            self.clientWidget.sendMessage('Started recording')
+            logging.info("Started recording by server's request")
+        elif message == 'Stop':
+            self.mainWidget.recordPushButton.toggle()
+            logging.info("Stopping recording by server's request")
+        elif message == 'Pause' or 'Resume':
+            self.mainWidget.pauseToolButton.toggle()
+            if message == 'Pause':
+                logging.info("Paused recording by server's request")
+            elif message == 'Resume':
+                logging.info("Resumed recording by server's request")
     
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
