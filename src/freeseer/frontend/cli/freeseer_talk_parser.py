@@ -27,6 +27,7 @@ import argparse
 
 import sys,os
 import re
+import time
 
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
@@ -41,11 +42,6 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         
       
         self.add_argument('mode',nargs = '+', metavar='talk mode')
-        
-        self.add_argument('--all', dest='remove_all', action='store_const',const=True, default=False)    
-        self.add_argument('-e', dest='event',nargs = '+',type=str)
-        self.add_argument('-p', dest='presentation',type=str)
-        self.add_argument('-r', dest='room',nargs = '+',type=str)
         
     def analyse_command(self, command):  
         '''
@@ -81,18 +77,22 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             
                                    
         elif(talk_mode == "remove"):
-            remove_mode = mode.split(" ")[1]
-            if(remove_mode == "id"):
-                self.remove_talk(int(mode.split(" ")[2]))
-            elif (remove_mode == "all"):
-                self.remove_all_talks()   
-                                             
+            try:
+                self.remove_talk(int(mode.split(" ")[1]))
+            except ValueError:
+                if (mode.split(" ")[1] == "all"):
+                    self.remove_all_talks() 
+                else:
+                    print "*** Invalid Syntax"       
+                                   
         elif(talk_mode == "add"):
             self.add_talk_by_prompt()
 
-
         elif(talk_mode == "update"):
-            self.update_talk_by_prompt(namespace.presentation)               
+            try:
+                self.update_talk_by_prompt(int(mode.split(" ")[1]))    
+            except:
+                print "*** Invalid Syntax"          
                 
         else:
             print "*** Unknown mode, please type one of the available modes or type 'help talk' to see all available modes"
@@ -202,11 +202,11 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         presentation.level = raw_input("Type the speaker level or press <ENTER> to pass: ").strip()
         presentation.event = raw_input("Type the event that held the presentation or press <ENTER> to pass: ").strip()
         presentation.room = raw_input("Type the room where the presentation will be performed or press <ENTER> to pass: ").strip()     
-        data = raw_input("Type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ").strip()
+        presentation.time = raw_input("Type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ").strip()
         
-        while(not self._is_date_format(data)):
-            if(len(data) > 0):
-                data = raw_input("Wrong date format, please type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ")
+        while(not self._is_date_format(presentation.time)):
+            if(len(presentation.time) > 0):
+                presentation.data = raw_input("Wrong date format, please type the presentation time (format: dd/MM/yyyy HH:mm) or press <ENTER> to pass: ")
             else:
                 break
              
@@ -253,10 +253,13 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             print "There's no such presentation"
             
         
-    def _is_date_format(self, value):
-        if(re.match("[0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9] [0-2][0-9]:[0-5][0-9]", value)):
+    def _is_date_format(self, date):
+        try:
+            valid_date = time.strptime(date, '%d/%m/%Y %H:%M')
             return True
-        return False
+        except ValueError:
+             return False
+
     
     def _get_mode(self, mode_list):
         mode = ""
