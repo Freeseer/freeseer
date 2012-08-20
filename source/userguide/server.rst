@@ -9,6 +9,15 @@ This tool is used for controlling Freeseer Record over network.
 The server can start recording, pause recording and stop recording.
 If you want the instance of your freeseer recorder to be controlled you can follow these steps:
 
+Required installation
+.....................
+
+In order to run the server, passlib library needed to be install. 
+This could be done by using this command:
+::
+
+    $ sudo easy_install passlib
+
 How to remote control:
 .......
 

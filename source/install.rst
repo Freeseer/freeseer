@@ -11,7 +11,7 @@ Prerequisites
 * python-feedparser
 * python-setuptools
 * yapsy (needs setuptools to install)
-
+* passlib (this is required for the server)
 
 Installers
 ----------
@@ -59,3 +59,13 @@ and Freeseer should detect them.
 
 .. note:: On both platforms the `.freeseer` directory is in the user's HOME
           folder. On Windows this is `C:\\Users\\username\\.freeseer\\`.
+
+Installation of passlib for Freeseer Server          
+*******************************************
+
+Passlib needs to be installed to run the Freeseer Server.
+It can be easily installed using this command:
+
+::
+
+    $ sudo easy_install passlib
