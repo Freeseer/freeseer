@@ -93,19 +93,8 @@ A visual representation of what a Freeseer contributor’s GitHub/git workflow s
 .. todo:: Finish diagram
 
 
-Starting a new task / Making a new feature branch
--------------------------------------------------
-
-Each new task or set of edits should have its own branch.
-It's a lot more organized than having all your work under the same branch (try to avoid this).
-
-A few reasons why tasks should have their own branches:
-
-- Less bugs and easier to find and fix the bugs that do exist
-- Easier for us (and yourself) to see what you're working on
-- Easier for us (and yourself) when it's time for you to send a pull request
-- It's an isolated sandbox, so if you screw up, nothing outside that branch is harmed
-- Because it's a sandbox, it's also good for experimenting - maybe you intentionally want to screw up!
+Make Issue-Specific Branches
+----------------------------
 
 Create a new branch based off Freeseer's experimental branch and make it your current branch::
 
@@ -134,8 +123,8 @@ If you followed the instructions, you should have a link to your `GitHub <http:/
    Be descriptive when naming your new branch! See :ref:`branch naming suggestions <branch-names>`.
 
 
-Close and Reference Issues with Commit Message
-----------------------------------------------
+Close and Reference Issues with a Commit Message
+------------------------------------------------
 
 To reduce overhead and management, we use a single issue tracker for all the
 organization's repositories. It can be found at our main repo:
@@ -169,6 +158,7 @@ Anyone with **write access** to the repository may close an issue or leave a not
 
 Dealing with Conflicts
 ----------------------
+
 You'll run into a merge conflict eventually.
 It's when something doesn't match up between the local and remote copy of a file.
 To be more precise, a merge conflict usually occurs when your current branch and the branch you want to merge into the current branch
@@ -211,7 +201,10 @@ To abort the conflict merging process at any time::
 
 Renaming your Branch
 --------------------
-Want to use a better name for your branch? These steps show you how to rename your local *and* remote branch.
+
+Want to use a better name for your branch?
+Here's how to rename your **local** and **remote** branches.
+
 ::
 
     $ git branch -m old-name new-name  # Rename your local branch
