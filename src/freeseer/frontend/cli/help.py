@@ -84,13 +84,10 @@ class Help():
     CONFIG_SET_FILE = '\tTurns file plugin on or off' \
     '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set file [on|off]'
     
-    CONFIG_SET_AUDIO_FEEDBACK = '\tTurns audio feedback on or off' \
-    '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set audio feedback [on|off]'
-    
     CONFIG_SET = '\tThe setter commands provide an interface to modify the original values ' \
     'of some configurations. The configurations available for setting are:' \
     '\n\n\t\taudio: Audio Mixer\n\t\tvideo: Video Mixer\n\t\tdir: Output directory' \
-    '\n\t\tstreaming: Video streaming\n\t\tself.file: File plugin\n\t\taudio feedback: Audio Feedback' \
+    '\n\t\tstreaming: Video streaming\n\t\tfile: File plugin' \
     '\n\n\tIn order to get more informations about each config setter, type "config help set <config>"'
     
     # General help
