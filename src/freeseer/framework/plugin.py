@@ -108,7 +108,6 @@ class PluginManager(QtCore.QObject):
         self.activate_plugin("Video Test Source", "VideoInput")
         self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.activate_plugin("Ogg Output", "Output")
-        self._activate_default_metadata_plugins()
         logging.debug("Default plugins activated.")
         
     def _activate_default_metadata_plugins(self):
