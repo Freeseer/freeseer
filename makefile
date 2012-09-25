@@ -40,6 +40,7 @@ egg: setup.py ALL
 
 # create deb package
 deb: ALL
+	cd ..
 	bin/pkg_deb.sh
 
 # create windows installer
