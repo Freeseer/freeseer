@@ -51,7 +51,7 @@
         <translation>Freeseer 配置工具</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="253"/>
+        <location filename="../../configtool/configtool.py" line="252"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -66,12 +66,12 @@
         <translation type="obsolete">记录音频</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="269"/>
+        <location filename="../../configtool/configtool.py" line="268"/>
         <source>Audio Mixer</source>
         <translation>音频混频器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="274"/>
+        <location filename="../../configtool/configtool.py" line="273"/>
         <source>Setup</source>
         <translation>设置</translation>
     </message>
@@ -81,37 +81,37 @@
         <translation type="obsolete">记录视频</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="273"/>
+        <location filename="../../configtool/configtool.py" line="272"/>
         <source>Video Mixer</source>
         <translation>视频混频器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="259"/>
+        <location filename="../../configtool/configtool.py" line="258"/>
         <source>Miscellaneous</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="261"/>
+        <location filename="../../configtool/configtool.py" line="260"/>
         <source>Record Directory</source>
         <translation>保存目录</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="262"/>
+        <location filename="../../configtool/configtool.py" line="261"/>
         <source>Enable Auto-Hide</source>
         <translation>启用自动隐藏</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="280"/>
+        <location filename="../../configtool/configtool.py" line="279"/>
         <source>Console Logger</source>
         <translation>控制台日志记录器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="283"/>
+        <location filename="../../configtool/configtool.py" line="282"/>
         <source>Log Level</source>
         <translation>日志记录等级</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="282"/>
+        <location filename="../../configtool/configtool.py" line="281"/>
         <source>Syslog Logger</source>
         <translation>系统日志记录器</translation>
     </message>
@@ -186,7 +186,7 @@
         <translation>日志记录器</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="260"/>
+        <location filename="../../configtool/configtool.py" line="259"/>
         <source>Default Language</source>
         <translation>默认语言</translation>
     </message>
@@ -198,15 +198,15 @@
     <message>
         <location filename="../../configtool/configtool.py" line="241"/>
         <source>Metadata</source>
-        <translation>元数据</translation>
+        <translation type="obsolete">元数据</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="268"/>
+        <location filename="../../configtool/configtool.py" line="267"/>
         <source>Audio Input</source>
         <translation>音频输入</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="272"/>
+        <location filename="../../configtool/configtool.py" line="271"/>
         <source>Video Input</source>
         <translation>视频输入</translation>
     </message>
@@ -214,192 +214,192 @@
 <context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="207"/>
+        <location filename="../../record/record.py" line="204"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - 便携式演示录制站</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="212"/>
+        <location filename="../../record/record.py" line="209"/>
         <source>Record</source>
         <translation>记录</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="215"/>
+        <location filename="../../record/record.py" line="212"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="216"/>
+        <location filename="../../record/record.py" line="213"/>
         <source>Hide Main Window</source>
         <translation>隐藏主窗口</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="217"/>
+        <location filename="../../record/record.py" line="214"/>
         <source>Show Main Window</source>
         <translation>显示主窗口</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="238"/>
+        <location filename="../../record/record.py" line="235"/>
         <source>&amp;File</source>
         <translation>文件(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="239"/>
+        <location filename="../../record/record.py" line="236"/>
         <source>&amp;Options</source>
         <translation>选项(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="240"/>
+        <location filename="../../record/record.py" line="237"/>
         <source>&amp;Language</source>
         <translation>语言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="241"/>
+        <location filename="../../record/record.py" line="238"/>
         <source>&amp;Help</source>
         <translation>帮助(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="243"/>
+        <location filename="../../record/record.py" line="240"/>
         <source>&amp;Open Video Directory</source>
         <translation>打开视频目录(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="244"/>
+        <location filename="../../record/record.py" line="241"/>
         <source>&amp;Quit</source>
         <translation>退出(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="245"/>
+        <location filename="../../record/record.py" line="242"/>
         <source>&amp;About</source>
         <translation>关于(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="269"/>
+        <location filename="../../record/record.py" line="266"/>
         <source>Event</source>
         <translation>会议</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="270"/>
+        <location filename="../../record/record.py" line="267"/>
         <source>Room</source>
         <translation>会议室</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="271"/>
+        <location filename="../../record/record.py" line="268"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="272"/>
+        <location filename="../../record/record.py" line="269"/>
         <source>Talk</source>
         <translation>演讲</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="213"/>
+        <location filename="../../record/record.py" line="210"/>
         <source>Pause</source>
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="221"/>
+        <location filename="../../record/record.py" line="218"/>
         <source>Ready.</source>
         <translation>准备就绪.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="222"/>
+        <location filename="../../record/record.py" line="219"/>
         <source>Recording...</source>
         <translation>记录...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="223"/>
+        <location filename="../../record/record.py" line="220"/>
         <source>Recording Paused.</source>
         <translation>记录暂停.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="211"/>
+        <location filename="../../record/record.py" line="208"/>
         <source>Standby</source>
         <translation>待机</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="214"/>
+        <location filename="../../record/record.py" line="211"/>
         <source>Resume</source>
         <translation>继续</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="220"/>
+        <location filename="../../record/record.py" line="217"/>
         <source>Idle.</source>
         <translation>闲置.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="246"/>
+        <location filename="../../record/record.py" line="243"/>
         <source>&amp;Report</source>
         <translation>故障报告(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="279"/>
+        <location filename="../../record/record.py" line="276"/>
         <source>Title:</source>
         <translation>标题:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="280"/>
+        <location filename="../../record/record.py" line="277"/>
         <source>Speaker:</source>
         <translation>演讲者:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="281"/>
+        <location filename="../../record/record.py" line="278"/>
         <source>Event:</source>
         <translation>会议:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="282"/>
+        <location filename="../../record/record.py" line="279"/>
         <source>Room:</source>
         <translation>会议室:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="283"/>
+        <location filename="../../record/record.py" line="280"/>
         <source>Time:</source>
         <translation>时间:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="284"/>
+        <location filename="../../record/record.py" line="281"/>
         <source>Comment</source>
         <translation>备注</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="286"/>
+        <location filename="../../record/record.py" line="283"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="287"/>
+        <location filename="../../record/record.py" line="284"/>
         <source>Report</source>
         <translation>故障报告</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="291"/>
+        <location filename="../../record/record.py" line="288"/>
         <source>No Audio</source>
         <translation>没有音频</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="292"/>
+        <location filename="../../record/record.py" line="289"/>
         <source>No Video</source>
         <translation>没有视频</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="293"/>
+        <location filename="../../record/record.py" line="290"/>
         <source>No Audio/Video</source>
         <translation>没有音频/视频</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="285"/>
+        <location filename="../../record/record.py" line="282"/>
         <source>Release Received</source>
         <translation>收到授权</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="290"/>
+        <location filename="../../record/record.py" line="287"/>
         <source>No Issues</source>
         <translation>无故障</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="278"/>
+        <location filename="../../record/record.py" line="275"/>
         <source>Reporting Tool</source>
         <translation type="unfinished"></translation>
     </message>
