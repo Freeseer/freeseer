@@ -89,9 +89,9 @@ class FreeseerCore:
             count = 0
             tempname = recordname
             
-        # Add "-NN" to the end of a duplicate record name to make it unique.
+            # Add "-NN" to the end of a duplicate record name to make it unique.
             while(self.duplicate_exists("%s.%s" % (tempname, extension))):
-                tempname = recordname + "-" + self.make_id_from_string(count, "0123456789")
+                tempname = "{}-{}".format(recordname, self.make_id_from_string(count, "0123456789"))
                 count+=1
 
         recordname = "%s.%s" % (tempname, extension)
