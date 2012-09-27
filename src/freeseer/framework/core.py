@@ -82,15 +82,17 @@ class FreeseerCore:
         If a record name with a .None extension is returned, the record name
         will just be ignored by the output plugin (e.g. Video Preview plugin).
         """
-        recordname = self.make_record_name(presentation)
-                
-        count = 0
-        tempname = recordname
         
-        # Add "-NN" to the end of a duplicate record name to make it unique.
-        while (self.duplicate_exists("%s.%s" % (tempname, extension))):
-            tempname = "{}-{}".format(recordname, self.make_id_from_string(count, "0123456789"))
-            count += 1
+        if presentation:
+            recordname = self.make_record_name(presentation)
+                    
+            count = 0
+            tempname = recordname
+            
+            # Add "-NN" to the end of a duplicate record name to make it unique.
+            while(self.duplicate_exists("%s.%s" % (tempname, extension))):
+                tempname = "{}-{}".format(recordname, self.make_id_from_string(count, "0123456789"))
+                count+=1
 
         recordname = "%s.%s" % (tempname, extension)
                      

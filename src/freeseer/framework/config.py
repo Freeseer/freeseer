@@ -24,6 +24,7 @@
 
 import ConfigParser
 import os
+import logging
 
 from freeseer.framework import const
 
@@ -96,7 +97,7 @@ class Config:
         try:
             os.makedirs(self.videodir)
         except OSError:
-            print('Video directory exists.')
+            logging.info(u'Video directory exists.')
             
     def readConfig(self):
         '''
