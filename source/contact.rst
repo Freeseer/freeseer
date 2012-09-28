@@ -73,6 +73,28 @@ We occasionally use `Google+ Hangouts
 Here's some tips for joining our next video chat:
 
 * Add `Andrew Ross <http://gplus.to/aross>`_ to your G+ circles, he leads the
-  discussion and starts the hangout.
-* Have a working webcam.
-* Have a headset (a dedicated microphone and headphones greatly improves audio quality).
+  discussion and starts the hangout
+* Have a webcam ready
+* Have a headset ready (optional but recommended)
+
+
+Using the Appropriate Communication Method
+------------------------------------------
+- Use the **mailing list** to discuss topics that affect the whole Freeseer community.
+
+  - Examples: introducing yourself, showing a draft or final version of your
+    project proposal, requesting help on a problem after an unsuccessful
+    attempt in the IRC room, progress updates
+  - If you're unsure which communication method to use, use the mailing list!
+- Use the **IRC channel** to have quick discussions that do not
+  require input from the whole community.
+
+  - Examples: need help with a bug, questions about the source code or
+    git, general questions about Freeseer
+  - Off-topic discussions are allowed, as long as they don't interrupt any
+    on-going discussions
+- Don't use **Twitter**, **Facebook**, or the **blog** to contact us. Those
+  services are mainly used to broadcast information to the public, and they are
+  not necessarily ran by us (i.e. Freeseer contributors).
+- Use the **toll-free phone number** if you need to contact Andrew urgently.
+- Use **G+ Hangouts** for Freeseer meetings where we discuss progress updates.

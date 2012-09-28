@@ -7,7 +7,6 @@ Some problems may not be caused by Freeseer but may be encountered when using Fr
 .. toctree::
    :maxdepth: 1
 
-   communication
    preview
    youtube
 

@@ -3,7 +3,7 @@ Community
 
 Open source software isn't just about code, it's about community and collaborating in public.
 
-.. TODO: Split into separate documents (currently too large for one)
+.. TODO: Consider getting rid of this table of contributors?
 
 Meet the Freeseer Community
 ---------------------------
