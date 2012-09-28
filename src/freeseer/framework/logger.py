@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
 import ConfigParser
 import logging
@@ -28,7 +28,7 @@ import logging.config
 import os
 import sys
 import socket
-from logging.handlers import SYSLOG_TCP_PORT
+#from logging.handlers import SYSLOG_TCP_PORT
 
 class Logger():
     '''
@@ -49,7 +49,16 @@ class Logger():
             
         try:
             logging.config.fileConfig(self.logconf)
+
+            # Disable logging if no log handlers are found
+            config = ConfigParser.ConfigParser()
+            config.readfp(open(self.logconf))
+            handlers = config.get("logger_root", "handlers")
+            if handlers is "":
+                logging.disable(logging.INFO)
+            
             logging.info('Logger initialized.')
+            
         except socket.error:
             sys.stderr.write('Logger failed to initialize\n')
         
@@ -69,7 +78,7 @@ class Logger():
         
         config.add_section('logger_root')
         config.set('logger_root', 'level', 'DEBUG')
-        config.set('logger_root', 'handlers', 'consoleHandler,syslogHandler')
+        config.set('logger_root', 'handlers', 'consoleHandler')
         
         config.add_section('handler_consoleHandler')
         config.set('handler_consoleHandler', 'class', 'StreamHandler')
@@ -126,11 +135,75 @@ class Logger():
                 self.socket.close()
         ## Default back to localhost        
         return "('localhost', handlers.SYSLOG_UDP_PORT)"
+    
+    #
+    # Console Logger Methods
+    #
+    
+    def set_console_logger(self, enabled):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        handlers = config.get("logger_root", "handlers")
+        handler_list = handlers.split(',')
+        
+        if enabled:
+            new_list = "consoleHandler,"
+        else:
+            new_list = ""
+        
+        for handler in handler_list:
+            if handler == "consoleHandler": continue
+            new_list += handler + ","
+        new_list = new_list.rstrip(',')
+        
+        config.set("logger_root", "handlers", new_list)
+        
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    def set_console_loglevel(self, level):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        config.set("handler_consoleHandler", "level", level)
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    #
+    # Syslog Logger Methods
+    #
+    
+    def set_syslog_logger(self, enabled):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        handlers = config.get("logger_root", "handlers")
+        handler_list = handlers.split(',')
+        
+        if enabled:
+            new_list = "syslogHandler,"
+        else:
+            new_list = ""
+        
+        for handler in handler_list:
+            if handler == "syslogHandler": continue
+            new_list += handler + ","
+        new_list = new_list.rstrip(',')
+        
+        config.set("logger_root", "handlers", new_list)
+        
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
+    
+    def set_syslog_loglevel(self, level):
+        config = ConfigParser.ConfigParser()
+        config.readfp(open(self.logconf))
+        config.set("handler_syslogHandler", "level", level)
+        with open(self.logconf, 'w') as configfile:
+            config.write(configfile)
         
 if __name__ == "__main__":
     logger = Logger(os.path.abspath(os.path.expanduser('~/.freeseer/')))
-    logger.log.debug('This is a debug log')
-    logger.log.critical('This is a critical log')
-    logger.log.error('This is an error log')
-    logger.log.info('This is an info log')
-    logger.log.warning('This is a warning log')
+    logging.debug('This is a debug log')
+    logging.critical('This is a critical log')
+    logging.error('This is an error log')
+    logging.info('This is an info log')
+    logging.warning('This is a warning log')

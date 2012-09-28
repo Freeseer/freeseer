@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
@@ -53,16 +53,35 @@ class PluginLoaderWidget(QtGui.QWidget):
         layout = QtGui.QHBoxLayout()
         widget.setLayout(layout)
         
-        # Checkbox, set the proper state on load
-        pluginCheckBox = QtGui.QCheckBox()
-        pluginCheckBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Maximum)
-        
-        if plugin.is_activated:
-            pluginCheckBox.setCheckState(QtCore.Qt.Checked)
-        else:
-            pluginCheckBox.setCheckState(QtCore.Qt.Unchecked)
-        
-        layout.addWidget(pluginCheckBox)
+        # Display Plugin's meta data in a tooltip
+        pluginTooltip = """
+        <table>
+        <tr>
+            <td>Name: </td>
+            <td><b>%(name)s</b></td>
+        </tr>
+        <tr>
+            <td>Version: </td>
+            <td><b>%(version)s</b></td>
+        <tr>
+            <td>Author: </td>
+            <td><b>%(author)s</b></td>
+        </tr>
+        <tr>
+            <td>Website: </td>
+            <td><b>%(website)s</b></td>
+        </tr>
+        <tr>
+            <td>Description: </td>
+            <td><b>%(description)s</b></td>
+        </tr>
+        </table>
+        """ % {"name" : plugin.name,
+               "version" : plugin.version,
+               "author" : plugin.author,
+               "website" : plugin.website,
+               "description" : plugin.description}
+        widget.setToolTip(pluginTooltip)
 
         # Plugin Label / Description
         textLayout = QtGui.QVBoxLayout()
@@ -85,15 +104,6 @@ class PluginLoaderWidget(QtGui.QWidget):
         textLayout.addWidget(pluginLabel)
         textLayout.addWidget(pluginDescLabel)
         # --- End Label / Description
-        
-        # Signal to activate/deactivate a plugin.
-        def set_plugin_state():
-            if pluginCheckBox.checkState() == 2:
-                plugman.activate_plugin(plugin_name, plugin_category)
-            else:
-                plugman.deactivate_plugin(plugin_name, plugin_category)
-        
-        widget.connect(pluginCheckBox, QtCore.SIGNAL('clicked()'), set_plugin_state)
         
         # If plugin supports configuration, show a configuration button.
         if plugin.plugin_object.get_widget() is not None:

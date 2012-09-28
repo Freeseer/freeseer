@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
@@ -51,45 +51,58 @@ class AddTalkWidget(QtGui.QWidget):
         # Title
         self.titleLabel = QtGui.QLabel("Title")
         self.titleLineEdit = QtGui.QLineEdit()
+        self.titleLineEdit.setPlaceholderText("Title of the presentation")
         self.titleLabel.setBuddy(self.titleLineEdit)
         self.addTalkLayout.addRow(self.titleLabel, self.titleLineEdit)
         
         # Presenter
         self.presenterLabel = QtGui.QLabel("Presenter")
         self.presenterLineEdit = QtGui.QLineEdit()
+        self.presenterLineEdit.setPlaceholderText("Name person or people presenting (comma separated)")
         self.presenterLabel.setBuddy(self.presenterLineEdit)
         self.addTalkLayout.addRow(self.presenterLabel, self.presenterLineEdit)
         
         # Event
         self.eventLabel = QtGui.QLabel("Event")
         self.eventLineEdit = QtGui.QLineEdit()
+        self.eventLineEdit.setPlaceholderText("The name of the Event this talk is being presented at")
         self.eventLabel.setBuddy(self.eventLineEdit)
         self.addTalkLayout.addRow(self.eventLabel, self.eventLineEdit)
         
         # Room
         self.roomLabel = QtGui.QLabel("Room")
         self.roomLineEdit = QtGui.QLineEdit()
+        self.roomLineEdit.setPlaceholderText("The Room in which the presentation is taking place")
         self.roomLabel.setBuddy(self.roomLineEdit)
         self.addTalkLayout.addRow(self.roomLabel, self.roomLineEdit)
         
         # Date 
+        current_date = QtCore.QDate()
         self.dateLabel = QtGui.QLabel("Date")
         self.dateEdit = QtGui.QDateEdit()
+        self.dateEdit.setDate(current_date.currentDate())
         self.dateLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.dateLabel, self.dateEdit)
         
         self.dateEdit.setCalendarPopup(True)
         
         # Time
+        current_time = QtCore.QTime()
         self.timeLabel = QtGui.QLabel("Time")
         self.timeEdit = QtGui.QTimeEdit()
+        self.timeEdit.setTime(current_time.currentTime())
         self.timeLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.timeLabel, self.timeEdit)
         
         # Buttons
+        addIcon = QtGui.QIcon.fromTheme("list-add")
+        cancelIcon = QtGui.QIcon.fromTheme("edit-clear")
+        
         self.buttonsWidget = QtGui.QHBoxLayout()
         self.addButton = QtGui.QPushButton("Add")
+        self.addButton.setIcon(addIcon)
         self.cancelButton = QtGui.QPushButton("Cancel")
+        self.cancelButton.setIcon(cancelIcon)
         self.buttonsWidget.addWidget(self.addButton)
         self.buttonsWidget.addWidget(self.cancelButton)
         self.addTalkLayout.addRow(None, self.buttonsWidget)

@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
@@ -41,7 +41,7 @@ RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
 HEADPHONES_LINK=u'http://mediadesign.deviantart.com/'
 
-class AboutDialog(QtGui.QWidget):
+class AboutDialog(QtGui.QDialog):
     """
     Common About Dialog for the Freeseer Project. This should be used for the
     about dialog when including one in GUIs.

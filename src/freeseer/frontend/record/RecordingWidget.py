@@ -21,7 +21,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
@@ -49,15 +49,55 @@ class RecordingWidget(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
+        boldFont = QtGui.QFont()
+        boldFont.setBold(True)
+        
+        # Control bar
+        self.controlRow = QtGui.QHBoxLayout()
+        self.mainLayout.addLayout(self.controlRow)
+        
+        self.standbyIcon = QtGui.QIcon.fromTheme("system-shutdown")
+        recordFallbackIcon = QtGui.QIcon(":/multimedia/record.png")
+        self.recordIcon = QtGui.QIcon.fromTheme("media-record", recordFallbackIcon)
+        stopFallbackIcon = QtGui.QIcon(":/multimedia/stop.png")
+        self.stopIcon =  QtGui.QIcon.fromTheme("media-playback-stop", stopFallbackIcon)
+        self.pauseIcon = QtGui.QIcon.fromTheme("media-playback-pause")
+        self.resumeIcon = QtGui.QIcon.fromTheme("media-playback-start")
+        self.headphoneIcon = QtGui.QIcon()
+        self.headphoneIcon.addPixmap(QtGui.QPixmap(":/multimedia/headphones.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        
+        self.standbyPushButton = QtGui.QPushButton("Standby")
+        self.standbyPushButton.setToolTip("Standby")
+        self.standbyPushButton.setMinimumSize(QtCore.QSize(0, 40))
+        self.standbyPushButton.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+        self.standbyPushButton.setIcon(self.standbyIcon)
+        self.standbyPushButton.setCheckable(True)
+        self.standbyPushButton.setObjectName("standbyButton")
+        self.controlRow.addWidget(self.standbyPushButton)
+        
         self.recordPushButton = QtGui.QPushButton("Record")
+        self.recordPushButton.setToolTip("Record")
         self.recordPushButton.setMinimumSize(QtCore.QSize(0, 40))
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/multimedia/record.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon1.addPixmap(QtGui.QPixmap(":/multimedia/stop.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.recordPushButton.setIcon(icon1)
+        self.recordPushButton.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Fixed)
+        self.recordPushButton.setIcon(self.recordIcon)
+        self.recordPushButton.setHidden(True)
+        self.recordPushButton.setEnabled(False)
         self.recordPushButton.setCheckable(True)
         self.recordPushButton.setObjectName("recordButton")
-        self.mainLayout.addWidget(self.recordPushButton)
+        self.controlRow.addWidget(self.recordPushButton)
+        self.connect(self.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.setRecordIcon)
+        
+        self.pauseToolButton = QtGui.QToolButton()
+        self.pauseToolButton.setText("Pause")
+        self.pauseToolButton.setToolTip("Pause")
+        self.pauseToolButton.setIcon(self.pauseIcon)
+        self.pauseToolButton.setMinimumSize(QtCore.QSize(40, 40))
+        self.pauseToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
+        self.pauseToolButton.setHidden(True)
+        self.pauseToolButton.setEnabled(False)
+        self.pauseToolButton.setCheckable(True)
+        self.controlRow.addWidget(self.pauseToolButton)
+        self.connect(self.pauseToolButton, QtCore.SIGNAL("toggled(bool)"), self.setPauseIcon)
         
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
@@ -89,6 +129,7 @@ class RecordingWidget(QtGui.QWidget):
         self.talkLabel = QtGui.QLabel("Talk ")
         self.talkLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Fixed)
         self.talkComboBox = QtGui.QComboBox()
+        self.talkComboBox.setFont(boldFont)
         self.talkComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
         self.talkComboBox.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToMinimumContentsLength)
         self.filterBarLayoutRow_2.addWidget(self.talkLabel)
@@ -105,6 +146,27 @@ class RecordingWidget(QtGui.QWidget):
         self.previewLayout.addWidget(self.previewWidget)
         self.previewLayout.addWidget(self.audioSlider)
         
+        self.statusLabel = QtGui.QLabel()
+        self.mainLayout.addWidget(self.statusLabel)
+        
+        # Audio Feedback Checkbox
+        self.audioFeedbackCheckbox = QtGui.QCheckBox()
+        self.audioFeedbackCheckbox.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.audioFeedbackCheckbox.setIcon(self.headphoneIcon)
+        self.audioFeedbackCheckbox.setToolTip("Enable Audio Feedback")
+        self.mainLayout.addWidget(self.audioFeedbackCheckbox)
+        
+    def setRecordIcon(self, state):
+        if state:
+            self.recordPushButton.setIcon(self.stopIcon)
+        else:
+            self.recordPushButton.setIcon(self.recordIcon)
+            
+    def setPauseIcon(self, state):
+        if state:
+            self.pauseToolButton.setIcon(self.resumeIcon)
+        else:
+            self.pauseToolButton.setIcon(self.pauseIcon)
 
 if __name__ == "__main__":
     import sys

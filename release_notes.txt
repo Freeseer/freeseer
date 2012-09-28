@@ -1,6 +1,6 @@
-Download the latest installers: https://github.com/fosslc/freeseer/downloads
+Download the latest installers: https://github.com/Freeseer/freeseer/downloads
 
-Download the latest source code: https://github.com/fosslc/freeseer/wiki/
+Download the latest source code: https://github.com/Freeseer/freeseer/wiki/
 
 Differences in 2.5.3
 - Added delay recording option

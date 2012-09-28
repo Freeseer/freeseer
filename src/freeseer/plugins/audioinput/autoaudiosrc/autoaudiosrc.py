@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
@@ -33,7 +33,7 @@ class ALSASrc(IAudioInput):
     name = "Auto Audio Source"
     
     def get_audioinput_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         audiosrc = gst.element_factory_make("autoaudiosrc", "audiosrc")
         bin.add(audiosrc)

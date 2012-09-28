@@ -13,9 +13,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
-if [ -f README.txt ] 
+if [ -f README.md ] 
 then
     cwd=`pwd`
 else
@@ -64,14 +64,16 @@ cp -R ${WAROOT}/pkg/desktop/freeseer.desktop ${PKGROOT_DESKTOP_PATH}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    rm -rf freeseer
     exit 1 
 fi
 
 # Copy the icon
-cp -R ${SRCROOT}/freeseer/framework/resources/freeseer_logo.png ${PKGROOT_PIXMAPS_PATH}
+cp -R ${SRCROOT}/freeseer/frontend/qtcommon/images/freeseer_logo.png ${PKGROOT_PIXMAPS_PATH}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    rm -rf freeseer
     exit 1 
 fi
 
@@ -81,6 +83,7 @@ cp -R ${SRCROOT}/* ${PKGROOT_PYTHON_PATH}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${SRCROOT} to ${PKGROOT_PYTHON_PATH}"
+    rm -rf freeseer
     exit 1 
 fi
 
@@ -89,18 +92,23 @@ cp -R ${PKGTEMPLATE}/* ${PKGROOT}
 if [ $? -ne 0 ]
 then
     echo "Could not copy the files from ${PKGTEMPLATE} to ${PKGROOT}"
+    rm -rf freeseer
     exit 1 
 fi
 
 # TODO: do a one-linder to update the version in the template files
 
 echo "Generating debian package."
-dpkg --build freeseer freeseer_2.5.3_all.deb
+dpkg --build freeseer freeseer_3.0.0_all.deb
 if [ $? -ne 0 ]
 then
     echo "dpkg failed. Review the output to debug."
+    rm -rf freeseer
     exit 1 
 fi
+
+echo "Removing temporary files"
+rm -rf freeseer
 
 echo "Packaging completed successfully."
 

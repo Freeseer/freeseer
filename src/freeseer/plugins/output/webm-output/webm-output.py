@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
@@ -31,46 +31,17 @@ from freeseer.framework.plugin import IOutput
 
 class WebMOutput(IOutput):
     name = "WebM Output"
-    type = "both"
+    type = IOutput.BOTH
+    recordto = IOutput.FILE
     extension = "webm"
     tags = None
     
-    def get_output_bin(self, metadata=None):
+    def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin(self.name)
         
         if metadata is not None:
             self.set_metadata(metadata)
-        
-        # Setup Audio Pipeline
-        audioqueue = gst.element_factory_make("queue", "audioqueue")
-        bin.add(audioqueue)
-        
-        audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
-        bin.add(audioconvert)
-        
-        audiolevel = gst.element_factory_make('level', 'audiolevel')
-        audiolevel.set_property('interval', 20000000)
-        bin.add(audiolevel)
-        
-        audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
-        bin.add(audiocodec)
-        
-        # Setup Video Pipeline
-        videoqueue = gst.element_factory_make("queue", "videoqueue")
-        bin.add(videoqueue)
-        
-        videocodec = gst.element_factory_make("vp8enc", "videocodec")
-        bin.add(videocodec)
-        
-        # Setup metadata
-        vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
-        # set tag merge mode to GST_TAG_MERGE_REPLACE
-        merge_mode = gst.TagMergeMode.__enum_values__[2]
-
-        vorbistag.merge_tags(self.tags, merge_mode)
-        vorbistag.set_tag_merge_mode(merge_mode)
-        bin.add(vorbistag)
-        
+            
         # Muxer
         muxer = gst.element_factory_make("webmmux", "muxer")
         bin.add(muxer)
@@ -79,17 +50,58 @@ class WebMOutput(IOutput):
         filesink.set_property('location', self.location)
         bin.add(filesink)
         
-        # Setup ghost pads
-        audiopad = audioqueue.get_pad("sink")
-        audio_ghostpad = gst.GhostPad("audiosink", audiopad)
-        bin.add_pad(audio_ghostpad)
+        #
+        # Setup Audio Pipeline
+        #
+        if audio:
+            audioqueue = gst.element_factory_make("queue", "audioqueue")
+            bin.add(audioqueue)
+            
+            audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
+            bin.add(audioconvert)
+            
+            audiolevel = gst.element_factory_make('level', 'audiolevel')
+            audiolevel.set_property('interval', 20000000)
+            bin.add(audiolevel)
+            
+            audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
+            bin.add(audiocodec)
+            
+            # Setup metadata
+            vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
+            # set tag merge mode to GST_TAG_MERGE_REPLACE
+            merge_mode = gst.TagMergeMode.__enum_values__[2]
+    
+            vorbistag.merge_tags(self.tags, merge_mode)
+            vorbistag.set_tag_merge_mode(merge_mode)
+            bin.add(vorbistag)
+            
+            # Setup ghost pads
+            audiopad = audioqueue.get_pad("sink")
+            audio_ghostpad = gst.GhostPad("audiosink", audiopad)
+            bin.add_pad(audio_ghostpad)
+            
+            gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, vorbistag, muxer)
         
-        videopad = videoqueue.get_pad("sink")
-        video_ghostpad = gst.GhostPad("videosink", videopad)
-        bin.add_pad(video_ghostpad)
+        #
+        # Setup Video Pipeline
+        #
+        if video:
+            videoqueue = gst.element_factory_make("queue", "videoqueue")
+            bin.add(videoqueue)
+            
+            videocodec = gst.element_factory_make("vp8enc", "videocodec")
+            bin.add(videocodec)
+            
+            videopad = videoqueue.get_pad("sink")
+            video_ghostpad = gst.GhostPad("videosink", videopad)
+            bin.add_pad(video_ghostpad)
+            
+            gst.element_link_many(videoqueue, videocodec, muxer)
         
-        gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, vorbistag, muxer)
-        gst.element_link_many(videoqueue, videocodec, muxer)
+        #
+        # Link muxer to filesink
+        #
         gst.element_link_many(muxer, filesink)
         
         return bin

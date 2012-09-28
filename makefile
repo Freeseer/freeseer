@@ -12,7 +12,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
 # This makefile generates the python code for the gui
 # from an XML definition file
@@ -40,6 +40,7 @@ egg: setup.py ALL
 
 # create deb package
 deb: ALL
+	cd ..
 	bin/pkg_deb.sh
 
 # create windows installer

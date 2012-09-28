@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 For support, questions, suggestions or any other inquiries, visit:
-http://wiki.github.com/fosslc/freeseer/
+http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
@@ -55,22 +55,24 @@ class AudioPassthrough(IAudioMixer):
         
         return bin
         
+    def get_inputs(self):
+        inputs = [self.input1]
+        return inputs
+        
     def load_inputs(self, player, mixer, inputs):
-        loaded = []
-        for plugin in inputs:
-            if plugin.is_activated and plugin.plugin_object.get_name() == self.input1:
-                input = plugin.plugin_object.get_audioinput_bin()
-                player.add(input)
-                input.link(mixer)
-                loaded.append(input)
-                break
-            
-        return loaded
+        # Load inputs
+        input = inputs[0]
+        player.add(input)
+        input.link(mixer)
 
 
     def load_config(self, plugman):
         self.plugman = plugman
-        self.input1 = self.plugman.plugmanc.readOptionFromPlugin("AudioMixer", self.name, "Audio Input")
+        
+        try:
+            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input")
+        except ConfigParser.NoSectionError:
+            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
     
     def get_widget(self):
         if self.widget is None:
@@ -88,18 +90,12 @@ class AudioPassthrough(IAudioMixer):
         return self.widget
 
     def widget_load_config(self, plugman):
-        self.plugman = plugman
-        
-        try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin("AudioMixer", self.name, "Audio Input")
-        except ConfigParser.NoSectionError:
-            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin("AudioMixer", self.name, "Audio Input", None)
+        self.load_config(plugman)
         
         sources = []
         plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
         for plugin in plugins:
-            if plugin.is_activated:
-                sources.append(plugin.plugin_object.get_name())
+            sources.append(plugin.plugin_object.get_name())
                 
         # Load the combobox with inputs
         self.combobox.clear()
@@ -111,5 +107,34 @@ class AudioPassthrough(IAudioMixer):
             n = n +1
 
     def set_input(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin("AudioMixer", self.name, "Audio Input", input)
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", input)
         self.plugman.save()
+        
+    def get_properties(self):
+        return ['Input1']
+    
+    def get_property_value(self, property):
+        if property == "Input1":
+            return self.input1
+        else:
+            return "There's no property with such name"
+        
+    def set_property_value(self, property, value):
+        if(property == "Input1"):
+            if(value == "AudioTest"):
+                self.set_input("Audio Test Source")
+            elif(value == "AutoAudio"):
+                self.set_input("Auto Audio Source")
+            elif(value == "Pulse"):
+                self.set_input("Pulse Audio Source")
+            elif(value == "Jack"):
+                self.set_input("Jack Audio Source")
+            elif(value == "Alsa"):
+                self.set_input("ALSA Audio Source")
+            else:
+                print "Choose an available Input"
+                #TODO List available options              
+        else:
+            return "Error: There's no property with such name"   
+        
+        

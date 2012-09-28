@@ -20,10 +20,13 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
 import ConfigParser
 import os
+import logging
+
+from freeseer.framework import const
 
 class Config:
     '''
@@ -43,6 +46,14 @@ class Config:
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         
         #
+        # Video Uploader needs to be reworked to work as a separate tool not
+        # adding any additional requirements to the main Freeseer UIs
+        #
+#        self.uploaderfile = os.path.abspath("{0}/uploader.conf".format(self.configdir))
+#        self.uploader = UploaderConfig(self.uploaderfile)
+        
+        
+        #
         # Set default settings
         #
         
@@ -54,6 +65,13 @@ class Config:
         self.enable_audio_recoding = True
         self.videomixer = 'Video Passthrough'
         self.audiomixer = 'Audio Passthrough'
+        self.record_to_file = True
+        self.record_to_file_plugin = 'Ogg Output'
+        self.record_to_stream = False
+        self.record_to_stream_plugin = None
+        self.audio_feedback = False
+        self.video_preview = True
+        self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
 
         # Lastrun
         self.start_x = 0
@@ -79,7 +97,7 @@ class Config:
         try:
             os.makedirs(self.videodir)
         except OSError:
-            print('Video directory exists.')
+            logging.info(u'Video directory exists.')
             
     def readConfig(self):
         '''
@@ -105,6 +123,11 @@ class Config:
             self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
             self.videomixer = config.get('Global', 'videomixer')
             self.audiomixer = config.get('Global', 'audiomixer')
+            self.record_to_file = config.getboolean('Global', 'record_to_file')
+            self.record_to_file_plugin = config.get('Global', 'record_to_file_plugin')
+            self.record_to_stream = config.getboolean('Global', 'record_to_stream')
+            self.record_to_stream_plugin = config.get('Global', 'record_to_stream_plugin')
+            self.default_language = config.get('Global', 'Default Language')
             
             # LastRun Section
             self.start_x = config.get('lastrun', 'area_start_x')
@@ -132,6 +155,11 @@ class Config:
         config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
         config.set('Global','videomixer',self.videomixer)
         config.set('Global','audiomixer',self.audiomixer)
+        config.set('Global','record_to_file', self.record_to_file)
+        config.set('Global','record_to_file_plugin', self.record_to_file_plugin)
+        config.set('Global','record_to_stream', self.record_to_stream)
+        config.set('Global','record_to_stream_plugin', self.record_to_stream_plugin)
+        config.set('Global', 'Default Language', self.default_language)
         
         config.add_section('lastrun')
         config.set('lastrun', 'area_start_x', self.start_x)
@@ -148,6 +176,68 @@ class Config:
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:
             config.write(configfile)
+
+#
+# Removing Video Uploader functions from freeseer core framework
+# Video Uploader should be redesigned to work as an independent tool not adding
+# any additional requirements to the rest of Freeseer
+#
+
+#
+# Classes needed by Video Uploader Tool
+#
+# TODO: This should be reworked so that this config is optional for other frontends.
+#class BaseSubConfig(object):
+#    def __init__(self, filename):
+#        self.config = ConfigParser.ConfigParser()
+#        self.filename = filename
+#        self.sections = []
+#    
+#    def _finishinit(self):
+#        try:
+#            with open(self.filename) as f:
+#                self.config.readfp(f)
+#        except IOError:
+#            for s in self.sections:
+#                s.set_defaults()
+#    def write(self):
+#        with open(self.filename, 'w') as f:
+#            self.config.write(f)
+#            
+#class BaseSectionConfig(object):
+#    defaults = {}
+#    section = ''
+#    
+#    def __init__(self, config):
+#        self.config = config
+#    
+#    def set_defaults(self):
+#        self.config.add_section(self.section)
+#        for k, v in self.defaults.iteritems():
+#            self.config.set(self.section, k, v)
+#            
+#def propertyargs(option, rtype=lambda x:x):
+#    return (lambda self:rtype(self.config.get(self.section, option)),
+#            lambda self, value:self.config.set(self.section, option, value))
+#
+#class UploaderConfig(BaseSubConfig):
+#    def __init__(self, filename):
+#        BaseSubConfig.__init__(self, filename)
+#        self.serverhistory = UploaderServerHistoryConfig(self.config)
+#        self.sections = [self.serverhistory,]
+#        self._finishinit()
+#        
+#class UploaderServerHistoryConfig(BaseSectionConfig):
+#    section = 'serverhistory'
+#    defaults = {'username':'',
+#                'server':'',
+#                'port':str(const.SFTP_DEFAULT_PORT),
+#                'servertype':str(const.NotSelected)}
+#    
+#    username = property(*propertyargs('username'))
+#    server = property(*propertyargs('server'))
+#    port = property(*propertyargs('port'))
+#    servertype = property(*propertyargs('servertype', int))
             
 # Config class test code
 if __name__ == "__main__":
