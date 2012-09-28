@@ -84,7 +84,7 @@ Basic Workflow
 4. Add and commit files you worked on. Optionally sign-off your commit with -s.
 5. Push your branch to your remote fork (and automatically create it if it doesn't exist yet) on GitHub.
 6. Send a pull request when your feature is ready to be merged. You can still make additional changes later.
-7. Delete your local branch (add -r to include remote branch) when you're absolutely sure you no longer need it.
+7. Delete your local (and remote) branch when you're absolutely sure you no longer need it.
 
 Workflow Diagram
 ----------------

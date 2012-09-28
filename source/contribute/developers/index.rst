@@ -14,19 +14,16 @@ We aim for test-driven and document-driven development, so write your tests and 
    :maxdepth: 2
 
    setup
-   devfromsource
-   tests
-   writecode/index
-   plugins/index
-   reviewcode
-   howto/index
-   pullrequestchecklist
-   documentation
-   mvc
-   timezones
+   develop-from-source
+   coding-guidelines
+   plugins
+   code-review
+   pull-requests
 
-.. - Setting up your environment
-.. - Code style guides
-.. - Writing plug-ins (using yapsy)
-.. - Code review
-.. - Pull request checklist
+..   tests
+..   writing-code
+..   howto/index
+..   documentation
+
+
+.. Writing plug-ins using yapsy, specifically PluginManager module

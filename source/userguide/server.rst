@@ -1,32 +1,34 @@
 Server
 ======
 
+The *Freeseer Server* tool communicates with the :doc:`Freeseer Record </userguide/record>` tool over a network.
+The server can be used to **start**, **stop**, **pause**, and **resume recording**.
 
-Introduction
-............
+Dependencies
+------------
 
-This tool is used for controlling Freeseer Record over network. 
-The server can start recording, pause recording and stop recording.
-If you want the instance of your freeseer recorder to be controlled you can follow these steps:
+The PassLib library is required to run the server.
 
-Required installation
-.....................
+To install it using pip::
 
-In order to run the server, passlib library needed to be install. 
-This could be done by using this command:
-::
+    sudo pip install passlib
 
-    $ sudo easy_install passlib
+To install it using easy_install::
 
-How to remote control:
-.......
+    sudo easy_install passlib
+
+.. todo:: Add MS instructions
+
+Usage
+-----
 
 1. Open **freeseer-server**
 
 .. figure:: /images/server_s1.png
     :align: center
 
-    You will be faced with this interface
+    The server interface will appear.
+
 Before clicking "Start Server" button, you can choose the IP you would like to use from the combobox next to the "IP:" label
 After you choose the ip or leaving the default you will have to click "Start Server". This will initialize and start our server.
 
