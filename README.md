@@ -69,7 +69,8 @@ Developers
     (pygtk-all-in-one package does not have a 64-bit installer yet)
     + Python needs to be version 2.7.\*
 
-    On Windows, add the following paths to your PATH variable:
+    On Windows, add the following paths to your PATH variable (the number
+    must match your Python version, e.g. 27 if you're using 2.7):
     
         C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
         
