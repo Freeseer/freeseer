@@ -18,10 +18,16 @@ Freeseer is based on open standards and supports royalty free audio and video co
 Curious why Freeseer exists? [Read our history!](http://fosslc.org/drupal/node/596)
 
 
-Users
------
-1. Download and install: https://github.com/Freeseer/freeseer/downloads
-2. Documentation: http://freeseer.github.com/docs
+Documentation
+-------------
+Read our documentation at http://freeseer.github.com/docs
+
+Install from a package
+----------------------
+Use this option if you just want to run Freeseer. If you plan on developing
+Freeseer, you would still need to fork and clone the repo.
+
+Visit our downloads page at https://github.com/Freeseer/freeseer/downloads
 
 **Note:** For the very latest but unstable version, you have to build from the experimental source (see developers section).
 
@@ -31,14 +37,14 @@ Developers
 ### 1. Install dependencies
  + Make
  + Git
- + Python 2.7
+ + Python 2.7+
  + sqlite3
  + PyQT development tools
  + Passlib (for the Freeseer Server)
 
     ### Ubuntu Linux:
 
-        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools python-xlib
+        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
         $ sudo easy_install yapsy passlib
 
     ### Fedora Linux:
@@ -70,9 +76,9 @@ Developers
     + Python needs to be version 2.7.\*
 
     On Windows, add the following paths to your PATH variable (the number
-    must match your Python version, e.g. 27 if you're using 2.7):
+    must match your Python version, e.g. 27 for version 2.7):
     
-        C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+        C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin
         
         
     Install additional Windows Freeseer plugins by placing the freeseer-plugins-windows repository in your C:\Users\<user>\.freeseer\plugins directory:
@@ -83,10 +89,7 @@ Developers
     Coming soon!
           
 ### 2. Download
-Download the source code as a [zip](https://github.com/Freeseer/freeseer/zipball/master)
-or [tarball](https://github.com/Freeseer/freeseer/tarball/master).
-
-Alternatively, you have the option to clone the project with git:
+Clone the project with git:
 
     $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
 
@@ -144,7 +147,7 @@ and [Undergraduate Capstone Open Source Projects](http://ucosp.ca).
 
 Copyright and license
 ---------------------
-© 2011 FOSSLC
+© 2011-2012 FOSSLC
 
 Licensed under the GNU General Public License, version 3 (GPLv3);
 you may not use this work except in compliance with the GPLv3.

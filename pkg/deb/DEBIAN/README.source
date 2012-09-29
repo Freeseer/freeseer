@@ -34,15 +34,17 @@ Developers
  + Python 2.7
  + sqlite3
  + PyQT development tools
+ + Passlib (for the Freeseer Server)
 
     ### Ubuntu Linux:
 
-        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools
-        $ sudo easy_install yapsy
+        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
+        $ sudo easy_install yapsy passlib
 
     ### Fedora Linux:
 
         $ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools
+        $ sudo easy_install yapsy configparser
 
     ### Windows:
     Install
@@ -67,9 +69,10 @@ Developers
     (pygtk-all-in-one package does not have a 64-bit installer yet)
     + Python needs to be version 2.7.\*
 
-    On Windows, add the following paths to your PATH variable:
+    On Windows, add the following paths to your PATH variable (the number
+    must match your Python version, e.g. 27 for version 2.7):
     
-        C:\Python26;C:\Python26\Lib\site-packages\PyQt4\bin
+        C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin
         
         
     Install additional Windows Freeseer plugins by placing the freeseer-plugins-windows repository in your C:\Users\<user>\.freeseer\plugins directory:
@@ -141,7 +144,7 @@ and [Undergraduate Capstone Open Source Projects](http://ucosp.ca).
 
 Copyright and license
 ---------------------
-© 2011 - 2012 FOSSLC
+© 2011 FOSSLC
 
 Licensed under the GNU General Public License, version 3 (GPLv3);
 you may not use this work except in compliance with the GPLv3.
