@@ -40,7 +40,8 @@ Developers
  + Python 2.7+
  + sqlite3
  + PyQT development tools
- + Passlib (for the Freeseer Server)
+ + Passlib (for the Freeseer server tool)
+ + Xlib (for one of the Linux plugins)
 
     ### Ubuntu Linux:
 
