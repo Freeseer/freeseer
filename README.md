@@ -38,8 +38,9 @@ Developers
 
     ### Ubuntu Linux:
 
-        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools python-xlib
+        $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.6-dev python-feedparser python-setuptools 
         $ sudo easy_install yapsy passlib
+	$ sudo apt-get install python-xlib
 
     ### Fedora Linux:
 
