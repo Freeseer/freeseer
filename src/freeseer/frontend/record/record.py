@@ -600,6 +600,8 @@ class RecordApp(QtGui.QMainWindow):
     def open_video_directory(self):
         if sys.platform.startswith("linux"):
             os.system("xdg-open %s" % self.core.config.videodir)
+        elif sys.platform.startswith("win32"):
+            os.system("explorer %s" % self.core.config.videodir)
         else:
             logging.info("Error: This command is not supported on the current OS.")
     
