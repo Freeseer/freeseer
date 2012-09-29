@@ -15,8 +15,6 @@ Freeseer is written in Python, uses Qt4 for its GUI, and Gstreamer for video/aud
 
 Freeseer is based on open standards and supports royalty free audio and video codecs.
 
-:This is a change 
-
 Curious why Freeseer exists? [Read our history!](http://fosslc.org/drupal/node/596)
 
 
