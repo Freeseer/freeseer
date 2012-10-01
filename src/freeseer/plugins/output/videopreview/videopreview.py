@@ -46,6 +46,9 @@ class VideoPreview(IOutput):
         
         videoqueue = gst.element_factory_make("queue", "videoqueue")
         bin.add(videoqueue)
+
+        cspace = gst.element_factory_make("ffmpegcolorspace", "cspace")
+        bin.add(cspace)
         
         videosink = gst.element_factory_make(self.previewsink, "videosink")
         bin.add(videosink)
@@ -55,7 +58,7 @@ class VideoPreview(IOutput):
         ghostpad = gst.GhostPad("sink", pad)
         bin.add_pad(ghostpad)
         
-        gst.element_link_many(videoqueue, videosink)
+        gst.element_link_many(videoqueue, cspace, videosink)
         
         return bin
     
