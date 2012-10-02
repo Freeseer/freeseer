@@ -23,5 +23,9 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 NAME = 'Freeseer'
-VERSION = '2.5.3'
+VERSION = '3.0.0-alpha'
 URL = 'http://github.com/Freeseer/freeseer'
+WWW = 'http://freeseer.github.com'
+BLOG = 'http://fosslc.org'
+DESCRIPTION = 'Video recording and streaming software'
+COPYRIGHT = 'Copyright (c) 2011-2012 Free and Open Source Software Learning Centre'
