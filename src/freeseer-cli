@@ -25,4 +25,4 @@
 from freeseer.frontend.cli.freeseer_shell import FreeseerShell
 
 if __name__ == "__main__":
-    shell =  FreeseerShell().run()
+    shell = FreeseerShell().run()
