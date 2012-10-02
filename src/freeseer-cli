@@ -20,10 +20,9 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
-from freeseer.frontend.cli.freeseer_shell import FreeSeerShell
+from freeseer.frontend.cli.freeseer_shell import FreeseerShell
 
 if __name__ == "__main__":
-    shell =  FreeSeerShell()
-    shell.run()
+    shell =  FreeseerShell().run()
