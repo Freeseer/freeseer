@@ -20,7 +20,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
 import argparse
 
@@ -31,7 +31,7 @@ import getpass
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 
-class FreeSeerConfigParser(argparse.ArgumentParser):
+class FreeseerConfigParser(argparse.ArgumentParser):
     def __init__(self, core):
         argparse.ArgumentParser.__init__(self)
         
