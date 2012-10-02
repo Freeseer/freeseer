@@ -28,6 +28,7 @@ from cmd import Cmd
 
 # TODO: Take a look at shlex.split() for tokenization of command arguments.
 
+from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer_record_parser import FreeseerRecordParser
 from freeseer_talk_parser import FreeseerTalkParser
@@ -63,17 +64,12 @@ class FreeseerShell(Cmd):
         self.CONFIG_SET_MODES_EXTENDED = self.CONFIG_SET_MODES + self.PLUGIN_CATEGORIES
         self.CONFIG_SHOW_MODES_EXTENDED = self.CONFIG_SHOW_MODES + self.PLUGIN_CATEGORIES
         
-        self.TITLE = 'Freeseer'
-        self.VERSION = '3.0.0'
-        self.DESCRIPTION = 'Video recording and streaming software'
-        self.COPYRIGHT = 'Copyright (c) 2011-2012 Free and Open Source Software Learning Centre\n' \
-                         'See http://fosslc.org or http://freeseer.github.com for more information.\n'
         self.HELP = 'Type "help" for more information.\n'
-        self.intro = '{} {} - {}\n{}\n{}'.format(
-            self.TITLE, self.VERSION, self.DESCRIPTION, self.COPYRIGHT,
-            self.HELP)
+        self.intro = '{} (v{}) - {}\n{}\n\nType "help" for more information.'.format(
+            project_info.NAME, project_info.VERSION, project_info.DESCRIPTION,
+            project_info.COPYRIGHT)
         self.prompt = '?- '
-       
+
         # Modify help's documentation strings.
         #self.doc_header = 'doc_header'
         #self.misc_header = 'misc_header'
