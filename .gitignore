@@ -13,9 +13,4 @@ dist
 build
 MANIFEST
 freeseer.egg-info
-src/freeseer/frontend/configtool/freeseer_configtool_ui.py
-src/freeseer/frontend/talkeditor/talkeditor_ui_qt.py
-src/freeseer/frontend/default/
-src/freeseer/frontend/videouploader/UploaderWidget_.py
-src/freeseer/frontend/videouploader/pyuic_VideoUploader_.py
 
