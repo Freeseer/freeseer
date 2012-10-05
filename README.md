@@ -46,12 +46,12 @@ Developers
     ### Ubuntu Linux:
 
         $ sudo apt-get install build-essential qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
-        $ sudo easy_install yapsy passlib
+        $ sudo easy_install yapsy==1.9.2 passlib
 
     ### Fedora Linux:
 
         $ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools
-        $ sudo easy_install yapsy configparser
+        $ sudo easy_install yapsy==1.9.2 configparser
 
     ### Windows:
     Install
@@ -69,7 +69,7 @@ Developers
     
         C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py feedparser
         C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py pygtk
-        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy
+        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy==1.9.2
     
     
     + Windows 32-bit packages are recommended
