@@ -106,6 +106,9 @@ class VideoPassthrough(IVideoMixer):
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type", self.input_type)
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", self.framerate)
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution", self.resolution)
+        except TypeError:
+            # Temp fix for issue when reading framerate the 2nd time causes TypeError
+            pass
     
     def get_widget(self):
         if self.widget is None:
