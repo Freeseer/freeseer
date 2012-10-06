@@ -207,9 +207,9 @@ Here's how to rename your **local** and **remote** branches.
 
 ::
 
-    $ git branch -m old-name new-name  # Rename your local branch
-    $ git push origin new-name  # Add the new branch to your origin remote
-    $ git push origin :old-name  # Delete the old remote branch
+    $ git branch -m old-name new-name  # Renames your local branch
+    $ git push origin new-name  # Adds the new branch to your origin remote
+    $ git push origin --delete old-name  # Deletes the old remote branch
 
 As far as I know, there's no easy way to rename a remote branch.
 Hence the deletion and adding steps.
