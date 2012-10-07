@@ -24,4 +24,4 @@
 
 NAME = 'Freeseer'
 VERSION = '2.5.3'
-URL = 'http://github.com/fosslc/freeseer'
+URL = 'http://github.com/Freeseer/freeseer'

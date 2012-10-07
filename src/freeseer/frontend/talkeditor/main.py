@@ -36,7 +36,7 @@ from talkeditor_ui_qt import *
 __version__ = project_info.VERSION
 
 NAME = project_info.NAME
-URL = project_info.VERSION
+URL = project_info.URL
 LANGUAGE_DIR = 'freeseer/frontend/talkeditor/languages/'
 
 
