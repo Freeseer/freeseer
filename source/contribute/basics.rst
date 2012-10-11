@@ -7,13 +7,19 @@ Git & GitHub
 Freeseer is hosted on `GitHub <http://github.com>`_, which uses `Git
 <http://git-scm.com/>`_. You'll generally encounter both while contributing.
 
-Git allows groups of people to work on the same documents (often code) at the
-same time, and without stepping on each other's toes. It's a distributed version
-control system. Git can be complicated for beginners or for people who have
+Git allows many people to work on the same documents (e.g. source code) at the
+same time, without stepping on each other's toes. It's a *distributed version
+control system*. Git can be complicated for beginners or for people who have
 previously used a version control system that's different by design (e.g. Subversion).
 
 No worries, there are tons of online resources. If you can't find what you're
 looking for, please ask us!
+
+Before we begin, keep in mind that there is no *correct* way of using git. With
+git, you can often achieve the same results via different ways. How you use git
+is often determined by the guidelines of the project you're contributing to.
+The examples on this page are how we recommend you use git when contributing to
+Freeseer.
 
 .. seealso::
 
@@ -32,7 +38,7 @@ looking for, please ask us!
    * Forgetful?
      :math:`\rightarrow` `Git Cheat Sheet <https://na1.salesforce.com/help/doc/en/salesforce_git_developer_cheatsheet.pdf>`_
 
-   * Eclipse is your favourite IDE?
+   * Eclipse is your preferred IDE?
      :math:`\rightarrow` `Eclipse Git Plugin <https://github.com/blog/1181-eclipse-git-plugin-2-0-released>`_
 
    * Prefer GUIs over CLIs?
@@ -44,7 +50,7 @@ looking for, please ask us!
 Forking Freeseer
 ----------------
 
-Once you have a GitHub account and Git installed and configured, the next step is to fork the Freeseer repo.
+Once you have a GitHub account and Git installed and configured, the next step is to fork the Freeseer repo[sitory].
 "Forking" means you use someone's project as a starting point for your own.
 
 1. Go to the `Freeseer repo <https://github.com/Freeseer/freeseer>`_ on GitHub.
