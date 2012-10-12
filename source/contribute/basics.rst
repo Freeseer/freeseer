@@ -54,35 +54,34 @@ Once you have a GitHub account and Git installed and configured, the next step i
 "Forking" means you use someone's project as a starting point for your own.
 
 1. Go to the `Freeseer repo <https://github.com/Freeseer/freeseer>`_ on GitHub.
-2. Fork the "Freeseer" repo by clicking the button.
+2. Fork the "Freeseer" repo by clicking the fork button. This creates a remote
+   copy of the project under your GitHub profile (github.com/username/freeseer).
+   Next, you'll use your fork to set up your local repo [#f1]_.
 
 .. image:: /images/fork.jpg
+    :align: center
+    :alt: Click the fork button on the page *github.com/Freeseer/freeseer*.
 
-Your fork is now complete! Next you'll set up your local repo.
+3. Clone the experimental branch. You'll be basing your work off of this branch.
+   Cloning the master branch is optional---it contains an older version of
+   Freeseer that you won't be working on---so we skip that step. ::
 
-3. Clone the project. First clone the master branch::
+    $ git clone -b experimental https://github.com/your_username/freeseer.git freeseer-experimental
 
-    $ git clone git@github.com:username/freeseer.git freeseer # where username is *your* username
+4. Configure remotes. Add a remote named ``upstream`` to keep track of the original Freeseer repo. ::
 
-4. Also clone the experimental branch [#f1]_::
-
-    $ git clone -b experimental git@github.com:username/freeseer.git freeseer-experimental
-
-5. Configure remotes. Add a remote named ``upstream`` to keep track of the original Freeseer repo::
-
-    $ cd freeseer
-    $ git remote add upstream git://github.com/Freeseer/freeseer.git
+    $ cd freeseer-experimental
+    $ git remote add upstream https://github.com/Freeseer/freeseer.git
     $ git fetch upstream
-    $ # Do the same for the experimental directory
-    $ cd ../freeseer-experimental
-    $ git remote add upstream git://github.com/Freeseer/freeseer.git
-    $ git fetch upstream
+
+   .. tip:: The name ``upstream`` is by convention. You can use whatever name
+     you prefer (e.g. ``mainstream`` or ``mothership``). 
 
 
 Basic Workflow
 --------------
 
-.. todo:: See NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
+.. todo:: (Dennis) See NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
 
 1. Create a new branch based off the central repo's (i.e. Freeseer's) experimental branch.
 2. Fetch any changes for good measure (optional).
@@ -224,4 +223,8 @@ If you don't have a remote tracking branch yet (i.e. you only have a local branc
 
 .. rubric:: Footnotes
 
-.. [#f1] Depending on the work you're doing, you may want to clone the development branch instead.
+.. [#f1] Your local repo, in this case, will be a copy (or *clone*) of your fork onto your computer.
+         You'll be doing all your work in your local repo. You don't need to be
+         connected to the internet to work in your local repo. However, you will
+         need to be if you want to push your changes to a remote repo or pull in
+         changes from a remote repo.
