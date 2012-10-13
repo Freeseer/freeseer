@@ -80,7 +80,7 @@ cd ..
 :: Installing dependencies with easy_install
 python C:\Python27\Lib\site-packages\easy_install.py feedparser
 python C:\Python27\Lib\site-packages\easy_install.py pygtk
-python C:\Python27\Lib\site-packages\easy_install.py yapsy
+python C:\Python27\Lib\site-packages\easy_install.py yapsy==1.9.2
 
 :: Freeseer's download and installation below is commented.
 del /q freeseer
