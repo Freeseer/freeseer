@@ -32,6 +32,21 @@ The freeseer.pro file contains details regarding which source files contain tran
 translation files need to be updated and/or created. If you wish to translate a new langauge simply add a new locale
 for the language you wish to translate.
 
+Adding Qt Translation Files to Freeseer-monitored List:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now the developer needs to update the list of monitored translations by editing the resources file using these commands:: 
+   
+   cd <freeseerroot>/src/freeseer/frontend/qtcommon
+   <texteditor> resource.qrc
+   
+The following line should be added::
+
+   <file alias="languages/tr_LANGUAGE_LOCALE.qm">languages/tr_LANGUAGE_LOCALE.qm</file>
+
+where LANGUAGE and LOCALE are parts of the file name as an example, for the English translation, LANGUAGE is en
+and LOCALE is US.
+
 Updating Qt Resource Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
