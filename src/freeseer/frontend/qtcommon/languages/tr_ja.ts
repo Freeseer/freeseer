@@ -214,192 +214,192 @@
 <context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="204"/>
+        <location filename="../../record/record.py" line="214"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - ポータブル プレゼンテーションの記録ステーション</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="209"/>
+        <location filename="../../record/record.py" line="219"/>
         <source>Record</source>
         <translation>記録する</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="212"/>
+        <location filename="../../record/record.py" line="222"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="213"/>
+        <location filename="../../record/record.py" line="223"/>
         <source>Hide Main Window</source>
         <translation>メインウィンドウを非表示</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="214"/>
+        <location filename="../../record/record.py" line="224"/>
         <source>Show Main Window</source>
         <translation>メインウィンドウを表示する</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="235"/>
+        <location filename="../../record/record.py" line="245"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="236"/>
+        <location filename="../../record/record.py" line="246"/>
         <source>&amp;Options</source>
         <translation>オプション(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="237"/>
+        <location filename="../../record/record.py" line="247"/>
         <source>&amp;Language</source>
         <translation>言語(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="238"/>
+        <location filename="../../record/record.py" line="248"/>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="240"/>
+        <location filename="../../record/record.py" line="250"/>
         <source>&amp;Open Video Directory</source>
         <translation>ビデオ ディレクトリを開く(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="241"/>
+        <location filename="../../record/record.py" line="251"/>
         <source>&amp;Quit</source>
         <translation>終了(&amp;Q)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="242"/>
+        <location filename="../../record/record.py" line="252"/>
         <source>&amp;About</source>
         <translation>アバウト(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="266"/>
+        <location filename="../../record/record.py" line="276"/>
         <source>Event</source>
         <translation>イベント</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="267"/>
+        <location filename="../../record/record.py" line="277"/>
         <source>Room</source>
         <translation>会議室</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="268"/>
+        <location filename="../../record/record.py" line="278"/>
         <source>Date</source>
         <translation>日付</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="269"/>
+        <location filename="../../record/record.py" line="279"/>
         <source>Talk</source>
         <translation>トーク</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="210"/>
+        <location filename="../../record/record.py" line="220"/>
         <source>Pause</source>
         <translation>ポーズ</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="228"/>
         <source>Ready.</source>
         <translation>レディ.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="219"/>
+        <location filename="../../record/record.py" line="229"/>
         <source>Recording...</source>
         <translation>レコーディング...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="220"/>
+        <location filename="../../record/record.py" line="230"/>
         <source>Recording Paused.</source>
         <translation>レコーディングは一時停止.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="208"/>
+        <location filename="../../record/record.py" line="218"/>
         <source>Standby</source>
         <translation>スタンバイ</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="211"/>
+        <location filename="../../record/record.py" line="221"/>
         <source>Resume</source>
         <translation>再開する</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="217"/>
+        <location filename="../../record/record.py" line="227"/>
         <source>Idle.</source>
         <translation>アイドル.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="243"/>
+        <location filename="../../record/record.py" line="253"/>
         <source>&amp;Report</source>
         <translation>報告(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="276"/>
+        <location filename="../../record/record.py" line="286"/>
         <source>Title:</source>
         <translation>タイトル:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="277"/>
+        <location filename="../../record/record.py" line="287"/>
         <source>Speaker:</source>
         <translation>演者:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="278"/>
+        <location filename="../../record/record.py" line="288"/>
         <source>Event:</source>
         <translation>イベント:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="279"/>
+        <location filename="../../record/record.py" line="289"/>
         <source>Room:</source>
         <translation>会議室:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="280"/>
+        <location filename="../../record/record.py" line="290"/>
         <source>Time:</source>
         <translation>時刻:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="281"/>
+        <location filename="../../record/record.py" line="291"/>
         <source>Comment</source>
         <translation>コメント</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="283"/>
+        <location filename="../../record/record.py" line="293"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="284"/>
+        <location filename="../../record/record.py" line="294"/>
         <source>Report</source>
         <translation>報告</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="288"/>
+        <location filename="../../record/record.py" line="298"/>
         <source>No Audio</source>
         <translation>オーディオない</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="289"/>
+        <location filename="../../record/record.py" line="299"/>
         <source>No Video</source>
         <translation>ビデオない</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="290"/>
+        <location filename="../../record/record.py" line="300"/>
         <source>No Audio/Video</source>
         <translation>オーディオ / ビデオ ない</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="282"/>
+        <location filename="../../record/record.py" line="292"/>
         <source>Release Received</source>
         <translation>リリース フォームを受けた</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="287"/>
+        <location filename="../../record/record.py" line="297"/>
         <source>No Issues</source>
         <translation>問題ない</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="275"/>
+        <location filename="../../record/record.py" line="285"/>
         <source>Reporting Tool</source>
         <translation type="unfinished"></translation>
     </message>
