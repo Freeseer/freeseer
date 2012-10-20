@@ -179,7 +179,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="233"/>
         <source>Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>التسجيل</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="267"/>
@@ -197,7 +197,7 @@
     <message>
         <location filename="../../record/record.py" line="214"/>
         <source>Freeseer - portable presentation recording station</source>
-        <translation type="unfinished"></translation>
+        <translation>فري سي آر - برنامج تسجيل المحاضرات</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="219"/>
@@ -212,12 +212,12 @@
     <message>
         <location filename="../../record/record.py" line="223"/>
         <source>Hide Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>إخفاء النافذة الرئيسية </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="224"/>
         <source>Show Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>اظهار النافذة الرئيسية</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="245"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../../record/record.py" line="250"/>
         <source>&amp;Open Video Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>فتح &amp;ملف الفيديو </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="251"/>
@@ -272,32 +272,32 @@
     <message>
         <location filename="../../record/record.py" line="279"/>
         <source>Talk</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان المحاضرة </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="220"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>إيقاف التسجيل مؤقتا </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="228"/>
         <source>Ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>جاهز للتسجيل </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="229"/>
         <source>Recording...</source>
-        <translation type="unfinished"></translation>
+        <translation>جاري التسجيل...</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="230"/>
         <source>Recording Paused.</source>
-        <translation type="unfinished"></translation>
+        <translation>التسجيل متوقف. </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="218"/>
         <source>Standby</source>
-        <translation type="unfinished"></translation>
+        <translation>جاهز للتسجيل.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="221"/>
@@ -312,7 +312,7 @@
     <message>
         <location filename="../../record/record.py" line="253"/>
         <source>&amp;Report</source>
-        <translation type="unfinished"></translation>
+        <translation>ت&amp;قرير </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="286"/>
@@ -322,7 +322,7 @@
     <message>
         <location filename="../../record/record.py" line="287"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>ملقي المحاضرة: </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="288"/>
@@ -342,7 +342,7 @@
     <message>
         <location filename="../../record/record.py" line="291"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>تعليق</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="293"/>
@@ -352,7 +352,7 @@
     <message>
         <location filename="../../record/record.py" line="294"/>
         <source>Report</source>
-        <translation type="unfinished"></translation>
+        <translation>تقرير </translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="298"/>
@@ -382,7 +382,7 @@
     <message>
         <location filename="../../record/record.py" line="285"/>
         <source>Reporting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>أداة إقرار المشاكل </translation>
     </message>
 </context>
 <context>
@@ -390,17 +390,17 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="164"/>
         <source>Freeseer Report Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>أداة إقرار المشاكل </translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="169"/>
         <source>Clear Database</source>
-        <translation type="unfinished"></translation>
+        <translation>حذف قاعدة البيانات </translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="170"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished"></translation>
+        <translation>هل أنت متأكد من حذف قاعدة البيانات؟ </translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="177"/>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="180"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">م&amp;ساعدة </translation>
+        <translation>م&amp;ساعدة </translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="181"/>
@@ -455,12 +455,12 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="193"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>عنوان المحاضرة: </translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="194"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>ملقي المحاضرة: </translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="195"/>
@@ -558,27 +558,27 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="201"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>الحدث</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>الغرفة </translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>التاريخ </translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="204"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>الوقت</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="216"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>إضافة محاضرة </translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="206"/>
