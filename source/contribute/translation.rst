@@ -44,8 +44,11 @@ The following line should be added::
 
    <file alias="languages/tr_LANGUAGE_LOCALE.qm">languages/tr_LANGUAGE_LOCALE.qm</file>
 
-where LANGUAGE and LOCALE are parts of the file name as an example, for the English translation, LANGUAGE is en
-and LOCALE is US.
+where LANGUAGE and LOCALE are specific to your translation. For example, an American English translation
+would be::
+
+   <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>.
+
 
 Updating Qt Resource Files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
