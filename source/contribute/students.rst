@@ -1,15 +1,27 @@
 Student
 =======
 
-Welcome aboard! We love working with students, in fact, most of the Freeseer community alumnus made their contributions
-when they were students. We try to recruit the best and brightest students and have them solve challenging and fun problems.
-We've worked with students from Google Summer of Code (GSoC), Undergraduate Capstone Open Source Projects (UCOSP), and Fedora Summer Coding.
+Welcome aboard! We love working with students. We try to recruit the best and
+brightest students and have them solve fun and challenging problems.
+We've worked with students through Google Summer of Code (GSoC),
+Undergraduate Capstone Open Source Projects (UCOSP), and Fedora Summer Coding.
+
+.. todo:: project evaluation -> https://docs.google.com/open?id=0B-Zj-q_JCBWbS1lNcHBuTEllcUE
+.. todo:: project proposal (verify it's in good condition) you can add, edit,
+          and remove sections as necessary. file > make copy
+.. attitude of forgiveness in the face of failure. When people have the interest
+.. of the company in mind, if mistakes are made along the way, those shouldn't be
+.. met with punishment.
+
+Getting Started
+---------------
+1. TODO
 
 Deciding What To Work On
 ------------------------
 
 We let students choose their projects. There are no set work hours, we think you work best when you want to work.
-As long as you get your work done (roughly) on time, you'll have nothing to worry about.
+As long as you get your work done on time, you'll have nothing to worry about.
 
 First you should get familiar with Freeseer and the community.
 :doc:`Introduce yourself on the mailing list</contact>`, tell us what you're experienced in or what you want to learn.
@@ -27,6 +39,11 @@ and release often as opposed to a highly polished proposal on your first try.
 When you finish your first draft of your proposal, notify everyone on the mailing list and include a link to where they can view it.
 We'll give you feedback so you can make any changes if necessary. Once everything looks fine, your proposal will be approved and you can
 start working on your projects!
+
+Because Freeseer is still a relatively young project and has a small codebase,
+there is lots of room for improvement. This means that your contributions will
+have a huge impact on the future of Freeseer! Due to the small size of our
+community, you'll also have a lot of responsibility.
 
 
 Stay In Touch
