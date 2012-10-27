@@ -9,7 +9,11 @@ This page documents how we use Freeseer for events and how we recommend you do t
 Equipment Needed
 -------------
 * A working installation of Freeseer
-* VGA Capture Device (we recommend an Epiphan device)
+* VGA Capture Device
+
+  * We recommend an `Epiphan frame grabber <http://www.epiphan.com/products/frame-grabbers/>`_
+  * We use the `VGA2USB device <http://www.epiphan.com/products/frame-grabbers/vga2usb/>`_ (the red one)
+    as it's the cheapest and does a decent job
 * Wireless Microphones (we recommend ...)
 
 Setup
@@ -33,8 +37,17 @@ Preparation
 
 Hosting the Videos
 ------------------
-FOSSLC.org can host your videos for free if the talks are open source related.
-We promote them on the site and host them on YouTube.
+The Free and Open Source Software Learning Centre (FOSSLC) can host your videos
+for free if the talks are open source related.
+We promote them on `fosslc.org <http://fosslc.org>`_ and host them on YouTube.
 We get quite a few hits on our website from various communities.
+If you decide to use the services of FOSSLC, please email fosslc@gmail.com.
 
 Of course, you can always use your own hosting solution.
+
+.. todo:: when a new laptop is plugged in like when speakers are  changing between talks. The first time you press record
+          sometimes vga2usb sends you a jumbled signal.
+          Strangely stopping and starting the recording
+          fixes it. Like the resolution is off or you don't see any useful signal just noise.
+          I think restarting the recording forces it to redetect the resolution properly.
+
