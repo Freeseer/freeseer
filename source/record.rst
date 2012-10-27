@@ -19,7 +19,9 @@ Equipment Needed
 Setup
 -----
 
-.. todo::
+.. raw:: html
+
+  <iframe width="840" height="480" src="http://www.youtube-nocookie.com/embed/jXs8beuvvrM" frameborder="0" allowfullscreen></iframe>
 
 Preparation
 -----------
