@@ -24,10 +24,7 @@ Setup
 Preparation
 -----------
 * Use the Talk Editor tool to enter all the talks and their info beforehand.
-* Have the speakers disable their screen saver and power saving mode.
-  If the presenter's laptop goes into power saving mode,
-  then the vga2usb device loses the signal and you will have to pause and restart
-  the recording.
+* Have the speakers disable their screen saver and power saving mode. [1]_
 
   * Linux users can use the caffeine app::
 
@@ -51,3 +48,7 @@ Of course, you can always use your own hosting solution.
           fixes it. Like the resolution is off or you don't see any useful signal just noise.
           I think restarting the recording forces it to redetect the resolution properly.
 
+.. rubric:: Footnotes
+
+.. [1] If the presenter's laptop goes into power saving mode, then the vga2usb
+       device loses the signal and you will have to pause and restart the recording.
