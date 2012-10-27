@@ -24,10 +24,12 @@ Setup
 
   <iframe width="840" height="480" src="http://www.youtube-nocookie.com/embed/jXs8beuvvrM" frameborder="0" allowfullscreen></iframe>
 
-Preparation
------------
+Preparation (Avoiding Common Errors)
+------------------------------------
 * Use the Talk Editor tool to enter all the talks and their info beforehand.
-* Have the speakers disable their screen saver and power saving mode. [1]_
+* Do a test recording with your completed setup to make sure everything works.
+* Verify that the presenters don't have their mics muted.
+* Have the presenter disable their screen saver and power saving mode. [1]_
 
   * Linux users can use the caffeine app::
 
