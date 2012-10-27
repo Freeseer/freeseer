@@ -15,6 +15,7 @@ screencasting software for recording and streaming presentations.
    intro
    install
    userguide/index
+   record
    troubleshoot/index
    community
    contact
