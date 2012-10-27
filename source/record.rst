@@ -37,6 +37,16 @@ Preparation (Avoiding Common Errors)
       sudo apt-get update
       sudo apt-get install caffeine
 
+Troubleshooting
+---------------
+
+* If you only see the red indicator light on the VGA2USB device (the green one
+  isn't showing), and everything has worked previously, then it's possible that
+  the USB cable connecting the device is damaged.
+
+* When a new presenter's laptop is plugged-in and you get a noisy signal the
+  first time you hit record, then try stopping and restarting the recording.
+
 Hosting the Videos
 ------------------
 The Free and Open Source Software Learning Centre (FOSSLC) can place your videos
@@ -46,11 +56,6 @@ The site is somewhat popular and gets quite a few hits from various communities.
 If you decide to use the services of FOSSLC, please email fosslc@gmail.com.
 Of course you can always use your own hosting solution.
 
-.. todo:: when a new laptop is plugged (eg when speakers are changing between talks).
-          The first time you press record sometimes vga2usb sends you a jumbled signal.
-          Strangely stopping and starting the recording fixes it.
-          Like the resolution is off or you don't see any useful signal just noise.
-          I think restarting the recording forces it to redetect the resolution properly.
 
 .. rubric:: Footnotes
 
