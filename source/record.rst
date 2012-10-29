@@ -15,6 +15,7 @@ Equipment Needed
   * We use the `VGA2USB device <http://www.epiphan.com/products/frame-grabbers/vga2usb/>`_ (the red one)
     as it's the cheapest and does a decent job
 * Wireless Microphones
+
   * We use Sennheiser EW100 G2
 
 Setup
