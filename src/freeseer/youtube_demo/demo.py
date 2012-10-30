@@ -1,29 +1,10 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-# freeseer - vga/presentation capture software
-#
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
-#  http://fosslc.org
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-# For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
-
-
+import ConfigParser
+import logging
 import argparse
+
+from freeseer.framework.QtDBConnector import QtDBConnector
 
 import sys,os
 import re
@@ -32,13 +13,93 @@ import time
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 
+#from ..framework import metadata
+#from freeseer.framework import uploader
+from freeseer.frontend.cli import freeseer_talk_parser
+
+
+from PyQt4 import QtGui, QtCore
+
+def upload():
+	#------- Trying to default to the video directory
+	config = ConfigParser.ConfigParser()
+
+	# Get the user's home directory
+	#self.
+	#userhome = os.path.expanduser('~')
+
+	configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
+	      
+	# Config location
+	#self.
+	#configdir = "HOME/.freeseer"
+	#self.
+	#configfile = os.path.abspath("/home/mitchell/Documents/freeseer.conf")
+
+	configfile = os.path.abspath("%s/freeseer.conf" % configdir)
+
+	#f2 = "$HOME/.freeseer/freeseer.conf"
+
+	config.readfp(open(configfile))\
+	#---------------------------------
+
+	vid = FreeSeerTalkParser(argparse.ArgumentParser)
+
+	#vid.show_all_talks()
+
+
+
+	email = raw_input("Email address: ")
+	#vfile = browse_video_directory()
+	vfile = raw_input("File: ")
+
+	# Check to see if the filename has a talk in the db
+	vid_id = vid.get_talk_by_file(vfile)	
+	print vid_id
+	
+
+	if vid_id == -1:
+    	    title = raw_input("Video title: ")
+	    
+	    description = raw_input("Description (optional): ")
+	    
+
+	else:
+	    title = vid.get_title_by_id(vid_id)
+	    description = "Event: " + vid.get_event_by_id(vid_id) +"\nSpeaker: " + vid.get_speaker_by_id(vid_id) + "\nRoom: " + vid.get_room_by_id(vid_id)
+
+	category = raw_input("Category (eg Education): ")
+	keywords = raw_input("Keywords (optional): ")
+
+	    
+
+	vpath = config.get('Global', 'video_directory')
+
+
+	#---Trying to get metadata
+
+
+
+
+	os.system("python freeseer/youtube_demo/uploader.py --email="+email+" --title="+title+" --category="+category+" --description="+description+" --keywords="+keywords+" " + vpath + "/" + vfile)
+
+
+
+
+
+
+
+
 
 class FreeSeerTalkParser(argparse.ArgumentParser):
-    def __init__(self, core):  
+    
+    def __init__(self, core):
+	configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
         argparse.ArgumentParser.__init__(self)
         
         self.core = core
-        self.db_connector = self.core.db
+	#self.db_connector = self.core.db
+        self.db_connector = QtDBConnector(configdir)
         
       
         self.add_argument('mode',nargs = '+', metavar='talk mode')
@@ -121,6 +182,60 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             print "#########################################################################"
             count+=1
         print "-----------------------------------------------------------------------------\n"
+
+
+    # Added this method to find a corresponding talk based on the file name
+    def get_talk_by_file(self, filename):
+	query = self.db_connector.get_talks()
+	count = 1
+	
+	
+	while query.next():
+	    talk_id =  unicode(query.value(0).toString())
+            title = unicode(query.value(1).toString())
+            speaker = unicode(query.value(2).toString())
+            event = unicode(query.value(5).toString())
+            room = unicode(query.value(6).toString())
+
+	    if title[:6].upper() in filename and speaker[:6].upper() in filename and event[:6].upper() in filename and room[:6].upper() in filename:
+	    	return talk_id
+	   
+	    count+=1
+
+	return -1 
+
+
+    def get_title_by_id(self, id):
+        presentation = self.db_connector.get_presentation(id)   
+        if(presentation):
+            return presentation.title
+        else:
+             print "--------------------------- Talk Not Found ----------------------------------"
+
+    def get_speaker_by_id(self, id):
+        presentation = self.db_connector.get_presentation(id)   
+        if(presentation):
+            return presentation.speaker
+        else:
+             print "--------------------------- Talk Not Found ----------------------------------"
+
+    def get_room_by_id(self, id):
+        presentation = self.db_connector.get_presentation(id)   
+        if(presentation):
+            return presentation.room
+        else:
+             print "--------------------------- Talk Not Found ----------------------------------"
+
+    def get_event_by_id(self, id):
+        presentation = self.db_connector.get_presentation(id)   
+        if(presentation):
+            return presentation.event
+        else:
+             print "--------------------------- Talk Not Found ----------------------------------"
+
+
+
+
         
     def show_talk_by_id(self, id):
         presentation = self.db_connector.get_presentation(id)   
@@ -277,3 +392,27 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
             count+=1
         
         return count
+
+
+#----------------------------------
+
+def browse_video_directory():
+    configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
+
+    fileDialog = QtGui.QFileDialog()
+    fileDialog.setFileMode(QtGui.QFileDialog.ShowDirsOnly)
+    filename = fileDialog.getOpenFileName(self, 'Select USB Drive Location')    
+
+    
+    newDir = QtGui.QFileDialog.getExistingDirectory( "Select Video Directory", configdir)
+    if newDir == "": newDir = directory
+       
+    videodir = os.path.abspath(str(newDir))
+
+    return videodir
+
+    #self.generalWidget.recordDirLineEdit.setText(videodir)
+    #self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
+
+
+
