@@ -26,9 +26,10 @@ class Help:
     """Contains all help strings used in Freeseer CLI."""
     
     # Record help
-    RECORD_HELP = '\tRecords the presentation with the respective id using ' \
-    'the current settings\n\tUSAGE: record <id>'
-    
+    RECORD = '\n'.join([ 'Records the desktop and saves the file to the video directory.\n',
+                         '\trecord <talk id>\tRecords the talk with the corresponding ID number in the talk database.',
+                         ])
+
     # Talk Help
     TALK_SHOW_TALKS = '\tLists all talks stored on database. If mode/value are ' \
     'provided, the talks are filtered. \n\n' \
@@ -102,17 +103,8 @@ class Help:
     "The general syntax used to set plugin's values is the following:\n\n" \
     "> config set <PLUGIN CATEGORY> <PLUGIN NAME> <PLUGIN PROPERTY> <PLUGIN VALUE>"
     
-    RECORD_GENERAL_HELP = 'Record Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the record tool on Freeseer.\n' \
-    'The following commands are supported:\n\n' \
-    "> record\n\nFor further information, type 'record help <command>'"
-    
     TALK_GENERAL_HELP = 'Talk Editor Tool Command Line Interface\n' \
     'This CLI defines all commands provided by the talk editor tool on Freeseer.\n' \
     'The following commands are supported:\n\n' \
     '> show\n> show events\n> remove\n> add\n> update\n\n' \
     "For further information, type 'talk help <command>'"
-    
-    
-    
-    
