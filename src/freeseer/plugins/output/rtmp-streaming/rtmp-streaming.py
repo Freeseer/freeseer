@@ -41,14 +41,83 @@ class RTMPOutput(IOutput):
     
     # RTMP Streaming variables
     url = ""
+    video_bitrate = 2400
     
+	#@brief - RTMP Streaming plugin.
+	# Structure for function was based primarily off the ogg function
+	# Creates a bin to stream flv content to [self.url]
+	# Bin has audio and video ghost sink pads 
+	# Converts audio and video to flv with [flvmux] element
+	# Streams flv content to [self.url]
+	# TODO - Error handling - verify pad setup
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin(self.name)
         
         if metadata is not None:
             self.set_metadata(metadata)
        
-        # TODO!!
+        # Muxer
+        muxer = gst.element_factory_make("flvmux", "muxer")
+        
+        # Setup metadata
+        # set tag merge mode to GST_TAG_MERGE_REPLACE
+        merge_mode = gst.TagMergeMode.__enum_values__[2]
+    
+        muxer.merge_tags(self.tags, merge_mode)
+        muxer.set_tag_merge_mode(merge_mode)
+        
+        bin.add(muxer)
+        
+        # RTMP sink
+        #TODO - rtmpsink factory?
+        rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
+        rtmpsink.set_property('location', self.url)
+        bin.add(rtmpsink)
+        
+        #
+        # Setup Audio Pipeline if Audio Recording is Enabled
+        #
+        if audio:
+            audioqueue = gst.element_factory_make("queue", "audioqueue")
+            bin.add(audioqueue)
+            
+            audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
+            bin.add(audioconvert)
+            
+            audiolevel = gst.element_factory_make('level', 'audiolevel')
+            audiolevel.set_property('interval', 20000000)
+            bin.add(audiolevel)
+            
+            # Setup ghost pads
+            audiopad = audioqueue.get_pad("sink")
+            audio_ghostpad = gst.GhostPad("audiosink", audiopad)
+            bin.add_pad(audio_ghostpad)
+            
+            gst.element_link_many(audioqueue, audioconvert, audiolevel, muxer)
+        
+        
+        #
+        # Setup Video Pipeline
+        #
+        if video:
+            videoqueue = gst.element_factory_make("queue", "videoqueue")
+            bin.add(videoqueue)
+            
+            videocodec = gst.element_factory_make("x264enc", "videocodec")
+            videocodec.set_property("bitrate", int(self.video_bitrate))
+            bin.add(videocodec)
+            
+            # Setup ghost pads
+            videopad = videoqueue.get_pad("sink")
+            video_ghostpad = gst.GhostPad("videosink", videopad)
+            bin.add_pad(video_ghostpad)
+            
+            gst.element_link_many(videoqueue, videocodec, muxer)
+        
+        #
+        # Link muxer to rtmpsink
+        #
+        gst.element_link_many(muxer, rtmpsink)
         
         return bin
     
