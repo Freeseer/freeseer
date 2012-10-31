@@ -104,6 +104,11 @@ class FreeseerShell(Cmd):
     
     def default(self, line):
         print '{} is not a valid command.'.format(line)
+    
+    def do_help(self, args):
+        """Override the help command to handle cases of command arguments."""
+        if len(args.split()) < 2: Cmd.do_help(self, args)
+        else: print 'print specific help for ', args
 
     def help_license(self): # TODO: Better if changed to do_license()?
         print 'Freeseer is licensed under the GNU GPL version 3.\n' \
@@ -113,7 +118,7 @@ class FreeseerShell(Cmd):
         print 'Freeseer is maintained by many voluntary contributors.\n' \
               'The project was started by Andrew Ross and Thanh Ha.\n'
  
-    def do_record(self, line):        
+    def do_record(self, line):
         if(len(line.split()) == 0):
             print "*** Invalid Syntax"
             return
