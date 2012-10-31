@@ -119,18 +119,13 @@ class FreeseerShell(Cmd):
               'The project was started by Andrew Ross and Thanh Ha.\n'
  
     def do_record(self, line):
-        if(len(line.split()) == 0):
-            print "*** Invalid Syntax"
-            return
-        elif (line.split()[0] == "help"):
-            help_topic = line.replace("help ", "")
-            if (help_topic == 'record'):
-                print Help.RECORD_HELP
-        else:
+        if line:
             self.record_parser.analyse_command(line)
+        else:
+            print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
     
     def help_record(self):
-        print Help.RECORD_GENERAL_HELP
+        print Help.RECORD
 
     #TODO   
     def complete_record(self, text, line, start_index, end_index):        
