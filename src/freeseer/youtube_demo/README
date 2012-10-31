@@ -2,6 +2,7 @@ YouTube uploader demo
 
 must have the google api:   * [http://code.google.com/p/gdata-python-client python-gdata] (>= 1.2.4)
 
+**Note to upload freeseer videos you should first convert them to mpg format with post-process.sh
 
 To run the demo just enter python demo.py
 

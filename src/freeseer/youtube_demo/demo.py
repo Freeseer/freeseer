@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# I realize there are things in here that are unneeded but I was just playing around a bit
+
 import ConfigParser
 import logging
 import argparse
@@ -24,24 +26,15 @@ def upload():
 	#------- Trying to default to the video directory
 	config = ConfigParser.ConfigParser()
 
-	# Get the user's home directory
-	#self.
-	#userhome = os.path.expanduser('~')
 
 	configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
 	      
 	# Config location
-	#self.
-	#configdir = "HOME/.freeseer"
-	#self.
-	#configfile = os.path.abspath("/home/mitchell/Documents/freeseer.conf")
-
 	configfile = os.path.abspath("%s/freeseer.conf" % configdir)
 
-	#f2 = "$HOME/.freeseer/freeseer.conf"
 
 	config.readfp(open(configfile))\
-	#---------------------------------
+	#---Trying to get metadata
 
 	vid = FreeSeerTalkParser(argparse.ArgumentParser)
 
@@ -76,10 +69,7 @@ def upload():
 	vpath = config.get('Global', 'video_directory')
 
 
-	#---Trying to get metadata
-
-
-
+	
 
 	os.system("python freeseer/youtube_demo/uploader.py --email="+email+" --title="+title+" --category="+category+" --description="+description+" --keywords="+keywords+" " + vpath + "/" + vfile)
 
@@ -90,7 +80,7 @@ def upload():
 
 
 
-
+# Basically a copy of freeseer_talk_parser.py with some added functions
 class FreeSeerTalkParser(argparse.ArgumentParser):
     
     def __init__(self, core):
@@ -184,7 +174,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
         print "-----------------------------------------------------------------------------\n"
 
 
-    # Added this method to find a corresponding talk based on the file name
+    #-----------Added this method to find a corresponding talk based on the file name -------------------
     def get_talk_by_file(self, filename):
 	query = self.db_connector.get_talks()
 	count = 1
@@ -204,7 +194,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
 
 	return -1 
 
-
+    #-------Some getters----------------
     def get_title_by_id(self, id):
         presentation = self.db_connector.get_presentation(id)   
         if(presentation):
