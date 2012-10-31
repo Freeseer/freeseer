@@ -106,9 +106,17 @@ class FreeseerShell(Cmd):
         print '{} is not a valid command.'.format(line)
     
     def do_help(self, args):
-        """Override the help command to handle cases of command arguments."""
-        if len(args.split()) < 2: Cmd.do_help(self, args)
-        else: print 'print specific help for ', args
+        """Override the help command to handle cases of command arguments.
+        
+        General help is provided by help_*() methods."""
+        if len(args.split()) < 2:
+            Cmd.do_help(self, args)
+        else:
+            if args == 'talk show':
+                print Help.TALK_SHOW_TALKS
+            elif args == 'talk show events':
+                print Help.TALK_SHOW_EVENTS
+            #TODO: and so forth for the rest of the specific help...
 
     def help_license(self): # TODO: Better if changed to do_license()?
         print 'Freeseer is licensed under the GNU GPL version 3.\n' \
