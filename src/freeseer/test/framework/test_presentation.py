@@ -17,4 +17,4 @@ class TestPresentation(unittest.TestCase):
 		self.assertNotEquals(self.pres.speaker, "John Doe")
 
 	def test_event_is_default(self):
-		self.assertTrue(self.pres.event == "haha")
+		self.assertFalse(self.pres.event != "Default")
