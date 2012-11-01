@@ -17,6 +17,7 @@ Equipment Needed
 * Wireless Microphones
 
   * We use Sennheiser EW100 G2
+* USB extension cable (optional)
 
 Setup
 -----
@@ -27,6 +28,8 @@ Setup
 
 Preparation (Avoiding Common Errors)
 ------------------------------------
+* Presentations that contain lots of animations or quick movements (e.g. live demos)
+  are best recorded with a higher-end frame grabber since they output higher FPS.
 * Use the Talk Editor tool to enter all the talks and their info beforehand.
 * Do a test recording with your completed setup to make sure everything works.
 * Verify that the presenters don't have their mics muted.
