@@ -81,7 +81,7 @@ cd ..
 :: Installing dependencies with easy_install
 python C:\Python27\Lib\site-packages\easy_install.py feedparser
 python C:\Python27\Lib\site-packages\easy_install.py pygtk
-python C:\Python27\Lib\site-packages\easy_install.py yapsy
+python C:\Python27\Lib\site-packages\easy_install.py yapsy==1.9.2
 
 :: Change Python 2.6 => Python 2.7 on Gstreamer
 xcopy /y /s "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\sdk\bindings\python\v2.7\lib" "%PROGRAMFILES%\OSSBuild\GStreamer\v0.10.7\lib\"

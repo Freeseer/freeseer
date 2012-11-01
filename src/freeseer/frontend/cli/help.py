@@ -20,20 +20,16 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # For support, questions, suggestions or any other inquiries, visit:
-# http://wiki.github.com/fosslc/freeseer/
+# http://wiki.github.com/Freeseer/freeseer/
 
-class Help():
-    '''
-    Contains all help texts used on FreeSeer CLI help section
-    '''
-    
-    HEADER = 'FreeSeer Shell, version 1.0\n' \
-    'Copyright (C) 2011-2012  Free and Open Source Software Learning Centre\n\n'
+class Help:
+    """Contains all help strings used in Freeseer CLI."""
     
     # Record help
-    RECORD_HELP = '\tRecords the presentation with the respective id using ' \
-    'the current settings\n\tUSAGE: record <id>'
-    
+    RECORD = '\n'.join([ 'Records the desktop and saves the file to the video directory.\n',
+                         '\trecord <talk id>\tRecords the talk with the corresponding ID number in the talk database.',
+                         ])
+
     # Talk Help
     TALK_SHOW_TALKS = '\tLists all talks stored on database. If mode/value are ' \
     'provided, the talks are filtered. \n\n' \
@@ -92,12 +88,12 @@ class Help():
     
     # General help
     
-    CONFIG_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the configtool on FreeSeer.\n' \
+    CONFIG_GENERAL_HELP = 'Talk Editor Tool Command Line Interface\n' \
+    'This CLI defines all commands provided by the configtool on Freeseer.\n' \
     'The following commands are supported:\n\n' \
     '> show \n> set\n\nFor further information, type config help <command>\n\n' \
     '>>> Command line plugin support <<< \n\n' \
-    "FreeSeer plugins can also be managed via config tool CLI. The general syntax " \
+    "Freeseer plugins can also be managed via config tool CLI. The general syntax " \
     "used to get current plugin's information is the following:\n\n" \
     '> config show [<PLUGIN CATEGORY>] [<PLUGIN NAME>] [<PLUGIN PROPERTY>]\n\n' \
     "NOTE: In case only plugin category is provided, all plugins matched on this " \
@@ -107,17 +103,8 @@ class Help():
     "The general syntax used to set plugin's values is the following:\n\n" \
     "> config set <PLUGIN CATEGORY> <PLUGIN NAME> <PLUGIN PROPERTY> <PLUGIN VALUE>"
     
-    RECORD_GENERAL_HELP = HEADER + 'Record Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the record tool on FreeSeer.\n' \
-    'The following commands are supported:\n\n' \
-    "> record\n\nFor further information, type 'record help <command>'"
-    
-    TALK_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the talk editor tool on FreeSeer.\n' \
+    TALK_GENERAL_HELP = 'Talk Editor Tool Command Line Interface\n' \
+    'This CLI defines all commands provided by the talk editor tool on Freeseer.\n' \
     'The following commands are supported:\n\n' \
     '> show\n> show events\n> remove\n> add\n> update\n\n' \
     "For further information, type 'talk help <command>'"
-    
-    
-    
-    
