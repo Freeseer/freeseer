@@ -104,6 +104,19 @@ class FreeseerShell(Cmd):
     
     def default(self, line):
         print '{} is not a valid command.'.format(line)
+    
+    def do_help(self, args):
+        """Override the help command to handle cases of command arguments.
+        
+        General help is provided by help_*() methods."""
+        if len(args.split()) < 2:
+            Cmd.do_help(self, args)
+        else:
+            if args == 'talk show':
+                print Help.TALK_SHOW_TALKS
+            elif args == 'talk show events':
+                print Help.TALK_SHOW_EVENTS
+            #TODO: and so forth for the rest of the specific help...
 
     def help_license(self): # TODO: Better if changed to do_license()?
         print 'Freeseer is licensed under the GNU GPL version 3.\n' \
@@ -113,19 +126,14 @@ class FreeseerShell(Cmd):
         print 'Freeseer is maintained by many voluntary contributors.\n' \
               'The project was started by Andrew Ross and Thanh Ha.\n'
  
-    def do_record(self, line):        
-        if(len(line.split()) == 0):
-            print "*** Invalid Syntax"
-            return
-        elif (line.split()[0] == "help"):
-            help_topic = line.replace("help ", "")
-            if (help_topic == 'record'):
-                print Help.RECORD_HELP
-        else:
+    def do_record(self, line):
+        if line:
             self.record_parser.analyse_command(line)
+        else:
+            print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
     
     def help_record(self):
-        print Help.RECORD_GENERAL_HELP
+        print Help.RECORD
 
     #TODO   
     def complete_record(self, text, line, start_index, end_index):        
