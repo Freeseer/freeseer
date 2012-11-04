@@ -51,7 +51,7 @@ Developers
     ### Fedora Linux:
 
         $ sudo yum install git make PyQt4-devel python-feedparser.noarch python-setuptools
-        $ sudo easy_install yapsy==1.9.2
+        $ sudo easy_install yapsy==1.9.2 configparser
 
     ### Windows:
     Install
