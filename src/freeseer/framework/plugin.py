@@ -49,7 +49,7 @@ class PluginManager(QtCore.QObject):
         QtCore.QObject.__init__(self)
         
         self.firstrun = False
-        plugman = PluginManagerSingleton().get()
+        plugman = PluginManagerSingleton.get()
         
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/plugin.conf" % self.configdir)
@@ -136,6 +136,9 @@ class PluginManager(QtCore.QObject):
             "QString", "QString", name="pluginActivated")
     plugin_deactivated = QtCore.pyqtSignal(
             "QString", "QString", name="pluginDectivated")
+    
+    def get_plugmanc(self):
+	return self.plugmanc
     
 
 class IBackendPlugin(IPlugin):
