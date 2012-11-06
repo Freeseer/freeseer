@@ -117,7 +117,7 @@ class FreeseerShell(Cmd):
             elif args == 'talk show events':
                 print Help.TALK_SHOW_EVENTS
 	    elif args == 'talk remove':
-		print Help.Talk_REMOVE
+		print Help.TALK_REMOVE
 	    elif args == 'talk add':
 		print Help.TALK_ADD
 	    elif args == 'talk update':
@@ -148,11 +148,11 @@ class FreeseerShell(Cmd):
 		print Help.TALK_GENERAL_HELP
             
 
-    def help_license(self): # TODO: Better if changed to do_license()?
+    def do_license(self, line): 
         print 'Freeseer is licensed under the GNU GPL version 3.\n' \
               'See https://raw.github.com/Freeseer/freeseer/master/src/LICENSE\n'
 
-    def help_credits(self): # TODO: Better if changed to do_credits()?
+    def do_credits(self, line): 
         print 'Freeseer is maintained by many voluntary contributors.\n' \
               'The project was started by Andrew Ross and Thanh Ha.\n'
  
