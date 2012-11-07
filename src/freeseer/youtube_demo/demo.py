@@ -33,7 +33,7 @@ def upload():
 	configfile = os.path.abspath("%s/freeseer.conf" % configdir)
 
 
-	config.readfp(open(configfile))\
+	config.readfp(open(configfile))
 	#---Trying to get metadata
 
 	vid = FreeSeerTalkParser(argparse.ArgumentParser)
@@ -386,6 +386,7 @@ class FreeSeerTalkParser(argparse.ArgumentParser):
 
 #----------------------------------
 
+"""
 def browse_video_directory():
     configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
 
@@ -403,6 +404,6 @@ def browse_video_directory():
 
     #self.generalWidget.recordDirLineEdit.setText(videodir)
     #self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
-
+"""
 
 
