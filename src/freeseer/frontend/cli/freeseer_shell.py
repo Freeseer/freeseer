@@ -122,31 +122,24 @@ class FreeseerShell(Cmd):
 		print Help.TALK_ADD
 	    elif args == 'talk update':
 		print Help.TALK_UPDATE
-	    elif args == 'record':
-		print Help.RECORD
 	    elif args == 'config show':
 		print Help.CONFIG_SHOW
 	    elif args == 'config set audio':
-		print Help.CONFIG_AUDIO_SET
-	    elif args == 'congif set video':
+		print Help.CONFIG_SET_AUDIO
+	    elif args == 'config set video':
 		print Help.CONFIG_VIDEO_SET
 	    elif args == 'config set video resolution':
 		print Help.CONFIG_VIDEO_RESOLUTION_SET
 	    elif args == 'config set dir':
 		print Help.CONFIG_DIR_SET
-	    elif args == 'config set audio':
-		print Help.CONFIG_SET_AUDIO
 	    elif args == 'config set streaming':
 		print Help.CONFIG_SET_STREAMING
 	    elif args == 'config set file':
 		print Help.CONFIG_SET_FILE
 	    elif args == 'config set':
 		print Help.CONFIG_SET
-	    elif args == 'config':
-		print Help.CONFIG_GENERAL_HELP
-	    else:
-		print Help.TALK_GENERAL_HELP
-            
+            else:
+                print 'Unknown %s topic' % (args)     
 
     def do_license(self, line): 
         print 'Freeseer is licensed under the GNU GPL version 3.\n' \
@@ -165,31 +158,19 @@ class FreeseerShell(Cmd):
     def help_record(self):
         print Help.RECORD
 
+    def help_config(self):
+	print Help.CONFIG_GENERAL_HELP
+
     #TODO   
     def complete_record(self, text, line, start_index, end_index):        
         pass
          
-    def do_talk(self, line):        
-        if(len(line.split()) == 0):
-            print "*** Invalid Syntax" 
-            return       
-        elif (line.split()[0] == "help"):
-            help_topic = line.replace("help ", "")
-            if (help_topic == 'show'):
-                print Help.TALK_SHOW_TALKS
-            elif (help_topic == 'show events'):
-                print Help.TALK_SHOW_EVENTS
-            elif (help_topic == 'remove'):
-                print Help.TALK_REMOVE
-            elif (help_topic == 'add'):
-                print Help.TALK_ADD
-            elif (help_topic == 'update'):
-                print Help.TALK_UPDATE            
-            else:
-                print "Unknow %s topic" % (help_topic)
-        else:
+    def do_talk(self, line):                     
+        if line:
             self.talk_parser.analyse_command(line)
-    
+        else:
+            print 'Error: please provide a valid entry. '    
+
     def help_talk(self):
         print Help.TALK_GENERAL_HELP
         
@@ -209,38 +190,11 @@ class FreeseerShell(Cmd):
         else:
             return self.TALK_MODES
         
-    """ #TODO          
     def do_config(self, line):        
-        if(len(line.split()) == 0):
-            print "*** Invalid Syntax"
-            return
-        elif (line.split()[0] == "help"):
-            help_topic = line.replace("help ", "")
-            if (help_topic == 'show'):
-                print Help.CONFIG_SHOW
-            elif (help_topic == 'set audio'):
-                print Help.CONFIG_AUDIO_SET
-            elif (help_topic == 'set video'):
-                print Help.CONFIG_VIDEO_SET
-            elif (help_topic == 'set video resolution'):
-                print Help.CONFIG_VIDEO_RESOLUTION_SET
-            elif (help_topic == 'set dir'):
-                print Help.CONFIG_DIR_SET
-            elif (help_topic == 'set audio'):
-                print Help.CONFIG_SET_AUDIO
-            elif (help_topic == 'set streaming'):
-                print Help.CONFIG_SET_STREAMING
-            elif (help_topic == 'set file'):
-                print Help.CONFIG_SET_FILE
-            elif (help_topic == 'set audio feedback'):
-                print Help.CONFIG_SET_AUDIO_FEEDBACK
-            elif (help_topic == 'set'):
-                print Help.CONFIG_SET
-            else:
-                "Unknow %s topic" % (help_topic)
-        else:
+        if line:
             self.config_parser.analyse_command(line) 
-    """ 
+        else:
+            print 'Error: please provide a valid entry.'
      
     def help_config(self):
         print Help.CONFIG_GENERAL_HELP
