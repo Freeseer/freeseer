@@ -60,7 +60,7 @@ class ControllerClientWidget(QtGui.QWidget):
         self.portLabel = QtGui.QLabel("Port")
         self.portEdit = QtGui.QSpinBox()
         self.portEdit.setMaximum(65535)
-        self.portEdit.setValue(1234)
+        self.portEdit.setValue(55441)
         self.connLayout.addRow(self.hostLabel, self.portLabel)
         self.connLayout.addRow(self.hostEdit, self.portEdit)
         
