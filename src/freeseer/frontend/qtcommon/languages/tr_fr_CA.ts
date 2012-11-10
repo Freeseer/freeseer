@@ -16,17 +16,19 @@
     <message>
         <location filename="../AboutDialog.py" line="100"/>
         <source>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer est un programme qui a l’abileté d’enregistrer les prèsentations vocalement avec
+des sources de video de l’USB,Firewire ou le bureau locale et les mixent pour faire un video.</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="104"/>
         <source>Copyright (C) 2011 The Free and Open Source Software Learning Centre</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous droits reserves 2011. Ce SOFTWARE est libre et il est une source ouverte. Centre Didactif</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="105"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;,without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sous la permission de GPL . Ce Software est disponible tel qu’il est sans assurance. Les auteurs ne sont pas responsables
+du tout s’il y a des dommages à cause du programme.</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="110"/>
