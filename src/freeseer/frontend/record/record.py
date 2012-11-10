@@ -37,13 +37,11 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.failure import Failure
-from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
+from freeseer.frontend.record.RecordingWidget import RecordingWidget
+from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
-
-from RecordingWidget import RecordingWidget
-
-from freeseer.frontend.controller.Client import ClientG
 
 __version__= project_info.VERSION
 
@@ -63,7 +61,6 @@ class RecordApp(QtGui.QMainWindow):
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
-        self.clientWidget = ClientG()
         self.reportWidget = ReportDialog()
         self.reportWidget.setModal(True)
         
@@ -74,6 +71,9 @@ class RecordApp(QtGui.QMainWindow):
 
         self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
         self.config = self.core.get_config()
+
+        # ClientDialog needs to be loaded after core to get the config directory        
+        self.clientWidget = ClientDialog(self.config.configdir)
         
         # Set timer for recording how much time elapsed during a recording
         self.reset_timer()
