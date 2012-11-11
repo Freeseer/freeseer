@@ -63,7 +63,7 @@ class ClientDialog(QtGui.QDialog):
         self.connect(self.mainWidget.hostEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.portEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
-        self.connect(self.mainWidget.recentConnList, QtCore.SIGNAL('itemSelectionChanged()'), self.recentListHandler)
+        self.connect(self.mainWidget.recentConnList, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem *)'), self.recentListHandler)
         
         self.enableConnectButton()
         self.hide()
@@ -229,7 +229,7 @@ class ClientDialog(QtGui.QDialog):
     '''
     Handler for the recent connections list. When you click on a recent connection the details of the connection are loaded 
     '''
-    def recentListHandler(self):
+    def recentListHandler(self, connection):
         self.mainWidget.hostEdit.setText(self.mainWidget.recentConnList.selectedItems()[0].ip)
         port = str(self.mainWidget.recentConnList.selectedItems()[0].port)
         self.mainWidget.portEdit.setText(port)
