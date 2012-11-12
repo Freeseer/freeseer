@@ -26,8 +26,6 @@ import ConfigParser
 import os
 import logging
 
-from freeseer.framework import const
-
 class Config:
     '''
     This class is responsible for reading/writing settings to/from a config file.
