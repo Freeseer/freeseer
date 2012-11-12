@@ -230,10 +230,12 @@ class ClientDialog(QtGui.QDialog):
     Handler for the recent connections list. When you click on a recent connection the details of the connection are loaded 
     '''
     def recentListHandler(self, connection):
-        self.mainWidget.hostEdit.setText(self.mainWidget.recentConnList.selectedItems()[0].ip)
-        port = str(self.mainWidget.recentConnList.selectedItems()[0].port)
-        self.mainWidget.portEdit.setText(port)
-        self.mainWidget.passEdit.setText(self.mainWidget.recentConnList.selectedItems()[0].passPhrase)
+        chost = self.mainWidget.recentConnList.selectedItems()[0].ip
+        cport = self.mainWidget.recentConnList.selectedItems()[0].port
+        cpass = self.mainWidget.recentConnList.selectedItems()[0].passPhrase
+        self.mainWidget.hostEdit.setText(chost)
+        self.mainWidget.portEdit.setValue(cport)
+        self.mainWidget.passEdit.setText(cpass)
         
 '''
 Custom QListWidgetItem
