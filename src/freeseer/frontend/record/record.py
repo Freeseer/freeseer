@@ -129,7 +129,6 @@ class RecordApp(QtGui.QMainWindow):
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
         
         self.actionClient = QtGui.QAction(self)
-        self.actionClient.setText("Connect to server")
         self.actionClient.setIcon(icon)
         # Actions
         self.menuFile.addAction(self.actionOpenVideoFolder)
@@ -248,6 +247,7 @@ class RecordApp(QtGui.QMainWindow):
         self.menuHelp.setTitle(self.uiTranslator.translate("RecordApp", "&Help"))
         
         self.actionOpenVideoFolder.setText(self.uiTranslator.translate("RecordApp", "&Open Video Directory"))
+        self.actionClient.setText(self.uiTranslator.translate("RecordApp", "&Connect to server"))
         self.actionExit.setText(self.uiTranslator.translate("RecordApp", "&Quit"))
         self.actionAbout.setText(self.uiTranslator.translate("RecordApp", "&About"))
         self.actionReport.setText(self.uiTranslator.translate("RecordApp", "&Report"))
@@ -318,6 +318,7 @@ class RecordApp(QtGui.QMainWindow):
         self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
         
         self.retranslate()
+        self.clientWidget.retranslate()
 
     def setupLanguageMenu(self):
         languages = QtCore.QDir(":/languages").entryList()
