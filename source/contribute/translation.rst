@@ -59,3 +59,17 @@ following commands::
 
    cd <freeseerroot>/src/freeseer/frontend/qtcommon
    make
+
+After the above steps are followed, a sample run of Freeseer should confirm that the translation is working.
+
+
+Commiting and Pushing the Translation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When all is ready to be commited please ensure that you remove the resource_rc.py files from the commit so it doesn't
+cause conflicts with any other work on translation that's currently being done. You do this by git-adding the files as
+normal and then issuing the following command before commiting:
+
+   git rm src/freeseer/frontend/resource_rc.py 
+
+Note: This command is assumed to run from the root directory of the Freeseer source code.
