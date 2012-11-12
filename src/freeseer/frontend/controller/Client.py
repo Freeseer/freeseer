@@ -193,7 +193,7 @@ class ClientDialog(QtGui.QDialog):
                 data = cur.fetchone()
                 self.mainWidget.recentConnList.clear()
                 if data is not None:
-                    listItem = ClientListWidget(data[0], data[1], data[2])
+                    listItem = ClientListItem(data[0], data[1], data[2])
                     self.mainWidget.recentConnList.addItem(listItem)
                 
     '''
@@ -239,7 +239,7 @@ class ClientDialog(QtGui.QDialog):
 Custom QListWidgetItem
 It is used for the recent connections list. 
 '''
-class ClientListWidget(QtGui.QListWidgetItem):
+class ClientListItem(QtGui.QListWidgetItem):
     
     def __init__(self, ip, port, passPhrase):
         QtGui.QWidgetItem.__init__(self)
