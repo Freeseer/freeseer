@@ -236,6 +236,7 @@ class ClientDialog(QtGui.QDialog):
         self.mainWidget.hostEdit.setText(chost)
         self.mainWidget.portEdit.setValue(cport)
         self.mainWidget.passEdit.setText(cpass)
+        self.mainWidget.toolBox.setCurrentWidget(self.mainWidget.connWidget)
         
 '''
 Custom QListWidgetItem
