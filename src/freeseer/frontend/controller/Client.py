@@ -250,7 +250,7 @@ class ClientListWidget(QtGui.QListWidgetItem):
         self.ip = ip
         self.port = port
         self.passPhrase = passPhrase
-        self.setText(self.ip + ' '  + str(port))
+        self.setText("%s:%s" % (ip, port))
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
