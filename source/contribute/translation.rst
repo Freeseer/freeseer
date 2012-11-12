@@ -68,7 +68,7 @@ Commiting and Pushing the Translation
 
 When all is ready to be commited please ensure that you remove the resource_rc.py files from the commit so it doesn't
 cause conflicts with any other work on translation that's currently being done. You do this by git-adding the files as
-normal and then issuing the following command before commiting:
+normal and then issuing the following command before commiting::
 
    git rm src/freeseer/frontend/resource_rc.py 
 
