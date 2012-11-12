@@ -33,6 +33,15 @@ from PyQt4.QtNetwork import QTcpSocket
 from ClientWidget import ControllerClientWidget
     
 class ClientDialog(QtGui.QDialog):
+
+    STATUS = ["Not Connected",
+              "Host Lookup",
+              "Establishing connection",
+              "Connected",
+              "The socket is bound to an address and port",
+              "For internal use only",
+              "Socket is about to close"]
+    
     def __init__(self, configdir, recentconndb_file="recentconn.db"):
         QtGui.QDialog.__init__(self)
         
@@ -43,7 +52,7 @@ class ClientDialog(QtGui.QDialog):
         self.socket = QTcpSocket() 
         self.addr = ''
         self.port = 0
-        self.status = 'Not connected'
+        self.status = self.STATUS[0]
         
         logging.info("Starting Client")
 
@@ -93,20 +102,7 @@ class ClientDialog(QtGui.QDialog):
     '''
     def updateStatus(self):
         state = self.socket.state()
-        if state == 0:
-            self.status = 'Not connected'
-        elif state == 1:
-            self.status = 'Host lookup'
-        elif state == 2:
-            self.status = 'Establishing connection'
-        elif state == 3:
-            self.status = 'Connected'
-        elif state == 4:
-            self.status = 'The socket is bound to an address and port'
-        elif state == 5:
-            self.status = 'For internal use only'
-        elif state == 6:
-            self.status = 'Socket is about to close'
+        self.status = self.STATUS[state]
         self.mainWidget.statusLabel.setText('Client status:' + self.status)
         
     '''
