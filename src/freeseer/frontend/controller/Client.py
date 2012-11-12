@@ -78,6 +78,45 @@ class ClientDialog(QtGui.QDialog):
         self.enableConnectButton()
         self.hide()
         
+        # Translations
+        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
+        self.retranslate()
+        self.updateStatus()
+        
+    ###
+    ### Translation Related
+    ###
+    def retranslate(self):
+        self.setWindowTitle(self.uiTranslator.translate("ControllerClientApp", "Controller Client"))                
+        #
+        # Reusable Strings
+        #
+        self.clientStatusString = self.uiTranslator.translate("ControllerClientApp", "Status")
+        self.connectString = self.uiTranslator.translate("ControllerClientApp", "Connect")
+        self.disconnectString = self.uiTranslator.translate("ControllerClientApp", "Disconnect")
+        # --- End Reusable Strings
+        
+        #
+        # Connection Settings
+        #
+        self.mainWidget.toolBox.setItemText(0, self.uiTranslator.translate("ControllerClientApp", "Connection Settings"))
+        self.mainWidget.hostLabel.setText(self.uiTranslator.translate("ControllerClientApp", "Host name (or IP Address)"))
+        self.mainWidget.portLabel.setText(self.uiTranslator.translate("ControllerClientApp", "Port"))
+        self.mainWidget.passLabel.setText(self.uiTranslator.translate("ControllerClientApp", "Passphrase"))
+        if self.status == self.STATUS[3]:
+            self.mainWidget.connectButton.setText(self.uiTranslator.translate("ControllerClientApp", self.disconnectString))
+        else:
+            self.mainWidget.connectButton.setText(self.uiTranslator.translate("ControllerClientApp", self.connectString))
+        self.updateStatus()
+        # --- End Connection Settings
+        
+        #
+        # Recent Connections
+        #
+        self.mainWidget.toolBox.setItemText(1, self.uiTranslator.translate("ControllerClientApp", "Recent Connections"))
+        # --- End Recent Connections
+        
     ##
     ## UI Related
     ##
@@ -91,7 +130,7 @@ class ClientDialog(QtGui.QDialog):
     def connected(self):
         logging.info("Connected to %s %s", self.addr, self.port)
         self.sendPassphrase()
-        self.mainWidget.connectButton.setText("Disconnect")
+        self.mainWidget.connectButton.setText(self.disconnectString)
         self.disconnect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer) 
         self.disconnect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
@@ -103,7 +142,7 @@ class ClientDialog(QtGui.QDialog):
     def updateStatus(self):
         state = self.socket.state()
         self.status = self.STATUS[state]
-        self.mainWidget.statusLabel.setText('Client status:' + self.status)
+        self.mainWidget.statusLabel.setText(self.clientStatusString + ": " + self.status)
         
     '''
     When there is a socket error this function is called to show the error in a QMessageBox
@@ -144,7 +183,7 @@ class ClientDialog(QtGui.QDialog):
         self.disconnect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
         self.connect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer)
         self.connect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
-        self.mainWidget.connectButton.setText('Connect')
+        self.mainWidget.connectButton.setText(self.connectString)
         self.addToRecentConnections()
       
     '''

@@ -33,7 +33,7 @@ class ControllerClientWidget(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
-        self.statusLabel = QtGui.QLabel("Status: " + "Disconnected")
+        self.statusLabel = QtGui.QLabel("Status: ")
         self.mainLayout.addWidget(self.statusLabel)
         
         #
