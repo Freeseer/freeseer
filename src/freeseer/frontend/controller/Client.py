@@ -64,7 +64,8 @@ class ClientDialog(QtGui.QDialog):
         self.connect(self.mainWidget.portEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.recentConnList, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem *)'), self.recentListHandler)
-        
+
+        self.getRecentConnections()
         self.enableConnectButton()
         self.hide()
         
