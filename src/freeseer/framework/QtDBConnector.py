@@ -225,19 +225,6 @@ class QtDBConnector():
         
         return self.presentationsModel
 
-    def get_failures_model(self):
-        """
-        Gets the Failure reports table Model
-        Useful for QT GUI based Frontends to load the Model in Table Views.
-        """
-        if self.failuresModel is None:
-            self.failuresModel = QtSql.QSqlTableModel()
-            self.failuresModel.setTable("failures")
-            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
-            self.failuresModel.select()
-
-        return self.failuresModel
-
     def get_events_model(self):
         """
         Gets the Events Model.
@@ -393,7 +380,7 @@ class QtDBConnector():
             self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
             self.failuresModel.select()
         
-        return self.failuresModel 
+        return self.failuresModel
     
 """
 Test code to independently test the methods in the QtDBConnector() class.    
