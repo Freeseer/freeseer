@@ -166,9 +166,8 @@ class ClientDialog(QtGui.QDialog):
         
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
 
-        addr = QtNetwork.QHostAddress(self.addr)
         logging.info("Connecting to %s %s", self.addr, self.port)
-        self.socket.connectToHost(addr, self.port)
+        self.socket.connectToHost(self.addr, self.port)
         if self.socket.waitForConnected(1000) is False :
             logging.error("Socket error %s", self.socket.errorString())    
     
