@@ -42,12 +42,12 @@ class ClientDialog(QtGui.QDialog):
               "For internal use only",
               "Socket is about to close"]
     
-    def __init__(self, configdir, recentconndb_file="recentconn.db"):
+    def __init__(self, configdir, recentconndb):
         QtGui.QDialog.__init__(self)
         
         # Variables
         self.configdir = configdir
-        self.recentconndb_file = os.path.abspath("%s/%s" % (self.configdir, recentconndb_file))
+        self.recentconndb = recentconndb
         
         self.socket = QTcpSocket()
         self.status = self.STATUS[0]
@@ -70,9 +70,9 @@ class ClientDialog(QtGui.QDialog):
         self.connect(self.mainWidget.hostEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.portEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.connect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
-        self.connect(self.mainWidget.recentConnList, QtCore.SIGNAL('itemDoubleClicked(QListWidgetItem *)'), self.recentListHandler)
+        self.connect(self.mainWidget.recentConnList, QtCore.SIGNAL('doubleClicked(const QModelIndex &)'), self.recentListHandler)
 
-        self.getRecentConnections()
+        self.loadRecentConnDB()
         self.enableConnectButton()
         self.hide()
         
@@ -164,7 +164,6 @@ class ClientDialog(QtGui.QDialog):
         caddr = self.mainWidget.hostEdit.text()
         cport = int(self.mainWidget.portEdit.text())
         cpass = self.mainWidget.passEdit.text()
-        self.getRecentConnections()      
         
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
 
@@ -217,73 +216,30 @@ class ClientDialog(QtGui.QDialog):
     ## Recent Connections Related
     ##
     
-    '''
-    This function is for getting the recent connections from the database and load it to the list
-    '''    
-    def getRecentConnections(self):
-        logging.info("Getting recent connections from database")
-        if os.path.isfile(self.recentconndb_file) is False:
-            logging.info("Database doesn't exist, creating database")
-            con = sqlite3.connect(self.recentconndb_file)
-            with con:
-                cur = con.cursor()
-                cur.execute('create table recentconnections(ip varchar(15), port int, passphrase varchar(150))') 
-        else:
-            con = sqlite3.connect(self.recentconndb_file)
-            with con:
-                cur = con.cursor()
-                cur.execute('select * from recentConnections')
-                data = cur.fetchone()
-                self.mainWidget.recentConnList.clear()
-                if data is not None:
-                    listItem = ClientListItem(data[0], data[1], data[2])
-                    self.mainWidget.recentConnList.addItem(listItem)
+    def loadRecentConnDB(self):
+        model = self.recentconndb.get_recentconn_model()
+        self.mainWidget.recentConnList.setModel(model)
+        self.mainWidget.recentConnList.setColumnHidden(2, True) # Hide the passphrase column
                 
     '''
     This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
     '''   
     def addToRecentConnections(self, caddr, cport, cpass):
-        con = sqlite3.connect(self.recentconndb_file)
-        with con:
-            cur = con.cursor()
-            cur.execute('''SELECT * FROM recentconnections WHERE ip = "%s" and port = "%d" and passphrase = "%s" ''' %
-                            (caddr, cport, cpass))
-                            
-            data = cur.fetchone()
-            if data is not None:
-                logging.info("Connection already exists in the database")
-                return
-            elif data is None:
-                cur.execute('''INSERT INTO recentConnections VALUES("%s" , "%d", "%s")''' %
-                            (caddr, cport, cpass))
-                logging.info("Recent connection %s %d added to the database ", caddr, cport)
-                self.getRecentConnections()
+        self.recentconndb.insert_recentconn(caddr, cport, cpass)
+        self.loadRecentConnDB()
         
     '''
     Handler for the recent connections list. When you click on a recent connection the details of the connection are loaded 
     '''
     def recentListHandler(self, connection):
-        chost = self.mainWidget.recentConnList.selectedItems()[0].host
-        cport = self.mainWidget.recentConnList.selectedItems()[0].port
-        cpass = self.mainWidget.recentConnList.selectedItems()[0].passPhrase
+        chost = connection.sibling(connection.row(), 0).data().toString()
+        cport = int(connection.sibling(connection.row(), 1).data().toString())
+        cpass = connection.sibling(connection.row(), 2).data().toString()
         self.mainWidget.hostEdit.setText(chost)
         self.mainWidget.portEdit.setValue(cport)
         self.mainWidget.passEdit.setText(cpass)
         self.mainWidget.toolBox.setCurrentWidget(self.mainWidget.connWidget)
         
-'''
-Custom QListWidgetItem
-It is used for the recent connections list. 
-'''
-class ClientListItem(QtGui.QListWidgetItem):
-    
-    def __init__(self, host, port, passPhrase):
-        QtGui.QWidgetItem.__init__(self)
-        self.host = host
-        self.port = port
-        self.passPhrase = passPhrase
-        self.setText("%s:%s" % (host, port))
-
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
