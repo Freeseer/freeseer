@@ -73,7 +73,7 @@ class RecordApp(QtGui.QMainWindow):
         self.config = self.core.get_config()
 
         # ClientDialog needs to be loaded after core to get the config directory        
-        self.clientWidget = ClientDialog(self.config.configdir)
+        self.clientWidget = ClientDialog(self.config.configdir, self.core.db)
         
         # Set timer for recording how much time elapsed during a recording
         self.reset_timer()

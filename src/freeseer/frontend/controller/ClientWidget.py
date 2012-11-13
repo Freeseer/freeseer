@@ -75,7 +75,9 @@ class ControllerClientWidget(QtGui.QWidget):
         # Recent Connections
         #
         
-        self.recentConnList = QtGui.QListWidget()
+        self.recentConnList = QtGui.QTableView()
+        self.recentConnList.setShowGrid(False)
+        self.recentConnList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.toolBox.addItem(self.recentConnList, "Recent Connections")
         
         #
