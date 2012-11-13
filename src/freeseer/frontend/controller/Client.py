@@ -49,9 +49,7 @@ class ClientDialog(QtGui.QDialog):
         self.configdir = configdir
         self.recentconndb_file = os.path.abspath("%s/%s" % (self.configdir, recentconndb_file))
         
-        self.socket = QTcpSocket() 
-        self.addr = ''
-        self.port = 0
+        self.socket = QTcpSocket()
         self.status = self.STATUS[0]
         
         logging.info("Starting Client")
@@ -128,7 +126,10 @@ class ClientDialog(QtGui.QDialog):
             self.mainWidget.connectButton.setEnabled(True)
     
     def connected(self):
-        logging.info("Connected to %s %s", self.addr, self.port)
+        caddr = self.socket.peerName()
+        cport = self.socket.peerPort()
+        logging.info("Connected to %s:%s" % (caddr, cport))
+        
         self.sendPassphrase()
         self.mainWidget.connectButton.setText(self.disconnectString)
         self.disconnect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer) 
@@ -160,16 +161,21 @@ class ClientDialog(QtGui.QDialog):
     Function that is called when connect button is pressed.
     '''
     def connectToServer(self):
-        self.addr = self.mainWidget.hostEdit.text()
-        self.port = int(self.mainWidget.portEdit.text())
+        caddr = self.mainWidget.hostEdit.text()
+        cport = int(self.mainWidget.portEdit.text())
+        cpass = self.mainWidget.passEdit.text()
         self.getRecentConnections()      
         
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
 
-        logging.info("Connecting to %s %s", self.addr, self.port)
-        self.socket.connectToHost(self.addr, self.port)
-        if self.socket.waitForConnected(1000) is False :
-            logging.error("Socket error %s", self.socket.errorString())    
+        logging.info("Connecting to %s:%s" % (caddr, cport))
+        self.socket.connectToHost(caddr, cport)
+        
+        if not self.socket.waitForConnected(1000):
+            logging.error("Socket error %s", self.socket.errorString())
+        else:
+            # Add to recent connections if connection is successful
+            self.addToRecentConnections(caddr, cport, cpass)
     
     def disconnectFromHost(self):
         self.socket.disconnectFromHost()
@@ -183,7 +189,6 @@ class ClientDialog(QtGui.QDialog):
         self.connect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer)
         self.connect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
         self.mainWidget.connectButton.setText(self.connectString)
-        self.addToRecentConnections()
       
     '''
     Function for sending message to the connected server
@@ -237,35 +242,28 @@ class ClientDialog(QtGui.QDialog):
     '''
     This function is for adding a new connection to the recent connections. It checks whether it exists in the database or not.
     '''   
-    def addToRecentConnections(self):
+    def addToRecentConnections(self, caddr, cport, cpass):
         con = sqlite3.connect(self.recentconndb_file)
         with con:
             cur = con.cursor()
             cur.execute('''SELECT * FROM recentconnections WHERE ip = "%s" and port = "%d" and passphrase = "%s" ''' %
-                            (self.addr,
-                             self.port,
-                             self.mainWidget.passEdit.text()
-                             )
-                        )
+                            (caddr, cport, cpass))
+                            
             data = cur.fetchone()
             if data is not None:
                 logging.info("Connection already exists in the database")
                 return
             elif data is None:
                 cur.execute('''INSERT INTO recentConnections VALUES("%s" , "%d", "%s")''' %
-                            (self.addr,
-                             self.port,
-                             self.mainWidget.passEdit.text()
-                             )
-                            )
-                logging.info("Recent connection %s %d added to the database ", self.addr, self.port)
+                            (caddr, cport, cpass))
+                logging.info("Recent connection %s %d added to the database ", caddr, cport)
                 self.getRecentConnections()
         
     '''
     Handler for the recent connections list. When you click on a recent connection the details of the connection are loaded 
     '''
     def recentListHandler(self, connection):
-        chost = self.mainWidget.recentConnList.selectedItems()[0].ip
+        chost = self.mainWidget.recentConnList.selectedItems()[0].host
         cport = self.mainWidget.recentConnList.selectedItems()[0].port
         cpass = self.mainWidget.recentConnList.selectedItems()[0].passPhrase
         self.mainWidget.hostEdit.setText(chost)
@@ -279,12 +277,12 @@ It is used for the recent connections list.
 '''
 class ClientListItem(QtGui.QListWidgetItem):
     
-    def __init__(self, ip, port, passPhrase):
+    def __init__(self, host, port, passPhrase):
         QtGui.QWidgetItem.__init__(self)
-        self.ip = ip
+        self.host = host
         self.port = port
         self.passPhrase = passPhrase
-        self.setText("%s:%s" % (ip, port))
+        self.setText("%s:%s" % (host, port))
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
