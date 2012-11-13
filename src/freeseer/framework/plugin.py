@@ -137,6 +137,9 @@ class PluginManager(QtCore.QObject):
     plugin_deactivated = QtCore.pyqtSignal(
             "QString", "QString", name="pluginDectivated")
     
+    def get_plugmanc(self):
+	return self.plugmanc
+    
 
 class IBackendPlugin(IPlugin):
     instance = 0
