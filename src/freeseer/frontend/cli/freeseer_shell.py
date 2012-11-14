@@ -156,7 +156,7 @@ class FreeseerShell(Cmd):
             print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
     
     def help_record(self):
-        print Help.RECORD
+        print Help.RECORD_HELP
 
     def help_config(self):
 	print Help.CONFIG_GENERAL_HELP
