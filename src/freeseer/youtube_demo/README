@@ -1,19 +1,12 @@
-YouTube uploader demo
+YouTube uploader demo (I should probably rename the files)
 
+Dependencies:
 must have the google api:   * [http://code.google.com/p/gdata-python-client python-gdata] (>= 1.2.4)
-
-**Note to upload freeseer videos you should first convert them to mpg format with post-process.sh
-
-To run the demo just enter python demo.py
-
-It will ask for your email, the title you want the video to have, category, description, and keywords (separated by commas)
-
-* Please enter title/decrption in quotes if it contains spaces ("this is the title") (will fix in future).
-
-Categories are: Tech Education Animals People Travel Entertainment Howto Sports Autos Music News Games Nonprofit Comedy Film
+and must download and install mutagen:   http://code.google.com/p/mutagen/ 
 
 
-It will also ask for the File Path. You can just enter the path to the file relative to where you are running the program from.
+Currently, to run enter python upload.py from src directory
+**Note that when asked for the filename the freeseer record directoy is automatically used by default. So if the video is in the recording directory then you should only enter the filename
 
 
 The video's url will be displayed after upload is complete.
