@@ -52,21 +52,27 @@ class TestConfigToolApp(unittest.TestCase):
 
 
 	def test_plugin_settings(self):
+		# TODO
 		pass
 
 	def test_plugin_audio_input_settings(self):
+		# TODO
 		pass
 
 	def test_plugin_audio_mixer_settings(self):
+		# TODO
 		pass
 
 	def test_plugin_video_input_settings(self):
+		# TODO
 		pass
 
 	def test_plugin_video_mixer_settings(self):
+		# TODO
 		pass
 
 	def test_plugin_output_settings(self):
+		# TODO
 		pass
 
 	def test_logger_settings(self):
