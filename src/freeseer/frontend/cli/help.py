@@ -28,11 +28,7 @@ class Help():
     '''
     
     HEADER = 'Freeseer Shell, version 1.0\n' \
-    'Copyright (C) 2011-2012  Free and Open Source Software Learning Centre\n\n'
-    
-    # Record help
-    RECORD_HELP = '\tRecords the presentation with the respective id using ' \
-    'the current settings\n\tUSAGE: record <id>'
+    'Copyright (C) 2011-2012  Free and Open Source Software Learning Centre\n\n'   
     
     # Talk Help
     TALK_SHOW_TALKS = '\tLists all talks stored on database. If mode/value are ' \
@@ -110,11 +106,11 @@ class Help():
     "respective property from this plugin is listed side-by-side with its respective value.\n\n" \
     "The general syntax used to set plugin's values is the following:\n\n" \
     "> config set <PLUGIN CATEGORY> <PLUGIN NAME> <PLUGIN PROPERTY> <PLUGIN VALUE>"
-    #Can we remove this entirely since we now use help record                       
-    RECORD_GENERAL_HELP = HEADER + 'Record Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the record tool on Freeseer.\n' \
-    'The following commands are supported:\n\n' \
-    "> record\n\n\nFor further information, type 'help record <command>'"
+    
+    #Record Help                  
+    RECORD_GENERAL_HELP = HEADER + '\tRecord Tool Command Line Interface\n' \
+    '\tRecords the presentation with the respective id using ' \
+    'the current settings\n\tUSAGE: record <id>'
     
     TALK_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
     'This CLI defines all commands provided by the talk editor tool on Freeseer.\n' \

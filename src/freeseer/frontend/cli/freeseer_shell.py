@@ -56,8 +56,13 @@ class FreeseerShell(Cmd):
         # Auto-complete modes
         self.TALK_MODES = ['show','remove','add','update']
         self.TALK_SHOW_MODES = ['event','events','room','id','all']
+
+        self.HELP_MODES = ['talk', 'config', 'exit', 'quit', 'record']
+        self.HELP_TALK_MODES = ['show', 'add', 'remove', 'update', 'show events']
+        self.HELP_CONFIG_MODES = ['show', 'set']
+        self.HELP_CONFIG_SET_MODES = ['audio', 'video', 'video resolution', 'dir', 'streaming', 'file']
         
-        self.CONFIG_MODE = ['show','set']        
+        self.CONFIG_MODES = ['show','set']        
         self.CONFIG_SET_MODES = ['audio','video','dir','streaming','file']
         self.CONFIG_SHOW_MODES = ['audio','video','all']
         self.PLUGIN_CATEGORIES = self.plugman.plugmanc.getCategories()
@@ -156,15 +161,45 @@ class FreeseerShell(Cmd):
             print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
     
     def help_record(self):
-        print Help.RECORD_HELP
+        print Help.RECORD_GENERAL_HELP
 
     def help_config(self):
 	print Help.CONFIG_GENERAL_HELP
 
-    #TODO   
-    def complete_record(self, text, line, start_index, end_index):        
-        pass
-         
+    def complete_help(self, text, line, start_index, end_index):
+        if text:
+          
+            if len(line.split()) == 2:
+                return [
+                    mode for mode in self.HELP_MODES
+                    if mode.startswith(text)
+                ]
+            elif len(line.split())==3:
+                if (line.split()[1]=="talk"):
+                    return[
+                        mode for mode in self.HELP_TALK_MODES
+                        if mode.startswith(text)
+                    ]
+                elif (line.split()[1]=="config"):
+                    return[
+                        mode for mode in self.HELP_CONFIG_MODES
+                        if mode.startswith(text)
+                    ]
+            elif len(line.split())==4:
+                if (line.split()[1]=="config") and (line.split()[2]=="set"):
+                    return[
+                        mode for mode in self.HELP_CONFIG_SET_MODES
+                        if mode.startswith(text)
+                    ]
+        elif len(line.split()) == 1:
+            return self.HELP_MODES
+        elif len(line.split()) ==2:
+            if line.split()[1]=="talk":
+                return self.HELP_TALK_MODES
+            elif line.split()[1]=="config":
+                return self.HELP_CONFIG_MODES
+        elif len(line.split()) == 3 and line.split()[1]=="config" and line.split()[2]=="set":
+            return self.HELP_CONFIG_SET_MODES  
     def do_talk(self, line):                     
         if line:
             self.talk_parser.analyse_command(line)
@@ -175,9 +210,9 @@ class FreeseerShell(Cmd):
         print Help.TALK_GENERAL_HELP
         
     def complete_talk(self, text, line, start_index, end_index):  
-        if text:    
+        if text:     
             if len(line.split()) == 2:
-                return [
+                   return [
                     mode for mode in self.TALK_MODES
                     if mode.startswith(text)
                 ]
@@ -187,8 +222,10 @@ class FreeseerShell(Cmd):
                         mode for mode in self.TALK_SHOW_MODES
                         if mode.startswith(text)
                     ]
-        else:
+        elif len(line.split()) == 1:
             return self.TALK_MODES
+        elif len(line.split()) == 2 and (line.split()[1] == "show"):
+            return self.TALK_SHOW_MODES
         
     def do_config(self, line):        
         if line:
@@ -203,7 +240,7 @@ class FreeseerShell(Cmd):
         if text:
             if len(line.split()) == 2:
                 return [
-                    mode for mode in self.CONFIG_MODE
+                    mode for mode in self.CONFIG_MODES
                     if mode.startswith(text)
                 ]
             elif len(line.split()) == 3:
@@ -237,8 +274,13 @@ class FreeseerShell(Cmd):
                     property for property in properties
                     if property.upper().startswith(text.upper())
                 ]
-        else:
-            return self.CONFIG_MODE
+        elif len(line.split())==1:
+            return self.CONFIG_MODES
+        elif len(line.split()) ==2:
+            if line.split()[1]=="set":
+                return self.CONFIG_SET_MODES_EXTENDED
+            elif line.split()[1]=="show":
+                return self.CONFIG_SHOW_MODES_EXTENDED
         
     def run(self):
         self.cmdloop()
