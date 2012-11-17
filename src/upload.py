@@ -1,3 +1,3 @@
-from freeseer.youtube_demo import demo
+from freeseer.youtube_uploader import youtube_upload
 
-demo.upload()
+youtube_upload.upload()
