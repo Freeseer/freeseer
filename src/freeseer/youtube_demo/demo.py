@@ -32,30 +32,38 @@ from PyQt4 import QtGui, QtCore
 def upload():
 	#------- Trying to default to the video directory
 	config = ConfigParser.ConfigParser()
-
-
 	configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
 	      
 	# Config location
 	configfile = os.path.abspath("%s/freeseer.conf" % configdir)
-
 	config.readfp(open(configfile))
-
-	
 
 
 	vpath = config.get('Global', 'video_directory')
 
 
 	email = raw_input("Email address: ")
-	#password = getpass.getpass()
+	password = getpass.getpass()
 	#vfile = browse_video_directory()
-	vfile = raw_input("File: ")
-	
-
+	vfile = raw_input("File/Directory: ")
 
 	
-	
+	# If the vfile is a directory then walk through the directory and upload all it's videos
+	if os.path.isdir(vpath+"/"+vfile):
+		for root, dirs, files in os.walk(vpath+"/"+vfile):
+			i=0
+			while i < len(files):
+				#print str(root)+"/"+files[i-1]
+				uploadToYouTube(str(root), files[i-1], email, password)
+				i=i+1
+
+
+	# Otherwise just upload the one video
+	else:
+		uploadToYouTube(vpath, vfile, email, password)
+
+
+
 	#ogg_vfile = ""
 	#mpg_vfile = vfile
 
@@ -102,37 +110,44 @@ def upload():
 		
 
 	#if ogg_vfile != "":
+
+# Uploads an ogg or mpg to YouTube, using the metadata from an ogg
+def uploadToYouTube(vpath, vfile, email, password):
+
 	# Get the title and description if video is an ogg file
-	if vfile[len(vfile)-3:] == "ogg":
+	if vfile.lower().endswith(('.ogg', '.mpg')):
+		if vfile.lower().endswith('.ogg'):
 
-		metadata = mutagen.oggvorbis.Open(vpath+"/"+vfile)
-		#print metadata.pprint()
+			metadata = mutagen.oggvorbis.Open(vpath+"/"+vfile)
+			#print metadata.pprint()
 
-		try:
-			title = str(metadata["title"])[3:len(str(metadata["title"]))-2]
-		except KeyError:
-			title = vfile
+			try:
+				title = metadata["title"][0]
+				print title
+			except KeyError:
+				title = vfile
 
 
-		try:
-			description = str(metadata["description"])[3:len(str(metadata["description"]))-2]
-		except KeyError:
-			description = ""
+			try:
+				description = metadata["description"][0]
+				print description
+			except KeyError:
+				description = ""
 
 		
 	
+		else:
+			title = vfile
+			description = ""
 	else:
-		title = vfile
-		description = ""
+		print vpath+"/"+vfile +" is not an ogg or mpg"
+		return
 
 	# Default category to education for now
 	category = "Education"
 
 
-
-
-
-	uploader.main_upload(shlex.split("--email="+email+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath + "/" + vfile))
+	uploader.main_upload(shlex.split("--email="+email+" --password="+password+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath+"/"+vfile))
 
 
 
