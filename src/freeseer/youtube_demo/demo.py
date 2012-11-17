@@ -12,6 +12,9 @@ import re
 import time
 #from freeseer.framework.core import FreeseerCore
 #from freeseer.framework.presentation import Presentation
+from freeseer.youtube_demo import uploader
+import getpass
+import shlex
 
 
 
@@ -43,9 +46,12 @@ def upload():
 
 	vpath = config.get('Global', 'video_directory')
 
+
 	email = raw_input("Email address: ")
+	#password = getpass.getpass()
 	#vfile = browse_video_directory()
 	vfile = raw_input("File: ")
+	
 
 
 	
@@ -125,7 +131,8 @@ def upload():
 
 
 
-	os.system("python src/freeseer/youtube_demo/uploader.py --email="+email+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath + "/" + vfile)
+
+	uploader.main_upload(shlex.split("--email="+email+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath + "/" + vfile))
 
 
 
