@@ -1,11 +1,12 @@
 YouTube uploader
 
 Dependencies:
-must have the google api:   * [http://code.google.com/p/gdata-python-client python-gdata] (>= 1.2.4)
+Must have the google api:   * [http://code.google.com/p/gdata-python-client python-gdata] (>= 1.2.4)
 and must download and install mutagen:   http://code.google.com/p/mutagen/ 
+To see the progress of the upload, it is recommended to install the progress bar (http://code.google.com/p/python-progressbar/downloads/detail?name=progressbar-2.3.tar.gz&can=2&q=)
 
 
-Currently, to run enter python upload.py
+Run youtube-uploader in src directory to run.
 **Note that when asked for the filename the freeseer record directoy is automatically used by default. So if the video is in the recording directory then you should only enter the filename
 
 
@@ -16,7 +17,7 @@ Can also enter a directory to upload all videos in the directory
 
 
 
-The folowing is the README for the upload program the demo uses:
+The folowing is the README for the upload program the uploader.py (in lib directory) uses:
 
 = Introduction =
 
