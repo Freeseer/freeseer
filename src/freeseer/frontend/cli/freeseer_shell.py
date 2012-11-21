@@ -256,7 +256,11 @@ class FreeseerShell(Cmd):
             return self.CONFIG_MODE
         
     def run(self):
-        self.cmdloop()
+        try:
+            self.cmdloop()
+        except KeyboardInterrupt:
+            print
+            pass
         
     def _disable_loggers(self):
         """ Disables all logging calls of severity INFO and below.
