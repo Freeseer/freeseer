@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2011 Free and Open Source Software Learning Centre
+# Copyright (C) 2012 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import unittest
-import time
 
 from PyQt4 import QtGui, QtTest, Qt
 from freeseer.frontend.record.record import RecordApp
@@ -106,4 +105,24 @@ class TestRecordApp(unittest.TestCase):
 
 		self.assertTrue(self.record_app.time_minutes == 0 and self.record_app.time_seconds == 0)
 
+
+	def test_file_menu_quit(self):
+		self.assertTrue(self.record_app.isVisible())
+	
+		self.record_app.actionExit.trigger()
+		self.assertFalse(self.record_app.isVisible())
+
+	def test_help_menu_about(self):
+		self.assertTrue(self.record_app.isVisible())
+	
+		self.record_app.actionAbout.trigger()
+		self.assertFalse(self.record_app.hasFocus())
+		self.assertTrue(self.record_app.aboutDialog.isVisible())
+	
+		QtTest.QTest.mouseClick(self.record_app.aboutDialog.closeButton, Qt.Qt.LeftButton)
+		self.assertFalse(self.record_app.aboutDialog.isVisible())
+
+
+	def tearDown(self):
+		self.record_app.actionExit.trigger()
 

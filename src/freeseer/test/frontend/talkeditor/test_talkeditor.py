@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2011 Free and Open Source Software Learning Centre
+# Copyright (C) 2012 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -139,9 +139,9 @@ class TestTalkEditorApp(unittest.TestCase):
 		# we need at least 1 talk
 		self.assertTrue(self.talk_editor.editorWidget.editor.model().rowCount() > 0)
 
-		# TODO: 
-		# ROADBLOCK: Clicking "clear" causes a pop-up confirmation box to appear.
-		# It isn't clear how to get the test case to pause until the box has focus.
+		# TODO: ROADBLOCK
+		# Clicking "clear" causes a pop-up confirmation box to appear.
+		# However, there is no link to this popup from inside the talk_editor
 
 		# hit the clear button, hit no. No changes
 		#QtTest.QTest.mouseClick(self.talk_editor.editorWidget.clearButton, Qt.Qt.LeftButton)
@@ -150,6 +150,26 @@ class TestTalkEditorApp(unittest.TestCase):
 		# hit the clear button, hit yes. Empty DB	
 		#QtTest.QTest.mouseClick(self.talk_editor.editorWidget.clearButton, Qt.Qt.LeftButton)
 		# TODO: get the pop-up box's focus and click the button
+
+	def test_file_menu_quit(self):
+		self.assertTrue(self.talk_editor.isVisible())
+
+		self.talk_editor.actionExit.trigger()
+		self.assertFalse(self.talk_editor.isVisible())
+
+	def test_help_menu_about(self):
+		self.assertTrue(self.talk_editor.isVisible())
+
+		self.talk_editor.actionAbout.trigger()
+		self.assertFalse(self.talk_editor.hasFocus())
+		self.assertTrue(self.talk_editor.aboutDialog.isVisible())
+
+		QtTest.QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
+		self.assertFalse(self.talk_editor.aboutDialog.isVisible())
+
+
+
+
 
 	def tearDown(self):
 		'''

@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2011 Free and Open Source Software Learning Centre
+# Copyright (C) 2012 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
+
 import unittest
 import os
 
@@ -60,9 +61,21 @@ class TestConfigToolApp(unittest.TestCase):
 
 	def test_general_settings(self):
 		self.assertTrue(self.config_tool.currentWidget == self.config_tool.generalWidget)
-		self.config.readConfig()			
 
-
+		times = 2
+		while times > 0: 	
+			state = self.config_tool.currentWidget.autoHideCheckBox.checkState()
+			expected_state = QtCore.Qt.Unchecked
+			if state == QtCore.Qt.Unchecked:
+				expected_state = QtCore.Qt.Checked
+			self.config_tool.currentWidget.autoHideCheckBox.click()
+			self.assertEquals( \
+				self.config_tool.currentWidget.autoHideCheckBox.checkState(), expected_state)	
+	
+			self.config.readConfig()
+			self.assertEquals(self.config.auto_hide, expected_state == QtCore.Qt.Checked)
+			times -= 1
+			
 	def test_recording_settings(self):
 		item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.avString, QtCore.Qt.MatchExactly)
 		self.assertFalse(len(item) == 0 or item[0] == None)
@@ -70,7 +83,63 @@ class TestConfigToolApp(unittest.TestCase):
 		QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
 
 		self.assertTrue(self.config_tool.currentWidget == self.config_tool.avWidget)
-		self.config.readConfig()			
+	
+		# Audio Input
+		times = 2
+		while times > 0:
+			self.config.readConfig()
+			if self.config_tool.currentWidget.audioGroupBox.isChecked():
+				self.assertTrue(self.config.enable_audio_recoding)
+				self.assertEquals(self.config.audiomixer, "Audio Passthrough")
+				self.config_tool.currentWidget.audioGroupBox.setChecked(False)
+			else:
+				self.assertFalse(self.config.enable_audio_recoding)
+				self.config_tool.currentWidget.audioGroupBox.setChecked(True)
+			times -= 1
+
+		# Video Input
+		times = 2
+		while times > 0:
+			self.config.readConfig()
+			if self.config_tool.currentWidget.videoGroupBox.isChecked():
+				self.assertTrue(self.config.enable_video_recoding)
+				# TODO: Write better test case for this
+				self.assertTrue(self.config.videomixer == "Video Passthrough" or \
+					self.config.videomixer == "Picture-In-Picture")
+				self.config_tool.currentWidget.videoGroupBox.setChecked(False)
+			else:
+				self.assertFalse(self.config.enable_video_recoding)
+				self.config_tool.currentWidget.videoGroupBox.setChecked(True)
+			times -= 1
+		
+		# Record to File
+		times = 2
+		while times > 0:
+			self.config.readConfig()
+			if self.config_tool.currentWidget.fileGroupBox.isChecked():
+				self.assertTrue(self.config.record_to_file)
+				# TODO: Write better test case for this
+				self.assertTrue(self.config.record_to_file_plugin == "Ogg Output" or \
+					self.config.record_to_file_plugin == "WebM Output")
+				self.config_tool.currentWidget.fileGroupBox.setChecked(False)
+			else:
+				self.assertFalse(self.config.record_to_file)
+				self.config_tool.currentWidget.fileGroupBox.setChecked(True)
+			times -= 1
+
+		# Record to Stream	
+		times = 2
+		while times > 0:
+			self.config.readConfig()
+			if self.config_tool.currentWidget.streamGroupBox.isChecked():
+				self.assertTrue(self.config.record_to_stream)
+				# TODO: Write better test case for this
+				#self.assertTrue(self.config.record_to_stream_plugin == None)
+				self.config_tool.currentWidget.streamGroupBox.setChecked(False)
+			else:
+				self.assertFalse(self.config.record_to_stream)
+				self.config_tool.currentWidget.streamGroupBox.setChecked(True)
+			times -= 1
 
 
 	def test_plugin_settings(self):
@@ -97,23 +166,27 @@ class TestConfigToolApp(unittest.TestCase):
 		# TODO
 		pass
 
-	def test_logger_settings(self):
-		item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.loggerString, QtCore.Qt.MatchExactly)
-		self.assertFalse(len(item) == 0 or item[0] == None)
-		self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
-		QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
-
-		self.assertTrue(self.config_tool.currentWidget == self.config_tool.loggerWidget)
-		self.config.readConfig()			
 	
-
-
-
 	def test_close_configtool(self):
 		self.assertTrue(self.config_tool.mainWidget.isVisible())
 		QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.config_tool.mainWidget.isVisible())
 
+	def test_file_menu_quit(self):
+		self.assertTrue(self.config_tool.isVisible())
+	
+		self.config_tool.actionExit.trigger()
+		self.assertFalse(self.config_tool.isVisible())
+
+	def test_help_menu_about(self):
+		self.assertTrue(self.config_tool.isVisible())
+
+		self.config_tool.actionAbout.trigger()
+		self.assertFalse(self.config_tool.hasFocus())
+		self.assertTrue(self.config_tool.aboutDialog.isVisible())
+
+		QtTest.QTest.mouseClick(self.config_tool.aboutDialog.closeButton, Qt.Qt.LeftButton)
+		self.assertFalse(self.config_tool.aboutDialog.isVisible())
 
 	def tearDown(self):
 		'''
