@@ -108,7 +108,7 @@ class TestTalkEditorApp(unittest.TestCase):
 		'''
 		Tests the "close" button. 
 		Although we close the app using this button after every test (in tearDown()), 
-		we are not guarenteed a valid test case in tearDown().
+		we are not guaranteed a valid test case in tearDown().
 		'''	
 
 		QtTest.QTest.mouseClick(self.talk_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
@@ -152,25 +152,33 @@ class TestTalkEditorApp(unittest.TestCase):
 		# TODO: get the pop-up box's focus and click the button
 
 	def test_file_menu_quit(self):
+		'''
+		Tests TalkEditorApp's File->Quit
+		'''
+
 		self.assertTrue(self.talk_editor.isVisible())
 
+		# File->Quit
 		self.talk_editor.actionExit.trigger()
 		self.assertFalse(self.talk_editor.isVisible())
 
 	def test_help_menu_about(self):
+		'''
+		Tests TalkEditorApp's Help->About
+		'''
+
 		self.assertTrue(self.talk_editor.isVisible())
 
+		# Help->About
 		self.talk_editor.actionAbout.trigger()
 		self.assertFalse(self.talk_editor.hasFocus())
 		self.assertTrue(self.talk_editor.aboutDialog.isVisible())
 
+		# Click "Close"
 		QtTest.QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.talk_editor.aboutDialog.isVisible())
 
-
-
-
-
+	
 	def tearDown(self):
 		'''
 		Standard tear down method. Runs after each test_* method.

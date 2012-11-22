@@ -55,7 +55,8 @@ class TestRecordApp(unittest.TestCase):
 		'''
 		Tests the initial state of the RecordApp
 		'''
-
+		
+		# TODO
 		pass
 
 	def test_standby_to_recording(self):
@@ -98,31 +99,47 @@ class TestRecordApp(unittest.TestCase):
 		Tests RecordApp.reset_timer()
 		'''		
 
+		# set our own values
 		self.record_app.time_minutes = 15
 		self.record_app.time_seconds = 30
 
+		# reset timer and check that the values are 0
 		self.record_app.reset_timer()
-
 		self.assertTrue(self.record_app.time_minutes == 0 and self.record_app.time_seconds == 0)
 
 
 	def test_file_menu_quit(self):
+		'''
+		Tests RecordApp's File->Quit
+		'''
+
 		self.assertTrue(self.record_app.isVisible())
 	
+		# File->Menu
 		self.record_app.actionExit.trigger()
 		self.assertFalse(self.record_app.isVisible())
 
 	def test_help_menu_about(self):
+		'''
+		Tests RecordApp's Help->About
+		'''
+
 		self.assertTrue(self.record_app.isVisible())
-	
+
+		# Help->About	
 		self.record_app.actionAbout.trigger()
 		self.assertFalse(self.record_app.hasFocus())
 		self.assertTrue(self.record_app.aboutDialog.isVisible())
 	
+		# Click "Close"
 		QtTest.QTest.mouseClick(self.record_app.aboutDialog.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.record_app.aboutDialog.isVisible())
 
 
 	def tearDown(self):
+		'''
+		Generic unittest.TestCase.tearDown()
+		'''
+
 		self.record_app.actionExit.trigger()
 

@@ -55,3 +55,33 @@ class TestReportEditorApp(unittest.TestCase):
 
 		QtTest.QTest.mouseClick(self.report_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.report_editor.editorWidget.isVisible())
+
+	
+	def test_file_menu_quit(self):
+ 		'''
+		Tests ReportEditorApp's File->Quit
+		'''
+
+		self.assertTrue(self.report_editor.isVisible())
+
+		# File->Menu
+		self.report_editor.actionExit.trigger()
+		self.assertFalse(self.report_editor.isVisible())
+
+	def test_help_menu_about(self):
+		'''
+		Tests ReportEditorApp's Help->About
+		'''
+
+		self.assertTrue(self.report_editor.isVisible())
+
+		# Help->About   
+		self.report_editor.actionAbout.trigger()
+		self.assertFalse(self.report_editor.hasFocus())
+		self.assertTrue(self.report_editor.aboutDialog.isVisible())
+
+		# Click "Close"
+		QtTest.QTest.mouseClick(self.report_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
+		self.assertFalse(self.report_editor.aboutDialog.isVisible())
+
+

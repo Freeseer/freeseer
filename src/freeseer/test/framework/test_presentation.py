@@ -29,9 +29,17 @@ from freeseer.framework.presentation import Presentation
 class TestPresentation(unittest.TestCase):
 	
 	def setUp(self):
+		'''
+		Generic unittest.TestCase.setUp()
+		'''
+
 		self.pres = Presentation("John Doe", event="haha", time="NOW")
 
 	def test_correct_time_set(self):
+		'''
+		Checks that the Presentation's time
+		'''
+
 		self.assertTrue(self.pres.time == "NOW")
 		self.pres.speaker = "John Doe"
 

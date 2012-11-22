@@ -60,8 +60,20 @@ class TestConfigToolApp(unittest.TestCase):
 		self.config = Config(homedir)
 
 	def test_general_settings(self):
+		'''
+		Tests for the config tool's General Tab
+		'''
+		
+		# General tab
 		self.assertTrue(self.config_tool.currentWidget == self.config_tool.generalWidget)
 
+		# Language drop-down
+		# TODO
+
+		# Record directory
+		# TODO
+
+		# Checkbox
 		times = 2
 		while times > 0: 	
 			state = self.config_tool.currentWidget.autoHideCheckBox.checkState()
@@ -77,14 +89,22 @@ class TestConfigToolApp(unittest.TestCase):
 			times -= 1
 			
 	def test_recording_settings(self):
+		'''
+		Tests for config tool's Recording tab
+		'''
+
+		# Select "Recording" tab
 		item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.avString, QtCore.Qt.MatchExactly)
 		self.assertFalse(len(item) == 0 or item[0] == None)
 		self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
 		QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
 
+		# Recording tab
 		self.assertTrue(self.config_tool.currentWidget == self.config_tool.avWidget)
 	
 		# Audio Input
+
+		# Checkbox
 		times = 2
 		while times > 0:
 			self.config.readConfig()
@@ -97,7 +117,12 @@ class TestConfigToolApp(unittest.TestCase):
 				self.config_tool.currentWidget.audioGroupBox.setChecked(True)
 			times -= 1
 
+		# Dropdown
+		# TODO
+
+
 		# Video Input
+		# Checkbox
 		times = 2
 		while times > 0:
 			self.config.readConfig()
@@ -112,7 +137,13 @@ class TestConfigToolApp(unittest.TestCase):
 				self.config_tool.currentWidget.videoGroupBox.setChecked(True)
 			times -= 1
 		
+		# Dropdown
+		# TODO		
+
+
 		# Record to File
+		
+		# Checkbox
 		times = 2
 		while times > 0:
 			self.config.readConfig()
@@ -127,7 +158,12 @@ class TestConfigToolApp(unittest.TestCase):
 				self.config_tool.currentWidget.fileGroupBox.setChecked(True)
 			times -= 1
 
+		# Dropdown
+		# TODO
+
 		# Record to Stream	
+		
+		# Checkbox
 		times = 2
 		while times > 0:
 			self.config.readConfig()
@@ -140,51 +176,95 @@ class TestConfigToolApp(unittest.TestCase):
 				self.assertFalse(self.config.record_to_stream)
 				self.config_tool.currentWidget.streamGroupBox.setChecked(True)
 			times -= 1
-
-
-	def test_plugin_settings(self):
+		
+		# Dropdown
 		# TODO
-		pass
+
 
 	def test_plugin_audio_input_settings(self):
+		'''
+		Tests for config tool's Plugins->Audio Input tab
+		'''
+
 		# TODO
 		pass
 
 	def test_plugin_audio_mixer_settings(self):
+		'''
+		Tests for config tool's Plugins->Audio Mixer tab
+		'''
+		
 		# TODO
 		pass
 
 	def test_plugin_video_input_settings(self):
+		'''
+		Tests for config tool's Plugins->Video Input tab
+		'''
+		
 		# TODO
 		pass
 
 	def test_plugin_video_mixer_settings(self):
+		'''
+		Tests for config tool's Plugins->Video Mixer tab
+		'''
+		
 		# TODO
 		pass
 
 	def test_plugin_output_settings(self):
+		'''
+		Tests for config tool's Plugins->Output tab
+		'''
+		
+		# TODO
+		pass
+
+	def test_logger_settings(self):
+		'''
+		Tests for config tool's Logger tab
+
+		These settings aren't part of the config file.
+		'''
+
 		# TODO
 		pass
 
 	
 	def test_close_configtool(self):
+		'''
+		Tests for config tool's close button
+		'''
+		
 		self.assertTrue(self.config_tool.mainWidget.isVisible())
 		QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.config_tool.mainWidget.isVisible())
 
 	def test_file_menu_quit(self):
+		'''
+		Tests for config tool's File->Quit
+		'''
+		
 		self.assertTrue(self.config_tool.isVisible())
 	
+		# File->Quit
 		self.config_tool.actionExit.trigger()
 		self.assertFalse(self.config_tool.isVisible())
 
 	def test_help_menu_about(self):
+		'''
+		Tests for config tool's Help->About
+		'''
+		
 		self.assertTrue(self.config_tool.isVisible())
 
+		# Help->About
 		self.config_tool.actionAbout.trigger()
 		self.assertFalse(self.config_tool.hasFocus())
 		self.assertTrue(self.config_tool.aboutDialog.isVisible())
 
+		# Click "Close"
 		QtTest.QTest.mouseClick(self.config_tool.aboutDialog.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.config_tool.aboutDialog.isVisible())
 
