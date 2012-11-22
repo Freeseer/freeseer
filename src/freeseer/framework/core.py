@@ -390,11 +390,11 @@ class FreeseerCore:
             plugins.append(plugin.plugin_object)
 
         self.backend.load_output_plugins(plugins,
-                                         self.config.enable_audio_recoding,
-                                         self.config.enable_video_recoding,
+                                         self.config.enable_audio_recording,
+                                         self.config.enable_video_recording,
                                          metadata)
         
-        if self.config.enable_audio_recoding:
+        if self.config.enable_audio_recording:
             logging.debug("Loading Audio Recording plugins...")
             audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
             if audiomixer is not None:
@@ -412,7 +412,7 @@ class FreeseerCore:
                 
                 self.backend.load_audiomixer(audiomixer, audiomixer_inputs)
         
-        if self.config.enable_video_recoding:
+        if self.config.enable_video_recording:
             logging.debug("Loading Video Recording plugins...")
             videomixer = self.plugman.plugmanc.getPluginByName(self.config.videomixer, "VideoMixer").plugin_object
             if videomixer is not None:

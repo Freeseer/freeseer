@@ -61,8 +61,8 @@ class Config:
         self.videodir = os.path.abspath('%s/Videos/' % self.userhome)
         self.auto_hide = False
         self.resolution = '0x0' # no scaling for video
-        self.enable_video_recoding = True
-        self.enable_audio_recoding = True
+        self.enable_video_recording = True
+        self.enable_audio_recording = True
         self.videomixer = 'Video Passthrough'
         self.audiomixer = 'Audio Passthrough'
         self.record_to_file = True
@@ -119,8 +119,8 @@ class Config:
             self.videodir = config.get('Global', 'video_directory')
             self.resolution = config.get('Global', 'resolution')
             self.auto_hide = config.getboolean('Global', 'auto_hide')
-            self.enable_video_recoding = config.getboolean('Global','enable_video_recoding')
-            self.enable_audio_recoding = config.getboolean('Global','enable_audio_recoding')
+            self.enable_video_recording = config.getboolean('Global','enable_video_recording')
+            self.enable_audio_recording = config.getboolean('Global','enable_audio_recording')
             self.videomixer = config.get('Global', 'videomixer')
             self.audiomixer = config.get('Global', 'audiomixer')
             self.record_to_file = config.getboolean('Global', 'record_to_file')
@@ -151,8 +151,8 @@ class Config:
         config.set('Global', 'video_directory', self.videodir)
         config.set('Global', 'resolution', self.resolution)
         config.set('Global', 'auto_hide', self.auto_hide)
-        config.set('Global','enable_video_recoding',self.enable_video_recoding)
-        config.set('Global','enable_audio_recoding',self.enable_audio_recoding)
+        config.set('Global','enable_video_recording',self.enable_video_recording)
+        config.set('Global','enable_audio_recording',self.enable_audio_recording)
         config.set('Global','videomixer',self.videomixer)
         config.set('Global','audiomixer',self.audiomixer)
         config.set('Global','record_to_file', self.record_to_file)
