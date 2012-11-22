@@ -412,7 +412,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         #
         # Set up Audio
         #
-        if self.config.enable_audio_recoding == True:
+        if self.config.enable_audio_recording == True:
             self.avWidget.audioGroupBox.setChecked(True)
         else:
             self.avWidget.audioGroupBox.setChecked(False)
@@ -431,7 +431,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         #
         # Set up Video
         #
-        if self.config.enable_video_recoding == True:
+        if self.config.enable_video_recording == True:
             self.avWidget.videoGroupBox.setChecked(True)
         else:
             self.avWidget.videoGroupBox.setChecked(False)
@@ -478,7 +478,7 @@ class ConfigToolApp(QtGui.QMainWindow):
             self.avWidget.streamSetupPushButton.setEnabled(False)
 
     def toggle_audiomixer_state(self, state):
-        self.config.enable_audio_recoding = state
+        self.config.enable_audio_recording = state
         self.config.writeConfig()
         
     def change_audiomixer(self, audiomixer):
@@ -491,7 +491,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         plugin.plugin_object.get_dialog()
             
     def toggle_videomixer_state(self, state):
-        self.config.enable_video_recoding = state
+        self.config.enable_video_recording = state
         self.config.writeConfig()
         
     def change_videomixer(self, videomixer):
