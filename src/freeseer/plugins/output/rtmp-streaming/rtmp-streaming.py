@@ -41,6 +41,7 @@ class RTMPOutput(IOutput):
     
     # RTMP Streaming variables
     url = ""
+    audio_quality = 0.3
     video_bitrate = 2400
     
 	#@brief - RTMP Streaming plugin.
@@ -69,7 +70,6 @@ class RTMPOutput(IOutput):
         bin.add(muxer)
         
         # RTMP sink
-        #TODO - rtmpsink factory?
         rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
         rtmpsink.set_property('location', self.url)
         bin.add(rtmpsink)
@@ -88,12 +88,16 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
+            audiocodec = gst.element_factory_make("faac", "audiocodec")
+            audiocodec.set_property("quality", float(self.audio_quality))
+            bin.add(audiocodec)
+            
             # Setup ghost pads
             audiopad = audioqueue.get_pad("sink")
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
             
-            gst.element_link_many(audioqueue, audioconvert, audiolevel, muxer)
+            gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, muxer)
         
         
         #
@@ -155,11 +159,39 @@ class RTMPOutput(IOutput):
             # Stream URL
             #
             
+            # TODO: URL validation?
+            
             self.label_stream_url = QtGui.QLabel("Stream URL")
             self.lineedit_stream_url = QtGui.QLineEdit()
             layout.addRow(self.label_stream_url, self.lineedit_stream_url)
 
             self.lineedit_stream_url.textEdited.connect(self.set_stream_url)
+            
+            #
+            # Audio Quality
+            #
+            
+            self.label_audio_quality = QtGui.QLabel("Audio Quality")
+            self.spinbox_audio_quality = QtGui.QDoubleSpinBox()
+            self.spinbox_audio_quality.setMinimum(0.0)
+            self.spinbox_audio_quality.setMaximum(1.0)
+            self.spinbox_audio_quality.setSingleStep(0.1)
+            self.spinbox_audio_quality.setDecimals(1)
+            self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
+            layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
+            
+            self.widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(double)'), self.set_audio_quality)
+            
+            #
+            # Video Quality
+            #
+            
+            self.label_video_quality = QtGui.QLabel("Video Quality (kb/s)")
+            self.spinbox_video_quality = QtGui.QSpinBox()
+            self.spinbox_video_quality.setMinimum(0)
+            self.spinbox_video_quality.setMaximum(16777215)
+            self.spinbox_video_quality.setValue(2400)           # Default value 2400
+            layout.addRow(self.label_video_quality, self.spinbox_video_quality)
 
         return self.widget
 
@@ -173,18 +205,36 @@ class RTMPOutput(IOutput):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
         self.plugman.save()
         
+    def set_audio_quality(self):
+        self.audio_quality = self.spinbox_audio_quality.value()
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
+        self.plugman.save()
+        
+    def set_video_bitrate(self):
+        self.video_bitrate = self.spinbox_video_quality.value()
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
+        self.plugman.save()
+        
     def get_properties(self):
-        return ["StreamURL"]
+        return ['StreamURL', 'AudioQuality', 'VideoBitrate']
     
     def get_property_value(self, property):
         if property == "StreamURL":
             return self.url
+        elif property == "AudioQuality":
+            return self.audio_quality
+        elif property == "VideoBitrate":
+            return self.video_bitrate
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
         if property == "StreamURL":
             return self.set_stream_url(value)
+        elif property == "AudioQuality":
+            return self.set_audio_quality(value)
+        elif property == "VideoBitrate":
+            return self.set_video_bitrate(value)
         else:
             return "Error: There's no property with such name" 
 
