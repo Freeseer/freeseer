@@ -30,8 +30,22 @@ Arch Linux
 ----------
 
 
-Instructions coming soon.
+In order to create a package for Arch Linux, a PKGBUILD should be produced. This PKGBUILD will serve as the installer
+in Arch.
+The PKGBUILD currently written are likely to work without any further modifications as they take the source
+code directly from Github. It's best to check on the functionality of a PKGBUILD with every new version and update
+the date.
 
+The PKGBUILD for a specific branch can be found in /pkg directory. In order to use the PKGBUILD simply download it
+and run::
+
+  makepkg
+
+in the installation directory. This should be followed with::
+
+  pacman -U [generated file name]
+
+For more information about PKGBUILDs please refer to the detailed Arch Linux documentation at https://wiki.archlinux.org/index.php/PKGBUILD
 
 Windows
 -------
