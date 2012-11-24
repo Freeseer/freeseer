@@ -50,11 +50,12 @@ For more information about PKGBUILDs please refer to the detailed Arch Linux doc
 Windows
 -------
 
-In order to package for Windows, you require setuptools.
-Be sure to install the right version for your version of python.
+In order to package for Windows, you require a few tools that will enable you to generate a package that
+contains all prerequisites for Freeseer. Since the required software is downloaded and packaged manually, this
+process will need to be done for every dependency change or Freeseer version update.
 
 a) Build Freeseer using the instructions in the README.txt file
-b) Create an RPM package by typing:
+b) Create an MSI package by typing:
 
   python setup.py bdist_wininst
 
