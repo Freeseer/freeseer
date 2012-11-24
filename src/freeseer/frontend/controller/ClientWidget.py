@@ -50,7 +50,7 @@ class ControllerClientWidget(QtGui.QWidget):
         #
  
         self.connWidget = QtGui.QWidget()
-        self.connLayout = QtGui.QFormLayout()
+        self.connLayout = QtGui.QGridLayout()
         self.connWidget.setLayout(self.connLayout)
         self.toolBox.addItem(self.connWidget, "Connection Settings")
         
@@ -61,15 +61,18 @@ class ControllerClientWidget(QtGui.QWidget):
         self.portEdit = QtGui.QSpinBox()
         self.portEdit.setMaximum(65535)
         self.portEdit.setValue(55441)
-        self.connLayout.addRow(self.hostLabel, self.portLabel)
-        self.connLayout.addRow(self.hostEdit, self.portEdit)
+        self.connLayout.addWidget(self.hostLabel, 0, 0)
+        self.connLayout.addWidget(self.portLabel, 0, 1)
+        self.connLayout.addWidget(self.hostEdit, 1, 0)
+        self.connLayout.addWidget(self.portEdit, 1, 1)
         
         self.passLabel = QtGui.QLabel("Passphrase")
         self.passEdit = QtGui.QLineEdit()
         self.passEdit.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
         self.connectButton = QtGui.QPushButton("Connect")
-        self.connLayout.addRow(self.passLabel, None)
-        self.connLayout.addRow(self.passEdit, self.connectButton)
+        self.connLayout.addWidget(self.passLabel, 2, 0)
+        self.connLayout.addWidget(self.passEdit, 3, 0)
+        self.connLayout.addWidget(self.connectButton, 3, 1)
         
         #
         # Recent Connections
