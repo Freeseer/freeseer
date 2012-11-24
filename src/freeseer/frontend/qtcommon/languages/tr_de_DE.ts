@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0">
+<!DOCTYPE TS>
+<TS version="2.0" language="de_DE" sourcelanguage="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../AboutDialog.py" line="94"/>
         <source>Freeseer About</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer über</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="95"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="100"/>
@@ -30,7 +31,7 @@
     <message>
         <location filename="../AboutDialog.py" line="110"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="115"/>
@@ -53,37 +54,37 @@
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Feile</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="222"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Optionen</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="223"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sprache</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="224"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="225"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verlasse</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="226"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Darüber</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="252"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="268"/>
@@ -93,7 +94,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="273"/>
         <source>Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Setup</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="272"/>
@@ -133,12 +134,12 @@
     <message>
         <location filename="../../configtool/configtool.py" line="232"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>General</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="234"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugins</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="235"/>
@@ -173,7 +174,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="259"/>
         <source>Default Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardsprache</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="233"/>
@@ -201,12 +202,12 @@
     <message>
         <location filename="../../record/record.py" line="219"/>
         <source>Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekord</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="222"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Halt</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="223"/>
@@ -216,27 +217,27 @@
     <message>
         <location filename="../../record/record.py" line="224"/>
         <source>Show Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauptfenster anzeigen</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="245"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Feile</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="246"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Optionen</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="247"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sprache</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="248"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="250"/>
@@ -246,37 +247,37 @@
     <message>
         <location filename="../../record/record.py" line="251"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verlasse</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="252"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Darüber</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="276"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="277"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Zimmer</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="278"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="279"/>
         <source>Talk</source>
-        <translation type="unfinished"></translation>
+        <translation>Präsentation</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="220"/>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="228"/>
@@ -296,12 +297,12 @@
     <message>
         <location filename="../../record/record.py" line="218"/>
         <source>Standby</source>
-        <translation type="unfinished"></translation>
+        <translation>Standby-Modus</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="221"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Fortsetze</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="227"/>
@@ -311,47 +312,47 @@
     <message>
         <location filename="../../record/record.py" line="253"/>
         <source>&amp;Report</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bericht</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="286"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="287"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprecher:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="288"/>
         <source>Event:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="289"/>
         <source>Room:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zimmer:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="290"/>
         <source>Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="291"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommentar</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="293"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="294"/>
         <source>Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Bericht</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="298"/>
@@ -404,62 +405,62 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="177"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Feile</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="178"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Optionen</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="179"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sprache</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="180"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="181"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Export nach CSV</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="182"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verlasse</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="183"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Darüber</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="189"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="190"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösche</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="191"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="193"/>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="194"/>
         <source>Speaker:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprecher:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="195"/>
@@ -469,7 +470,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="196"/>
         <source>Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ebene:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="197"/>
@@ -479,12 +480,12 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="198"/>
         <source>Room:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zimmer:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="199"/>
         <source>Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="171"/>
@@ -512,32 +513,32 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="186"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Feile</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="187"/>
         <source>&amp;Options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Optionen</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="188"/>
         <source>&amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sprache</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="189"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="191"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verlasse</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="192"/>
         <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Darüber</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="198"/>
@@ -547,12 +548,12 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="199"/>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="200"/>
         <source>Presenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprecher</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="201"/>
@@ -562,17 +563,17 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Zimmer</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Datum</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="204"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="216"/>
@@ -587,7 +588,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="212"/>
         <source>URL</source>
-        <translation type="unfinished"></translation>
+        <translation>URL</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="213"/>
@@ -597,27 +598,27 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="217"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="218"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Lösche</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="219"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="190"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Export nach CSV</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Feile</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="215"/>
@@ -630,7 +631,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="247"/>
         <source>Language Display Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
 </context>
 </TS>
