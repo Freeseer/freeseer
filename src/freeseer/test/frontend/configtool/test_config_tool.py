@@ -73,9 +73,8 @@ class TestConfigToolApp(unittest.TestCase):
 		# Record directory
 		# TODO
 
-		# Checkbox
-		times = 2
-		while times > 0: 	
+		# AutoHide Checkbox
+		for i in range(2):
 			state = self.config_tool.currentWidget.autoHideCheckBox.checkState()
 			expected_state = QtCore.Qt.Unchecked
 			if state == QtCore.Qt.Unchecked:
@@ -86,7 +85,6 @@ class TestConfigToolApp(unittest.TestCase):
 	
 			self.config.readConfig()
 			self.assertEquals(self.config.auto_hide, expected_state == QtCore.Qt.Checked)
-			times -= 1
 			
 	def test_recording_settings(self):
 		'''
@@ -105,17 +103,15 @@ class TestConfigToolApp(unittest.TestCase):
 		# Audio Input
 
 		# Checkbox
-		times = 2
-		while times > 0:
+		for i in range(2):
 			self.config.readConfig()
 			if self.config_tool.currentWidget.audioGroupBox.isChecked():
-				self.assertTrue(self.config.enable_audio_recoding)
+				self.assertTrue(self.config.enable_audio_recording)
 				self.assertEquals(self.config.audiomixer, "Audio Passthrough")
 				self.config_tool.currentWidget.audioGroupBox.setChecked(False)
 			else:
-				self.assertFalse(self.config.enable_audio_recoding)
+				self.assertFalse(self.config.enable_audio_recording)
 				self.config_tool.currentWidget.audioGroupBox.setChecked(True)
-			times -= 1
 
 		# Dropdown
 		# TODO
@@ -123,19 +119,17 @@ class TestConfigToolApp(unittest.TestCase):
 
 		# Video Input
 		# Checkbox
-		times = 2
-		while times > 0:
+		for i in range(2):
 			self.config.readConfig()
 			if self.config_tool.currentWidget.videoGroupBox.isChecked():
-				self.assertTrue(self.config.enable_video_recoding)
+				self.assertTrue(self.config.enable_video_recording)
 				# TODO: Write better test case for this
 				self.assertTrue(self.config.videomixer == "Video Passthrough" or \
 					self.config.videomixer == "Picture-In-Picture")
 				self.config_tool.currentWidget.videoGroupBox.setChecked(False)
 			else:
-				self.assertFalse(self.config.enable_video_recoding)
+				self.assertFalse(self.config.enable_video_recording)
 				self.config_tool.currentWidget.videoGroupBox.setChecked(True)
-			times -= 1
 		
 		# Dropdown
 		# TODO		
@@ -144,8 +138,7 @@ class TestConfigToolApp(unittest.TestCase):
 		# Record to File
 		
 		# Checkbox
-		times = 2
-		while times > 0:
+		for i in range(2):
 			self.config.readConfig()
 			if self.config_tool.currentWidget.fileGroupBox.isChecked():
 				self.assertTrue(self.config.record_to_file)
@@ -156,7 +149,6 @@ class TestConfigToolApp(unittest.TestCase):
 			else:
 				self.assertFalse(self.config.record_to_file)
 				self.config_tool.currentWidget.fileGroupBox.setChecked(True)
-			times -= 1
 
 		# Dropdown
 		# TODO
@@ -164,8 +156,7 @@ class TestConfigToolApp(unittest.TestCase):
 		# Record to Stream	
 		
 		# Checkbox
-		times = 2
-		while times > 0:
+		for i in range(2):
 			self.config.readConfig()
 			if self.config_tool.currentWidget.streamGroupBox.isChecked():
 				self.assertTrue(self.config.record_to_stream)
@@ -175,7 +166,6 @@ class TestConfigToolApp(unittest.TestCase):
 			else:
 				self.assertFalse(self.config.record_to_stream)
 				self.config_tool.currentWidget.streamGroupBox.setChecked(True)
-			times -= 1
 		
 		# Dropdown
 		# TODO
@@ -225,7 +215,8 @@ class TestConfigToolApp(unittest.TestCase):
 		'''
 		Tests for config tool's Logger tab
 
-		These settings aren't part of the config file.
+		Needs to be tested differently since the
+		Config instance isn't affected by changes in this tab.
 		'''
 
 		# TODO

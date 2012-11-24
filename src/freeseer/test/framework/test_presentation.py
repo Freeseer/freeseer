@@ -26,8 +26,19 @@ import unittest
 
 from freeseer.framework.presentation import Presentation
 
+
+# 
+# Note: The Presentation class doesn't really need to be tested
+# since all the functionality is set and referenced using
+# public attributes.
+#
+# This test class was implemented as a quick-and-easy demo
+# and proof-of-concept for Freeseer's test framework
+#
+
+
 class TestPresentation(unittest.TestCase):
-	
+
 	def setUp(self):
 		'''
 		Generic unittest.TestCase.setUp()
@@ -36,12 +47,7 @@ class TestPresentation(unittest.TestCase):
 		self.pres = Presentation("John Doe", event="haha", time="NOW")
 
 	def test_correct_time_set(self):
-		'''
-		Checks that the Presentation's time
-		'''
-
 		self.assertTrue(self.pres.time == "NOW")
-		self.pres.speaker = "John Doe"
 
 	def test_speaker_not_first_param(self):
 		self.assertNotEquals(self.pres.speaker, "John Doe")
