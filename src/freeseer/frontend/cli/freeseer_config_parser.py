@@ -288,19 +288,19 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             print "'" + path + "' is not an available path"      
             
     def turn_audio_off(self):
-        self.config.enable_audio_recoding = False
+        self.config.enable_audio_recording = False
         self.config.writeConfig()
         
     def turn_audio_on(self):
-        self.config.enable_audio_recoding = True
+        self.config.enable_audio_recording = True
         self.config.writeConfig()
         
     def turn_video_on(self):
-        self.config.enable_video_recoding = True
+        self.config.enable_video_recording = True
         self.config.writeConfig()
         
     def turn_video_off(self):
-        self.config.enable_video_recoding = False
+        self.config.enable_video_recording = False
         self.config.writeConfig() 
         
     def turn_audiofeedback_off(self):
@@ -331,7 +331,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
     def _show_video_configs(self):
         print "-------------------------- Settings --------------------------------"
         print " ###################### Video Settings ############################"
-        print "Video recoding enabled: Yes" if self.config.enable_video_recoding else "Video recoding enabled: No"
+        print "Video recording enabled: Yes" if self.config.enable_video_recording else "Video recording enabled: No"
         print "Current Video Mixer: " + self.config.videomixer
         print "Available Video Mixers Plugins: "
         count = 1
@@ -350,7 +350,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         
     def _show_audio_config(self):
         print " ###################### Audio Settings ############################"        
-        print "Audio recoding enabled: Yes" if self.config.enable_audio_recoding else "Audio recoding enabled: No"
+        print "Audio recording enabled: Yes" if self.config.enable_audio_recording else "Audio recording enabled: No"
         print "Available Audio Mixers: " 
         count = 1       
         for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
