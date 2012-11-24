@@ -14,5 +14,6 @@
     <file alias="languages/tr_nl_NL.qm">languages/tr_nl_NL.qm</file>
     <file alias="languages/tr_fr_CA.qm">languages/tr_fr_CA.qm</file>
     <file alias="languages/tr_ar_EG.qm">languages/tr_ar_EG.qm</file>
+    <file alias="languages/tr_de_DE.qm">languages/tr_de_DE.qm</file>
   </qresource>
 </RCC>
