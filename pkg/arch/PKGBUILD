@@ -1,6 +1,6 @@
 # Contributor: Thanh Ha <thanh.ha@alumni.carleton.ca>
 pkgname=freeseer-git
-pkgver=20110509
+pkgver=20121111
 pkgrel=1
 pkgdesc="This project contains code for a video capture utility capable of capturing presentations. It captures vga output and audio and mixes them together to produce a video thus enabling you to capture great presentations, demos, or training material easily."
 arch=('i686' 'x86_64')
@@ -25,7 +25,7 @@ _gitroot="git://github.com/Freeseer/freeseer.git"
 build() {
   git clone $_gitroot 
   cd ${srcdir}/freeseer/
-  git checkout -b pkgbuild origin/development
+  git checkout -b pkgbuild origin/experimental
   cd src/
 
   make || return 1
