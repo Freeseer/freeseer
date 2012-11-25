@@ -103,6 +103,7 @@ class RTMPOutput(IOutput):
             bin.add(videoqueue)
             
             videocodec = gst.element_factory_make("x264enc", "videocodec")
+            videocodec.set_property('tune', 'zerolatency')
             bin.add(videocodec)
             
             # Setup ghost pads
