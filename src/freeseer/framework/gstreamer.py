@@ -147,17 +147,17 @@ class Gstreamer:
             type = plugin.get_type()
             bin = plugin.get_output_bin(record_audio, record_video, metadata)
             
-            if type == IOutput.AUDIO:
-                if record_audio:
-                    self.player.add(bin)
-                    self.audio_tee.link(bin)
-                    self.output_plugins.append(bin)
-            elif type == IOutput.VIDEO:
-                if record_video:
-                    self.player.add(bin)
-                    self.video_tee.link(bin)
-                    self.output_plugins.append(bin)
-            elif type == IOutput.BOTH:
+            #if type == IOutput.AUDIO:
+                #if record_audio:
+                    #self.player.add(bin)
+                    #self.audio_tee.link(bin)
+                    #self.output_plugins.append(bin)
+            #elif type == IOutput.VIDEO:
+                #if record_video:
+                    #self.player.add(bin)
+                    #self.video_tee.link(bin)
+                    #self.output_plugins.append(bin)
+            if type == IOutput.BOTH:
                 self.player.add(bin)
                 if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
                 if record_video: self.video_tee.link_pads("src%d", bin, "videosink")
@@ -166,6 +166,7 @@ class Gstreamer:
     def unload_output_plugins(self):
         for plugin in self.output_plugins:
             gst.element_unlink_many(self.video_tee, plugin)
+            gst.element_unlink_many(self.audio_tee, plugin)
             self.player.remove(plugin)
     
     def load_audiomixer(self, mixer, inputs):
