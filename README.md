@@ -38,7 +38,8 @@ Publishing to the Web
 ---------------------
 
 Once you've made your changes to the documentation, preview them by rebuilding
-the output files with `make html`. The default build directory is `./build/`.
+the output files with `make html`.  
+The default build directory is `./build/`.
 We want the files in `./build/html/` to go to the
 [freeseer.github.com](https://github.com/Freeseer/freeseer.github.com) repo.
 
