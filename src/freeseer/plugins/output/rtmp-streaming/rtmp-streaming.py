@@ -91,16 +91,17 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-            audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
-            audiocodec.set_property("quality", float(self.audio_quality))
-            bin.add(audiocodec)
+#            audiocodec = gst.element_factory_make("faac", "audiocodec")
+#            audiocodec.set_property("quality", float(self.audio_quality))
+#            bin.add(audiocodec)
             
             # Setup ghost pads
             audiopad = audioqueue.get_pad("sink")
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
             
-            gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, muxer)
+            gst.element_link_many(audioqueue, audioconvert, audiolevel, muxer)
+#            gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, muxer)
         
         
         #
@@ -149,8 +150,14 @@ class RTMPOutput(IOutput):
         
         try:
             self.url = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Stream URL")
+            self.audio_quality = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Quality")
+            self.video_bitrate = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate")
+            self.video_tune = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Tune")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
     
     def get_widget(self):
         if self.widget is None:
@@ -183,7 +190,7 @@ class RTMPOutput(IOutput):
             self.spinbox_audio_quality.setSingleStep(0.1)
             self.spinbox_audio_quality.setDecimals(1)
             self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
-            layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
+#            layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
             
             self.widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(double)'), self.set_audio_quality)
             
@@ -206,7 +213,7 @@ class RTMPOutput(IOutput):
             
             self.label_video_tune = QtGui.QLabel("Video Tune")
             self.combobox_video_tune = QtGui.QComboBox()
-            self.combobox_video_tune.addItems(TUNE_VALUES)
+            self.combobox_video_tune.addItems(self.TUNE_VALUES)
             layout.addRow(self.label_video_tune, self.combobox_video_tune)
             
             self.widget.connect(self.combobox_video_tune, 
@@ -217,8 +224,8 @@ class RTMPOutput(IOutput):
             # Note
             #
             
-            self.label_video_tune_note = QtGui.QLabel("*For RTMP streaming, all other outputs must be set to leaky")
-            layout.addRow(self.label_video_quality)
+            self.label_note = QtGui.QLabel("*For RTMP streaming, all other outputs must be set to leaky")
+            layout.addRow(self.label_note)
 
 
         return self.widget
@@ -227,6 +234,12 @@ class RTMPOutput(IOutput):
         self.load_config(plugman)
         
         self.lineedit_stream_url.setText(self.url)
+
+        self.spinbox_audio_quality.setValue(float(self.audio_quality))
+        self.spinbox_video_quality.setValue(int(self.video_bitrate))
+
+        tuneIndex = self.combobox_video_tune.findText(self.video_tune)
+        self.combobox_video_tune.setCurrentIndex(tuneIndex)
 
     def set_stream_url(self, text):
         self.url = text
