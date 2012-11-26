@@ -34,8 +34,8 @@ For a brief introduction on reStructuredText concepts and syntax:
 * [Sphinx cheat](http://matplotlib.sourceforge.net/sampledoc/cheatsheet.html)
   [sheet](http://openalea.gforge.inria.fr/doc/openalea/doc/_build/html/source/sphinx/rest_syntax.html)
 
-**Tip:** You can view the (reStructuredText) source of any page built with
-Sphinx. Simply click the "Show Source" link on the page you're interested in.
+**Tip:** View the underlying reStructuredText of any page built with Sphinx by
+clicking the "Show Source" link on the page you're interested in.
 
 Publishing to the Web
 ---------------------
