@@ -88,7 +88,7 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-            audiocodec = gst.element_factory_make("faac", "audiocodec")
+            audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
             audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
             
