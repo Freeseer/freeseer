@@ -41,7 +41,9 @@ class VideoPreview(IOutput):
     # Video Preview variables
     previewsink = "autovideosink"
     leakyqueue = "no"
-    # Leaky Queue options = ["no", "upstream", "downstream"]
+    
+    # Leaky Queue
+    LEAKY_VALUES = ["no", "upstream", "downstream"]
     
     def get_output_bin(self, audio=False, video=True, metadata=None):
         bin = gst.Bin(self.name)
@@ -70,8 +72,10 @@ class VideoPreview(IOutput):
         self.plugman = plugman
         try:
             self.previewsink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink")
+            self.leakyqueue = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
 
         
     def get_widget(self):
@@ -99,14 +103,12 @@ class VideoPreview(IOutput):
             # Allows user to set queue in video to be leaky - required to work with RTMP streaming plugin
             self.leakyQueueLabel = QtGui.QLabel(self.widget.tr("Leaky Queue"))
             self.leakyQueueComboBox = QtGui.QComboBox()
-            self.leakyQueueComboBox.addItem("Not Leaky")
-            self.leakyQueueComboBox.addItem("Leaky on upstream (new buffers)")
-            self.leakyQueueComboBox.addItem("Leaky on downstream (old buffers)")
+            self.leakyQueueComboBox.addItems(self.LEAKY_VALUES)
             
             layout.addRow(self.leakyQueueLabel, self.leakyQueueComboBox)
                         
             self.widget.connect(self.leakyQueueComboBox, 
-                                QtCore.SIGNAL('currentIndexChanged(int)'), 
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_leakyqueue)
 
         return self.widget
@@ -117,19 +119,15 @@ class VideoPreview(IOutput):
         previewIndex = self.previewComboBox.findText(self.previewsink)
         self.previewComboBox.setCurrentIndex(previewIndex)
             
+        leakyQueueIndex = self.leakyQueueComboBox.findText(self.leakyqueue)
+        self.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
+            
     def set_previewsink(self, previewsink):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
         self.plugman.save()
             
-    def set_leakyqueue(self, index):
-        if index == 0:
-        	self.leakyqueue = "no"
-        elif index == 1:
-        	self.leakyqueue = "upstream"
-        elif index == 2:
-        	self.leakyqueue = "downstream"
-        	
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
+    def set_leakyqueue(self, value):
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
         self.plugman.save()
         
     def get_properties(self):
