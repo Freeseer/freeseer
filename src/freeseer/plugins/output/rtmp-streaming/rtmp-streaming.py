@@ -43,6 +43,9 @@ class RTMPOutput(IOutput):
     url = ""
     audio_quality = 0.3
     video_bitrate = 2400
+    video_tune='none'
+    
+    TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
     
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
@@ -109,7 +112,8 @@ class RTMPOutput(IOutput):
             
             videocodec = gst.element_factory_make("x264enc", "videocodec")
             videocodec.set_property("bitrate", int(self.video_bitrate))
-            videocodec.set_property('tune', 'zerolatency')
+            if self.video_tune != 'none':
+            	videocodec.set_property('tune', self.video_tune)
             bin.add(videocodec)
             
             # Setup ghost pads
@@ -193,6 +197,29 @@ class RTMPOutput(IOutput):
             self.spinbox_video_quality.setMaximum(16777215)
             self.spinbox_video_quality.setValue(2400)           # Default value 2400
             layout.addRow(self.label_video_quality, self.spinbox_video_quality)
+            
+            self.widget.connect(self.spinbox_video_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_video_bitrate)
+            
+            #
+            # Video Tune
+            #
+            
+            self.label_video_tune = QtGui.QLabel("Video Tune")
+            self.combobox_video_tune = QtGui.QComboBox()
+            self.combobox_video_tune.addItems(TUNE_VALUES)
+            layout.addRow(self.label_video_tune, self.combobox_video_tune)
+            
+            self.widget.connect(self.combobox_video_tune, 
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                self.set_video_tune)
+            
+            #
+            # Note
+            #
+            
+            self.label_video_tune_note = QtGui.QLabel("*For RTMP streaming, all other outputs must be set to leaky")
+            layout.addRow(self.label_video_quality)
+
 
         return self.widget
 
@@ -216,8 +243,13 @@ class RTMPOutput(IOutput):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
         self.plugman.save()
         
+    def set_video_tune(self, tune):
+        self.video_tune = tune
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Tune", str(self.video_tune))
+        self.plugman.save()
+        
     def get_properties(self):
-        return ['StreamURL', 'AudioQuality', 'VideoBitrate']
+        return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune']
     
     def get_property_value(self, property):
         if property == "StreamURL":
@@ -226,6 +258,8 @@ class RTMPOutput(IOutput):
             return self.audio_quality
         elif property == "VideoBitrate":
             return self.video_bitrate
+        elif property == "VideoTune":
+            return self.video_tune
         else:
             return "There's no property with such name"
         
@@ -236,6 +270,8 @@ class RTMPOutput(IOutput):
             return self.set_audio_quality(value)
         elif property == "VideoBitrate":
             return self.set_video_bitrate(value)
+        elif property == "VideoTune":
+            return self.set_video_tune(value)
         else:
             return "Error: There's no property with such name" 
 
