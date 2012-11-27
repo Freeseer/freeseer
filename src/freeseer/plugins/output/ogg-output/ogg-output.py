@@ -48,6 +48,7 @@ class OggOutput(IOutput):
         bin = gst.Bin(self.name)
         
         if metadata is not None:
+            self.generate_xml_metadata(metadata).write(self.location+".xml")
             self.set_metadata(metadata)
             
         # Muxer
