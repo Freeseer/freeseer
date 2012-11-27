@@ -195,37 +195,37 @@ class VideoPassthrough(IVideoMixer):
         return ['InputType', 'Input1', 'Framerate']
     
     def get_property_value(self, property):
-        if property == "InputType":
+        if property == "inputtype":
             return self.input_type
-        elif property == "Input1":
+        elif property == "input1":
             return self.input1
-        elif property == "Framerate":    
+        elif property == "framerate":    
             return self.framerate
-        elif property == "Resolution":
+        elif property == "resolution":
             return self.resolution  
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if(property == "Framerate"):
+        if(property == "framerate"):
             try:
                 int_value = int(value)
                 self.set_framerate(int_value)
             except:
                 print "Failed"
-        elif(property == "InputType"):
+        elif(property == "inputtype"):
             try:
                 self.set_videocolour(value)
             except:
                 print "Failed"
-        elif(property == "Input1"):
-            if(value == "USB"):
+        elif(property == "input1"):
+            if(value == "usb"):
                 self.set_input("USB Source")
-            elif(value == "Firewire"):
+            elif(value == "firewire"):
                 self.set_input("Firewire Source")
-            elif(value == "Desktop"):
+            elif(value == "desktop"):
                 self.set_input("Desktop-Linux Source")
-            elif(value == "VideoTest"):
+            elif(value == "videotest"):
                 self.set_input("Video Test Source")
             else:
                 print "Choose an available Input"

@@ -50,8 +50,14 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         
         
         self.add_argument('mode',nargs = '+', metavar='talk mode')
+ 
+        #Error messages
+        self.NOT_SUPPORTED = 'This plugin is not supported by the CLI'
+        self.PROVIDE_VALUE = 'Please provide a property value as on/off'    
+        self.SYNTAX = 'Invalid Syntax'
+        self.NO_INFO = 'There is no plugin with such informations'
+        self.NO_INDEX = 'Index is not valid. Please provide a valid index.'
 
-    
     def analyse_command(self, command):  
         '''
         Analyses the command typed by the user
@@ -92,21 +98,21 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                                 for property in plugin.plugin_object.get_properties():
                                     print property
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                         elif(len(args) == 4):
                             try:
                                 print plugin.plugin_object.get_property_value(args[3])
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                         elif(len(args) == 5):
                             try:
                                 plugin.plugin_object.set_property_value(args[3], args[4])
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                     else:
-                        print "There's no plugin with such informations"
+                        print self.NO_INFO
                 except IndexError:
-                    print "*** Invalid Syntax"
+                    print self.SYNTAX
                 except KeyError:
                     print "*** There's no category with such name"
             
@@ -132,7 +138,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                     elif (set_value == "off"):
                         self.turn_video_off()
                     else:
-                        print "*** Please provide property value as on/off"
+                        print self.PROVIDE_VALUE
                 
             elif (set_mode == "resolution"):                
                 self.set_video_resolution(int(set_value)) 
@@ -147,7 +153,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                     elif (set_value == "off"):
                         self.turn_audio_off()
                     else:
-                        print "*** Please provide property value as on/off"
+                        print self.PROVIDE_VALUE
                 
             elif (set_mode == "dir"):
                 self.set_output_dir(set_value) 
@@ -158,7 +164,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 elif (set_value == "off"):
                     self.turn_audiofeedback_off()
                 else:
-                    print "*** Please provide property value as on/off"
+                    print self.PROVIDE_VALUE
                     
             elif (set_mode == "file"):
                 if(set_value == "on"):
@@ -166,7 +172,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 elif (set_value == "off"):
                     self.turn_file_record_off()
                 else:
-                    print "*** Please provide property value as on/off"
+                    print self.PROVIDE_VALUE
                     
             elif (set_mode == "streaming"):
                 if(set_value == "on"):
@@ -174,7 +180,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 elif (set_value == "off"):
                     self.turn_streaming_off()
                 else:
-                    print "*** Please provide property value as on/off"
+                    print self.PROVIDE_VALUE
             
             else:
                 try:
@@ -187,11 +193,11 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                             try:
                                 plugin.plugin_object.set_property_value(args[3], args[4])
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                     else:
-                        print "There's no plugin with such informations"
+                        print self.NO_INFO
                 except:
-                    print "Invalid Syntax"     
+                    print self.SYNTAX     
 
                            
     def show_all_configs(self):
@@ -209,7 +215,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             self.config.videomixer = video_mixer_selected
             self.config.writeConfig()
         except:
-            print "There's no video mixer plugin with this specified index" 
+            print self.NO_INDEX 
             
     def show_all_resolutions(self):
         self._show_resolutions()
@@ -229,7 +235,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             self.config.audio = audio_mixer_selected
             self.config.writeConfig()
         except:
-            print "There's no video source with this specified index"
+            print self.NO_INDEX
             
     def show_streaming_settings(self):
         print " #################### Streaming Settings ##########################"

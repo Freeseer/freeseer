@@ -105,13 +105,13 @@ class VideoPreview(IOutput):
         return ['PreviewSink']
     
     def get_property_value(self, property):
-        if property == 'PreviewSink':
+        if property == 'previewsink':
             return self.previewsink
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if property == 'PreviewSink':
+        if property == 'previewsink':
             self.set_previewsink(value)
         else:
             return "Error: There's no property with such name" 

@@ -43,7 +43,7 @@ class FreeseerShell(Cmd):
     def __init__(self):        
         Cmd.__init__(self)  
         
-        self._disable_loggers()       
+        #self._disable_loggers()       
         self.core = FreeseerCore(self)  
         self.plugman = self.core.get_plugin_manager()
         self.db_connector = self.core.db  
@@ -74,7 +74,7 @@ class FreeseerShell(Cmd):
             project_info.NAME, project_info.VERSION, project_info.DESCRIPTION,
             project_info.COPYRIGHT)
         self.prompt = '?- '
-
+        self.ERROR_MESSAGE = 'Error: please provide a valid entry. '    
         # Modify help's documentation strings.
         #self.doc_header = 'doc_header'
         #self.misc_header = 'misc_header'
@@ -158,7 +158,7 @@ class FreeseerShell(Cmd):
         if line:
             self.record_parser.analyse_command(line)
         else:
-            print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
+            print self.ERROR_MESSAGE
     
     def help_record(self):
         print Help.RECORD_GENERAL_HELP
@@ -204,7 +204,7 @@ class FreeseerShell(Cmd):
         if line:
             self.talk_parser.analyse_command(line)
         else:
-            print 'Error: please provide a valid entry. '    
+            print self.ERROR_MESSAGE    
 
     def help_talk(self):
         print Help.TALK_GENERAL_HELP
@@ -231,7 +231,7 @@ class FreeseerShell(Cmd):
         if line:
             self.config_parser.analyse_command(line) 
         else:
-            print 'Error: please provide a valid entry.'
+            print self.ERROR_MESSAGE
      
     def help_config(self):
         print Help.CONFIG_GENERAL_HELP
