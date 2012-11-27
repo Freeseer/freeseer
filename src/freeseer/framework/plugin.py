@@ -67,8 +67,8 @@ class PluginManager(QtCore.QObject):
                                        "freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
             "AudioInput" : IAudioInput,
-            "AudioMixer" : IAudioMixer,
-            "VideoInput" : IVideoInput,
+            "audiomixer" : IAudioMixer,
+            "videoinput" : IVideoInput,
             "videomixer" : IVideoMixer,
             "Output" : IOutput})
         self.plugmanc.collectPlugins()
@@ -100,12 +100,12 @@ class PluginManager(QtCore.QObject):
         Default the passthrough mixers and ogg output plugins.
         """
         
-        self.activate_plugin("Audio Passthrough", "AudioMixer")
+        self.activate_plugin("Audio Passthrough", "audiomixer")
         self.activate_plugin("Audio Test Source", "AudioInput")
-        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
+        self.plugmanc.registerOptionFromPlugin("audiomixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
             
         self.activate_plugin("Video Passthrough", "videomixer")
-        self.activate_plugin("Video Test Source", "VideoInput")
+        self.activate_plugin("Video Test Source", "videoinput")
         self.plugmanc.registerOptionFromPlugin("videomixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.activate_plugin("Ogg Output", "Output")
         logging.debug("Default plugins activated.")
@@ -210,7 +210,7 @@ class IAudioInput(IBackendPlugin):
         raise NotImplementedError
     
 class IAudioMixer(IBackendPlugin):
-    CATEGORY = "AudioMixer"
+    CATEGORY = "audiomixer"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -236,7 +236,7 @@ class IAudioMixer(IBackendPlugin):
         raise NotImplementedError
     
 class IVideoInput(IBackendPlugin):
-    CATEGORY = "VideoInput"
+    CATEGORY = "videoinput"
     
     def __init__(self):
         IBackendPlugin.__init__(self)

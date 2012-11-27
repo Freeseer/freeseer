@@ -43,8 +43,8 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         
         self.RESOLUTION_LIST = self._get_resolution_list(self.core.config.resmap)
         self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("videomixer")]
-        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")]
-        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoInput")]
+        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("audiomixer")]
+        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("videoinput")]
         self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioInput")]
         self.OUTPUT_PLUGINS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output")]
         
@@ -346,7 +346,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             count += 1
         count = 1    
         print "Available Video Input Plugins: "
-        for video_input in self.plugman.plugmanc.getPluginsOfCategory("VideoInput"):
+        for video_input in self.plugman.plugmanc.getPluginsOfCategory("videoinput"):
             print "%d - %s" % (count, video_input.name)  
             count += 1      
         print "Current Video Resolution " + self.config.resolution
@@ -359,7 +359,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         print "Audio recoding enabled: Yes" if self.config.enable_audio_recoding else "Audio recoding enabled: No"
         print "Available Audio Mixers: " 
         count = 1       
-        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
+        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("audiomixer"):
             print "%d - %s" % (count, audio_mixer.name)  
             count += 1
         print "Current Audio Mixer: " + self.config.audiomixer

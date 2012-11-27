@@ -397,7 +397,7 @@ class FreeseerCore:
         
         if self.config.enable_audio_recoding:
             logging.debug("Loading Audio Recording plugins...")
-            audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "AudioMixer").plugin_object
+            audiomixer = self.plugman.plugmanc.getPluginByName(self.config.audiomixer, "audiomixer").plugin_object
             if audiomixer is not None:
                 audiomixer.load_config(self.plugman)
                 
@@ -425,7 +425,7 @@ class FreeseerCore:
                 videoinputs = videomixer.get_inputs()
                 for i in videoinputs:
                     logging.debug("Loading Video Mixer Input: %s", i)
-                    video_input = self.plugman.plugmanc.getPluginByName(i, "VideoInput").plugin_object
+                    video_input = self.plugman.plugmanc.getPluginByName(i, "videoinput").plugin_object
                     video_input.load_config(self.plugman)
                     videomixer_inputs.append(video_input.get_videoinput_bin())
                 
