@@ -66,7 +66,7 @@ class PluginManager(QtCore.QObject):
                                        os.path.expanduser("~/.freeseer/plugins"), 
                                        "freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
-            "AudioInput" : IAudioInput,
+            "audioinput" : IAudioInput,
             "audiomixer" : IAudioMixer,
             "videoinput" : IVideoInput,
             "videomixer" : IVideoMixer,
@@ -101,7 +101,7 @@ class PluginManager(QtCore.QObject):
         """
         
         self.activate_plugin("Audio Passthrough", "audiomixer")
-        self.activate_plugin("Audio Test Source", "AudioInput")
+        self.activate_plugin("Audio Test Source", "audioinput")
         self.plugmanc.registerOptionFromPlugin("audiomixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
             
         self.activate_plugin("Video Passthrough", "videomixer")
@@ -201,7 +201,7 @@ class IBackendPlugin(IPlugin):
         raise NotImplementedError("Plugins supported by CLI should implement this!")
 
 class IAudioInput(IBackendPlugin):
-    CATEGORY = "AudioInput"
+    CATEGORY = "audioinput"
     
     def __init__(self):
         IBackendPlugin.__init__(self)

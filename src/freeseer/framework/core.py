@@ -407,7 +407,7 @@ class FreeseerCore:
                 audioinputs = audiomixer.get_inputs()
                 for i in audioinputs:
                     logging.debug("Loading Audio Mixer Input: %s", i)
-                    audio_input = self.plugman.plugmanc.getPluginByName(i, "AudioInput").plugin_object
+                    audio_input = self.plugman.plugmanc.getPluginByName(i, "audioinput").plugin_object
                     audio_input.load_config(self.plugman)
                     audiomixer_inputs.append(audio_input.get_audioinput_bin())
                 
