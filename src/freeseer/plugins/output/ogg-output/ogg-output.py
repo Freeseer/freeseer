@@ -29,6 +29,8 @@ import pygst
 pygst.require("0.10")
 import gst
 
+import xml.etree.ElementTree as ET
+
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IOutput
@@ -44,10 +46,27 @@ class OggOutput(IOutput):
     audio_quality = 0.3
     video_bitrate = 2400
     
+    def generate_xml_metadata(self, metadata):
+        root = ET.Element('metadata')
+        
+        keys = ["title",
+                "artist",
+                "performer",
+                "album",
+                "location",
+                "date",
+                "comment"]
+        for key in keys:
+            node = ET.SubElement(root, key)
+            node.text = metadata[key]		
+       
+        return ET.ElementTree(root)
+
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin(self.name)
         
         if metadata is not None:
+            self.generate_xml_metadata(metadata).write(self.location+".xml")
             self.set_metadata(metadata)
             
         # Muxer
