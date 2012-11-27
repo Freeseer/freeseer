@@ -114,6 +114,7 @@ class FreeseerShell(Cmd):
         """Override the help command to handle cases of command arguments.
         
         General help is provided by help_*() methods."""
+        args = args.lower()
         if len(args.split()) < 2:
             Cmd.do_help(self, args)
         else:
@@ -156,7 +157,7 @@ class FreeseerShell(Cmd):
  
     def do_record(self, line):
         if line:
-            self.record_parser.analyse_command(line)
+            self.record_parser.analyse_command(line.lower())
         else:
             print self.ERROR_MESSAGE
     
@@ -167,6 +168,7 @@ class FreeseerShell(Cmd):
 	print Help.CONFIG_GENERAL_HELP
 
     def complete_help(self, text, line, start_index, end_index):
+        line = line.lower()
         if text:
           
             if len(line.split()) == 2:
@@ -202,14 +204,15 @@ class FreeseerShell(Cmd):
             return self.HELP_CONFIG_SET_MODES  
     def do_talk(self, line):                     
         if line:
-            self.talk_parser.analyse_command(line)
+            self.talk_parser.analyse_command(line.lower())
         else:
             print self.ERROR_MESSAGE    
 
     def help_talk(self):
         print Help.TALK_GENERAL_HELP
         
-    def complete_talk(self, text, line, start_index, end_index):  
+    def complete_talk(self, text, line, start_index, end_index):
+        line = line.lower()
         if text:     
             if len(line.split()) == 2:
                    return [
@@ -229,15 +232,16 @@ class FreeseerShell(Cmd):
         
     def do_config(self, line):        
         if line:
-            self.config_parser.analyse_command(line) 
+            self.config_parser.analyse_command(line.lower()) 
         else:
             print self.ERROR_MESSAGE
      
     def help_config(self):
         print Help.CONFIG_GENERAL_HELP
 
-    def complete_config(self, text, line, start_index, end_index):        
-        if text:
+    def complete_config(self, text, line, start_index, end_index):
+        line = line.lower()        
+        if text:		
             if len(line.split()) == 2:
                 return [
                     mode for mode in self.CONFIG_MODES
