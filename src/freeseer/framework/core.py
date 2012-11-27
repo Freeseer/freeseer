@@ -356,19 +356,19 @@ class FreeseerCore:
         load_plugins = []
         
         if self.config.record_to_file:
-            p = self.plugman.plugmanc.getPluginByName(self.config.record_to_file_plugin, "Output")
+            p = self.plugman.plugmanc.getPluginByName(self.config.record_to_file_plugin, "output")
             load_plugins.append(p)
             
         if self.config.record_to_stream:
-            p = self.plugman.plugmanc.getPluginByName(self.config.record_to_stream_plugin, "Output")
+            p = self.plugman.plugmanc.getPluginByName(self.config.record_to_stream_plugin, "output")
             load_plugins.append(p)
             
         if self.config.audio_feedback:
-            p = self.plugman.plugmanc.getPluginByName("Audio Feedback", "Output")
+            p = self.plugman.plugmanc.getPluginByName("Audio Feedback", "output")
             load_plugins.append(p)
             
         if self.config.video_preview:
-            p = self.plugman.plugmanc.getPluginByName("Video Preview", "Output")
+            p = self.plugman.plugmanc.getPluginByName("Video Preview", "output")
             load_plugins.append(p)
                 
         plugins = []

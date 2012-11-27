@@ -70,7 +70,7 @@ class PluginManager(QtCore.QObject):
             "audiomixer" : IAudioMixer,
             "videoinput" : IVideoInput,
             "videomixer" : IVideoMixer,
-            "Output" : IOutput})
+            "output" : IOutput})
         self.plugmanc.collectPlugins()
         
         # If config was corrupt or did not exist, reset default plugins.
@@ -107,7 +107,7 @@ class PluginManager(QtCore.QObject):
         self.activate_plugin("Video Passthrough", "videomixer")
         self.activate_plugin("Video Test Source", "videoinput")
         self.plugmanc.registerOptionFromPlugin("videomixer", "Video Passthrough-0", "Video Input", "Video Test Source")
-        self.activate_plugin("Ogg Output", "Output")
+        self.activate_plugin("Ogg Output", "output")
         logging.debug("Default plugins activated.")
         
     def _activate_default_metadata_plugins(self):
@@ -282,7 +282,7 @@ class IOutput(IBackendPlugin):
     #
     # static variables
     #
-    CATEGORY = "Output"
+    CATEGORY = "output"
     
     # recordto
     FILE = 0
