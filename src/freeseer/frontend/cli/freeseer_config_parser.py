@@ -42,7 +42,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         self.plugins = self._get_plugins()
         
         self.RESOLUTION_LIST = self._get_resolution_list(self.core.config.resmap)
-        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")]
+        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("videomixer")]
         self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")]
         self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoInput")]
         self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioInput")]
@@ -341,7 +341,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         print "Current Video Mixer: " + self.config.videomixer
         print "Available Video Mixers Plugins: "
         count = 1
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("videomixer"):
             print "%d - %s" % (count, video_mixer.name)
             count += 1
         count = 1    
@@ -384,7 +384,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
              
     def _show_video_mixers(self):
         count = 1
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("videomixer"):
             print "%d - %s" % (count, video_mixer.name)
             count += 1
         

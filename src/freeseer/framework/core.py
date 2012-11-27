@@ -415,7 +415,7 @@ class FreeseerCore:
         
         if self.config.enable_video_recoding:
             logging.debug("Loading Video Recording plugins...")
-            videomixer = self.plugman.plugmanc.getPluginByName(self.config.videomixer, "VideoMixer").plugin_object
+            videomixer = self.plugman.plugmanc.getPluginByName(self.config.videomixer, "videomixer").plugin_object
             if videomixer is not None:
                 videomixer.load_config(self.plugman)
                 

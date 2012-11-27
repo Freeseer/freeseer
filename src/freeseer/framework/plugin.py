@@ -69,7 +69,7 @@ class PluginManager(QtCore.QObject):
             "AudioInput" : IAudioInput,
             "AudioMixer" : IAudioMixer,
             "VideoInput" : IVideoInput,
-            "VideoMixer" : IVideoMixer,
+            "videomixer" : IVideoMixer,
             "Output" : IOutput})
         self.plugmanc.collectPlugins()
         
@@ -104,9 +104,9 @@ class PluginManager(QtCore.QObject):
         self.activate_plugin("Audio Test Source", "AudioInput")
         self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
             
-        self.activate_plugin("Video Passthrough", "VideoMixer")
+        self.activate_plugin("Video Passthrough", "videomixer")
         self.activate_plugin("Video Test Source", "VideoInput")
-        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
+        self.plugmanc.registerOptionFromPlugin("videomixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.activate_plugin("Ogg Output", "Output")
         logging.debug("Default plugins activated.")
         
@@ -249,7 +249,7 @@ class IVideoInput(IBackendPlugin):
         raise NotImplementedError
     
 class IVideoMixer(IBackendPlugin):
-    CATEGORY = "VideoMixer"
+    CATEGORY = "videomixer"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
