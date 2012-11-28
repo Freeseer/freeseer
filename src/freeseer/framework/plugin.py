@@ -31,6 +31,8 @@ import pygst
 pygst.require("0.10")
 import gst
 
+import xml.etree.ElementTree as ET
+
 from yapsy.PluginManager import PluginManagerSingleton
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
@@ -329,6 +331,22 @@ class IOutput(IBackendPlugin):
         Set the metadata if supported by Output plugin. 
         """
         pass
+
+    def generate_xml_metadata(self, metadata):
+        root = ET.Element('metadata')
+        
+        keys = ["title",
+                "artist",
+                "performer",
+                "album",
+                "location",
+                "date",
+                "comment"]
+        for key in keys:
+            node = ET.SubElement(root, key)
+            node.text = metadata[key]		
+       
+        return ET.ElementTree(root)
 
 #
 # Removing Video Uploader code from Freeseer framework core
