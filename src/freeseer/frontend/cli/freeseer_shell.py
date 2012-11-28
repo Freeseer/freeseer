@@ -43,7 +43,7 @@ class FreeseerShell(Cmd):
     def __init__(self):        
         Cmd.__init__(self)  
         
-        #self._disable_loggers()       
+        self._disable_loggers()       
         self.core = FreeseerCore(self)  
         self.plugman = self.core.get_plugin_manager()
         self.db_connector = self.core.db  

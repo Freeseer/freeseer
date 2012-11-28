@@ -47,8 +47,8 @@ class Help():
     '\n\n\tUSAGE: talk add'
     
     TALK_UPDATE = '\tAllows the user to update an existent talk by providing its ' \
-    'news informations\n\n\tAvailable options:\n\t\t-p: Talk Id' \
-    '\n\n\tUSAGE: talk update -p <id>'
+    'news informations\n\n\tAvailable options:\n\t\t Talk Id' \
+    '\n\n\tUSAGE: talk update <id>'
     
     # Config Help
     
@@ -58,25 +58,25 @@ class Help():
     
     """CONFIG_AUDIO_SET = '\tSets the current audio mixer to the specified index.' \
     'The list of available line mixers can be obtained in the "config show audio" command' \
-    '\n\n\tAvailable options:\n\t-i: Audio mixer index \n\n\tUSAGE: config set audio -i <index>'i
+    '\n\n\tAvailable options:\n\tAudio mixer index \n\n\tUSAGE: config set audio <index>'i
     """
     
     CONFIG_VIDEO_SET = '\tSets the current video mixer to the specified index.' \
     'The list of available mixers can be obtained in the "config show video" command' \
-    '\n\n\tAvailable options:\n\t-i: Video mixer index \n\n\tUSAGE: config set video -i <index>'
+    '\n\n\tAvailable options:\n\tVideo mixer index \n\n\tUSAGE: config set video <index>'
 
     CONFIG_VIDEO_RESOLUTION_SET = '\tSets the current video resolution to the specified index.' \
     'The list of available resolutions can be obtained in the "config show video" command' \
-    '\n\n\tAvailable options:\n\t-i: Resolution index \n\n\tUSAGE: config set video resolution -i <index>'
+    '\n\n\tAvailable options:\n\tResolution index \n\n\tUSAGE: config set video resolution <index>'
     
     CONFIG_DIR_SET = '\tSets the output directory to the specified path' \
-    '\n\n\tAvailable options:\n\t-p: Absolute path \n\n\tUSAGE: config set dir -p <path>'
+    '\n\n\tAvailable options:\n\tAbsolute path \n\n\tUSAGE: config set dir <path>'
     
     CONFIG_SET_AUDIO = '\tTurns audio on or off' \
     '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set audio [on|off]'\
     '\n\n\tSets the current audio mixer to the specified index.'\
     'The list of available line mixers can be obtained in the "config show audio" command'\
-    '\n\n\tAvailable options:\n\t-i:Audio mixer index \n\n\tUsage:config set audio -i <index>'
+    '\n\n\tAvailable options:\n\tAudio mixer index \n\n\tUsage:config set audio  <index>'
     
     CONFIG_SET_STREAMING = '\tTurns streaming on or off' \
     '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set streaming [on|off]'
