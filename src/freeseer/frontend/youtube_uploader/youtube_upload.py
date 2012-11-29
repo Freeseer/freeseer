@@ -46,6 +46,11 @@ def upload():
 	password = getpass.getpass()
 	#vfile = browse_video_directory()
 	vfile = raw_input("File or Directory: "+vpath+"/")
+
+	# Check whether the file exists, and ask again if not
+	while os.path.exists(vpath+"/"+vfile) == False:
+		print "Cannot find file or directory " + vpath+"/"+vfile
+		vfile = raw_input("File or Directory: "+vpath+"/")
 	
 	# If the vfile is a directory then walk through the directory and upload all it's videos
 	if os.path.isdir(vpath+"/"+vfile):
@@ -108,13 +113,11 @@ def uploadToYouTube(vpath, vfile, email, password):
 			#print metadata.pprint()
 			try:
 				title = metadata["title"][0]
-				print title
 			except KeyError:
 				title = vfile
 
 			try:
 				description = metadata["description"][0]
-				print description
 			except KeyError:
 				description = ""		
 	
