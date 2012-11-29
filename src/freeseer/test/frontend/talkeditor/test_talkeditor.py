@@ -131,10 +131,11 @@ class TestTalkEditorApp(unittest.TestCase):
 			self.talk_editor.addTalkWidget.presenterLineEdit.setText(mPresenter)
 			self.talk_editor.addTalkWidget.eventLineEdit.setText(mEvent)
 			self.talk_editor.addTalkWidget.roomLineEdit.setText(mRoom)
-		# date and time are prepopulated 
 
-		# add in the talk
-		QtTest.QTest.mouseClick(self.talk_editor.addTalkWidget.addButton, Qt.Qt.LeftButton)
+			# date and time are prepopulated 
+
+			# add in the talk
+			QtTest.QTest.mouseClick(self.talk_editor.addTalkWidget.addButton, Qt.Qt.LeftButton)
 
 		# we need at least 1 talk
 		self.assertTrue(self.talk_editor.editorWidget.editor.model().rowCount() > 0)
