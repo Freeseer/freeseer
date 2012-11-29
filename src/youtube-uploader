@@ -25,5 +25,4 @@
 from freeseer.frontend.youtube_uploader.youtube_upload import upload
 
 if __name__ == "__main__":
-    shell = upload()
-    shell.run()
+    upload()
