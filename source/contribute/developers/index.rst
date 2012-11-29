@@ -15,6 +15,7 @@ We aim for test-driven and document-driven development, so write your tests and 
 
    setup
    develop-from-source
+   testing
    coding-guidelines
    plugins
    code-review
