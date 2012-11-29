@@ -304,6 +304,15 @@ class IOutput(IBackendPlugin):
     extension = None
     location = None
     
+    metadata_order = [
+        "title",
+        "artist",
+        "performer",
+        "album",
+        "location",
+        "date",
+        "comment"]
+
     def __init__(self):
         IBackendPlugin.__init__(self)
     
@@ -335,14 +344,7 @@ class IOutput(IBackendPlugin):
     def generate_xml_metadata(self, metadata):
         root = ET.Element('metadata')
         
-        keys = ["title",
-                "artist",
-                "performer",
-                "album",
-                "location",
-                "date",
-                "comment"]
-        for key in keys:
+        for key in self.metadata_order:
             node = ET.SubElement(root, key)
             node.text = metadata[key]		
        
