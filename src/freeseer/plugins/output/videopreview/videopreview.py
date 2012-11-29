@@ -94,7 +94,7 @@ class VideoPreview(IOutput):
             self.previewComboBox.addItem("gconfvideosink")
             
             layout.addRow(self.previewLabel, self.previewComboBox)
-                        
+            
             self.widget.connect(self.previewComboBox, 
                                 QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_previewsink)
