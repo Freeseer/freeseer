@@ -23,7 +23,6 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import unittest
-import logging
 
 from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
 
