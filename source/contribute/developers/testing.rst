@@ -1,40 +1,31 @@
-Freeseer Test Suite
-===================
+Run Freeseer's Test Suite
+=========================
 
-.. rename all the next sub sections... they need to be more poignant
+.. TODO: improve names of subsections
 
-Setting up the Test environment
+Configure your Test Environment
 *******************************
 
-Checking you have all the dependencies
---------------------------------------
-  
-This is one of the easiest steps because there are no extra dependencies for testing! As long as your python installation contains the unittest module (part of the standard library) and the QtTest module (part of the PyQt4 package and used throughout Freeseer).
+If you can run Freeseer, you should have nothing to configure. This is because
+Python's ``unittest`` module and PyQt's ``QtTest`` module are used for
+Freeseer's test suite. The ``unittest`` module is Python's standard unit testing
+framework, and thus part of the standard library. The ``QtTest`` module is
+included with the PyQt4 package, which you should have installed as it's
+a dependency for Freeseer.
 
-If you want to make sure, you can fire up python and check:
-  
-.. code-block:: none
-    
-  $ python
-  Python 2.7.3 (default, Aug  1 2012, 05:16:07)
-  [GCC 4.6.3] on linux2
-  Type "help", "copyright", "credits" or "license" for more information.
-  >>>
+If you want to make sure, you can start the Python interpreter and
+import ``unittest`` and ``QtTest``::
+ 
+  >>> import unittest
+  >>> from PyQt4 import QtTest
 
-We're using python 2.7.x and that is the minimum version required at this time for Freeseer in general (also the maximum I believe since we do not support python3 yet).
-
-Next, import unittest then import QtTest:
-  
->>> import unittest
->>> from PyQt4 import QtTest
-
-If there are any errors, you won't be able to proceed with testing. If unittest fails to import, then something is missing in your basic Python installation. If QtTest fails to import then it's likely Freeseer will not even run!
+If there are any errors, you won't be able to proceed with testing. 
 
 
 Extending the Test Suite
 ************************
 
-Structure of /freeseer/test
+Structure of test directory
 ---------------------------
  
 At this time, the test modules are contained in a folder in the src/freeseer directory called test. 
