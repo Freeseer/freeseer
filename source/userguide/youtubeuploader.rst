@@ -7,9 +7,11 @@ This is a CLI tool that can upload ogg and mpg videos to YouTube. It uses a `3rd
 Dependencies
 ------------------
 
-* Must have this `google api <https://code.google.com/p/gdata-python-client/downloads/list>`_ (>= 1.2.4)
-* Must download and install `mutagen <http://code.google.com/p/mutagen/>`_
-* To see the progress of the upload, it is recommended to install the `progress bar <http://code.google.com/p/python-progressbar/downloads/detail?name=progressbar-2.3.tar.gz&can=2&q=>`_
+* `Google Data APIs Python Client Library <https://code.google.com/p/gdata-python-client/downloads/list>`_ (>= 1.2.4)
+* `Mutagen <http://code.google.com/p/mutagen/downloads/list>`_ (>=1.20)
+* `Python Progress Bar <http://code.google.com/p/python-progressbar/downloads/list>`_ (optional, >= 2.3)
+
+
 
 
 How to Use
