@@ -1,8 +1,8 @@
 [![freeseer](https://github.com/Freeseer/freeseer.github.com/raw/master/img/banner.png
 "Freeseer by FOSSLC")](http://freeseer.github.com)
 
-Documentation
--------------
+Freeseer's Documentation
+------------------------
 
 The Freeseer team uses a tool called [Sphinx](http://sphinx.pocoo.org) to create
 the project's documentation.
@@ -16,6 +16,8 @@ We chose Sphinx for several reasons:
 * Common tool for documenting projects written in Python
 * Multiple output formats (HTML, LaTeX, manual pages, and plain text)
 * Handles Python code, including highlighting, docstrings, and more
+* Easy to track with git
+  * Plus all the benefits of GitHub like pull requests, issue management, and a code review system
 
 Getting Started
 ---------------
@@ -46,11 +48,10 @@ files using `make html`.
     cd freeseer-docs/
     make html
 
-Your updated HTML files should be in`freeseer-docs/build/html/`.
-Open the appropriate HTML file(s) with your favourite browser to view the results.
+Your updated HTML files should be in`freeseer-docs/build/html/`.  
+Open the relevant HTML file(s) with your favourite web browser!
 
-**Tip:** GitHub can render reStructredText, just view any `.rst` file to see how
-it looks.
+**Tip:** GitHub can render reStructredText. View an `.rst` file to see how it looks.
 
 **Tip:** View the underlying reStructuredText of any webpage built with Sphinx
 by clicking the "Show Source" link on the page you're on.
