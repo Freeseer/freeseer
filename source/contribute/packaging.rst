@@ -1,4 +1,4 @@
-Packaging guidlines for the currently supported operating systems and distributions
+Packaging guidelines for the currently supported operating systems and distributions
 ====================================================================================
 
 Fedora/RedHat/CentOS/OpenSUSE Linux
@@ -10,20 +10,26 @@ b) Create an RPM package by typing:
   python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,
   python-sqlite2,gstreamer,gstreamer-python,PyQt4
 
-OR alternatively,
+Or alternatively,
 
-We have a handy "make rpm" target from the top level makefile that does both steps a and b
-the "make rpm" target has a dependency on building the source
-so this should happen automatically
+We have a handy "make rpm" target from the top level (src directory) makefile that does both steps a and b.
+The
+
+  make rpm 
+
+target has a dependency on building the source so this should happen automatically.
 
 
 Ubuntu/Debian Linux
 -------------------
 
-  Run "make deb" from the top level makefile
+Run
 
-the "make deb" target has a dependency on building the source
-so this should happen automatically
+  make deb
+
+from the top level (src directory) makefile.
+
+The "make deb" target has a dependency on building the source so this should happen automatically.
 
 
 Arch Linux
@@ -60,7 +66,7 @@ b) Create an MSI package by typing:
   python setup.py bdist_wininst
 
 
-MacOS
------
+Mac OS
+------
 
-Sorry, we don't support MacOS just yet. We hope to soon.
+Sorry, we don't support Mac OS just yet. We hope to soon.
