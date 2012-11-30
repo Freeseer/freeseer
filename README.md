@@ -34,15 +34,34 @@ For a brief introduction on reStructuredText concepts and syntax:
 * [Sphinx cheat](http://matplotlib.sourceforge.net/sampledoc/cheatsheet.html)
   [sheet](http://openalea.gforge.inria.fr/doc/openalea/doc/_build/html/source/sphinx/rest_syntax.html)
 
-**Tip:** View the underlying reStructuredText of any page built with Sphinx by
-clicking the "Show Source" link on the page you're interested in.
 
-Publishing to the Web
----------------------
+Preview your Changes
+--------------------
 
-Once you've made your changes to the documentation, preview them by rebuilding
-the output files with `make html`.  
-The default build directory is `./build/`.
+Note: You need to install Sphinx to preview your changes.
+
+Once you've made your changes to the documentation, you need to rebuild the HTML
+files using `make html`.
+
+    cd freeseer-docs/
+    make html
+
+Your updated HTML files should be in`freeseer-docs/build/html/`.
+Open the appropriate HTML file(s) with your favourite browser to view the results.
+
+**Tip:** GitHub can render reStructredText, just view any `.rst` file to see how
+it looks.
+
+**Tip:** View the underlying reStructuredText of any webpage built with Sphinx
+by clicking the "Show Source" link on the page you're on.
+
+
+Publish to the Web
+-------------------
+
+Once your changes are complete and look fine, they are ready to be deployed to
+the online documentation at http://freeseer.github.com/docs.
+
 We want the files in `./build/html/` to go to the
 [freeseer.github.com](https://github.com/Freeseer/freeseer.github.com) repo.
 
@@ -59,3 +78,8 @@ Or for a more manual approach, you can place the output directly in your local f
 
     $ sphinx-build -b html source path/to/freeseer.github.com/docs/
     # Don't forget to commit and push the changes in freeseer.github.com!
+
+**Note:** This script is only intended for people with **write access** to the
+[freeseer.github.com repo](http://github.com/freeseer/freeseer.github.com). It
+builds the Sphinx output, copies the newly produced HTML files to your local
+freeseer.github.com repo, then pushes them to GitHub.
