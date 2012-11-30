@@ -17,6 +17,7 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
    talkeditor
    reporteditor
    server
+   youtube-uploader
    config/index
    config/plugins/index
 .. freeseer-record = Record
