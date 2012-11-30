@@ -2,7 +2,7 @@
 YouTube Uploader
 ******************
 
-This is a CLI tool that can upload ogg and mpg videos to YouTube. It uses a `3rd party uploader <http://code.google.com/p/youtube-upload>`_ to upload the videos. It can upload either a single video or an entire directory. If the video is in the Freeseer ogg format then the metadata for the title and descripion will be used to populate the YouTube title and description fields. Otherwise, the title will default to the filename and the description will be blank.
+This is a CLI tool that can upload ogg and mpg videos to YouTube. It uses a `3rd party uploader <http://code.google.com/p/youtube-upload>`_ to upload the videos. It can upload either a single video or an entire directory. If the video is in the Freeseer ogg format then the metadata for the title and descripion will be used to populate the YouTube title and description fields. Otherwise, the title will default to the filename and the description will be blank. Also, the category is Education by default.
 
 Dependencies
 ------------------
