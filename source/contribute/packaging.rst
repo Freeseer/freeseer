@@ -51,7 +51,9 @@ in the installation directory. This should be followed with::
 
   pacman -U [generated file name]
 
-For more information about PKGBUILDs please refer to the detailed Arch Linux documentation at https://wiki.archlinux.org/index.php/PKGBUILD
+For more information about PKGBUILDs please refer to the detailed Arch Linux documentation at:: 
+  
+  https://wiki.archlinux.org/index.php/PKGBUILD
 
 Windows
 -------
@@ -64,6 +66,20 @@ a) Build Freeseer using the instructions in the README.txt file
 b) Create an MSI package by typing:
 
   python setup.py bdist_wininst
+
+c) Download and install DotNetInstaller from:
+  
+  http://dblock.github.com/dotnetinstaller/
+
+d) Follow the steps for a standalone bootstrapper installer from this tutorial:
+  
+  http://www.codeproject.com/Articles/5116/dotNetInstaller-Setup-Bootstrapper-for-NET-Applica
+
+The added MSIs will be including all the prerequisites and the produced Freeseer MSI. It will also include 
+all the easy-install python commands. An XML file will be produced (an example is in pkg/windows) which you
+can modify to rearrange the installation order if needed.
+
+e) Test the produced .exe file on a clean computer before making the package public.
 
 
 Mac OS
