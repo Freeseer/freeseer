@@ -1,19 +1,19 @@
 Packaging guidelines for the currently supported operating systems and distributions
 ====================================================================================
 
+
 Fedora/RedHat/CentOS/OpenSUSE Linux
 ------------------------------------
 
 a) Build Freeseer using the instructions in the README.txt file
-b) Create an RPM package by typing:
+b) Create an RPM package by typing::
 
-  python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser,
-  python-sqlite2,gstreamer,gstreamer-python,PyQt4
+  python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser, python-sqlite2,gstreamer,gstreamer-python,PyQt4
 
 Or alternatively,
 
 We have a handy "make rpm" target from the top level (src directory) makefile that does both steps a and b.
-The
+The::
 
   make rpm 
 
@@ -23,7 +23,7 @@ target has a dependency on building the source so this should happen automatical
 Ubuntu/Debian Linux
 -------------------
 
-Run
+Run::
 
   make deb
 
@@ -34,7 +34,6 @@ The "make deb" target has a dependency on building the source so this should hap
 
 Arch Linux
 ----------
-
 
 In order to create a package for Arch Linux, a PKGBUILD should be produced. This PKGBUILD will serve as the installer
 in Arch.
@@ -55,6 +54,7 @@ For more information about PKGBUILDs please refer to the detailed Arch Linux doc
   
   https://wiki.archlinux.org/index.php/PKGBUILD
 
+
 Windows
 -------
 
@@ -63,7 +63,7 @@ contains all prerequisites for Freeseer. Since the required software is download
 process will need to be done for every dependency change or Freeseer version update.
 
 a) Build Freeseer using the instructions in the README.txt file
-b) Create an MSI package by typing:
+b) Create an MSI package by typing::
 
   python setup.py bdist_wininst
 
