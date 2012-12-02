@@ -89,7 +89,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="268"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Mixer</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="273"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="272"/>
         <source>Video Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Mixer</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="258"/>
@@ -144,27 +144,27 @@
     <message>
         <location filename="../../configtool/configtool.py" line="235"/>
         <source>AudioInput</source>
-        <translation type="unfinished"></translation>
+        <translation>Audioeingang</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="236"/>
         <source>AudioMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Mixer</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="237"/>
         <source>VideoInput</source>
-        <translation type="unfinished"></translation>
+        <translation>Videoeingang</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="238"/>
         <source>VideoMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Mixer</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="239"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgabe</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="240"/>
@@ -184,12 +184,12 @@
     <message>
         <location filename="../../configtool/configtool.py" line="267"/>
         <source>Audio Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Audioeingang</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="271"/>
         <source>Video Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Videoeingang</translation>
     </message>
 </context>
 <context>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../../record/record.py" line="223"/>
         <source>Hide Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauptfenster ausblenden</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="224"/>
@@ -282,7 +282,7 @@
     <message>
         <location filename="../../record/record.py" line="228"/>
         <source>Ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereit.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="229"/>
@@ -395,12 +395,12 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="169"/>
         <source>Clear Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Klare Datenbank</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="170"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished"></translation>
+        <translation>Klare Datenbank?</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="177"/>
@@ -465,7 +465,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="195"/>
         <source>Description:</source>
-        <translation type="unfinished"></translation>
+        <translation>Beschreibung:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="196"/>
@@ -475,7 +475,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="197"/>
         <source>Event:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="198"/>
@@ -490,7 +490,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="171"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählen Sie Datei</translation>
     </message>
 </context>
 <context>
@@ -503,12 +503,12 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="179"/>
         <source>Clear Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Klare Datenbank</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="180"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished"></translation>
+        <translation>Klare Datenbank?</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="186"/>
@@ -558,7 +558,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="201"/>
         <source>Event</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignis</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
