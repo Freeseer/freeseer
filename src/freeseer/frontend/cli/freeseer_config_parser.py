@@ -42,16 +42,22 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         self.plugins = self._get_plugins()
         
         self.RESOLUTION_LIST = self._get_resolution_list(self.core.config.resmap)
-        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")]
-        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")]
-        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoInput")]
-        self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioInput")]
-        self.OUTPUT_PLUGINS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output")]
+        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("videomixer")]
+        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("audiomixer")]
+        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("videoinput")]
+        self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("audioinput")]
+        self.OUTPUT_PLUGINS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("output")]
         
         
         self.add_argument('mode',nargs = '+', metavar='talk mode')
+ 
+        #Error messages
+        self.NOT_SUPPORTED = 'This plugin is not supported by the CLI'
+        self.PROVIDE_VALUE = 'Please provide a property value as on/off'    
+        self.SYNTAX = 'Invalid Syntax'
+        self.NO_INFO = 'There is no plugin with such informations'
+        self.NO_INDEX = 'Index is not valid. Please provide a valid index.'
 
-    
     def analyse_command(self, command):  
         '''
         Analyses the command typed by the user
@@ -65,7 +71,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             try:
                 show_mode = mode.split(" ")[1]
             except:
-                print "*** Please provide the show mode. To see all available modes type'config help show'"
+                print "*** Please provide the show mode. To see all available modes type'help config show'"
                 return 
             
             if(show_mode == "all"):
@@ -92,21 +98,21 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                                 for property in plugin.plugin_object.get_properties():
                                     print property
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                         elif(len(args) == 4):
                             try:
                                 print plugin.plugin_object.get_property_value(args[3])
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                         elif(len(args) == 5):
                             try:
                                 plugin.plugin_object.set_property_value(args[3], args[4])
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                     else:
-                        print "There's no plugin with such informations"
+                        print self.NO_INFO
                 except IndexError:
-                    print "*** Invalid Syntax"
+                    print self.SYNTAX
                 except KeyError:
                     print "*** There's no category with such name"
             
@@ -114,7 +120,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             try:
                 set_mode = mode.split(" ")[1]
             except:
-                print "*** Please provide the set mode. To see all available modes type'config help set'"
+                print "*** Please provide the set mode. To see all available modes type'help config set'"
                 return 
             try:
                 set_value = mode.split(" ")[2]
@@ -132,7 +138,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                     elif (set_value == "off"):
                         self.turn_video_off()
                     else:
-                        print "*** Please provide property value as on/off"
+                        print self.PROVIDE_VALUE
                 
             elif (set_mode == "resolution"):                
                 self.set_video_resolution(int(set_value)) 
@@ -147,7 +153,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                     elif (set_value == "off"):
                         self.turn_audio_off()
                     else:
-                        print "*** Please provide property value as on/off"
+                        print self.PROVIDE_VALUE
                 
             elif (set_mode == "dir"):
                 self.set_output_dir(set_value) 
@@ -158,7 +164,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 elif (set_value == "off"):
                     self.turn_audiofeedback_off()
                 else:
-                    print "*** Please provide property value as on/off"
+                    print self.PROVIDE_VALUE
                     
             elif (set_mode == "file"):
                 if(set_value == "on"):
@@ -166,7 +172,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 elif (set_value == "off"):
                     self.turn_file_record_off()
                 else:
-                    print "*** Please provide property value as on/off"
+                    print self.PROVIDE_VALUE
                     
             elif (set_mode == "streaming"):
                 if(set_value == "on"):
@@ -174,7 +180,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 elif (set_value == "off"):
                     self.turn_streaming_off()
                 else:
-                    print "*** Please provide property value as on/off"
+                    print self.PROVIDE_VALUE
             
             else:
                 try:
@@ -187,11 +193,11 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                             try:
                                 plugin.plugin_object.set_property_value(args[3], args[4])
                             except NotImplementedError:
-                                print "This plugin is not supported by CLI"
+                                print self.NOT_SUPPORTED
                     else:
-                        print "There's no plugin with such informations"
+                        print self.NO_INFO
                 except:
-                    print "Invalid Syntax"     
+                    print self.SYNTAX     
 
                            
     def show_all_configs(self):
@@ -209,7 +215,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             self.config.videomixer = video_mixer_selected
             self.config.writeConfig()
         except:
-            print "There's no video mixer plugin with this specified index" 
+            print self.NO_INDEX 
             
     def show_all_resolutions(self):
         self._show_resolutions()
@@ -229,7 +235,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             self.config.audio = audio_mixer_selected
             self.config.writeConfig()
         except:
-            print "There's no video source with this specified index"
+            print self.NO_INDEX
             
     def show_streaming_settings(self):
         print " #################### Streaming Settings ##########################"
@@ -335,12 +341,12 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         print "Current Video Mixer: " + self.config.videomixer
         print "Available Video Mixers Plugins: "
         count = 1
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("videomixer"):
             print "%d - %s" % (count, video_mixer.name)
             count += 1
         count = 1    
         print "Available Video Input Plugins: "
-        for video_input in self.plugman.plugmanc.getPluginsOfCategory("VideoInput"):
+        for video_input in self.plugman.plugmanc.getPluginsOfCategory("videoinput"):
             print "%d - %s" % (count, video_input.name)  
             count += 1      
         print "Current Video Resolution " + self.config.resolution
@@ -353,7 +359,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         print "Audio recording enabled: Yes" if self.config.enable_audio_recording else "Audio recording enabled: No"
         print "Available Audio Mixers: " 
         count = 1       
-        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
+        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("audiomixer"):
             print "%d - %s" % (count, audio_mixer.name)  
             count += 1
         print "Current Audio Mixer: " + self.config.audiomixer
@@ -378,7 +384,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
              
     def _show_video_mixers(self):
         count = 1
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("videomixer"):
             print "%d - %s" % (count, video_mixer.name)
             count += 1
         

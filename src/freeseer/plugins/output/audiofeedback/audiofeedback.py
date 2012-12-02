@@ -99,13 +99,13 @@ class AudioFeedback(IOutput):
         return ['FeedbackSink']
     
     def get_property_value(self, property):
-        if property == "FeedbackSink":
+        if property == "feedbacksink":
             return self.feedbacksink
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if(property == "FeedbackSink"):
+        if(property == "feedbacksink"):
             self.set_feedbacksink(value)          
         else:
             return "Error: There's no property with such name" 

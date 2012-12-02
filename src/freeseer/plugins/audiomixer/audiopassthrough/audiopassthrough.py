@@ -114,22 +114,22 @@ class AudioPassthrough(IAudioMixer):
         return ['Input1']
     
     def get_property_value(self, property):
-        if property == "Input1":
+        if property == "input1":
             return self.input1
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if(property == "Input1"):
-            if(value == "AudioTest"):
+        if(property == "input1"):
+            if(value == "audiotest"):
                 self.set_input("Audio Test Source")
-            elif(value == "AutoAudio"):
+            elif(value == "autoaudio"):
                 self.set_input("Auto Audio Source")
-            elif(value == "Pulse"):
+            elif(value == "aulse"):
                 self.set_input("Pulse Audio Source")
-            elif(value == "Jack"):
+            elif(value == "jack"):
                 self.set_input("Jack Audio Source")
-            elif(value == "Alsa"):
+            elif(value == "alsa"):
                 self.set_input("ALSA Audio Source")
             else:
                 print "Choose an available Input"

@@ -204,34 +204,34 @@ class PictureInPicture(IVideoMixer):
         return ['MainInput', "PIPInput"]
     
     def get_property_value(self, property):
-        if property == "MainInput":
+        if property == "maininput":
             return self.input1
-        elif property == "PIPInput":
+        elif property == "pipinput":
             return self.input2
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if(property == "MainInput"):
-            if(value == "USB"):
+        if(property == "maininput"):
+            if(value == "usb"):
                 self.set_maininput("USB Source")
-            elif(value == "Firewire"):
+            elif(value == "firewire"):
                 self.set_maininput("Firewire Source")
-            elif(value == "Desktop"):
+            elif(value == "desktop"):
                 self.set_maininput("Desktop-Linux Source")
-            elif(value == "VideoTest"):
+            elif(value == "videotest"):
                 self.set_maininput("Video Test Source")
             else:
                 print "Choose an available Input"
                 #TODO List available options   
-        if(property == "PIPInput"):
-            if(value == "USB"):
+        if(property == "pipinput"):
+            if(value == "usb"):
                 self.set_pipinput("USB Source")
-            elif(value == "Firewire"):
+            elif(value == "firewire"):
                 self.set_pipinput("Firewire Source")
-            elif(value == "Desktop"):
+            elif(value == "desktop"):
                 self.set_pipinput("Desktop-Linux Source")
-            elif(value == "VideoTest"):
+            elif(value == "videotest"):
                 self.set_pipinput("Video Test Source")
             else:
                 print "Choose an available Input"

@@ -204,17 +204,17 @@ class OggOutput(IOutput):
         return ['AudioQuality', 'VideoBitrate']
     
     def get_property_value(self, property):
-        if property == "AudioQuality":
+        if property == "audioquality":
             return self.audio_quality
-        elif property == "VideoBitrate":
+        elif property == "videobitrate":
             return self.video_bitrate
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if property == "AudioQuality":
+        if property == "audioquality":
             return self.set_audio_quality(value)
-        elif property == "VideoBitrate":
+        elif property == "videobitrate":
             return self.set_video_bitrate(value)
         else:
             return "Error: There's no property with such name" 

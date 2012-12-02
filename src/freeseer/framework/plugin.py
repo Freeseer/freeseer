@@ -68,11 +68,11 @@ class PluginManager(QtCore.QObject):
                                        os.path.expanduser("~/.freeseer/plugins"), 
                                        "freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
-            "AudioInput" : IAudioInput,
-            "AudioMixer" : IAudioMixer,
-            "VideoInput" : IVideoInput,
-            "VideoMixer" : IVideoMixer,
-            "Output" : IOutput})
+            "audioinput" : IAudioInput,
+            "audiomixer" : IAudioMixer,
+            "videoinput" : IVideoInput,
+            "videomixer" : IVideoMixer,
+            "output" : IOutput})
         self.plugmanc.collectPlugins()
         
         # If config was corrupt or did not exist, reset default plugins.
@@ -102,14 +102,14 @@ class PluginManager(QtCore.QObject):
         Default the passthrough mixers and ogg output plugins.
         """
         
-        self.activate_plugin("Audio Passthrough", "AudioMixer")
-        self.activate_plugin("Audio Test Source", "AudioInput")
-        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
+        self.activate_plugin("Audio Passthrough", "audiomixer")
+        self.activate_plugin("Audio Test Source", "audioinput")
+        self.plugmanc.registerOptionFromPlugin("audiomixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
             
-        self.activate_plugin("Video Passthrough", "VideoMixer")
-        self.activate_plugin("Video Test Source", "VideoInput")
-        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
-        self.activate_plugin("Ogg Output", "Output")
+        self.activate_plugin("Video Passthrough", "videomixer")
+        self.activate_plugin("Video Test Source", "videoinput")
+        self.plugmanc.registerOptionFromPlugin("videomixer", "Video Passthrough-0", "Video Input", "Video Test Source")
+        self.activate_plugin("Ogg Output", "output")
         logging.debug("Default plugins activated.")
         
     def _activate_default_metadata_plugins(self):
@@ -203,7 +203,7 @@ class IBackendPlugin(IPlugin):
         raise NotImplementedError("Plugins supported by CLI should implement this!")
 
 class IAudioInput(IBackendPlugin):
-    CATEGORY = "AudioInput"
+    CATEGORY = "audioinput"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -212,7 +212,7 @@ class IAudioInput(IBackendPlugin):
         raise NotImplementedError
     
 class IAudioMixer(IBackendPlugin):
-    CATEGORY = "AudioMixer"
+    CATEGORY = "audiomixer"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -238,7 +238,7 @@ class IAudioMixer(IBackendPlugin):
         raise NotImplementedError
     
 class IVideoInput(IBackendPlugin):
-    CATEGORY = "VideoInput"
+    CATEGORY = "videoinput"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -251,7 +251,7 @@ class IVideoInput(IBackendPlugin):
         raise NotImplementedError
     
 class IVideoMixer(IBackendPlugin):
-    CATEGORY = "VideoMixer"
+    CATEGORY = "videomixer"
     
     def __init__(self):
         IBackendPlugin.__init__(self)
@@ -284,7 +284,7 @@ class IOutput(IBackendPlugin):
     #
     # static variables
     #
-    CATEGORY = "Output"
+    CATEGORY = "output"
     
     # recordto
     FILE = 0

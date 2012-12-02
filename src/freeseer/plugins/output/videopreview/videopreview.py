@@ -134,7 +134,7 @@ class VideoPreview(IOutput):
         return ['PreviewSink', 'LeakyQueue']
     
     def get_property_value(self, property):
-        if property == 'PreviewSink':
+        if property == 'previewsink':
             return self.previewsink
         elif property == 'LeakyQueue':
             return self.leakyqueue
@@ -142,7 +142,7 @@ class VideoPreview(IOutput):
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if property == 'PreviewSink':
+        if property == 'previewsink':
             self.set_previewsink(value)
         elif property == 'LeakyQueue':
             self.set_leakyqueue(value)

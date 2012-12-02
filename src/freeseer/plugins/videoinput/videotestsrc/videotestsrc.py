@@ -126,22 +126,22 @@ class VideoTestSrc(IVideoInput):
         return ['Live','Pattern']
     
     def get_property_value(self, property):
-        if property == 'Live':
+        if property == 'live':
             return self.live
-        elif property == 'Pattern':
+        elif property == 'pattern':
             return self.pattern
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
-        if property == 'Live':
-            if(value == "ON"):                
+        if property == 'live':
+            if(value == "on"):                
                 self.set_live(True)
-            elif(value == "OFF"):
+            elif(value == "off"):
                 self.set_live(False)
             else:
                 return "Please choose one of the acceptable variable values: ON or OFF"
-        elif property == "Pattern":
+        elif property == "pattern":
             self.set_pattern(value)            
         else:
             return "Error: There's no property with such name" 
