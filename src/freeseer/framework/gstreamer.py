@@ -166,6 +166,7 @@ class Gstreamer:
     def unload_output_plugins(self):
         for plugin in self.output_plugins:
             gst.element_unlink_many(self.video_tee, plugin)
+            gst.element_unlink_many(self.audio_tee, plugin)
             self.player.remove(plugin)
     
     def load_audiomixer(self, mixer, inputs):
