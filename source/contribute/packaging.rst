@@ -5,7 +5,7 @@ Packaging guidelines for the currently supported operating systems and distribut
 Fedora/RedHat/CentOS/OpenSUSE Linux
 ------------------------------------
 
-a) Build Freeseer using the instructions in the README.txt file
+a) Build Freeseer using the instructions in the README file
 b) Create an RPM package by typing::
 
   python setup.py bdist_rpm --group="Sound and Video" --requires=python-feedparser, python-sqlite2,gstreamer,gstreamer-python,PyQt4
@@ -62,7 +62,7 @@ In order to package for Windows, you require a few tools that will enable you to
 contains all prerequisites for Freeseer. Since the required software is downloaded and packaged manually, this
 process will need to be done for every dependency change or Freeseer version update.
 
-a) Build Freeseer using the instructions in the README.txt file
+a) Build Freeseer using the instructions in the README file
 b) Create an MSI package by typing::
 
   python setup.py bdist_wininst
