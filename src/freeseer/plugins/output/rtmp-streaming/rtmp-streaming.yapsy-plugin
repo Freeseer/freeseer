@@ -1,0 +1,9 @@
+[Core]
+Name = RTMP Streaming
+Module = rtmp-streaming
+
+[Documentation]
+Author = Jonathan Shen & Mike Chong
+Version = 0.1
+Website = http://fosslc.org
+Description = RTMP Streaming plugin streams video to a RTMP server.

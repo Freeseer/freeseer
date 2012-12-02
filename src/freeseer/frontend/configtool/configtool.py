@@ -477,6 +477,16 @@ class ConfigToolApp(QtGui.QMainWindow):
             self.avWidget.streamComboBox.setEnabled(False)
             self.avWidget.streamSetupPushButton.setEnabled(False)
 
+        n = 0 # Counter for finding Stream Format to set as current
+        self.avWidget.streamComboBox.clear()
+        plugins = self.plugman.plugmanc.getPluginsOfCategory("Output")
+        for plugin in plugins:
+            if plugin.plugin_object.get_recordto() == IOutput.STREAM:
+                self.avWidget.streamComboBox.addItem(plugin.plugin_object.get_name())
+                if plugin.plugin_object.get_name() == self.config.record_to_stream_plugin:
+                    self.avWidget.streamComboBox.setCurrentIndex(n)
+                n += 1
+
     def toggle_audiomixer_state(self, state):
         self.config.enable_audio_recording = state
         self.config.writeConfig()

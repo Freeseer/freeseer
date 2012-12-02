@@ -40,11 +40,17 @@ class VideoPreview(IOutput):
     
     # Video Preview variables
     previewsink = "autovideosink"
+    leakyqueue = "no"
+    
+    # Leaky Queue
+    LEAKY_VALUES = ["no", "upstream", "downstream"]
     
     def get_output_bin(self, audio=False, video=True, metadata=None):
         bin = gst.Bin(self.name)
         
+        # Leaky queue necessary to work with rtmp streaming
         videoqueue = gst.element_factory_make("queue", "videoqueue")
+        videoqueue.set_property("leaky", self.leakyqueue)
         bin.add(videoqueue)
 
         cspace = gst.element_factory_make("ffmpegcolorspace", "cspace")
@@ -66,8 +72,10 @@ class VideoPreview(IOutput):
         self.plugman = plugman
         try:
             self.previewsink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink")
+            self.leakyqueue = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
+            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
 
         
     def get_widget(self):
@@ -76,6 +84,8 @@ class VideoPreview(IOutput):
             
             layout = QtGui.QFormLayout()
             self.widget.setLayout(layout)
+            
+            # Preview
             self.previewLabel = QtGui.QLabel(self.widget.tr("Preview"))
             self.previewComboBox = QtGui.QComboBox()
             self.previewComboBox.addItem("autovideosink")
@@ -88,7 +98,19 @@ class VideoPreview(IOutput):
             self.widget.connect(self.previewComboBox, 
                                 QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_previewsink)
+
+            # Leaky Queue
+            # Allows user to set queue in video to be leaky - required to work with RTMP streaming plugin
+            self.leakyQueueLabel = QtGui.QLabel(self.widget.tr("Leaky Queue"))
+            self.leakyQueueComboBox = QtGui.QComboBox()
+            self.leakyQueueComboBox.addItems(self.LEAKY_VALUES)
             
+            layout.addRow(self.leakyQueueLabel, self.leakyQueueComboBox)
+                        
+            self.widget.connect(self.leakyQueueComboBox, 
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                self.set_leakyqueue)
+
         return self.widget
     
     def widget_load_config(self, plugman):
@@ -97,21 +119,32 @@ class VideoPreview(IOutput):
         previewIndex = self.previewComboBox.findText(self.previewsink)
         self.previewComboBox.setCurrentIndex(previewIndex)
             
+        leakyQueueIndex = self.leakyQueueComboBox.findText(self.leakyqueue)
+        self.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
+            
     def set_previewsink(self, previewsink):
         self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
         self.plugman.save()
+            
+    def set_leakyqueue(self, value):
+        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
+        self.plugman.save()
         
     def get_properties(self):
-        return ['PreviewSink']
+        return ['PreviewSink', 'LeakyQueue']
     
     def get_property_value(self, property):
         if property == 'PreviewSink':
             return self.previewsink
+        elif property == 'LeakyQueue':
+            return self.leakyqueue
         else:
             return "There's no property with such name"
         
     def set_property_value(self, property, value):
         if property == 'PreviewSink':
             self.set_previewsink(value)
+        elif property == 'LeakyQueue':
+            self.set_leakyqueue(value)
         else:
             return "Error: There's no property with such name" 
