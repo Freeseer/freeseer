@@ -2,6 +2,8 @@ Run Freeseer's Test Suite
 =========================
 
 .. TODO: improve names of subsections
+.. TODO: finish reviewing this page
+.. TODO: reference Qt class docs (see Lance's last blog post) in See Also box
 
 Configure your Test Environment
 *******************************
@@ -25,12 +27,13 @@ If there are any errors, you won't be able to proceed with testing.
 Extending the Test Suite
 ************************
 
-Structure of test directory
+Structure of Test Directory
 ---------------------------
  
-At this time, the test modules are contained in a folder in the src/freeseer directory called test. 
+The test modules are contained in the `src/freeseer/test` directory.
 
-Since as of Python 2.7, unittest supports (recursive) test module discovery, all test modules should exist somewhere inside the src/freeseer/test folder because when we run the suite later, we'll be pointing to this folder as the root.
+As of Python 2.7, unittest supports (recursive) test module discovery.
+All test modules should exist somewhere inside `src/freeseer/test/` so that the test suite can find them.
 
 See the Best Practices section for details available here: :ref:`Best-Practices`.
 
