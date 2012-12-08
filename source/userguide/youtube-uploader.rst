@@ -13,9 +13,9 @@ The category is set to *Education* by default.
 Dependencies
 ------------
 
-* `Google Data APIs Python Client Library <https://code.google.com/p/gdata-python-client/downloads/list>`_ (>= 1.2.4)
-* `Mutagen <http://code.google.com/p/mutagen/downloads/list>`_ (>=1.20)
-* `Python Progress Bar <http://code.google.com/p/python-progressbar/downloads/list>`_ (optional, >= 2.3)
+* `Google Data APIs Python Client Library <https://code.google.com/p/gdata-python-client/downloads/list>`_ (:math:`\geq` 1.2.4)
+* `Mutagen <http://code.google.com/p/mutagen/downloads/list>`_ (:math:`\geq` 1.20)
+* `Python Progress Bar <http://code.google.com/p/python-progressbar/downloads/list>`_ (optional, :math:`\geq` 2.3)
 
 How to Use
 ----------
