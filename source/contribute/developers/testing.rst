@@ -332,3 +332,22 @@ A: From experience this was ultimately the result of an import error or invocati
 #. Ensure that you are using __init__.py files (they can be empty files as they only tell Python to treat the folder as a package) in all the directories inside src/freeseer/test. If that's correct, maybe 
 #. Make sure you that in your test module, you are importing from freeseer.folder.module_name
 
+
+What should testers focus on?
+-----------------------------
+
+Ultimately, testers should protect users and the organization from bad design,
+confusing UX, functional bugs, security and privacy issues, and so forth. 
+
+Some things testers should consider:
+
+· Where are the weak points in the software?
+
+· What are the security, privacy, performance and reliability concerns?
+
+· Do all the primary user scenarios work as expected? For all international audiences?
+
+· Does the product interoperate with other products (hardware and software)?
+
+· In the event of a problem, how good are the diagnostics?
+
