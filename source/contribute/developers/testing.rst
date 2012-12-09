@@ -30,12 +30,14 @@ Extending the Test Suite
 Structure of Test Directory
 ---------------------------
  
-The test modules are contained in the `src/freeseer/test` directory.
+As of Python 2.7, unittest supports (recursive) test module discovery.  
+All test modules should exist somewhere inside `src/freeseer/test/` so that the
+test suite can find them.
 
-As of Python 2.7, unittest supports (recursive) test module discovery.
-All test modules should exist somewhere inside `src/freeseer/test/` so that the test suite can find them.
+Since Freeseer is well organized into modules, we'd like to mirror this setup in the test folder. This means that if your code is located in src/freeseer/framework/core.py then your test code should be found in src/test/framework/test_core.py (more about file naming conventions later). We do this for logical ordering: it tells us that test modules in src/freeseer/test/folder_name are for testing modules in src/freeseer/folder_name.
+  
+If you are creating a new folder in src/freeseer/test/\*, ensure that your folder contains a __init__.py such that your test module can be imported by unittest during discovery. 
 
-See the Best Practices section for details available here: :ref:`Best-Practices`.
 
 Adding/Editing a test module
 ----------------------------
@@ -172,15 +174,6 @@ A useful addition to the assert methods provided are the option to pass a messag
 
 If the optional message ( "Silly you, 3 is not 4!" in this case) is given, then if the assertion fails the user will be given this optional message instead of the generic message.  
 
-
-.. _Best-Practices:
-
-Best practices
---------------
-
-#. Since Freeseer is well organized into modules, we'd like to mirror this setup in the test folder. This means that if your code is located in src/freeseer/framework/core.py then your test code should be found in src/test/framework/test_core.py (more about file naming conventions later). We do this for logical ordering: it tells us that test modules in src/freeseer/test/folder_name are for testing modules in src/freeseer/folder_name.
-  
-#. If you are creating a new folder in src/freeseer/test/\*, ensure that your folder contains a __init__.py such that your test module can be imported by unittest during discovery. 
 
 Running the Test Suite
 **********************
