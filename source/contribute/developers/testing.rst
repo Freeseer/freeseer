@@ -9,9 +9,9 @@ Configure your Test Environment
 *******************************
 
 If you can run Freeseer, you should have nothing to configure. This is because
-Python's ``unittest`` module and PyQt's ``QtTest`` module are used for
-Freeseer's test suite. The ``unittest`` module is Python's standard unit testing
-framework, and thus part of the standard library. The ``QtTest`` module is
+Python's `unittest` module and PyQt's `QtTest` module are used for
+Freeseer's test suite. The `unittest` module is Python's standard unit testing
+framework, and thus part of the standard library. The `QtTest` module is
 included with the PyQt4 package, which you should have installed as it's
 a dependency for Freeseer.
 
@@ -30,8 +30,8 @@ Extending the Test Suite
 Structure of Test Directory
 ---------------------------
  
-As of Python 2.7, unittest supports (recursive) test module discovery.  
-All test modules should exist somewhere inside `src/freeseer/test/` so that the
+As of Python 2.7, `unittest` supports (recursive) test module discovery.
+All test modules should exist somewhere inside ``src/freeseer/test/`` so that the
 test suite can find them.
 
 Since Freeseer is well organized into modules, we'd like to mirror this setup in the test folder. This means that if your code is located in src/freeseer/framework/core.py then your test code should be found in src/test/framework/test_core.py (more about file naming conventions later). We do this for logical ordering: it tells us that test modules in src/freeseer/test/folder_name are for testing modules in src/freeseer/folder_name.
