@@ -65,7 +65,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             try:
                 show_mode = mode.split(" ")[1]
             except:
-                print "*** Please provide the show mode. To see all available modes type'config help show'"
+                print "*** Please provide the show mode. To see all available modes type'help config show'"
                 return 
             
             if(show_mode == "all"):
@@ -114,7 +114,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
             try:
                 set_mode = mode.split(" ")[1]
             except:
-                print "*** Please provide the set mode. To see all available modes type'config help set'"
+                print "*** Please provide the set mode. To see all available modes type'help config set'"
                 return 
             try:
                 set_value = mode.split(" ")[2]
