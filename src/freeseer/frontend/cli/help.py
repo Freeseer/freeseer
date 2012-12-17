@@ -22,14 +22,14 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-class Help:
-    """Contains all help strings used in Freeseer CLI."""
+class Help():
+    '''
+    Contains all help texts used on Freeseer CLI help section
+    '''
     
-    # Record help
-    RECORD = '\n'.join([ 'Records the desktop and saves the file to the video directory.\n',
-                         '\trecord <talk id>\tRecords the talk with the corresponding ID number in the talk database.',
-                         ])
-
+    HEADER = 'Freeseer Shell, version 1.0\n' \
+    'Copyright (C) 2011-2012  Free and Open Source Software Learning Centre\n\n'   
+    
     # Talk Help
     TALK_SHOW_TALKS = '\tLists all talks stored on database. If mode/value are ' \
     'provided, the talks are filtered. \n\n' \
@@ -47,8 +47,8 @@ class Help:
     '\n\n\tUSAGE: talk add'
     
     TALK_UPDATE = '\tAllows the user to update an existent talk by providing its ' \
-    'news informations\n\n\tAvailable options:\n\t\t-p: Talk Id' \
-    '\n\n\tUSAGE: talk update -p <id>'
+    'news informations\n\n\tAvailable options:\n\t\t Talk Id' \
+    '\n\n\tUSAGE: talk update <id>'
     
     # Config Help
     
@@ -56,23 +56,27 @@ class Help:
     '\n\n\tAvailable options:\n\t\tvideo: Video configuration\n\t\taudio: Audio configurations' \
     '\n\t\tall: All configurations \n\n\tUSAGE: config show [video] [audio] [all]'
     
-    CONFIG_AUDIO_SET = '\tSets the current audio mixer to the specified index.' \
-    'The list of availablLINEe mixers can be obtained in the "config show audio" command' \
-    '\n\n\tAvailable options:\n\t-i: Audio mixer index \n\n\tUSAGE: config set audio -i <index>'
+    """CONFIG_AUDIO_SET = '\tSets the current audio mixer to the specified index.' \
+    'The list of available line mixers can be obtained in the "config show audio" command' \
+    '\n\n\tAvailable options:\n\tAudio mixer index \n\n\tUSAGE: config set audio <index>'i
+    """
     
     CONFIG_VIDEO_SET = '\tSets the current video mixer to the specified index.' \
     'The list of available mixers can be obtained in the "config show video" command' \
-    '\n\n\tAvailable options:\n\t-i: Video mixer index \n\n\tUSAGE: config set video -i <index>'
+    '\n\n\tAvailable options:\n\tVideo mixer index \n\n\tUSAGE: config set video <index>'
 
     CONFIG_VIDEO_RESOLUTION_SET = '\tSets the current video resolution to the specified index.' \
     'The list of available resolutions can be obtained in the "config show video" command' \
-    '\n\n\tAvailable options:\n\t-i: Resolution index \n\n\tUSAGE: config set video resolution -i <index>'
+    '\n\n\tAvailable options:\n\tResolution index \n\n\tUSAGE: config set video resolution <index>'
     
     CONFIG_DIR_SET = '\tSets the output directory to the specified path' \
-    '\n\n\tAvailable options:\n\t-p: Absolute path \n\n\tUSAGE: config set dir -p <path>'
+    '\n\n\tAvailable options:\n\tAbsolute path \n\n\tUSAGE: config set dir <path>'
     
     CONFIG_SET_AUDIO = '\tTurns audio on or off' \
-    '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set audio [on|off]'
+    '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set audio [on|off]'\
+    '\n\n\tSets the current audio mixer to the specified index.'\
+    'The list of available line mixers can be obtained in the "config show audio" command'\
+    '\n\n\tAvailable options:\n\tAudio mixer index \n\n\tUsage:config set audio  <index>'
     
     CONFIG_SET_STREAMING = '\tTurns streaming on or off' \
     '\n\n\tAvailable options:\n\ton: Turns on \n\toff: Turns off \n\n\tUSAGE: config set streaming [on|off]'
@@ -82,16 +86,16 @@ class Help:
     
     CONFIG_SET = '\tThe setter commands provide an interface to modify the original values ' \
     'of some configurations. The configurations available for setting are:' \
-    '\n\n\t\taudio: Audio Mixer\n\t\tvideo: Video Mixer\n\t\tdir: Output directory' \
-    '\n\t\tstreaming: Video streaming\n\t\tfile: File plugin' \
-    '\n\n\tIn order to get more informations about each config setter, type "config help set <config>"'
+    '\n\n\t\taudio: Audio Mixer\n\t\tvideo: Video Mixer\n\t\tvideo resolution: Resolution changes' \
+    '\n\t\tdir: Output directory\n\t\tstreaming: Video streaming\n\t\tfile: File plugin' \
+    '\n\n\tIn order to get more informations about each config setter, type "help config set <config>"'
     
     # General help
     
-    CONFIG_GENERAL_HELP = 'Talk Editor Tool Command Line Interface\n' \
+    CONFIG_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
     'This CLI defines all commands provided by the configtool on Freeseer.\n' \
     'The following commands are supported:\n\n' \
-    '> show \n> set\n\nFor further information, type config help <command>\n\n' \
+    '> show \n> set\n\nFor further information, type help config <command>\n\n' \
     '>>> Command line plugin support <<< \n\n' \
     "Freeseer plugins can also be managed via config tool CLI. The general syntax " \
     "used to get current plugin's information is the following:\n\n" \
@@ -103,8 +107,17 @@ class Help:
     "The general syntax used to set plugin's values is the following:\n\n" \
     "> config set <PLUGIN CATEGORY> <PLUGIN NAME> <PLUGIN PROPERTY> <PLUGIN VALUE>"
     
-    TALK_GENERAL_HELP = 'Talk Editor Tool Command Line Interface\n' \
+    #Record Help                  
+    RECORD_GENERAL_HELP = HEADER + '\tRecord Tool Command Line Interface\n' \
+    '\tRecords the presentation with the respective id using ' \
+    'the current settings\n\tUSAGE: record <id>'
+    
+    TALK_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
     'This CLI defines all commands provided by the talk editor tool on Freeseer.\n' \
     'The following commands are supported:\n\n' \
     '> show\n> show events\n> remove\n> add\n> update\n\n' \
-    "For further information, type 'talk help <command>'"
+    "For further information, type 'help talk <command>'"
+    
+    
+    
+    

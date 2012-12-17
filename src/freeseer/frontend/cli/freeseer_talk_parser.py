@@ -39,7 +39,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
         
         self.core = core
         self.db_connector = self.core.db
-        
+        self.NO_ID = "Please provide a valid id"
       
         self.add_argument('mode',nargs = '+', metavar='talk mode')
         
@@ -60,20 +60,29 @@ class FreeseerTalkParser(argparse.ArgumentParser):
             try:
                 show_mode = mode.split(" ")[1]
             except:
-                print "*** Please provide the show mode. To see all available modes type'talk help show'"
+                print "*** Please provide the show mode. To see all available modes type'help talk show'"
                 return            
             if (show_mode == "events"):
                 self.show_all_events()         
             elif(show_mode == "event"):
-                self.show_talk_by_event(mode.split(" ")[2])
+		if len(mode.split(" "))>2:
+                    self.show_talk_by_event(mode.split(" ")[2])
+                else:
+                    print self.NO_ID
             elif(show_mode == "room" ):
-                self.show_talk_by_room(mode.split(" ")[2])
+		if len(mode.split(" "))>2:
+                    self.show_talk_by_room(mode.split(" ")[2])
+                else:
+                    print self.NO_ID
             elif(show_mode == "id"):
-                self.show_talk_by_id(mode.split(" ")[2]) 
+		if len(mode.split(" "))>2:
+                    self.show_talk_by_id(mode.split(" ")[2])
+                else:
+                    print self.NO_ID 
             elif(show_mode == "all"):
                 self.show_all_talks()
             else:
-                print "*** Unavailable show mode, to see all available modes type'talk help show'"
+                print "*** Unavailable show mode, to see all available modes type'help talk show'"
             
                                    
         elif(talk_mode == "remove"):
