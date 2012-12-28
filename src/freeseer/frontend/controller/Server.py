@@ -32,6 +32,7 @@ from PyQt4.QtNetwork import QTcpServer, QHostAddress
 
 from freeseer.framework.logger import Logger
 from ServerWidget import ControllerServerWidget
+from Client import COMMANDS
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -40,9 +41,17 @@ except AttributeError:
 
 PORT = 55441
 
+CLIENT_STATUS = ["Stopped",
+                 "Recording",
+                 "Paused",
+                 "Idle"]
+
 class ServerApp(QtGui.QMainWindow):
     
-    status = 'Off' 
+    STATUS = ["Offline",
+              "Online"]
+
+    status = STATUS[0]
     clients = []
     passPhrase = ''
     ipAddress = None
@@ -84,22 +93,24 @@ class ServerApp(QtGui.QMainWindow):
     ###
     
     def startServer(self):    
-        if self.status == 'Off':
+        if self.status == self.STATUS[0]:   # Check if status is Offline
             if self.ipAddress is None:
                 self.ipAddress = QHostAddress(self.mainWidget.hostCombo.currentText())
             self.server.listen(self.ipAddress, PORT)    
             self.mainWidget.startButton.setText(QtCore.QString('Stop Server'))
-            self.status = 'Running'
-            logging.info("Started server %s:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
+            self.status = self.STATUS[1]    # Set Running
+            logging.info("Started server %s: %s", self.server.serverAddress().toString(), str(self.server.serverPort()))
             self.mainWidget.hostCombo.setEnabled(False)
-        elif self.status == 'Running':
+            
+        elif self.status == self.STATUS[1]:      # Check if status is Online
             self.server.close()
             self.mainWidget.startButton.setText(QtCore.QString('Start Server'))
-            self.status = 'Off'
+            self.status = self.STATUS[0]         # Set status Offline
             self.disconnectAllClients()
             self.mainWidget.hostCombo.setEnabled(True)
             self.ipAddress = None
-        self.mainWidget.statusLabel.setText('Server status:' + self.status)
+            
+        self.mainWidget.statusLabel.setText('Server status: ' + self.status)
         self.setPassPhrase()
         self.setConnectionLabel()
         
@@ -109,26 +120,30 @@ class ServerApp(QtGui.QMainWindow):
         self.mainWidget.settingsEdit.setText(text)
 
         if self.mainWidget.passEdit.text():
-            self.mainWidget.settingsEdit.setText("%s:%s" % (self.mainWidget.passEdit.text(),
+            self.mainWidget.settingsEdit.setText("%s@%s" % (self.mainWidget.passEdit.text(),
                                                             text))
     
     def updateButtons(self):
         if len(self.mainWidget.clientList.selectedItems()) > 0:
             self.mainWidget.clientDisconnectButton.setEnabled(True)
             self.mainWidget.clientStartButton.setEnabled(True)
+            
             for i in range(0, len(self.mainWidget.clientList.selectedItems())):
                 clientStatus = self.mainWidget.clientList.selectedItems()[i].status
-                logging.info("Client status:%s", clientStatus)
-                if clientStatus == 'Recording':
-                    logging.info("Client recording")
+                logging.debug("Client status: %s", clientStatus)
+                
+                if clientStatus == CLIENT_STATUS[1]:    # Client is Recording
                     self.mainWidget.clientStartButton.setText('Pause Recording')
                     self.mainWidget.clientStopButton.setEnabled(True)
-                elif clientStatus == 'Idle':
+                    
+                elif clientStatus == CLIENT_STATUS[3]:  # Client is Idle
                     self.mainWidget.clientStartButton.setText('Start Recording')
                     self.mainWidget.clientStopButton.setEnabled(False)
-                elif clientStatus == 'Paused':
+                    
+                elif clientStatus == CLIENT_STATUS[2]:  # Client is Paused
                     self.mainWidget.clientStartButton.setText('Resume Recording')
                     self.mainWidget.clientStopButton.setEnabled(True)
+                    
         else:
             self.mainWidget.clientDisconnectButton.setEnabled(False)
             self.mainWidget.clientStartButton.setEnabled(False)
@@ -174,6 +189,10 @@ class ServerApp(QtGui.QMainWindow):
             logging.info("Client accepted")
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+            
+    def ipComboBoxHandler(self):
+        self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
+        logging.info("Server IP changed to: %s", self.ipAddress.toString())
             
     ###
     ### Client List Methods
@@ -222,22 +241,23 @@ class ServerApp(QtGui.QMainWindow):
         buttonText = self.mainWidget.clientStartButton.text()
         
         # Find out what command to send
-        if buttonText == 'Start Recording':
-            command = 'Record'
+        if buttonText == 'Start Recording' or buttonText == 'Resume Recording':
+            command = COMMANDS[1]   # Set Record
         elif buttonText == 'Pause Recording':
-            command = 'Pause'
-        elif buttonText == 'Resume Recording':
-            command = 'Resume'
-        logging.info(command + " send to") 
+            command = COMMANDS[2]   # Set Pause
         
         # Send command
         for i in range(0, len(self.mainWidget.clientList.selectedItems())):
-            client = self.mainWidget.clientList.selectedItems()[i].client
+            c_item = self.mainWidget.clientList.selectedItems()[i]
+            client = c_item.client
             self.sendMessage(client, command)
-            if command == 'Record' or command == 'Resume':
-                self.mainWidget.clientList.selectedItems()[i].changeStatus('Recording')
-            elif command == 'Pause':
-                self.mainWidget.clientList.selectedItems()[i].changeStatus('Paused')
+            
+            if command == COMMANDS[1]:                # Check if command is Record
+                c_item.changeStatus(CLIENT_STATUS[1]) # Set Recording
+            elif command == COMMANDS[2]:              # Check if command is Pause
+                c_item.changeStatus(CLIENT_STATUS[2]) # Set Paused
+                
+            logging.info("Sent  %s  command to %s" % (command, c_item.address))
                 
         self.updateButtons()
     
@@ -245,17 +265,18 @@ class ServerApp(QtGui.QMainWindow):
     Sends a stop command to selected clients
     '''
     def sendStopCommand (self):
-        logging.info("Stop record send to")
+        command = COMMANDS[0]   # Set Stop command
+        
         for i in range(0, len(self.mainWidget.clientList.selectedItems())):
-            client = self.mainWidget.clientList.selectedItems()[i].client
-            self.sendMessage(client, 'Stop')
-            self.mainWidget.clientList.selectedItems()[i].changeStatus('Idle')
+            c_item = self.mainWidget.clientList.selectedItems()[i]
+            client = c_item.client
+            self.sendMessage(client, command)
+            c_item.changeStatus(CLIENT_STATUS[3])  # Set Idle
+            
+            logging.info("Sent  %s  command to %s" % (command, c_item.address))
+            
         self.updateButtons()
-    
-    def getClientFromList(self, ip):
-        for i in range(0, len(self.clients)):
-            if self.clients[i].localAddress().toString() == ip:
-                self.sendMessage(self.clients[i], 'Record')
+        
     '''
     Method to disconnect all clients selected from the list
     '''
@@ -271,10 +292,6 @@ class ServerApp(QtGui.QMainWindow):
         for i in range(0, self.mainWidget.clientList.count()):
             client = self.mainWidget.clientList.item(i).client
             client.disconnectFromHost()
-    
-    def ipComboBoxHandler(self):
-        self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
-        logging.info("Server IP changed to:%s", self.ipAddress.toString())
         
 '''
 Custom QListWidgetItem class
@@ -285,10 +302,11 @@ class ClientListItem(QtGui.QListWidgetItem):
     def __init__(self, client):
         QtGui.QWidgetItem.__init__(self)
         self.client = client
-        self.status = 'Idle'
-        self.setText(self.client.localAddress().toString() + ' ' + self.status)
+        self.address = self.client.localAddress().toString()
+        self.status = CLIENT_STATUS[3]
+        self.setText(self.address + ' ' + self.status)
         
     def changeStatus(self, status):
         self.status = status
-        self.setText(self.client.localAddress().toString() + ' ' + self.status)
+        self.setText('%s %s' % (self.address, self.status))
         

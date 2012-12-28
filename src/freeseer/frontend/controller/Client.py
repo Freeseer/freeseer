@@ -24,14 +24,16 @@
 
 import os
 import logging
-import sys
-import sqlite3
 
-from PyQt4 import QtNetwork, QtCore, QtGui
+from PyQt4 import QtCore, QtGui
 from PyQt4.QtNetwork import QTcpSocket
 
 from ClientWidget import ControllerClientWidget
-    
+
+COMMANDS = ["Stop",
+            "Record",
+            "Pause"]
+
 class ClientDialog(QtGui.QDialog):
 
     STATUS = ["Not Connected",
