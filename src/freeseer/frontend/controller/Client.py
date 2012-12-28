@@ -88,7 +88,7 @@ class ClientDialog(QtGui.QDialog):
     ### Translation Related
     ###
     def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("ControllerClientApp", "Controller Client"))                
+        self.setWindowTitle(self.uiTranslator.translate("ControllerClientApp", "Controller Client"))
         #
         # Reusable Strings
         #
