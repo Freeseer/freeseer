@@ -79,6 +79,10 @@ class ServerApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.clientDisconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
         self.connect(self.mainWidget.clientList, QtCore.SIGNAL('itemSelectionChanged()'), self.updateButtons)
         
+    ###
+    ### Server Methods
+    ###
+    
     def startServer(self):    
         if self.status == 'Off':
             if self.ipAddress is None:
@@ -97,6 +101,16 @@ class ServerApp(QtGui.QMainWindow):
             self.ipAddress = None
         self.mainWidget.statusLabel.setText('Server status:' + self.status)
         self.setPassPhrase()
+        self.setConnectionLabel()
+        
+    def setConnectionLabel(self):
+        text = "%s:%s" % (self.mainWidget.hostCombo.currentText(),
+                          self.mainWidget.portEdit.text())
+        self.mainWidget.settingsEdit.setText(text)
+
+        if self.mainWidget.passEdit.text():
+            self.mainWidget.settingsEdit.setText("%s:%s" % (self.mainWidget.passEdit.text(),
+                                                            text))
     
     def updateButtons(self):
         if len(self.mainWidget.clientList.selectedItems()) > 0:
@@ -160,6 +174,10 @@ class ServerApp(QtGui.QMainWindow):
             logging.info("Client accepted")
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+            
+    ###
+    ### Client List Methods
+    ###
             
     '''
     This is the function to handle a new connection.
@@ -252,7 +270,7 @@ class ServerApp(QtGui.QMainWindow):
     def disconnectAllClients(self):
         for i in range(0, self.mainWidget.clientList.count()):
             client = self.mainWidget.clientList.item(i).client
-            client.disconnectFromHost()    
+            client.disconnectFromHost()
     
     def ipComboBoxHandler(self):
         self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
