@@ -316,7 +316,7 @@
     <message>
         <location filename="../../record/record.py" line="218"/>
         <source>Standby</source>
-        <translation>Ready to Record</translation>
+        <translation>Prepare to Record</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="221"/>
