@@ -212,54 +212,102 @@
     </message>
 </context>
 <context>
+    <name>ControllerClientApp</name>
+    <message>
+        <location filename="../../controller/Client.py" line="91"/>
+        <source>Controller Client</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="95"/>
+        <source>Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="96"/>
+        <source>Connect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="97"/>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="103"/>
+        <source>Connection Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="104"/>
+        <source>Host name (or IP Address)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="105"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="106"/>
+        <source>Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="117"/>
+        <source>Recent Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="214"/>
+        <location filename="../../record/record.py" line="213"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - ポータブル プレゼンテーションの記録ステーション</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="219"/>
+        <location filename="../../record/record.py" line="218"/>
         <source>Record</source>
         <translation>記録する</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="222"/>
+        <location filename="../../record/record.py" line="221"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="223"/>
+        <location filename="../../record/record.py" line="222"/>
         <source>Hide Main Window</source>
         <translation>メインウィンドウを非表示</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="224"/>
+        <location filename="../../record/record.py" line="223"/>
         <source>Show Main Window</source>
         <translation>メインウィンドウを表示する</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="245"/>
+        <location filename="../../record/record.py" line="244"/>
         <source>&amp;File</source>
         <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="246"/>
+        <location filename="../../record/record.py" line="245"/>
         <source>&amp;Options</source>
         <translation>オプション(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="247"/>
+        <location filename="../../record/record.py" line="246"/>
         <source>&amp;Language</source>
         <translation>言語(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="248"/>
+        <location filename="../../record/record.py" line="247"/>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="250"/>
+        <location filename="../../record/record.py" line="249"/>
         <source>&amp;Open Video Directory</source>
         <translation>ビデオ ディレクトリを開く(&amp;O)</translation>
     </message>
@@ -294,37 +342,37 @@
         <translation>トーク</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="220"/>
+        <location filename="../../record/record.py" line="219"/>
         <source>Pause</source>
         <translation>ポーズ</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="228"/>
+        <location filename="../../record/record.py" line="227"/>
         <source>Ready.</source>
         <translation>レディ.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="229"/>
+        <location filename="../../record/record.py" line="228"/>
         <source>Recording...</source>
         <translation>レコーディング...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="230"/>
+        <location filename="../../record/record.py" line="229"/>
         <source>Recording Paused.</source>
         <translation>レコーディングは一時停止.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="217"/>
         <source>Standby</source>
         <translation>スタンバイ</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="221"/>
+        <location filename="../../record/record.py" line="220"/>
         <source>Resume</source>
         <translation>再開する</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="227"/>
+        <location filename="../../record/record.py" line="226"/>
         <source>Idle.</source>
         <translation>アイドル.</translation>
     </message>
@@ -401,6 +449,11 @@
     <message>
         <location filename="../../record/record.py" line="285"/>
         <source>Reporting Tool</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="250"/>
+        <source>&amp;Connect to server</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

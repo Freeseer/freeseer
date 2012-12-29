@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2012  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -24,15 +24,17 @@
 
 import logging
 import os
-import sys
-
-from PyQt4 import QtCore, QtGui, QtNetwork 
-
-from PyQt4.QtNetwork import QTcpServer, QHostAddress, QNetworkInterface
-
-from freeseer.framework.logger import Logger
 
 from passlib.apps import custom_app_context as pwd_context
+
+from PyQt4 import QtCore, QtGui
+from PyQt4.QtNetwork import QTcpServer, QHostAddress
+
+from freeseer.framework.logger import Logger
+from freeseer.frontend.qtcommon.Resource import resource_rc
+
+from ServerWidget import ControllerServerWidget
+from Client import COMMANDS
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -41,16 +43,28 @@ except AttributeError:
 
 PORT = 55441
 
-class ServerWidget(QtGui.QWidget):
+CLIENT_STATUS = ["Stopped",
+                 "Recording",
+                 "Paused",
+                 "Idle"]
+
+class ServerApp(QtGui.QMainWindow):
     
-    status = 'Off' 
+    STATUS = ["Offline",
+              "Online"]
+
+    status = STATUS[0]
     clients = []
     passPhrase = ''
     ipAddress = None
     
     def __init__(self):
-        QtGui.QWidget.__init__(self) 
-        self.resize(400, 420)
+        QtGui.QWidget.__init__(self)
+        self.resize(400, 300)
+        
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.setWindowIcon(icon)
         
         configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
         self.logger = Logger(configdir)
@@ -58,163 +72,237 @@ class ServerWidget(QtGui.QWidget):
         
         self.server = QTcpServer(self)
         logging.info("Starting Freeseer Server")
-        self.startButton = QtGui.QPushButton('Start Server', self)
-        self.startButton.move(25, 90)
-       
-        self.statusLabel = QtGui.QLabel('Server status:' + self.status, self)
-        self.statusLabel.move(25, 15)
-        self.statusLabel.resize(200, 25)
         
-        self.iLabel = QtGui.QLabel('IP:', self)
-        self.iLabel.move(25, 40)
+        # Setup Widget
+        self.mainWidget = ControllerServerWidget()
+        self.setCentralWidget(self.mainWidget)
         
-        self.ipComboBox = QtGui.QComboBox(self)
-        self.ipComboBox.addItem(QtCore.QString("0.0.0.0"))
-        self.ipComboBox.move(50, 35)
-        self.ipComboBox.resize(100, 35)
-        
-        self.portLabel = QtGui.QLabel('Port:', self)
-        self.portLabel.move(25, 57)
-        self.portLabel.resize(100, 40)
-        
-        self.statusLabel2 = QtGui.QLabel('', self)
-        self.statusLabel2.move(25, 45)
-        self.statusLabel2.resize(200, 25)
-        
-        self.messageLine = QtGui.QLineEdit(self)
-        self.messageLine.move(190, 10)
-        
-        self.messageButton = QtGui.QPushButton('Send Message', self)
-        self.messageButton.setEnabled(False)
-        self.messageButton.move(320, 10)
-        
-        self.propertiesLabel = QtGui.QLabel('Properties:', self)
-        self.propertiesLabel.move(25, 355)
-        
-        self.propertiesInfoButton = QtGui.QPushButton('?', self)
-        self.propertiesInfoButton.move(120, 352)
-        self.propertiesInfoButton.resize(20, 20)
-        
-        self.propertyLabel = QtGui.QTextEdit(self)
-        self.propertyLabel.move(25, 375)
-        self.propertyLabel.resize(256, 80)
-        self.propertyLabel.setReadOnly(True)
-        self.propertyLabel.setText('Host Instance:\nIP:\nPort:\nPassphrase:')
-        
-        self.passPhraseLabel = QtGui.QLabel('Passphrase:' + self.passPhrase, self)
-        self.passPhraseLabel.move(190, 40)
-        
-        self.passPhraseEdit = QtGui.QLineEdit(self)
-        self.passPhraseEdit.move(190, 60)
-        
-        self.passPhraseEdit.setText('pass')
-        self.setPassPhrase()
-        
-        self.passPhraseButton = QtGui.QPushButton('Set Passphrase', self)
-        self.passPhraseButton.setEnabled(False)
-        self.passPhraseButton.move(320, 60)
-        
-        self.ipLabel = QtGui.QLabel('IP Address', self)
-        self.ipLabel.move(25, 130)
-        
-        self.connectionLabel = QtGui.QLabel('Status', self)
-        self.connectionLabel.move(115, 130)
-        
-        self.qListWidget = QtGui.QListWidget(self)
-        self.qListWidget.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-        self.qListWidget.move(25, 160)
-        self.qListWidget.resize(256, 192)
-        
-        self.startRecordButton = QtGui.QPushButton('Start Recording', self)
-        self.startRecordButton.move(300, 160)
-        self.startRecordButton.setEnabled(False)
-        
-        self.stopRecordButton = QtGui.QPushButton('Stop Recording', self)
-        self.stopRecordButton.move(300, 210)
-        self.stopRecordButton.setEnabled(False)
-        
-        self.disconnectButton = QtGui.QPushButton('Disconnect', self)
-        self.disconnectButton.move(300, 310)
-        self.disconnectButton.setEnabled(False)
-        
+        self.mainWidget.hostCombo.addItem(QtCore.QString("0.0.0.0"))
+                
         #Connections
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
-        self.connect(self.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
-        self.connect(self.messageLine, QtCore.SIGNAL('textEdited(QString)'), self.enableMessageButton)
-        self.connect(self.messageButton, QtCore.SIGNAL('pressed()'), self.sendCustomMessage)
-        self.connect(self.passPhraseEdit, QtCore.SIGNAL('textEdited(QString)'), self.enablePassphraseButton)
-        self.connect(self.passPhraseButton, QtCore.SIGNAL('pressed()'), self.setPassPhrase)
-        self.connect(self.startRecordButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
-        self.connect(self.stopRecordButton, QtCore.SIGNAL('pressed()'), self.sendStopCommand)
-        self.connect(self.disconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
-        self.connect(self.qListWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.updateButtons)
-        self.connect(self.propertiesInfoButton, QtCore.SIGNAL('pressed()'), self.showPropertiesInfo)
-        self.connect(self.ipComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.ipComboBoxHandler)
+        self.connect(self.mainWidget.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
+        self.connect(self.mainWidget.hostCombo, QtCore.SIGNAL('currentIndexChanged(int)'), self.ipComboBoxHandler)
         
+        # Client Control
+        self.connect(self.mainWidget.clientStartButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
+        self.connect(self.mainWidget.clientStopButton, QtCore.SIGNAL('pressed()'), self.sendStopCommand)
+        self.connect(self.mainWidget.clientDisconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
+        self.connect(self.mainWidget.clientList, QtCore.SIGNAL('itemSelectionChanged()'), self.updateClientButtons)
+    
+        #
+        # Translator
+        #
+        self.current_language = None
+        self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
+        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator.load(":/languages/tr_en_US.qm")
+        self.langActionGroup = QtGui.QActionGroup(self)
+        self.langActionGroup.setExclusive(True)
+        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
+        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
+        # --- Translator
+        
+        #
+        # Setup Menubar
+        #
+        self.menubar = QtGui.QMenuBar()
+        self.setMenuBar(self.menubar)
+        
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
+        self.menubar.setObjectName(_fromUtf8("menubar"))
+        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile.setObjectName(_fromUtf8("menuFile"))
+        self.menuOptions = QtGui.QMenu(self.menubar)
+        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
+        self.menuLanguage = QtGui.QMenu(self.menuOptions)
+        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
+        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
+        
+        exitIcon = QtGui.QIcon.fromTheme("application-exit")
+        self.actionExit = QtGui.QAction(self)
+        self.actionExit.setShortcut("Ctrl+Q")
+        self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        self.actionExit.setIcon(exitIcon)
+        
+        self.actionAbout = QtGui.QAction(self)
+        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
+        self.actionAbout.setIcon(icon)
+        
+        self.actionClient = QtGui.QAction(self)
+        self.actionClient.setIcon(icon)
+        # Actions
+        self.menuFile.addAction(self.actionExit)
+        self.menuHelp.addAction(self.actionAbout)
+        self.menuOptions.addAction(self.menuLanguage.menuAction())
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuOptions.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
+        
+        self.setupLanguageMenu()
+        # --- End Menubar
+        
+        self.load_settings()
+        self.updateStatus(self.status)
+        
+    ###
+    ### Translation Related
+    ###
+    def retranslate(self):
+        self.setWindowTitle(self.uiTranslator.translate("ControllerServerApp", "Controller Server"))
+        
+        #
+        # Reusuable Strings
+        #
+        self.serverStatusString = self.uiTranslator.translate("ControllerServerApp", "Server status")
+        self.startServerString = self.uiTranslator.translate("ControllerServerApp", "Start Server")
+        self.stopServerString = self.uiTranslator.translate("ControllerServerApp", "Stop Server")
+        self.startRecordingString = self.uiTranslator.translate("ControllerServerApp", "Start Recording")
+        self.stopRecordingString = self.uiTranslator.translate("ControllerServerApp", "Stop Recording")
+        self.pauseRecordingString = self.uiTranslator.translate("ControllerServerApp", "Pause Recording")
+        self.resumeRecordingString = self.uiTranslator.translate("ControllerServerApp", "Resume Recording")
+        # --- End Reusable Strings
+        
+        #
+        # Server Settings
+        #
+        self.mainWidget.toolBox.setItemText(0, self.uiTranslator.translate("ControllerServerApp", "Server Settings"))
+        self.mainWidget.hostLabel.setText(self.uiTranslator.translate("ControllerServerApp", "IP Address"))
+        self.mainWidget.portLabel.setText(self.uiTranslator.translate("ControllerServerApp", "Port"))
+        self.mainWidget.passLabel.setText(self.uiTranslator.translate("ControllerServerApp", "Passphrase"))
+        
+        # Button
+        if self.status == self.STATUS[0]:
+            self.mainWidget.startButton.setText(self.stopServerString)
+        else:
+            self.mainWidget.startButton.setText(self.startServerString)
+        # --- End Server Settings
+        
+        #
+        # Control Clients
+        #
+        self.mainWidget.toolBox.setItemText(1, self.uiTranslator.translate("ControllerServerApp", "Control Clients"))
+        self.updateClientButtons()
+        self.mainWidget.clientDisconnectButton.setText(self.uiTranslator.translate("ControllerServerApp", "Disconnect"))
+        # --- End Control Clients
+        
+    def translate(self, action):
+        """Translates the GUI.
+
+        When a language is selected from the language menu, this function is
+        called and the language to be changed to is retrieved.
+        """
+        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
+        
+        logging.info("Switching language to: %s" % action.text())
+        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
+        
+        self.retranslate()
+        
+    def setupLanguageMenu(self):
+        languages = QtCore.QDir(":/languages").entryList()
+        
+        if self.current_language is None:
+            self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
+            logging.debug("Detected user's locale as %s" % self.current_language)
+        
+        for language in languages:
+            translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.
+            translator.load(":/languages/%s" % language)
+            language_display_text = translator.translate("Translation", "Language Display Text")
+            
+            languageAction = QtGui.QAction(self)
+            languageAction.setCheckable(True)
+            languageAction.setText(language_display_text)
+            languageAction.setData(language)
+            self.menuLanguage.addAction(languageAction)
+            self.langActionGroup.addAction(languageAction)
+            
+            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
+                languageAction.setChecked(True)
+        
+    ###
+    ### Server Methods
+    ###
+    def load_settings(self): 
+        logging.info('Loading settings...')
+        
+        # Load default language.
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
+    
     def startServer(self):    
-        if self.status == 'Off':
+        if self.status == self.STATUS[0]:   # Check if status is Offline
             if self.ipAddress is None:
-                self.ipAddress = QHostAddress(self.ipComboBox.currentText())
+                self.ipAddress = QHostAddress(self.mainWidget.hostCombo.currentText())
             self.server.listen(self.ipAddress, PORT)    
-            self.startButton.setText(QtCore.QString('Stop Server'))
-            self.status = 'Running' 
-            string = 'IP:' + self.server.serverAddress().toString() + ' Port:' + str(self.server.serverPort())
-            self.portLabel.setText("Port:" + str(self.server.serverPort()))
-            logging.info("Started server IP:%s Port:%s", self.server.serverAddress().toString(), str(self.server.serverPort()))
-            self.ipComboBox.setEnabled(False)
-            self.updateProperties()
-        elif self.status == 'Running':
+            self.status = self.STATUS[1]    # Set Running            
+            self.mainWidget.hostCombo.setEnabled(False)
+            logging.info("Started server %s: %s", self.server.serverAddress().toString(), str(self.server.serverPort()))
+            
+        elif self.status == self.STATUS[1]:      # Check if status is Online
             self.server.close()
-            self.startButton.setText(QtCore.QString('Start Server'))
-            self.status = 'Off'
+            self.status = self.STATUS[0]         # Set status Offline
             self.disconnectAllClients()
-            self.ipComboBox.setEnabled(True)
+            self.mainWidget.hostCombo.setEnabled(True)
             self.ipAddress = None
-        self.statusLabel.setText('Server status:' + self.status)
-    
-    '''
-    This function is for updating the properties box when there is a change in the attributes
-    '''
-    def updateProperties(self):
-        self.propertyLabel.setText('Host Instance:\nIP:' + self.server.serverAddress().toString() + '\nPort:' + str(self.server.serverPort())
-                                    + '\nPassphrase:' + self.passPhrase2)
+            
+        self.updateStatus(self.status)
+        self.setPassPhrase()
+        self.setConnectionLabel()
         
-    
-    def enableMessageButton(self):
-        if self.messageLine == '':
-            self.messageButton.setEnabled(False)
+    def updateStatus(self, status):
+        self.mainWidget.statusLabel.setText("%s: %s" % (self.serverStatusString, status))
+        
+    def setConnectionLabel(self):
+        text = "%s:%s" % (self.mainWidget.hostCombo.currentText(),
+                          self.mainWidget.portEdit.text())
+        self.mainWidget.settingsEdit.setText(text)
+
+        if self.mainWidget.passEdit.text():
+            self.mainWidget.settingsEdit.setText("%s@%s" % (self.mainWidget.passEdit.text(),
+                                                            text))
+        
+    '''
+    This function is for changing the passphrase. It saves the new passphrase in the self.passPhrase after encoding it.
+    '''
+    def setPassPhrase(self):
+        self.passphrase = self.mainWidget.passEdit.text()
+        logging.info ("Passphrase set to %s", self.passphrase)
+        #self.passPhrase = base64.b64encode(self.passPhrase)
+        self.passphrase = str(self.passphrase)
+        self.passphrase = pwd_context.encrypt(self.passphrase)
+        
+    '''
+    This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
+    Client is accepted if the passphrases match. Otherwise client is rejected
+    '''  
+    def readPassPhrase(self):
+        client = QtCore.QObject.sender(self)
+        message = client.read(client.bytesAvailable())   
+        logging.info("Client said: %s", message)
+        if pwd_context.verify(message, self.passphrase) is False:
+            client.disconnectFromHost()
+            logging.info("Client rejected")
         else:
-            self.messageButton.setEnabled(True)
+            self.clients.append(client)
+            self.updateList()
+            logging.info("Client accepted")
+            self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
+            self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+            
+    def ipComboBoxHandler(self):
+        self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
+        logging.info("Server IP changed to: %s", self.ipAddress.toString())
     
-    def enablePassphraseButton(self):
-        if self.passPhraseEdit == '':
-            self.passPhraseButton.setEnabled(False)
-        else:
-            self.passPhraseButton.setEnabled(True)
-    
-    def updateButtons(self):
-        if len(self.qListWidget.selectedItems()) > 0:
-            self.disconnectButton.setEnabled(True)
-            self.startRecordButton.setEnabled(True)
-            for i in range(0, len(self.qListWidget.selectedItems())):
-                clientStatus = self.qListWidget.selectedItems()[i].status
-                logging.info("Client status:%s", clientStatus)
-                if clientStatus == 'Recording':
-                    logging.info("Client recording")
-                    self.startRecordButton.setText('Pause Recording')
-                    self.stopRecordButton.setEnabled(True)
-                elif clientStatus == 'Idle':
-                    self.startRecordButton.setText('Start Recording')
-                    self.stopRecordButton.setEnabled(False)
-                elif clientStatus == 'Paused':
-                    self.startRecordButton.setText('Resume Recording')
-                    self.stopRecordButton.setEnabled(True)
-        else:
-            self.disconnectButton.setEnabled(False)
-            self.startRecordButton.setEnabled(False)
-            self.startRecordButton.setText('Start Recording')
-            self.stopRecordButton.setEnabled(False) 
-            self.stopRecordButton.setText('Stop Recording')
+    ###
+    ### Messaging
+    ###
     
     def startRead(self):
         client = QtCore.QObject.sender(self)
@@ -226,45 +314,10 @@ class ServerWidget(QtGui.QWidget):
         block = QtCore.QByteArray()
         block.append(message)
         client.write(block)
-    
-    def sendCustomMessage(self):
-        for i in range(0, len(self.clients)):
-            client = self.clients.pop(i)
-            self.clients.insert(i, client)
-            self.sendMessage(client, self.messageLine.text())
-        
-    '''
-    This function is for changing the passphrase. It saves the new passphrase in the self.passPhrase after encoding it.
-    '''
-    def setPassPhrase(self):
-        self.passPhrase = self.passPhraseEdit.text()
-        logging.info ("Passphrase changed to %s", self.passPhraseEdit.text())
-        self.passPhraseLabel.setText("Passphrase:" + self.passPhrase)
-        self.passPhraseEdit.clear()
-        #self.passPhrase = base64.b64encode(self.passPhrase)
-        self.passPhrase = str(self.passPhrase)
-        self.passPhrase2 = self.passPhrase
-        self.passPhrase = pwd_context.encrypt(self.passPhrase)
-        self.updateProperties()
-        
-    
-    '''
-    This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
-    Client is accepted if the passphrases match. Otherwise client is rejected
-    '''  
-    def readPassPhrase(self):
-        client = QtCore.QObject.sender(self)
-        message = client.read(client.bytesAvailable())   
-        logging.info("Client said: %s", message)
-        if pwd_context.verify(message, self.passPhrase) is False:
-            client.disconnectFromHost()
-            logging.info("Client rejected")
-        else:
-            self.clients.append(client)
-            self.updateList()
-            logging.info("Client accepted")
-            self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
-            self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+            
+    ###
+    ### Client List Methods
+    ###
             
     '''
     This is the function to handle a new connection.
@@ -279,24 +332,24 @@ class ServerWidget(QtGui.QWidget):
         logging.info("Client disconnected")
         self.clients.remove(client)
         self.updateList()
-        self.updateButtons()
+        self.updateClientButtons()
     
     '''
     This method is to update the list
     '''
     def updateList(self):
-        self.qListWidget.clear()
+        self.mainWidget.clientList.clear()
         for i in range(0, len(self.clients)):
             client = self.clients[i]
-            listItem = ServerListWidget(client)
-            self.qListWidget.addItem(listItem)
+            listItem = ClientListItem(client)
+            self.mainWidget.clientList.addItem(listItem)
             clientLabel = QtGui.QLabel('F1', self)
             clientLabel.move(5 + (i * 20), 150)
     
     def addClientToList(self, client):
         self.clients.append(object)
-        listItem = ServerListWidget(client)
-        self.qListWidget.addItem(listItem)
+        listItem = ClientListItem(client)
+        self.mainWidget.clientList.addItem(listItem)
     
     def removeClientFromTheList(self, client):
         self.clients.remove(client)
@@ -306,145 +359,103 @@ class ServerWidget(QtGui.QWidget):
     Sends a record command to the selected clients
     '''     
     def sendRecordCommand (self):
-        buttonText = self.startRecordButton.text()
-        if buttonText == 'Start Recording':
-            command = 'Record'
-        elif buttonText == 'Pause Recording':
-            command = 'Pause'
-        elif buttonText == 'Resume Recording':
-            command = 'Resume'
-        logging.info(command + " send to") 
-        for i in range(0, len(self.qListWidget.selectedItems())):
-            client = self.qListWidget.selectedItems()[i].client
+        buttonText = self.mainWidget.clientStartButton.text()
+        
+        # Find out what command to send
+        if buttonText == self.startRecordingString or buttonText == self.resumeRecordingString:
+            command = COMMANDS[1]   # Set Record
+        elif buttonText == self.pauseRecordingString:
+            command = COMMANDS[2]   # Set Pause
+        
+        # Send command
+        for i in range(0, len(self.mainWidget.clientList.selectedItems())):
+            c_item = self.mainWidget.clientList.selectedItems()[i]
+            client = c_item.client
             self.sendMessage(client, command)
-            if command == 'Record' or command == 'Resume':
-                self.qListWidget.selectedItems()[i].changeStatus('Recording')
-            elif command == 'Pause':
-                self.qListWidget.selectedItems()[i].changeStatus('Paused')
-        self.updateButtons()
+            
+            if command == COMMANDS[1]:                # Check if command is Record
+                c_item.changeStatus(CLIENT_STATUS[1]) # Set Recording
+            elif command == COMMANDS[2]:              # Check if command is Pause
+                c_item.changeStatus(CLIENT_STATUS[2]) # Set Paused
+                
+            logging.info("Sent  %s  command to %s" % (command, c_item.address))
+                
+        self.updateClientButtons()
     
     '''
     Sends a stop command to selected clients
     '''
     def sendStopCommand (self):
-        logging.info("Stop record send to")
-        for i in range(0, len(self.qListWidget.selectedItems())):
-            client = self.qListWidget.selectedItems()[i].client
-            self.sendMessage(client, 'Stop')
-            self.qListWidget.selectedItems()[i].changeStatus('Idle')
-        self.updateButtons()
-    
-    def getClientFromList(self, ip):
-        for i in range(0, len(self.clients)):
-            if self.clients[i].localAddress().toString() == ip:
-                self.sendMessage(self.clients[i], 'Record')
+        command = COMMANDS[0]   # Set Stop command
+        
+        for i in range(0, len(self.mainWidget.clientList.selectedItems())):
+            c_item = self.mainWidget.clientList.selectedItems()[i]
+            client = c_item.client
+            self.sendMessage(client, command)
+            c_item.changeStatus(CLIENT_STATUS[3])  # Set Idle
+            
+            logging.info("Sent  %s  command to %s" % (command, c_item.address))
+            
+        self.updateClientButtons()
+        
     '''
     Method to disconnect all clients selected from the list
     '''
     def disconnectClients(self):
-        for i in range(0, len(self.qListWidget.selectedItems())):
-            client = self.qListWidget.selectedItems()[i].client
+        for i in range(0, len(self.mainWidget.clientList.selectedItems())):
+            client = self.mainWidget.clientList.selectedItems()[i].client
             client.disconnectFromHost()  
     
     '''
     Method to disconnect all clients that are connected
     '''
     def disconnectAllClients(self):
-        for i in range(0, self.qListWidget.count()):
-            client = self.qListWidget.item(i).client
-            client.disconnectFromHost()    
-    
-    '''
-    This shows a messagebox explaining the properties box
-    '''
-    def showPropertiesInfo(self):
-        infoString = 'This box is for copying the connection info\n for an easy way to enter the conneciton details\non the client side. You can copy this info and send it to the client(s) to connect to this server.'
-        QtGui.QMessageBox.information(self, QtCore.QString('Properties Info'), QtCore.QString(infoString))
+        for i in range(0, self.mainWidget.clientList.count()):
+            client = self.mainWidget.clientList.item(i).client
+            client.disconnectFromHost()
+            
+    def updateClientButtons(self):
+        if len(self.mainWidget.clientList.selectedItems()) > 0:
+            self.mainWidget.clientDisconnectButton.setEnabled(True)
+            self.mainWidget.clientStartButton.setEnabled(True)
+            
+            for i in range(0, len(self.mainWidget.clientList.selectedItems())):
+                clientStatus = self.mainWidget.clientList.selectedItems()[i].status
+                logging.debug("Client status: %s", clientStatus)
+                
+                if clientStatus == CLIENT_STATUS[1]:    # Client is Recording
+                    self.mainWidget.clientStartButton.setText(self.pauseRecordingString)
+                    self.mainWidget.clientStopButton.setEnabled(True)
+                    
+                elif clientStatus == CLIENT_STATUS[3]:  # Client is Idle
+                    self.mainWidget.clientStartButton.setText(self.startRecordingString)
+                    self.mainWidget.clientStopButton.setEnabled(False)
+                    
+                elif clientStatus == CLIENT_STATUS[2]:  # Client is Paused
+                    self.mainWidget.clientStartButton.setText(self.resumeRecordingString)
+                    self.mainWidget.clientStopButton.setEnabled(True)
+                    
+        else:
+            self.mainWidget.clientDisconnectButton.setEnabled(False)
+            self.mainWidget.clientStartButton.setEnabled(False)
+            self.mainWidget.clientStartButton.setText(self.startRecordingString)
+            self.mainWidget.clientStopButton.setEnabled(False) 
+            self.mainWidget.clientStopButton.setText(self.stopRecordingString)
         
-    
-    def ipComboBoxHandler(self):
-        self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
-        logging.info("Server IP changed to:%s", self.ipAddress.toString())
-        
-        
-    
-class ServerG(QtGui.QMainWindow):
-    
-    def __init__(self):
-        QtGui.QMainWindow.__init__(self)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.setWindowIcon(icon)
-        
-        #
-        # Translator
-        #
-        self.current_language = None
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
-        self.langActionGroup = QtGui.QActionGroup(self)
-        self.langActionGroup.setExclusive(True)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
-        # --- Translator
-        
-        self.setGeometry(300, 300, 450, 470)
-        self.retranslate()
-        
-        self.mainWidget = ServerWidget()
-        
-        self.menubar = QtGui.QMenuBar(self.mainWidget)
-        self.setMenuBar(self.menubar)
-        
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        
-        self.menuFile = QtGui.QMenu("File")
-        self.menuFile.addMenu(QtGui.QMenu("Quit"))
-        self.menu2 = QtGui.QMenu("Edit")
-        
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
-        self.actionExit.setShortcut("Ctrl+Q")
-        self.actionExit.setObjectName(QtCore.QString("Exit"))
-        self.actionExit.setIcon(exitIcon)
-        self.actionExit.setText(self.uiTranslator.translate("RecordApp", "&Quit"))
-        
-        self.menuFile.addAction(self.actionExit)
-        self.menubar.addMenu(self.menuFile)
-        self.menubar.addMenu(self.menu2)
-        
-        self.setCentralWidget(self.mainWidget)
-        self.setWindowTitle('Freeseer - Server')
-        
-    def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("RecordApp", "Freeseer - portable presentation recording station"))
-    
-    def translate(self, action):
-        '''
-        When a language is selected from the language menu this function is called
-        The language to be changed to is retrieved
-        '''
-        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
-        logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-        
-        self.retranslate()
-
 '''
 Custom QListWidgetItem class
 Additionally it includes a client object
 '''
-class ServerListWidget(QtGui.QListWidgetItem):
+class ClientListItem(QtGui.QListWidgetItem):
     
     def __init__(self, client):
         QtGui.QWidgetItem.__init__(self)
         self.client = client
-        self.status = 'Idle'
-        self.setText(self.client.localAddress().toString() + ' ' + self.status)
+        self.address = self.client.localAddress().toString()
+        self.status = CLIENT_STATUS[3]
+        self.setText(self.address + ' ' + self.status)
         
     def changeStatus(self, status):
         self.status = status
-        self.setText(self.client.localAddress().toString() + ' ' + self.status)
+        self.setText('%s %s' % (self.address, self.status))
         

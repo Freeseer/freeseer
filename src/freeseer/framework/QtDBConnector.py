@@ -33,6 +33,8 @@ from freeseer.framework.failure import *
 class QtDBConnector():
     presentationsModel = None
     failuresModel = None
+    recentconnModel = None
+    
     def __init__(self, configdir, talkdb_file="presentations.db"):
         """
         Initialize the QtDBConnector
@@ -64,6 +66,10 @@ class QtDBConnector():
             # check if failures table exists and if not create it.
             if not self.talkdb.tables().contains("failures"):
                 self.__create_failures_table()
+                
+            # check if recentConnections table exists and if not create it.
+            if not self.talkdb.tables().contains("recentconn"):
+                self.__create_recentconn_table()
         else:
             print "Unable to create talkdb file."
             
@@ -225,19 +231,6 @@ class QtDBConnector():
         
         return self.presentationsModel
 
-    def get_failures_model(self):
-        """
-        Gets the Failure reports table Model
-        Useful for QT GUI based Frontends to load the Model in Table Views.
-        """
-        if self.failuresModel is None:
-            self.failuresModel = QtSql.QSqlTableModel()
-            self.failuresModel.setTable("failures")
-            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
-            self.failuresModel.select()
-
-        return self.failuresModel
-
     def get_events_model(self):
         """
         Gets the Events Model.
@@ -393,7 +386,49 @@ class QtDBConnector():
             self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
             self.failuresModel.select()
         
-        return self.failuresModel 
+        return self.failuresModel
+        
+    ##
+    ## Controller Feature
+    ##
+    
+    def __create_recentconn_table(self):
+        """
+        Create the recentconn table in the database 
+        Should be used to initialize a new table.
+        """
+        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS recentconn
+                                        (host varchar(255),
+                                         port int,
+                                         passphrase varchar(255),
+                                         UNIQUE (host, port) ON CONFLICT REPLACE)''')
+                                     
+    def clear_recentconn_table(self):
+        """
+        Drops the recentconn (Controller) table from the database
+        """
+        query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS recentconn''')
+        
+    def insert_recentconn(self, chost, cport, cpass):
+        """
+        Insert a failure into the database.
+        """
+        
+        query = QtSql.QSqlQuery('''INSERT INTO recentconn VALUES("%s", "%d", "%s")''' %
+                                   (chost, cport, cpass))
+        logging.info("Recent connection added: %s:%d" % (chost, cport))
+        
+    def get_recentconn_model(self):
+        """
+        Gets the Recent Connections table Model
+        Useful for QT GUI based Frontends to load the Model in Table Views.
+        """
+        self.recentconnModel = QtSql.QSqlTableModel()
+        self.recentconnModel.setTable("recentconn")
+        self.recentconnModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
+        self.recentconnModel.select()
+        
+        return self.recentconnModel
     
 """
 Test code to independently test the methods in the QtDBConnector() class.    
