@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="de_DE" sourcelanguage="en_US">
+<!DOCTYPE TS><TS version="2.0" language="de_DE" sourcelanguage="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -237,6 +236,79 @@
     <message>
         <location filename="../../controller/Client.py" line="117"/>
         <source>Recent Connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ControllerServerApp</name>
+    <message>
+        <location filename="../../controller/Server.py" line="153"/>
+        <source>Controller Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="158"/>
+        <source>Server status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="159"/>
+        <source>Start Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="160"/>
+        <source>Stop Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="161"/>
+        <source>Start Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="162"/>
+        <source>Stop Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="163"/>
+        <source>Pause Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="164"/>
+        <source>Resume Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="170"/>
+        <source>Server Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="171"/>
+        <source>IP Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="172"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="173"/>
+        <source>Passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="185"/>
+        <source>Control Clients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="187"/>
+        <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -682,7 +754,7 @@
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="247"/>
+        <location filename="../../controller/Server.py" line="213"/>
         <source>Language Display Text</source>
         <translation>Deutsch</translation>
     </message>
