@@ -4,7 +4,8 @@ SOURCES = ../AboutDialog.py \
           ../../configtool/configtool.py \
           ../../reporteditor/reporteditor.py \
           ../../talkeditor/talkeditor.py \
-          ../../controller/Client.py
+          ../../controller/Client.py \
+          ../../controller/Server.py
 
 TRANSLATIONS = tr_en_US.ts \
                tr_ar_EG.ts \ 
