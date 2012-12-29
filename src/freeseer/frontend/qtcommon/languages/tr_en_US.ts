@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en_US" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -212,54 +213,175 @@
     </message>
 </context>
 <context>
+    <name>ControllerClientApp</name>
+    <message>
+        <location filename="../../controller/Client.py" line="91"/>
+        <source>Controller Client</source>
+        <translation>Controller Client</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="95"/>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="96"/>
+        <source>Connect</source>
+        <translation>Connect</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="97"/>
+        <source>Disconnect</source>
+        <translation>Disconnect</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="103"/>
+        <source>Connection Settings</source>
+        <translation>Connection Settings</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="104"/>
+        <source>Host name (or IP Address)</source>
+        <translation>Host name (or IP Address)</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="105"/>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="106"/>
+        <source>Passphrase</source>
+        <translation>Passphrase</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Client.py" line="117"/>
+        <source>Recent Connections</source>
+        <translation>Recent Connections</translation>
+    </message>
+</context>
+<context>
+    <name>ControllerServerApp</name>
+    <message>
+        <location filename="../../controller/Server.py" line="153"/>
+        <source>Controller Server</source>
+        <translation>Controller Server</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="158"/>
+        <source>Server status</source>
+        <translation>Server status</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="159"/>
+        <source>Start Server</source>
+        <translation>Start Server</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="160"/>
+        <source>Stop Server</source>
+        <translation>Stop Server</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="161"/>
+        <source>Start Recording</source>
+        <translation>Start Recording</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="162"/>
+        <source>Stop Recording</source>
+        <translation>Stop Recording</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="163"/>
+        <source>Pause Recording</source>
+        <translation>Pause Recording</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="164"/>
+        <source>Resume Recording</source>
+        <translation>Resume Recording</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="170"/>
+        <source>Server Settings</source>
+        <translation>Server Settings</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="171"/>
+        <source>IP Address</source>
+        <translation>IP Address</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="172"/>
+        <source>Port</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="173"/>
+        <source>Passphrase</source>
+        <translation>Passphrase</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="185"/>
+        <source>Control Clients</source>
+        <translation>Control Clients</translation>
+    </message>
+    <message>
+        <location filename="../../controller/Server.py" line="187"/>
+        <source>Disconnect</source>
+        <translation>Disconnect</translation>
+    </message>
+</context>
+<context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="214"/>
+        <location filename="../../record/record.py" line="213"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation>Freeseer - The portable presentation recording station</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="219"/>
+        <location filename="../../record/record.py" line="218"/>
         <source>Record</source>
         <translation>Record</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="222"/>
+        <location filename="../../record/record.py" line="221"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="223"/>
+        <location filename="../../record/record.py" line="222"/>
         <source>Hide Main Window</source>
         <translation>Hide Main Window</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="224"/>
+        <location filename="../../record/record.py" line="223"/>
         <source>Show Main Window</source>
         <translation>Show Main Window</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="245"/>
+        <location filename="../../record/record.py" line="244"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="246"/>
+        <location filename="../../record/record.py" line="245"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="247"/>
+        <location filename="../../record/record.py" line="246"/>
         <source>&amp;Language</source>
         <translation>&amp;Language</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="248"/>
+        <location filename="../../record/record.py" line="247"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="250"/>
+        <location filename="../../record/record.py" line="249"/>
         <source>&amp;Open Video Directory</source>
         <translation>&amp;Open Video Directory</translation>
     </message>
@@ -294,37 +416,37 @@
         <translation>Talk</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="220"/>
+        <location filename="../../record/record.py" line="219"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="228"/>
+        <location filename="../../record/record.py" line="227"/>
         <source>Ready.</source>
         <translation>Ready.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="229"/>
+        <location filename="../../record/record.py" line="228"/>
         <source>Recording...</source>
         <translation>Recording...</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="230"/>
+        <location filename="../../record/record.py" line="229"/>
         <source>Recording Paused.</source>
         <translation>Recording Paused.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="217"/>
         <source>Standby</source>
         <translation>Prepare to Record</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="221"/>
+        <location filename="../../record/record.py" line="220"/>
         <source>Resume</source>
         <translation>Resume</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="227"/>
+        <location filename="../../record/record.py" line="226"/>
         <source>Idle.</source>
         <translation>Idle.</translation>
     </message>
@@ -402,6 +524,11 @@
         <location filename="../../record/record.py" line="285"/>
         <source>Reporting Tool</source>
         <translation>Reporting Tool</translation>
+    </message>
+    <message>
+        <location filename="../../record/record.py" line="250"/>
+        <source>&amp;Connect to server</source>
+        <translation>&amp;Connect to server</translation>
     </message>
 </context>
 <context>
@@ -653,7 +780,7 @@
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="247"/>
+        <location filename="../../controller/Server.py" line="213"/>
         <source>Language Display Text</source>
         <translation>English</translation>
     </message>

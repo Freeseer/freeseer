@@ -26,10 +26,10 @@ import sys
 
 from PyQt4 import QtGui
 
-from freeseer.frontend.controller.Server import ServerG
+from freeseer.frontend.controller.Server import ServerApp
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    main = ServerG()
+    main = ServerApp()
     main.show()
     sys.exit(app.exec_())

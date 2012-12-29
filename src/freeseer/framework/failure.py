@@ -22,8 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-from PyQt4 import QtCore, QtGui
-
 class Failure():    
     '''
     This class is responsible for encapsulate data about failures
