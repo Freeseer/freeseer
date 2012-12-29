@@ -1,0 +1,9 @@
+[Core]
+Name = Firewire Source
+Module = firewiresrc
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.2
+Website = http://fosslc.org
+Description = Firewire Source for recording cameras

@@ -1,0 +1,9 @@
+[Core]
+Name = Jack Audio Source
+Module = jackaudiosrc
+
+[Documentation]
+Author = Thanh Ha
+Version = 0.1
+Website = http://fosslc.org
+Description = Jack Audio Sound Source
