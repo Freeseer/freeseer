@@ -9,10 +9,27 @@ You can help in our localization efforts.
 How to Contribute Translations
 ------------------------------
 
-*TODO:* https://github.com/Freeseer/freeseer/issues/127
+Translating Freeseer
+^^^^^^^^^^^^^^^^^^^^
+
+In order to translate Freeseer a translator can use Qt Linguist tool to read the translation files located in
+
+    cd <freeseerroot>/src/freeseer/frontend/qtcommon/languages
+
+In this directory there exists several *.ts files. These are the translation files for each language. Simply
+load the language you would like to translate into Qt Linguist and complete the translations.
+
+If the language you wish to translate is not available, the section `Updating Translation Files`_
+
+Once your translation is complete simply send a pull request containing only the *.ts file that you are contributing
+back.
+
 
 How to update translation resources
 -----------------------------------
+
+The following steps are not required for a translator but more for a developer to make new translation contributions
+appear in freeseer.
 
 There are 2 items to keep in mind in relation to updating translation resources.
 
@@ -61,18 +78,3 @@ following commands::
    make
 
 After the above steps are followed, a sample run of Freeseer should confirm that the translation is working.
-
-
-Commiting and Pushing the Translation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When all is ready to be commited please ensure that you remove the resource_rc.py files from the commit so it doesn't
-cause conflicts with any other work on translation that's currently being done. You do this by checking out the original version of the file with the command below before git-adding files to be committed::
-
-   git checkout resource_rc.py
-
-.. note::
-    This command is assumed to run from the src/freeseer/frontend/qtcommon/ directory of the Freeseer source code.
-
-.. note::
-    If you already added this file to be committed by accident you can run "git reset HEAD resource_rc.py" to reset it and then run the checkout
