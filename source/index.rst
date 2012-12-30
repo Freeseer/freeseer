@@ -10,15 +10,11 @@ Welcome to the official documentation for `Freeseer <http://freeseer.github.com>
 screencasting software for recording and streaming presentations. 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    
-   intro
-   install
+   about/index
    userguide/index
-   record
-   troubleshoot/index
-   community
-   contact
    contribute/index
-   changelog
+   troubleshoot/index
+
 

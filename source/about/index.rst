@@ -1,5 +1,5 @@
-Introduction
-============
+About Freeseer
+==============
 
 .. sidebar:: Software with a Purpose.
 
@@ -42,6 +42,14 @@ Freeseer began in 2009 as an in-house solution for FOSSLC to record conference t
 Many people have contributed since then and development is still on-going.
 
 You can read more about Freeseer's history at `fosslc.org <http://fosslc.org/drupal/node/596>`_.
+
+Freeseer Community
+------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   community
 
 
 Who Freeseer Is For
@@ -89,3 +97,11 @@ by title, speaker, event, room, and more.
 
 **Configure Freeseer:** Configure your audio and video input, output, save location, and more. With Freeseer's plugin system,
 developers can easily write their own plugin to add a new feature. Plugins are configurable via the config tool.
+
+Recording Events
+----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   record

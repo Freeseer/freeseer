@@ -1,5 +1,5 @@
-Troubleshoot
-============
+Troubleshooting Guide
+=====================
 
 Run into trouble using Freeseer? Check out these lists of application messages and common problems and solutions.
 

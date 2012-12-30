@@ -1,4 +1,5 @@
 .. Where to start
+.. Installing Freeseer
 .. I am a ...
 ..   Power user
 ..   Translator
@@ -18,8 +19,9 @@
 ..     When to use which communication medium
 ..     Be bold but communicate often
 ..     Committing and closing issues
-Contribute
-==========
+
+Contributor Guide
+=================
 
 At Freeseer, we know that software development isn't just about code. We're looking for writers, designers, power users, 
 and user experience experts to collaborate with us to make a world-class platform. All are welcome. 
@@ -57,6 +59,14 @@ I am a...
 .. power user
 
 If you're interested in lending a hand, please do :doc:`get in touch </contact>`.
+
+Installing Freeseer
+-------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   install
 
 Basics
 ------
