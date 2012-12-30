@@ -43,13 +43,21 @@ Many people have contributed since then and development is still on-going.
 
 You can read more about Freeseer's history at `fosslc.org <http://fosslc.org/drupal/node/596>`_.
 
-Freeseer Community
-------------------
 
-.. toctree::
-   :maxdepth: 2
+Expectations Around Sharing Freeseer
+------------------------------------
 
-   community
+The Freeseer project includes code, documentation, and more, written by many different people.
+All Freeseer contributors retain copyright on their contributions, but agree to release it under the same license as Freeseer.
+If you are unable or unwilling to contribute a patch under the GPL version 3 or later, do not submit a patch.
+
+Freeseer is copyrighted by `FOSSLC <http://fosslc.org>`_ and various contributors (listed above).
+
+Freeseer is licensed under the GNU General Public License, version 3 (GPLv3); you may not use this work except in compliance with the GPLv3.
+
+You may obtain a copy of the GPLv3  at:
+
+http://www.fsf.org/licensing/licenses/gpl.html
 
 
 Who Freeseer Is For
