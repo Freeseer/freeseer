@@ -67,9 +67,12 @@ Commiting and Pushing the Translation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When all is ready to be commited please ensure that you remove the resource_rc.py files from the commit so it doesn't
-cause conflicts with any other work on translation that's currently being done. You do this by git-adding the files as
-normal and then issuing the following command before commiting::
+cause conflicts with any other work on translation that's currently being done. You do this by checking out the original version of the file with the command below before git-adding files to be committed::
 
-   git rm src/freeseer/frontend/resource_rc.py 
+   git checkout resource_rc.py
 
-Note: This command is assumed to run from the root directory of the Freeseer source code.
+.. note::
+    This command is assumed to run from the src/freeseer/frontend/qtcommon/ directory of the Freeseer source code.
+
+.. note::
+    If you already added this file to be committed by accident you can run "git reset HEAD resource_rc.py" to reset it and then run the checkout
