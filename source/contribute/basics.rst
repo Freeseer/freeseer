@@ -151,7 +151,7 @@ Close and Reference Issues with a Commit Message
   To reduce overhead, we use a single issue tracker for all the organization's repositories:
   `github.com/Freeseer/freeseer/issues <https://github.com/Freeseer/freeseer/issues>`_
 
-With GitHub, you can reference and close issues from a commit message. [#f2]_
+GitHub allows you to reference and close issues from a commit message. [#f2]_
 When you reference an issue via a commit message, the commit that contains the
 reference will appear as a note on the issue's page. This is useful if you
 want to easily see which commits are related to the issue.
