@@ -47,6 +47,13 @@ Freeseer.
 
 
 
+Git Philosophy
+--------------
+- Branches are tasks, commits are subtasks
+- Commit early, commit often
+- Your local repo is your scratch pad
+
+
 Forking Freeseer
 ----------------
 
@@ -84,7 +91,16 @@ Basic Workflow
 .. todo:: (Dennis) See NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
 
 1. Create a new branch based off the central repo's (i.e. Freeseer's) experimental branch.
-2. Fetch any changes for good measure (optional).
+2. Fetch any changes for good measure (optional). ::
+
+    $ git fetch upstream
+    $ git merge upstream/experimental
+    # OR
+    $ git pull upstream experimental # Fetch and merge
+    # The latter method (pull) is more prone to conflicts.
+    # If you want to keep your repo up to date but don't want to break something
+    # by updating your files, fetch but do not merge right after.
+
 3. Work on your feature.
 4. Add and commit files you worked on. Optionally sign-off your commit with -s.
 5. Push your branch to your remote fork (and automatically create it if it doesn't exist yet) on GitHub.
@@ -131,35 +147,48 @@ If you followed the instructions, you should have a link to your `GitHub <http:/
 Close and Reference Issues with a Commit Message
 ------------------------------------------------
 
-To reduce overhead and management, we use a single issue tracker for all the
-organization's repositories. It can be found at our main repo:
-`github.com/Freeseer/freeseer/issues <https://github.com/Freeseer/freeseer/issues>`_.
+.. important::
+  To reduce overhead, we use a single issue tracker for all the organization's repositories:
+  `github.com/Freeseer/freeseer/issues <https://github.com/Freeseer/freeseer/issues>`_
 
-Using a few simple keywords you can close an issue right from a commit
-message, or just leave a note on the issue.
+With GitHub, you can reference and close issues from a commit message. [#f2]_
+When you reference an issue via a commit message, the commit that contains the
+reference will appear as a note on the issue's page. This is useful if you
+want to easily see which commits are related to the issue.
+`See an example of this in practice.
+<https://github.com/Freeseer/freeseer/issues/258#commit-ref-c578203>`_
 
-Referencing GitHub issues from the commit message:
+There are two ways to reference issues.
+For example, let's reference issue 123 from a commit message.
 
-* Link: use the issue number
-* Link & close: use a keyword and issue number
-* Link from a repo that's not freeseer.git: explicitly reference Freeseer/freeseer
+1. Short form: `'#123'` or `'GH-123'` or `'gh-123'`
+2. Long form: `'Freeseer/freeseer#123'`
 
-Examples:
-::
+Using the long form, you can also reference issues that belong to different
+repositories on GitHub. This is called a cross-repo reference.
+`See an example of this in practice.
+<https://github.com/Freeseer/freeseer/issues/266#commit-ref-619d989>`_
 
-    git commit -m 'closes #35'
-                  'closes gh-35'
-                  'Resolved issue #35'
-                  'See #35 for more info'
-                  'Fixes issues Freeseer/freeseer#35'
+To close an issue, place a supported keyword directly in front of the reference.
+E.g. `'Close #123'`, `'Fix gh-123'`.
 
 .. tip::
 
-  Supported keywords: **close**, **closes**, **closed**, **fixes**, **fixed**, **fix**, **resolved**
+  - Supported keywords: **close**, **closes**, **closed**, **fix**, **fixes**, **fixed**, **resolved**
 
-  Keywords are not case sensitive.
+  - Keywords (including organization and repo names) are case-insensitive.
+      
+  - If you don't have permission to close a specific issue on GitHub,
+    you won't be able to close it from a commit message.
 
-Anyone with **write access** to the repository may close an issue or leave a note.
+  - If you forked a repository, you can use the short form to reference issues
+    that belong to the original repository. This is especially useful for
+    interns who contribute to Freeseer.
+
+.. important:: You cannot close issues from a commit message if it's cross-repo.
+               You'll have to close them manually on GitHub. Keep this in mind
+               when working on issues that belong to Freeseer's documentation.
+
 
 Dealing with Conflicts
 ----------------------
@@ -220,7 +249,6 @@ As far as I know, there's no easy way to rename a remote branch.
 Hence the deletion and adding steps.
 If you don't have a remote tracking branch yet (i.e. you only have a local branch), then you can skip the last 2 steps.
 
-
 .. rubric:: Footnotes
 
 .. [#f1] Your local repo, in this case, will be a copy (or *clone*) of your fork onto your computer.
@@ -228,3 +256,8 @@ If you don't have a remote tracking branch yet (i.e. you only have a local branc
          connected to the internet to work in your local repo. However, you will
          need to be if you want to push your changes to a remote repo or pull in
          changes from a remote repo.
+
+.. [#f2] You can reference any issue on GitHub from a commit message, but you
+         can only close an issue from a commit message if the issue belongs to
+         the same repository as the commit.
+         
