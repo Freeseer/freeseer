@@ -185,10 +185,6 @@ E.g. `'Close #123'`, `'Fix gh-123'`.
     that belong to the original repository. This is especially useful for
     interns who contribute to Freeseer.
 
-.. important:: You cannot close issues from a commit message if it's cross-repo.
-               You'll have to close them manually on GitHub. Keep this in mind
-               when working on issues that belong to Freeseer's documentation.
-
 
 Dealing with Conflicts
 ----------------------
@@ -257,7 +253,10 @@ If you don't have a remote tracking branch yet (i.e. you only have a local branc
          need to be if you want to push your changes to a remote repo or pull in
          changes from a remote repo.
 
-.. [#f2] You can reference any issue on GitHub from a commit message, but you
-         can only close an issue from a commit message if the issue belongs to
-         the same repository as the commit.
+.. [#f2] You can reference any issue on GitHub via a commit message, but you
+         can only close an issue via a commit message if the issue belongs to
+         the same repository as the commit. In other words, you cannot close an
+         issue from a commit message if it’s cross-repo. You’ll have to close
+         it manually on GitHub. Keep this in mind when working on issues that
+         belong to Freeseer’s documentation.
          
