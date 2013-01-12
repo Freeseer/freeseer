@@ -76,9 +76,9 @@ class USBSrc(IVideoInput):
         self.plugman = plugman
         
         try:
-            self.device = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Device")
+            self.device = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Device", self.device)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", self.device)
         
     def get_widget(self):
         if self.widget is None:
@@ -111,5 +111,5 @@ class USBSrc(IVideoInput):
             n = n +1
             
     def set_device(self, device):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Device", device)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
         self.plugman.save()

@@ -98,15 +98,15 @@ class VideoPassthrough(IVideoMixer):
         self.plugman = plugman
         
         try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Input")
-            self.input_type = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type")
-            self.framerate = int(self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate"))
-            self.resolution = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution")
+            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input")
+            self.input_type = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type")
+            self.framerate = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate"))
+            self.resolution = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Resolution")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Input", self.input1)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type", self.input_type)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", self.framerate)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Resolution", self.resolution)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", self.input1)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", self.input_type)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", self.framerate)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Resolution", self.resolution)
         except TypeError:
             # Temp fix for issue when reading framerate the 2nd time causes TypeError
             pass
@@ -181,15 +181,15 @@ class VideoPassthrough(IVideoMixer):
         self.framerateSlider.setValue(self.framerate)
 
     def set_input(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Input", input)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
         self.plugman.save()
         
     def set_videocolour(self, input_type):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
         self.plugman.save()
         
     def set_framerate(self, framerate):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
         self.plugman.save()
         
     def get_properties(self):
