@@ -1,9 +1,0 @@
-[Core]
-Name = os.stat Parser
-Module = osstat
-
-[Documentation]
-Author = Jordan Klassen
-Version = 0.1
-Website = http://fosslc.org
-Description = Reads basic file metadata retrieved via os.stat
