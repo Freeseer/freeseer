@@ -94,7 +94,7 @@ class AudioPassthrough(IAudioMixer):
         self.load_config(plugman)
         
         sources = []
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
+        plugins = self.plugman.get_audioinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
                 

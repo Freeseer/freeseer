@@ -158,7 +158,7 @@ class PictureInPicture(IVideoMixer):
         self.load_config(plugman)
         
         sources = []
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+        plugins = self.plugman.get_videoinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
         
@@ -187,7 +187,7 @@ class PictureInPicture(IVideoMixer):
         
     def open_mainInputSetup(self):
         plugin_name = str(self.mainInputComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
+        plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
         
@@ -197,7 +197,7 @@ class PictureInPicture(IVideoMixer):
         
     def open_pipInputSetup(self):
         plugin_name = str(self.pipInputComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
+        plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
         
