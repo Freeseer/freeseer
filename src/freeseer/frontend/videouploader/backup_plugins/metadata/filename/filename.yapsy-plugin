@@ -1,9 +1,0 @@
-[Core]
-Name = Filename Parser
-Module = filename
-
-[Documentation]
-Author = Jordan Klassen
-Version = 0.1
-Website = http://fosslc.org
-Description = Simplest metadata provider. Simply splits the filename into the path and name

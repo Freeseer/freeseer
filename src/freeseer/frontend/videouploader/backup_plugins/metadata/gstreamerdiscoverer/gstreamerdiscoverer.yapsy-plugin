@@ -1,9 +1,0 @@
-[Core]
-Name = GstDiscoverer Parser
-Module = gstreamerdiscoverer
-
-[Documentation]
-Author = Jordan Klassen
-Version = 0.1
-Website = http://fosslc.org
-Description = Metadata provider that uses GstDiscoverer
