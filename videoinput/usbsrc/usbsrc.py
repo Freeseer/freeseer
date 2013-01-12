@@ -36,7 +36,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class USBSrc(IVideoInput):
     name = "USB Source"
-    os = ["linux2"]
+    os = ["linux", "linux2"]
     device = "/dev/video0"
     device_list = []
     

@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IVideoMixer
 
 class VideoPassthrough(IVideoMixer):
     name = "Video Passthrough"
-    os = ["linux2", "win32", "cygwin"]
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     input1 = None
     widget = None
     

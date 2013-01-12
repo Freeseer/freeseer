@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class AudioFeedback(IOutput):
     name = "Audio Feedback"
-    os = ["linux2", "win32", "cygwin", "darwin"]
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     type = IOutput.AUDIO
     recordto = IOutput.OTHER
     

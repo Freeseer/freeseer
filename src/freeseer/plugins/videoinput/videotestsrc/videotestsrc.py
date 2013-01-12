@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class VideoTestSrc(IVideoInput):
     name = "Video Test Source"
-    os = ["linux2", "win32", "cygwin", "darwin"]
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     
     # variables
     live = False
