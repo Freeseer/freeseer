@@ -31,6 +31,7 @@ from freeseer.framework.plugin import IOutput
 
 class WebMOutput(IOutput):
     name = "WebM Output"
+    os = ["linux", "linux2", "win32", "cygwin"]
     type = IOutput.BOTH
     recordto = IOutput.FILE
     extension = "webm"

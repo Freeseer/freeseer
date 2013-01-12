@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IAudioInput
 
 class JackAudioSrc(IAudioInput):
     name = "Jack Audio Source"
+    os = ["linux", "linux2"]
     
     # jackaudio variables
     client = ""
@@ -59,15 +60,15 @@ class JackAudioSrc(IAudioInput):
         self.plugman = plugman
         
         try:
-            self.client = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Client")
-            self.connect = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Connect")
-            self.server = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Server")
-            self.clientname = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "ClientName")
+            self.client = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Client")
+            self.connect = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Connect")
+            self.server = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Server")
+            self.clientname = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Client", self.client)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Connect", self.connect)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Server", self.server)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "ClientName", self.clientname)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", self.client)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", self.connect)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", self.server)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", self.clientname)
     
     def get_widget(self):
         if self.widget is None:
@@ -109,20 +110,20 @@ class JackAudioSrc(IAudioInput):
 
     def set_client(self):
         client = str(self.lineedit_client.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Client", client)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", client)
         self.plugman.save()
         
     def set_connect(self):
         connect = str(self.lineedit_connect.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Connect", connect)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", connect)
         self.plugman.save()
         
     def set_server(self):
         server = str(self.lineedit_server.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Server", server)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", server)
         self.plugman.save()
         
     def set_clientname(self):
         clientname = str(self.lineedit_clientname.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "ClientName", clientname)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", clientname)
         self.plugman.save()

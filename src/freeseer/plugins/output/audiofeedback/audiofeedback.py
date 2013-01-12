@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class AudioFeedback(IOutput):
     name = "Audio Feedback"
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     type = IOutput.AUDIO
     recordto = IOutput.OTHER
     
@@ -62,9 +63,9 @@ class AudioFeedback(IOutput):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.feedbacksink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
+            self.feedbacksink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
         
     def get_widget(self):
         if self.widget is None:
@@ -92,7 +93,7 @@ class AudioFeedback(IOutput):
         self.feedbackComboBox.setCurrentIndex(feedbackIndex)
             
     def set_feedbacksink(self, feedbacksink):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
         self.plugman.save()
         
     def get_properties(self):

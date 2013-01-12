@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class OggIcecast(IOutput):
     name = "Ogg Icecast"
+    os = ["linux", "linux2"]
     type = IOutput.BOTH
     recordto = IOutput.STREAM
     extension = "ogg"
@@ -133,15 +134,15 @@ class OggIcecast(IOutput):
         self.plugman = plugman
         
         try:
-            self.ip = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "IP")
-            self.port = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Port")
-            self.password = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Password")
-            self.mount = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Mount")
+            self.ip = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "IP")
+            self.port = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port")
+            self.password = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Password")
+            self.mount = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Mount")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "IP", self.ip)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Port", self.port)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Password", self.password)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Mount", self.mount)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", self.ip)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", self.port)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", self.password)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", self.mount)
     
     def get_widget(self):
         if self.widget is None:
@@ -183,20 +184,20 @@ class OggIcecast(IOutput):
 
     def set_ip(self):
         ip = str(self.lineedit_ip.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "IP", ip)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", ip)
         self.plugman.save()
         
     def set_port(self):
         port = str(self.lineedit_port.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Port", port)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", port)
         self.plugman.save()
         
     def set_password(self):
         password = str(self.lineedit_password.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Password", password)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", password)
         self.plugman.save()
         
     def set_mount(self):
         mount = str(self.lineedit_mount.text())
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Mount", mount)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", mount)
         self.plugman.save()

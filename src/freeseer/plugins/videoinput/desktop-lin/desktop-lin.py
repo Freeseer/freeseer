@@ -24,7 +24,6 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 import ConfigParser
-import os
 
 import pygst
 pygst.require("0.10")
@@ -38,6 +37,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop-Linux Source"
+    os = ["linux", "linux2"]
     
     # ximagesrc
     screen = 0
@@ -66,9 +66,9 @@ class DesktopLinuxSrc(IVideoInput):
         self.plugman = plugman
         
         try:
-            self.screen = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Screen")
+            self.screen = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Screen")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
         except TypeError:
             # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
             pass
@@ -96,5 +96,5 @@ class DesktopLinuxSrc(IVideoInput):
         self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
             
     def set_screen(self, screen):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Screen", screen)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
         self.plugman.save()

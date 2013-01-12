@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IAudioMixer
 
 class AudioPassthrough(IAudioMixer):
     name = "Audio Passthrough"
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     input1 = None
     widget = None
     
@@ -70,9 +71,9 @@ class AudioPassthrough(IAudioMixer):
         self.plugman = plugman
         
         try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input")
+            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input")
         except ConfigParser.NoSectionError:
-            self.input1 = self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
+            self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
     
     def get_widget(self):
         if self.widget is None:
@@ -93,7 +94,7 @@ class AudioPassthrough(IAudioMixer):
         self.load_config(plugman)
         
         sources = []
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioInput")
+        plugins = self.plugman.get_audioinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
                 
@@ -107,7 +108,7 @@ class AudioPassthrough(IAudioMixer):
             n = n +1
 
     def set_input(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Input", input)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", input)
         self.plugman.save()
         
     def get_properties(self):

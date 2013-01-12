@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IVideoMixer
 
 class PictureInPicture(IVideoMixer):
     name = "Picture-In-Picture"
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     input1 = None # Main Source
     input2 = None # PIP Source
     widget = None
@@ -118,11 +119,11 @@ class PictureInPicture(IVideoMixer):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source")
-            self.input2 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source")
+            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source")
+            self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", self.input1)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", self.input2)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", self.input1)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", self.input2)
     
     def get_widget(self):
         
@@ -157,7 +158,7 @@ class PictureInPicture(IVideoMixer):
         self.load_config(plugman)
         
         sources = []
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+        plugins = self.plugman.get_videoinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
         
@@ -181,22 +182,22 @@ class PictureInPicture(IVideoMixer):
         
             
     def set_maininput(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", input)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
         self.plugman.save()
         
     def open_mainInputSetup(self):
         plugin_name = str(self.mainInputComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
+        plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
         
     def set_pipinput(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", input)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
         self.plugman.save()
         
     def open_pipInputSetup(self):
         plugin_name = str(self.pipInputComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(plugin_name, "VideoInput")
+        plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
         
