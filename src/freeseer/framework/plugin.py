@@ -114,24 +114,6 @@ class PluginManager(QtCore.QObject):
     def save(self):
         with open(self.configfile, 'w') as configfile:
             self.config.write(configfile)
-        
-    def activate_plugin(self, plugin_name, plugin_category):
-        self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
-        self.save()
-        self.plugin_activated.emit(plugin_name, plugin_category)
-        logging.debug("Plugin %s activated." % plugin_name)
-        
-    def deactivate_plugin(self, plugin_name, plugin_category):
-        self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
-        self.save()
-        self.plugin_deactivated.emit(plugin_name, plugin_category)
-        logging.debug("Plugin %s deactivated." % plugin_name)
-        
-    # the arguments are plugin_name, plugin_category
-    plugin_activated = QtCore.pyqtSignal(
-            "QString", "QString", name="pluginActivated")
-    plugin_deactivated = QtCore.pyqtSignal(
-            "QString", "QString", name="pluginDectivated")
     
 
 class IBackendPlugin(IPlugin):
@@ -139,6 +121,10 @@ class IBackendPlugin(IPlugin):
     name = None
     widget = None
     CATEGORY = "Undefined"
+    
+    # list of supported OSes per:
+    #    http://docs.python.org/2/library/sys.html#sys.platform
+    os = []
     
     def __init__(self):
         IPlugin.__init__(self)

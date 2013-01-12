@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IAudioInput
 
 class JackAudioSrc(IAudioInput):
     name = "Jack Audio Source"
+    os = ["linux2"]
     
     # jackaudio variables
     client = ""

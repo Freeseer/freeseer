@@ -36,6 +36,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class FirewireSrc(IVideoInput):
     name = "Firewire Source"
+    os = ["linux2"]
     device = "/dev/fw1"
     device_list = []
     

@@ -38,6 +38,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop-Linux Source"
+    os = ["linux2"]
     
     # ximagesrc
     screen = 0
