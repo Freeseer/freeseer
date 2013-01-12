@@ -25,7 +25,6 @@
 import ConfigParser
 import logging
 import os
-import sys
 
 from PyQt4 import QtGui, QtCore
 
@@ -421,7 +420,7 @@ class ConfigToolApp(QtGui.QMainWindow):
             
         n = 0 # Counter for finding Audio Mixer to set as current.
         self.avWidget.audioMixerComboBox.clear()
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")
+        plugins = self.plugman.get_audiomixer_plugins()
         for plugin in plugins:
             self.avWidget.audioMixerComboBox.addItem(plugin.plugin_object.get_name())
             if plugin.plugin_object.get_name() == self.config.audiomixer:
@@ -440,7 +439,7 @@ class ConfigToolApp(QtGui.QMainWindow):
             
         n = 0 # Counter for finding Video Mixer to set as current.
         self.avWidget.videoMixerComboBox.clear()
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")
+        plugins = self.plugman.get_videomixer_plugins()
         for plugin in plugins:
             self.avWidget.videoMixerComboBox.addItem(plugin.plugin_object.get_name())
             if plugin.plugin_object.get_name() == self.config.videomixer:
@@ -459,7 +458,7 @@ class ConfigToolApp(QtGui.QMainWindow):
             
         n = 0 # Counter for finding File Format to set as current
         self.avWidget.fileComboBox.clear()
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("Output")
+        plugins = self.plugman.get_output_plugins()
         for plugin in plugins:
             if plugin.plugin_object.get_recordto() == IOutput.FILE:
                 self.avWidget.fileComboBox.addItem(plugin.plugin_object.get_name())
@@ -479,7 +478,7 @@ class ConfigToolApp(QtGui.QMainWindow):
 
         n = 0 # Counter for finding Stream Format to set as current
         self.avWidget.streamComboBox.clear()
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("Output")
+        plugins = self.plugman.get_output_plugins()
         for plugin in plugins:
             if plugin.plugin_object.get_recordto() == IOutput.STREAM:
                 self.avWidget.streamComboBox.addItem(plugin.plugin_object.get_name())
@@ -497,7 +496,7 @@ class ConfigToolApp(QtGui.QMainWindow):
 
     def setup_audio_mixer(self):
         mixer = str(self.avWidget.audioMixerComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(mixer, "AudioMixer")
+        plugin = self.plugman.get_plugin_by_name(mixer, "AudioMixer")
         plugin.plugin_object.get_dialog()
             
     def toggle_videomixer_state(self, state):
@@ -510,7 +509,7 @@ class ConfigToolApp(QtGui.QMainWindow):
     
     def setup_video_mixer(self):
         mixer = str(self.avWidget.videoMixerComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(mixer, "VideoMixer")
+        plugin = self.plugman.get_plugin_by_name(mixer, "VideoMixer")
         plugin.plugin_object.get_dialog()
 
     def toggle_record_to_file(self, state):
@@ -523,7 +522,7 @@ class ConfigToolApp(QtGui.QMainWindow):
     
     def setup_file_format(self):
         output = str(self.avWidget.fileComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(output, "Output")
+        plugin = self.plugman.get_plugin_by_name(output, "Output")
         plugin.plugin_object.get_dialog()
         
     def toggle_record_to_stream(self, state):
@@ -536,16 +535,41 @@ class ConfigToolApp(QtGui.QMainWindow):
     
     def setup_stream_format(self):
         output = str(self.avWidget.streamComboBox.currentText())
-        plugin = self.plugman.plugmanc.getPluginByName(output, "Output")
+        plugin = self.plugman.get_plugin_by_name(output, "Output")
         plugin.plugin_object.get_dialog()    
 
     ###
     ### Plugin Loader Related
     ###
+    
+    def get_plugins(self, plugin_type):
+        """
+        Returns a list of plugins of type
         
+        Parameters:
+            plugin_type - type of plugins to get
+            
+        Returns:
+            list of plugins of type specified
+        """
+        plugins = []
+        
+        if plugin_type == "AudioInput":
+            plugins = self.plugman.get_audioinput_plugins()
+        elif plugin_type == "AudioMixer":
+            plugins = self.plugman.get_audiomixer_plugins()
+        elif plugin_type == "VideoInput":
+            plugins = self.plugman.get_videoinput_plugins()
+        elif plugin_type == "VideoMixer":
+            plugins = self.plugman.get_videomixer_plugins()
+        elif plugin_type == "Output":
+            plugins = self.plugman.get_output_plugins()
+        
+        return plugins
+    
     def load_plugin_list(self, plugin_type):
         self.pluginloaderWidget.listWidget.clear()
-        for plugin in self.plugman.plugmanc.getPluginsOfCategory(plugin_type):
+        for plugin in self.get_plugins(plugin_type):
             item = QtGui.QListWidgetItem()
             
             size = QtCore.QSize(64, 64)
@@ -594,7 +618,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.load_plugin_list("Output")
     
     def load_plugin_widgets(self):
-        for plugin in self.plugman.plugmanc.getAllPlugins():
+        for plugin in self.plugman.get_all_plugins():
             plugin.plugin_object.set_gui(self)
 
     def show_plugin_widget_dialog(self, widget):

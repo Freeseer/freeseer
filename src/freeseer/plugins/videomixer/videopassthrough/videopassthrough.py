@@ -162,7 +162,7 @@ class VideoPassthrough(IVideoMixer):
         self.load_config(plugman)
         
         sources = []
-        plugins = self.plugman.plugmanc.getPluginsOfCategory("VideoInput")
+        plugins = self.plugman.get_videoinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
                 
