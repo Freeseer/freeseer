@@ -65,12 +65,12 @@ class VideoTestSrc(IVideoInput):
         self.plugman = plugman
         
         try:
-            live = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Live")
+            live = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Live")
             if live == "True": self.live = True
-            self.pattern = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Pattern")
+            self.pattern = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Live", self.live)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Live", self.live)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
         except TypeError:
             # Temp fix for issue where reading checkbox the 2nd time causes TypeError.
             pass
@@ -115,12 +115,12 @@ class VideoTestSrc(IVideoInput):
 
     def set_live(self, checked):
         self.live = checked
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Live", self.live)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Live", self.live)
         self.plugman.save()
         
     def set_pattern(self, pattern):
         self.pattern = pattern
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
         self.plugman.save()
         
     def get_properties(self):

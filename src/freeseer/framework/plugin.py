@@ -105,16 +105,37 @@ class PluginManager(QtCore.QObject):
         """
         Default the passthrough mixers and ogg output plugins.
         """
+        self.set_plugin_option("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
+        self.set_plugin_option("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
+        self.save()
+        logging.info("Default plugins enabled.")
         
-        self.activate_plugin("Audio Passthrough", "AudioMixer")
-        self.activate_plugin("Audio Test Source", "AudioInput")
-        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
-            
-        self.activate_plugin("Video Passthrough", "VideoMixer")
-        self.activate_plugin("Video Test Source", "VideoInput")
-        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
-        self.activate_plugin("Ogg Output", "Output")
-        logging.debug("Default plugins activated.")
+    def get_plugin_option(self, category, name, option):
+        """
+        Returns the value stored in the config for a plugin option
+        
+        Parameters:
+            category    - category to check
+            name        - name of the plugin
+            option      - plugin option to retrieve
+        Returns:
+            value of plugin option
+        """
+        return self.plugmanc.readOptionFromPlugin(category, name, option)
+    
+    def set_plugin_option(self, category, name, option, value):
+        """
+        Stores a value to the config for a plugin option
+        
+        Parameters:
+            category    - category to check
+            name        - name of the plugin
+            option      - plugin option to retrieve
+            value       - value to store
+        Returns:
+            none
+        """
+        self.plugmanc.registerOptionFromPlugin(category, name, option, value)
         
     ##
     ## Functions related to getting plugins supported by user's OS

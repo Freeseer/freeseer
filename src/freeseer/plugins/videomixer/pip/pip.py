@@ -119,11 +119,11 @@ class PictureInPicture(IVideoMixer):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.input1 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source")
-            self.input2 = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source")
+            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source")
+            self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", self.input1)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", self.input2)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", self.input1)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", self.input2)
     
     def get_widget(self):
         
@@ -182,7 +182,7 @@ class PictureInPicture(IVideoMixer):
         
             
     def set_maininput(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Main Source", input)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
         self.plugman.save()
         
     def open_mainInputSetup(self):
@@ -192,7 +192,7 @@ class PictureInPicture(IVideoMixer):
         plugin.plugin_object.get_dialog()
         
     def set_pipinput(self, input):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "PIP Source", input)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
         self.plugman.save()
         
     def open_pipInputSetup(self):
