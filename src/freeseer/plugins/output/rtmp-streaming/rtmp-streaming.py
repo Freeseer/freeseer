@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class RTMPOutput(IOutput):
     name = "RTMP Streaming"
-    os = ["linux2", "win32", "cygwin"]
+    os = ["linux", "linux2", "win32", "cygwin"]
     type = IOutput.BOTH
     recordto = IOutput.STREAM
     tags = None

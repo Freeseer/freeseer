@@ -24,7 +24,6 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 import ConfigParser
-import os
 
 import pygst
 pygst.require("0.10")
@@ -38,7 +37,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop-Linux Source"
-    os = ["linux2"]
+    os = ["linux", "linux2"]
     
     # ximagesrc
     screen = 0

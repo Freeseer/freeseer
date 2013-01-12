@@ -268,7 +268,7 @@ class IBackendPlugin(IPlugin):
     
     # list of supported OSes per:
     #    http://docs.python.org/2/library/sys.html#sys.platform
-    os = list()
+    os = []
     
     def __init__(self):
         IPlugin.__init__(self)

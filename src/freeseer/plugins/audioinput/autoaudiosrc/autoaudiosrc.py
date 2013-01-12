@@ -31,7 +31,7 @@ from freeseer.framework.plugin import IAudioInput
 
 class ALSASrc(IAudioInput):
     name = "Auto Audio Source"
-    os = ["linux2", "win32", "cygwin", "darwin"]
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     
     def get_audioinput_bin(self):
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.

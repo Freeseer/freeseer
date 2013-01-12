@@ -35,7 +35,7 @@ from freeseer.framework.plugin import IAudioMixer
 
 class AudioPassthrough(IAudioMixer):
     name = "Audio Passthrough"
-    os = ["linux2", "win32", "cygwin", "darwin"]
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     input1 = None
     widget = None
     
