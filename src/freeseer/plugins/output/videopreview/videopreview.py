@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class VideoPreview(IOutput):
     name = "Video Preview"
+    os = ["linux2", "win32", "cygwin", "darwin"]
     type = IOutput.VIDEO
     recordto = IOutput.OTHER
     

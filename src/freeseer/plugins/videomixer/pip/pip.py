@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IVideoMixer
 
 class PictureInPicture(IVideoMixer):
     name = "Picture-In-Picture"
+    os = ["linux2"]
     input1 = None # Main Source
     input2 = None # PIP Source
     widget = None

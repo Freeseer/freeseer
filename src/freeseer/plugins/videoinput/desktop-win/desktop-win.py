@@ -31,6 +31,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class DesktopWinSrc(IVideoInput):
     name = "Desktop-Windows Source"
+    os = ["win32", "cygwin"]
     
     def get_videoinput_bin(self):
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
