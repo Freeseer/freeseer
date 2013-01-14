@@ -25,6 +25,7 @@
 import ConfigParser
 import logging
 import os
+import sys
 
 import pygst
 pygst.require("0.10")
@@ -95,44 +96,169 @@ class PluginManager(QtCore.QObject):
             self.firstrun = True # If config was corrupt or did not exist, reset defaults.
             self.save()
             return
+            
+    def save(self):
+        with open(self.configfile, 'w') as configfile:
+            self.config.write(configfile)
         
     def set_default_plugins(self):
         """
         Default the passthrough mixers and ogg output plugins.
         """
-        
-        self.activate_plugin("Audio Passthrough", "AudioMixer")
-        self.activate_plugin("Audio Test Source", "AudioInput")
-        self.plugmanc.registerOptionFromPlugin("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
-            
-        self.activate_plugin("Video Passthrough", "VideoMixer")
-        self.activate_plugin("Video Test Source", "VideoInput")
-        self.plugmanc.registerOptionFromPlugin("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
-        self.activate_plugin("Ogg Output", "Output")
-        logging.debug("Default plugins activated.")
-        
-    def save(self):
-        with open(self.configfile, 'w') as configfile:
-            self.config.write(configfile)
-        
-    def activate_plugin(self, plugin_name, plugin_category):
-        self.plugmanc.activatePluginByName(plugin_name, plugin_category, True)
+        self.set_plugin_option("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
+        self.set_plugin_option("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.save()
-        self.plugin_activated.emit(plugin_name, plugin_category)
-        logging.debug("Plugin %s activated." % plugin_name)
+        logging.info("Default plugins enabled.")
         
-    def deactivate_plugin(self, plugin_name, plugin_category):
-        self.plugmanc.deactivatePluginByName(plugin_name, plugin_category, True)
-        self.save()
-        self.plugin_deactivated.emit(plugin_name, plugin_category)
-        logging.debug("Plugin %s deactivated." % plugin_name)
+    def get_plugin_option(self, category, name, option):
+        """
+        Returns the value stored in the config for a plugin option
         
-    # the arguments are plugin_name, plugin_category
-    plugin_activated = QtCore.pyqtSignal(
-            "QString", "QString", name="pluginActivated")
-    plugin_deactivated = QtCore.pyqtSignal(
-            "QString", "QString", name="pluginDectivated")
+        Parameters:
+            category    - category to check
+            name        - name of the plugin
+            option      - plugin option to retrieve
+        Returns:
+            value of plugin option
+        """
+        return self.plugmanc.readOptionFromPlugin(category, name, option)
     
+    def set_plugin_option(self, category, name, option, value):
+        """
+        Stores a value to the config for a plugin option
+        
+        Parameters:
+            category    - category to check
+            name        - name of the plugin
+            option      - plugin option to retrieve
+            value       - value to store
+        Returns:
+            none
+        """
+        self.plugmanc.registerOptionFromPlugin(category, name, option, value)
+        
+    ##
+    ## Functions related to getting plugins supported by user's OS
+    ##
+
+    def _os_supported(self, plugin):
+        """
+        Determines if the user's OS as detected by sys.platform is supported by
+        the plugin.
+        
+        Parameters: plugin - a plugin object
+        Returns: true/false
+        """
+        return sys.platform in plugin.plugin_object.get_supported_os()
+        
+    def _get_supported_plugins(self, unfiltered_plugins):
+        """
+        Returns a list of plugins supported by the users OS as detected by
+        python's sys.platform library.
+        
+        Parameters:
+            unfiltered plugins - list of plugins to filter
+        Returns:
+            list of supported plugins
+        """
+        plugins = []
+        
+        for plugin in unfiltered_plugins:
+            if self._os_supported(plugin):
+                plugins.append(plugin)
+                
+        return plugins
+        
+    def get_plugin_by_name(self, name, category):
+        """
+        Takes a name & category and returns the plugin with that name.
+        
+        Parameters:
+            name        - name of the plugin
+            category    - category to search
+        Returns:
+            plugin
+        """
+        return self.plugmanc.getPluginByName(name, category)
+        
+    def get_all_plugins(self):
+        """
+        Returns a list of all plugins supported by the users OS as detected by
+        python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of all supported plugins
+        """
+        unfiltered_plugins = self.plugmanc.getAllPlugins()
+        return self._get_supported_plugins(unfiltered_plugins)
+        
+    def get_audioinput_plugins(self):
+        """
+        Returns a list of plugins that are supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of supported AudioInput plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory("AudioInput")
+        return self._get_supported_plugins(unfiltered_plugins)
+    
+    def get_audiomixer_plugins(self):
+        """
+        Returns a list of plugins that are supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of supported AudioMixer plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory("AudioMixer")
+        return self._get_supported_plugins(unfiltered_plugins)
+    
+    def get_videoinput_plugins(self):
+        """
+        Returns a list of plugins that are supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of supported VideoInput plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory("VideoInput")
+        return self._get_supported_plugins(unfiltered_plugins)
+    
+    def get_videomixer_plugins(self):
+        """
+        Returns a list of plugins that are supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of supported VideoMixer plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory("VideoMixer")
+        return self._get_supported_plugins(unfiltered_plugins)
+    
+    def get_output_plugins(self):
+        """
+        Returns a list of plugins that are supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of supported Output plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory("Output")
+        return self._get_supported_plugins(unfiltered_plugins)
+
 
 class IBackendPlugin(IPlugin):
     instance = 0
@@ -140,11 +266,21 @@ class IBackendPlugin(IPlugin):
     widget = None
     CATEGORY = "Undefined"
     
+    # list of supported OSes per:
+    #    http://docs.python.org/2/library/sys.html#sys.platform
+    os = []
+    
     def __init__(self):
         IPlugin.__init__(self)
     
     def get_name(self):
         return self.name
+        
+    def get_supported_os(self):
+        """
+        Returns a list of OSes supported by the plugin
+        """
+        return self.os
     
     def get_config_name(self):
         return "%s-%s" % (self.name, self.instance)

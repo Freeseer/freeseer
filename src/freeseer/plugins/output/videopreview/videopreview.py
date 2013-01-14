@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class VideoPreview(IOutput):
     name = "Video Preview"
+    os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     type = IOutput.VIDEO
     recordto = IOutput.OTHER
     
@@ -71,11 +72,11 @@ class VideoPreview(IOutput):
     def load_config(self, plugman):
         self.plugman = plugman
         try:
-            self.previewsink = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink")
-            self.leakyqueue = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue")
+            self.previewsink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink")
+            self.leakyqueue = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
 
         
     def get_widget(self):
@@ -123,11 +124,11 @@ class VideoPreview(IOutput):
         self.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
             
     def set_previewsink(self, previewsink):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
         self.plugman.save()
             
     def set_leakyqueue(self, value):
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
         self.plugman.save()
         
     def get_properties(self):

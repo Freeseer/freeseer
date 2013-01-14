@@ -35,6 +35,7 @@ from freeseer.framework.plugin import IOutput
 
 class RTMPOutput(IOutput):
     name = "RTMP Streaming"
+    os = ["linux", "linux2", "win32", "cygwin"]
     type = IOutput.BOTH
     recordto = IOutput.STREAM
     tags = None
@@ -148,15 +149,15 @@ class RTMPOutput(IOutput):
         self.plugman = plugman
         
         try:
-            self.url = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Stream URL")
-            self.audio_quality = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Quality")
-            self.video_bitrate = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate")
-            self.video_tune = self.plugman.plugmanc.readOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Tune")
+            self.url = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL")
+            self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
+            self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
+            self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
-            self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
     
     def get_widget(self):
         if self.widget is None:
@@ -242,22 +243,22 @@ class RTMPOutput(IOutput):
 
     def set_stream_url(self, text):
         self.url = text
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
         self.plugman.save()
         
     def set_audio_quality(self):
         self.audio_quality = self.spinbox_audio_quality.value()
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
         self.plugman.save()
         
     def set_video_bitrate(self):
         self.video_bitrate = self.spinbox_video_quality.value()
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
         self.plugman.save()
         
     def set_video_tune(self, tune):
         self.video_tune = tune
-        self.plugman.plugmanc.registerOptionFromPlugin(self.CATEGORY, self.get_config_name(), "Video Tune", str(self.video_tune))
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", str(self.video_tune))
         self.plugman.save()
         
     def get_properties(self):
