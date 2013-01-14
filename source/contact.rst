@@ -1,14 +1,21 @@
 Contact Us
 ==========
 
-The Freeseer community is available to brainstorm, ask and answer questions, and offer support online.
+The Freeseer community is available to brainstorm, ask and answer questions,
+and offer support online.
 
 
-Mailing Lists
--------------
+Mailing List
+------------
 
-The community's main hub of communication is our email list. Join our discussions on the 
-`Freeseer Mailing List <http://box674.bluehost.com/mailman/listinfo/freeseer_fosslc.org>`_.
+Join the Freeseer development list at http://groups.google.com/group/freeseer.
+Once you've joined, you can post and receive updates through the website, or
+through freeseer@googlegroups.com.
+
+.. warning::
+  The `Freeseer mailing list on bluehost
+  <http://box674.bluehost.com/mailman/listinfo/freeseer_fosslc.org>`_
+  (freeseer@fosslc.org) is deprecated and should no longer be used.
 
 
 IRC Channel
@@ -19,9 +26,10 @@ Chat live with Freeseer community members in our IRC channel. Here are the conne
 * IRC Server: irc.freenode.net
 * Channel/Room: #freeseer
 
-You can `join via your browser <http://webchat.freenode.net/?channels=#freeseer>`_ or your favourite IRC client.
+You can `join using your browser <http://webchat.freenode.net/?channels=#freeseer>`_
+or your favourite IRC client.
 
-If you enjoy working from the terminal, you can use `irssi <http://irssi.org/>`_.
+If you enjoy working from the terminal, you can try `irssi <http://irssi.org/>`_.
 To quickly get started:
 
 ::
@@ -34,9 +42,14 @@ To quickly get started:
 
 .. tip::
 
-    Shortcuts exists, such as `/j` instead of `/join`.
-    To block activity messages in the room: `/ignore -channels #freeseer * JOINS
-    PARTS QUITS NICKS`. You can specificy more rooms by comma separating them.
+  - To get someone's attention on IRC, mention their username
+
+    - Some IRC clients (like irssi) support autocompletion via the tab key
+  - Shortcuts exists, such as `/j` for `/join` and `/w` for `/who`
+  - To block activity messages in the room: `/ignore -channels #freeseer * JOINS
+    PARTS QUITS NICKS`
+
+    - You can specificy more rooms by comma separating them
 
 Twitter, Facebook, and Blog
 ---------------------------
