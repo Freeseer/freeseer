@@ -4,6 +4,7 @@ Contact Us
 The Freeseer community is available to brainstorm, ask and answer questions,
 and offer support online.
 
+.. _mailing-list-label:
 
 Mailing List
 ------------
