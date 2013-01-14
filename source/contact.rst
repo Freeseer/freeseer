@@ -18,6 +18,7 @@ through freeseer@googlegroups.com.
   <http://box674.bluehost.com/mailman/listinfo/freeseer_fosslc.org>`_
   (freeseer@fosslc.org) is deprecated and should no longer be used.
 
+.. _irc-label:
 
 IRC Channel
 -----------
