@@ -7,31 +7,34 @@ Record
 Record Over a Network
 ---------------------
 
-Client
-......
+Via Command Line Interface (CLI)
+................................
 
-This tool is used for controlling Freeseer over network. The client is for connecting to the running Freeseer Server. The server can start recording, pause recording and stop recording. If you want the instance of your freeseer recorder to be controlled you can follow these steps:
+.. todo:: Document using SSH and Freeseer's CLI to record over a network.
+
+Via Graphical User Interface (GUI)
+..................................
+
+The client tool is used for controlling Freeseer over a network.
+The client connects to a running Freeseer :doc:`server`.
+The server can be used to start, pause, and stop recording on multiple remote
+instances of Freeseer.
+
+To set up your client:
 
 1. Open **freeseer-record**
-2. Click **File** > **Client**
+2. Click **File** > **Connect to server**
 
-.. figure:: /images/client_s1.png
+.. figure:: /images/client.png
     :align: center
 
-    When you see this window, you can start the client by clicking the Start button.
+    *The client window*
 
-There are 3 ways to enter the details of the Server:
+Simply enter the host name or IP address of the server tool, enter the
+passphrase, then hit `Connect`.
 
-1. By entering the information to the IP, port and Passphrase textboxes.
-2. Properties box can be used to enter the details quickly. This is a feature used with the properties from the Server properties box. You can copy and paste the properties and click the add properties button and the information will be entered in the appropriate textboxs.
-
-.. figure:: /images/client_s2.png
-    :align: center
-
-3. If you have used this feature before and successfully connected to the Freeseer Server it will be on the recent connections box. You can choose the one that you would like to connect to from the list and the appropriate textboxs will be filled with the information.
-
-.. figure:: /images/client_s3.png
-    :align: center
+If you've connected to a server in the past, you can also use the `Recent
+Connections` tab to select a server.
 
  
 Report Tool
