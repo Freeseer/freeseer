@@ -132,9 +132,9 @@ Mailing list
 ------------
 Have a question? Ask on our mailing list!
 
-freeseer@fosslc.org
+freeseer@googlegroups.com
 
-[Subscribe to mailing list](http://box674.bluehost.com/mailman/listinfo/freeseer_fosslc.org)
+[Subscribe to mailing list](http://groups.google.com/group/freeseer)
 
 
 Authors
