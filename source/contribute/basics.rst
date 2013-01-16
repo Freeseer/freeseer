@@ -53,6 +53,7 @@ Git Philosophy
 - Commit early, commit often
 - Your local repo is your scratch pad
 
+.. _fork-freeseer-label:
 
 Forking Freeseer
 ----------------

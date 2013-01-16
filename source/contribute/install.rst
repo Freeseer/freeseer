@@ -21,7 +21,8 @@ Prerequisites
 Installers
 ----------
 
-Visit our `download page <https://github.com/Freeseer/freeseer/downloads>`_ for installers for Debian/Ubuntu and Windows.
+Visit our `download page <https://github.com/Freeseer/freeseer/downloads>`_
+for installers for Debian/Ubuntu and Windows.
 
 Build from Source
 -----------------
@@ -29,11 +30,13 @@ Build from Source
 Download the source code as a `zip <https://github.com/Freeseer/freeseer/zipball/master>`_ or
 `tarball <https://github.com/Freeseer/freeseer/tarball/master>`_.
 
-Alternatively, potential contributors can clone the project with git:
+Alternatively, you can clone the project with git:
 
 ::
 
     $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
+
+Potential contributors should :ref:`fork Freeseer <fork-freeseer-label>`.
 
 .. todo:: Add build instructions (or just link to readme)
 
