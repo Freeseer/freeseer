@@ -25,7 +25,7 @@ Step 2: Don't File An Issue... Yet
 public, but try not to file a new issue unless the problem or feature
 request has been discussed with the Freeseer community.
 If you file a new issue without discussing, you risk it being closed for reasons
-such as it being a known issue, or previously rejected idea, or off-topic.
+such as it being a known issue, previously rejected idea, or off-topic.
 
 
 Step 3: Contact the Community
@@ -34,30 +34,25 @@ Step 3: Contact the Community
 Send an email to our :ref:`mailing list <mailing-list-label>` describing your
 problem or idea. You may also use our :ref:`IRC channel <irc-label>`
 if you think it's a minor issue, but mailing list is preferred.
-Please be specific when communicating.
+Please be specific and courteous when communicating.
 
-For bug reports, describe step by step exactly what you did and what went wrong,
-including application messaging word for word, as well as what version of
-Freeseer you are running and what operating system and version of Python you are
-running.
-
-For feature ideas, describe exactly how you think the new functionality should
-work, and include mockups and screenshots if you can. Sell your idea to the
-community by clearly explaining its benefits and use cases, and how you plan to 
-help make the feature.
-
-Thanks for helping us make Freeseer a great application,
-and for respecting the community's time and public spaces!
+Thanks for helping improve Freeseer, and for respecting the community's time
+and public spaces!
 
 Step 4: File a New Issue using a Template
 -----------------------------------------
-You can find templates for bug reports and feature requests, below.
+| You can find templates for bug reports and feature requests, below.
+| We ask that new contributors follow these templates closely.
 
-.. tip:: Please assign the appropriate label(s) to classify your issue.
-         You will see a list of options when reporting your issue.
+.. important::
+    Please assign the appropriate label(s) to classify your issue.
+    You will see a list of options when reporting your issue.
 
 Bug Report Template
 *******************
+
+For bug reports, describe step by step exactly what you did and what went wrong.
+
 ::
 
     Steps to reproduce the problem:
@@ -78,10 +73,9 @@ Bug Report Template
     - No, I think it never worked
 
 
-    Any other comments?
+    Any other comments? (E.g. Freeseer version, Python version, operating system, error messages, etc.)
     
-
-Another, more concise, template::
+Another, more concise, bug template::
 
     Steps:
     1.
@@ -96,6 +90,18 @@ Another, more concise, template::
 
 Feature Request Template
 ************************
+
+For feature ideas, describe exactly how you think the new functionality should
+work, and include mockups and screenshots if you can. Sell your idea to the
+community by clearly explaining its benefits and use cases, and how you plan to 
+help make the feature.
+
 ::
 
     Purpose of this new feature:
+
+
+    Describe the feature and its functionality:
+
+
+    Mockups / Screenshots / Examples:
