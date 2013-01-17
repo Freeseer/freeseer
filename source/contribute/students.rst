@@ -12,7 +12,11 @@ Getting Started
 ---------------
 1. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
 2. Introduce yourself to the Freeseer community via the
-   :ref:`mailing list <mailing-list-label>` and tell us your GitHub username
+   :ref:`mailing list <mailing-list-label>` and tell us:
+
+   - your GitHub username
+   - why you chose Freeseer
+   - what you hope to learn
 3. :ref:`Fork freeseer <fork-freeseer-label>` and get it up and running
 4. Make a copy of the `project proposal <todo>`_ on Google Docs (``File`` > ``Make Copy``)
 5. Start thinking of ways how you can improve Freeseer!
@@ -24,16 +28,16 @@ Getting Started
 Deciding What To Work On
 ------------------------
 
-We let students choose their projects. There are no set work hours, we think you work best when you want to work.
-As long as you get your work done on time, you'll have nothing to worry about.
+We let students choose their projects. There are no set work hours -- we think
+you work best when you want to work. Meet your deadlines and you'll be fine.
 
-First you should get familiar with Freeseer and the community.
-:doc:`Introduce yourself on the mailing list</contact>`, tell us what you're experienced in or what you want to learn.
-
-Depending on which program you're participating in, you may have to attend a `sprint <http://en.wikipedia.org/wiki/Sprint_(software_development)>`_ with your new teammates.
+Depending on which program you're participating in, you may have to attend a
+`sprint <http://en.wikipedia.org/wiki/Sprint_(software_development)>`_ with your
+new teammates.
 
 Next, you need to document your ideas. Use this
-`project proposal template <https://github.com/Freeseer/freeseer/blob/development/docs/developer_templates/Project_proposal.odt?raw=true>`_.
+`project proposal template
+<https://github.com/Freeseer/freeseer/blob/development/docs/developer_templates/Project_proposal.odt?raw=true>`_.
 You may modify it by adding or removing sections that you think are relevant or irrelevant.
 It also includes a timeline to help schedule your work. Decide with your professor and/or project mentor when your end date will be.
 
