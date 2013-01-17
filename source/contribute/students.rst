@@ -6,8 +6,6 @@ brightest students and have them solve fun and challenging problems.
 We've worked with students through Google Summer of Code (GSoC),
 Undergraduate Capstone Open Source Projects (UCOSP), and Fedora Summer Coding.
 
-.. todo:: project evaluation -> https://docs.google.com/open?id=0B-Zj-q_JCBWbS1lNcHBuTEllcUE
-
 Getting Started
 ---------------
 1. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
@@ -17,9 +15,18 @@ Getting Started
    - your GitHub username
    - why you chose Freeseer
    - what you hope to learn
+   - and a little about yourself (e.g. hobbies, education, favourite movie, etc)
 3. :ref:`Fork freeseer <fork-freeseer-label>` and get it up and running
-4. Make a copy of the `project proposal <todo>`_ on Google Docs (``File`` > ``Make Copy``)
-5. Start thinking of ways how you can improve Freeseer!
+4. Take a look at the `project evaluation document
+   <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_,
+   use it as a guide
+5. Make a copy of the `project design document
+   <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
+   on Google Docs
+   
+   - ``File`` > ``Make a copy``
+   - Replace the highlighted sections with your own content
+6. Start thinking of ways how you can improve Freeseer!
 
 .. tip::
   As a student, you can apply for a **free micro account** at
@@ -33,25 +40,42 @@ you work best when you want to work. Meet your deadlines and you'll be fine.
 
 Depending on which program you're participating in, you may have to attend a
 `sprint <http://en.wikipedia.org/wiki/Sprint_(software_development)>`_ with your
-new teammates.
+new teammates. We usually let students brainstorm at the sprint what to work on.
 
-Next, you need to document your ideas. Use this
-`project proposal template
-<https://github.com/Freeseer/freeseer/blob/development/docs/developer_templates/Project_proposal.odt?raw=true>`_.
-You may modify it by adding or removing sections that you think are relevant or irrelevant.
-It also includes a timeline to help schedule your work. Decide with your professor and/or project mentor when your end date will be.
+If you've followed the steps above, you should have a copy of the
+`project design document <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
+on your Google Docs/Drive account. The reason we ask that you keep it on Google's
+cloud is so that we, the mentors, can easily organize and comment on all the
+design documents from the students.
 
-We don't expect your proposal to be perfect right away. Don't spend too much time on it. In this case it's better to release early
-and release often as opposed to a highly polished proposal on your first try.
+.. important::
+  Verify that your sharing settings allow us to view and comment on the
+  document!
 
-When you finish your first draft of your proposal, notify everyone on the mailing list and include a link to where they can view it.
-We'll give you feedback so you can make any changes if necessary. Once everything looks fine, your proposal will be approved and you can
-start working on your projects!
+You may modify the design document by adding or removing sections that you think
+are relevant or irrelevant to your project.
+It also includes a timeline to help schedule your work.
+Decide with your professor and/or project mentor when your exact end date will be.
+
+We don't expect your design document to be perfect right away.
+Don't spend too much (or too little) time on it. In this case it's better to
+release early and release often as opposed to a highly polished document on your
+first try.
+
+When you finish your first draft of the document, notify everyone on the
+mailing list and include a link so they can view it on Google Docs/Drive.
+We'll give you feedback so you can make any changes if necessary.
+
+.. tip::
+  You can start working on your project while your design document is still in
+  progress.
 
 Because Freeseer is still a relatively young project and has a small codebase,
 there is lots of room for improvement. This means that your contributions will
 have a huge impact on the future of Freeseer! Due to the small size of our
-community, you'll also have a lot of responsibility.
+community, you'll also have a lot of responsibility. We learn a lot from working
+with students, don't be shy to point out when we're wrong or to suggest a better
+alternative!
 
 
 Stay In Touch
