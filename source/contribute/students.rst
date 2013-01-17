@@ -7,15 +7,19 @@ We've worked with students through Google Summer of Code (GSoC),
 Undergraduate Capstone Open Source Projects (UCOSP), and Fedora Summer Coding.
 
 .. todo:: project evaluation -> https://docs.google.com/open?id=0B-Zj-q_JCBWbS1lNcHBuTEllcUE
-.. todo:: project proposal (verify it's in good condition) you can add, edit,
-          and remove sections as necessary. file > make copy
-.. attitude of forgiveness in the face of failure. When people have the interest
-.. of the company in mind, if mistakes are made along the way, those shouldn't be
-.. met with punishment.
 
 Getting Started
 ---------------
-1. TODO
+1. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
+2. Introduce yourself to the Freeseer community via the
+   :ref:`mailing list <mailing-list-label>` and tell us your GitHub username
+3. :ref:`Fork freeseer <fork-freeseer-label>` and get it up and running
+4. Make a copy of the `project proposal <todo>`_ on Google Docs (``File`` > ``Make Copy``)
+5. Start thinking of ways how you can improve Freeseer!
+
+.. tip::
+  As a student, you can apply for a **free micro account** at
+  `github.com/edu <http://github.com/edu>`_ and get 5 private repositories!
 
 Deciding What To Work On
 ------------------------
@@ -69,9 +73,10 @@ Expectations
 ------------
 
 * Be available for others to contact you
-* Communicate often: be active on IRC and the mailing list
-* Try to be a team player, not just a teammate
+* Communicate often: be active on IRC, the mailing list, and status updates
+* Be a team player, not just a teammate
 * Post updates often, let us know when you completed a feature or if you're having difficulty
+* Ask for help when you need it!
 * 8-10 hours of work per week
 
 
@@ -79,7 +84,7 @@ How To Succeed
 --------------
 
 * Choose an appropriate project that you can realistically accomplish
-* We don't expect you to be qualified, that's the point, you're here to learn
+* We don't expect you to be completely qualified, that's the point, you're here to learn
 
 For more info, check out these `videos from a GSoC information session <http://fosslc.org/drupal/node/374>`_ held at
 the University of Toronto.
