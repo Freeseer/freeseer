@@ -3,10 +3,11 @@ Installation
 
 Here's everything you need to know to get Freeseer up and running.
 
-.. note:: Freeseer stores its configuration settings in a `.freeseer` directory.
-          On both Windows and Linux, the `.freeseer` directory is in the user's
-          HOME directory. On Windows this is `C:\\Users\\username\\.freeseer\\`.
-          On Linux it's `/home/username/.freeseer/`.
+.. note::
+  Freeseer stores its configuration settings in a directory called ``.freeseer``.
+  On both Windows and Linux, this  directory is in the user's HOME directory.
+  On Windows it's ``C:\Users\username\.freeseer\``.
+  On Linux it's ``/home/username/.freeseer/``.
 
 Prerequisites
 -------------
