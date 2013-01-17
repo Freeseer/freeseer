@@ -6,75 +6,75 @@ There should be no language barrier between Freeseer and our users.
 You can help in our localization efforts.
 
 
-How to Contribute Translations
-------------------------------
+Add a Translation
+-----------------
 
-Translating Freeseer
-^^^^^^^^^^^^^^^^^^^^
+1. Open the **Qt Linguist** tool --
+   it should come with your installation of **PyQt**
 
-In order to translate Freeseer a translator can use Qt Linguist tool to read the translation files located in
-
-    cd <freeseerroot>/src/freeseer/frontend/qtcommon/languages
-
-In this directory there exists several *.ts files. These are the translation files for each language. Simply
-load the language you would like to translate into Qt Linguist and complete the translations.
-
-If the language you wish to translate is not available, the section `Updating Translation Files`_
-
-Once your translation is complete simply send a pull request containing only the *.ts file that you are contributing
-back.
+2. Translation files are located in
+   ``<path-to-freeseer>/src/freeseer/frontend/qtcommon/languages/``.
+   If a file for your language exists, continue to step 3.
+   Otherwise, you'll need to `update translation resources`_ first.
 
 
-How to update translation resources
------------------------------------
+3. Using Qt Linguist, open a translation (``.ts``) file for your language
+  
+4. Once you've completed the translation, `send a pull request
+   <https://help.github.com/articles/creating-a-pull-request>`_
+   containing only the ``.ts`` file(s) that you modified.
 
-The following steps are not required for a translator but more for a developer to make new translation contributions
-appear in freeseer.
+.. seealso::
+  `Qt Linguist documentation for translators
+  <http://doc.qt.digia.com/qt/linguist-translators.html>`_
 
-There are 2 items to keep in mind in relation to updating translation resources.
 
-1. Updating Translation Files
-2. Updating Qt Resource Files
+Update Translation Resources
+----------------------------
 
-Updating Translation Files
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+For new translations to appear in Freeseer, you need to update the translation
+resources. This task is typically left to a developer, not a translator.
+Please ask a developer to update the translation resources before you attempt to.
 
-The first item needs to be done when a developer writes new code in the software and thus adding new translation
-strings to the software which needs to be translated. To update translation files run the following commands::
+1. Update Translation Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   cd <freeseerroot>/src/freeseer/frontend/qtcommon/languages
+This step only needs to be completed if a developer wrote code that contains
+new translation strings in the user-interface. To update translation files::
+
+   cd <path-to-freeseer>/src/freeseer/frontend/qtcommon/languages
    pylupdate4 freeseer.pro
   
-The freeseer.pro file contains details regarding which source files contain translation strings as well as which
-translation files need to be updated and/or created. If you wish to translate a new langauge simply add a new locale
-for the language you wish to translate.
+The ``freeseer.pro`` file specifies which source files contain translation
+strings, as well as which translation files need to be updated and/or created.
+If you want to translate to a new language, add a new locale for that language.
 
-Adding Qt Translation Files to Freeseer-monitored List:
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2. Add Qt Translation Files to Freeseer-monitored List
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now the developer needs to update the list of monitored translations by editing the resources file using these commands:: 
+Next, you need to update the list of monitored translations by editing the
+``resource.qrc`` file:: 
    
-   cd <freeseerroot>/src/freeseer/frontend/qtcommon
-   <texteditor> resource.qrc
+   cd <path-to-freeseer>/src/freeseer/frontend/qtcommon
+   <text-editor> resource.qrc
    
-The following line should be added::
+Add the following line::
 
    <file alias="languages/tr_LANGUAGE_LOCALE.qm">languages/tr_LANGUAGE_LOCALE.qm</file>
 
-where LANGUAGE and LOCALE are specific to your translation. For example, an American English translation
-would be::
+where `LANGUAGE` and `LOCALE` are specific to your translation.
+For example, for an American English translation::
 
-   <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>.
+   <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>
 
 
-Updating Qt Resource Files
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+3. Update Qt Resource Files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When translations are ready and complete, they need to be imported into Qt Resource files to be useful.
-The good news is this is fairly easy since we include scripts to do this automatically. Simply run the
-following commands::
+When translations are ready to be used, they need to be imported into Qt's resource files.
+We included a script to automate the process. Simply run::
 
-   cd <freeseerroot>/src/freeseer/frontend/qtcommon
+   cd <path-to-freeseer>/src/freeseer/frontend/qtcommon
    make
 
-After the above steps are followed, a sample run of Freeseer should confirm that the translation is working.
+You should now see your translation(s) the next time you run Freeseer.
