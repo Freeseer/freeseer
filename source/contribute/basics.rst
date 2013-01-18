@@ -55,8 +55,8 @@ Git Philosophy
 
 .. _fork-freeseer-label:
 
-Forking Freeseer
-----------------
+Forking and Cloning Freeseer
+----------------------------
 
 Once you have a GitHub account and Git installed and configured, the next step is to fork the Freeseer repo[sitory].
 "Forking" means you use someone's project as a starting point for your own.
@@ -89,7 +89,7 @@ Once you have a GitHub account and Git installed and configured, the next step i
 Basic Workflow
 --------------
 
-.. todo:: (Dennis) See NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
+.. todo: (Dennis) See NumPy's docs (Development workflow), ThinkUp's docs (Developer), and my Google Doc's Freeseer scrap notes!
 
 1. Create a new branch based off the central repo's (i.e. Freeseer's) experimental branch.
 2. Fetch any changes for good measure (optional). ::
