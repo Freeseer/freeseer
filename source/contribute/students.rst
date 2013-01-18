@@ -8,25 +8,28 @@ Undergraduate Capstone Open Source Projects (UCOSP), and Fedora Summer Coding.
 
 Getting Started
 ---------------
-1. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
-2. Introduce yourself to the Freeseer community via the
+#. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
+#. Introduce yourself to the Freeseer community via the
    :ref:`mailing list <mailing-list-label>` and tell us:
 
    - your GitHub username
    - why you chose Freeseer
    - what you hope to learn
    - and a little about yourself (e.g. hobbies, education, favourite movie, etc)
-3. :ref:`Fork freeseer <fork-freeseer-label>` and get it up and running
-4. Take a look at the `project evaluation document
+#. Join us in our :ref:`IRC channel <irc-label>`
+   
+   - Tell us who you are if your nickname isn't obvious, or update your whois info
+#. :ref:`Fork & clone Freeseer <fork-freeseer-label>` and get it up and running
+#. Take a look at the `project evaluation document
    <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_,
    use it as a guide
-5. Make a copy of the `project design document
+#. Make a copy of the `project design document
    <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
    on Google Docs
    
    - ``File`` > ``Make a copy``
    - Replace the highlighted sections with your own content
-6. Start thinking of ways how you can improve Freeseer!
+#. Start thinking of ways how you can improve Freeseer!
 
 .. tip::
   As a student, you can apply for a **free micro account** at
