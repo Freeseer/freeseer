@@ -174,9 +174,9 @@ class ServerApp(QtGui.QMainWindow):
         
         # Button
         if self.status == self.STATUS[0]:
-            self.mainWidget.startButton.setText(self.stopServerString)
-        else:
             self.mainWidget.startButton.setText(self.startServerString)
+        else:
+            self.mainWidget.startButton.setText(self.stopServerString)
         # --- End Server Settings
         
         #
@@ -255,6 +255,7 @@ class ServerApp(QtGui.QMainWindow):
         self.updateStatus(self.status)
         self.setPassPhrase()
         self.setConnectionLabel()
+        self.retranslate()
         
     def updateStatus(self, status):
         self.mainWidget.statusLabel.setText("%s: %s" % (self.serverStatusString, status))
