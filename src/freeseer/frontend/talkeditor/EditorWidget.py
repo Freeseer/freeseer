@@ -42,7 +42,7 @@ class EditorWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        
+        print QtCore.PYQT_VERSION_STR
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
@@ -66,7 +66,8 @@ class EditorWidget(QtGui.QWidget):
         
         self.rssLabel = QtGui.QLabel("URL")
         self.rssLineEdit = QtGui.QLineEdit()
-        self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
+        if QtCore.PYQT_VERSION_STR != "4.7.3":
+            self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
         self.rssLabel.setBuddy(self.rssLineEdit)
         self.rssPushButton = QtGui.QPushButton("Load talks from RSS")
         rss_icon = QtGui.QIcon()
@@ -88,10 +89,13 @@ class EditorWidget(QtGui.QWidget):
         
         self.csvLabel = QtGui.QLabel("File")
         self.csvLineEdit = QtGui.QLineEdit()
+
         if sys.platform == 'win32':
-            self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
+            if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+                self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
         else:
-            self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
+            if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+                self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
         self.csvLabel.setBuddy(self.csvLineEdit)
         self.csvFileSelectButton = QtGui.QToolButton()
         self.csvFileSelectButton.setText("...")
