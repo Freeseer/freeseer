@@ -53,7 +53,7 @@ Properly Style Your Commit Messages
 To help keep the style of our commit messages consistent and for easier viewing
 on GitHub, please write your commit messages in accordance with this style::
     
-    Capitalized and concise (70 chars or less) summary of your commit
+    Capitalized and concise (50 chars or less) summary of your commit
 
     More detailed explanatory text if necessary. Wrap at 72 characters.
     Notice that the above summary message does not end with a period,
@@ -65,7 +65,9 @@ on GitHub, please write your commit messages in accordance with this style::
 
     - Put a space after bullet points and blank lines between them
 
+    - Add any references to related issues on GitHub if possible
+
 If you can describe your commit with just a summary line, you may use
 git commit's message argument::
 
-    git commit -m "Summary of your commit (70 chars or less)"
+    git commit -m "Summary of your commit (50 chars or less)"
