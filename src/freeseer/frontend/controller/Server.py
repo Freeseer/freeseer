@@ -78,12 +78,17 @@ class ServerApp(QtGui.QMainWindow):
         self.setCentralWidget(self.mainWidget)
         
         self.mainWidget.hostCombo.addItem(QtCore.QString("0.0.0.0"))
-                
+
         #Connections
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
         self.connect(self.mainWidget.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
         self.connect(self.mainWidget.hostCombo, QtCore.SIGNAL('currentIndexChanged(int)'), self.ipComboBoxHandler)
-        
+        self.connect(self.mainWidget.passEdit, QtCore.SIGNAL('textChanged(QString)'), self.onPassChanged)
+
+        # Initialize Passphrase Field
+        self.mainWidget.passEdit.setPlaceholderText("Passphrase required to start server")
+        self.mainWidget.startButton.setEnabled(False)
+
         # Client Control
         self.connect(self.mainWidget.clientStartButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
         self.connect(self.mainWidget.clientStopButton, QtCore.SIGNAL('pressed()'), self.sendStopCommand)
@@ -296,6 +301,16 @@ class ServerApp(QtGui.QMainWindow):
             logging.info("Client accepted")
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+
+    '''
+    This function disables the 'Start' button only when the passphrase field is empty.
+    '''
+    def onPassChanged(self):
+		if self.mainWidget.passEdit.text():
+		    self.mainWidget.startButton.setEnabled(True)
+		else:
+		    self.mainWidget.startButton.setEnabled(False)
+
             
     def ipComboBoxHandler(self):
         self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
@@ -442,7 +457,7 @@ class ServerApp(QtGui.QMainWindow):
             self.mainWidget.clientStartButton.setText(self.startRecordingString)
             self.mainWidget.clientStopButton.setEnabled(False) 
             self.mainWidget.clientStopButton.setText(self.stopRecordingString)
-        
+
 '''
 Custom QListWidgetItem class
 Additionally it includes a client object
@@ -459,4 +474,4 @@ class ClientListItem(QtGui.QListWidgetItem):
     def changeStatus(self, status):
         self.status = status
         self.setText('%s %s' % (self.address, self.status))
-        
+
