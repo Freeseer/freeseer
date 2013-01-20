@@ -42,7 +42,7 @@ class EditorWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        print QtCore.PYQT_VERSION_STR
+
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
         
