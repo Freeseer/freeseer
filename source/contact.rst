@@ -23,10 +23,14 @@ through freeseer@googlegroups.com.
 IRC Channel
 -----------
 
-Chat live with Freeseer community members in our IRC channel. Here are the connection details: 
+Chat live with Freeseer community members in our IRC channel.
+Here are the connection details: 
 
-* IRC Server: irc.freenode.net
-* Channel/Room: #freeseer
+* IRC Server: `irc.freenode.net`
+* Channel/Room: `#freeseer`
+
+IRC Clients
+^^^^^^^^^^^
 
 You can `join using your browser <http://webchat.freenode.net/?channels=#freeseer>`_
 or your favourite IRC client.
@@ -38,20 +42,39 @@ To quickly get started:
 
     $ sudo apt-get install irssi
     $ irssi
-    > /connect irc.freenode.net
-    > /nick my-preferred-nickname (optional)
-    > /join #freeseer
+    # Then, from irssi's prompt:
+    /connect irc.freenode.net
+    /nick <your-nickname>
+    /join #freeseer
 
 .. tip::
 
   - To get someone's attention on IRC, mention their username
 
     - Some IRC clients (like irssi) support autocompletion via the tab key
-  - Shortcuts exists, such as `/j` for `/join` and `/w` for `/who`
-  - To block activity messages in the room: `/ignore -channels #freeseer * JOINS
-    PARTS QUITS NICKS`
+  - Shortcuts exists, such as ``/j`` for ``/join`` and ``/w`` for ``/who``
+  - To block activity messages in the room:
+    ``/ignore -channels #freeseer * JOINS PARTS QUITS NICKS``
 
     - You can specificy more rooms by comma separating them
+
+Channel Bot
+^^^^^^^^^^^
+
+You've probably noticed this guy ``[o__o]`` hanging out in `#freeseer`.
+He's our friendly channel bot from `BotBot.me <https://botbot.me>`_.
+
+He'll respond to certain queries. Try asking him for help::
+
+  <You> [o__o]: help
+
+He can **look up GitHub issues** for you, just type ``gh<issue-number>``::
+
+ <You> gh1
+ <[o__o]> Package freeseer for Fedora.: https://github.com/Freeseer/freeseer/issues/1
+
+He also keeps a **log of our channel**. Read any discussions you missed at
+http://botbot.me/freenode/freeseer.
 
 Twitter, Facebook, and Blog
 ---------------------------
@@ -74,21 +97,23 @@ Toll-free Phone Number
 ----------------------
 
 Call for free at **1-877-253-0617 x27**.
-If Andrew (our project leader) isn't available to answer the call, then you'll be asked to leave a voicemail message.
+If Andrew (our project leader) isn't available to answer the call,
+then you'll be asked to leave a voicemail message.
 
-We're thinking of setting up a system that forwards these voicemails to our mailing list. Stay tuned! 
+We're thinking of setting up a system that forwards these voicemails to our mailing list.
+Stay tuned! 
 
 
 Google+ Hangouts
------------
+----------------
 
 We occasionally use `Google+ Hangouts
 <http://www.google.com/+/learnmore/hangouts/>`_ for Freeseer meetings.
 
 Here's some tips for joining our next video chat:
 
-* Add `Andrew Ross <http://gplus.to/aross>`_ to your G+ circles, he leads the
-  discussion and starts the hangout
+* Add `Andrew Ross <http://gplus.to/aross>`_ to your G+ circles,
+  he leads the discussion and starts the hangout
 * Have a webcam ready
 * Have a headset ready (optional but recommended)
 
