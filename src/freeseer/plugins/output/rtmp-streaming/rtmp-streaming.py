@@ -92,8 +92,8 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-            audiocodec = gst.element_factory_make("faac", "audiocodec")
-            audiocodec.set_property("quality", float(self.audio_quality))
+            audiocodec = gst.element_factory_make("lame", "audiocodec")
+            # audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
             
             # Setup ghost pads
