@@ -70,6 +70,9 @@ class QtDBConnector():
             # check if recentConnections table exists and if not create it.
             if not self.talkdb.tables().contains("recentconn"):
                 self.__create_recentconn_table()
+                
+            #verify that correct version of tables exists
+            self.update_version()
         else:
             print "Unable to create talkdb file."
             
@@ -78,7 +81,48 @@ class QtDBConnector():
         This function is used to close the connection the the database.    
         """
         self.talkdb.close()
+
+    def update_version(self):
+        """
+        Upgrade database to the latest version.
+        """
+        
+        #array of table layouts of database versions (currently only presentations table has changed)
+        versions = [['Speaker', 'Title', 'Description', 'Level', 'Event', 'Time', 'Room', 'Id', 'FileNameId'],
+                    ["Id", "Title", "Speaker", "Description", "Level", "Event", "Room", "Time"]]
+        
+        def v1_upgrade():
+            QtSql.QSqlQuery('''INSERT INTO presentations
+                SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old
+                ''')
+        #upgrade old versions[i] to newest. Must contain function for each versions[i] up to len(versions) - 1
+        versionUpdaters = [v1_upgrade]
+        
+        #check if the currentrecord is the same table as the fields
+        def versionEquals(currentrecord, fields):
+            lenrec = currentrecord.count()
+            if lenrec != len(fields):
+                return False
+            for i in range(lenrec):
+                if currentrecord.fieldName(i) != fields[i]:
+                    return False
+            return True
             
+        currentrecord = self.talkdb.record("presentations")
+        if versionEquals(currentrecord, versions[-1]):
+            logging.info("Presentations database is already at newest version")
+            return
+        
+        QtSql.QSqlQuery("ALTER TABLE presentations RENAME TO presentations_old") #temporary table
+        self.__create_presentations_table()
+        for i in range(len(versions) - 1): #if is old version i, run update function
+            if versionEquals(currentrecord, versions[i]):
+                if i < len(versionUpdaters):
+                    versionUpdaters[i]()
+                logging.info("Upgraded presentations database from version " + str(i))
+                break
+        QtSql.QSqlQuery("DROP TABLE presentations_old")
+    
     def __create_presentations_table(self):
         """
         Creates the presentations table in the database. Should be used to
