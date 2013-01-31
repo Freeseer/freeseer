@@ -45,8 +45,10 @@ class RTMPOutput(IOutput):
     audio_quality = 0.3
     video_bitrate = 2400
     video_tune='none'
+    audio_codec='lame'
     
     TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
+    AUDIO_CODEC_VALUES = ['lame', 'faac']
     
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
@@ -92,7 +94,7 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-            audiocodec = gst.element_factory_make("lame", "audiocodec")
+            audiocodec = gst.element_factory_make(self.audio_codec, "audiocodec")
             # audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
             
@@ -153,11 +155,13 @@ class RTMPOutput(IOutput):
             self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
             self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
             self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
+            self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", self.audio_codec)
     
     def get_widget(self):
         if self.widget is None:
@@ -193,6 +197,19 @@ class RTMPOutput(IOutput):
             layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
             
             self.widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(double)'), self.set_audio_quality)
+
+            #
+            # Audio Codec
+            #
+            
+            self.label_audio_codec = QtGui.QLabel("Audio Codec")
+            self.combobox_audio_codec = QtGui.QComboBox()
+            self.combobox_audio_codec.addItems(self.AUDIO_CODEC_VALUES)
+            layout.addRow(self.label_audio_codec, self.combobox_audio_codec)
+            
+            self.widget.connect(self.combobox_audio_codec, 
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                self.set_audio_codec)
             
             #
             # Video Quality
@@ -240,6 +257,9 @@ class RTMPOutput(IOutput):
 
         tuneIndex = self.combobox_video_tune.findText(self.video_tune)
         self.combobox_video_tune.setCurrentIndex(tuneIndex)
+        
+        acIndex = self.combobox_audio_codec.findText(self.audio_codec)
+        self.combobox_audio_codec.setCurrentIndex(acIndex)
 
     def set_stream_url(self, text):
         self.url = text
@@ -260,9 +280,14 @@ class RTMPOutput(IOutput):
         self.video_tune = tune
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", str(self.video_tune))
         self.plugman.save()
+
+    def set_audio_codec(self, codec):
+        self.audio_codec = codec
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", str(self.audio_codec))
+        self.plugman.save()
         
     def get_properties(self):
-        return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune']
+        return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec']
     
     def get_property_value(self, property):
         if property == "StreamURL":
@@ -273,6 +298,8 @@ class RTMPOutput(IOutput):
             return self.video_bitrate
         elif property == "VideoTune":
             return self.video_tune
+        elif property == "AudioCodec":
+            return self.audio_codec
         else:
             return "There's no property with such name"
         
@@ -285,6 +312,8 @@ class RTMPOutput(IOutput):
             return self.set_video_bitrate(value)
         elif property == "VideoTune":
             return self.set_video_tune(value)
+        elif property == "AudioCodec":
+            return self.set_audio_codec(value)
         else:
             return "Error: There's no property with such name" 
 
