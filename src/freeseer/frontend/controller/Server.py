@@ -83,7 +83,12 @@ class ServerApp(QtGui.QMainWindow):
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
         self.connect(self.mainWidget.startButton, QtCore.SIGNAL('pressed()'), self.startServer)
         self.connect(self.mainWidget.hostCombo, QtCore.SIGNAL('currentIndexChanged(int)'), self.ipComboBoxHandler)
+        self.connect(self.mainWidget.passEdit, QtCore.SIGNAL('textChanged(QString)'), self.onPassChanged)
         
+        # Initialize Passphrase Field
+        self.mainWidget.passEdit.setPlaceholderText("Passphrase required to start server")
+        self.mainWidget.startButton.setEnabled(False)
+
         # Client Control
         self.connect(self.mainWidget.clientStartButton, QtCore.SIGNAL('pressed()'), self.sendRecordCommand)
         self.connect(self.mainWidget.clientStopButton, QtCore.SIGNAL('pressed()'), self.sendStopCommand)
@@ -174,9 +179,9 @@ class ServerApp(QtGui.QMainWindow):
         
         # Button
         if self.status == self.STATUS[0]:
-            self.mainWidget.startButton.setText(self.stopServerString)
-        else:
             self.mainWidget.startButton.setText(self.startServerString)
+        else:
+            self.mainWidget.startButton.setText(self.stopServerString)
         # --- End Server Settings
         
         #
@@ -255,6 +260,7 @@ class ServerApp(QtGui.QMainWindow):
         self.updateStatus(self.status)
         self.setPassPhrase()
         self.setConnectionLabel()
+        self.retranslate()
         
     def updateStatus(self, status):
         self.mainWidget.statusLabel.setText("%s: %s" % (self.serverStatusString, status))
@@ -295,6 +301,13 @@ class ServerApp(QtGui.QMainWindow):
             logging.info("Client accepted")
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+    
+    def onPassChanged(self):
+        """Disable 'Start' button only when the passphrase field is empty."""
+        if self.mainWidget.passEdit.text():
+            self.mainWidget.startButton.setEnabled(True)
+        else:
+            self.mainWidget.startButton.setEnabled(False)
             
     def ipComboBoxHandler(self):
         self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
