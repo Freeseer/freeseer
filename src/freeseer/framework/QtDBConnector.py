@@ -29,6 +29,7 @@ from PyQt4 import QtSql
 
 from freeseer.framework.presentation import *
 from freeseer.framework.failure import *
+from freeseer import project_info
 
 class QtDBConnector():
     presentationsModel = None
@@ -70,6 +71,9 @@ class QtDBConnector():
             # check if recentConnections table exists and if not create it.
             if not self.talkdb.tables().contains("recentconn"):
                 self.__create_recentconn_table()
+                
+            #verify that correct version of database exists
+            self.__update_version()
         else:
             print "Unable to create talkdb file."
             
@@ -78,7 +82,59 @@ class QtDBConnector():
         This function is used to close the connection the the database.    
         """
         self.talkdb.close()
-            
+
+    def get_program_version_int(self):
+        """
+        Get Freeseer's current version as an integer.
+        """
+        result = []
+        for c in project_info.VERSION:
+            if c.isdigit():
+                result.append(c)
+        return int(''.join(result))
+    
+    def __get_db_version_int(self):
+        """
+        Get the database's current version. Default is 0 if unset (for 2x and older)
+        """
+        query = QtSql.QSqlQuery('PRAGMA user_version')
+        query.first()
+        return query.value(0).toInt()[0]
+
+    def __update_version(self):
+        """
+        Upgrade database to the latest version.
+        updaterVersion[i] version number of the incremental update function located at updaters[i]
+        updaters[] functions are then called in order starting at the old version to the end.
+        Version # of 2.x and older is 0
+        """
+        
+        db_version = self.__get_db_version_int()
+        program_version = self.get_program_version_int()
+        if program_version == db_version:
+            return
+        
+        def update_2xto30():
+            """
+            Incremental update of database from 2.x and older to 3.0.
+            """
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old') #temporary table
+            self.__create_presentations_table()
+            QtSql.QSqlQuery("""INSERT INTO presentations 
+                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
+            QtSql.QSqlQuery('DROP TABLE presentations_old')
+        
+        updaters = [update_2xto30]
+        updaterVersion = [0] #next entry is 300
+        
+        if len(updaters) != len(updaterVersion) or db_version not in updaterVersion: #not setup properly
+            logging.info('Database upgrade failed.')
+            return
+        for updater in updaters[updaterVersion.index(db_version):]:
+            updater()
+        QtSql.QSqlQuery('PRAGMA user_version = %i' % program_version)
+        logging.info('Upgraded presentations database from version %i', db_version)
+    
     def __create_presentations_table(self):
         """
         Creates the presentations table in the database. Should be used to
