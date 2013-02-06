@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fr_FR" sourcelanguage="en_US">
+<!DOCTYPE TS>
+<TS version="2.0" language="fr_FR" sourcelanguage="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../AboutDialog.py" line="94"/>
         <source>Freeseer About</source>
-        <translation>À propos Freeseer</translation>
+        <translation type="unfinished">Freeseer Outil de configuration</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="95"/>
