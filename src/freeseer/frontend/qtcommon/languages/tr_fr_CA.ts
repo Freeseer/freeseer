@@ -6,18 +6,17 @@
     <message>
         <location filename="../AboutDialog.py" line="94"/>
         <source>Freeseer About</source>
-        <translation type="unfinished">Freeseer Outil de configuration</translation>
+        <translation>Freeseer À propos</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="95"/>
         <source>Close</source>
-        <translation>fermer</translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="100"/>
         <source>Freeseer is a video capture utility capable of capturing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</source>
-        <translation>Freeseer est un programme qui a l’abileté d’enregistrer les prèsentations vocalement avec
-des sources de video de l’USB,Firewire ou le bureau locale et les mixent pour faire un video.</translation>
+        <translation>Freeseer est un utilitaire de capture vidéo permettant d&apos;enregistrer des présentations. Il capture les sources vidéos depuis usb, firewire, ou le bureau local. Le vidéo et l&apos;audio sont mixés ensemble pour produire un vidéo.</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="104"/>
@@ -27,8 +26,7 @@ des sources de video de l’USB,Firewire ou le bureau locale et les mixent pour 
     <message>
         <location filename="../AboutDialog.py" line="105"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;,without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
-        <translation>Sous la permission de GPL . Ce Software est disponible tel qu’il est sans assurance. Les auteurs ne sont pas responsables
-du tout s’il y a des dommages à cause du programme.</translation>
+        <translation>Sous la licence GPL version 3. Ce logiciel est disponible tel quel, sans aucune assurance. Les auteurs ne sont pas responsables de tout dommages causé par ce logiciel.</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="110"/>
@@ -38,12 +36,12 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../AboutDialog.py" line="115"/>
         <source>Record button graphics by</source>
-        <translation>Graphiques par b Enregistrer</translation>
+        <translation>Design graphique du bouton enregistrement par</translation>
     </message>
     <message>
         <location filename="../AboutDialog.py" line="116"/>
         <source>Headphones graphics by</source>
-        <translation type="unfinished"></translation>
+        <translation>Design graphique écouteurs par</translation>
     </message>
 </context>
 <context>
@@ -51,7 +49,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../configtool/configtool.py" line="216"/>
         <source>Freeseer ConfigTool</source>
-        <translation>Freeseer outil de configuration</translation>
+        <translation>Freeseer Outil de configuration</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
@@ -91,7 +89,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../configtool/configtool.py" line="268"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixeur Audio</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="273"/>
@@ -101,77 +99,77 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../configtool/configtool.py" line="272"/>
         <source>Video Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixeur Vidéo</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="258"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Misc</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="260"/>
         <source>Record Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Dossier d&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="261"/>
         <source>Enable Auto-Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer l&apos;auto minimisation</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="279"/>
         <source>Console Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>Console de journalisation</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="282"/>
         <source>Log Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de journalisation</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="281"/>
         <source>Syslog Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>Journal Syslog</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="232"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="234"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Greffons</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="235"/>
         <source>AudioInput</source>
-        <translation type="unfinished"></translation>
+        <translation>EntréeAudio</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="236"/>
         <source>AudioMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>MixeurAudio</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="237"/>
         <source>VideoInput</source>
-        <translation type="unfinished"></translation>
+        <translation>EntréeVidéo</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="238"/>
         <source>VideoMixer</source>
-        <translation type="unfinished"></translation>
+        <translation>MixeurVidéo</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="239"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>Sortie</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="240"/>
         <source>Logger</source>
-        <translation type="unfinished"></translation>
+        <translation>Journal</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="259"/>
@@ -181,17 +179,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../configtool/configtool.py" line="233"/>
         <source>Recording</source>
-        <translation>Enregistre</translation>
+        <translation>Enregistrement</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="267"/>
         <source>Audio Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée Audio</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="271"/>
         <source>Video Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée Vidéo</translation>
     </message>
 </context>
 <context>
@@ -199,47 +197,50 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../controller/Client.py" line="91"/>
         <source>Controller Client</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Need to verify</translatorcomment>
+        <translation>Client Contrôleur</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="95"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>État</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="96"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Need to verify context (Connecter|Connexion)</translatorcomment>
+        <translation>Connecter</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="97"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Need to verify context (Déconnecter|Déconnexion)</translatorcomment>
+        <translation>Déconnecter</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="103"/>
         <source>Connection Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration Connexion</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="104"/>
         <source>Host name (or IP Address)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d&apos;Hôte (ou adresse IP)</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="105"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="106"/>
         <source>Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de Passe</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="117"/>
         <source>Recent Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Connexions récentes</translation>
     </message>
 </context>
 <context>
@@ -247,72 +248,74 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../controller/Server.py" line="153"/>
         <source>Controller Server</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Need to verify</translatorcomment>
+        <translation>Contrôleur Serveur</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="158"/>
         <source>Server status</source>
-        <translation type="unfinished"></translation>
+        <translation>État Serveur</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="159"/>
         <source>Start Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer Serveur</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="160"/>
         <source>Stop Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter Serveur</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="161"/>
         <source>Start Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer Enregistrement</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="162"/>
         <source>Stop Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter Enregistrement</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="163"/>
         <source>Pause Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre en Pause l&apos;Enregistrement</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="164"/>
         <source>Resume Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Reprendre l&apos;Enregistrement</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="170"/>
         <source>Server Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurations Serveur</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="171"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse IP</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="172"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="173"/>
         <source>Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de Passe</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="185"/>
         <source>Control Clients</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Need to verify context</translatorcomment>
+        <translation>Clients Contrôleurs</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="187"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Déconnecter</translation>
     </message>
 </context>
 <context>
@@ -320,7 +323,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="213"/>
         <source>Freeseer - portable presentation recording station</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer - la station portable d&apos;enregistrement de présentation</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="218"/>
@@ -330,17 +333,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="221"/>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="222"/>
         <source>Hide Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimiser la Fenêtre Principale</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="223"/>
         <source>Show Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la Fenêtre Principale</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="244"/>
@@ -365,7 +368,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="249"/>
         <source>&amp;Open Video Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ouvrir le Dossier d&apos;Enregistrement</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="251"/>
@@ -380,12 +383,12 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="276"/>
         <source>Event</source>
-        <translation>Conference</translation>
+        <translation>Conférence</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="277"/>
         <source>Room</source>
-        <translation>Chambre</translation>
+        <translation>Salle</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="278"/>
@@ -395,7 +398,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="279"/>
         <source>Talk</source>
-        <translation type="unfinished"></translation>
+        <translation>Présentation</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="219"/>
@@ -410,17 +413,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="228"/>
         <source>Recording...</source>
-        <translation>Enregistre...</translation>
+        <translation>Enregistrement en cours...</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="229"/>
         <source>Recording Paused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrement en Pause.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="217"/>
         <source>Standby</source>
-        <translation type="unfinished"></translation>
+        <translation>En attente</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="220"/>
@@ -430,12 +433,13 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="226"/>
         <source>Idle.</source>
+        <translatorcomment>Need to verify context, synonym</translatorcomment>
         <translation>Au repos.</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="253"/>
         <source>&amp;Report</source>
-        <translation>&amp;Rapporter</translation>
+        <translation>&amp;Rapport</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="286"/>
@@ -445,27 +449,27 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="287"/>
         <source>Speaker:</source>
-        <translation>Speaker:</translation>
+        <translation>Conférencier:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="288"/>
         <source>Event:</source>
-        <translation>Conference:</translation>
+        <translation>Conférence:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="289"/>
         <source>Room:</source>
-        <translation>Chambre:</translation>
+        <translation>Salle:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="290"/>
         <source>Time:</source>
-        <translation>Temps:</translation>
+        <translation>Heure:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="291"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaire</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="293"/>
@@ -475,42 +479,42 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../record/record.py" line="294"/>
         <source>Report</source>
-        <translation type="unfinished"></translation>
+        <translation>Rapport</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="298"/>
         <source>No Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;Audio</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="299"/>
         <source>No Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de Vidéo</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="300"/>
         <source>No Audio/Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas d&apos;Audio/Vidéo</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="292"/>
         <source>Release Received</source>
-        <translation type="unfinished"></translation>
+        <translation>Décharge légale reçue</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="297"/>
         <source>No Issues</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun problème</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="285"/>
         <source>Reporting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>Outil de Rapport</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="250"/>
         <source>&amp;Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Connexion au Serveur</translation>
     </message>
 </context>
 <context>
@@ -518,17 +522,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="164"/>
         <source>Freeseer Report Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer - Éditeur de Rapport</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="169"/>
         <source>Clear Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Vider la Base de Données</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="170"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous certain de vouloir vider la base de données?</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="177"/>
@@ -553,7 +557,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="181"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exporter vers CSV</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="182"/>
@@ -568,12 +572,12 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="189"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Retirer</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="190"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="191"/>
@@ -588,7 +592,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="194"/>
         <source>Speaker:</source>
-        <translation type="unfinished">Speaker:</translation>
+        <translation>Conférencier:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="195"/>
@@ -598,27 +602,27 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="196"/>
         <source>Level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="197"/>
         <source>Event:</source>
-        <translation>Conference:</translation>
+        <translation>Conférence:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="198"/>
         <source>Room:</source>
-        <translation>Chambre:</translation>
+        <translation>Salle:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="199"/>
         <source>Time:</source>
-        <translation>Temps:</translation>
+        <translation>Heure:</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="171"/>
         <source>Select File</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez un Fichier</translation>
     </message>
 </context>
 <context>
@@ -626,17 +630,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="174"/>
         <source>Freeseer Talk Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Freeseer - Éditeur de Conférence</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="179"/>
         <source>Clear Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Vider la Base de Données</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="180"/>
         <source>Are you sure you want to clear the DB?</source>
-        <translation type="unfinished"></translation>
+        <translation>Êtes-vous certain de vouloir vider la base de données?</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="186"/>
@@ -671,7 +675,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="198"/>
         <source>Add Talk</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter une Présentation</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="199"/>
@@ -681,17 +685,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="200"/>
         <source>Presenter</source>
-        <translation type="unfinished"></translation>
+        <translation>Conférencier</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="201"/>
         <source>Event</source>
-        <translation>Conference</translation>
+        <translation>Conférence</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="202"/>
         <source>Room</source>
-        <translation>Chambre</translation>
+        <translation>Salle</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
@@ -701,17 +705,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="204"/>
         <source>Time</source>
-        <translation>Temps</translation>
+        <translation>Heure</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="216"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="206"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="212"/>
@@ -721,17 +725,17 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="213"/>
         <source>Load talks from RSS</source>
-        <translation type="unfinished"></translation>
+        <translation>Charger les présentations depuis un fil RSS</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="217"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Retirer</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="218"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="219"/>
@@ -741,7 +745,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="190"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exporter vers CSV</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
@@ -751,7 +755,7 @@ du tout s’il y a des dommages à cause du programme.</translation>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="215"/>
         <source>Load talks from CSV</source>
-        <translation type="unfinished"></translation>
+        <translation>Charger les présentations depuis CSV</translation>
     </message>
 </context>
 <context>
