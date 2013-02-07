@@ -3,11 +3,11 @@ import os
 
 from setuptools import setup
 setup(name='freeseer',
-      version='2.5.3',
+      version='2.6',
       description='video recording and streaming tool',
       author='fosslc',
       author_email='fosslc@gmail.com',
-      url='http://wiki.github.com/fosslc/freeseer/',
+      url='http://wiki.github.com/Freeseer/freeseer/',
       long_description='Freeseer is a tool for capturing or streaming video.\n\n\
 It enables you to capture great presentations, demos, training material,\n\
 and other videos. It handles desktop screen-casting with ease.\n\n\
