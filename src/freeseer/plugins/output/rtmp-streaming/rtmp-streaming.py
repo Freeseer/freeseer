@@ -46,9 +46,12 @@ class RTMPOutput(IOutput):
     video_bitrate = 2400
     video_tune='none'
     audio_codec='lame'
-    
+    streaming_dest='custom'
+    streaming_key = ''
+
     TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
     AUDIO_CODEC_VALUES = ['lame', 'faac']
+    STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
     
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
@@ -162,21 +165,20 @@ class RTMPOutput(IOutput):
             self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
             self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
             self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
+            self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", self.audio_codec)
-    
-    def get_widget(self):
-        if self.widget is None:
-            self.widget = QtGui.QWidget()
-            self.widget.setWindowTitle("RTMP Streaming Options")
-            
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
+
+    def get_content_widget(self, streaming_dest):
+        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
+            self.custom_widget = QtGui.QWidget()
+            self.custom_widget_layout = QtGui.QFormLayout()
+            self.custom_widget.setLayout(self.custom_widget_layout)
             #
             # Stream URL
             #
@@ -185,7 +187,7 @@ class RTMPOutput(IOutput):
             
             self.label_stream_url = QtGui.QLabel("Stream URL")
             self.lineedit_stream_url = QtGui.QLineEdit()
-            layout.addRow(self.label_stream_url, self.lineedit_stream_url)
+            self.custom_widget_layout.addRow(self.label_stream_url, self.lineedit_stream_url)
 
             self.lineedit_stream_url.textEdited.connect(self.set_stream_url)
             
@@ -200,9 +202,9 @@ class RTMPOutput(IOutput):
             self.spinbox_audio_quality.setSingleStep(0.1)
             self.spinbox_audio_quality.setDecimals(1)
             self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
-            layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
+            self.custom_widget_layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
             
-            self.widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(double)'), self.set_audio_quality)
+            self.custom_widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(double)'), self.set_audio_quality)
 
             #
             # Audio Codec
@@ -211,9 +213,9 @@ class RTMPOutput(IOutput):
             self.label_audio_codec = QtGui.QLabel("Audio Codec")
             self.combobox_audio_codec = QtGui.QComboBox()
             self.combobox_audio_codec.addItems(self.AUDIO_CODEC_VALUES)
-            layout.addRow(self.label_audio_codec, self.combobox_audio_codec)
+            self.custom_widget_layout.addRow(self.label_audio_codec, self.combobox_audio_codec)
             
-            self.widget.connect(self.combobox_audio_codec, 
+            self.custom_widget.connect(self.combobox_audio_codec, 
                                 QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_audio_codec)
             
@@ -226,9 +228,9 @@ class RTMPOutput(IOutput):
             self.spinbox_video_quality.setMinimum(0)
             self.spinbox_video_quality.setMaximum(16777215)
             self.spinbox_video_quality.setValue(2400)           # Default value 2400
-            layout.addRow(self.label_video_quality, self.spinbox_video_quality)
+            self.custom_widget_layout.addRow(self.label_video_quality, self.spinbox_video_quality)
             
-            self.widget.connect(self.spinbox_video_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_video_bitrate)
+            self.custom_widget.connect(self.spinbox_video_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_video_bitrate)
             
             #
             # Video Tune
@@ -237,9 +239,9 @@ class RTMPOutput(IOutput):
             self.label_video_tune = QtGui.QLabel("Video Tune")
             self.combobox_video_tune = QtGui.QComboBox()
             self.combobox_video_tune.addItems(self.TUNE_VALUES)
-            layout.addRow(self.label_video_tune, self.combobox_video_tune)
+            self.custom_widget_layout.addRow(self.label_video_tune, self.combobox_video_tune)
             
-            self.widget.connect(self.combobox_video_tune, 
+            self.custom_widget.connect(self.combobox_video_tune, 
                                 QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_video_tune)
             
@@ -248,14 +250,80 @@ class RTMPOutput(IOutput):
             #
             
             self.label_note = QtGui.QLabel("*For RTMP streaming, all other outputs must be set to leaky")
-            layout.addRow(self.label_note)
+            self.custom_widget_layout.addRow(self.label_note)
 
+            self.content_widget = self.custom_widget
+            self.load_config_delegate = self.custom_widget_load_config
+
+        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
+            self.justin_widget = QtGui.QWidget()
+            self.justin_widget_layout = QtGui.QFormLayout()
+            self.justin_widget.setLayout(self.justin_widget_layout)
+
+            #
+            # justin.tv Streaming Key
+            #
+            
+            self.label_streaming_key = QtGui.QLabel("Streaming Key")
+            self.lineedit_streaming_key = QtGui.QLineEdit()
+            self.justin_widget_layout.addRow(self.label_streaming_key, self.lineedit_streaming_key)
+
+            self.lineedit_streaming_key.textEdited.connect(self.set_streaming_key)
+
+            #
+            # Note
+            #
+            
+            self.label_note = QtGui.QLabel("*See: http://www.justin.tv/broadcast/adv_other")
+            self.justin_widget_layout.addRow(self.label_note)
+
+            self.content_widget = self.justin_widget
+            self.load_config_delegate = self.justin_widget_load_config
+
+        return self.content_widget
+    
+    def get_widget(self):
+        if self.widget is None:
+            self.widget = QtGui.QWidget()
+            self.widget.setWindowTitle("RTMP Streaming Options")
+            
+            self.widget_layout = QtGui.QFormLayout()
+            self.widget.setLayout(self.widget_layout)
+
+            #
+            # Streaming presets
+            #
+
+            self.label_streaming_dest = QtGui.QLabel("Streaming Destination")
+            self.combobox_streaming_dest = QtGui.QComboBox()
+            self.combobox_streaming_dest.addItems(self.STREAMING_DESTINATION_VALUES)
+            self.widget_layout.addRow(self.label_streaming_dest, self.combobox_streaming_dest)
+            
+            self.widget.connect(self.combobox_streaming_dest,
+                                QtCore.SIGNAL('currentIndexChanged(const QString&)'),
+                                self.set_streaming_dest)
+
+            self.scroll_area = QtGui.QScrollArea()
+            self.scroll_area.setWidgetResizable(True)
+            #self.widget_layout.addWidget(self.scroll_area)
+            self.widget_layout.addRow(self.scroll_area)
+
+            self.get_content_widget(self.streaming_dest)
+            self.scroll_area.setWidget(self.get_content_widget(self.streaming_dest))
 
         return self.widget
 
+    def load_config_delegate(self):
+        pass
+
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+        self.load_config_delegate()
+
+    def justin_widget_load_config(self):
+        self.lineedit_streaming_key.setText(self.streaming_key)
+
+    def custom_widget_load_config(self):
         self.lineedit_stream_url.setText(self.url)
 
         self.spinbox_audio_quality.setValue(float(self.audio_quality))
@@ -287,6 +355,20 @@ class RTMPOutput(IOutput):
     def set_audio_codec(self, codec):
         self.audio_codec = codec
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", str(self.audio_codec))
+        self.plugman.save()
+
+    def set_streaming_dest(self, dest):
+        self.streaming_dest = dest
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", str(self.streaming_dest))
+        self.plugman.save()
+
+        self.scroll_area.setWidget(None)
+        self.scroll_area.setWidget(self.get_content_widget(self.streaming_dest))
+        self.load_config_delegate()
+
+    def set_streaming_key(self, text):
+        self.streaming_key = text
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
         self.plugman.save()
         
     def get_properties(self):
