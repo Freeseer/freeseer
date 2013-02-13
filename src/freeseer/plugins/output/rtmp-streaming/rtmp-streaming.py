@@ -52,6 +52,7 @@ class RTMPOutput(IOutput):
     TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
     AUDIO_CODEC_VALUES = ['lame', 'faac']
     STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
+    JUSTIN_URL = 'rtmp://live-3c.justin.tv/app/'
     
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
@@ -78,9 +79,14 @@ class RTMPOutput(IOutput):
         
         bin.add(muxer)
         
+        url = self.url
+        
+        if self.streaming_dest == STREAMING_DESTINATION_VALUES[1]:
+            url = self.JUSTIN_URL + self.streaming_key
+        
         # RTMP sink
         rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
-        rtmpsink.set_property('location', self.url)
+        rtmpsink.set_property('location', url)
         bin.add(rtmpsink)
         
         #
