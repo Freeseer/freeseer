@@ -166,6 +166,11 @@ class RTMPOutput(IOutput):
             self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
             self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
             self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key")
+            self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
+            if str(self.streaming_dest) in self.STREAMING_DESTINATION_VALUES:
+                index = min([i for i in range(len(self.STREAMING_DESTINATION_VALUES)) \
+                    if self.STREAMING_DESTINATION_VALUES[i] == self.streaming_dest])
+                self.combobox_streaming_dest.setCurrentIndex(index)
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
@@ -173,9 +178,10 @@ class RTMPOutput(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", self.audio_codec)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_key)
 
     def get_content_widget(self, streaming_dest):
-        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
+        if streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
             self.custom_widget = QtGui.QWidget()
             self.custom_widget_layout = QtGui.QFormLayout()
             self.custom_widget.setLayout(self.custom_widget_layout)
@@ -255,7 +261,7 @@ class RTMPOutput(IOutput):
             self.content_widget = self.custom_widget
             self.load_config_delegate = self.custom_widget_load_config
 
-        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
+        if streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
             self.justin_widget = QtGui.QWidget()
             self.justin_widget_layout = QtGui.QFormLayout()
             self.justin_widget.setLayout(self.justin_widget_layout)
@@ -297,6 +303,7 @@ class RTMPOutput(IOutput):
             self.label_streaming_dest = QtGui.QLabel("Streaming Destination")
             self.combobox_streaming_dest = QtGui.QComboBox()
             self.combobox_streaming_dest.addItems(self.STREAMING_DESTINATION_VALUES)
+            
             self.widget_layout.addRow(self.label_streaming_dest, self.combobox_streaming_dest)
             
             self.widget.connect(self.combobox_streaming_dest,
@@ -305,10 +312,8 @@ class RTMPOutput(IOutput):
 
             self.scroll_area = QtGui.QScrollArea()
             self.scroll_area.setWidgetResizable(True)
-            #self.widget_layout.addWidget(self.scroll_area)
             self.widget_layout.addRow(self.scroll_area)
-
-            self.get_content_widget(self.streaming_dest)
+            
             self.scroll_area.setWidget(self.get_content_widget(self.streaming_dest))
 
         return self.widget
