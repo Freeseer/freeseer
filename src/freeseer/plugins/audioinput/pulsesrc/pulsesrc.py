@@ -45,7 +45,7 @@ class PulseSrc(IAudioInput):
         
         audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
         audiosrc.set_property('device', self.source)
-        print('dev: ' + audiosrc.get_property('device')) #temp
+        logging.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
         bin.add(audiosrc)
         
         # Setup ghost pad
@@ -98,12 +98,10 @@ class PulseSrc(IAudioInput):
         sources = self.__get_sources()
         self.source_combobox.clear()
         self.widget.disconnect(self.source_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_source) #stop signals while populating
-        i = 0
-        for s in sources:
-            self.source_combobox.addItem(s[1], userData=s[0])
-            if self.source == s[0]:
+        for i, source in enumerate(sources):
+            self.source_combobox.addItem(source[1], userData=source[0])
+            if self.source == source[0]:
                 self.source_combobox.setCurrentIndex(i)
-            i += 1
         self.widget.connect(self.source_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_source)
         
 
