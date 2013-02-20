@@ -69,6 +69,10 @@ class RecordApp(QtGui.QMainWindow):
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
+        # Initialize current_event , current_room
+        self.current_event = None
+        self.current_room = None
+
         self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
         self.config = self.core.get_config()
 
@@ -424,13 +428,14 @@ class RecordApp(QtGui.QMainWindow):
             # Select next talk if there is one within 15 minutes.
             starttime = QtCore.QDateTime().currentDateTime()
             stoptime = starttime.addSecs(900)
-            talkid = self.core.db.get_talk_between_time(self.current_event, self.current_room, 
-                                                        starttime.toString(), stoptime.toString())
-            if talkid is not None:
-                for i in range(self.mainWidget.talkComboBox.count()):
-                    if talkid == self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString():
-                        self.mainWidget.talkComboBox.setCurrentIndex(i)
-            
+            if self.current_event is not None or self.current_room is not None:
+                talkid = self.core.db.get_talk_between_time(self.current_event, self.current_room,
+                                                            starttime.toString(), stoptime.toString())
+                if talkid is not None:
+                    for i in range(self.mainWidget.talkComboBox.count()):
+                        if talkid == self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString():
+                            self.mainWidget.talkComboBox.setCurrentIndex(i)
+
     def pause(self, state):
         if (state): # Pause Recording.
             self.core.pause()

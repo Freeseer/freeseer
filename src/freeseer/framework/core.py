@@ -82,7 +82,7 @@ class FreeseerCore:
         If a record name with a .None extension is returned, the record name
         will just be ignored by the output plugin (e.g. Video Preview plugin).
         """
-        
+        recordname = None
         if presentation:
             recordname = self.make_record_name(presentation)
                     
@@ -93,13 +93,15 @@ class FreeseerCore:
             while(self.duplicate_exists("%s.%s" % (tempname, extension))):
                 tempname = "{0}-{1}".format(recordname, self.make_id_from_string(count, "0123456789"))
                 count+=1
+            if(tempname == None):
+                recordname = "NONAME.%s" % (extension)
+            else:
+                recordname = "%s.%s" % (tempname, extension)
+            if extension is not None:
+                logging.debug('Set record name to %s', recordname)
 
-        recordname = "%s.%s" % (tempname, extension)
-                     
-        if extension is not None:
-            logging.debug('Set record name to %s', recordname)        
-        
-        return recordname
+            return recordname
+        return "NONAME.noname.%s" % (extension)
 
 
     def make_record_name(self, presentation):
@@ -341,13 +343,22 @@ class FreeseerCore:
         
         To be used for populating the current recording's file metadata.
         """
-        return { "title" : presentation.title,
-                 "artist" : presentation.speaker,
-                 "performer" : presentation.speaker,
-                 "album" : presentation.event,
-                 "location" : presentation.room,
-                 "date" : str(datetime.date.today()),
-                 "comment" : presentation.description }
+        if (presentation):
+            return {"title" : presentation.title,
+                    "artist" : presentation.speaker,
+                    "performer" : presentation.speaker,
+                    "album" : presentation.event,
+                    "location" : presentation.room,
+                    "date" : str(datetime.date.today()),
+                    "comment" : presentation.description }
+
+        return { "title" : "NODATA",
+                 "artist" : "NODATA",
+                 "performer" : "NODATA",
+                 "album" : "NODATA",
+                 "location" : "NODATA",
+                 "date" : "NODATA",
+                 "comment" : "NODATA" }
 
 
     def load_backend(self, presentation):
