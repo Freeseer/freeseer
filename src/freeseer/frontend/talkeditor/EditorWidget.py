@@ -66,7 +66,7 @@ class EditorWidget(QtGui.QWidget):
         
         self.rssLabel = QtGui.QLabel("URL")
         self.rssLineEdit = QtGui.QLineEdit()
-        if QtCore.PYQT_VERSION_STR != "4.7.3":
+        if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
             self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
         self.rssLabel.setBuddy(self.rssLineEdit)
         self.rssPushButton = QtGui.QPushButton("Load talks from RSS")
