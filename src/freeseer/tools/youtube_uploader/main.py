@@ -32,13 +32,6 @@ from PyQt4 import QtGui
 import os
 from scrapemark import scrape
 import shlex
-"""
-when executing src/freeseer/tools/youtube_uploader/youtube_upload.py 
-an error occurs
-  File "/home/higuchi/Projects/freeseer/test/freeseer/src/freeseer/tools/youtube_uploader/youtube_upload.py", line 33, in <module>
-    from lib.youtube_upload import youtube_upload
-"""
-sys.path.append('../../../')
 class UploaderMainApp(QtGui.QWidget):
     def __init__(self, core=None):
         super(UploaderMainApp,self).__init__()
