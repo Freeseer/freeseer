@@ -27,11 +27,18 @@ http://wiki.github.com/Freeseer/freeseer/
 import sys
 import glob
 from os.path import expanduser
-import youtube_upload as youtube
+from lib. youtube_upload import youtube_upload as youtube
 from PyQt4 import QtGui
 import os
 from scrapemark import scrape
-
+import shlex
+"""
+when executing src/freeseer/tools/youtube_uploader/youtube_upload.py 
+an error occurs
+  File "/home/higuchi/Projects/freeseer/test/freeseer/src/freeseer/tools/youtube_uploader/youtube_upload.py", line 33, in <module>
+    from lib.youtube_upload import youtube_upload
+"""
+sys.path.append('../../../')
 class UploaderMainApp(QtGui.QWidget):
     def __init__(self, core=None):
         super(UploaderMainApp,self).__init__()
@@ -172,13 +179,11 @@ class UploaderMainApp(QtGui.QWidget):
         path = str(self.path_edit.text())
         title = self.title_edit.text()
         category = self.combo.currentText()
-	#replace existing cli
-        cmd = 'youtube-upload --email='+str(email)+' --password='+str(passwd)+' --title='+str(title)+' --category='+str(category)+' '+path
-        print cmd
-        out = commands.getoutput(cmd)
-        print out
+        cmd = "--email="+str(email)+" --password="+str(passwd)+" --title="+str(title)+" --category="+str(category)+" "+str(path)
+        arg = shlex.split(cmd)
+        youtube.main_upload(arg)
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     main = UploaderMainApp()
-    main.show();
+    main.show()
     sys.exit(app.exec_())
