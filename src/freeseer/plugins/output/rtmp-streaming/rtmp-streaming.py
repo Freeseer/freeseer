@@ -83,10 +83,6 @@ class RTMPOutput(IOutput):
         url = self.url
         audio_codec = self.audio_codec
         
-        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
-            url = self.JUSTIN_URL + self.streaming_key
-            audio_codec = 'lame'
-        
         # RTMP sink
         rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
         rtmpsink.set_property('location', url)
@@ -283,6 +279,16 @@ class RTMPOutput(IOutput):
             self.label_note = QtGui.QLabel("*See: http://www.justin.tv/broadcast/adv_other")
             self.justin_widget_layout.addRow(self.label_note)
 
+            #
+            # Apply button, so as not to accidentally overwrite custom settings
+            #
+            
+            self.apply_button = QtGui.QPushButton("Apply")
+            self.apply_button.setToolTip("Overwrite custom settings for justin.tv")
+            self.justin_widget_layout.addRow(self.apply_button)
+
+            self.apply_button.clicked.connect(self.apply_justin_settings)
+
             self.content_widget = self.justin_widget
             self.load_config_delegate = self.justin_widget_load_config
 
@@ -384,6 +390,11 @@ class RTMPOutput(IOutput):
         self.streaming_key = text
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
         self.plugman.save()
+
+    def apply_justin_settings(self):
+        # here is where all the justin.tv streaming presets will be applied
+        self.set_stream_url(self.JUSTIN_URL + self.streaming_key)
+        self.set_audio_codec('lame')
         
     def get_properties(self):
         return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec', 'Streaming Destination']
