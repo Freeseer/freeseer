@@ -53,6 +53,7 @@ class RTMPOutput(IOutput):
     AUDIO_CODEC_VALUES = ['lame', 'faac']
     STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
     JUSTIN_URL = 'rtmp://live-3c.justin.tv/app/'
+
     
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
@@ -106,7 +107,7 @@ class RTMPOutput(IOutput):
             bin.add(audiolevel)
             
             audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
-            # audiocodec.set_property("quality", float(self.audio_quality))
+
             bin.add(audiocodec)
             
             # Setup ghost pads
@@ -180,6 +181,7 @@ class RTMPOutput(IOutput):
 
     def get_content_widget(self, streaming_dest):
         if streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
+
             self.custom_widget = QtGui.QWidget()
             self.custom_widget_layout = QtGui.QFormLayout()
             self.custom_widget.setLayout(self.custom_widget_layout)
@@ -368,6 +370,7 @@ class RTMPOutput(IOutput):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", str(self.streaming_dest))
         self.plugman.save()
 
+
         if str(self.streaming_dest) in self.STREAMING_DESTINATION_VALUES:
             index = min([i for i in range(len(self.STREAMING_DESTINATION_VALUES)) \
                 if self.STREAMING_DESTINATION_VALUES[i] == self.streaming_dest])
@@ -412,6 +415,7 @@ class RTMPOutput(IOutput):
             return self.set_audio_codec(value)
         elif property == "Streaming Destination":
             return self.set_streaming_dest(value)
+
         else:
             return "Error: There's no property with such name" 
 
