@@ -80,9 +80,11 @@ class RTMPOutput(IOutput):
         bin.add(muxer)
         
         url = self.url
+        audio_codec = self.audio_codec
         
-        if self.streaming_dest == STREAMING_DESTINATION_VALUES[1]:
+        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
             url = self.JUSTIN_URL + self.streaming_key
+            audio_codec = 'lame'
         
         # RTMP sink
         rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
@@ -103,7 +105,7 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-            audiocodec = gst.element_factory_make(self.audio_codec, "audiocodec")
+            audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
             # audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
             
@@ -173,10 +175,6 @@ class RTMPOutput(IOutput):
             self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
             self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key")
             self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
-            if str(self.streaming_dest) in self.STREAMING_DESTINATION_VALUES:
-                index = min([i for i in range(len(self.STREAMING_DESTINATION_VALUES)) \
-                    if self.STREAMING_DESTINATION_VALUES[i] == self.streaming_dest])
-                self.combobox_streaming_dest.setCurrentIndex(index)
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
@@ -373,6 +371,11 @@ class RTMPOutput(IOutput):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", str(self.streaming_dest))
         self.plugman.save()
 
+        if str(self.streaming_dest) in self.STREAMING_DESTINATION_VALUES:
+            index = min([i for i in range(len(self.STREAMING_DESTINATION_VALUES)) \
+                if self.STREAMING_DESTINATION_VALUES[i] == self.streaming_dest])
+            self.combobox_streaming_dest.setCurrentIndex(index)
+
         self.scroll_area.setWidget(None)
         self.scroll_area.setWidget(self.get_content_widget(self.streaming_dest))
         self.load_config_delegate()
@@ -383,7 +386,7 @@ class RTMPOutput(IOutput):
         self.plugman.save()
         
     def get_properties(self):
-        return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec']
+        return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec', 'Streaming Destination']
     
     def get_property_value(self, property):
         if property == "StreamURL":
@@ -410,6 +413,8 @@ class RTMPOutput(IOutput):
             return self.set_video_tune(value)
         elif property == "AudioCodec":
             return self.set_audio_codec(value)
+        elif property == "Streaming Destination":
+            return self.set_streaming_dest(value)
         else:
             return "Error: There's no property with such name" 
 
