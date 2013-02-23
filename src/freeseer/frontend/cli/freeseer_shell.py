@@ -352,13 +352,6 @@ class FreeseerShell(Cmd):
         print 'Freeseer is maintained by many voluntary contributors.\n' \
               'The project was started by Andrew Ross and Thanh Ha.\n'
         
-    def run(self):
-        try:
-            self.cmdloop()
-        except KeyboardInterrupt:
-            print
-            pass
-        
     def _disable_loggers(self):
         """ Disables all logging calls of severity INFO and below.
         
