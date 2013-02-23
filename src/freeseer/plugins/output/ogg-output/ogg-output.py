@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -194,12 +194,10 @@ class OggOutput(IOutput):
     def set_audio_quality(self):
         self.audio_quality = self.spinbox_audio_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
-        self.plugman.save()
         
     def set_video_bitrate(self):
         self.video_bitrate = self.spinbox_video_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
-        self.plugman.save()
         
     def get_properties(self):
         return ['AudioQuality', 'VideoBitrate']

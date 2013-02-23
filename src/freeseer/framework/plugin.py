@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -40,25 +40,24 @@ from PyQt4 import QtCore
 
 class PluginManager(QtCore.QObject):
     '''
-    @signal pluginActivated(plugin_name, plugin_category)
-    Emitted when a plugin is activated.
+    Plugin Manager for Freeseer
     
-    @signal pluginDectivated(plugin_name, plugin_category)
-    Emitted when a plugin is deactivated.
+    Provides the core functionality which enables plugin support in.
     '''
     
     def __init__(self, configdir):
         QtCore.QObject.__init__(self)
         
         self.firstrun = False
-        plugman = PluginManagerSingleton.get()
+        PluginManagerSingleton.setBehaviour([ConfigurablePluginManager])
+        self.plugmanc = PluginManagerSingleton.get()
         
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/plugin.conf" % self.configdir)
         
         self.config = ConfigParser.ConfigParser()
         self.load()
-        self.plugmanc = ConfigurablePluginManager(self.config, self, plugman)
+        self.plugmanc.setConfigParser(self.config, self.save)
         
         # Get the path where the installed plugins are located on systems where
         # freeseer is installed.
