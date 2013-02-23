@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -25,15 +25,17 @@
 import logging
 
 from cmd import Cmd
+from help import Help
 
 # TODO: Take a look at shlex.split() for tokenization of command arguments.
 
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
+
 from freeseer_record_parser import FreeseerRecordParser
 from freeseer_talk_parser import FreeseerTalkParser
 from freeseer_config_parser import FreeseerConfigParser
-from help import Help
+
 
 class FreeseerShell(Cmd):
     """Freeseer Shell provides an interface to the CLI frontend.
@@ -69,8 +71,14 @@ class FreeseerShell(Cmd):
         self.CONFIG_SET_MODES_EXTENDED = self.CONFIG_SET_MODES + self.PLUGIN_CATEGORIES
         self.CONFIG_SHOW_MODES_EXTENDED = self.CONFIG_SHOW_MODES + self.PLUGIN_CATEGORIES
         
-        self.HELP = 'Type "help" for more information.\n'
-        self.intro = '{} (v{}) - {}\n{}\n\nType "help" for more information.'.format(
+        self.intro = """{} (v{}) - {}\n{}
+        
+        Basic commands:
+            - record    # Initiates recording
+            - config    # Configures settings
+            - talk      # Configures the talk database
+        
+        Type "help <topic>" for more information.""".format(
             project_info.NAME, project_info.VERSION, project_info.DESCRIPTION,
             project_info.COPYRIGHT)
         self.prompt = '?- '
@@ -109,6 +117,10 @@ class FreeseerShell(Cmd):
     
     def default(self, line):
         print '{} is not a valid command.'.format(line)
+        
+    ###
+    ### Help Commands
+    ###
     
     def do_help(self, args):
         """Override the help command to handle cases of command arguments.
@@ -144,28 +156,8 @@ class FreeseerShell(Cmd):
 	    elif args == 'config set':
 		print Help.CONFIG_SET
             else:
-                print 'Unknown %s topic' % (args)     
-
-    def do_license(self, line): 
-        print 'Freeseer is licensed under the GNU GPL version 3.\n' \
-              'See https://raw.github.com/Freeseer/freeseer/master/src/LICENSE\n'
-
-    def do_credits(self, line): 
-        print 'Freeseer is maintained by many voluntary contributors.\n' \
-              'The project was started by Andrew Ross and Thanh Ha.\n'
- 
-    def do_record(self, line):
-        if line:
-            self.record_parser.analyse_command(line)
-        else:
-            print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
-    
-    def help_record(self):
-        print Help.RECORD_GENERAL_HELP
-
-    def help_config(self):
-	print Help.CONFIG_GENERAL_HELP
-
+                print 'Unknown %s topic' % (args)
+                
     def complete_help(self, text, line, start_index, end_index):
         if text:
           
@@ -199,16 +191,50 @@ class FreeseerShell(Cmd):
             elif line.split()[1]=="config":
                 return self.HELP_CONFIG_MODES
         elif len(line.split()) == 3 and line.split()[1]=="config" and line.split()[2]=="set":
-            return self.HELP_CONFIG_SET_MODES  
-    def do_talk(self, line):                     
+            return self.HELP_CONFIG_SET_MODES
+
+    ###
+    ### Record Tool Commands
+    ###
+
+    def do_record(self, line):
+        """
+        Record Tool
+        
+        Records a presentation with the respective id using the currently
+        configured settings.
+        
+        Usage: record <id>
+        """
+        if line:
+            self.record_parser.analyse_command(line)
+        else:
+            print 'Error: Please provide a valid talk ID.' # TODO: make error messages consistent
+    
+    ###
+    ### Talk Editor Commands
+    ###
+
+    def do_talk(self, line):
+        """
+        Talk Editor
+        
+        Provides functions to configure the talk database in Freeseer.
+        
+        The following commands are supported:
+            - show
+            - show events
+            - remove
+            - add
+            - update
+            
+        For detailed help on specific commands, type: help talk <topic>
+        """
         if line:
             self.talk_parser.analyse_command(line)
         else:
             print 'Error: please provide a valid entry. '    
 
-    def help_talk(self):
-        print Help.TALK_GENERAL_HELP
-        
     def complete_talk(self, text, line, start_index, end_index):  
         if text:     
             if len(line.split()) == 2:
@@ -227,14 +253,40 @@ class FreeseerShell(Cmd):
         elif len(line.split()) == 2 and (line.split()[1] == "show"):
             return self.TALK_SHOW_MODES
         
-    def do_config(self, line):        
+    ###
+    ### Config Tool Commands
+    ###
+        
+    def do_config(self, line):
+        """
+        Config Tool
+        
+        Provides options for configuring Freeseer.
+        
+        The following commands are supported:
+            - show <option>
+            - set <option>
+
+        For detailed instructions, type: help config <topic>
+        
+        >>> Command line plugin support <<<
+        Freeseer plugins can also be managed via config tool CLI. The general syntax
+        used to get current plugin's information is the following:
+            
+        > config show [<PLUGIN CATEGORY> [[<PLUGIN NAME>] [<PLUGIN PROPERTY>]]]
+        
+        NOTE: In case only plugin category is provided, all plugins matched on this
+        category are listed. In case category name and plugin name are provided, all plugin's
+        properties are listed. In case category, plugin name and property are provided, the
+        respective property from this plugin is listed side-by-side with its respective value.
+        The general syntax used to set plugin's values is the following:
+            
+        > config set <PLUGIN CATEGORY> <PLUGIN NAME> <PLUGIN PROPERTY> <PLUGIN VALUE>
+        """
         if line:
             self.config_parser.analyse_command(line) 
         else:
             print 'Error: please provide a valid entry.'
-     
-    def help_config(self):
-        print Help.CONFIG_GENERAL_HELP
 
     def complete_config(self, text, line, start_index, end_index):        
         if text:
@@ -281,6 +333,24 @@ class FreeseerShell(Cmd):
                 return self.CONFIG_SET_MODES_EXTENDED
             elif line.split()[1]=="show":
                 return self.CONFIG_SHOW_MODES_EXTENDED
+
+    ###
+    ### Misc Commands
+    ###
+           
+    def do_license(self, line):
+        """
+        Prints the license information
+        """
+        print 'Freeseer is licensed under the GNU GPL version 3.\n' \
+              'See https://raw.github.com/Freeseer/freeseer/master/src/LICENSE\n'
+
+    def do_credits(self, line):
+        """
+        Prints the credits
+        """
+        print 'Freeseer is maintained by many voluntary contributors.\n' \
+              'The project was started by Andrew Ross and Thanh Ha.\n'
         
     def run(self):
         try:
