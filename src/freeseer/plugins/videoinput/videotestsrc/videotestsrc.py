@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -116,12 +116,10 @@ class VideoTestSrc(IVideoInput):
     def set_live(self, checked):
         self.live = checked
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Live", self.live)
-        self.plugman.save()
         
     def set_pattern(self, pattern):
         self.pattern = pattern
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
-        self.plugman.save()
         
     def get_properties(self):
         return ['Live','Pattern']

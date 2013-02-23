@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -185,19 +185,15 @@ class OggIcecast(IOutput):
     def set_ip(self):
         ip = str(self.lineedit_ip.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", ip)
-        self.plugman.save()
         
     def set_port(self):
         port = str(self.lineedit_port.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", port)
-        self.plugman.save()
         
     def set_password(self):
         password = str(self.lineedit_password.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", password)
-        self.plugman.save()
         
     def set_mount(self):
         mount = str(self.lineedit_mount.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", mount)
-        self.plugman.save()
