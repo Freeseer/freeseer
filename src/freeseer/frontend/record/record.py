@@ -160,7 +160,7 @@ class RecordApp(FreeseerApp):
     ### Translation Related
     ###
     def retranslate(self):
-        self.clientWidget.retranslate()
+        self.clientWidget.retranslate(self.current_language)
         
         self.setWindowTitle(self.uiTranslator.translate("RecordApp", "Freeseer - portable presentation recording station"))
         #
