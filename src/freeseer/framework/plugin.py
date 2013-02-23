@@ -27,10 +27,6 @@ import logging
 import os
 import sys
 
-import pygst
-pygst.require("0.10")
-import gst
-
 import xml.etree.ElementTree as ET
 
 from yapsy.PluginManager import PluginManagerSingleton
