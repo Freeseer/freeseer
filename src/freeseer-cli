@@ -25,4 +25,9 @@
 from freeseer.frontend.cli.freeseer_shell import FreeseerShell
 
 if __name__ == "__main__":
-    shell = FreeseerShell().run()
+    import sys
+    if len(sys.argv) > 1:
+        FreeseerShell().onecmd(' '.join(sys.argv[1:]))
+    else:
+        FreeseerShell().cmdloop()
+
