@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_CN" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_CN" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -337,27 +338,27 @@
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="128"/>
         <source>&amp;File</source>
-        <translation type="unfinished">文件(&amp;F)</translation>
+        <translation>文件(&amp;F)</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="129"/>
         <source>&amp;Language</source>
-        <translation type="unfinished">语言(&amp;L)</translation>
+        <translation>语言(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="130"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">帮助(&amp;H)</translation>
+        <translation>帮助(&amp;H)</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="132"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished">退出(&amp;Q)</translation>
+        <translation>退出(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="133"/>
         <source>&amp;About</source>
-        <translation type="unfinished">关于(&amp;A)</translation>
+        <translation>关于(&amp;A)</translation>
     </message>
 </context>
 <context>

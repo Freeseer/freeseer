@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fr_FR" sourcelanguage="en_US">
+<!DOCTYPE TS>
+<TS version="2.0" language="fr_FR" sourcelanguage="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -317,27 +318,27 @@
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="128"/>
         <source>&amp;File</source>
-        <translation type="unfinished">&amp;Fichier</translation>
+        <translation>&amp;Fichier</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="129"/>
         <source>&amp;Language</source>
-        <translation type="unfinished">&amp;Langue</translation>
+        <translation>&amp;Langue</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="130"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">&amp;Aide</translation>
+        <translation>&amp;Aide</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="132"/>
         <source>&amp;Quit</source>
-        <translation type="unfinished">&amp;Quitter</translation>
+        <translation>&amp;Quitter</translation>
     </message>
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="133"/>
         <source>&amp;About</source>
-        <translation type="unfinished">À &amp;propos</translation>
+        <translation>À &amp;propos</translation>
     </message>
 </context>
 <context>
