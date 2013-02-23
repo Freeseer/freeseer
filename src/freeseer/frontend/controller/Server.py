@@ -30,7 +30,9 @@ from passlib.apps import custom_app_context as pwd_context
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtNetwork import QTcpServer, QHostAddress
 
+from freeseer.framework.config import Config
 from freeseer.framework.logger import Logger
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from ServerWidget import ControllerServerWidget
@@ -48,7 +50,7 @@ CLIENT_STATUS = ["Stopped",
                  "Paused",
                  "Idle"]
 
-class ServerApp(QtGui.QMainWindow):
+class ServerApp(FreeseerApp):
     
     STATUS = ["Offline",
               "Online"]
@@ -59,7 +61,7 @@ class ServerApp(QtGui.QMainWindow):
     ipAddress = None
     
     def __init__(self):
-        QtGui.QWidget.__init__(self)
+        FreeseerApp.__init__(self)
         self.resize(400, 300)
         
         icon = QtGui.QIcon()
@@ -95,59 +97,6 @@ class ServerApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.clientDisconnectButton, QtCore.SIGNAL('pressed()'), self.disconnectClients)
         self.connect(self.mainWidget.clientList, QtCore.SIGNAL('itemSelectionChanged()'), self.updateClientButtons)
     
-        #
-        # Translator
-        #
-        self.current_language = None
-        self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
-        self.langActionGroup = QtGui.QActionGroup(self)
-        self.langActionGroup.setExclusive(True)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
-        # --- Translator
-        
-        #
-        # Setup Menubar
-        #
-        self.menubar = QtGui.QMenuBar()
-        self.setMenuBar(self.menubar)
-        
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
-        self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
-        self.actionExit.setShortcut("Ctrl+Q")
-        self.actionExit.setObjectName(_fromUtf8("actionExit"))
-        self.actionExit.setIcon(exitIcon)
-        
-        self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
-        self.actionAbout.setIcon(icon)
-        
-        self.actionClient = QtGui.QAction(self)
-        self.actionClient.setIcon(icon)
-        # Actions
-        self.menuFile.addAction(self.actionExit)
-        self.menuHelp.addAction(self.actionAbout)
-        self.menuOptions.addAction(self.menuLanguage.menuAction())
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuOptions.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        
-        self.setupLanguageMenu()
-        # --- End Menubar
-        
         self.load_settings()
         self.updateStatus(self.status)
         
@@ -192,51 +141,18 @@ class ServerApp(QtGui.QMainWindow):
         self.mainWidget.clientDisconnectButton.setText(self.uiTranslator.translate("ControllerServerApp", "Disconnect"))
         # --- End Control Clients
         
-    def translate(self, action):
-        """Translates the GUI.
-
-        When a language is selected from the language menu, this function is
-        called and the language to be changed to is retrieved.
-        """
-        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
-        logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-        
-        self.retranslate()
-        
-    def setupLanguageMenu(self):
-        languages = QtCore.QDir(":/languages").entryList()
-        
-        if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
-            logging.debug("Detected user's locale as %s" % self.current_language)
-        
-        for language in languages:
-            translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.
-            translator.load(":/languages/%s" % language)
-            language_display_text = translator.translate("Translation", "Language Display Text")
-            
-            languageAction = QtGui.QAction(self)
-            languageAction.setCheckable(True)
-            languageAction.setText(language_display_text)
-            languageAction.setData(language)
-            self.menuLanguage.addAction(languageAction)
-            self.langActionGroup.addAction(languageAction)
-            
-            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
-                languageAction.setChecked(True)
-        
     ###
     ### Server Methods
     ###
     def load_settings(self): 
         logging.info('Loading settings...')
+        configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
+        self.config = Config(configdir)
         
         # Load default language.
         actions = self.menuLanguage.actions()
         for action in actions:
-            if action.data().toString() == self.default_language:
+            if action.data().toString() == self.config.default_language:
                 action.setChecked(True)
                 self.translate(action)
                 break

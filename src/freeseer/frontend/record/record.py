@@ -40,22 +40,16 @@ from freeseer.framework.failure import Failure
 from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
-from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
 __version__= project_info.VERSION
 
-class RecordApp(QtGui.QMainWindow):
+class RecordApp(FreeseerApp):
     """Freeseer's main GUI class."""
     def __init__(self):
-        QtGui.QMainWindow.__init__(self)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.setWindowIcon(icon)
+        FreeseerApp.__init__(self)
         self.resize(550, 450)
         
-        self.aboutDialog = AboutDialog()
-        self.aboutDialog.setModal(True)
         self.talks_to_save = []
         self.talks_to_delete = []
         
@@ -81,73 +75,29 @@ class RecordApp(QtGui.QMainWindow):
         self.timer.timeout.connect(self.update_timer)
         
         #
-        # Translator
-        #
-        self.current_language = None
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
-        self.langActionGroup = QtGui.QActionGroup(self)
-        self.langActionGroup.setExclusive(True)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
-        # --- Translator
-        
-        #
         # Setup Menubar
         #
-        self.menubar = QtGui.QMenuBar()
-        self.setMenuBar(self.menubar)
-        
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
-        self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        
         folderIcon = QtGui.QIcon.fromTheme("folder")
         self.actionOpenVideoFolder = QtGui.QAction(self)
         self.actionOpenVideoFolder.setShortcut("Ctrl+O")
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         self.actionOpenVideoFolder.setIcon(folderIcon)
-        
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
-        self.actionExit.setShortcut("Ctrl+Q")
-        self.actionExit.setObjectName(_fromUtf8("actionExit"))
-        self.actionExit.setIcon(exitIcon)
-        
-        self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
-        self.actionAbout.setIcon(icon)
-        
+
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
         
         self.actionClient = QtGui.QAction(self)
-        self.actionClient.setIcon(icon)
+        self.actionClient.setIcon(self.icon)
         # Actions
-        self.menuFile.addAction(self.actionOpenVideoFolder)
-        self.menuFile.addAction(self.actionClient)
-        self.menuFile.addAction(self.actionExit)
-        self.menuHelp.addAction(self.actionAbout)
+        self.menuFile.insertAction(self.actionExit, self.actionOpenVideoFolder)
+        self.menuFile.insertAction(self.actionExit, self.actionClient)
         self.menuHelp.addAction(self.actionReport)
-        self.menuOptions.addAction(self.menuLanguage.menuAction())
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuOptions.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        
-        self.setupLanguageMenu()
         # --- End Menubar
 
         #
         # Systray Setup
         #
-        self.systray = QtGui.QSystemTrayIcon(icon)
+        self.systray = QtGui.QSystemTrayIcon(self.icon)
         self.systray.show()
         self.systray.menu = QtGui.QMenu()
         self.systray.setContextMenu(self.systray.menu)
@@ -174,9 +124,7 @@ class RecordApp(QtGui.QMainWindow):
         self.connect(self.mainWidget.audioFeedbackCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_feedback)
 
         # Main Window Connections
-        self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
-        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        #self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
         
@@ -205,11 +153,15 @@ class RecordApp(QtGui.QMainWindow):
         # Setup spacebar key.
         self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
         self.mainWidget.recordPushButton.setFocus()
-
+        
+        self.retranslate()
+        
     ###
     ### Translation Related
     ###
     def retranslate(self):
+        self.clientWidget.retranslate()
+        
         self.setWindowTitle(self.uiTranslator.translate("RecordApp", "Freeseer - portable presentation recording station"))
         #
         # Reusable Strings
@@ -241,15 +193,8 @@ class RecordApp(QtGui.QMainWindow):
         #
         # Menubar
         #
-        self.menuFile.setTitle(self.uiTranslator.translate("RecordApp", "&File"))
-        self.menuOptions.setTitle(self.uiTranslator.translate("RecordApp", "&Options"))
-        self.menuLanguage.setTitle(self.uiTranslator.translate("RecordApp", "&Language"))
-        self.menuHelp.setTitle(self.uiTranslator.translate("RecordApp", "&Help"))
-        
         self.actionOpenVideoFolder.setText(self.uiTranslator.translate("RecordApp", "&Open Video Directory"))
         self.actionClient.setText(self.uiTranslator.translate("RecordApp", "&Connect to server"))
-        self.actionExit.setText(self.uiTranslator.translate("RecordApp", "&Quit"))
-        self.actionAbout.setText(self.uiTranslator.translate("RecordApp", "&About"))
         self.actionReport.setText(self.uiTranslator.translate("RecordApp", "&Report"))
         # --- End Menubar
         
@@ -304,44 +249,6 @@ class RecordApp(QtGui.QMainWindow):
             self.reportWidget.reportCombo.addItem(i)
         # --- End ReportWidget
         
-        self.aboutDialog.retranslate(self.current_language)
-        
-    def translate(self, action):
-        """Translates the GUI.
-
-        When a language is selected from the language menu, this function is
-        called and the language to be changed to is retrieved.
-        """
-        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
-        logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-        
-        self.retranslate()
-        self.clientWidget.retranslate()
-
-    def setupLanguageMenu(self):
-        languages = QtCore.QDir(":/languages").entryList()
-        
-        if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
-            logging.debug("Detected user's locale as %s" % self.current_language)
-        
-        for language in languages:
-            translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.
-            translator.load(":/languages/%s" % language)
-            language_display_text = translator.translate("Translation", "Language Display Text")
-            
-            languageAction = QtGui.QAction(self)
-            languageAction.setCheckable(True)
-            languageAction.setText(language_display_text)
-            languageAction.setData(language)
-            self.menuLanguage.addAction(languageAction)
-            self.langActionGroup.addAction(languageAction)
-            
-            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
-                languageAction.setChecked(True)
-            
     ###
     ### UI Logic
     ###    

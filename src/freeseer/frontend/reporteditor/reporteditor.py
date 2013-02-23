@@ -37,18 +37,19 @@ from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from ReportEditorWidget import ReportEditorWidget
 
 __version__ = project_info.VERSION
         
-class ReportEditorApp(QtGui.QMainWindow):
+class ReportEditorApp(FreeseerApp):
     '''
     Freeseer report editor main gui class
     '''
     def __init__(self, core=None):
-        QtGui.QMainWindow.__init__(self)
+        FreeseerApp.__init__(self)
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -78,56 +79,13 @@ class ReportEditorApp(QtGui.QMainWindow):
         self.config = self.core.get_config()
         
         #
-        # Translator
-        #
-        self.current_language = None
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
-        self.langActionGroup = QtGui.QActionGroup(self)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
-        # --- End Translator
-        
-        #
         # Setup Menubar
         #
-        self.menubar = QtGui.QMenuBar()
-        self.setMenuBar(self.menubar)
-        
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 884, 21))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
-        self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
-        self.actionExit.setShortcut("Ctrl+Q")
-        self.actionExit.setObjectName(_fromUtf8("actionExit"))
-        self.actionExit.setIcon(exitIcon)
-        
-        self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
-        self.actionAbout.setIcon(icon)
-        
         self.actionExportCsv = QtGui.QAction(self)
         self.actionExportCsv.setObjectName(_fromUtf8("actionExportCsv"))
         
         # Actions
-        self.menuFile.addAction(self.actionExportCsv)
-        self.menuFile.addAction(self.actionExit)
-        self.menuOptions.addAction(self.menuLanguage.menuAction())
-        self.menuHelp.addAction(self.actionAbout)
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuOptions.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        
-        self.setupLanguageMenu()
+        self.menuFile.insertAction(self.actionExit, self.actionExportCsv)
         # --- End Menubar
         
         #
@@ -172,18 +130,6 @@ class ReportEditorApp(QtGui.QMainWindow):
         # --- End Reusable Strings
         
         #
-        # Menubar
-        #
-        self.menuFile.setTitle(self.uiTranslator.translate("ReportEditorApp", "&File"))
-        self.menuOptions.setTitle(self.uiTranslator.translate("ReportEditorApp", "&Options"))
-        self.menuLanguage.setTitle(self.uiTranslator.translate("ReportEditorApp", "&Language"))
-        self.menuHelp.setTitle(self.uiTranslator.translate("ReportEditorApp", "&Help"))
-        self.actionExportCsv.setText(self.uiTranslator.translate("ReportEditorApp", "&Export to CSV"))
-        self.actionExit.setText(self.uiTranslator.translate("ReportEditorApp", "&Quit"))
-        self.actionAbout.setText(self.uiTranslator.translate("ReportEditorApp", "&About"))
-        # --- End Menubar
-        
-        #
         # EditorWidget
         #
         self.editorWidget.removeButton.setText(self.uiTranslator.translate("ReportEditorApp", "Remove"))
@@ -198,44 +144,7 @@ class ReportEditorApp(QtGui.QMainWindow):
         self.editorWidget.roomLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Room:"))
         self.editorWidget.timeLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Time:"))
         # --- End EditorWidget
-        
-        self.aboutDialog.retranslate(self.current_language)
     
-    def translate(self , action):
-        '''
-        When a language is selected from the language menu this function is called
-        The language to be changed to is retrieved
-        '''
-
-        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
-        logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-        
-        self.retranslate()
-    
-    def setupLanguageMenu(self):
-        languages = QtCore.QDir(":/languages").entryList()
-        
-        if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
-            logging.debug("Detected user's locale as %s" % self.current_language)
-        
-        for language in languages:
-            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
-            translator.load(":/languages/%s" % language)
-            language_display_text = translator.translate("Translation", "Language Display Text")
-            
-            languageAction = QtGui.QAction(self)
-            languageAction.setCheckable(True)
-            languageAction.setText(language_display_text)
-            languageAction.setData(language)
-            self.menuLanguage.addAction(languageAction)
-            self.langActionGroup.addAction(languageAction)
-            
-            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
-                languageAction.setChecked(True)
-        
     def load_failures_model(self):
         # Load Presentation Model
         self.failureModel = self.core.db.get_failures_model()
