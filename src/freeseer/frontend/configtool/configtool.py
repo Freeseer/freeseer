@@ -35,7 +35,6 @@ except AttributeError:
 
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
-from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 from freeseer.framework.plugin import IOutput

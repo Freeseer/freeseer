@@ -36,7 +36,6 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
-from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
@@ -65,7 +64,6 @@ class TalkEditorApp(FreeseerApp):
         self.editorWidget = EditorWidget()
         self.editorWidget.editor.setColumnHidden(5, True)
         self.addTalkWidget = AddTalkWidget()
-        self.aboutDialog = AboutDialog()
         
         self.mainLayout.addWidget(self.editorWidget)
         self.mainLayout.addWidget(self.addTalkWidget)
@@ -111,10 +109,6 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.editorWidget.csvPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_csv)
         self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
-        
-        # Main Window Connections
-        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
 
         # Load default language
         actions = self.menuLanguage.actions()
