@@ -1,5 +1,6 @@
 CODECFORTR = UTF-8
 SOURCES = ../AboutDialog.py \
+          ../../qtcommon/FreeseerApp.py \
           ../../record/record.py \
           ../../configtool/configtool.py \
           ../../reporteditor/reporteditor.py \

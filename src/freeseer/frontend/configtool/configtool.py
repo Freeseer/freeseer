@@ -36,6 +36,7 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 from freeseer.framework.plugin import IOutput
 
@@ -47,13 +48,13 @@ from LoggerWidget import LoggerWidget
 
 __version__ = project_info.VERSION
 
-class ConfigToolApp(QtGui.QMainWindow):
+class ConfigToolApp(FreeseerApp):
     '''
     ConfigTool is used to tune settings used by the Freeseer Application
     '''
 
     def __init__(self, core=None):
-        QtGui.QMainWindow.__init__(self)
+        FreeseerApp.__init__(self)
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -70,8 +71,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.mainWidget.rightPanelWidget.setLayout(self.mainWidgetLayout)
         
         # Load all ConfigTool Widgets
-        self.aboutDialog = AboutDialog()
-        self.aboutDialog.setModal(True)
         self.generalWidget = GeneralWidget()
         self.avWidget = AVWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
@@ -85,60 +84,26 @@ class ConfigToolApp(QtGui.QMainWindow):
         
         self.config = self.core.get_config()
         self.plugman = self.core.get_plugin_manager()
-        
-        #
-        # Translator
-        #
-        self.current_language = None
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
-        self.langActionGroup = QtGui.QActionGroup(self)
-        self.langActionGroup.setExclusive(True)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
-        # --- Translator
-        
-        #
-        # Setup Menubar
-        #
-        self.menubar = QtGui.QMenuBar()
-        self.setMenuBar(self.menubar)
-        
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 566, 26))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
-        self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
-        self.actionExit.setShortcut("Ctrl+Q")
-        self.actionExit.setObjectName(_fromUtf8("actionExit"))
-        self.actionExit.setIcon(exitIcon)
-        
-        self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
-        self.actionAbout.setIcon(icon)
-        
-        # Actions
-        self.menuFile.addAction(self.actionExit)
-        self.menuHelp.addAction(self.actionAbout)
-        self.menuOptions.addAction(self.menuLanguage.menuAction())
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuOptions.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        
-        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        
-        self.setupLanguageMenu()
-        # --- End Menubar
 
+        #
+        # --- Language Related
+        #
+        # Fill in the langauges combobox and load the default language
+        for language in self.languages:
+            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
+            translator.load(":/languages/%s" % language)
+            language_display_text = translator.translate("Translation", "Language Display Text")
+            self.generalWidget.languageComboBox.addItem(language_display_text, language)
+            
+        # Load default language.
+        actions = self.menuLanguage.actions()
+        for action in actions:
+            if action.data().toString() == self.config.default_language:
+                action.setChecked(True)
+                self.translate(action)
+                break
+        # --- End Language Related
+        
         # connections
         self.connect(self.mainWidget.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.mainWidget.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
@@ -215,17 +180,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.setWindowTitle(self.uiTranslator.translate("ConfigToolApp", "Freeseer ConfigTool"))
         
         #
-        # Menubar
-        #
-        self.menuFile.setTitle(self.uiTranslator.translate("ConfigToolApp", "&File"))
-        self.menuOptions.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Options"))
-        self.menuLanguage.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Language"))
-        self.menuHelp.setTitle(self.uiTranslator.translate("ConfigToolApp", "&Help"))
-        self.actionExit.setText(self.uiTranslator.translate("ConfigToolApp", "&Quit"))
-        self.actionAbout.setText(self.uiTranslator.translate("ConfigToolApp", "&About"))
-        # --- End Menubar
-        
-        #
         # ConfigToolWidget
         #
         self.generalString = self.uiTranslator.translate("ConfigToolApp", "General")
@@ -280,51 +234,6 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.loggerWidget.syslogLoggerGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Syslog Logger"))
         self.loggerWidget.syslogLoggerLevelLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Log Level"))
         # --- End LoggerWidget
-        
-        self.aboutDialog.retranslate(self.current_language)
-        
-    def translate(self, action):
-        '''
-        When a language is selected from the language menu this function is called
-        The language to be changed to is retrieved
-        '''
-        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
-        logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-        
-        self.retranslate()
-
-    def setupLanguageMenu(self):
-        languages = QtCore.QDir(":/languages").entryList()
-        
-        if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
-            logging.debug("Detected user's locale as %s" % self.current_language)
-        
-        for language in languages:
-            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
-            translator.load(":/languages/%s" % language)
-            language_display_text = translator.translate("Translation", "Language Display Text")
-            
-            languageAction = QtGui.QAction(self)
-            languageAction.setCheckable(True)
-            languageAction.setText(language_display_text)
-            languageAction.setData(language)
-            self.menuLanguage.addAction(languageAction)
-            self.langActionGroup.addAction(languageAction)
-            self.generalWidget.languageComboBox.addItem(language_display_text, language)
-            
-            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
-                languageAction.setChecked(True)
-                
-        # Load default language
-        actions = self.menuLanguage.actions()
-        for action in actions:
-            if action.data().toString() == self.config.default_language:
-                action.setChecked(True)
-                self.translate(action)
-                break
 
     ###
     ### General
