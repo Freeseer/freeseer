@@ -36,7 +36,6 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
-from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
@@ -63,7 +62,6 @@ class ReportEditorApp(FreeseerApp):
         
         self.editorWidget = ReportEditorWidget()
         self.editorWidget.editor.setColumnHidden(5, True)
-        self.aboutDialog = AboutDialog()
         
         self.mainLayout.addWidget(self.editorWidget)
         
@@ -98,8 +96,6 @@ class ReportEditorApp(FreeseerApp):
         self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         
         # Main Window Connections
-        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_reports_to_csv)
         self.connect(self.editorWidget.editor, QtCore.SIGNAL('clicked (const QModelIndex&)'), self.editorSelectionChanged)
 
