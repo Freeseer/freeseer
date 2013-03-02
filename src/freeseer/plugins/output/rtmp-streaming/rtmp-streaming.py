@@ -49,6 +49,8 @@ class RTMPOutput(IOutput):
     audio_codec='lame'
     streaming_dest='custom'
     streaming_key = ''
+    consumer_key = ''
+    consumer_secret = ''
 
     TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
     AUDIO_CODEC_VALUES = ['lame', 'faac']
@@ -172,6 +174,8 @@ class RTMPOutput(IOutput):
             self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
             self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
             self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key")
+            self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key")
+            self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret")
             self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
@@ -180,6 +184,8 @@ class RTMPOutput(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", self.audio_codec)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_key)
 
     def get_content_widget(self, streaming_dest):
@@ -286,6 +292,26 @@ class RTMPOutput(IOutput):
             self.justin_widget_layout.addRow(self.label_note)
 
             #
+            # Consumer key
+            #
+
+            self.label_consumer_key = QtGui.QLabel("Consumer Key (optional)")
+            self.lineedit_consumer_key = QtGui.QLineEdit()
+            self.justin_widget_layout.addRow(self.label_consumer_key, self.lineedit_consumer_key)
+
+            self.lineedit_consumer_key.textEdited.connect(self.set_consumer_key)
+
+            #
+            # Consumer key
+            #
+
+            self.label_consumer_secret = QtGui.QLabel("Consumer Secret (optional)")
+            self.lineedit_consumer_secret = QtGui.QLineEdit()
+            self.justin_widget_layout.addRow(self.label_consumer_secret, self.lineedit_consumer_secret)
+
+            self.lineedit_consumer_secret.textEdited.connect(self.set_consumer_secret)
+
+            #
             # Apply button, so as not to accidentally overwrite custom settings
             #
             
@@ -339,6 +365,8 @@ class RTMPOutput(IOutput):
 
     def justin_widget_load_config(self):
         self.lineedit_streaming_key.setText(self.streaming_key)
+        self.lineedit_consumer_key.setText(self.consumer_key)
+        self.lineedit_consumer_secret.setText(self.consumer_secret)
 
     def custom_widget_load_config(self):
         self.lineedit_stream_url.setText(self.url)
@@ -395,6 +423,16 @@ class RTMPOutput(IOutput):
     def set_streaming_key(self, text):
         self.streaming_key = text
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
+        self.plugman.save()
+
+    def set_consumer_key(self, text):
+        self.consumer_key = text
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
+        self.plugman.save()
+
+    def set_consumer_secret(self, text):
+        self.consumer_secret = text
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
         self.plugman.save()
 
     def apply_justin_settings(self):
