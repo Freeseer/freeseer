@@ -174,8 +174,8 @@ class RTMPOutput(IOutput):
             self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
             self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
             self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key")
-            self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key")
-            self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret")
+            self.consumer_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key")
+            self.consumer_secret = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret")
             self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
