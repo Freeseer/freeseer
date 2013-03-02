@@ -38,23 +38,7 @@ from freeseer.framework.plugin import IVideoInput
 class USBSrc(IVideoInput):
     name = "USB Source"
     os = ["linux", "linux2", "win32", "cygwin"]
-    device = "/dev/video0"
-    device_list = []
-    
-    def __init__(self):
-        IVideoInput.__init__(self)
-        
-        #
-        # Detect available devices
-        #
-        i = 0
-        path = "/dev/video"
-        devpath = path + str(i)
-        
-        while os.path.exists(devpath):
-            self.device_list.append(devpath)
-            i=i+1
-            devpath=path + str(i)
+    device = None
     
     def get_videoinput_bin(self):
         """
@@ -65,9 +49,10 @@ class USBSrc(IVideoInput):
         videosrc = None
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.set_property("device", self.device)
+            videosrc.set_property("device-name", self.device)
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
+            videosrc.set_property("device-name", self.device)
         bin.add(videosrc)
         
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
@@ -113,11 +98,30 @@ class USBSrc(IVideoInput):
         # Load the combobox with inputs
         self.combobox.clear()
         n = 0
-        for i in self.device_list:
-            self.combobox.addItem(i)
-            if i == self.device:
+        for device in self.get_devices():
+            self.combobox.addItem(device)
+            if device == self.device:
                 self.combobox.setCurrentIndex(n)
-            n = n +1
+            n = n + 1
             
+    def get_devices(self):
+        """
+        Returns a list of possible devices detected
+        
+        NOTE: GstPropertyProbe has been removed in later versions of Gstreamer
+              When a new method is available this function will need to be
+              redesigned:
+                  https://bugzilla.gnome.org/show_bug.cgi?id=678402
+        """
+        if sys.platform.startswith("linux"):
+            videosrc = gst.element_factory_make("v4l2src", "videosrc")
+            videosrc.probe_property_name('device-name')
+            return videosrc.probe_get_values_name('device')
+        elif sys.platform in ["win32", "cygwin"]:
+            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
+            videosrc.probe_property_name('device-name')
+            return videosrc.probe_get_values_name('device-name')
+        return None
+    
     def set_device(self, device):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
