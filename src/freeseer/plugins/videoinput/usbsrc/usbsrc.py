@@ -25,6 +25,7 @@ http://wiki.github.com/Freeseer/freeseer/
 
 import ConfigParser
 import os
+import sys
 
 import pygst
 pygst.require("0.10")
@@ -36,7 +37,7 @@ from freeseer.framework.plugin import IVideoInput
 
 class USBSrc(IVideoInput):
     name = "USB Source"
-    os = ["linux", "linux2"]
+    os = ["linux", "linux2", "win32", "cygwin"]
     device = "/dev/video0"
     device_list = []
     
@@ -61,12 +62,20 @@ class USBSrc(IVideoInput):
         """
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
-        videosrc = gst.element_factory_make("v4l2src", "videosrc")
-        videosrc.set_property("device", self.device)
+        videosrc = None
+        if sys.platform.startswith("linux"):
+            videosrc = gst.element_factory_make("v4l2src", "videosrc")
+            videosrc.set_property("device", self.device)
+        elif sys.platform in ["win32", "cygwin"]:
+            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
         bin.add(videosrc)
         
+        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
+        bin.add(colorspace)
+        videosrc.link(colorspace)
+        
         # Setup ghost pad
-        pad = videosrc.get_pad("src")
+        pad = colorspace.get_pad("src")
         ghostpad = gst.GhostPad("videosrc", pad)
         bin.add_pad(ghostpad)
         
