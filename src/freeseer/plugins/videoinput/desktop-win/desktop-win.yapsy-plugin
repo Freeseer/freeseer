@@ -1,9 +1,0 @@
-[Core]
-Name = Desktop-Windows Source
-Module = desktop-win
-
-[Documentation]
-Author = Thanh Ha
-Version = 0.2
-Website = http://fosslc.org
-Description = Source for recording your desktop on Windows.
