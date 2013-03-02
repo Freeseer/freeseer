@@ -28,6 +28,7 @@ import ConfigParser
 import pygst
 pygst.require("0.10")
 import gst
+import logging
 
 from PyQt4 import QtGui, QtCore
 
@@ -102,8 +103,15 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-            audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
 
+            
+            audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
+            
+            if 'quality' in audiocodec.get_property_names():
+                audiocodec.set_property("quality", int(self.audio_quality))
+            else:
+                logging.debug("WARNING: Missing property: 'quality' on audiocodec; available: " + \
+                    ','.join(audiocodec.get_property_names()))
             bin.add(audiocodec)
             
             # Setup ghost pads
@@ -138,7 +146,6 @@ class RTMPOutput(IOutput):
         # Link muxer to rtmpsink
         #
         gst.element_link_many(muxer, rtmpsink)
-        print "BIN!!"
         return bin
     
     def set_metadata(self, data):
@@ -198,15 +205,14 @@ class RTMPOutput(IOutput):
             #
             
             self.label_audio_quality = QtGui.QLabel("Audio Quality")
-            self.spinbox_audio_quality = QtGui.QDoubleSpinBox()
-            self.spinbox_audio_quality.setMinimum(0.0)
-            self.spinbox_audio_quality.setMaximum(1.0)
-            self.spinbox_audio_quality.setSingleStep(0.1)
-            self.spinbox_audio_quality.setDecimals(1)
-            self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
+            self.spinbox_audio_quality = QtGui.QSpinBox()
+            self.spinbox_audio_quality.setMinimum(0)
+            self.spinbox_audio_quality.setMaximum(9)
+            self.spinbox_audio_quality.setSingleStep(1)
+            self.spinbox_audio_quality.setValue(5)
             self.custom_widget_layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
             
-            self.custom_widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(double)'), self.set_audio_quality)
+            self.custom_widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_audio_quality)
 
             #
             # Audio Codec
