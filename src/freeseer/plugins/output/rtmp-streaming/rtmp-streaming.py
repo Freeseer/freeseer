@@ -276,7 +276,7 @@ class RTMPOutput(IOutput):
             # Note
             #
             
-            self.label_note = QtGui.QLabel("*See: http://www.justin.tv/broadcast/adv_other\nYou must be logged in obtain your Streaming Key")
+            self.label_note = QtGui.QLabel("*See: http://www.justin.tv/broadcast/adv_other\nYou must be logged in to obtain your Streaming Key")
             self.justin_widget_layout.addRow(self.label_note)
 
             #
