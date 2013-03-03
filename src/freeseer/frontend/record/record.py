@@ -37,6 +37,7 @@ except AttributeError:
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 from freeseer.framework.failure import Failure
+from freeseer.framework.util import get_free_space
 from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
@@ -368,7 +369,8 @@ class RecordApp(FreeseerApp):
             self.time_seconds = 0
             self.time_minutes += 1
             
-        self.mainWidget.statusLabel.setText("Elapsed Time: " + time)
+        self.mainWidget.statusLabel.setText("Free Space: %s --- Elapsed Time: %s" % 
+                        (get_free_space(self.config.videodir), time))
         
     def reset_timer(self):
         """Resets the Elapsed Time."""
