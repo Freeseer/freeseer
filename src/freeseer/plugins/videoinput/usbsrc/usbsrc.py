@@ -49,7 +49,7 @@ class USBSrc(IVideoInput):
         videosrc = None
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.set_property("device-name", self.device)
+            videosrc.set_property("device", self.device)
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
             videosrc.set_property("device-name", self.device)
@@ -115,7 +115,7 @@ class USBSrc(IVideoInput):
         """
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.probe_property_name('device-name')
+            videosrc.probe_property_name('device')
             return videosrc.probe_get_values_name('device')
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
