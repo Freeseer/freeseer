@@ -29,5 +29,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         FreeseerShell().onecmd(' '.join(sys.argv[1:]))
     else:
-        FreeseerShell().cmdloop()
-
+        try:
+            FreeseerShell().cmdloop()
+        except KeyboardInterrupt:
+            # Cleanly terminate on CTRL+C.
+            print
+            pass
