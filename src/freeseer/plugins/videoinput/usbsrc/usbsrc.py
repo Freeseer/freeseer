@@ -87,7 +87,7 @@ class USBSrc(IVideoInput):
             
             # Connections
             self.widget.connect(self.combobox, 
-                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                QtCore.SIGNAL('currentIndexChanged(int)'), 
                                 self.set_device)
             
         return self.widget
@@ -98,30 +98,48 @@ class USBSrc(IVideoInput):
         # Load the combobox with inputs
         self.combobox.clear()
         n = 0
-        for device in self.get_devices():
-            self.combobox.addItem(device)
+        for device, devurl in self.get_devices().items():
+            self.combobox.addItem(device, devurl)
             if device == self.device:
                 self.combobox.setCurrentIndex(n)
             n = n + 1
             
     def get_devices(self):
         """
-        Returns a list of possible devices detected
+        Returns a list of possible devices detected as a dictionary
+        
+        On Linux the dictionary is a key, value pair of:
+            Device Name : Device Path
+            
+        On Windows the dictionary is a key, value pair of:
+            Device Name : Device Name
         
         NOTE: GstPropertyProbe has been removed in later versions of Gstreamer
               When a new method is available this function will need to be
               redesigned:
                   https://bugzilla.gnome.org/show_bug.cgi?id=678402
         """
+        
+        devicemap = {}
+        
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("v4l2src", "videosrc")
             videosrc.probe_property_name('device')
-            return videosrc.probe_get_values_name('device')
+            devices = videosrc.probe_get_values_name('device')            
+            
+            for device in devices:
+                videosrc.set_property('device', device)
+                devicemap[videosrc.get_property('device-name')] = device
+            
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
-            videosrc.probe_property_name('device-name')
-            return videosrc.probe_get_values_name('device-name')
-        return None
+            devices = videosrc.probe_property_name('device-name')
+            
+            for device in devices:
+                devicemap[device] = device
+                
+        return devicemap
     
     def set_device(self, device):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
+        devname = self.combobox.itemData(device).toString()
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", devname)
