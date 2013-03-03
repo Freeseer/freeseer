@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -23,35 +23,31 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import argparse
-
-import sys,os
-import re
 import getpass
+import os
+import re
+import sys
 
-from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 
 class FreeseerConfigParser(argparse.ArgumentParser):
-    def __init__(self, core):
+    def __init__(self, config, db, plugman):
         argparse.ArgumentParser.__init__(self)
         
-        self.core = core 
-        self.plugman = self.core.get_plugin_manager()
-        self.db_connector = self.core.db 
-        self.config = self.core.config 
+        self.config = config
+        self.db = db
+        self.plugman = plugman 
         self.plugins = self._get_plugins()
         
-        self.RESOLUTION_LIST = self._get_resolution_list(self.core.config.resmap)
-        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer")]
-        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer")]
-        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("VideoInput")]
-        self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("AudioInput")]
-        self.OUTPUT_PLUGINS = [plugin.name for plugin in self.plugman.plugmanc.getPluginsOfCategory("Output")]
-        
+        self.RESOLUTION_LIST = self._get_resolution_list(self.config.resmap)
+        self.VIDEO_MIXERS = [plugin.name for plugin in self.plugman.get_videomixer_plugins()]
+        self.AUDIO_MIXERS = [plugin.name for plugin in self.plugman.get_audiomixer_plugins()]
+        self.VIDEO_INPUTS = [plugin.name for plugin in self.plugman.get_videoinput_plugins()]
+        self.AUDIO_INPUTS = [plugin.name for plugin in self.plugman.get_audioinput_plugins()]
+        self.OUTPUT_PLUGINS = [plugin.name for plugin in self.plugman.get_output_plugins()]
         
         self.add_argument('mode',nargs = '+', metavar='talk mode')
 
-    
     def analyse_command(self, command):  
         '''
         Analyses the command typed by the user
@@ -80,11 +76,11 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 args = mode.split(" ")                
                 try:     
                     if(len(args) == 2):
-                            for plugin in self.plugman.plugmanc.getPluginsOfCategory(args[1]):
+                            for plugin in self.plugman.get_plugins_of_category(args[1]):
                                 print plugin.name.replace(" ","")
                             return               
                     plugin_name = self.get_plugin_name(args[2])
-                    plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
+                    plugin = self.plugman.get_plugin_by_name(plugin_name, category=args[1])
                     if plugin:
                         plugin.plugin_object.load_config(self.plugman)
                         if(len(args) == 3):                
@@ -180,7 +176,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
                 try:
                     args = mode.split(" ")
                     plugin_name = self.get_plugin_name(args[2])
-                    plugin = self.plugman.plugmanc.getPluginByName(plugin_name, category=args[1])
+                    plugin = self.plugman.get_plugin_by_name(plugin_name, category=args[1])
                     if plugin:
                         plugin.plugin_object.load_config(self.plugman)
                         if(len(args) == 5):
@@ -202,7 +198,6 @@ class FreeseerConfigParser(argparse.ArgumentParser):
     def show_all_video_configs(self):
         self._show_video_configs()
             
-        
     def set_video_mixer(self, index):
         try:
             video_mixer_selected = self.VIDEO_MIXERS[index-1]
@@ -335,12 +330,12 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         print "Current Video Mixer: " + self.config.videomixer
         print "Available Video Mixers Plugins: "
         count = 1
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+        for video_mixer in self.plugman.get_videomixer_plugins():
             print "%d - %s" % (count, video_mixer.name)
             count += 1
         count = 1    
         print "Available Video Input Plugins: "
-        for video_input in self.plugman.plugmanc.getPluginsOfCategory("VideoInput"):
+        for video_input in self.plugman.get_videoinput_plugins():
             print "%d - %s" % (count, video_input.name)  
             count += 1      
         print "Current Video Resolution " + self.config.resolution
@@ -349,19 +344,19 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         print "Video preview enabled: Yes" if self.config.video_preview else "Video preview enabled: No"
         
     def _show_audio_config(self):
-        print " ###################### Audio Settings ############################"        
+        print " ###################### Audio Settings ############################"
         print "Audio recording enabled: Yes" if self.config.enable_audio_recording else "Audio recording enabled: No"
         print "Available Audio Mixers: " 
         count = 1       
-        for audio_mixer in self.plugman.plugmanc.getPluginsOfCategory("AudioMixer"):
+        for audio_mixer in self.plugman.get_audiomixer_plugins():
             print "%d - %s" % (count, audio_mixer.name)  
             count += 1
         print "Current Audio Mixer: " + self.config.audiomixer
-        print "Audio feedback enabled: Yes" if self.config.audio_feedback else "Audio feedback enabled: No"        
+        print "Audio feedback enabled: Yes" if self.config.audio_feedback else "Audio feedback enabled: No"
         
-    def _show_output_configs(self):           
-        print " ###################### Output Settings ############################"      
-        print "Video Directory: " + self.config.videodir   
+    def _show_output_configs(self):
+        print " ###################### Output Settings ############################"
+        print "Video Directory: " + self.config.videodir
         print "Recording to File: Yes" if self.config.record_to_file else "Recording to File: No" 
         if self.config.record_to_file:
             print "Current record to file plugin: " + self.config.record_to_file_plugin
@@ -378,7 +373,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
              
     def _show_video_mixers(self):
         count = 1
-        for video_mixer in self.plugman.plugmanc.getPluginsOfCategory("VideoMixer"):
+        for video_mixer in self.plugman.get_videomixer_plugins():
             print "%d - %s" % (count, video_mixer.name)
             count += 1
         
@@ -398,7 +393,7 @@ class FreeseerConfigParser(argparse.ArgumentParser):
         return list
     
     def _get_plugins(self):
-        plugins = self.plugman.plugmanc.getAllPlugins()
+        plugins = self.plugman.get_all_plugins()
         plugins_data = []
         
         for plugin in plugins:

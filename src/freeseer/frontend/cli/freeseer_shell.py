@@ -28,30 +28,34 @@ from cmd import Cmd
 from help import Help
 
 from freeseer import project_info
-from freeseer.framework.core import FreeseerCore
+from freeseer import settings
+from freeseer.framework.config import Config
+from freeseer.framework.database import QtDBConnector
+from freeseer.framework.multimedia import Gstreamer
+from freeseer.framework.plugin import PluginManager
 
 from freeseer_record_parser import FreeseerRecordParser
 from freeseer_talk_parser import FreeseerTalkParser
 from freeseer_config_parser import FreeseerConfigParser
-
 
 class FreeseerShell(Cmd):
     """Freeseer Shell provides an interface to the CLI frontend.
 
     Note that help methods take precedence to method's doc strings.
     """
-    def __init__(self):        
-        Cmd.__init__(self)  
+    def __init__(self):
+        Cmd.__init__(self)
         
-        self._disable_loggers()       
-        self.core = FreeseerCore(self)  
-        self.plugman = self.core.get_plugin_manager()
-        self.db_connector = self.core.db  
+        self._disable_loggers()
+        self.config = Config(settings.configdir)
+        self.db = QtDBConnector(settings.configdir)
+        self.plugman = PluginManager(settings.configdir)
+        self.media = Gstreamer(self.config, self.plugman)
         
         # Parsers
-        self.config_parser = FreeseerConfigParser(self.core)
-        self.record_parser = FreeseerRecordParser(self.core)
-        self.talk_parser = FreeseerTalkParser(self.core)
+        self.config_parser = FreeseerConfigParser(self.config, self.db, self.plugman)
+        self.record_parser = FreeseerRecordParser(self.config, self.db, self.media)
+        self.talk_parser = FreeseerTalkParser(self.config, self.db)
         
         # Auto-complete modes
         self.TALK_MODES = ['show','remove','add','update']

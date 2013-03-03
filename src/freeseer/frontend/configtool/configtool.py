@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -34,10 +34,12 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-from freeseer.framework.core import FreeseerCore
+from freeseer import settings
+from freeseer.framework.config import Config
+from freeseer.framework.logger import Logger
+from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
-from freeseer.framework.plugin import IOutput
 
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
@@ -75,14 +77,9 @@ class ConfigToolApp(FreeseerApp):
         self.pluginloaderWidget = PluginLoaderWidget()
         self.loggerWidget = LoggerWidget()
         
-        # Only instantiate a new Core if we need to
-        if core is None:
-            self.core = FreeseerCore()
-        else:
-            self.core = core
-        
-        self.config = self.core.get_config()
-        self.plugman = self.core.get_plugin_manager()
+        self.config = Config(settings.configdir)
+        self.logger = Logger(settings.configdir)
+        self.plugman = PluginManager(settings.configdir)
 
         #
         # --- Language Related
@@ -556,7 +553,7 @@ class ConfigToolApp(FreeseerApp):
         
         # Get the config details
         config = ConfigParser.ConfigParser()
-        config.readfp(open(self.core.logger.logconf))
+        config.readfp(open(self.logger.logconf))
         handlers = config.get('logger_root', 'handlers')
         handler_list = handlers.split(',')
         
@@ -609,21 +606,21 @@ class ConfigToolApp(FreeseerApp):
     
     def toggle_console_logger(self, state):
         if self.loggerWidget.consoleLoggerGroupBox.isChecked():
-            self.core.logger.set_console_logger(True)
+            self.logger.set_console_logger(True)
         else:
-            self.core.logger.set_console_logger(False)
+            self.logger.set_console_logger(False)
     
     def change_console_loglevel(self, level):
-        self.core.logger.set_console_loglevel(level)
+        self.logger.set_console_loglevel(level)
             
     def toggle_syslog_logger(self, state):
         if self.loggerWidget.syslogLoggerGroupBox.isChecked():
-            self.core.logger.set_syslog_logger(True)
+            self.logger.set_syslog_logger(True)
         else:
-            self.core.logger.set_syslog_logger(False)
+            self.logger.set_syslog_logger(False)
     
     def change_syslog_loglevel(self, level):
-        self.core.logger.set_syslog_loglevel(level)
+        self.logger.set_syslog_loglevel(level)
 
     # Override
     

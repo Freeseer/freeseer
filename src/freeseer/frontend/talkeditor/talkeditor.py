@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,9 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-from freeseer.framework.core import FreeseerCore
+from freeseer import settings
+from freeseer.framework.config import Config
+from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -70,14 +72,9 @@ class TalkEditorApp(FreeseerApp):
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
-
-        # Only instantiate a new Core if we need to
-        if core is not None:
-            self.core = core
-        else:
-            self.core = FreeseerCore(self)
             
-        self.config = self.core.get_config()
+        self.config = Config(settings.configdir)
+        self.db = QtDBConnector(settings.configdir)
         
         #
         # Setup Menubar
@@ -133,6 +130,12 @@ class TalkEditorApp(FreeseerApp):
         # --- End Reusable Strings
         
         #
+        # Menubar
+        #
+        self.actionExportCsv.setText(self.uiTranslator.translate("TalkEditorApp", "&Export to CSV"))
+        # --- End Menubar
+        
+        #
         # AddTalkWidget
         #
         self.addTalkWidget.addTalkGroupBox.setTitle(self.uiTranslator.translate("TalkEditorApp", "Add Talk"))
@@ -161,7 +164,7 @@ class TalkEditorApp(FreeseerApp):
     
     def load_presentations_model(self):
         # Load Presentation Model
-        self.presentationModel = self.core.db.get_presentations_model()
+        self.presentationModel = self.db.get_presentations_model()
         self.editorWidget.editor.setModel(self.presentationModel)
     
     def show_add_talk_widget(self):
@@ -187,7 +190,7 @@ class TalkEditorApp(FreeseerApp):
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
 
-        self.core.db.insert_presentation(presentation)
+        self.db.insert_presentation(presentation)
 
         # cleanup
         self.addTalkWidget.titleLineEdit.clear()
@@ -207,7 +210,7 @@ class TalkEditorApp(FreeseerApp):
         self.presentationModel.select()
         
     def reset(self):
-        self.core.db.clear_database()
+        self.db.clear_database()
         self.presentationModel.select()
         
     def confirm_reset(self):
@@ -229,7 +232,7 @@ class TalkEditorApp(FreeseerApp):
             
     def add_talks_from_rss(self):
         rss_url = unicode(self.editorWidget.rssLineEdit.text())
-        self.core.add_talks_from_rss(rss_url)
+        self.db.add_talks_from_rss(rss_url)
         self.presentationModel.select()
 
     def closeEvent(self, event):
@@ -239,8 +242,7 @@ class TalkEditorApp(FreeseerApp):
     
     def csv_file_select(self):
         dirpath = str(self.editorWidget.csvLineEdit.text())
-        fname = QtGui.QFileDialog.getOpenFileName(self,'Select file',
-                                dirpath[0:dirpath.rfind(os.path.sep)])
+        fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.editorWidget.csvLineEdit.setText(fname)    
     
@@ -248,15 +250,14 @@ class TalkEditorApp(FreeseerApp):
         fname = self.editorWidget.csvLineEdit.text()
         
         if fname:
-            self.core.add_talks_from_csv(fname)
+            self.db.add_talks_from_csv(fname)
             self.presentationModel.select()
     
     def export_talks_to_csv(self):
         dirpath = str(self.editorWidget.csvLineEdit.text())
-        fname = QtGui.QFileDialog.getSaveFileName(self,'Select file',
-                                dirpath[0:dirpath.rfind(os.path.sep)])
+        fname = QtGui.QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
-            self.core.export_talks_to_csv(fname)
+            self.db.export_talks_to_csv(fname)
 
 if __name__ == "__main__":
     import sys

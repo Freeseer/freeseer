@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -35,13 +35,18 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-from freeseer.framework.core import FreeseerCore
+from freeseer import settings
+from freeseer.framework.config import Config
+from freeseer.framework.database import QtDBConnector
+from freeseer.framework.logger import Logger
+from freeseer.framework.multimedia import Gstreamer
+from freeseer.framework.plugin import PluginManager
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
-from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
 __version__= project_info.VERSION
 
@@ -64,11 +69,14 @@ class RecordApp(FreeseerApp):
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
-        self.core = FreeseerCore(self.mainWidget.previewWidget.winId(), self.audio_feedback)
-        self.config = self.core.get_config()
+        self.config = Config(settings.configdir)
+        self.db = QtDBConnector(settings.configdir)
+        self.logger = Logger(settings.configdir)
+        self.plugman = PluginManager(settings.configdir)
+        self.media = Gstreamer(self.config, self.plugman, self.mainWidget.previewWidget.winId(), self.audio_feedback)
 
         # ClientDialog needs to be loaded after core to get the config directory        
-        self.clientWidget = ClientDialog(self.config.configdir, self.core.db)
+        self.clientWidget = ClientDialog(self.config.configdir, self.db)
         
         # Set timer for recording how much time elapsed during a recording
         self.reset_timer()
@@ -274,7 +282,7 @@ class RecordApp(FreeseerApp):
         """
         #i = self.mainWidget.talkComboBox.currentIndex()
         #p_id = self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
-        return self.core.db.get_presentation(self.current_presentation_id())
+        return self.db.get_presentation(self.current_presentation_id())
     
     def current_presentation_id(self):
         """Returns the current selected presentation ID."""
@@ -284,7 +292,7 @@ class RecordApp(FreeseerApp):
     def standby(self, state):
         if (state): # Prepare the pipelines
             self.load_backend()
-            self.core.pause()
+            self.media.pause()
             self.mainWidget.statusLabel.setText(self.readyString)
 
     def record(self, state):
@@ -295,17 +303,17 @@ class RecordApp(FreeseerApp):
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
             self.systray.showMessage("Recording", "RECORDING")
-            self.core.record()
+            self.media.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
 
             # Hide if auto-hide is set.
-            if(self.core.config.auto_hide == True):
+            if(self.config.auto_hide == True):
                 self.hide_window()
                 self.visibilityAction.setText(self.showWindowString)
                 
-            if (self.core.config.delay_recording>0):
-                time.sleep(float(self.core.config.delay_recording))
+            if (self.config.delay_recording>0):
+                time.sleep(float(self.config.delay_recording))
 
             self.mainWidget.statusLabel.setText(self.recordingString)
             
@@ -316,7 +324,7 @@ class RecordApp(FreeseerApp):
             logo_rec = QtGui.QPixmap(":/freeseer/logo.png")
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
-            self.core.stop()
+            self.media.stop()
             self.mainWidget.pauseToolButton.setChecked(False)
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
@@ -332,7 +340,7 @@ class RecordApp(FreeseerApp):
             # Select next talk if there is one within 15 minutes.
             starttime = QtCore.QDateTime().currentDateTime()
             stoptime = starttime.addSecs(900)
-            talkid = self.core.db.get_talk_between_time(self.current_event, self.current_room, 
+            talkid = self.db.get_talk_between_time(self.current_event, self.current_room, 
                                                         starttime.toString(), stoptime.toString())
             if talkid is not None:
                 for i in range(self.mainWidget.talkComboBox.count()):
@@ -341,22 +349,22 @@ class RecordApp(FreeseerApp):
             
     def pause(self, state):
         if (state): # Pause Recording.
-            self.core.pause()
+            self.media.pause()
             logging.info("Recording paused.")
             self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
             self.timer.stop()
         elif self.mainWidget.recordPushButton.isChecked():
-            self.core.record()
+            self.media.record()
             logging.info("Recording unpaused.")
             self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
             self.mainWidget.statusLabel.setText(self.recordingString)
             self.timer.start(1000)
             
     def load_backend(self, talk=None):
-        if talk is not None: self.core.stop()
+        if talk is not None: self.media.stop()
         
-        self.core.load_backend(self.current_presentation())
+        self.media.load_backend(self.current_presentation())
         
     def update_timer(self):
         """Updates the Elapsed Time displayed.
@@ -388,7 +396,7 @@ class RecordApp(FreeseerApp):
         self.mainWidget.talkComboBox.setToolTip(talk)
     
     def load_event_list(self):
-        model = self.core.db.get_events_model()
+        model = self.db.get_events_model()
         self.mainWidget.eventComboBox.setModel(model)
 
     def load_rooms_from_event(self, event):
@@ -396,7 +404,7 @@ class RecordApp(FreeseerApp):
         
         self.current_event = event
 
-        model = self.core.db.get_rooms_model(self.current_event)
+        model = self.db.get_rooms_model(self.current_event)
         self.mainWidget.roomComboBox.setModel(model)
         
         #self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_room)
@@ -404,14 +412,14 @@ class RecordApp(FreeseerApp):
     def load_dates_from_event_room(self, change):
         event = str(self.mainWidget.eventComboBox.currentText())
         room = str(self.mainWidget.roomComboBox.currentText())
-        model = self.core.db.get_dates_from_event_room_model(event, room)
+        model = self.db.get_dates_from_event_room_model(event, room)
         self.mainWidget.dateComboBox.setModel(model)
 
     def load_talks_from_date(self, date):
         self.current_room = str(self.mainWidget.roomComboBox.currentText())
         self.current_date = date
         
-        model = self.core.db.get_talks_model(self.current_event, self.current_room, self.current_date)
+        model = self.db.get_talks_model(self.current_event, self.current_room, self.current_date)
         self.mainWidget.talkComboBox.setModel(model)
         
     ###
@@ -427,7 +435,7 @@ class RecordApp(FreeseerApp):
         
         # Get existing report if there is one.
         talk_id = self.current_presentation_id()
-        f = self.core.db.get_report(talk_id)
+        f = self.db.get_report(talk_id)
         if f is not None:
             self.reportWidget.commentEdit.setText(f.comment)
             i = self.reportWidget.reportCombo.findText(f.indicator)
@@ -451,28 +459,13 @@ class RecordApp(FreeseerApp):
                                                                        self.reportWidget.options[i],
                                                                        self.reportWidget.releaseCheckBox.isChecked()))
         
-        self.core.db.insert_failure(failure)
+        self.db.insert_failure(failure)
         self.reportWidget.close()
     
     ###
     ### Misc.
     ###
     
-#    def area_select(self):
-#        self.area_selector = QtAreaSelector(self)
-#        self.area_selector.show()
-#        logging.info('Desktop area selector started.')
-#        self.hide_window()
-    
-    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-        self.start_x = self.core.config.start_x = start_x
-        self.start_y = self.core.config.start_y = start_y
-        self.end_x = self.core.config.end_x = end_x
-        self.end_y = self.core.config.end_y = end_y
-        self.core.set_recording_area(self.start_x, self.start_y, self.end_x, self.end_y)
-        logging.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
-        self.show_window()
-
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             self.hide_window() 
@@ -509,9 +502,9 @@ class RecordApp(FreeseerApp):
         
     def open_video_directory(self):
         if sys.platform.startswith("linux"):
-            os.system("xdg-open %s" % self.core.config.videodir)
+            os.system("xdg-open %s" % self.config.videodir)
         elif sys.platform.startswith("win32"):
-            os.system("explorer %s" % self.core.config.videodir)
+            os.system("explorer %s" % self.config.videodir)
         else:
             logging.info("Error: This command is not supported on the current OS.")
     
@@ -521,7 +514,7 @@ class RecordApp(FreeseerApp):
         
     def keyPressEvent(self, event):
         logging.debug("Keypressed: %s" % event.key())
-        self.core.backend.keyboard_event(event.key())
+        self.backend.keyboard_event(event.key())
     
     '''
     Client functions
