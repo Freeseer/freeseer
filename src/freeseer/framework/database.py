@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,14 +22,16 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import csv
 import logging
 import os
 
 from PyQt4 import QtSql
 
-from freeseer.framework.presentation import *
-from freeseer.framework.failure import *
 from freeseer import project_info
+from freeseer.framework.presentation import Presentation
+from freeseer.framework.failure import Failure, Report
+from freeseer.framework.rss_parser import FeedParser
 
 class QtDBConnector():
     presentationsModel = None
@@ -349,6 +351,145 @@ class QtDBConnector():
             return None
         
         
+    ##
+    ## Import / Export Functions
+    ##
+    
+    def add_talks_from_rss(self, rss):
+        """Adds talks from an rss feed."""
+        entry = str(rss)
+        feedparser = FeedParser(entry)
+
+        if len(feedparser.build_data_dictionary()) == 0:
+            logging.info("RSS: No data found.")
+
+        else:
+            for presentation in feedparser.build_data_dictionary():
+                talk = Presentation(presentation["Title"],
+                                    presentation["Speaker"],
+                                    presentation["Abstract"],  # Description
+                                    presentation["Level"],
+                                    presentation["Event"],
+                                    presentation["Room"],
+                                    presentation["Time"])
+                self.insert_presentation(talk)
+    
+    def add_talks_from_csv(self, fname):
+        """Adds talks from a csv file.
+        
+        Title and speaker must be present.
+        """
+        file = open(fname,'r')
+        try:
+            reader = csv.DictReader(file)
+            for row in reader:
+                try:
+                    title = row['Title']
+                    speaker = row['Speaker']
+                except KeyError:
+                    logging.error("Missing Key in Row: %s", row)
+                    return
+                    
+                try:
+                    abstract = row['Abstract'] # Description
+                except KeyError:
+                    abstract = ''
+                
+                try:
+                    level = row['Level']
+                except KeyError:
+                    level = ''
+                
+                try:
+                    event = row['Event']
+                except KeyError:
+                    event = ''
+                
+                try:
+                    room = row['Room']
+                except KeyError:
+                    room = ''
+                
+                try:
+                    time = row['Time']
+                except KeyError:
+                    time = ''
+                
+                talk = Presentation(title,
+                                    speaker,
+                                    abstract,
+                                    level,
+                                    event,
+                                    room,
+                                    time)
+                self.insert_presentation(talk)
+            
+        except IOError:
+            logging.error("CSV: File %s not found", file)
+        
+        finally:
+            file.close()
+                 
+    def export_talks_to_csv(self, fname):
+        #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
+
+        fieldNames = ('Title',
+                      'Speaker',
+                      'Abstract',
+                      'Level',
+                      'Event',
+                      'Room',
+                      'Time')
+        
+        try:
+            file = open(fname, 'w')
+            writer = csv.DictWriter(file, fieldnames=fieldNames)
+            headers = dict( (n,n) for n in fieldNames )
+            writer.writerow(headers)
+            
+            result = self.get_talks()
+            while result.next():
+                #print unicode(result.value(1).toString())
+                writer.writerow({'Title':unicode(result.value(1).toString()),
+                                 'Speaker':unicode(result.value(2).toString()),
+                                 'Abstract':unicode(result.value(3).toString()),
+                                 'Level':unicode(result.value(4).toString()),
+                                 'Event':unicode(result.value(5).toString()),
+                                 'Room':unicode(result.value(6).toString()),
+                                 'Time':unicode(result.value(7).toString())})   
+        finally:
+            file.close()
+    
+    def export_reports_to_csv(self, fname):
+        fieldNames = ('Title',
+                      'Speaker',
+                      'Abstract',
+                      'Level',
+                      'Event',
+                      'Room',
+                      'Time',
+                      'Problem',
+                      'Error')
+        try:
+            file = open(fname, 'w')
+            writer = csv.DictWriter(file, fieldnames=fieldNames)
+            headers = dict( (n,n) for n in fieldNames)
+            writer.writerow(headers)
+            
+            result = self.get_reports()
+            for report in result:
+                writer.writerow({'Title':report.presentation.title,
+                                 'Speaker':report.presentation.speaker,
+                                 'Abstract':report.presentation.description,
+                                 'Level':report.presentation.level,
+                                 'Event':report.presentation.event,
+                                 'Room':report.presentation.room,
+                                 'Time':report.presentation.time,
+                                 'Problem':report.failure.indicator,
+                                 'Error':report.failure.comment})
+        finally:
+            file.close()
+            
     #
     # Reporting Feature
     #
@@ -397,7 +538,7 @@ class QtDBConnector():
             failure = Failure(unicode(result.value(0).toString()),    # id
                               unicode(result.value(1).toString()),    # comment
                               unicode(result.value(2).toString()),    # indicator
-                              bool(result.value(3))),                 # release
+                              bool(result.value(3)))                  # release
             p = self.get_presentation(failure.talkId)
             r = Report(p, failure)
             list.append(r)

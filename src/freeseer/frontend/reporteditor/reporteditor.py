@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,9 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-from freeseer.framework.core import FreeseerCore
+from freeseer import settings
+from freeseer.framework.config import Config
+from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -67,14 +69,9 @@ class ReportEditorApp(FreeseerApp):
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
-
-        # Only instantiate a new Core if we need to
-        if core is not None:
-            self.core = core
-        else:
-            self.core = FreeseerCore(self)
-            
-        self.config = self.core.get_config()
+        
+        self.config = Config(settings.configdir)
+        self.db = QtDBConnector(settings.configdir)
         
         #
         # Setup Menubar
@@ -143,7 +140,7 @@ class ReportEditorApp(FreeseerApp):
     
     def load_failures_model(self):
         # Load Presentation Model
-        self.failureModel = self.core.db.get_failures_model()
+        self.failureModel = self.db.get_failures_model()
         editor = self.editorWidget.editor
         editor.setModel(self.failureModel)
         editor.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
@@ -167,7 +164,7 @@ class ReportEditorApp(FreeseerApp):
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
 
-        self.core.db.insert_presentation(presentation)
+        self.db.insert_presentation(presentation)
 
         # cleanup
         self.addTalkWidget.titleLineEdit.clear()
@@ -187,7 +184,7 @@ class ReportEditorApp(FreeseerApp):
         self.failureModel.select()
         
     def reset(self):
-        self.core.db.clear_report_db()
+        self.db.clear_report_db()
         self.failureModel.select()
         
     def confirm_reset(self):
@@ -217,7 +214,7 @@ class ReportEditorApp(FreeseerApp):
         self.updatePresentationInfo(talkId)
         
     def updatePresentationInfo(self, talkId):
-        p = self.core.db.get_presentation(talkId)
+        p = self.db.get_presentation(talkId)
         if p is not None:
             self.editorWidget.titleLabel2.setText(p.title)
             self.editorWidget.speakerLabel2.setText(p.speaker)
@@ -236,9 +233,9 @@ class ReportEditorApp(FreeseerApp):
             self.editorWidget.timeLabel2.setText("Talk not found")
         
     def export_reports_to_csv(self):
-        fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString)
+        fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString, "", "*.csv")
         if fname:
-            self.core.export_reports_to_csv(fname)
+            self.db.export_reports_to_csv(fname)
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

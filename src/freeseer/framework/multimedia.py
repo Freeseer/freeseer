@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -26,46 +26,130 @@ import datetime
 import logging
 import os
 import unicodedata
-import csv
 
-from freeseer import project_info
-import gstreamer
+import gobject
+gobject.threads_init()
+import pygst
+pygst.require("0.10")
+import gst
 
-from config import Config
-from logger import Logger
-from QtDBConnector import QtDBConnector
-from rss_parser import FeedParser
-from presentation import Presentation
-from plugin import PluginManager
+from freeseer.framework.plugin import IOutput
 
-__version__= project_info.VERSION
-
-class FreeseerCore:
-    """Freeseer's core logic code.
+class Gstreamer:
+    NULL = 0
+    RECORD = 1
+    PAUSE = 2
+    STOP = 3
     
-    Used to link a GUI frontend with a recording backend, such as
-    backend.gstreamer.
-    """
-    def __init__(self, window_id=None, audio_feedback=None):
+    def __init__(self, config, plugman, window_id=None, audio_feedback=None):
+        self.config = config
+        self.plugman = plugman
+        self.window_id = window_id
+        self.audio_feedback_event = audio_feedback
         
-        # Read in config information
-        configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
-        self.config = Config(configdir)
-        self.logger = Logger(configdir)
-        self.db = QtDBConnector(configdir)
-        self.plugman = PluginManager(configdir)
-
-        # Start Freeseer Recording Backend
-        self.backend = gstreamer.Gstreamer(window_id, audio_feedback)
+        self.record_audio = False
+        self.record_video = False
         
-        logging.info("Core initialized")   
+        self.current_state = Gstreamer.NULL
+        
+        # Initialize Player
+        self.player = gst.Pipeline('player')
+        bus = self.player.get_bus()
+        bus.add_signal_watch()
+        bus.enable_sync_message_emission()
+        bus.connect('message', self.on_message)
+        bus.connect('sync-message::element', self.on_sync_message)
+        
+        # Initialize Entry Points
+        self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
+        self.video_tee = gst.element_factory_make('tee', 'video_tee')
+        self.player.add(self.audio_tee, self.video_tee)
+        
+        logging.debug("Gstreamer initialized.")
 
-    def get_config(self):
-        return self.config
+    ##
+    ## GST Player Functions
+    ##
+    def on_message(self, bus, message):
+        t = message.type
 
-    def get_plugin_manager(self):
-        return self.plugman
+        if t == gst.MESSAGE_EOS:
+            self.stop()
 
+        elif t == gst.MESSAGE_ERROR:
+            err, debug = message.parse_error()
+            #self.core.logger.log.debug('Error: ' + str(err) + str(debug))
+            #self.player.set_state(gst.STATE_NULL)
+            #self.stop()
+
+        elif message.structure is not None:
+            s = message.structure.get_name()
+
+            if s == 'level':
+                msg = message.structure.to_string()
+                rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
+                
+                # This is an inaccurate representation of decibels into percent
+                # conversion, this code should be revisited.
+                try:
+                    percent = (int(round(rms_dB)) + 50) * 2
+                except OverflowError:
+                    percent = 0
+                self.audio_feedback_event(percent)
+            
+    def on_sync_message(self, bus, message):
+        if message.structure is None:
+            return
+        message_name = message.structure.get_name()
+        if message_name == 'prepare-xwindow-id':
+            imagesink = message.src
+            imagesink.set_property('force-aspect-ratio', True)
+            imagesink.set_xwindow_id(int(self.window_id))
+            logging.debug("Preview loaded into window.")
+            
+    def keyboard_event(self, key):
+        """
+        Keyboard event handler.
+        """
+        pass
+            
+    ##
+    ## Recording functions
+    ##
+    def record(self):
+        """
+        Start recording.
+        """
+        self.player.set_state(gst.STATE_PLAYING)
+        self.current_state = Gstreamer.RECORD
+        logging.debug("Recording started.")
+        
+    def pause(self):
+        """
+        Pause recording.
+        """
+        self.player.set_state(gst.STATE_PAUSED)
+        self.current_state = Gstreamer.PAUSE
+        logging.debug("Gstreamer paused.")
+    
+    def stop(self):
+        """
+        Stop recording.
+        """
+        if self.current_state != Gstreamer.NULL and self.current_state != Gstreamer.STOP:
+            self.player.set_state(gst.STATE_NULL)
+            
+            self.unload_audiomixer()
+            self.unload_videomixer()    
+            self.unload_output_plugins()
+            
+            self.current_state = Gstreamer.STOP
+            logging.debug("Gstreamer stopped.")
+            
+            
+    ##
+    ## Record Filename Functions
+    ##
     def duplicate_exists(self, recordname):
         """Checks to see if a record name already exists in the directory."""
         filename = self.config.videodir + '/' + recordname
@@ -74,8 +158,7 @@ class FreeseerCore:
         except IOError:
             return False
         return True
-
-
+    
     def get_record_name(self, presentation, extension):
         """Returns the filename to use when recording.
         
@@ -107,7 +190,7 @@ class FreeseerCore:
 
         If any information is missing, we blank it out intelligently
         And if we have nothing for some reason, we use "default"
-        """	
+        """    
         event = self.make_shortname(presentation.event)
         title = self.make_shortname(presentation.title)
         room = self.make_shortname(presentation.room)
@@ -168,7 +251,6 @@ class FreeseerCore:
 
         return string[index0] + string[index1]
 
-
     def make_shortname(self, string):
         """Returns the first 6 characters of a string in uppercase.
 
@@ -178,163 +260,7 @@ class FreeseerCore:
         bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
         string = "".join(ch for ch in string if ch not in bad_chars)
         return string[0:6].upper()
-
-    ##
-    ## Database Functions
-    ##
-    def add_talks_from_rss(self, rss):
-        """Adds talks from an rss feed."""
-        entry = str(rss)
-        feedparser = FeedParser(entry)
-
-        if len(feedparser.build_data_dictionary()) == 0:
-            logging.info("RSS: No data found.")
-
-        else:
-            for presentation in feedparser.build_data_dictionary():
-                talk = Presentation(presentation["Title"],
-                                    presentation["Speaker"],
-                                    presentation["Abstract"],  # Description
-                                    presentation["Level"],
-                                    presentation["Event"],
-                                    presentation["Room"],
-                                    presentation["Time"])
-                self.db.insert_presentation(talk)
-    
-    def add_talks_from_csv(self, fname):
-        """Adds talks from a csv file.
         
-        Title and speaker must be present.
-        """
-        file = open(fname,'r')
-        try:
-            reader = csv.DictReader(file)
-            for row in reader:
-                try:
-                    title = row['Title']
-                    speaker = row['Speaker']
-                except KeyError:
-                    logging.error("Missing Key in Row: %s", row)
-                    return
-                    
-                try:
-                    abstract = row['Abstract'] # Description
-                except KeyError:
-                    abstract = ''
-                
-                try:
-                    level = row['Level']
-                except KeyError:
-                    level = ''
-                
-                try:
-                    event = row['Event']
-                except KeyError:
-                    event = ''
-                
-                try:
-                    room = row['Room']
-                except KeyError:
-                    room = ''
-                
-                try:
-                    time = row['Time']
-                except KeyError:
-                    time = ''
-                
-                talk = Presentation(title,
-                                    speaker,
-                                    abstract,
-                                    level,
-                                    event,
-                                    room,
-                                    time)
-                self.db.insert_presentation(talk)
-            
-        except IOError:
-            logging.error("CSV: File %s not found", file)
-        
-        finally:
-            file.close()
-                 
-    def export_talks_to_csv(self, fname):
-        #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
-
-        fieldNames = ('Title',
-                      'Speaker',
-                      'Abstract',
-                      'Level',
-                      'Event',
-                      'Room',
-                      'Time')
-        
-        try:
-            file = open(fname, 'w')
-            writer = csv.DictWriter(file, fieldnames=fieldNames)
-            headers = dict( (n,n) for n in fieldNames )
-            writer.writerow(headers)
-            
-            result = self.db.get_talks()
-            while result.next():
-                #print unicode(result.value(1).toString())
-                writer.writerow({'Title':unicode(result.value(1).toString()),
-                                 'Speaker':unicode(result.value(2).toString()),
-                                 'Abstract':unicode(result.value(3).toString()),
-                                 'Level':unicode(result.value(4).toString()),
-                                 'Event':unicode(result.value(5).toString()),
-                                 'Room':unicode(result.value(6).toString()),
-                                 'Time':unicode(result.value(7).toString())})   
-        finally:
-            file.close()
-    
-    def export_reports_to_csv(self, fname):
-        fieldNames = ('Title',
-                      'Speaker',
-                      'Abstract',
-                      'Level',
-                      'Event',
-                      'Room',
-                      'Time',
-                      'Problem',
-                      'Error')
-        try:
-            file = open(fname, 'w')
-            writer = csv.DictWriter(file, fieldnames=fieldNames)
-            headers = dict( (n,n) for n in fieldNames)
-            writer.writerow(headers)
-            
-            result = self.db.get_reports()
-            for report in result:
-                writer.writerow({'Title':report.presentation.title,
-                                 'Speaker':report.presentation.speaker,
-                                 'Abstract':report.presentation.description,
-                                 'Level':report.presentation.level,
-                                 'Event':report.presentation.event,
-                                 'Room':report.presentation.room,
-                                 'Time':report.presentation.time,
-                                 'Problem':report.failure.indicator,
-                                 'Error':report.failure.comment})
-        finally:
-            file.close()
-            
-    ##
-    ## Backend Functions
-    ##
-    
-    def set_recording_area(self, x1, y1, x2, y2):
-        # gstreamer backend needs to have the lower x/y coordinates
-        # sent first.
-        if x2 < x1:
-            if y2 < y1:
-                self.backend.set_recording_area(x2, y2, x1, y1)
-            else:
-                self.backend.set_recording_area(x2, y1, x1, y2)
-        else:
-            if y2 < y1:
-                self.backend.set_recording_area(x1, y2, x2, y1)
-            else:
-                self.backend.set_recording_area(x1, y1, x2, y2)
-
     def prepare_metadata(self, presentation):
         """Returns a dictionary of tags and tag values.
         
@@ -347,7 +273,10 @@ class FreeseerCore:
                  "location" : presentation.room,
                  "date" : str(datetime.date.today()),
                  "comment" : presentation.description }
-
+        
+    ##
+    ## Plugin Loading
+    ##
 
     def load_backend(self, presentation):
         logging.debug("Loading Output plugins...")
@@ -381,7 +310,7 @@ class FreeseerCore:
     
             # Prepare metadata.
             metadata = self.prepare_metadata(presentation)
-            #self.backend.populate_metadata(data)
+            #self.populate_metadata(data)
     
             record_location = os.path.abspath(self.config.videodir + '/' + record_name)                
             plugin.plugin_object.set_recording_location(record_location)
@@ -389,7 +318,7 @@ class FreeseerCore:
             plugin.plugin_object.load_config(self.plugman)
             plugins.append(plugin.plugin_object)
 
-        self.backend.load_output_plugins(plugins,
+        self.load_output_plugins(plugins,
                                          self.config.enable_audio_recording,
                                          self.config.enable_video_recording,
                                          metadata)
@@ -410,7 +339,7 @@ class FreeseerCore:
                     audio_input.load_config(self.plugman)
                     audiomixer_inputs.append(audio_input.get_audioinput_bin())
                 
-                self.backend.load_audiomixer(audiomixer, audiomixer_inputs)
+                self.load_audiomixer(audiomixer, audiomixer_inputs)
         
         if self.config.enable_video_recording:
             logging.debug("Loading Video Recording plugins...")
@@ -428,18 +357,72 @@ class FreeseerCore:
                     video_input.load_config(self.plugman)
                     videomixer_inputs.append(video_input.get_videoinput_bin())
                 
-                self.backend.load_videomixer(videomixer, videomixer_inputs)
+                self.load_videomixer(videomixer, videomixer_inputs)
                 
         self.pause()
+    
+    def load_output_plugins(self, plugins, record_audio, record_video, metadata):
+        self.output_plugins = []
+        for plugin in plugins:
+            type = plugin.get_type()
+            bin = plugin.get_output_bin(record_audio, record_video, metadata)
+            
+            if type == IOutput.AUDIO:
+                if record_audio:
+                    self.player.add(bin)
+                    self.audio_tee.link(bin)
+                    self.output_plugins.append(bin)
+            elif type == IOutput.VIDEO:
+                if record_video:
+                    self.player.add(bin)
+                    self.video_tee.link(bin)
+                    self.output_plugins.append(bin)
+            elif type == IOutput.BOTH:
+                self.player.add(bin)
+                if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
+                if record_video: self.video_tee.link_pads("src%d", bin, "videosink")
+                self.output_plugins.append(bin)
+                
+    def unload_output_plugins(self):
+        for plugin in self.output_plugins:
+            gst.element_unlink_many(self.video_tee, plugin)
+            gst.element_unlink_many(self.audio_tee, plugin)
+            self.player.remove(plugin)
+    
+    def load_audiomixer(self, mixer, inputs):
+        self.record_audio = True
+        self.audio_input_plugins = inputs
+        
+        self.audiomixer = mixer.get_audiomixer_bin()
+        self.player.add(self.audiomixer)
+        self.audiomixer.link(self.audio_tee)
+        
+        mixer.load_inputs(self.player, self.audiomixer, inputs)
+        
+    def unload_audiomixer(self):
+        if self.record_audio is True:
+            for plugin in self.audio_input_plugins:
+                gst.element_unlink_many(self.audio_tee, plugin)
+                self.player.remove(plugin)
+        
+            gst.element_unlink_many(self.audiomixer, self.audio_tee)
+            self.player.remove(self.audiomixer)
 
-    def record(self):
-        """Informs backend to begin recording presentation."""
-        self.backend.record()
-
-    def pause(self):
-        """Sets the pipeline up in paused state."""
-        self.backend.pause()
-
-    def stop(self):
-        """Informs backend to stop recording."""
-        self.backend.stop()
+    def load_videomixer(self, mixer, inputs):
+        self.record_video = True
+        self.video_input_plugins = inputs
+        
+        self.videomixer = mixer.get_videomixer_bin()
+        self.player.add(self.videomixer)
+        self.videomixer.link(self.video_tee)
+        
+        mixer.load_inputs(self.player, self.videomixer, inputs)
+        
+    def unload_videomixer(self):
+        if self.record_video is True:
+            for plugin in self.video_input_plugins:
+                gst.element_unlink_many(self.video_tee, plugin)
+                self.player.remove(plugin)
+            
+            gst.element_unlink_many(self.videomixer, self.video_tee)
+            self.player.remove(self.videomixer)

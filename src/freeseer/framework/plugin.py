@@ -189,6 +189,19 @@ class PluginManager(QtCore.QObject):
         unfiltered_plugins = self.plugmanc.getAllPlugins()
         return self._get_supported_plugins(unfiltered_plugins)
         
+    def get_plugins_of_category(self, category):
+        """
+        Returns a list of all plugins in category supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of all supported plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory(category)
+        return self._get_supported_plugins(unfiltered_plugins)
+        
     def get_audioinput_plugins(self):
         """
         Returns a list of plugins that are supported by the users OS as
