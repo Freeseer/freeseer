@@ -27,8 +27,6 @@ import logging
 from cmd import Cmd
 from help import Help
 
-# TODO: Take a look at shlex.split() for tokenization of command arguments.
-
 from freeseer import project_info
 from freeseer.framework.core import FreeseerCore
 
@@ -78,7 +76,7 @@ class FreeseerShell(Cmd):
             - config    # Configures settings
             - talk      # Configures the talk database
         
-        Type "help <topic>" for more information.""".format(
+        Type "help <topic>", "credits", or "license" for more information.""".format(
             project_info.NAME, project_info.VERSION, project_info.DESCRIPTION,
             project_info.COPYRIGHT)
         self.prompt = '?- '
