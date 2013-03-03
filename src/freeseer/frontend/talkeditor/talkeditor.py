@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -34,9 +34,11 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import project_info
-from freeseer.framework.core import FreeseerCore
+from freeseer import settings
+from freeseer.framework.config import Config
+from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
-from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from EditorWidget import EditorWidget
@@ -44,12 +46,12 @@ from AddTalkWidget import AddTalkWidget
 
 __version__ = project_info.VERSION
         
-class TalkEditorApp(QtGui.QMainWindow):
+class TalkEditorApp(FreeseerApp):
     '''
     Freeseer talk database editor main gui class
     '''
     def __init__(self, core=None):
-        QtGui.QMainWindow.__init__(self)
+        FreeseerApp.__init__(self)
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -64,73 +66,24 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.editorWidget = EditorWidget()
         self.editorWidget.editor.setColumnHidden(5, True)
         self.addTalkWidget = AddTalkWidget()
-        self.aboutDialog = AboutDialog()
         
         self.mainLayout.addWidget(self.editorWidget)
         self.mainLayout.addWidget(self.addTalkWidget)
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
-
-        # Only instantiate a new Core if we need to
-        if core is not None:
-            self.core = core
-        else:
-            self.core = FreeseerCore(self)
             
-        self.config = self.core.get_config()
-        
-        #
-        # Translator
-        #
-        self.current_language = None
-        self.uiTranslator = QtCore.QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
-        self.langActionGroup = QtGui.QActionGroup(self)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
-        # --- End Translator
+        self.config = Config(settings.configdir)
+        self.db = QtDBConnector(settings.configdir)
         
         #
         # Setup Menubar
         #
-        self.menubar = QtGui.QMenuBar()
-        self.setMenuBar(self.menubar)
-        
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 884, 21))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuOptions = QtGui.QMenu(self.menubar)
-        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
-        self.menuLanguage = QtGui.QMenu(self.menuOptions)
-        self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
-        self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
-        self.actionExit.setShortcut("Ctrl+Q")
-        self.actionExit.setObjectName(_fromUtf8("actionExit"))
-        self.actionExit.setIcon(exitIcon)
-        
-        self.actionAbout = QtGui.QAction(self)
-        self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
-        self.actionAbout.setIcon(icon)
-        
         self.actionExportCsv = QtGui.QAction(self)
         self.actionExportCsv.setObjectName(_fromUtf8("actionExportCsv"))
         
         # Actions
-        self.menuFile.addAction(self.actionExportCsv)
-        self.menuFile.addAction(self.actionExit)
-        self.menuOptions.addAction(self.menuLanguage.menuAction())
-        self.menuHelp.addAction(self.actionAbout)
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuOptions.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        
-        self.setupLanguageMenu()
+        self.menuFile.insertAction(self.actionExit, self.actionExportCsv)
         # --- End Menubar
         
         #
@@ -153,10 +106,6 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.editorWidget.csvPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_csv)
         self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
-        
-        # Main Window Connections
-        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -183,13 +132,7 @@ class TalkEditorApp(QtGui.QMainWindow):
         #
         # Menubar
         #
-        self.menuFile.setTitle(self.uiTranslator.translate("TalkEditorApp", "&File"))
-        self.menuOptions.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Options"))
-        self.menuLanguage.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Language"))
-        self.menuHelp.setTitle(self.uiTranslator.translate("TalkEditorApp", "&Help"))
         self.actionExportCsv.setText(self.uiTranslator.translate("TalkEditorApp", "&Export to CSV"))
-        self.actionExit.setText(self.uiTranslator.translate("TalkEditorApp", "&Quit"))
-        self.actionAbout.setText(self.uiTranslator.translate("TalkEditorApp", "&About"))
         # --- End Menubar
         
         #
@@ -218,47 +161,10 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.editorWidget.clearButton.setText(self.uiTranslator.translate("TalkEditorApp", "Clear"))
         self.editorWidget.closeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Close"))
         # --- End EditorWidget
-        
-        self.aboutDialog.retranslate(self.current_language)
     
-    def translate(self , action):
-        '''
-        When a language is selected from the language menu this function is called
-        The language to be changed to is retrieved
-        '''
-
-        self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
-        logging.info("Switching language to: %s" % action.text())
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-        
-        self.retranslate()
-    
-    def setupLanguageMenu(self):
-        languages = QtCore.QDir(":/languages").entryList()
-        
-        if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()    #Retrieve Current Locale from the operating system
-            logging.debug("Detected user's locale as %s" % self.current_language)
-        
-        for language in languages:
-            translator = QtCore.QTranslator()   #Create a translator to translate Language Display Text
-            translator.load(":/languages/%s" % language)
-            language_display_text = translator.translate("Translation", "Language Display Text")
-            
-            languageAction = QtGui.QAction(self)
-            languageAction.setCheckable(True)
-            languageAction.setText(language_display_text)
-            languageAction.setData(language)
-            self.menuLanguage.addAction(languageAction)
-            self.langActionGroup.addAction(languageAction)
-            
-            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
-                languageAction.setChecked(True)
-        
     def load_presentations_model(self):
         # Load Presentation Model
-        self.presentationModel = self.core.db.get_presentations_model()
+        self.presentationModel = self.db.get_presentations_model()
         self.editorWidget.editor.setModel(self.presentationModel)
     
     def show_add_talk_widget(self):
@@ -284,7 +190,7 @@ class TalkEditorApp(QtGui.QMainWindow):
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
 
-        self.core.db.insert_presentation(presentation)
+        self.db.insert_presentation(presentation)
 
         # cleanup
         self.addTalkWidget.titleLineEdit.clear()
@@ -304,7 +210,7 @@ class TalkEditorApp(QtGui.QMainWindow):
         self.presentationModel.select()
         
     def reset(self):
-        self.core.db.clear_database()
+        self.db.clear_database()
         self.presentationModel.select()
         
     def confirm_reset(self):
@@ -326,7 +232,7 @@ class TalkEditorApp(QtGui.QMainWindow):
             
     def add_talks_from_rss(self):
         rss_url = unicode(self.editorWidget.rssLineEdit.text())
-        self.core.add_talks_from_rss(rss_url)
+        self.db.add_talks_from_rss(rss_url)
         self.presentationModel.select()
 
     def closeEvent(self, event):
@@ -336,8 +242,7 @@ class TalkEditorApp(QtGui.QMainWindow):
     
     def csv_file_select(self):
         dirpath = str(self.editorWidget.csvLineEdit.text())
-        fname = QtGui.QFileDialog.getOpenFileName(self,'Select file',
-                                dirpath[0:dirpath.rfind(os.path.sep)])
+        fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.editorWidget.csvLineEdit.setText(fname)    
     
@@ -345,15 +250,14 @@ class TalkEditorApp(QtGui.QMainWindow):
         fname = self.editorWidget.csvLineEdit.text()
         
         if fname:
-            self.core.add_talks_from_csv(fname)
+            self.db.add_talks_from_csv(fname)
             self.presentationModel.select()
     
     def export_talks_to_csv(self):
         dirpath = str(self.editorWidget.csvLineEdit.text())
-        fname = QtGui.QFileDialog.getSaveFileName(self,'Select file',
-                                dirpath[0:dirpath.rfind(os.path.sep)])
+        fname = QtGui.QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
-            self.core.export_talks_to_csv(fname)
+            self.db.export_talks_to_csv(fname)
 
 if __name__ == "__main__":
     import sys

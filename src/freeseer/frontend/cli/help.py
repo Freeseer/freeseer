@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -90,33 +90,6 @@ class Help():
     '\n\t\tdir: Output directory\n\t\tstreaming: Video streaming\n\t\tfile: File plugin' \
     '\n\n\tIn order to get more informations about each config setter, type "help config set <config>"'
     
-    # General help
-    
-    CONFIG_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the configtool on Freeseer.\n' \
-    'The following commands are supported:\n\n' \
-    '> show \n> set\n\nFor further information, type help config <command>\n\n' \
-    '>>> Command line plugin support <<< \n\n' \
-    "Freeseer plugins can also be managed via config tool CLI. The general syntax " \
-    "used to get current plugin's information is the following:\n\n" \
-    '> config show [<PLUGIN CATEGORY>] [<PLUGIN NAME>] [<PLUGIN PROPERTY>]\n\n' \
-    "NOTE: In case only plugin category is provided, all plugins matched on this " \
-    "category are listed. In case category name and plugin name are provided, all plugin's" \
-    "properties are listed. In case category, plugin name and property are provided, the" \
-    "respective property from this plugin is listed side-by-side with its respective value.\n\n" \
-    "The general syntax used to set plugin's values is the following:\n\n" \
-    "> config set <PLUGIN CATEGORY> <PLUGIN NAME> <PLUGIN PROPERTY> <PLUGIN VALUE>"
-    
-    #Record Help                  
-    RECORD_GENERAL_HELP = HEADER + '\tRecord Tool Command Line Interface\n' \
-    '\tRecords the presentation with the respective id using ' \
-    'the current settings\n\tUSAGE: record <id>'
-    
-    TALK_GENERAL_HELP = HEADER + 'Talk Editor Tool Command Line Interface\n' \
-    'This CLI defines all commands provided by the talk editor tool on Freeseer.\n' \
-    'The following commands are supported:\n\n' \
-    '> show\n> show events\n> remove\n> add\n> update\n\n' \
-    "For further information, type 'help talk <command>'"
     
     
     

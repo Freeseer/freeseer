@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,16 +22,24 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import signal
+import ctypes
+import os
 import sys
 
-from PyQt4 import QtGui
+def format_size(num):
+    for x in ['bytes','KB','MB','GB','TB']:
+        if num < 1024.0:
+            return "%3.1f %s" % (num, x)
+        num /= 1024.0
 
-from freeseer.frontend.record.record import RecordApp
-
-if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-    app = QtGui.QApplication(sys.argv)
-    main = RecordApp()
-    main.show()
-    sys.exit(app.exec_())
+def get_free_space(directory):
+        """ Return directory free space (in human readable form) """
+        if sys.platform in ["win32", "cygwin"]:
+            free_bytes = ctypes.c_ulonglong(0)
+            ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(directory), 
+                                                       None, None, ctypes.pointer(free_bytes))
+            space = free_bytes.value
+        else:
+            space = os.statvfs(directory).f_bfree * os.statvfs(directory).f_frsize
+            
+        return format_size(space)

@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -23,22 +23,20 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import argparse
-
-import sys,os
-
-from freeseer.framework.core import FreeseerCore
+import os
+import sys
 
 class FreeseerRecordParser(argparse.ArgumentParser):
-    def __init__(self, core):
-        
-        self.core = core  
-        self.core.config.video_preview  = False
-        self.core.config.writeConfig()
-        self.db_connector = self.core.db
+    def __init__(self, config, db, media):
+        self.media = media
+        self.config = config
+        self.db = db
+        self.config.video_preview  = False
+        self.config.writeConfig()
      
         argparse.ArgumentParser.__init__(self)
 
-    def analyse_command(self, command):  
+    def analyse_command(self, command):
         '''
         Analyses the command typed by the user
         ''' 
@@ -61,17 +59,17 @@ class FreeseerRecordParser(argparse.ArgumentParser):
         '''
         Records the presentation with the specified id
         '''        
-        prs = self.db_connector.get_presentation(id)  
+        prs = self.db.get_presentation(id)  
         if(prs):
             try:
-                self.core.load_backend(prs)
-                self.core.record()
-                print "\n Recording on progress, press <space> to stop \n"          
+                self.media.load_backend(prs)
+                self.media.record()
+                print "\n Recording on progress, press <space> to stop \n"
           
-                while(self.getchar() != " "):            
+                while(self.getchar() != " "):
                     continue
             
-                self.core.stop();
+                self.media.stop();
             except Exception, e:
                 #TODO Try to provide more details about the error
                 print "Error while recording"
@@ -79,8 +77,6 @@ class FreeseerRecordParser(argparse.ArgumentParser):
         else:
             print "\n*** Error: There's no presentation with such id\n"
         
-         
-          
     def _is_valid_filename(self, path):
         if not path.endswith(".ogg"):
             print "\n*** Error: The file must be an ogg file\n"
@@ -96,17 +92,23 @@ class FreeseerRecordParser(argparse.ArgumentParser):
     def _is_valid_path(self, path):
         return os.path.exists(os.path.expanduser(os.path.dirname(path)))
 
-              
     def getchar(self):
         '''
         Gets the key pressed by the user
-        '''        
-        import tty, termios
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setraw(sys.stdin.fileno())
-            ch = sys.stdin.read(1)
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        return ch
+        '''
+        # Windows users need msvcrt
+        if sys.platform in ["win32", "cygwin"]:
+            import msvcrt
+            return msvcrt.getch()
+        
+        # Unix can use termios
+        else:
+            import termios, tty
+            fd = sys.stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setraw(sys.stdin.fileno())
+                ch = sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+            return ch

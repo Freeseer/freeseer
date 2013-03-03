@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,23 +22,20 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-
 import argparse
-
-import sys,os
+import os
 import re
+import sys
 import time
 
-from freeseer.framework.core import FreeseerCore
 from freeseer.framework.presentation import Presentation
 
-
 class FreeseerTalkParser(argparse.ArgumentParser):
-    def __init__(self, core):  
+    def __init__(self, config, db):  
         argparse.ArgumentParser.__init__(self)
         
-        self.core = core
-        self.db_connector = self.core.db
+        self.config = config
+        self.db = db
         self.NO_ID = "Please provide a valid id"
       
         self.add_argument('mode',nargs = '+', metavar='talk mode')
@@ -109,7 +106,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
             
     def show_all_events(self):
         print "---------------------------------- Events -----------------------------------"
-        query = self.db_connector.get_events()
+        query = self.db.get_events()
         count = 1
         while query.next():
             print "Event %d: %s" % (count,unicode(query.value(0).toString()))
@@ -119,7 +116,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
     def show_all_talks(self):
         print "---------------------------------- Talks ------------------------------------"
         count = 1
-        query = self.db_connector.get_talks()
+        query = self.db.get_talks()
         
         while query.next():
             print "Talk Id: " + unicode(query.value(0).toString())
@@ -132,7 +129,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
         print "-----------------------------------------------------------------------------\n"
         
     def show_talk_by_id(self, id):
-        presentation = self.db_connector.get_presentation(id)   
+        presentation = self.db.get_presentation(id)   
         if(presentation):
             print "----------------------------- Talk Found ------------------------------------"
             print "Talk Title: " + presentation.title
@@ -146,7 +143,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
                 
     def show_talk_by_event(self, event):
         count = 1
-        query = self.db_connector.get_talks_by_event(event)
+        query = self.db.get_talks_by_event(event)
         while query.next():
             print "Talk Id: " + unicode(query.value(0).toString())
             print "Talk Title: " + unicode(query.value(1).toString())
@@ -158,7 +155,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
                 
     def show_talk_by_room(self, room):
         count = 1
-        query = self.db_connector.get_talks_by_room(room)
+        query = self.db.get_talks_by_room(room)
         
         while query.next():
             print "Talk Id: " + unicode(query.value(0).toString())
@@ -170,7 +167,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
             count+=1      
                 
     def remove_talk(self, id):
-        presentation = self.db_connector.get_presentation(id)
+        presentation = self.db.get_presentation(id)
         if presentation:
             self.show_talk_by_id(id)
             answer = raw_input("This will remove this presentation.Continue? (yes/no) ")
@@ -179,7 +176,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
                 answer = raw_input("Please provide an available answer.Do you want to remove this presentation? (yes/no) ")
             else:
                 if answer == "yes":
-                    self.db_connector.delete_presentation(id)
+                    self.db.delete_presentation(id)
                     print "Talk removed"
         else:
             print "There's no such presentation"
@@ -191,7 +188,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
             answer = raw_input("Please provide an available answer. Do you want to remove ALL presentations? (yes/no) ")
         
         if answer == "yes":
-                self.db_connector.clear_database()
+                self.db.clear_database()
            
     def add_talk_by_prompt(self):
         print "------------------------------ Adding a Talk -------------------------------\n"
@@ -219,14 +216,14 @@ class FreeseerTalkParser(argparse.ArgumentParser):
             else:
                 break
              
-        if not self.db_connector.presentation_exists(presentation):
-            self.db_connector.insert_presentation(presentation)
+        if not self.db.presentation_exists(presentation):
+            self.db.insert_presentation(presentation)
             print "###################### Talk Added ############################"
         else:
             print "############### Error: Talk Already Exists ###################"
 
     def update_talk_by_prompt(self, id): 
-        presentation = self.db_connector.get_presentation(id)
+        presentation = self.db.get_presentation(id)
         if presentation:                  
             print "#### You have choosen to edit the following talk ###"
             
@@ -254,7 +251,7 @@ class FreeseerTalkParser(argparse.ArgumentParser):
             new_presentation.event = event
             new_presentation.room = room
             
-            self.db_connector.update_presentation(id, new_presentation)
+            self.db.update_presentation(id, new_presentation)
             
             print "### Talk Updated! ###"
             
@@ -269,7 +266,6 @@ class FreeseerTalkParser(argparse.ArgumentParser):
         except ValueError:
              return False
 
-    
     def _get_mode(self, mode_list):
         mode = ""
         for item in mode_list:

@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -27,10 +27,6 @@ import logging
 import os
 import sys
 
-import pygst
-pygst.require("0.10")
-import gst
-
 import xml.etree.ElementTree as ET
 
 from yapsy.PluginManager import PluginManagerSingleton
@@ -40,25 +36,24 @@ from PyQt4 import QtCore
 
 class PluginManager(QtCore.QObject):
     '''
-    @signal pluginActivated(plugin_name, plugin_category)
-    Emitted when a plugin is activated.
+    Plugin Manager for Freeseer
     
-    @signal pluginDectivated(plugin_name, plugin_category)
-    Emitted when a plugin is deactivated.
+    Provides the core functionality which enables plugin support in.
     '''
     
     def __init__(self, configdir):
         QtCore.QObject.__init__(self)
         
         self.firstrun = False
-        plugman = PluginManagerSingleton.get()
+        PluginManagerSingleton.setBehaviour([ConfigurablePluginManager])
+        self.plugmanc = PluginManagerSingleton.get()
         
         self.configdir = configdir
         self.configfile = os.path.abspath("%s/plugin.conf" % self.configdir)
         
         self.config = ConfigParser.ConfigParser()
         self.load()
-        self.plugmanc = ConfigurablePluginManager(self.config, self, plugman)
+        self.plugmanc.setConfigParser(self.config, self.save)
         
         # Get the path where the installed plugins are located on systems where
         # freeseer is installed.
@@ -192,6 +187,19 @@ class PluginManager(QtCore.QObject):
             list of all supported plugins
         """
         unfiltered_plugins = self.plugmanc.getAllPlugins()
+        return self._get_supported_plugins(unfiltered_plugins)
+        
+    def get_plugins_of_category(self, category):
+        """
+        Returns a list of all plugins in category supported by the users OS as
+        detected by python's sys.platform library.
+        
+        Parameters:
+            none
+        Returns:
+            list of all supported plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory(category)
         return self._get_supported_plugins(unfiltered_plugins)
         
     def get_audioinput_plugins(self):

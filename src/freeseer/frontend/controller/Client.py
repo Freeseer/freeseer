@@ -79,6 +79,7 @@ class ClientDialog(QtGui.QDialog):
         self.hide()
         
         # Translations
+        self.current_language = "en_US"
         self.uiTranslator = QtCore.QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
         self.retranslate()
@@ -87,7 +88,12 @@ class ClientDialog(QtGui.QDialog):
     ###
     ### Translation Related
     ###
-    def retranslate(self):
+    def retranslate(self, language=None):
+        if language is not None:
+            self.current_language = language
+            
+        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
+        
         self.setWindowTitle(self.uiTranslator.translate("ControllerClientApp", "Controller Client"))
         #
         # Reusable Strings

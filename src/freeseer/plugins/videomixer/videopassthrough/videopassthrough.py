@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -182,15 +182,12 @@ class VideoPassthrough(IVideoMixer):
 
     def set_input(self, input):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
-        self.plugman.save()
         
     def set_videocolour(self, input_type):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
-        self.plugman.save()
         
     def set_framerate(self, framerate):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
-        self.plugman.save()
         
     def get_properties(self):
         return ['InputType', 'Input1', 'Framerate']

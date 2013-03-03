@@ -56,7 +56,7 @@ class AboutDialog(QtGui.QDialog):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         
-        self.current_language = "tr_en_US.qm"
+        self.current_language = "en_US"
         self.uiTranslator = QtCore.QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
         

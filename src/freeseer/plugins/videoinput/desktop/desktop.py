@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -24,20 +24,22 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 import ConfigParser
+import sys
 
 import pygst
 pygst.require("0.10")
 import gst
 
-import Xlib.display
+if sys.platform.startswith("linux"):
+    import Xlib.display
 
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IVideoInput
 
 class DesktopLinuxSrc(IVideoInput):
-    name = "Desktop-Linux Source"
-    os = ["linux", "linux2"]
+    name = "Desktop Source"
+    os = ["linux", "linux2", "win32", "cygwin"]
     
     # ximagesrc
     screen = 0
@@ -48,7 +50,11 @@ class DesktopLinuxSrc(IVideoInput):
         """
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
-        videosrc = gst.element_factory_make("ximagesrc", "videosrc")
+        videosrc = None
+        if sys.platform.startswith("linux"):
+            videosrc = gst.element_factory_make("ximagesrc", "videosrc")
+        elif sys.platform in ["win32", "cygwin"]:
+            videosrc = gst.element_factory_make("dx9screencapsrc", "videosrc")
         bin.add(videosrc)
         
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
@@ -91,10 +97,11 @@ class DesktopLinuxSrc(IVideoInput):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-                
-        display = Xlib.display.Display()
-        self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
+        
+        # Xlib is only available on linux
+        if sys.platform.startswith("linux"):
+            display = Xlib.display.Display()
+            self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
             
     def set_screen(self, screen):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
-        self.plugman.save()

@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -49,8 +49,9 @@ class OggOutput(IOutput):
         bin = gst.Bin(self.name)
         
         if metadata is not None:
-            self.generate_xml_metadata(metadata).write(self.location+".xml")
             self.set_metadata(metadata)
+            if self.matterhorn == 2:  # checked
+                self.generate_xml_metadata(metadata).write(self.location+".xml")
             
         # Muxer
         muxer = gst.element_factory_make("oggmux", "muxer")
@@ -141,9 +142,11 @@ class OggOutput(IOutput):
         try:
             self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
             self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
+            self.matterhorn = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn"))
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", self.video_bitrate)
         except TypeError:
             # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
             pass
@@ -183,6 +186,15 @@ class OggOutput(IOutput):
             
             self.widget.connect(self.spinbox_video_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_video_bitrate)
             
+            #
+            # Misc.
+            #
+            self.label_matterhorn = QtGui.QLabel("Matterhorn Metadata")
+            self.checkbox_matterhorn = QtGui.QCheckBox()
+            layout.addRow(self.label_matterhorn, self.checkbox_matterhorn)
+            
+            self.widget.connect(self.checkbox_matterhorn, QtCore.SIGNAL('stateChanged(int)'), self.set_matterhorn)
+            
         return self.widget
 
     def widget_load_config(self, plugman):
@@ -190,16 +202,25 @@ class OggOutput(IOutput):
         
         self.spinbox_audio_quality.setValue(float(self.audio_quality))
         self.spinbox_video_quality.setValue(int(self.video_bitrate))
+        self.checkbox_matterhorn.setCheckState(int(self.matterhorn))
 
     def set_audio_quality(self):
         self.audio_quality = self.spinbox_audio_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
-        self.plugman.save()
         
     def set_video_bitrate(self):
         self.video_bitrate = self.spinbox_video_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
-        self.plugman.save()
+        
+    def set_matterhorn(self, enabled=False):
+        """
+        Enables or Disables Matterhorn metadata generation.
+        
+        If enabled filename.xml will be created along side the video file
+        containing matterhorn metadata in xml format.
+        """
+        self.matterhorn = enabled
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", str(self.matterhorn))
         
     def get_properties(self):
         return ['AudioQuality', 'VideoBitrate']

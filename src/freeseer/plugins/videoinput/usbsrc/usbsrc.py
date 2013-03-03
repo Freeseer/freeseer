@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -25,6 +25,7 @@ http://wiki.github.com/Freeseer/freeseer/
 
 import ConfigParser
 import os
+import sys
 
 import pygst
 pygst.require("0.10")
@@ -36,24 +37,8 @@ from freeseer.framework.plugin import IVideoInput
 
 class USBSrc(IVideoInput):
     name = "USB Source"
-    os = ["linux", "linux2"]
-    device = "/dev/video0"
-    device_list = []
-    
-    def __init__(self):
-        IVideoInput.__init__(self)
-        
-        #
-        # Detect available devices
-        #
-        i = 0
-        path = "/dev/video"
-        devpath = path + str(i)
-        
-        while os.path.exists(devpath):
-            self.device_list.append(devpath)
-            i=i+1
-            devpath=path + str(i)
+    os = ["linux", "linux2", "win32", "cygwin"]
+    device = None
     
     def get_videoinput_bin(self):
         """
@@ -61,12 +46,21 @@ class USBSrc(IVideoInput):
         """
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
-        videosrc = gst.element_factory_make("v4l2src", "videosrc")
-        videosrc.set_property("device", self.device)
+        videosrc = None
+        if sys.platform.startswith("linux"):
+            videosrc = gst.element_factory_make("v4l2src", "videosrc")
+            videosrc.set_property("device", self.device)
+        elif sys.platform in ["win32", "cygwin"]:
+            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
+            videosrc.set_property("device-name", self.device)
         bin.add(videosrc)
         
+        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
+        bin.add(colorspace)
+        videosrc.link(colorspace)
+        
         # Setup ghost pad
-        pad = videosrc.get_pad("src")
+        pad = colorspace.get_pad("src")
         ghostpad = gst.GhostPad("videosrc", pad)
         bin.add_pad(ghostpad)
         
@@ -93,7 +87,7 @@ class USBSrc(IVideoInput):
             
             # Connections
             self.widget.connect(self.combobox, 
-                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+                                QtCore.SIGNAL('currentIndexChanged(int)'), 
                                 self.set_device)
             
         return self.widget
@@ -104,12 +98,48 @@ class USBSrc(IVideoInput):
         # Load the combobox with inputs
         self.combobox.clear()
         n = 0
-        for i in self.device_list:
-            self.combobox.addItem(i)
-            if i == self.device:
+        for device, devurl in self.get_devices().items():
+            self.combobox.addItem(device, devurl)
+            if device == self.device:
                 self.combobox.setCurrentIndex(n)
-            n = n +1
+            n = n + 1
             
+    def get_devices(self):
+        """
+        Returns a list of possible devices detected as a dictionary
+        
+        On Linux the dictionary is a key, value pair of:
+            Device Name : Device Path
+            
+        On Windows the dictionary is a key, value pair of:
+            Device Name : Device Name
+        
+        NOTE: GstPropertyProbe has been removed in later versions of Gstreamer
+              When a new method is available this function will need to be
+              redesigned:
+                  https://bugzilla.gnome.org/show_bug.cgi?id=678402
+        """
+        
+        devicemap = {}
+        
+        if sys.platform.startswith("linux"):
+            videosrc = gst.element_factory_make("v4l2src", "videosrc")
+            videosrc.probe_property_name('device')
+            devices = videosrc.probe_get_values_name('device')            
+            
+            for device in devices:
+                videosrc.set_property('device', device)
+                devicemap[videosrc.get_property('device-name')] = device
+            
+        elif sys.platform in ["win32", "cygwin"]:
+            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
+            devices = videosrc.probe_property_name('device-name')
+            
+            for device in devices:
+                devicemap[device] = device
+                
+        return devicemap
+    
     def set_device(self, device):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
-        self.plugman.save()
+        devname = self.combobox.itemData(device).toString()
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", devname)
