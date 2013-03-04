@@ -217,47 +217,47 @@
     <message>
         <location filename="../../controller/Client.py" line="91"/>
         <source>Controller Client</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラ クライアント</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="95"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>ステータス</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="96"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>コネクト</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="97"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ディスコネクト</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="103"/>
         <source>Connection Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>接続設定</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="104"/>
         <source>Host name (or IP Address)</source>
-        <translation type="unfinished"></translation>
+        <translation>ホスト名 (IPアドレス)</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="105"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>ポート</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="106"/>
         <source>Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>パスフレーズ</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="117"/>
         <source>Recent Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>最近の接続</translation>
     </message>
 </context>
 <context>
@@ -265,72 +265,72 @@
     <message>
         <location filename="../../controller/Server.py" line="107"/>
         <source>Controller Server</source>
-        <translation type="unfinished"></translation>
+        <translation>コントローラサーバー</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="112"/>
         <source>Server status</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバのステータス</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="113"/>
         <source>Start Server</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバを起動する</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="114"/>
         <source>Stop Server</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバーを停止する</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="115"/>
         <source>Start Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディングを開始する</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="116"/>
         <source>Stop Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディングを止める</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="117"/>
         <source>Pause Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディングを一時停止する</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="118"/>
         <source>Resume Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>レコーディングを再開</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="124"/>
         <source>Server Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバーの設定</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="125"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IPアドレス</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="126"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>ポート</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="127"/>
         <source>Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>パスフレーズ</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="139"/>
         <source>Control Clients</source>
-        <translation type="unfinished"></translation>
+        <translation>コントロールクライアント</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="141"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>ディスコネクト</translation>
     </message>
 </context>
 <context>
@@ -551,12 +551,12 @@
     <message>
         <location filename="../../record/record.py" line="230"/>
         <source>Reporting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>報告ツール</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="197"/>
         <source>&amp;Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>サーバーに接続する(&amp;C)</translation>
     </message>
 </context>
 <context>

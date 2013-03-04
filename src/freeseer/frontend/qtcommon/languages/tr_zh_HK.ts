@@ -217,47 +217,47 @@
     <message>
         <location filename="../../controller/Client.py" line="91"/>
         <source>Controller Client</source>
-        <translation type="unfinished"></translation>
+        <translation>控制器客戶端</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="95"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>狀態</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="96"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>接通</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="97"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>斷開</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="103"/>
         <source>Connection Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>連接設置</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="104"/>
         <source>Host name (or IP Address)</source>
-        <translation type="unfinished"></translation>
+        <translation>主機名 (IP地址)</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="105"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>端口</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="106"/>
         <source>Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>密碼</translation>
     </message>
     <message>
         <location filename="../../controller/Client.py" line="117"/>
         <source>Recent Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>最近連接</translation>
     </message>
 </context>
 <context>
@@ -265,72 +265,72 @@
     <message>
         <location filename="../../controller/Server.py" line="107"/>
         <source>Controller Server</source>
-        <translation type="unfinished"></translation>
+        <translation>控制器服務器</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="112"/>
         <source>Server status</source>
-        <translation type="unfinished"></translation>
+        <translation>服務器狀態</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="113"/>
         <source>Start Server</source>
-        <translation type="unfinished"></translation>
+        <translation>啟動服務器</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="114"/>
         <source>Stop Server</source>
-        <translation type="unfinished"></translation>
+        <translation>停止服務器</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="115"/>
         <source>Start Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>開始記錄</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="116"/>
         <source>Stop Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>停止記錄</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="117"/>
         <source>Pause Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>暫停記錄</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="118"/>
         <source>Resume Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>恢復記錄</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="124"/>
         <source>Server Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>服務器設置</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="125"/>
         <source>IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP地址</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="126"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>端口</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="127"/>
         <source>Passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>密碼</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="139"/>
         <source>Control Clients</source>
-        <translation type="unfinished"></translation>
+        <translation>控制客戶端</translation>
     </message>
     <message>
         <location filename="../../controller/Server.py" line="141"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>斷開</translation>
     </message>
 </context>
 <context>
@@ -551,12 +551,12 @@
     <message>
         <location filename="../../record/record.py" line="230"/>
         <source>Reporting Tool</source>
-        <translation type="unfinished"></translation>
+        <translation>報告工具</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="197"/>
         <source>&amp;Connect to server</source>
-        <translation type="unfinished"></translation>
+        <translation>連接到服務器(&amp;C)</translation>
     </message>
 </context>
 <context>
