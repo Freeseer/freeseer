@@ -64,7 +64,9 @@ class PulseSrc(IAudioInput):
             inputstr = subprocess.check_output('pactl list | grep -A3 "Source #"', shell=True)
             inputstr = inputstr.splitlines()
             for i in range(0, len(inputstr), 5):
-                result.append((inputstr[i+2][7:], inputstr[i+3][14:]))
+                name = inputstr[i + 2][inputstr[i + 2].find(':') + 2:]
+                description = inputstr[i + 3][inputstr[i + 3].find(':') + 2:]
+                result.append((name, description))
         except:
             result = [('0', 'Default')]
             logging.warn('Could not get pulseaudio sources.')
