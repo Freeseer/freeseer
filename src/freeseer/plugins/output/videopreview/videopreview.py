@@ -47,7 +47,7 @@ class VideoPreview(IOutput):
     LEAKY_VALUES = ["no", "upstream", "downstream"]
     
     def get_output_bin(self, audio=False, video=True, metadata=None):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         # Leaky queue necessary to work with rtmp streaming
         videoqueue = gst.element_factory_make("queue", "videoqueue")
@@ -65,7 +65,9 @@ class VideoPreview(IOutput):
         ghostpad = gst.GhostPad("sink", pad)
         bin.add_pad(ghostpad)
         
-        gst.element_link_many(videoqueue, cspace, videosink)
+        # Link Elements
+        videoqueue.link(cspace)
+        cspace.link(videosink)
         
         return bin
     

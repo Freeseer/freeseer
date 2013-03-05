@@ -63,7 +63,8 @@ class Gstreamer:
         # Initialize Entry Points
         self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
         self.video_tee = gst.element_factory_make('tee', 'video_tee')
-        self.player.add(self.audio_tee, self.video_tee)
+        self.player.add(self.audio_tee)
+        self.player.add(self.video_tee)
         
         logging.debug("Gstreamer initialized.")
 
@@ -386,8 +387,8 @@ class Gstreamer:
                 
     def unload_output_plugins(self):
         for plugin in self.output_plugins:
-            gst.element_unlink_many(self.video_tee, plugin)
-            gst.element_unlink_many(self.audio_tee, plugin)
+            self.video_tee.unlink(plugin)
+            self.audio_tee.unlink(plugin)
             self.player.remove(plugin)
     
     def load_audiomixer(self, mixer, inputs):
@@ -403,10 +404,10 @@ class Gstreamer:
     def unload_audiomixer(self):
         if self.record_audio is True:
             for plugin in self.audio_input_plugins:
-                gst.element_unlink_many(self.audio_tee, plugin)
+                self.audio_tee.unlink(plugin)
                 self.player.remove(plugin)
         
-            gst.element_unlink_many(self.audiomixer, self.audio_tee)
+            self.audiomixer.unlink(self.audio_tee)
             self.player.remove(self.audiomixer)
 
     def load_videomixer(self, mixer, inputs):
@@ -422,8 +423,8 @@ class Gstreamer:
     def unload_videomixer(self):
         if self.record_video is True:
             for plugin in self.video_input_plugins:
-                gst.element_unlink_many(self.video_tee, plugin)
+                self.video_tee.unlink(plugin)
                 self.player.remove(plugin)
             
-            gst.element_unlink_many(self.videomixer, self.video_tee)
+            self.videomixer.unlink(self.video_tee)
             self.player.remove(self.videomixer)

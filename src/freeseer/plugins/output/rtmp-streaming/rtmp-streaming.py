@@ -56,7 +56,7 @@ class RTMPOutput(IOutput):
 	# Streams flv content to [self.url]
 	# TODO - Error handling - verify pad setup
     def get_output_bin(self, audio=True, video=True, metadata=None):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         if metadata is not None:
             self.set_metadata(metadata)
@@ -101,7 +101,11 @@ class RTMPOutput(IOutput):
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
             
-            gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, muxer)
+            # Link Elements
+            audioqueue.link(audioconvert)
+            audioconvert.link(audiolevel)
+            audiolevel.link(audiocodec)
+            audiocodec.link(muxer)
         
         
         #
@@ -122,12 +126,14 @@ class RTMPOutput(IOutput):
             video_ghostpad = gst.GhostPad("videosink", videopad)
             bin.add_pad(video_ghostpad)
             
-            gst.element_link_many(videoqueue, videocodec, muxer)
+            # Link Elements
+            videoqueue.link(videocodec)
+            videocodec.link(muxer)
         
         #
         # Link muxer to rtmpsink
         #
-        gst.element_link_many(muxer, rtmpsink)
+        muxer.link(rtmpsink)
         
         return bin
     
