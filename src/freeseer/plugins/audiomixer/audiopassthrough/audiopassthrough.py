@@ -40,7 +40,7 @@ class AudioPassthrough(IAudioMixer):
     widget = None
     
     def get_audiomixer_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         audiomixer = gst.element_factory_make("adder", "audiomixer")
         bin.add(audiomixer)

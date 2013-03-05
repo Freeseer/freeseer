@@ -38,7 +38,7 @@ class WebMOutput(IOutput):
     tags = None
     
     def get_output_bin(self, audio=True, video=True, metadata=None):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         if metadata is not None:
             self.set_metadata(metadata)
@@ -82,7 +82,12 @@ class WebMOutput(IOutput):
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
             
-            gst.element_link_many(audioqueue, audioconvert, audiolevel, audiocodec, vorbistag, muxer)
+            # Link Elements
+            audioqueue.link(audioconvert)
+            audioconvert.link(audiolevel)
+            audiolevel.link(audiocodec)
+            audiocodec.link(vorbistag)
+            vorbistag.link(muxer)
         
         #
         # Setup Video Pipeline
@@ -98,12 +103,14 @@ class WebMOutput(IOutput):
             video_ghostpad = gst.GhostPad("videosink", videopad)
             bin.add_pad(video_ghostpad)
             
-            gst.element_link_many(videoqueue, videocodec, muxer)
+            # Link Elements
+            videoqueue.link(videocodec)
+            videocodec.link(muxer)
         
         #
         # Link muxer to filesink
         #
-        gst.element_link_many(muxer, filesink)
+        muxer.link(filesink)
         
         return bin
     

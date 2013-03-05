@@ -41,7 +41,7 @@ class PictureInPicture(IVideoMixer):
     widget = None
     
     def get_videomixer_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         videomixer = gst.element_factory_make("videomixer", "videomixer")
         bin.add(videomixer)
