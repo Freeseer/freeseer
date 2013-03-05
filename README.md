@@ -54,37 +54,18 @@ Developers
         $ sudo easy_install yapsy==1.9.2
 
     ### Windows:
-    Install
-
-    + python-2.7.2
-    + GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7
-    + GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7
-    + setuptools-0.6c11.win32-py2.7 
-    + PyQt-Py2.7-x86-gpl-4.8.5-1
-    + pygtk
-    + feedparser
-    + yapsy
-
-    To install FeedParser, PyGTK, and Yapsy, run:
-    
-        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py feedparser
-        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py pygtk
-        C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy==1.9.2
-    
-    
-    + Windows 32-bit packages are recommended
-    (pygtk-all-in-one package does not have a 64-bit installer yet)
-    + Python needs to be version 2.7.\*
-
-    On Windows, add the following paths to your PATH variable (the number
-    must match your Python version, e.g. 27 for version 2.7):
-    
-        C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin
-        
-        
-    Install additional Windows Freeseer plugins by placing the freeseer-plugins-windows repository in your C:\Users\<user>\.freeseer\plugins directory:
-    
-        https://github.com/Freeseer/freeseer-plugins-windows
+      1. [python-2.7.3](http://www.python.org/getit/)([x86](http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi) or [x64](http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi))
+        + Python needs to be version 2.7.\*
+      1. [setuptools-0.6c11.win32-py2.7](https://pypi.python.org/pypi/setuptools#downloads) ([download](https://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe#md5=57e1e64f6b7c7f1d2eddfc9746bbaf20))
+      1. [GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7](https://code.google.com/p/ossbuild/downloads/list)([download](https://ossbuild.googlecode.com/files/GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7.msi))
+      1. [GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7](https://code.google.com/p/ossbuild/downloads/list)([download](https://ossbuild.googlecode.com/files/GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7.msi))
+      1. [PyQt-Py2.7-x86-gpl-4.8.5-1](http://www.riverbankcomputing.com/software/pyqt/download)([x86](http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.10/PyQt4-4.10-gpl-Py2.7-Qt4.8.4-x32.exe/download))
+        + Windows 32-bit packages are recommended (pygtk-all-in-one package does not have a 64-bit installer yet)
+        + On Windows, add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
+      1. these python eggs : ```pygtk```, ```feedparser```, ```yapsy```
+         - ```C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py feedparser```
+         - ```C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py pygtk```
+         - ```C:\Python27\python.exe C:\Python27\Lib\site-packages\easy_install.py yapsy==1.9.2```
 
     ### Mac OS X:
     Coming soon!
