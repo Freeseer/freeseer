@@ -23,12 +23,12 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+import logging
+
+import ConfigParser
+import gst
 import pygst
 pygst.require("0.10")
-import gst
-import subprocess
-import logging
-import ConfigParser
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IAudioInput
