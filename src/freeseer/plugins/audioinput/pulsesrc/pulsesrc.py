@@ -60,16 +60,11 @@ class PulseSrc(IAudioInput):
         Get a list of pairs in the form (name, description) for each pulseaudio source.
         """
         result = []
-        try:
-            inputstr = subprocess.check_output('pactl list | grep -A3 "Source #"', shell=True)
-            inputstr = inputstr.splitlines()
-            for i in range(0, len(inputstr), 5):
-                name = inputstr[i + 2][inputstr[i + 2].find(':') + 2:]
-                description = inputstr[i + 3][inputstr[i + 3].find(':') + 2:]
-                result.append((name, description))
-        except:
-            result = [('0', 'Default')]
-            logging.warn('Could not get pulseaudio sources.')
+        audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
+        audiosrc.probe_property_name('device')
+        names = audiosrc.probe_get_values_name('device')
+        #should be getting actual device description, but .get_property('device-name') does not work
+        result = [(name, name) for name in names]
         return result
 
     def load_config(self, plugman):
