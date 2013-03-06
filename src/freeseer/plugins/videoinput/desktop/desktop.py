@@ -46,6 +46,7 @@ class DesktopLinuxSrc(IVideoInput):
     # ximagesrc
     desktop = "Full"
     screen = 0
+    window = ""
     
     # Area Select
     start_x = 0
@@ -70,6 +71,9 @@ class DesktopLinuxSrc(IVideoInput):
                 videosrc.set_property("endx", self.end_x)
                 videosrc.set_property("endy", self.end_y)
                 logging.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+                
+            if self.desktop == "Window":
+                videosrc.set_property("xname", self.window)
             
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dx9screencapsrc", "videosrc")
@@ -101,6 +105,7 @@ class DesktopLinuxSrc(IVideoInput):
         try:
             self.desktop = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop")
             self.screen = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Screen")
+            self.window = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Window")
             self.start_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_x"))
             self.start_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_y"))
             self.end_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_x"))
@@ -108,6 +113,7 @@ class DesktopLinuxSrc(IVideoInput):
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", self.desktop)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", self.window)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", self.start_x)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", self.start_y)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", self.end_x)
@@ -138,16 +144,29 @@ class DesktopLinuxSrc(IVideoInput):
             layout = QtGui.QFormLayout()
             self.widget.setLayout(layout)
             
-            self.desktopLabel = QtGui.QLabel("Record Desktop")
-            self.areaLabel = QtGui.QLabel("Record Region")
+            self.desktopLabel = QtGui.QLabel("Record Desktop")            
             self.desktopButton = QtGui.QRadioButton()
+            layout.addRow(self.desktopLabel, self.desktopButton)
+            
             areaGroup = QtGui.QHBoxLayout()
+            self.areaLabel = QtGui.QLabel("Record Region")
             self.areaButton = QtGui.QRadioButton()
             self.setAreaButton = QtGui.QPushButton("Set")
             areaGroup.addWidget(self.areaButton)
-            areaGroup.addWidget(self.setAreaButton)
-            layout.addRow(self.desktopLabel, self.desktopButton)
+            areaGroup.addWidget(self.setAreaButton)            
             layout.addRow(self.areaLabel, areaGroup)
+            
+            if sys.platform.startswith('linux'):
+                windowGroup = QtGui.QHBoxLayout()
+                self.windowLabel = QtGui.QLabel("Record Window")
+                self.windowButton = QtGui.QRadioButton()
+                self.windowList = QtGui.QComboBox()
+                windowGroup.addWidget(self.windowButton)
+                windowGroup.addWidget(self.windowList)
+                layout.addRow(self.windowLabel, windowGroup)
+                
+                self.widget.connect(self.windowButton, QtCore.SIGNAL('clicked()'), self.set_desktop_window)
+                self.widget.connect(self.windowList, QtCore.SIGNAL('currentIndexChanged(const QString &)'), self.set_window)
             
             self.screenLabel = QtGui.QLabel("Screen")
             self.screenSpinBox = QtGui.QSpinBox()
@@ -158,7 +177,7 @@ class DesktopLinuxSrc(IVideoInput):
             self.widget.connect(self.areaButton, QtCore.SIGNAL('clicked()'), self.set_desktop_area)
             self.widget.connect(self.setAreaButton, QtCore.SIGNAL('clicked()'), self.area_select)
             self.widget.connect(self.screenSpinBox, QtCore.SIGNAL('valueChanged(int)'), self.set_screen)
-            self.widget.connect(self.setAreaButton, QtCore.SIGNAL('clicked()'), self.area_select)
+            
             
         return self.widget
 
@@ -169,11 +188,27 @@ class DesktopLinuxSrc(IVideoInput):
             self.desktopButton.setChecked(True)
         elif self.desktop == "Area":
             self.areaButton.setChecked(True)
+        elif self.desktop == "Window":
+            self.windowButton.setChecked(True)
         
         # Xlib is only available on linux
         if sys.platform.startswith("linux"):
             display = Xlib.display.Display()
             self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
+            
+            root = display.screen().root
+            windows = root.query_tree().children
+            uniq_wins = []
+            n = 0
+            for win in windows:
+                win_name = win.get_wm_name()
+                if win_name not in uniq_wins and win_name is not None:
+                    uniq_wins.append(win_name)
+                    self.windowList.addItem(win_name)
+                    
+                    if win_name == self.window:
+                        self.windowList.setCurrentIndex(n)
+                    n = n + 1
             
     def set_screen(self, screen):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
@@ -183,3 +218,9 @@ class DesktopLinuxSrc(IVideoInput):
         
     def set_desktop_area(self):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Area")
+        
+    def set_desktop_window(self):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Window")
+        
+    def set_window(self, window):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", window)
