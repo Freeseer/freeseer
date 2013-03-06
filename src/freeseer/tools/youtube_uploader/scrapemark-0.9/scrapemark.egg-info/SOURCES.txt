@@ -1,7 +1,0 @@
-README
-scrapemark.py
-setup.py
-scrapemark.egg-info/PKG-INFO
-scrapemark.egg-info/SOURCES.txt
-scrapemark.egg-info/dependency_links.txt
-scrapemark.egg-info/top_level.txt
