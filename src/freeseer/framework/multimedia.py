@@ -361,8 +361,6 @@ class Gstreamer:
                 
                 self.load_videomixer(videomixer, videomixer_inputs)
                 
-        self.pause()
-    
     def load_output_plugins(self, plugins, record_audio, record_video, metadata):
         self.output_plugins = []
         for plugin in plugins:
