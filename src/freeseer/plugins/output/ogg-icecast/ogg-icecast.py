@@ -48,7 +48,7 @@ class OggIcecast(IOutput):
     mount = "stream.ogg"
     
     def get_output_bin(self, audio=True, video=True, metadata=None):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         if metadata is not None:
             self.set_metadata(metadata)
@@ -91,7 +91,11 @@ class OggIcecast(IOutput):
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
             
-            gst.element_link_many(audioqueue, audioconvert, audiocodec, vorbistag, muxer)
+            # Link elements
+            audioqueue.link(audioconvert)
+            audioconvert.link(audiocodec)
+            audiocodec.link(vorbistag)
+            vorbistag.link(muxer)
         
         #
         # Setup Video Pipeline
@@ -107,12 +111,13 @@ class OggIcecast(IOutput):
             video_ghostpad = gst.GhostPad("videosink", videopad)
             bin.add_pad(video_ghostpad)
             
-            gst.element_link_many(videoqueue, videocodec, muxer)
+            videoqueue.link(videocodec)
+            videocodec.link(muxer)
         
         #
         # Link muxer to icecast
         #
-        gst.element_link_many(muxer, icecast)
+        muxer.link(icecast)
         
         return bin
     

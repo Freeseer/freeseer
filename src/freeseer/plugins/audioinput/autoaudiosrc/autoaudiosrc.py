@@ -29,7 +29,7 @@ import gst
 
 from freeseer.framework.plugin import IAudioInput
 
-class ALSASrc(IAudioInput):
+class AutoAudioSrc(IAudioInput):
     name = "Auto Audio Source"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     

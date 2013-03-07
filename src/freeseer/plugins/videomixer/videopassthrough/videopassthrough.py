@@ -45,7 +45,7 @@ class VideoPassthrough(IVideoMixer):
     resolution = "NOSCALE"
     
     def get_videomixer_bin(self):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         # Video Rate
         videorate = gst.element_factory_make("videorate", "videorate")
@@ -71,7 +71,11 @@ class VideoPassthrough(IVideoMixer):
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
         bin.add(colorspace)
         
-        gst.element_link_many(videorate, videorate_cap, videoscale, videoscale_cap, colorspace)
+        # Link Elements
+        videorate.link(videorate_cap)
+        videorate_cap.link(videoscale)
+        videoscale.link(videoscale_cap)
+        videoscale_cap.link(colorspace)
         
         # Setup ghost pad
         sinkpad = videorate.get_pad("sink")

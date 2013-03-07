@@ -64,7 +64,18 @@ class FirewireSrc(IVideoInput):
         dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
         dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
         
-        bin.add(videosrc, dv1394q1, dv1394dvdemux, dv1394q2, dv1394dvdec)
+        # Add Elements
+        bin.add(videosrc)
+        bin.add(dv1394q1)
+        bin.add(dv1394dvdemux)
+        bin.add(dv1394q2)
+        bin.add(dv1394dvdec)
+        
+        # Link Elements
+        videosrc.link(dv1394q1)
+        dv1394q1.link(dv1394dvdemux)
+        dv1394dvdemux.link(dv1394q2)
+        dv1394q2.link(dv1394dvdec)
         
         # Setup ghost pad
         pad = dv1394dvdec.get_pad("src")

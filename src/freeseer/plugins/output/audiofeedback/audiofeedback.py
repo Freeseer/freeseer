@@ -43,7 +43,7 @@ class AudioFeedback(IOutput):
     feedbacksink = "autoaudiosink"
     
     def get_output_bin(self, audio=True, video=False, metadata=None):
-        bin = gst.Bin(self.name)
+        bin = gst.Bin()
         
         audioqueue = gst.element_factory_make("queue", "audioqueue")
         bin.add(audioqueue)
@@ -56,7 +56,7 @@ class AudioFeedback(IOutput):
         ghostpad = gst.GhostPad("sink", pad)
         bin.add_pad(ghostpad)
         
-        gst.element_link_many(audioqueue, audiosink)
+        audioqueue.link(audiosink)
         
         return bin
     

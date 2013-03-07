@@ -24,6 +24,7 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 import ConfigParser
+import logging
 import sys
 
 import pygst
@@ -36,13 +37,22 @@ if sys.platform.startswith("linux"):
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IVideoInput
+from freeseer.framework.qt_area_selector import QtAreaSelector
 
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop Source"
     os = ["linux", "linux2", "win32", "cygwin"]
     
     # ximagesrc
+    desktop = "Full"
     screen = 0
+    window = ""
+    
+    # Area Select
+    start_x = 0
+    start_y = 0
+    end_x = 0
+    end_y = 0
     
     def get_videoinput_bin(self):
         """
@@ -53,8 +63,29 @@ class DesktopLinuxSrc(IVideoInput):
         videosrc = None
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("ximagesrc", "videosrc")
+            
+            # Configure coordinates if we're not recording full desktop
+            if self.desktop == "Area":
+                videosrc.set_property("startx", self.start_x)
+                videosrc.set_property("starty", self.start_y)
+                videosrc.set_property("endx", self.end_x)
+                videosrc.set_property("endy", self.end_y)
+                logging.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+                
+            if self.desktop == "Window":
+                videosrc.set_property("xname", self.window)
+            
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dx9screencapsrc", "videosrc")
+            
+            # Configure coordinates if we're not recording full desktop
+            if self.desktop == "Area":
+                videosrc.set_property("x", self.start_x)
+                videosrc.set_property("y", self.start_y)
+                videosrc.set_property("width", self.start_x + self.end_x)
+                videosrc.set_property("height", self.start_y + self.end_y)
+                logging.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+                
         bin.add(videosrc)
         
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
@@ -72,12 +103,39 @@ class DesktopLinuxSrc(IVideoInput):
         self.plugman = plugman
         
         try:
+            self.desktop = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop")
             self.screen = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Screen")
+            self.window = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Window")
+            self.start_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_x"))
+            self.start_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_y"))
+            self.end_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_x"))
+            self.end_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_y"))
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", self.desktop)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", self.window)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", self.start_x)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", self.start_y)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", self.end_x)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", self.end_y)
         except TypeError:
             # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
             pass
+        
+    def area_select(self):
+        self.area_selector = QtAreaSelector(self)
+        self.area_selector.show()
+        self.gui.hide()
+        self.widget.window().hide()
+
+    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", start_x)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_y", start_y)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", end_x)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_y", end_y)
+        logging.debug('Area selector start: %sx%s end: %sx%s' % (start_x, start_y, end_x, end_y))
+        self.gui.show()        
+        self.widget.window().show()
         
     def get_widget(self):
         if self.widget is None:
@@ -86,22 +144,83 @@ class DesktopLinuxSrc(IVideoInput):
             layout = QtGui.QFormLayout()
             self.widget.setLayout(layout)
             
+            self.desktopLabel = QtGui.QLabel("Record Desktop")            
+            self.desktopButton = QtGui.QRadioButton()
+            layout.addRow(self.desktopLabel, self.desktopButton)
+            
+            areaGroup = QtGui.QHBoxLayout()
+            self.areaLabel = QtGui.QLabel("Record Region")
+            self.areaButton = QtGui.QRadioButton()
+            self.setAreaButton = QtGui.QPushButton("Set")
+            areaGroup.addWidget(self.areaButton)
+            areaGroup.addWidget(self.setAreaButton)            
+            layout.addRow(self.areaLabel, areaGroup)
+            
+            if sys.platform.startswith('linux'):
+                windowGroup = QtGui.QHBoxLayout()
+                self.windowLabel = QtGui.QLabel("Record Window")
+                self.windowButton = QtGui.QRadioButton()
+                self.windowList = QtGui.QComboBox()
+                windowGroup.addWidget(self.windowButton)
+                windowGroup.addWidget(self.windowList)
+                layout.addRow(self.windowLabel, windowGroup)
+                
+                self.widget.connect(self.windowButton, QtCore.SIGNAL('clicked()'), self.set_desktop_window)
+                self.widget.connect(self.windowList, QtCore.SIGNAL('currentIndexChanged(const QString &)'), self.set_window)
+            
             self.screenLabel = QtGui.QLabel("Screen")
             self.screenSpinBox = QtGui.QSpinBox()
             layout.addRow(self.screenLabel, self.screenSpinBox)
             
             # Connections
+            self.widget.connect(self.desktopButton, QtCore.SIGNAL('clicked()'), self.set_desktop_full)
+            self.widget.connect(self.areaButton, QtCore.SIGNAL('clicked()'), self.set_desktop_area)
+            self.widget.connect(self.setAreaButton, QtCore.SIGNAL('clicked()'), self.area_select)
             self.widget.connect(self.screenSpinBox, QtCore.SIGNAL('valueChanged(int)'), self.set_screen)
+            
             
         return self.widget
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
+        if self.desktop == "Full":
+            self.desktopButton.setChecked(True)
+        elif self.desktop == "Area":
+            self.areaButton.setChecked(True)
+        elif self.desktop == "Window":
+            self.windowButton.setChecked(True)
+        
         # Xlib is only available on linux
         if sys.platform.startswith("linux"):
             display = Xlib.display.Display()
             self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
             
+            root = display.screen().root
+            windows = root.query_tree().children
+            uniq_wins = []
+            n = 0
+            for win in windows:
+                win_name = win.get_wm_name()
+                if win_name not in uniq_wins and win_name is not None:
+                    uniq_wins.append(win_name)
+                    self.windowList.addItem(win_name)
+                    
+                    if win_name == self.window:
+                        self.windowList.setCurrentIndex(n)
+                    n = n + 1
+            
     def set_screen(self, screen):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
+        
+    def set_desktop_full(self):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Full")
+        
+    def set_desktop_area(self):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Area")
+        
+    def set_desktop_window(self):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Window")
+        
+    def set_window(self, window):
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", window)
