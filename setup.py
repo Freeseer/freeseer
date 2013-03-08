@@ -3,7 +3,7 @@ import os
 
 from setuptools import setup
 setup(name='freeseer',
-      version='3.0.0',
+      version='3.0.0-beta',
       author='Free and Open Source Software Learning Center',
       author_email='fosslc@gmail.com',
       url='http://wiki.github.com/Freeseer/freeseer/',
