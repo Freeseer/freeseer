@@ -158,6 +158,9 @@ class RTMPOutput(IOutput):
         # Link muxer to rtmpsink
         #
         muxer.link(rtmpsink)
+
+        self.justin_api.set_channel_status(self.get_talk_status(metadata))
+
         return bin
 
     def get_talk_status(self, metadata):
