@@ -208,6 +208,7 @@ class RTMPOutput(IOutput):
             self.justin_api_persistent = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object")
             if self.justin_api_persistent:
                 self.justin_api = JustinApi.from_string(self.justin_api_persistent)
+                self.justin_api.set_save_method(self.set_justin_api_persistent)
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
 
@@ -650,10 +651,11 @@ class JustinApi:
         data = self.get_data('channel/show/%s.json' % login)
         print "CHANNEL", data
         
-        ctitle = {
-            'title': "Wolololo!",
+        update_contents = {
+            'title': status,
+            'status': status,
         }
 
-        self.set_data('channel/update.json', ctitle)
+        self.set_data('channel/update.json', update_contents)
     def to_string(self):
         return pickle.dumps([self.consumer_key, self.consumer_secret, str(self.request_token_str), str(self.access_token_str)])
