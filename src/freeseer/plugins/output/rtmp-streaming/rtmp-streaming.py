@@ -34,6 +34,8 @@ from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IOutput
 
+import oauth
+
 class RTMPOutput(IOutput):
     name = "RTMP Streaming"
     os = ["linux", "linux2", "win32", "cygwin"]
@@ -51,11 +53,16 @@ class RTMPOutput(IOutput):
     streaming_key = ''
     consumer_key = ''
     consumer_secret = ''
+    authorization_url = ''
 
     TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
     AUDIO_CODEC_VALUES = ['lame', 'faac']
     STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
     JUSTIN_URL = 'rtmp://live-3c.justin.tv/app/'
+    STATUS_KEYS = ['artist', 'title']
+
+    justin_api = None
+    justin_api_persistent = ''
     
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
@@ -69,7 +76,7 @@ class RTMPOutput(IOutput):
         
         if metadata is not None:
             self.set_metadata(metadata)
-       
+
         # Muxer
         muxer = gst.element_factory_make("flvmux", "muxer")
         
@@ -152,6 +159,10 @@ class RTMPOutput(IOutput):
         #
         muxer.link(rtmpsink)
         return bin
+
+    def get_talk_status(self, metadata):
+        if not metadata: return ""
+        return " - ".join([metadata[status_key] for status_key in self.STATUS_KEYS])
     
     def set_metadata(self, data):
         '''
@@ -190,6 +201,13 @@ class RTMPOutput(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_key)
+
+        try:
+            self.justin_api_persistent = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object")
+            if self.justin_api_persistent:
+                self.justin_api = JustinApi.from_string(self.justin_api_persistent)
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
 
     def get_content_widget(self, streaming_dest):
         if streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
@@ -323,6 +341,17 @@ class RTMPOutput(IOutput):
 
             self.apply_button.clicked.connect(self.apply_justin_settings)
 
+            #
+            # URL
+            #
+
+            self.label_authorization_url = QtGui.QLabel("URL")
+            self.label_authorization_url.setVisible(False)
+            self.lineedit_authorization_url = QtGui.QLineEdit()
+            self.lineedit_authorization_url.setReadOnly(True)
+            self.lineedit_authorization_url.setVisible(False)
+            self.justin_widget_layout.addRow(self.label_authorization_url, self.lineedit_authorization_url)
+
             self.content_widget = self.justin_widget
             self.load_config_delegate = self.justin_widget_load_config
 
@@ -419,23 +448,33 @@ class RTMPOutput(IOutput):
         self.load_config_delegate()
 
     def set_streaming_key(self, text):
-        self.streaming_key = text
+        self.streaming_key = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
         self.plugman.save()
 
     def set_consumer_key(self, text):
-        self.consumer_key = text
+        self.consumer_key = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
         self.plugman.save()
 
     def set_consumer_secret(self, text):
-        self.consumer_secret = text
+        self.consumer_secret = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
+        self.plugman.save()
+
+    def set_justin_api_persistent(self, text):
+        self.justin_api_persistent = str(text)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
         self.plugman.save()
 
     def apply_justin_settings(self):
         # here is where all the justin.tv streaming presets will be applied
         self.set_stream_url(self.JUSTIN_URL + self.streaming_key)
+        url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
+        self.justin_api.set_save_method(self.set_justin_api_persistent)
+        self.lineedit_authorization_url.setText(url)
+        self.label_authorization_url.setVisible(True)
+        self.lineedit_authorization_url.setVisible(True)
         self.set_audio_codec('lame')
         
     def get_properties(self):
@@ -471,3 +510,42 @@ class RTMPOutput(IOutput):
         else:
             return "Error: There's no property with such name" 
 
+class JustinApi:
+    @staticmethod
+    def open_request(consumer_key, consumer_secret):
+        """
+        returns request url and JustinClient object
+        the object will need to obtain access token on first use
+        """
+        return "http://localhost/", JustinApi(consumer_key=consumer_key, consumer_secret=consumer_secret)
+
+    @staticmethod
+    def from_string(persistent_obj):
+        """
+        Returns JustinClient object from string.
+        """
+        consumer_key, consumer_secret, request_token, access_token = persistent_obj.split("&")
+        return JustinApi(consumer_key, consumer_secret, request_token, access_token)
+
+    def __init__(self, consumer_key="", consumer_secret="", request_token="", access_token=""):
+        self.consumer_key = consumer_key
+        self.consumer_secret = consumer_secret
+        self.request_token = request_token
+        self.access_token = access_token
+
+    def set_save_method(self, save_method):
+        """
+        upon obtaining an access token, this object will be have a different
+        serialization
+
+        in order to support this the given save_method should be called
+        upon any such change with the new serialization as its only argument
+        """
+        self.save_method = save_method
+        self.save_method(self.to_string())
+
+    def set_channel_status(self, status):
+        pass
+
+    def to_string(self):
+        return "&".join([self.consumer_key, self.consumer_secret, self.request_token, self.access_token])
