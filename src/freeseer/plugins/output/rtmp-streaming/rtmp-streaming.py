@@ -547,7 +547,7 @@ class JustinApi:
         
         auth_request = oauth.OAuthRequest.from_token_and_callback(
             token=token,
-            callback='http://jakub.adamek.student.tcs.uj.edu.pl/',
+            callback='http://localhost/',
             http_url='http://%s/oauth/authorize' % JustinApi.addr)
         
         print "TOKEN", token
