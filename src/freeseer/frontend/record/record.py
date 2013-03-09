@@ -292,7 +292,8 @@ class RecordApp(FreeseerApp):
     def standby(self, state):
         if (state): # Prepare the pipelines
             self.load_backend()
-            self.media.pause()
+            
+           # self.media.pause()
             self.mainWidget.statusLabel.setText(self.readyString)
 
     def record(self, state):
