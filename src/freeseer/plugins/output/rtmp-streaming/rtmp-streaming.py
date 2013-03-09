@@ -29,12 +29,15 @@ import pygst
 pygst.require("0.10")
 import gst
 import logging
+import httplib
+import simplejson
+import pickle
 
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IOutput
 
-import oauth
+from oauth import oauth
 
 class RTMPOutput(IOutput):
     name = "RTMP Streaming"
@@ -514,27 +517,57 @@ class RTMPOutput(IOutput):
             return "Error: There's no property with such name" 
 
 class JustinApi:
+    addr = 'api.justin.tv'
+    
     @staticmethod
     def open_request(consumer_key, consumer_secret):
         """
         returns request url and JustinClient object
         the object will need to obtain access token on first use
         """
-        return "http://localhost/", JustinApi(consumer_key=consumer_key, consumer_secret=consumer_secret)
+        consumer = oauth.OAuthConsumer(consumer_key, consumer_secret)
+        url = "http://%s/oauth/request_token" % JustinApi.addr
+        print "URL", url
+        request = oauth.OAuthRequest.from_consumer_and_token(
+            consumer,
+            None,
+            http_method='GET',
+            http_url=url)
+        
+        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, None)
+        
+        connection = httplib.HTTPConnection(JustinApi.addr)
+        connection.request('GET', request.http_url, headers=request.to_header())
+        result = connection.getresponse().read()
+        print "RESULT", result
+        
+        token = oauth.OAuthToken.from_string(result)
+        
+        auth_request = oauth.OAuthRequest.from_token_and_callback(
+            token=token,
+            callback='http://jakub.adamek.student.tcs.uj.edu.pl/',
+            http_url='http://%s/oauth/authorize' % JustinApi.addr)
+        
+        print "TOKEN", token
+        print "ACCESS URL", auth_request.to_url()
+
+        return auth_request.to_url(), JustinApi(consumer_key=consumer_key, consumer_secret=consumer_secret, request_token_str=result)
 
     @staticmethod
     def from_string(persistent_obj):
         """
         Returns JustinClient object from string.
         """
-        consumer_key, consumer_secret, request_token, access_token = persistent_obj.split("&")
-        return JustinApi(consumer_key, consumer_secret, request_token, access_token)
+        print "LOADING FROM", persistent_obj
+        consumer_key, consumer_secret, request_token_str, access_token_str = pickle.loads(persistent_obj)
+        return JustinApi(consumer_key, consumer_secret, request_token_str, access_token_str)
 
-    def __init__(self, consumer_key="", consumer_secret="", request_token="", access_token=""):
+    def __init__(self, consumer_key="", consumer_secret="", request_token_str="", access_token_str=""):
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
-        self.request_token = request_token
-        self.access_token = access_token
+        self.request_token_str = request_token_str
+        self.access_token_str = access_token_str
+        
 
     def set_save_method(self, save_method):
         """
@@ -547,8 +580,79 @@ class JustinApi:
         self.save_method = save_method
         self.save_method(self.to_string())
 
-    def set_channel_status(self, status):
-        pass
+    def obtain_access_token(self):
+        consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+        token = oauth.OAuthToken.from_string(self.request_token_str)
+        url = "http://%s/oauth/access_token" % JustinApi.addr
+        print "URL", url
+        request = oauth.OAuthRequest.from_consumer_and_token(
+            consumer,
+            token,
+            http_method='GET',
+            http_url=url)
+        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+        connection = httplib.HTTPConnection(self.addr)
+        connection.request('GET', request.http_url, headers=request.to_header())
+        result = connection.getresponse().read()
+        self.access_token_str = result
+        print "ACCESS TOKEN", result
+        access_token = oauth.OAuthToken.from_string(result)
+        print "SERIALIZED", self.to_string()
+        self.save_method(self.to_string())
 
+
+    def get_data(self, endpoint):
+        token = oauth.OAuthToken.from_string(self.access_token_str)
+        consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+        request = oauth.OAuthRequest.from_consumer_and_token(
+            consumer,
+            token,
+            http_method='GET',
+            http_url="http://%s/api/%s" % (JustinApi.addr, endpoint))
+        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+        connection = httplib.HTTPConnection(self.addr)
+        connection.request('GET', request.http_url, headers=request.to_header())
+        result = connection.getresponse().read()
+        
+        print "RESULT", result
+        data = simplejson.loads(result)
+        return data
+
+    def set_data(self, endpoint, payload):
+        token = oauth.OAuthToken.from_string(self.access_token_str)
+        consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+        request = oauth.OAuthRequest.from_consumer_and_token(
+            consumer,
+            token,
+            http_method='POST',
+            http_url="http://%s/api/%s" % (JustinApi.addr, endpoint),
+            parameters=payload)
+        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+        connection = httplib.HTTPConnection(self.addr)
+        connection.request('POST', request.http_url, body=request.to_postdata())
+        result = connection.getresponse().read()
+        
+        print "RESULT", result
+        #data = simplejson.loads(result)
+        #return data       
+        return result
+
+    def set_channel_status(self, status):
+        if not self.access_token_str:
+            self.obtain_access_token()
+        else:
+            print "maccess token! ", self.access_token_str
+        print "WHOAMI..."
+        data = self.get_data("account/whoami.json")
+        login = data['login']
+        print "LOGIN", login
+        data = self.get_data('channel/show/%s.json' % login)
+        print "CHANNEL", data
+        
+        ctitle = {
+            'title': "Wolololo!",
+        }
+
+        self.set_data('channel/update.json', ctitle)
     def to_string(self):
-        return "&".join([self.consumer_key, self.consumer_secret, self.request_token, self.access_token])
+        return pickle.dumps([self.consumer_key, self.consumer_secret, str(self.request_token_str), str(self.access_token_str)])
