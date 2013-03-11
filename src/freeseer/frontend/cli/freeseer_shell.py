@@ -27,8 +27,7 @@ import logging
 from cmd import Cmd
 from help import Help
 
-from freeseer import project_info
-from freeseer import settings
+from freeseer import settings, __version__, NAME, DESCRIPTION, COPYRIGHT
 from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
 from freeseer.framework.multimedia import Gstreamer
@@ -81,8 +80,7 @@ class FreeseerShell(Cmd):
             - talk      # Configures the talk database
         
         Type "help <topic>", "credits", or "license" for more information.""".format(
-            project_info.NAME, project_info.VERSION, project_info.DESCRIPTION,
-            project_info.COPYRIGHT)
+            NAME, __version__, DESCRIPTION, COPYRIGHT)
         self.prompt = '?- '
 
         # Modify help's documentation strings.

@@ -29,13 +29,9 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import project_info
+from freeseer import __version__, NAME, URL
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
-__version__= project_info.VERSION
-
-NAME = project_info.NAME
-URL = project_info.URL
 RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'

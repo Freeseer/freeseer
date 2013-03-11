@@ -23,7 +23,6 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import logging
-import os
 import sys
 
 from PyQt4 import QtGui, QtCore
@@ -33,8 +32,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import project_info
-from freeseer import settings
+from freeseer import settings, __version__
 from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
@@ -43,8 +41,6 @@ from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from EditorWidget import EditorWidget
 from AddTalkWidget import AddTalkWidget
-
-__version__ = project_info.VERSION
         
 class TalkEditorApp(FreeseerApp):
     '''
