@@ -28,7 +28,7 @@ import os
 
 from PyQt4 import QtSql
 
-from freeseer import project_info
+from freeseer import __version__
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
 from freeseer.framework.rss_parser import FeedParser
@@ -90,7 +90,7 @@ class QtDBConnector():
         Get Freeseer's current version as an integer.
         """
         result = []
-        for c in project_info.VERSION:
+        for c in __version__:
             if c.isdigit():
                 result.append(c)
         return int(''.join(result))

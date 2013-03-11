@@ -26,11 +26,9 @@ import logging
 
 from PyQt4 import QtGui, QtCore
 
-from freeseer import project_info
+from freeseer import __version__
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
-
-__version__= project_info.VERSION
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

@@ -33,8 +33,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import project_info
-from freeseer import settings
+from freeseer import settings, __version__
 from freeseer.framework.config import Config
 from freeseer.framework.logger import Logger
 from freeseer.framework.plugin import PluginManager, IOutput
@@ -46,8 +45,6 @@ from GeneralWidget import GeneralWidget
 from AVWidget import AVWidget
 from PluginLoaderWidget import PluginLoaderWidget
 from LoggerWidget import LoggerWidget
-
-__version__ = project_info.VERSION
 
 class ConfigToolApp(FreeseerApp):
     '''
