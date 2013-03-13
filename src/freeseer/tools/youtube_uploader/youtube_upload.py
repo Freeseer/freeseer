@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -103,7 +103,7 @@ def upload():
 	#if ogg_vfile != "":
 
 # Uploads an ogg or mpg to YouTube, using the metadata from an ogg
-def uploadToYouTube(vpath, vfile, email, password, category):
+def uploadToYouTube(vpath, vfile, email, password, category = 'Education'):
 
 	# Get the title and description if video is an ogg file
 	if vfile.lower().endswith(('.ogg', '.mpg')):

@@ -28,13 +28,17 @@ import sys
 import glob
 from os.path import expanduser
 from youtube_upload import uploadToYouTube
+from freeseer.framework.core import FreeseerCore
 from PyQt4 import QtGui
 import os
 import mutagen.oggvorbis
 import shlex
+
 class UploaderMainApp(QtGui.QWidget):
     def __init__(self, core=None):
         super(UploaderMainApp,self).__init__()
+        self.core = FreeseerCore()
+        self.config = self.core.get_config()
         #set label
         self.email = QtGui.QLabel('email address:')
         self.password = QtGui.QLabel('password:')
@@ -63,7 +67,7 @@ class UploaderMainApp(QtGui.QWidget):
         #self.s_location_edit = QtGui.QLineEdit(self)
         self.s_date_edit = QtGui.QLineEdit(self)
         #set category combo
-        CATEGORY_VALUES = ['Tech','Education','Animals',
+        CATEGORY_VALUES = ['Education','Tech','Animals',
                 'People','Travel','Entertainement','Howto',
                 'Sports','Autos','Music','News','Games',
                 'Nonprofit','Comedy','Film']
@@ -109,9 +113,9 @@ class UploaderMainApp(QtGui.QWidget):
         and (self.s_performer_edit.text()=='') and (self.s_album_edit.text()=='') \
         and (self.s_date_edit.text()=='')):
             filt = self.search_video()
-            fname = QtGui.QFileDialog.getOpenFileName(self,'Open File',expanduser("~/Videos/"),filt)
+            fname = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,filt)
         else:
-            fname = QtGui.QFileDialog.getOpenFileName(self,'Open File',expanduser("~/Videos/"),'*.ogg OR *.mpg OR *.mpeg')
+            fname = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,'*.ogg OR *.mpg OR *.mpeg')
         self.path_edit.setText(fname)
     
     def search_video(self):
@@ -121,7 +125,7 @@ class UploaderMainApp(QtGui.QWidget):
         album = self.s_album_edit.text()
         #location = self.s_location_edit.text()
         date = self.s_date_edit.text()
-        video_list = glob.glob(expanduser("~/Videos/")+'*.ogg')
+        video_list = glob.glob(expanduser(self.config.videodir)+'*.ogg')
         meta = [[0 for j in range(5)] for i in range(len(video_list))]
         search_file_index = [True for i in range(len(video_list))]
         i = 0
