@@ -293,8 +293,9 @@ class RecordApp(FreeseerApp):
         if (state): # Prepare the pipelines
             self.load_backend()
             
-            #commented to fix issue 302
-            #self.media.pause()
+            #add record first to fix issue 302
+            self.media.record()
+            self.media.pause()
             
             self.mainWidget.statusLabel.setText(self.readyString)
 
