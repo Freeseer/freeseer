@@ -34,8 +34,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import project_info
-from freeseer import settings
+from freeseer import settings, __version__
 from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
 from freeseer.framework.logger import Logger
@@ -47,8 +46,6 @@ from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
-
-__version__= project_info.VERSION
 
 class RecordApp(FreeseerApp):
     """Freeseer's main GUI class."""

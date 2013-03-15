@@ -29,13 +29,9 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import project_info
+from freeseer import __version__, NAME, URL
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
-__version__= project_info.VERSION
-
-NAME = project_info.NAME
-URL = project_info.URL
 RECORD_BUTTON_ARTIST=u'Sekkyumu'
 RECORD_BUTTON_LINK=u'http://sekkyumu.deviantart.com/'
 HEADPHONES_ARTIST=u'Ben Fleming'
@@ -73,7 +69,7 @@ class AboutDialog(QtGui.QDialog):
         self.layout.addWidget(self.logo, 0, 0)
         
         # Right Top corner of grid, Infos
-        self.aboutInfo = QtGui.QLabel("About Info")
+        self.aboutInfo = QtGui.QLabel("About Info", openExternalLinks=True)
         self.aboutInfo.setWordWrap(True)
         self.layout.addWidget(self.aboutInfo, 0, 1)
         
@@ -112,7 +108,7 @@ class AboutDialog(QtGui.QDialog):
         u'<p>' + self.copyrightString + u'</p>' + \
         u'<p><a href="'+URL+u'">' + URL + u'</a></p>' \
         u'<p>' + self.licenseTextString + u'</p>' \
-        u'<p>' +  self.uiTranslator.translate("AboutDialog", "Record button graphics by") + ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
+        u'<p>' + self.uiTranslator.translate("AboutDialog", "Record button graphics by") + ': <a href="' + RECORD_BUTTON_LINK+ u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
         u'<p>'+ self.uiTranslator.translate("AboutDialog", "Headphones graphics by") + ': <a href="' + HEADPHONES_LINK+ u'">' + HEADPHONES_ARTIST + u'</a></p>'
         
         self.aboutInfo.setText(self.aboutInfoString)

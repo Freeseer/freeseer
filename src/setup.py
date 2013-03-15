@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-setup(name='freeseer',
-      version='3.0.0',
-      author='Free and Open Source Software Learning Center',
-      author_email='fosslc@gmail.com',
-      url='http://wiki.github.com/Freeseer/freeseer/',
-      description='video recording and streaming tool',
+
+from freeseer import __version__, NAME, __author__, __email__, URL, DESCRIPTION
+
+setup(name=NAME,
+      version=__version__,
+      author=__author__,
+      author_email=__email__,
+      url=URL,
+      description=DESCRIPTION,
       long_description='Freeseer is a tool for capturing or streaming video.\n\n\
 It enables you to capture great presentations, demos, training material,\n\
 and other videos. It handles desktop screen-casting with ease.\n\n\
@@ -31,11 +34,15 @@ Freeseer itself can run on commodity hardware such as a laptop or desktop.',
           "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
           "Topic :: Multimedia :: Video :: Capture",
           ],
-      package_dir={'freeseer': 'src/freeseer'},
+      install_requires = [
+          "feedparser",
+          "yapsy",
+          ],
       package_data={'freeseer': ['plugins/*/*/*']},
       packages=['freeseer', 'freeseer.framework',
                             'freeseer.frontend',
                             'freeseer.frontend.configtool',
+                            'freeseer.frontend.controller',
                             'freeseer.frontend.qtcommon',
                             'freeseer.frontend.reporteditor',
                             'freeseer.frontend.talkeditor',
