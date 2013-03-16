@@ -528,7 +528,6 @@ class JustinApi:
         """
         consumer = oauth.OAuthConsumer(consumer_key, consumer_secret)
         url = "http://%s/oauth/request_token" % JustinApi.addr
-        print "URL", url
         request = oauth.OAuthRequest.from_consumer_and_token(
             consumer,
             None,
@@ -540,7 +539,6 @@ class JustinApi:
         connection = httplib.HTTPConnection(JustinApi.addr)
         connection.request('GET', request.http_url, headers=request.to_header())
         result = connection.getresponse().read()
-        print "RESULT", result
         
         token = oauth.OAuthToken.from_string(result)
         
@@ -548,9 +546,6 @@ class JustinApi:
             token=token,
             callback='http://localhost/',
             http_url='http://%s/oauth/authorize' % JustinApi.addr)
-        
-        print "TOKEN", token
-        print "ACCESS URL", auth_request.to_url()
 
         return auth_request.to_url(), JustinApi(consumer_key=consumer_key, consumer_secret=consumer_secret, request_token_str=result)
 
@@ -559,7 +554,6 @@ class JustinApi:
         """
         Returns JustinClient object from string.
         """
-        print "LOADING FROM", persistent_obj
         consumer_key, consumer_secret, request_token_str, access_token_str = pickle.loads(persistent_obj)
         return JustinApi(consumer_key, consumer_secret, request_token_str, access_token_str)
 
@@ -585,7 +579,6 @@ class JustinApi:
         consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
         token = oauth.OAuthToken.from_string(self.request_token_str)
         url = "http://%s/oauth/access_token" % JustinApi.addr
-        print "URL", url
         request = oauth.OAuthRequest.from_consumer_and_token(
             consumer,
             token,
@@ -596,9 +589,7 @@ class JustinApi:
         connection.request('GET', request.http_url, headers=request.to_header())
         result = connection.getresponse().read()
         self.access_token_str = result
-        print "ACCESS TOKEN", result
         access_token = oauth.OAuthToken.from_string(result)
-        print "SERIALIZED", self.to_string()
         self.save_method(self.to_string())
 
 
@@ -614,8 +605,6 @@ class JustinApi:
         connection = httplib.HTTPConnection(self.addr)
         connection.request('GET', request.http_url, headers=request.to_header())
         result = connection.getresponse().read()
-        
-        print "RESULT", result
         data = simplejson.loads(result)
         return data
 
@@ -632,23 +621,15 @@ class JustinApi:
         connection = httplib.HTTPConnection(self.addr)
         connection.request('POST', request.http_url, body=request.to_postdata())
         result = connection.getresponse().read()
-        
-        print "RESULT", result
-        #data = simplejson.loads(result)
-        #return data       
         return result
 
     def set_channel_status(self, status):
         if not self.access_token_str:
             self.obtain_access_token()
-        else:
-            print "maccess token! ", self.access_token_str
-        print "WHOAMI..."
+            
         data = self.get_data("account/whoami.json")
         login = data['login']
-        print "LOGIN", login
         data = self.get_data('channel/show/%s.json' % login)
-        print "CHANNEL", data
         
         update_contents = {
             'title': status,
