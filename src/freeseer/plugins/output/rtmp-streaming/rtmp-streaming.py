@@ -576,66 +576,75 @@ class JustinApi:
         self.save_method(self.to_string())
 
     def obtain_access_token(self):
-        consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
-        token = oauth.OAuthToken.from_string(self.request_token_str)
-        url = "http://%s/oauth/access_token" % JustinApi.addr
-        request = oauth.OAuthRequest.from_consumer_and_token(
-            consumer,
-            token,
-            http_method='GET',
-            http_url=url)
-        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-        connection = httplib.HTTPConnection(self.addr)
-        connection.request('GET', request.http_url, headers=request.to_header())
-        result = connection.getresponse().read()
-        self.access_token_str = result
-        access_token = oauth.OAuthToken.from_string(result)
-        self.save_method(self.to_string())
-
+        try:
+            consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+            token = oauth.OAuthToken.from_string(self.request_token_str)
+            url = "http://%s/oauth/access_token" % JustinApi.addr
+            request = oauth.OAuthRequest.from_consumer_and_token(
+                consumer,
+                token,
+                http_method='GET',
+                http_url=url)
+            request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+            connection = httplib.HTTPConnection(self.addr)
+            connection.request('GET', request.http_url, headers=request.to_header())
+            result = connection.getresponse().read()
+            self.access_token_str = result
+            access_token = oauth.OAuthToken.from_string(result)
+            self.save_method(self.to_string())
+        except KeyError:
+            logging.error("justin.tv API: failed to obtain an access token")
 
     def get_data(self, endpoint):
-        token = oauth.OAuthToken.from_string(self.access_token_str)
-        consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
-        request = oauth.OAuthRequest.from_consumer_and_token(
-            consumer,
-            token,
-            http_method='GET',
-            http_url="http://%s/api/%s" % (JustinApi.addr, endpoint))
-        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-        connection = httplib.HTTPConnection(self.addr)
-        connection.request('GET', request.http_url, headers=request.to_header())
-        result = connection.getresponse().read()
-        data = simplejson.loads(result)
+        try:
+            token = oauth.OAuthToken.from_string(self.access_token_str)
+            consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+            request = oauth.OAuthRequest.from_consumer_and_token(
+                consumer,
+                token,
+                http_method='GET',
+                http_url="http://%s/api/%s" % (JustinApi.addr, endpoint))
+            request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+            connection = httplib.HTTPConnection(self.addr)
+            connection.request('GET', request.http_url, headers=request.to_header())
+            result = connection.getresponse().read()
+            data = simplejson.loads(result)
+        except KeyError, simplejson.decoder.JSONDecodeError:
+            logging.error("justin.tv API: failed fetch data from endpoint %s" % endpoint)
+            return dict()
         return data
 
     def set_data(self, endpoint, payload):
-        token = oauth.OAuthToken.from_string(self.access_token_str)
-        consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
-        request = oauth.OAuthRequest.from_consumer_and_token(
-            consumer,
-            token,
-            http_method='POST',
-            http_url="http://%s/api/%s" % (JustinApi.addr, endpoint),
-            parameters=payload)
-        request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-        connection = httplib.HTTPConnection(self.addr)
-        connection.request('POST', request.http_url, body=request.to_postdata())
-        result = connection.getresponse().read()
+        try:
+            token = oauth.OAuthToken.from_string(self.access_token_str)
+            consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+            request = oauth.OAuthRequest.from_consumer_and_token(
+                consumer,
+                token,
+                http_method='POST',
+                http_url="http://%s/api/%s" % (JustinApi.addr, endpoint),
+                parameters=payload)
+            request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
+            connection = httplib.HTTPConnection(self.addr)
+            connection.request('POST', request.http_url, body=request.to_postdata())
+            result = connection.getresponse().read()
+        except KeyError:
+            logging.error("justin.tv API: failed write data to endpoint %s" % endpoint)
+            return None
         return result
 
     def set_channel_status(self, status):
+        self.access_token_str = ""
         if not self.access_token_str:
             self.obtain_access_token()
-            
         data = self.get_data("account/whoami.json")
         login = data['login']
         data = self.get_data('channel/show/%s.json' % login)
-        
         update_contents = {
             'title': status,
             'status': status,
         }
-
         self.set_data('channel/update.json', update_contents)
+    
     def to_string(self):
         return pickle.dumps([self.consumer_key, self.consumer_secret, str(self.request_token_str), str(self.access_token_str)])
