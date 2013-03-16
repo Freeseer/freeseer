@@ -63,6 +63,7 @@ class RTMPOutput(IOutput):
     STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
     JUSTIN_URL = 'rtmp://live-3c.justin.tv/app/'
     STATUS_KEYS = ['artist', 'title']
+    DESCRIPTION_KEY = 'comment'
 
     justin_api = None
     justin_api_persistent = ''
@@ -162,13 +163,18 @@ class RTMPOutput(IOutput):
         #
         muxer.link(rtmpsink)
 
-        self.justin_api.set_channel_status(self.get_talk_status(metadata))
+        self.justin_api.set_channel_status(self.get_talk_status(metadata),
+                                                self.get_description(metadata))
 
         return bin
 
     def get_talk_status(self, metadata):
         if not metadata: return ""
         return " - ".join([metadata[status_key] for status_key in self.STATUS_KEYS])
+    
+    def get_description(self, metadata):
+        if not metadata: return ""
+        return metadata[self.DESCRIPTION_KEY]
     
     def set_metadata(self, data):
         '''
@@ -633,7 +639,7 @@ class JustinApi:
             return None
         return result
 
-    def set_channel_status(self, status):
+    def set_channel_status(self, status, description):
         if not self.access_token_str:
             self.obtain_access_token()
         data = self.get_data("account/whoami.json")
@@ -642,6 +648,7 @@ class JustinApi:
         update_contents = {
             'title': status,
             'status': status,
+            'description': description,
         }
         self.set_data('channel/update.json', update_contents)
     
