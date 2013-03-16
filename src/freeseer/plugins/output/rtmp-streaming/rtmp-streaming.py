@@ -32,6 +32,7 @@ import logging
 import httplib
 import simplejson
 import pickle
+import webbrowser
 
 from PyQt4 import QtGui, QtCore
 
@@ -477,12 +478,14 @@ class RTMPOutput(IOutput):
     def apply_justin_settings(self):
         # here is where all the justin.tv streaming presets will be applied
         self.set_stream_url(self.JUSTIN_URL + self.streaming_key)
-        url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
-        self.justin_api.set_save_method(self.set_justin_api_persistent)
-        self.lineedit_authorization_url.setText(url)
-        self.label_authorization_url.setVisible(True)
-        self.lineedit_authorization_url.setVisible(True)
         self.set_audio_codec('lame')
+        if self.consumer_key and self.consumer_secret:
+            url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
+            self.justin_api.set_save_method(self.set_justin_api_persistent)
+            self.lineedit_authorization_url.setText(url)
+            self.label_authorization_url.setVisible(True)
+            self.lineedit_authorization_url.setVisible(True)
+            webbrowser.open(url)
         
     def get_properties(self):
         return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec', 'Streaming Destination']
