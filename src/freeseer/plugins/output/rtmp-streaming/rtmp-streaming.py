@@ -634,7 +634,6 @@ class JustinApi:
         return result
 
     def set_channel_status(self, status):
-        self.access_token_str = ""
         if not self.access_token_str:
             self.obtain_access_token()
         data = self.get_data("account/whoami.json")
