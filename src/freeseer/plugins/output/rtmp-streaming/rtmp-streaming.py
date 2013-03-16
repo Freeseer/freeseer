@@ -494,7 +494,9 @@ class RTMPOutput(IOutput):
                 self.lineedit_authorization_url.setVisible(True)
                 webbrowser.open(url)
         except KeyError:
-            logging.error("justin.api: authentication failed; supplied credential may be incorrect")
+            logging.error("justin.tv API error: Authentication failed. Supplied credentials may be incorrect.")
+            QtGui.QMessageBox.critical(self.widget, "justin.tv error", "Authentication failed. Supplied credentials for Justin.tv" \
+                    "may be incorrect.", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
             self.label_authorization_url.setVisible(False)
             self.lineedit_authorization_url.setVisible(False)
             
