@@ -641,6 +641,8 @@ class JustinApi:
         if not self.access_token_str:
             self.obtain_access_token()
         data = self.get_data("account/whoami.json")
+        if not data:
+            return
         login = data['login']
         data = self.get_data('channel/show/%s.json' % login)
         update_contents = {
