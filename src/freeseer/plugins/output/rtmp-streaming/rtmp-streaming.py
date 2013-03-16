@@ -352,17 +352,6 @@ class RTMPOutput(IOutput):
 
             self.apply_button.clicked.connect(self.apply_justin_settings)
 
-            #
-            # URL
-            #
-
-            self.label_authorization_url = QtGui.QLabel("URL")
-            self.label_authorization_url.setVisible(False)
-            self.lineedit_authorization_url = QtGui.QLineEdit()
-            self.lineedit_authorization_url.setReadOnly(True)
-            self.lineedit_authorization_url.setVisible(False)
-            self.justin_widget_layout.addRow(self.label_authorization_url, self.lineedit_authorization_url)
-
             self.content_widget = self.justin_widget
             self.load_config_delegate = self.justin_widget_load_config
 
@@ -489,16 +478,14 @@ class RTMPOutput(IOutput):
             if self.consumer_key and self.consumer_secret:
                 url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
                 self.justin_api.set_save_method(self.set_justin_api_persistent)
-                self.lineedit_authorization_url.setText(url)
-                self.label_authorization_url.setVisible(True)
-                self.lineedit_authorization_url.setVisible(True)
                 webbrowser.open(url)
+                QtGui.QMessageBox.information(self.widget, "justin.tv authentication", "An authorization URL should have opened in your browser.\n" \
+                        "If not, go open the following URL to allow freeseer to manage your justin.tv channel.\n" \
+                        "%s" % url, QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
         except KeyError:
             logging.error("justin.tv API error: Authentication failed. Supplied credentials may be incorrect.")
             QtGui.QMessageBox.critical(self.widget, "justin.tv error", "Authentication failed. Supplied credentials for Justin.tv" \
-                    "may be incorrect.", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
-            self.label_authorization_url.setVisible(False)
-            self.lineedit_authorization_url.setVisible(False)
+                    " may be incorrect.", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
             
     def get_properties(self):
         return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec', 'Streaming Destination']
