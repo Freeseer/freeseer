@@ -33,6 +33,7 @@ from PyQt4 import QtGui
 import os
 import mutagen.oggvorbis
 import shlex
+import re
 
 class UploaderMainApp(QtGui.QWidget):
     def __init__(self, core=None):
@@ -119,13 +120,13 @@ class UploaderMainApp(QtGui.QWidget):
         self.path_edit.setText(fname)
     
     def search_video(self):
-        title = self.s_title_edit.text()
-        artist = self.s_artist_edit.text()
-        performer = self.s_performer_edit.text()
-        album = self.s_album_edit.text()
+        title = str(self.s_title_edit.text())
+        artist = str(self.s_artist_edit.text())
+        performer = str(self.s_performer_edit.text())
+        album = str(self.s_album_edit.text())
         #location = self.s_location_edit.text()
-        date = self.s_date_edit.text()
-        video_list = glob.glob(expanduser(self.config.videodir)+'*.ogg')
+        date = str(self.s_date_edit.text())
+        video_list = glob.glob(self.config.videodir+'/*.ogg')
         meta = [[0 for j in range(5)] for i in range(len(video_list))]
         search_file_index = [True for i in range(len(video_list))]
         i = 0
@@ -152,21 +153,20 @@ class UploaderMainApp(QtGui.QWidget):
             except KeyError:
                 meta[i][4] = ""
             i = i+1
-
         for i in range(len(video_list)):
-            if not((meta[i][0]==title) or (title=='')):
+            if not((re.search(title,meta[i][0])) or (title=='')):
                 search_file_index[i]=False
                 continue
-            elif not((meta[i][1]==artist) or (artist=='')):
+            elif not((re.search(artist,meta[i][1])) or (artist=='')):
                 search_file_index[i]=False
                 continue
-            elif not((meta[i][2]==performer) or (performer=='')):
+            elif not((re.search(performer,meta[i][2])) or (performer=='')):
                 search_file_index[i]=False
                 continue
-            elif not((meta[i][3]==album) or (album=='')):
+            elif not((re.search(album,meta[i][3])) or (album=='')):
                 search_file_index[i]=False
                 continue
-            elif not((meta[i][4]==date) or (date=='')):
+            elif not((re.search(date,meta[i][4])) or (date=='')):
                 search_file_index[i]=False
                 continue
         filt = ''
@@ -182,7 +182,7 @@ class UploaderMainApp(QtGui.QWidget):
         email = str(self.email_edit.text())
         passwd = str(self.password_edit.text())
         path = str(self.path_edit.text())
-        #title = self.title_edit.text()
+        #title = str(self.title_edit.text())
         category = str(self.combo.currentText())
         vpath = os.path.dirname(path)
         vfile = os.path.basename(path)
