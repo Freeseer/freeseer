@@ -1,0 +1,9 @@
+[Core]
+Name = Multiple Audio Inputs
+Module = multiaudio
+
+[Documentation]
+Author = Aaron Brubacher
+Version = 0.1
+Website = http://fosslc.org
+Description = Audio mixer for multiple audio inputs.
