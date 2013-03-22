@@ -103,7 +103,7 @@ def upload():
 	#if ogg_vfile != "":
 
 # Uploads an ogg or mpg to YouTube, using the metadata from an ogg
-def uploadToYouTube(vpath, vfile, email, password, category = 'Education'):
+def uploadToYouTube(vpath, vfile, email, password, category='Education'):
 
 	# Get the title and description if video is an ogg file
 	if vfile.lower().endswith(('.ogg', '.mpg')):

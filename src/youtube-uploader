@@ -23,7 +23,7 @@
 # http://wiki.github.com/fosslc/freeseer/
 import sys
 from PyQt4 import QtGui
-from freeseer.tools.youtube_uploader.UploaderWidget import UploaderMainApp
+from freeseer.tools.youtube_uploader.uploader_widget import UploaderMainApp
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

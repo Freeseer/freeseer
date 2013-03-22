@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-'''
+"""
 freeseer - vga/presentation capture software
 
 Copyright (C) 2013  Free and Open Source Software Learning Centre
@@ -23,17 +23,18 @@ For support, questions, suggestions or any other inquiries, visit:
 http://wiki.github.com/Freeseer/freeseer/
 
 @author: Takayuki Higuchi
-'''
-import sys
+"""
 import glob
-from os.path import expanduser
-from youtube_upload import uploadToYouTube
-from freeseer.framework.core import FreeseerCore
-from PyQt4 import QtGui
 import os
-import mutagen.oggvorbis
-import shlex
 import re
+import shlex
+import sys
+
+import mutagen.oggvorbis
+from PyQt4 import QtGui
+from youtube_upload import uploadToYouTube
+
+from freeseer.framework.core import FreeseerCore
 
 class UploaderMainApp(QtGui.QWidget):
     def __init__(self, core=None):
@@ -59,7 +60,7 @@ class UploaderMainApp(QtGui.QWidget):
         self.path_edit = QtGui.QLineEdit(self)
         #self.title_edit = QtGui.QLineEdit(self)
         self.upbtn = QtGui.QPushButton('Upload',self)
-        self.refbtn = QtGui.QPushButton('reference',self)
+        self.refbtn = QtGui.QPushButton('Select file',self)
         self.combo = QtGui.QComboBox(self)
         self.s_title_edit = QtGui.QLineEdit(self)
         self.s_artist_edit = QtGui.QLineEdit(self)
@@ -68,10 +69,10 @@ class UploaderMainApp(QtGui.QWidget):
         #self.s_location_edit = QtGui.QLineEdit(self)
         self.s_date_edit = QtGui.QLineEdit(self)
         #set category combo
-        CATEGORY_VALUES = ['Education','Tech','Animals',
+        CATEGORY_VALUES = ('Education','Tech','Animals',
                 'People','Travel','Entertainement','Howto',
                 'Sports','Autos','Music','News','Games',
-                'Nonprofit','Comedy','Film']
+                'Nonprofit','Comedy','Film')
         for category in CATEGORY_VALUES:
             self.combo.addItem(category)
         #arrange items
@@ -104,20 +105,20 @@ class UploaderMainApp(QtGui.QWidget):
         grid.addWidget(self.upbtn,11,16)
         #connect function
         self.password_edit.setEchoMode(self.password_edit.Password)
-        self.refbtn.clicked.connect(self.reffile) 
+        self.refbtn.clicked.connect(self.open_file_dialog) 
         self.setLayout(grid)
         self.setWindowTitle('Upload video to YouTube')
         self.upbtn.clicked.connect(self.upload)
     #open video folder
-    def reffile(self):
-        if not((self.s_title_edit.text()=='') and (self.s_artist_edit.text()=='') \
-        and (self.s_performer_edit.text()=='') and (self.s_album_edit.text()=='') \
-        and (self.s_date_edit.text()=='')):
-            filt = self.search_video()
-            fname = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,filt)
+    def open_file_dialog(self):
+        if (self.s_title_edit.text() or self.s_artist_edit.text()
+        or self.s_performer_edit.text() or self.s_album_edit.text()
+        or self.s_date_edit.text()):
+            file_filter = self.search_video()
+            filename = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,file_filter)
         else:
-            fname = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,'*.ogg OR *.mpg OR *.mpeg')
-        self.path_edit.setText(fname)
+            filename = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,'*.ogg OR *.mpg OR *.mpeg')
+        self.path_edit.setText(filename)
     
     def search_video(self):
         title = str(self.s_title_edit.text())
@@ -127,56 +128,52 @@ class UploaderMainApp(QtGui.QWidget):
         #location = self.s_location_edit.text()
         date = str(self.s_date_edit.text())
         video_list = glob.glob(self.config.videodir+'/*.ogg')
-        meta = [[0 for j in range(5)] for i in range(len(video_list))]
-        search_file_index = [True for i in range(len(video_list))]
-        i = 0
-        for vfile in video_list:
-            metadata = mutagen.oggvorbis.Open(vfile)
+        meta = [[""]*5] * len(video_list)
+        search_file_index = [True]*len(video_list)
+
+        for i, videofile in enumerate(video_list):
+            metadata = mutagen.oggvorbis.Open(videofile)
             try:
                 meta[i][0]= metadata["title"][0]
             except KeyError:
-                meta[i][0] = ""
+                print "cannot extract title of " + videofile
             try:
                 meta[i][1] = metadata["artist"][0]
             except KeyError:
-                meta[i][1] = ""
+                print "cannot extract artist of " + videofile
             try:
                 meta[i][2] = metadata["performer"][0]
             except KeyError:
-                meta[i][2] = ""
+                print "cannot extract performer of " + videofile
             try:
                 meta[i][3] = metadata["album"][0]
             except KeyError:
-                meta[i][3] = ""
+                print "cannot extract album of " + videofile
             try:
                 meta[i][4] = metadata["date"][0]
             except KeyError:
-                meta[i][4] = ""
-            i = i+1
-        for i in range(len(video_list)):
-            if not((re.search(title,meta[i][0])) or (title=='')):
-                search_file_index[i]=False
-                continue
-            elif not((re.search(artist,meta[i][1])) or (artist=='')):
-                search_file_index[i]=False
-                continue
-            elif not((re.search(performer,meta[i][2])) or (performer=='')):
-                search_file_index[i]=False
-                continue
-            elif not((re.search(album,meta[i][3])) or (album=='')):
-                search_file_index[i]=False
-                continue
-            elif not((re.search(date,meta[i][4])) or (date=='')):
-                search_file_index[i]=False
-                continue
-        filt = ''
-        for i in range(len(video_list)):
-            if not(filt==''):
-                filt = filt + ' OR '
-            if search_file_index[i]==True:
+                print "cannot extract date of " + videofile
+
+        for i in xrange(len(video_list)):
+            if not(re.search(title,meta[i][0])) and title:
+                search_file_index[i] = False
+            elif not(re.search(artist,meta[i][1])) and artist:
+                search_file_index[i] = False
+            elif not(re.search(performer,meta[i][2])) and performer:
+                search_file_index[i] = False
+            elif not(re.search(album,meta[i][3])) and album:
+                search_file_index[i] = False
+            elif not(re.search(date,meta[i][4])) and date:
+                search_file_index[i] = False
+
+        file_filter = ''
+        for i in xrange(len(video_list)):
+            if file_filter:
+                file_filter += ' OR '
+            if search_file_index[i]:
                 search_file = video_list[i]
-                filt = filt + os.path.basename(search_file)
-        return filt 
+                file_filter += os.path.basename(search_file)
+        return file_filter 
     
     def upload(self):
         email = str(self.email_edit.text())
@@ -186,11 +183,8 @@ class UploaderMainApp(QtGui.QWidget):
         category = str(self.combo.currentText())
         vpath = os.path.dirname(path)
         vfile = os.path.basename(path)
-        uploadToYouTube(vpath, vfile, email, passwd, category)
-'''        
-if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-    main = UploaderMainApp()
-    main.show()
-    sys.exit(app.exec_())
-    '''
+        root, ext = os.path.splitext(vfile)
+        if (ext == "ogg") or (ext == "mpg") or (ext == "mpeg"):
+            uploadToYouTube(vpath, vfile, email, passwd, category)
+        else:
+            print vpath + vfile + " is not an ogg or mpg."
