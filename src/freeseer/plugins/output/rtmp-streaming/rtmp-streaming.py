@@ -168,7 +168,8 @@ class RTMPOutput(IOutput):
         #
         muxer.link(rtmpsink)
 
-        self.justin_api.set_channel_status(self.get_talk_status(metadata),
+        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
+            self.justin_api.set_channel_status(self.get_talk_status(metadata),
                                                 self.get_description(metadata))
 
         return bin
