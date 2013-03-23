@@ -79,8 +79,8 @@ class MultiAudio(IAudioMixer):
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1')
             self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2')
         except ConfigParser.NoSectionError:
-            self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
-            self.input2 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
         
     def get_widget(self):
         if self.widget is None:
@@ -95,7 +95,7 @@ class MultiAudio(IAudioMixer):
             layout.addWidget(self.source1_label, 0, 0)
             layout.addWidget(self.source1_combobox, 0, 1)
             layout.addWidget(self.source1_button, 0, 2)
-            self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input1)
+            self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
             self.widget.connect(self.source1_button, QtCore.SIGNAL('clicked()'), self.source1_setup)
             
             self.source2_label = QtGui.QLabel('Source 2')
@@ -105,18 +105,19 @@ class MultiAudio(IAudioMixer):
             layout.addWidget(self.source2_label, 1, 0)
             layout.addWidget(self.source2_combobox, 1, 1)
             layout.addWidget(self.source2_button, 1, 2)
-            self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input2)
+            self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
             self.widget.connect(self.source2_button, QtCore.SIGNAL('clicked()'), self.source2_setup)
         return self.widget
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
+        print(self.input1 + self.input2)
         
         plugins = self.plugman.get_audioinput_plugins()
+        self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
+        self.widget.disconnect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
         self.source1_combobox.clear()
         self.source2_combobox.clear()
-        self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input1)
-        self.widget.disconnect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input2)
         for i, source in enumerate(plugins):
             name = source.plugin_object.get_name()
             self.source1_combobox.addItem(name)
@@ -125,30 +126,34 @@ class MultiAudio(IAudioMixer):
             self.source2_combobox.addItem(name)
             if self.input2 == name:
                 self.source2_combobox.setCurrentIndex(i)
-        self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input1)
-        self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input2)
+        self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
+        self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
         
     def source1_setup(self):
         plugin_name = str(self.source1_combobox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
-        #plugin.plugin_object.set_instance(0)
+        plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
         
     def source2_setup(self):
         plugin_name = str(self.source2_combobox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
-        #plugin.plugin_object.set_instance(1)
+        plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
         
     def set_input1(self, input1):
+        self.input1 = input1
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
+        self.plugman.save()
         
     def set_input2(self, input2):
+        self.input2 = input2
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
+        self.plugman.save()
         
     def get_properties(self):
         return ['Input1', 'Input2']
-    
+        
     def get_property_value(self, p):
         if p == 'Input1':
             return self.input1
@@ -164,9 +169,9 @@ class MultiAudio(IAudioMixer):
             return
             
         if p == 'Input1':
-            self.__set_input1(value)
+            self.set_input1(value)
         elif p == 'Input2':
-            self.__set_input2(value)
+            self.set_input2(value)
         else:
             return "Error: There's no property with such name"
         
