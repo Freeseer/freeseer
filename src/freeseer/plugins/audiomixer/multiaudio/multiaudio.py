@@ -85,20 +85,28 @@ class MultiAudio(IAudioMixer):
     def get_widget(self):
         if self.widget is None:
             self.widget = QtGui.QWidget()
-            layout = QtGui.QFormLayout()
+            layout = QtGui.QGridLayout()
             self.widget.setLayout(layout)
             
             self.source1_label = QtGui.QLabel('Source 1')
             self.source1_combobox = QtGui.QComboBox()
             self.source1_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            layout.addRow(self.source1_label, self.source1_combobox)
-            self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input1)
+            self.source1_button = QtGui.QPushButton("Setup") 
+            layout.addWidget(self.source1_label, 0, 0)
+            layout.addWidget(self.source1_combobox, 0, 1)
+            layout.addWidget(self.source1_button, 0, 2)
+            self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input1)
+            self.widget.connect(self.source1_button, QtCore.SIGNAL('clicked()'), self.source1_setup)
             
             self.source2_label = QtGui.QLabel('Source 2')
             self.source2_combobox = QtGui.QComboBox()
             self.source2_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            layout.addRow(self.source2_label, self.source2_combobox)
-            self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input2)
+            self.source2_button = QtGui.QPushButton("Setup") 
+            layout.addWidget(self.source2_label, 1, 0)
+            layout.addWidget(self.source2_combobox, 1, 1)
+            layout.addWidget(self.source2_button, 1, 2)
+            self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input2)
+            self.widget.connect(self.source2_button, QtCore.SIGNAL('clicked()'), self.source2_setup)
         return self.widget
     
     def widget_load_config(self, plugman):
@@ -107,8 +115,8 @@ class MultiAudio(IAudioMixer):
         plugins = self.plugman.get_audioinput_plugins()
         self.source1_combobox.clear()
         self.source2_combobox.clear()
-        self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input1)
-        self.widget.disconnect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input2)
+        self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input1)
+        self.widget.disconnect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input2)
         for i, source in enumerate(plugins):
             name = source.plugin_object.get_name()
             self.source1_combobox.addItem(name)
@@ -117,13 +125,25 @@ class MultiAudio(IAudioMixer):
             self.source2_combobox.addItem(name)
             if self.input2 == name:
                 self.source2_combobox.setCurrentIndex(i)
-        self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input1)
-        self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input2)
+        self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input1)
+        self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_input2)
         
-    def __set_input1(self, input1):
+    def source1_setup(self):
+        plugin_name = str(self.source1_combobox.currentText())
+        plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
+        #plugin.plugin_object.set_instance(0)
+        plugin.plugin_object.get_dialog()
+        
+    def source2_setup(self):
+        plugin_name = str(self.source2_combobox.currentText())
+        plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
+        #plugin.plugin_object.set_instance(1)
+        plugin.plugin_object.get_dialog()
+        
+    def set_input1(self, input1):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
         
-    def __set_input2(self, input2):
+    def set_input2(self, input2):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
         
     def get_properties(self):
