@@ -34,8 +34,8 @@ from freeseer.framework.plugin import IAudioMixer
 class MultiAudio(IAudioMixer):
     name = 'Multiple Audio Inputs'
     os = ['linux', 'linux2', 'win32', 'cygwin', 'darwin']
-    input1 = "Pulse Audio Source" #None
-    input2 = "ALSA Source" #None
+    input1 = None
+    input2 = None
     widget = None
     
     def get_audiomixer_bin(self):
@@ -81,18 +81,44 @@ class MultiAudio(IAudioMixer):
         except ConfigParser.NoSectionError:
             self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
             self.input2 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
-    
+        
     def get_widget(self):
         if self.widget is None:
-            #TODO
-            pass
-        
+            self.widget = QtGui.QWidget()
+            layout = QtGui.QFormLayout()
+            self.widget.setLayout(layout)
+            
+            self.source1_label = QtGui.QLabel('Source 1')
+            self.source1_combobox = QtGui.QComboBox()
+            self.source1_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+            layout.addRow(self.source1_label, self.source1_combobox)
+            self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input1)
+            
+            self.source2_label = QtGui.QLabel('Source 2')
+            self.source2_combobox = QtGui.QComboBox()
+            self.source2_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
+            layout.addRow(self.source2_label, self.source2_combobox)
+            self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input2)
         return self.widget
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
-        #TODO widget
+        plugins = self.plugman.get_audioinput_plugins()
+        self.source1_combobox.clear()
+        self.source2_combobox.clear()
+        self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input1)
+        self.widget.disconnect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input2)
+        for i, source in enumerate(plugins):
+            name = source.plugin_object.get_name()
+            self.source1_combobox.addItem(name)
+            if self.input1 == name:
+                self.source1_combobox.setCurrentIndex(i)
+            self.source2_combobox.addItem(name)
+            if self.input2 == name:
+                self.source2_combobox.setCurrentIndex(i)
+        self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input1)
+        self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.__set_input2)
         
     def __set_input1(self, input1):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
@@ -124,7 +150,3 @@ class MultiAudio(IAudioMixer):
         else:
             return "Error: There's no property with such name"
         
-            
-            
-    
-    
