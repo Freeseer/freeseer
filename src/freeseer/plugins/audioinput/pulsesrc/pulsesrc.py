@@ -93,8 +93,8 @@ class PulseSrc(IAudioInput):
         self.load_config(plugman)
         
         sources = self.__get_sources()
-        self.source_combobox.clear()
         self.widget.disconnect(self.source_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_source) #stop signals while populating
+        self.source_combobox.clear()
         for i, source in enumerate(sources):
             self.source_combobox.addItem(source[1], userData=source[0])
             if self.source == source[0]:
