@@ -69,7 +69,10 @@ class RTMPOutput(IOutput):
 
     justin_api = None
     justin_api_persistent = ''
-    
+
+    streaming_destination_widget = None
+    load_config_delegate = None
+
 	#@brief - RTMP Streaming plugin.
 	# Structure for function was based primarily off the ogg function
 	# Creates a bin to stream flv content to [self.url]
@@ -208,7 +211,7 @@ class RTMPOutput(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_key)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_dest)
 
         try:
             self.justin_api_persistent = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object")
@@ -296,10 +299,15 @@ class RTMPOutput(IOutput):
 
         return self.stream_settings_widget
 
-    def get_streaming_destination_widget(self, streaming_dest):
+    def setup_streaming_destination_widget(self, streaming_dest):
         if streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
+            self.load_config_delegate = None
+            self.unlock_stream_settings()
             return None
         if streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
+            self.load_config_delegate = self.justin_widget_load_config
+            self.lineedit_stream_url.setEnabled(False)
+            self.combobox_audio_codec.setEnabled(False)
             return self.get_justin_widget()
 
     def get_justin_widget(self):
@@ -362,7 +370,6 @@ class RTMPOutput(IOutput):
             self.widget.setWindowTitle("RTMP Streaming Options")
             
             self.widget_layout = QtGui.QFormLayout()
-            self.widget_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
             self.widget.setLayout(self.widget_layout)
 
             #
@@ -388,30 +395,37 @@ class RTMPOutput(IOutput):
         return self.widget
 
     def load_streaming_destination_widget(self):
-        streaming_destination_widget = self.get_streaming_destination_widget(self.streaming_dest)
+        streaming_destination_widget = self.setup_streaming_destination_widget(self.streaming_dest)
+
+        if self.streaming_destination_widget != None:
+            self.streaming_destination_widget.deleteLater()
+            self.streaming_destination_widget = None
 
         if streaming_destination_widget:
-            self.streaming_destination_area = QtGui.QScrollArea()
-            self.streaming_destination_area.setWidgetResizable(True)
-            self.widget_layout.addRow(self.streaming_destination_area)
-
-            self.streaming_destination_area.setWidget(streaming_destination_widget)
-        elif self.streaming_destination_area:
-            print self.widget_layout.removeWidget(self.streaming_destination_area)
-        self.widget.update()
- 
-    def load_config_delegate(self):
-        pass
+            self.widget_layout.addRow(streaming_destination_widget)
+            self.streaming_destination_widget = streaming_destination_widget
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         self.stream_settings_load_config()
-        self.load_config_delegate()
+
+        self.combobox_streaming_dest.setCurrentIndex(self.STREAMING_DESTINATION_VALUES.index(self.streaming_dest))
+
+        self.load_streaming_destination_widget()
+        if self.load_config_delegate:
+            self.load_config_delegate()
 
     def justin_widget_load_config(self):
         self.lineedit_streaming_key.setText(self.streaming_key)
         self.lineedit_consumer_key.setText(self.consumer_key)
         self.lineedit_consumer_secret.setText(self.consumer_secret)
+
+    def unlock_stream_settings(self):
+        self.lineedit_stream_url.setEnabled(True)
+        self.spinbox_audio_quality.setEnabled(True)
+        self.spinbox_video_quality.setEnabled(True)
+        self.combobox_video_tune.setEnabled(True)
+        self.combobox_audio_codec.setEnabled(True)
 
     def stream_settings_load_config(self):
         self.lineedit_stream_url.setText(self.url)
@@ -461,6 +475,8 @@ class RTMPOutput(IOutput):
             self.combobox_streaming_dest.setCurrentIndex(index)
 
         self.load_streaming_destination_widget()
+        if self.load_config_delegate:
+            self.load_config_delegate()
 
     def set_streaming_key(self, text):
         self.streaming_key = str(text)
@@ -486,6 +502,9 @@ class RTMPOutput(IOutput):
         # here is where all the justin.tv streaming presets will be applied
         self.set_stream_url(self.JUSTIN_URL + self.streaming_key)
         self.set_audio_codec('lame')
+
+        self.stream_settings_load_config()
+
         try:
             if self.consumer_key and self.consumer_secret:
                 url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
