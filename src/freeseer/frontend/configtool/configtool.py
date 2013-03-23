@@ -625,6 +625,7 @@ class ConfigToolApp(QtGui.QMainWindow):
         self.dialog = QtGui.QDialog(self)
     
         self.dialog_layout = QtGui.QVBoxLayout()
+        self.dialog_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.dialog.setLayout(self.dialog_layout)
         self.dialog_layout.addWidget(widget)
         
