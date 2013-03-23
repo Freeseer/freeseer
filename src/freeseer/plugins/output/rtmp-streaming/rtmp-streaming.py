@@ -337,7 +337,7 @@ class RTMPOutput(IOutput):
             self.lineedit_consumer_key.textEdited.connect(self.set_consumer_key)
 
             #
-            # Consumer key
+            # Consumer secret
             #
 
             self.label_consumer_secret = QtGui.QLabel("Consumer Secret (optional)")
