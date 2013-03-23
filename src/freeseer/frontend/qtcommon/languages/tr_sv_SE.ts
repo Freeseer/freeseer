@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="2.0">
 <context>
+    <name>*For RTMP streaming, all other outputs must be set to leaky</name>
+</context>
+<context>
+    <name>*See: http://www.justin.tv/broadcast/adv_other
+You must be logged in to obtain your Streaming Key</name>
+</context>
+<context>
     <name>AboutDialog</name>
     <message>
         <location filename="../AboutDialog.py" line="94"/>
@@ -46,147 +53,147 @@
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="216"/>
+        <location filename="../../configtool/configtool.py" line="215"/>
         <source>Freeseer ConfigTool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="221"/>
+        <location filename="../../configtool/configtool.py" line="220"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="222"/>
+        <location filename="../../configtool/configtool.py" line="221"/>
         <source>&amp;Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="223"/>
+        <location filename="../../configtool/configtool.py" line="222"/>
         <source>&amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="224"/>
+        <location filename="../../configtool/configtool.py" line="223"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="225"/>
+        <location filename="../../configtool/configtool.py" line="224"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="226"/>
+        <location filename="../../configtool/configtool.py" line="225"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="252"/>
+        <location filename="../../configtool/configtool.py" line="251"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="268"/>
+        <location filename="../../configtool/configtool.py" line="267"/>
         <source>Audio Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="273"/>
+        <location filename="../../configtool/configtool.py" line="272"/>
         <source>Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="272"/>
+        <location filename="../../configtool/configtool.py" line="271"/>
         <source>Video Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="258"/>
+        <location filename="../../configtool/configtool.py" line="257"/>
         <source>Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="260"/>
+        <location filename="../../configtool/configtool.py" line="259"/>
         <source>Record Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="261"/>
+        <location filename="../../configtool/configtool.py" line="260"/>
         <source>Enable Auto-Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="279"/>
+        <location filename="../../configtool/configtool.py" line="278"/>
         <source>Console Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="282"/>
+        <location filename="../../configtool/configtool.py" line="281"/>
         <source>Log Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="281"/>
+        <location filename="../../configtool/configtool.py" line="280"/>
         <source>Syslog Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="232"/>
+        <location filename="../../configtool/configtool.py" line="231"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="234"/>
+        <location filename="../../configtool/configtool.py" line="233"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="235"/>
+        <location filename="../../configtool/configtool.py" line="234"/>
         <source>AudioInput</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="236"/>
+        <location filename="../../configtool/configtool.py" line="235"/>
         <source>AudioMixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="237"/>
+        <location filename="../../configtool/configtool.py" line="236"/>
         <source>VideoInput</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="238"/>
+        <location filename="../../configtool/configtool.py" line="237"/>
         <source>VideoMixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="239"/>
+        <location filename="../../configtool/configtool.py" line="238"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="240"/>
+        <location filename="../../configtool/configtool.py" line="239"/>
         <source>Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="259"/>
+        <location filename="../../configtool/configtool.py" line="258"/>
         <source>Default Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="233"/>
+        <location filename="../../configtool/configtool.py" line="232"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="267"/>
+        <location filename="../../configtool/configtool.py" line="266"/>
         <source>Audio Input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="271"/>
+        <location filename="../../configtool/configtool.py" line="270"/>
         <source>Video Input</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,72 +249,72 @@
 <context>
     <name>ControllerServerApp</name>
     <message>
-        <location filename="../../controller/Server.py" line="153"/>
+        <location filename="../../controller/Server.py" line="158"/>
         <source>Controller Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="158"/>
+        <location filename="../../controller/Server.py" line="163"/>
         <source>Server status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="159"/>
+        <location filename="../../controller/Server.py" line="164"/>
         <source>Start Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="160"/>
+        <location filename="../../controller/Server.py" line="165"/>
         <source>Stop Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="161"/>
+        <location filename="../../controller/Server.py" line="166"/>
         <source>Start Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="162"/>
+        <location filename="../../controller/Server.py" line="167"/>
         <source>Stop Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="163"/>
+        <location filename="../../controller/Server.py" line="168"/>
         <source>Pause Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="164"/>
+        <location filename="../../controller/Server.py" line="169"/>
         <source>Resume Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="170"/>
+        <location filename="../../controller/Server.py" line="175"/>
         <source>Server Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="171"/>
+        <location filename="../../controller/Server.py" line="176"/>
         <source>IP Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="172"/>
+        <location filename="../../controller/Server.py" line="177"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="173"/>
+        <location filename="../../controller/Server.py" line="178"/>
         <source>Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="185"/>
+        <location filename="../../controller/Server.py" line="190"/>
         <source>Control Clients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="187"/>
+        <location filename="../../controller/Server.py" line="192"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -754,8 +761,39 @@
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../controller/Server.py" line="213"/>
+        <location filename="../../controller/Server.py" line="218"/>
         <source>Language Display Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>rtmp</name>
+    <message>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="354"/>
+        <source>Overwrite custom settings for justin.tv</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="486"/>
+        <source>An authorization URL should have opened in your browser.
+If not, go open the following URL to allow freeseer to manage your justin.tv channel.
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="495"/>
+        <source>Authentication failed. Supplied credentials for Justin.tv may be incorrect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="301"/>
+        <source>*For RTMP streaming, all other outputs must be set to leaky</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="326"/>
+        <source>*See: http://www.justin.tv/broadcast/adv_other
+You must be logged in to obtain your Streaming Key</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
