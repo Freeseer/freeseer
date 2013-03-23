@@ -117,8 +117,6 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
             
-
-            
             audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
             
             if 'quality' in audiocodec.get_property_names():
@@ -334,7 +332,7 @@ class RTMPOutput(IOutput):
             self.lineedit_consumer_key.textEdited.connect(self.set_consumer_key)
 
             #
-            # Consumer key
+            # Consumer secret
             #
 
             self.label_consumer_secret = QtGui.QLabel("Consumer Secret (optional)")
