@@ -18,8 +18,7 @@ We aim for test-driven and document-driven development, so write your tests and 
    testing
    coding-guidelines
    plugins
-   code-review
-   pull-requests
+   pull-requests-and-code-review
 
 ..   tests
 ..   writing-code
