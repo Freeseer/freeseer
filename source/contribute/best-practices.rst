@@ -15,7 +15,7 @@ Name Your Branch After an Issue or Task
 
 If an `issue exists <http://github.com/Freeseer/freeseer/issues>`_ for the task
 you're going to work on, name your new branch after the issue # and description.
-For example, if you’re working on Issue #100, a new logo, your branch name would
+For example, if you're working on Issue #100, a new logo, your branch name would
 be "100-new-logo".
 
 If you'll be working on a task which no issue exists for, consider creating an
