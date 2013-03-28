@@ -106,7 +106,7 @@ def upload():
 def uploadToYouTube(vpath, vfile, email, password, category='Education'):
 
 	# Get the title and description if video is an ogg file
-	if vfile.lower().endswith(('.ogg', '.mpg')):
+	if vfile.lower().endswith(('.ogg', '.mpg', '.mpeg')):
 		if vfile.lower().endswith('.ogg'):
 			metadata = mutagen.oggvorbis.Open(vpath+"/"+vfile)
 			#print metadata.pprint()

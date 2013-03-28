@@ -36,9 +36,16 @@ from youtube_upload import uploadToYouTube
 
 from freeseer.framework.core import FreeseerCore
 
-class UploaderMainApp(QtGui.QWidget):
+class UploaderGuiApp(QtGui.QWidget):
+    """
+    Class documentation
+    GUI for Youtube uploader
+    """
     def __init__(self, core=None):
-        super(UploaderMainApp,self).__init__()
+        """
+        initial setting of gui for youube uploader
+        """
+        super(UploaderGuiApp,self).__init__()
         self.core = FreeseerCore()
         self.config = self.core.get_config()
         #set label
@@ -49,9 +56,9 @@ class UploaderMainApp(QtGui.QWidget):
         self.category = QtGui.QLabel('category:')
         self.search_option = QtGui.QLabel('search option')
         self.search_title = QtGui.QLabel('title:') 
-        self.search_artist = QtGui.QLabel('artist:')        
-        self.search_performer = QtGui.QLabel('performer:')
-        self.search_album = QtGui.QLabel('album:')        
+        self.search_description = QtGui.QLabel('description:')        
+        self.search_speaker = QtGui.QLabel('speaker:')
+        self.search_event = QtGui.QLabel('event:')        
         #self.search_location = QtGui.QLabel('location:')        
         self.search_date = QtGui.QLabel('date(y-m-d):')        
         #set button and edit box 
@@ -63,9 +70,9 @@ class UploaderMainApp(QtGui.QWidget):
         self.refbtn = QtGui.QPushButton('Select file',self)
         self.combo = QtGui.QComboBox(self)
         self.s_title_edit = QtGui.QLineEdit(self)
-        self.s_artist_edit = QtGui.QLineEdit(self)
-        self.s_performer_edit = QtGui.QLineEdit(self)
-        self.s_album_edit = QtGui.QLineEdit(self)
+        self.s_description_edit = QtGui.QLineEdit(self)
+        self.s_speaker_edit = QtGui.QLineEdit(self)
+        self.s_event_edit = QtGui.QLineEdit(self)
         #self.s_location_edit = QtGui.QLineEdit(self)
         self.s_date_edit = QtGui.QLineEdit(self)
         #set category combo
@@ -88,12 +95,12 @@ class UploaderMainApp(QtGui.QWidget):
         grid.addWidget(self.search_option,4,1,1,15)
         grid.addWidget(self.search_title,5,1)
         grid.addWidget(self.s_title_edit,5,2,1,14)
-        grid.addWidget(self.search_artist,6,1)
-        grid.addWidget(self.s_artist_edit,6,2,1,14)
-        grid.addWidget(self.search_performer,7,1)
-        grid.addWidget(self.s_performer_edit,7,2,1,14)
-        grid.addWidget(self.search_album,8,1)
-        grid.addWidget(self.s_album_edit,8,2,1,14)
+        grid.addWidget(self.search_description,6,1)
+        grid.addWidget(self.s_description_edit,6,2,1,14)
+        grid.addWidget(self.search_speaker,7,1)
+        grid.addWidget(self.s_speaker_edit,7,2,1,14)
+        grid.addWidget(self.search_event,8,1)
+        grid.addWidget(self.s_event_edit,8,2,1,14)
         #grid.addWidget(self.search_location,9,1)
         #grid.addWidget(self.s_location_edit,9,2,1,14)
         grid.addWidget(self.search_date,9,1)
@@ -109,22 +116,27 @@ class UploaderMainApp(QtGui.QWidget):
         self.setLayout(grid)
         self.setWindowTitle('Upload video to YouTube')
         self.upbtn.clicked.connect(self.upload)
-    #open video folder
+
     def open_file_dialog(self):
-        if (self.s_title_edit.text() or self.s_artist_edit.text()
-        or self.s_performer_edit.text() or self.s_album_edit.text()
-        or self.s_date_edit.text()):
-            file_filter = self.search_video()
-            filename = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,file_filter)
-        else:
-            filename = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,'*.ogg OR *.mpg OR *.mpeg')
+        """
+        open dialog box for easy video selecting.
+        """
+        file_filter = "*.ogg OR *.mpg OR *.mpeg"
+        if (self.s_title_edit.text() or self.s_description_edit.text()
+           or self.s_speaker_edit.text() or self.s_event_edit.text()
+           or self.s_date_edit.text()):
+            file_filter = self.get_video_filter()
+        filename = QtGui.QFileDialog.getOpenFileName(self,'Open File',self.config.videodir,file_filter)
         self.path_edit.setText(filename)
     
-    def search_video(self):
+    def get_video_filter(self):
+        """
+        make video filter for easy video search
+        """
         title = str(self.s_title_edit.text())
-        artist = str(self.s_artist_edit.text())
-        performer = str(self.s_performer_edit.text())
-        album = str(self.s_album_edit.text())
+        description = str(self.s_description_edit.text())
+        speaker = str(self.s_speaker_edit.text())
+        event = str(self.s_event_edit.text())
         #location = self.s_location_edit.text()
         date = str(self.s_date_edit.text())
         video_list = glob.glob(self.config.videodir+'/*.ogg')
@@ -133,37 +145,28 @@ class UploaderMainApp(QtGui.QWidget):
 
         for i, videofile in enumerate(video_list):
             metadata = mutagen.oggvorbis.Open(videofile)
-            try:
-                meta[i][0]= metadata["title"][0]
-            except KeyError:
-                print "cannot extract title of " + videofile
-            try:
-                meta[i][1] = metadata["artist"][0]
-            except KeyError:
-                print "cannot extract artist of " + videofile
-            try:
-                meta[i][2] = metadata["performer"][0]
-            except KeyError:
-                print "cannot extract performer of " + videofile
-            try:
-                meta[i][3] = metadata["album"][0]
-            except KeyError:
-                print "cannot extract album of " + videofile
-            try:
-                meta[i][4] = metadata["date"][0]
-            except KeyError:
-                print "cannot extract date of " + videofile
+            print metadata
+            if 'title' in metadata:
+                meta[i][0]= metadata['title'][0]
+            if 'comment' in metadata:
+                meta[i][1] = metadata['comment'][0]
+            if 'performer' in metadata:
+                meta[i][2] = metadata['performer'][0]
+            if 'album' in metadata:
+                meta[i][3] = metadata['album'][0]
+            if 'date' in metadata:
+                meta[i][4] = metadata['date'][0]
 
         for i in xrange(len(video_list)):
-            if not(re.search(title,meta[i][0])) and title:
+            if not(re.search(title.lower(),meta[i][0].lower())) and title:
                 search_file_index[i] = False
-            elif not(re.search(artist,meta[i][1])) and artist:
+            elif not(re.search(description.lower(),meta[i][1].lower())) and description:
                 search_file_index[i] = False
-            elif not(re.search(performer,meta[i][2])) and performer:
+            elif not(re.search(speaker.lower(),meta[i][2].lower())) and speaker:
                 search_file_index[i] = False
-            elif not(re.search(album,meta[i][3])) and album:
+            elif not(re.search(event.lower(),meta[i][3].lower())) and event:
                 search_file_index[i] = False
-            elif not(re.search(date,meta[i][4])) and date:
+            elif not(re.search(date.lower(),meta[i][4].lower())) and date:
                 search_file_index[i] = False
 
         file_filter = ''
@@ -176,6 +179,9 @@ class UploaderMainApp(QtGui.QWidget):
         return file_filter 
     
     def upload(self):
+        """
+        execute CLI of youtube uploader
+        """
         email = str(self.email_edit.text())
         passwd = str(self.password_edit.text())
         path = str(self.path_edit.text())
@@ -184,13 +190,17 @@ class UploaderMainApp(QtGui.QWidget):
         vpath = os.path.dirname(path)
         vfile = os.path.basename(path)
         ext = os.path.splitext(vfile)[1]
-        if (ext == ".ogg") or (ext == ".mpg") or (ext == ".mpeg"):
+        accepted_formats = ('.ogg', '.mpg', '.mpeg')
+        if ext in accepted_formats:
             uploadToYouTube(vpath, vfile, email, passwd, category)
         else:
-            print vpath + '/' + vfile + " is not an ogg or mpg."
+            print vpath + '/' + vfile + 'is not an ogg or mpg.'
             self.upload_error(vpath + '/' + vfile)
     def upload_error(self,path):
-        msgBox = QtGui.QMessageBox(self, windowTitle='upload error', text=path+" is not an ogg or mpg")
+        """
+        show error for invalid file uploading
+        """
+        msgBox = QtGui.QMessageBox(self, windowTitle='upload error', text=path+' is not an ogg or mpg')
         msgBox.exec_()
 
             
