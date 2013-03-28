@@ -128,7 +128,7 @@ class UploaderMainApp(QtGui.QWidget):
         #location = self.s_location_edit.text()
         date = str(self.s_date_edit.text())
         video_list = glob.glob(self.config.videodir+'/*.ogg')
-        meta = [[""]*5] * len(video_list)
+        meta = [["" for j in range(5)] for i in range(len(video_list))]
         search_file_index = [True]*len(video_list)
 
         for i, videofile in enumerate(video_list):
@@ -183,8 +183,15 @@ class UploaderMainApp(QtGui.QWidget):
         category = str(self.combo.currentText())
         vpath = os.path.dirname(path)
         vfile = os.path.basename(path)
-        root, ext = os.path.splitext(vfile)
-        if (ext == "ogg") or (ext == "mpg") or (ext == "mpeg"):
+        ext = os.path.splitext(vfile)[1]
+        if (ext == ".ogg") or (ext == ".mpg") or (ext == ".mpeg"):
             uploadToYouTube(vpath, vfile, email, passwd, category)
         else:
-            print vpath + vfile + " is not an ogg or mpg."
+            print vpath + '/' + vfile + " is not an ogg or mpg."
+            self.upload_error(vpath + '/' + vfile)
+    def upload_error(self,path):
+        msgBox = QtGui.QMessageBox(self, windowTitle='upload error', text=path+" is not an ogg or mpg")
+        msgBox.exec_()
+
+            
+            
