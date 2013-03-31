@@ -77,7 +77,7 @@ class QtDBConnector():
             #verify that correct version of database exists
             self.__update_version()
         else:
-            print "Unable to create talkdb file."
+            logging.error("Unable to create talkdb file.")
             
     def __close_table(self):
         """
@@ -449,7 +449,7 @@ class QtDBConnector():
             
             result = self.get_talks()
             while result.next():
-                #print unicode(result.value(1).toString())
+                logging.debug(unicode(result.value(1).toString()))
                 writer.writerow({'Title':unicode(result.value(1).toString()),
                                  'Speaker':unicode(result.value(2).toString()),
                                  'Abstract':unicode(result.value(3).toString()),
