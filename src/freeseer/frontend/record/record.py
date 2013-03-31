@@ -511,7 +511,7 @@ class RecordApp(FreeseerApp):
         
     def keyPressEvent(self, event):
         logging.debug("Keypressed: %s" % event.key())
-        self.backend.keyboard_event(event.key())
+        self.media.keyboard_event(event.key())
     
     '''
     Client functions
