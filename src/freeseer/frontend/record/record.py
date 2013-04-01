@@ -40,6 +40,7 @@ from freeseer.framework.database import QtDBConnector
 from freeseer.framework.logger import Logger
 from freeseer.framework.multimedia import Gstreamer
 from freeseer.framework.plugin import PluginManager
+from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
@@ -65,6 +66,8 @@ class RecordApp(FreeseerApp):
         
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
+        self.current_event = None
+        self.current_room = None
 
         self.config = Config(settings.configdir)
         self.db = QtDBConnector(settings.configdir)
@@ -335,14 +338,15 @@ class RecordApp(FreeseerApp):
             self.reset_timer()
             
             # Select next talk if there is one within 15 minutes.
-            starttime = QtCore.QDateTime().currentDateTime()
-            stoptime = starttime.addSecs(900)
-            talkid = self.db.get_talk_between_time(self.current_event, self.current_room, 
-                                                        starttime.toString(), stoptime.toString())
-            if talkid is not None:
-                for i in range(self.mainWidget.talkComboBox.count()):
-                    if talkid == self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString():
-                        self.mainWidget.talkComboBox.setCurrentIndex(i)
+            if self.current_event and self.current_room:
+                starttime = QtCore.QDateTime().currentDateTime()
+                stoptime = starttime.addSecs(900)
+                talkid = self.db.get_talk_between_time(self.current_event, self.current_room, 
+                                                            starttime.toString(), stoptime.toString())
+                if talkid is not None:
+                    for i in range(self.mainWidget.talkComboBox.count()):
+                        if talkid == self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString():
+                            self.mainWidget.talkComboBox.setCurrentIndex(i)
             
     def pause(self, state):
         if (state): # Pause Recording.
@@ -361,8 +365,15 @@ class RecordApp(FreeseerApp):
     def load_backend(self, talk=None):
         if talk is not None: self.media.stop()
         
-        self.media.load_backend(self.current_presentation())
-        
+        if self.current_presentation():
+            self.media.load_backend(self.current_presentation())
+
+        # If current presentation is no existant (empty talk database)
+        # use a default recording name.
+        else:
+            presentation = Presentation(title=unicode("default"))
+            self.media.load_backend(presentation)
+
     def update_timer(self):
         """Updates the Elapsed Time displayed.
         
