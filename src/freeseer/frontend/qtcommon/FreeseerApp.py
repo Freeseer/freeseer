@@ -78,6 +78,11 @@ class FreeseerApp(QtGui.QMainWindow):
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         self.actionExit.setIcon(exitIcon)
         
+        helpIcon = QtGui.QIcon.fromTheme("help-contents")
+        self.actionOnlineHelp = QtGui.QAction(self)
+        self.actionOnlineHelp.setObjectName(_fromUtf8("actionOnlineHelp"))
+        self.actionOnlineHelp.setIcon(helpIcon)
+
         self.actionAbout = QtGui.QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.actionAbout.setIcon(self.icon)
@@ -85,6 +90,7 @@ class FreeseerApp(QtGui.QMainWindow):
         # Actions
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addAction(self.actionOnlineHelp)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuLanguage.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
@@ -94,9 +100,15 @@ class FreeseerApp(QtGui.QMainWindow):
         
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.actionOnlineHelp, QtCore.SIGNAL('triggered()'), self.openOnlineHelp)
         
         self.retranslateFreeseerApp()
         self.aboutDialog.retranslate("en_US")
+
+    def openOnlineHelp(self):
+        """Opens a link to the Freeseer Online Help"""
+        url = QtCore.QUrl("http://freeseer.github.com/docs/")
+        QtGui.QDesktopServices.openUrl(url)
         
     def translate(self, action):
         """Translates the GUI via menu action.
@@ -129,6 +141,7 @@ class FreeseerApp(QtGui.QMainWindow):
         
         self.actionExit.setText(self.uiTranslator.translate("FreeseerApp", "&Quit"))
         self.actionAbout.setText(self.uiTranslator.translate("FreeseerApp", "&About"))
+        self.actionOnlineHelp.setText(self.uiTranslator.translate("FreeseerApp", "Online Documentation"))
         # --- Menubar
         
     def setupLanguageMenu(self):
