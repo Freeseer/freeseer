@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 For support, questions, suggestions or any other inquiries, visit:
 http://wiki.github.com/Freeseer/freeseer/
 
-@author: Thanh Ha
+@author: Aaron Brubacher
 '''
 
 import ConfigParser
