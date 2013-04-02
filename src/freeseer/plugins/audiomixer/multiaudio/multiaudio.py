@@ -60,7 +60,7 @@ class MultiAudio(IAudioMixer):
         return mixerbin
 
     def get_inputs(self):
-        inputs = [self.input1, self.input2]
+        inputs = [(self.input1, 0), (self.input2, 1)]
         return inputs
     
     def load_inputs(self, player, mixer, inputs):
