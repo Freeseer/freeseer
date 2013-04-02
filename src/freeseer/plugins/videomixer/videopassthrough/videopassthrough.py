@@ -89,7 +89,7 @@ class VideoPassthrough(IVideoMixer):
         return bin
     
     def get_inputs(self):
-        inputs = [self.input1]
+        inputs = [(self.input1, 0)]
         return inputs
         
     def load_inputs(self, player, mixer, inputs):
