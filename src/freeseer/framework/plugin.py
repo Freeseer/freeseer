@@ -360,7 +360,7 @@ class IAudioMixer(IBackendPlugin):
     
     def get_inputs(self):
         """
-        Returns a list of inputs the that the audio mixer needs
+        Returns a list of tuples containing the input name and instance number that the audio mixer needs
         in order to initialize it's pipelines.
         
         This should be used so that the code that calls it can
@@ -403,7 +403,7 @@ class IVideoMixer(IBackendPlugin):
     
     def get_inputs(self):
         """
-        Returns a list of inputs the that the video mixer needs
+        Returns a list of tuples containing the input name and instance number that the video mixer needs
         in order to initialize it's pipelines.
         
         This should be used so that the code that calls it can
