@@ -111,7 +111,6 @@ class MultiAudio(IAudioMixer):
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        print(self.input1 + self.input2)
         
         plugins = self.plugman.get_audioinput_plugins()
         self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
