@@ -41,6 +41,7 @@ from freeseer.framework.plugin import IOutput
 from oauth import oauth
 
 class RTMPOutput(IOutput):
+
     name = "RTMP Streaming"
     os = ["linux", "linux2", "win32", "cygwin"]
     type = IOutput.BOTH
@@ -297,7 +298,7 @@ class RTMPOutput(IOutput):
             # Note
             #
             
-            self.label_note = QtGui.QLabel("*For RTMP streaming, all other outputs must be set to leaky")
+            self.label_note = QtGui.QLabel(self.gui.uiTranslator.translate('rtmp', "*For RTMP streaming, all other outputs must be set to leaky"))
             self.custom_widget_layout.addRow(self.label_note)
 
             self.content_widget = self.custom_widget
@@ -322,7 +323,7 @@ class RTMPOutput(IOutput):
             # Note
             #
             
-            self.label_note = QtGui.QLabel("*See: http://www.justin.tv/broadcast/adv_other\nYou must be logged in to obtain your Streaming Key")
+            self.label_note = QtGui.QLabel(self.gui.uiTranslator.translate('rtmp', "*See: http://www.justin.tv/broadcast/adv_other\nYou must be logged in to obtain your Streaming Key"))
             self.justin_widget_layout.addRow(self.label_note)
 
             #
@@ -350,7 +351,7 @@ class RTMPOutput(IOutput):
             #
             
             self.apply_button = QtGui.QPushButton("Apply")
-            self.apply_button.setToolTip("Overwrite custom settings for justin.tv")
+            self.apply_button.setToolTip(self.gui.uiTranslator.translate('rtmp', "Overwrite custom settings for justin.tv"))
             self.justin_widget_layout.addRow(self.apply_button)
 
             self.apply_button.clicked.connect(self.apply_justin_settings)
@@ -479,13 +480,21 @@ class RTMPOutput(IOutput):
                 url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
                 self.justin_api.set_save_method(self.set_justin_api_persistent)
                 webbrowser.open(url)
-                QtGui.QMessageBox.information(self.widget, "justin.tv authentication", "An authorization URL should have opened in your browser.\n" \
+                QtGui.QMessageBox.information(self.widget,
+                    "justin.tv authentication", 
+                    self.gui.uiTranslator.translate('rtmp', "An authorization URL should have opened in your browser.\n" \
                         "If not, go open the following URL to allow freeseer to manage your justin.tv channel.\n" \
-                        "%s" % url, QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
+                        "%1").arg(url), 
+                    QtGui.QMessageBox.Ok, 
+                    QtGui.QMessageBox.Ok)
         except KeyError:
             logging.error("justin.tv API error: Authentication failed. Supplied credentials may be incorrect.")
-            QtGui.QMessageBox.critical(self.widget, "justin.tv error", "Authentication failed. Supplied credentials for Justin.tv" \
-                    " may be incorrect.", QtGui.QMessageBox.Ok, QtGui.QMessageBox.Ok)
+            QtGui.QMessageBox.critical(self.widget, 
+                "justin.tv error", 
+                self.gui.uiTranslator.translate('rtmp', "Authentication failed. Supplied credentials for Justin.tv" \
+                    " may be incorrect."), 
+                QtGui.QMessageBox.Ok,
+                QtGui.QMessageBox.Ok)
             
     def get_properties(self):
         return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec', 'Streaming Destination']
