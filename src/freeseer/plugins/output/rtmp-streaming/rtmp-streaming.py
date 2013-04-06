@@ -59,6 +59,7 @@ class RTMPOutput(IOutput):
     consumer_key = ''
     consumer_secret = ''
     authorization_url = ''
+    use_justin_api = 'no'
 
     TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
     AUDIO_CODEC_VALUES = ['lame', 'faac']
@@ -168,7 +169,7 @@ class RTMPOutput(IOutput):
         #
         muxer.link(rtmpsink)
 
-        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
+        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1] and self.use_justin_api == 'yes':
             self.justin_api.set_channel_status(self.get_talk_status(metadata),
                                                 self.get_description(metadata))
 
@@ -209,6 +210,7 @@ class RTMPOutput(IOutput):
             self.consumer_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key")
             self.consumer_secret = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret")
             self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
+            self.use_justin_api = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
@@ -219,6 +221,7 @@ class RTMPOutput(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_dest)
+            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API", self.use_justin_api)
 
         try:
             self.justin_api_persistent = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object")
@@ -340,6 +343,16 @@ class RTMPOutput(IOutput):
         self.justin_widget_layout.addRow(self.label_note)
 
         #
+        # Checkbox for whether or not to use the justin.tv API to push channel settings
+        #
+
+        self.label_api_checkbox = QtGui.QLabel("Set Justin.tv channel properties")
+        self.api_checkbox = QtGui.QCheckBox()
+        self.justin_widget_layout.addRow(self.label_api_checkbox, self.api_checkbox)
+
+        self.api_checkbox.stateChanged.connect(self.set_use_justin_api)
+
+        #
         # Consumer key
         #
 
@@ -427,6 +440,12 @@ class RTMPOutput(IOutput):
         self.lineedit_consumer_key.setText(self.consumer_key)
         self.lineedit_consumer_secret.setText(self.consumer_secret)
 
+        check_state = 0
+        if self.use_justin_api == 'yes':
+            check_state = 2
+        self.api_checkbox.setCheckState(check_state)
+        self.toggle_consumer_key_secret_fields()
+
     def unlock_stream_settings(self):
         self.lineedit_stream_url.setEnabled(True)
         self.spinbox_audio_quality.setEnabled(True)
@@ -489,6 +508,23 @@ class RTMPOutput(IOutput):
         self.streaming_key = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
         self.plugman.save()
+
+    def set_use_justin_api(self, state):
+        if state != 0:
+            self.use_justin_api = 'yes'
+        else:
+            self.use_justin_api = 'no'
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API", self.use_justin_api)
+        self.plugman.save()
+        self.toggle_consumer_key_secret_fields()
+
+    def toggle_consumer_key_secret_fields(self):
+        if self.use_justin_api == 'yes':
+            self.lineedit_consumer_key.setEnabled(True)
+            self.lineedit_consumer_secret.setEnabled(True)
+        else:
+            self.lineedit_consumer_key.setEnabled(False)
+            self.lineedit_consumer_secret.setEnabled(False)
 
     def set_consumer_key(self, text):
         self.consumer_key = str(text)
