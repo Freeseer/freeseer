@@ -449,14 +449,17 @@ class RTMPOutput(IOutput):
     def set_stream_url(self, text):
         self.url = text
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
+        self.plugman.save()
         
     def set_audio_quality(self):
         self.audio_quality = self.spinbox_audio_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
+        self.plugman.save()
         
     def set_video_bitrate(self):
         self.video_bitrate = self.spinbox_video_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
+        self.plugman.save()
         
     def set_video_tune(self, tune):
         self.video_tune = tune
