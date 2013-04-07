@@ -16,12 +16,8 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
    install
    record
    talkeditor
+   config/index
+   config/plugins/index
    reporteditor
    server
    youtube-uploader
-   config/index
-   config/plugins/index
-   freeseer-record = Record
-   freeseer-talkeditor = Manage Talks
-   freeseer-reporteditor = Report Editor
-   freeseer-config = Settings
