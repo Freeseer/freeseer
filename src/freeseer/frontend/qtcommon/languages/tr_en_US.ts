@@ -363,7 +363,7 @@
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="144"/>
         <source>Online Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Online Documentation</translation>
     </message>
 </context>
 <context>
@@ -792,7 +792,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="131"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished">&amp;Export to CSV</translation>
+        <translation>&amp;Export to CSV</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="153"/>
