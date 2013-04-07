@@ -1,17 +1,18 @@
-.*sw*
+# python auto-generated
 *.pyc
-*.ogg
-*.mkv
-*.deb
+freeseer.egg-info
+dist
+build
+MANIFEST
+
+# OS Generated
+.*sw*
 *.orig
 *~
+
+# Tooling Generated
 .project
 .pydevproject
 .spyderproject
 .directory
 .settings
-dist
-build
-MANIFEST
-freeseer.egg-info
-
