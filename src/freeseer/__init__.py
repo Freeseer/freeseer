@@ -17,7 +17,7 @@ Freeseer’s source code is licensed under the GNU General Public License and
 is available on GitHub.
 """
 
-NAME = 'Freeseer'
+NAME = 'freeseer'
 __version__ = '3.0.0-beta2'
 __author__ = "Free and Open Source Software Learning Center"
 __email__ = "fosslc@gmail.com"
