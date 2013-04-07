@@ -219,14 +219,14 @@ class OggOutput(IOutput):
         self.video_bitrate = self.spinbox_video_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
         
-    def set_matterhorn(self, enabled=False):
+    def set_matterhorn(self, state):
         """
         Enables or Disables Matterhorn metadata generation.
         
         If enabled filename.xml will be created along side the video file
         containing matterhorn metadata in xml format.
         """
-        self.matterhorn = enabled
+        self.matterhorn = state
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", str(self.matterhorn))
         
     def get_properties(self):
