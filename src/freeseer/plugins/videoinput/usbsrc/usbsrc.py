@@ -133,7 +133,8 @@ class USBSrc(IVideoInput):
             
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
-            devices = videosrc.probe_property_name('device-name')
+            videosrc.probe_property_name('device-name')
+            devices = videosrc.probe_get_values_name('device-name')  
             
             for device in devices:
                 devicemap[device] = device
