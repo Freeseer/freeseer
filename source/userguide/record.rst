@@ -1,3 +1,5 @@
+.. _record-tool:
+
 Record
 ======
 
