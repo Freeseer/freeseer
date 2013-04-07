@@ -97,7 +97,7 @@ class AboutDialog(QtGui.QDialog):
                     "Freeseer is a video capture utility capable of capturing presentations. It captures video "
                     "sources such as usb, firewire, or local desktop along with audio and mixes them together to "
                     "produce a video.")
-        self.copyrightString = self.uiTranslator.translate("AboutDialog", 'Copyright (C) 2011 The Free and Open Source Software Learning Centre')
+        self.copyrightString = self.uiTranslator.translate("AboutDialog", 'Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre')
         self.licenseTextString = self.uiTranslator.translate("AboutDialog", "Freeseer is licensed under the GPL version 3. This software is provided 'as-is',"
                     "without any express or implied warranty. In no event will the authors be held liable for any "
                     "damages arising from the use of this software.")
