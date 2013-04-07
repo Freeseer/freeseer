@@ -13,6 +13,7 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
 .. toctree::
    :maxdepth: 2
 
+   install
    record
    talkeditor
    reporteditor
@@ -20,7 +21,7 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
    youtube-uploader
    config/index
    config/plugins/index
-.. freeseer-record = Record
+   freeseer-record = Record
    freeseer-talkeditor = Manage Talks
    freeseer-reporteditor = Report Editor
    freeseer-config = Settings
