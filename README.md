@@ -32,8 +32,8 @@ Visit our downloads page at https://github.com/Freeseer/freeseer/downloads
 **Note:** For the very latest but unstable version, you have to build from the experimental source (see developers section).
 
 
-Developers
-----------
+Installing Freeseer
+-------------------
 ### 1. Install dependencies
  + Make
  + Git
@@ -71,18 +71,27 @@ Developers
     Coming soon!
           
 ### 2. Download
-Clone the project with git:
+
+If you are a user and would like to use Freeseer you can install the current version
+using PIP
+
+    $ pip install freeseer
+
+If your a developer and want to contribute to Freeseer clone the project with git:
 
     $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
 
-### 3. Build
-
-    $ cd freeseer
-    $ make
-
-### 4. Run
+### 3. Run
 
 Once you have the prerequisite components you can run Freeseer using the following commands:
+
+Users who installed using pip:
+
+    $ freeseer-record  # Recording tool
+    $ freeseer-config  # Configuration tool
+    $ freeseer-talkeditor  # Talk-list editor
+
+Developers who git cloned the repo will need to:
 
     $ cd src
     $ ./freeseer-record  # Recording tool
@@ -129,7 +138,7 @@ and [Undergraduate Capstone Open Source Projects](http://ucosp.ca).
 
 Copyright and license
 ---------------------
-© 2011-2012 FOSSLC
+© 2011-2013 FOSSLC
 
 Licensed under the GNU General Public License, version 3 (GPLv3);
 you may not use this work except in compliance with the GPLv3.
