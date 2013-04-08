@@ -48,6 +48,8 @@ Freeseer itself can run on commodity hardware such as a laptop or desktop.',
                             'freeseer.frontend.reporteditor',
                             'freeseer.frontend.talkeditor',
                             'freeseer.frontend.record'],
+      data_files=[('share/applications', ['data/freeseer.desktop']),
+-                 ('share/applications', ['data/48x48-freeseer.png'])],
       scripts=['src/freeseer-record', 'src/freeseer-config', 'src/freeseer-talkeditor',
                'src/freeseer-reporteditor'])
 
