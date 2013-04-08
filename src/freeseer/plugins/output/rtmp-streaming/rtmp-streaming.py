@@ -23,22 +23,41 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Jonathan Shen
 '''
 
+# Python libs
 import ConfigParser
-
-import pygst
-pygst.require("0.10")
-import gst
 import logging
-import httplib
-import simplejson
 import pickle
 import webbrowser
 
+# GStreamer libs
+import pygst
+pygst.require("0.10")
+import gst
+
+# Qt libs
 from PyQt4 import QtGui, QtCore
 
+# Freeseer libs
 from freeseer.framework.plugin import IOutput
 
-from oauth import oauth
+#
+# Non-standard imports required for plugin but not
+# for freeseer to run.
+#
+try:
+    import httplib
+    import simplejson
+    from oauth import oauth
+except:
+    logging.error("""RTMP-Streaming: Failed to load plugin.
+        This plugin requires the following libraries in order operate:
+
+            - httplib
+            - simplejson
+            - oauth
+
+        If you wish to use this plugin please ensure these libraries are installed on your system.
+        """)
 
 class RTMPOutput(IOutput):
 
