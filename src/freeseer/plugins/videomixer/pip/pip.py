@@ -90,31 +90,57 @@ class PictureInPicture(IVideoMixer):
     def load_inputs(self, player, mixer, inputs):
         # Load main source
         input1 = inputs[0]
-        player.add(input1)
-        
+
+        # Create videoscale element in order to scale to dimensions not supported by camera 
+        mainsrc_scale = gst.element_factory_make("videoscale", "mainsrc_scale")
+
+        # Create ffmpegcolorspace element to convert from what camera supports to rgb
+        mainsrc_colorspace = gst.element_factory_make("ffmpegcolorspace", "mainsrc_colorspace")
+
+        # Create capsfilter for limiting to x-raw-rgb pixel video format and setting dimensions
         mainsrc_capsfilter = gst.element_factory_make("capsfilter", "mainsrc_capsfilter")
         mainsrc_capsfilter.set_property('caps',
                         gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
-        player.add(mainsrc_capsfilter)
         
-        input1.link(mainsrc_capsfilter)
-        srcpad = mainsrc_capsfilter.get_pad("src")
+        mainsrc_elements = [input1, mainsrc_scale, mainsrc_capsfilter, mainsrc_colorspace]
+
+        # Add elements to player in list order
+        map(lambda element: player.add(element), mainsrc_elements)
+
+        # Link elements in a specific order
+        input1.link(mainsrc_scale)
+        mainsrc_scale.link(mainsrc_capsfilter)
+        mainsrc_capsfilter.link(mainsrc_colorspace)
+        
+        # Link colorspace element to sink pad for pixel format conversion
+        srcpad = mainsrc_colorspace.get_pad("src")
         sinkpad = mixer.get_pad("sink_main")
         srcpad.link(sinkpad)
-    
+
         # Load the secondary source
         input2 = inputs[1]
-        player.add(input2)
-        
+
+        # Create gst elements as above, but set smaller dimensions
+        pipsrc_scale = gst.element_factory_make("videoscale", "pipsrc_scale")
+        pipsrc_colorspace = gst.element_factory_make("ffmpegcolorspace", "pipsrc_colorspace")
         pipsrc_capsfilter = gst.element_factory_make("capsfilter", "pipsrc_capsfilter")
         pipsrc_capsfilter.set_property('caps',
                         gst.caps_from_string('video/x-raw-rgb, width=200, height=150'))
-        player.add(pipsrc_capsfilter)
-        
-        input2.link(pipsrc_capsfilter)
-        srcpad = pipsrc_capsfilter.get_pad("src")
+
+        pipsrc_elements = [input2, pipsrc_scale, pipsrc_capsfilter, pipsrc_colorspace]
+
+        #Add elements to player in list order
+        map(lambda element: player.add(element), pipsrc_elements)
+
+        # Link elements in specific order
+        input2.link(pipsrc_scale)
+        pipsrc_scale.link(pipsrc_capsfilter)
+        pipsrc_capsfilter.link(pipsrc_colorspace)
+
+        # Link colorspace element to sink pad for pixel format conversion
+        srcpad = pipsrc_colorspace.get_pad("src")
         sinkpad = mixer.get_pad("sink_pip")
-        srcpad.link(sinkpad)
+        srcpad.link(sinkpad)     
     
     def load_config(self, plugman):
         self.plugman = plugman
