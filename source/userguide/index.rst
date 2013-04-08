@@ -11,7 +11,7 @@ If you ever have to refer to this guide, then please :doc:`let us know </contact
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    install
    record
