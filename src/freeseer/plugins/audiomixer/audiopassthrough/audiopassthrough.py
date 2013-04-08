@@ -84,6 +84,7 @@ class AudioPassthrough(IAudioMixer):
             
             self.label = QtGui.QLabel("Audio Input")
             self.combobox = QtGui.QComboBox()
+            self.combobox.setMinimumWidth(150)
             layout.addRow(self.label, self.combobox)
             
             self.widget.connect(self.combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
@@ -136,5 +137,3 @@ class AudioPassthrough(IAudioMixer):
                 #TODO List available options              
         else:
             return "Error: There's no property with such name"   
-        
-        

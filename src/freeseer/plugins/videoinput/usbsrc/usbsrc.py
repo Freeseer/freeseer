@@ -83,6 +83,7 @@ class USBSrc(IVideoInput):
             
             self.label = QtGui.QLabel("Video Device")
             self.combobox = QtGui.QComboBox()
+            self.combobox.setMinimumWidth(150)
             layout.addRow(self.label, self.combobox)
             
             # Connections
