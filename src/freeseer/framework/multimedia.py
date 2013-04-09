@@ -25,7 +25,6 @@
 import datetime
 import logging
 import os
-import unicodedata
 
 import gobject
 gobject.threads_init()
@@ -34,6 +33,7 @@ pygst.require("0.10")
 import gst
 
 from freeseer.framework.plugin import IOutput
+from freeseer.framework.util import get_record_name
 
 class Gstreamer:
     NULL = 0
@@ -147,121 +147,6 @@ class Gstreamer:
             self.current_state = Gstreamer.STOP
             logging.debug("Gstreamer stopped.")
             
-            
-    ##
-    ## Record Filename Functions
-    ##
-    def duplicate_exists(self, recordname):
-        """Checks to see if a record name already exists in the directory."""
-        filename = self.config.videodir + '/' + recordname
-        try:
-            result = open(filename, 'r')
-        except IOError:
-            return False
-        return True
-    
-    def get_record_name(self, presentation, extension):
-        """Returns the filename to use when recording.
-        
-        If a record name with a .None extension is returned, the record name
-        will just be ignored by the output plugin (e.g. Video Preview plugin).
-        """
-        
-        if presentation:
-            recordname = self.make_record_name(presentation)
-                    
-            count = 0
-            tempname = recordname
-            
-            # Add "-NN" to the end of a duplicate record name to make it unique.
-            while(self.duplicate_exists("%s.%s" % (tempname, extension))):
-                tempname = "{0}-{1}".format(recordname, self.make_id_from_string(count, "0123456789"))
-                count+=1
-
-        recordname = "%s.%s" % (tempname, extension)
-                     
-        if extension is not None:
-            logging.debug('Set record name to %s', recordname)        
-        
-        return recordname
-
-
-    def make_record_name(self, presentation):
-        """Create an 'EVENT-ROOM-SPEAKER-TITLE' record name.
-
-        If any information is missing, we blank it out intelligently
-        And if we have nothing for some reason, we use "default"
-        """    
-        event = self.make_shortname(presentation.event)
-        title = self.make_shortname(presentation.title)
-        room = self.make_shortname(presentation.room)
-        speaker = self.make_shortname(presentation.speaker)
-
-        recordname = ""  # TODO: add substrings to a list then ''.join(list) -- better practice
-            
-        if event != "": # TODO: empty strings are falsy, use 'if not string:'
-            if recordname != "":
-                recordname = recordname + "-" + event
-            else:
-                recordname = event
-        
-        if room != "":
-            if recordname != "":
-                recordname = recordname + "-" + room
-            else:
-                recordname = room
-        
-        if speaker != "":
-            if recordname != "":
-                recordname = recordname + "-" + speaker
-            else:
-                recordname = speaker
-                
-        if title != "":
-            if recordname != "":
-                recordname = recordname + "-" + title
-            else:
-                recordname = title
-           
-        # Convert unicode filenames to their equivalent ascii so that
-        # we don't run into issues with gstreamer or filesystems.
-        recordname = unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
-                
-        if recordname != "":
-            return recordname
-                    
-        return "default"
-
-    def make_id_from_string(self, position, string='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'):
-        """Returns a 2-character id from a string of valid characters.
-        
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' are the valid characters for
-        UNIQUE in a record name.
-        """
-        index1 = position % string.__len__()
-        index0 = int( position / string.__len__() )
-
-        if index0 >= string.__len__():
-            logging.debug('WARNING: Unable to generate unique filename.')
-            # Return a unique 2 character string which will not overwrite previous files.
-            # There is a possibility of infinite looping on testing duplicates once
-            # all possible UNIQUE's and NN's are exhausted if all the files are kept 
-            # in the same directory.
-            # (36 * 36 * 100 filenames before this occurs, assuming EVENT is unique inside the directory.)
-            return "##" 
-
-        return string[index0] + string[index1]
-
-    def make_shortname(self, string):
-        """Returns the first 6 characters of a string in uppercase.
-
-        Strip out non alpha-numeric characters, spaces, and most punctuation.
-        """
-                
-        bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
-        string = "".join(ch for ch in string if ch not in bad_chars)
-        return string[0:6].upper()
-        
     def prepare_metadata(self, presentation):
         """Returns a dictionary of tags and tag values.
         
@@ -307,7 +192,7 @@ class Gstreamer:
             extension = plugin.plugin_object.get_extension()
 
             # Create a filename to record to.
-            record_name = self.get_record_name(presentation, extension)
+            record_name = get_record_name(presentation, extension, self.config.videodir)
     
             # Prepare metadata.
             metadata = self.prepare_metadata(presentation)

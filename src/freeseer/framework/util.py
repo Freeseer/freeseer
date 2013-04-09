@@ -23,8 +23,10 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import ctypes
+import logging
 import os
 import sys
+import unicodedata
 
 def format_size(num):
     for x in ['bytes','KB','MB','GB','TB']:
@@ -43,3 +45,88 @@ def get_free_space(directory):
             space = os.statvfs(directory).f_bfree * os.statvfs(directory).f_frsize
             
         return format_size(space)
+
+###
+### Filename related functions
+###
+
+def get_record_name(presentation, extension, path="."):
+    """Returns the filename to use when recording.
+    
+    If a record name with a .None extension is returned, the record name
+    will just be ignored by the output plugin (e.g. Video Preview plugin).
+    """
+    if presentation:
+        recordname = make_record_name(presentation)
+        
+        count = 0
+        tempname = recordname
+        
+        # Add a number to the end of a duplicate record name so we don't
+        # overwrite existing files
+        while(os.path.exists(os.path.join(path, "%s.%s" % (tempname, extension)))):
+            tempname = "{0}-{1}".format(recordname, count)
+            count+=1
+
+    recordname = "%s.%s" % (tempname, extension)
+
+    # This is to ensure that we don't log a message when extension is None
+    if extension is not None:
+        logging.debug('Set record name to %s', recordname)        
+
+    return recordname
+
+def make_record_name(presentation):
+    """Create an 'EVENT-ROOM-SPEAKER-TITLE' record name.
+
+    If any information is missing, we blank it out intelligently
+    And if we have nothing for some reason, we use "default"
+    """    
+    event = make_shortname(presentation.event)
+    title = make_shortname(presentation.title)
+    room = make_shortname(presentation.room)
+    speaker = make_shortname(presentation.speaker)
+
+    recordname = ""  # TODO: add substrings to a list then ''.join(list) -- better practice
+
+    if event != "": # TODO: empty strings are falsy, use 'if not string:'
+        if recordname != "":
+            recordname = recordname + "-" + event
+        else:
+            recordname = event
+
+    if room != "":
+        if recordname != "":
+            recordname = recordname + "-" + room
+        else:
+            recordname = room
+
+    if speaker != "":
+        if recordname != "":
+            recordname = recordname + "-" + speaker
+        else:
+            recordname = speaker
+
+    if title != "":
+        if recordname != "":
+            recordname = recordname + "-" + title
+        else:
+            recordname = title
+
+    # Convert unicode filenames to their equivalent ascii so that
+    # we don't run into issues with gstreamer or filesystems.
+    recordname = unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
+
+    if recordname != "":
+        return recordname
+
+    return "default"
+
+def make_shortname(string):
+    """Returns the first 6 characters of a string in uppercase.
+
+    Strip out non alpha-numeric characters, spaces, and most punctuation.
+    """
+    bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
+    string = "".join(ch for ch in string if ch not in bad_chars)
+    return string[0:6].upper()
