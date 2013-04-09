@@ -23,7 +23,6 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import ctypes
-import logging
 import os
 import sys
 import unicodedata
@@ -69,10 +68,6 @@ def get_record_name(presentation, extension, path="."):
             count+=1
 
     recordname = "%s.%s" % (tempname, extension)
-
-    # This is to ensure that we don't log a message when extension is None
-    if extension is not None:
-        logging.debug('Set record name to %s', recordname)        
 
     return recordname
 

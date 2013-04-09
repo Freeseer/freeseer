@@ -193,6 +193,10 @@ class Gstreamer:
 
             # Create a filename to record to.
             record_name = get_record_name(presentation, extension, self.config.videodir)
+
+            # This is to ensure that we don't log a message when extension is None
+            if extension is not None:
+                logging.info('Set record name to %s', record_name)
     
             # Prepare metadata.
             metadata = self.prepare_metadata(presentation)
@@ -204,10 +208,12 @@ class Gstreamer:
             plugin.plugin_object.load_config(self.plugman)
             plugins.append(plugin.plugin_object)
 
-        self.load_output_plugins(plugins,
-                                         self.config.enable_audio_recording,
-                                         self.config.enable_video_recording,
-                                         metadata)
+        if not self.load_output_plugins(plugins,
+                                        self.config.enable_audio_recording,
+                                        self.config.enable_video_recording,
+                                        metadata):
+            # Loading Output plugins failed, abort
+            return False
         
         if self.config.enable_audio_recording:
             logging.debug("Loading Audio Recording plugins...")
@@ -226,7 +232,9 @@ class Gstreamer:
                     audio_input.load_config(self.plugman)
                     audiomixer_inputs.append(audio_input.get_audioinput_bin())
                 
-                self.load_audiomixer(audiomixer, audiomixer_inputs)
+                if not self.load_audiomixer(audiomixer, audiomixer_inputs):
+                    # Loading AudioMixer failed, abort
+                    return False
         
         if self.config.enable_video_recording:
             logging.debug("Loading Video Recording plugins...")
@@ -245,13 +253,22 @@ class Gstreamer:
                     video_input.load_config(self.plugman)
                     videomixer_inputs.append(video_input.get_videoinput_bin())
                 
-                self.load_videomixer(videomixer, videomixer_inputs)
+                if not self.load_videomixer(videomixer, videomixer_inputs):
+                    # Loading VideoMixer failed, abort
+                    return False
+
+        return True
                 
     def load_output_plugins(self, plugins, record_audio, record_video, metadata):
         self.output_plugins = []
         for plugin in plugins:
             type = plugin.get_type()
             bin = plugin.get_output_bin(record_audio, record_video, metadata)
+
+            if not bin:
+                logging.error("Failed to load Output plugin: bin returned None")
+                self.unload_output_plugins()
+                return False
             
             if type == IOutput.AUDIO:
                 if record_audio:
@@ -268,6 +285,8 @@ class Gstreamer:
                 if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")                
                 if record_video: self.video_tee.link_pads("src%d", bin, "videosink")
                 self.output_plugins.append(bin)
+
+        return True
                 
     def unload_output_plugins(self):
         for plugin in self.output_plugins:
@@ -280,10 +299,17 @@ class Gstreamer:
         self.audio_input_plugins = inputs
         
         self.audiomixer = mixer.get_audiomixer_bin()
+
+        if not self.audiomixer:
+            logging.error("Failed to load AudioMixer plugin: bin returned None")
+            return False
+
         self.player.add(self.audiomixer)
         self.audiomixer.link(self.audio_tee)
         
         mixer.load_inputs(self.player, self.audiomixer, inputs)
+
+        return True
         
     def unload_audiomixer(self):
         if self.record_audio is True:
@@ -299,10 +325,17 @@ class Gstreamer:
         self.video_input_plugins = inputs
         
         self.videomixer = mixer.get_videomixer_bin()
+
+        if not self.videomixer:
+            logging.error("Failed to load VideoMixer plugin: bin returned None")
+            return False
+
         self.player.add(self.videomixer)
         self.videomixer.link(self.video_tee)
         
         mixer.load_inputs(self.player, self.videomixer, inputs)
+
+        return True
         
     def unload_videomixer(self):
         if self.record_video is True:
