@@ -136,18 +136,9 @@ class RecordApp(FreeseerApp):
         #self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
-        
+
         # GUI Disabling/Enabling Connections
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.standbyPushButton.setHidden)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.recordPushButton.setVisible)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.recordPushButton.setEnabled)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setVisible)
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.eventComboBox.setDisabled)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.roomComboBox.setDisabled)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.dateComboBox.setDisabled)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.talkComboBox.setDisabled)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.audioFeedbackCheckbox.setDisabled)
         
         #Client Connections
         self.connect(self.clientWidget.socket, QtCore.SIGNAL('readyRead()'), self.getAction)
@@ -260,7 +251,8 @@ class RecordApp(FreeseerApp):
         
     ###
     ### UI Logic
-    ###    
+    ###
+    
     def load_settings(self): 
         logging.info('Loading settings...')
         
@@ -290,15 +282,34 @@ class RecordApp(FreeseerApp):
         return self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
     
     def standby(self, state):
-        if (state): # Prepare the pipelines
-            self.load_backend()
-            self.media.pause()
-            self.mainWidget.statusLabel.setText(self.readyString)
+        def toggle_gui(state):
+            """Toggles GUI components when standby is pressed"""
+            self.mainWidget.standbyPushButton.setHidden(state)
+            self.mainWidget.recordPushButton.setVisible(state)
+            self.mainWidget.recordPushButton.setEnabled(state)
+            self.mainWidget.pauseToolButton.setVisible(state)
+            self.mainWidget.eventComboBox.setDisabled(state)
+            self.mainWidget.roomComboBox.setDisabled(state)
+            self.mainWidget.dateComboBox.setDisabled(state)
+            self.mainWidget.talkComboBox.setDisabled(state)
+            self.mainWidget.audioFeedbackCheckbox.setDisabled(state)
 
+        if (state): # Prepare the pipelines
+            if self.load_backend():
+                toggle_gui(True)
+                self.media.pause()
+                self.mainWidget.statusLabel.setText(self.readyString)
+            else:
+                toggle_gui(False)
+                self.mainWidget.standbyPushButton.setChecked(False)
+        else:
+            toggle_gui(False)
+            self.mainWidget.standbyPushButton.setChecked(False)
+    
     def record(self, state):
         """The logic for recording and stopping recording."""
 
-        if (state): # Start Recording.
+        if state: # Start Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
@@ -331,7 +342,7 @@ class RecordApp(FreeseerApp):
             self.mainWidget.audioSlider.setValue(0)
             
             # Finally set the standby button back to unchecked position.
-            self.mainWidget.standbyPushButton.setChecked(False)
+            self.standby(False)
             
             # Stop and reset timer.
             self.timer.stop()
@@ -366,13 +377,15 @@ class RecordApp(FreeseerApp):
         if talk is not None: self.media.stop()
         
         if self.current_presentation():
-            self.media.load_backend(self.current_presentation())
+            presentation = self.current_presentation()
 
         # If current presentation is no existant (empty talk database)
         # use a default recording name.
         else:
             presentation = Presentation(title=unicode("default"))
-            self.media.load_backend(presentation)
+        
+        if self.media.load_backend(presentation): return True
+        else: return False  # Error something failed while loading the backend
 
     def update_timer(self):
         """Updates the Elapsed Time displayed.

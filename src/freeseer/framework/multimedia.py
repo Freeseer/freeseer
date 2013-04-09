@@ -234,6 +234,7 @@ class Gstreamer:
                 
                 if not self.load_audiomixer(audiomixer, audiomixer_inputs):
                     # Loading AudioMixer failed, abort
+                    self.unload_output_plugins()
                     return False
         
         if self.config.enable_video_recording:
@@ -255,6 +256,8 @@ class Gstreamer:
                 
                 if not self.load_videomixer(videomixer, videomixer_inputs):
                     # Loading VideoMixer failed, abort
+                    self.unload_output_plugins()
+                    self.unload_audiomixer()
                     return False
 
         return True
