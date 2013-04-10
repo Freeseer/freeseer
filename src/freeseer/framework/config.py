@@ -23,8 +23,9 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import ConfigParser
-import os
 import logging
+import os
+import shutil
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +34,7 @@ class Config:
     This class is responsible for reading/writing settings to/from a config file.
     '''
 
-    def __init__(self, configdir):
+    def __init__(self, configdir, profile=None):
         '''
         Initialize settings from a configfile
         '''
@@ -42,7 +43,12 @@ class Config:
         
         # Config location
         self.configdir = configdir
-        self.configfile = os.path.abspath("%s/freeseer.conf" % self.configdir)
+
+        if profile:
+            # Use a profile if specified
+            self.configfile = os.path.abspath(os.path.join(self.configdir, "profiles", profile, "freeseer.conf"))
+        else:
+            self.configfile = os.path.abspath(os.path.join(self.configdir, "freeseer.conf"))
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         
         #
@@ -117,7 +123,7 @@ class Config:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
         
-    def writeConfig(self):
+    def writeConfig(self, profile=None):
         '''
         Write settings to a config file.
         '''
@@ -144,6 +150,26 @@ class Config:
         except OSError:
             pass # directory exists.
         
-        # Save default settings to new config file
-        with open(self.configfile, 'w') as configfile:
+        # Save settings, if a profile is provided save to profile
+        if profile:
+            saveto = os.path.abspath(os.path.join(self.configdir, "profiles", str(profile), "freeseer.conf"))
+            # need to save plugin config too
+            try:
+                os.makedirs(os.path.abspath(os.path.join(self.configdir, "profiles", str(profile))))
+            except OSError:
+                pass # profiles directory already exists
+
+            pluginfile = os.path.abspath(os.path.join(self.configdir, "plugin.conf"))
+            plugindst = os.path.abspath(os.path.join(self.configdir, "profiles", str(profile), "plugin.conf"))
+            shutil.copyfile(pluginfile, plugindst)
+        else:
+            saveto = os.path.abspath(os.path.join(self.configdir, "freeseer.conf"))
+        with open(saveto, 'w') as configfile:
             config.write(configfile)
+
+    def saveProfile(self, profile=None):
+        if profile:
+            self.writeConfig(profile)
+        else:
+            log.error("No profile name specified to save to.")
+        pass

@@ -43,7 +43,7 @@ class PluginManager(QtCore.QObject):
     Provides the core functionality which enables plugin support in.
     '''
     
-    def __init__(self, configdir):
+    def __init__(self, configdir, profile=None):
         QtCore.QObject.__init__(self)
         
         self.firstrun = False
@@ -51,7 +51,12 @@ class PluginManager(QtCore.QObject):
         self.plugmanc = PluginManagerSingleton.get()
         
         self.configdir = configdir
-        self.configfile = os.path.abspath("%s/plugin.conf" % self.configdir)
+
+        if profile:
+            # Use profile if specified
+            self.configfile = os.path.abspath(os.path.join(self.configdir, "profiles", profile, "plugin.conf"))
+        else:
+            self.configfile = os.path.abspath(os.path.join(self.configdir, "plugin.conf"))
         
         self.config = ConfigParser.ConfigParser()
         self.load()

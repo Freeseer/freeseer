@@ -49,23 +49,29 @@ def get_free_space(directory):
 ### Filename related functions
 ###
 
-def get_record_name(presentation, extension, path="."):
+def get_record_name(extension, presentation=None, filename=None, path="."):
     """Returns the filename to use when recording.
     
     If a record name with a .None extension is returned, the record name
     will just be ignored by the output plugin (e.g. Video Preview plugin).
+
+    Function will return None if neither presentation nor filename is passed.
     """
-    if presentation:
+    if presentation is not None:
         recordname = make_record_name(presentation)
-        
-        count = 0
-        tempname = recordname
-        
-        # Add a number to the end of a duplicate record name so we don't
-        # overwrite existing files
-        while(os.path.exists(os.path.join(path, "%s.%s" % (tempname, extension)))):
-            tempname = "{0}-{1}".format(recordname, count)
-            count+=1
+    elif filename is not None:
+        recordname = filename
+    else:
+        return None
+    
+    count = 0
+    tempname = recordname
+    
+    # Add a number to the end of a duplicate record name so we don't
+    # overwrite existing files
+    while(os.path.exists(os.path.join(path, "%s.%s" % (tempname, extension)))):
+        tempname = "{0}-{1}".format(recordname, count)
+        count+=1
 
     recordname = "%s.%s" % (tempname, extension)
 
