@@ -25,13 +25,46 @@
 import signal
 import sys
 
-from PyQt4 import QtGui
+###
+### Program Start
+###
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-from freeseer.frontend.record.record import RecordApp
+if len(sys.argv) > 1:
+    """If arguments are passed, act as a commandline"""
+    import argparse
+    import gobject
+    
+    parser = argparse.ArgumentParser(description='Freeseer Recording Utility')
+    parser.add_argument("-t", "--talk", type=int, help="Talk ID of the talk you would like to record")
+    parser.add_argument("-f", "--filename", type=unicode, help="Record to filename")
+    parser.add_argument("-p", "--profile", type=unicode, help="Use profile")
+    parser.add_argument("-s", "--show-talks", help="Shows all talks", action="store_true")
+    args = parser.parse_args()
 
-if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-    app = QtGui.QApplication(sys.argv)
+
+    # Must declare after argparse otherwise GStreamer will take over the cli help
+    from freeseer.frontend.record.RecordingController import RecordingController
+
+    if args.profile:
+        app = RecordingController(cli=True, profile=args.profile)
+    else:
+        app = RecordingController(cli=True)
+
+    if args.talk:
+        if app.record_talk_id(args.talk): sys.exit(gobject.MainLoop().run())
+    elif args.filename:
+        if app.record_filename(args.filename): sys.exit(gobject.MainLoop().run())
+    elif args.show_talks:
+        app.print_talks()
+    
+
+else:
+    """Launch the GUI if no arguments are passed"""
+    from PyQt4.QtGui import QApplication
+    from freeseer.frontend.record.record import RecordApp
+
+    app = QApplication(sys.argv)
     main = RecordApp()
     main.show()
     sys.exit(app.exec_())

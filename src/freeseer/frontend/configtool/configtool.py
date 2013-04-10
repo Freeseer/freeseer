@@ -25,8 +25,12 @@
 import ConfigParser
 import logging
 import os
+import re
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtGui import QInputDialog
+from PyQt4.QtGui import QLineEdit
+from PyQt4.QtGui import QMessageBox
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -76,6 +80,10 @@ class ConfigToolApp(FreeseerApp):
         self.config = Config(settings.configdir)
         self.plugman = PluginManager(settings.configdir)
 
+        # Custom Menu Items
+        self.actionSaveProfile = QtGui.QAction(self)
+        self.menuFile.insertAction(self.actionExit, self.actionSaveProfile)
+
         #
         # --- Language Related
         #
@@ -96,6 +104,7 @@ class ConfigToolApp(FreeseerApp):
         # --- End Language Related
         
         # connections
+        self.connect(self.actionSaveProfile, QtCore.SIGNAL('triggered()'), self.show_save_profile_dialog)
         self.connect(self.mainWidget.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.mainWidget.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
         
@@ -153,6 +162,11 @@ class ConfigToolApp(FreeseerApp):
     
     def retranslate(self):
         self.setWindowTitle(self.app.translate("ConfigToolApp", "Freeseer ConfigTool"))
+
+        #
+        # Menu
+        #
+        self.saveProfileString = self.actionSaveProfile.setText(self.app.translate("ConfigToolApp", "Save Profile"))
         
         #
         # ConfigToolWidget
@@ -198,6 +212,21 @@ class ConfigToolApp(FreeseerApp):
         self.avWidget.videoMixerLabel.setText(self.app.translate("ConfigToolApp", "Video Mixer"))
         self.avWidget.videoMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
         # --- End AV Widget
+
+    ###
+    ### Menu
+    ###
+
+    def show_save_profile_dialog(self):
+        profile, ok = QInputDialog().getText(self ,"Save Profile", "Profile Name", QLineEdit.Normal)
+        
+        # Validate alphanumeric and dashes allowed
+        valid = re.match('^[\w-]+$', profile) is not None
+        
+        if not valid:
+            QMessageBox.information(None, "Invalid name", "Invalid characters used. Only alphanumeric and dashes allowed.")
+
+        if ok and valid: self.config.saveProfile(profile)
         
     ###
     ### General
