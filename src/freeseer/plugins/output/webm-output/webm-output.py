@@ -73,7 +73,9 @@ class WebMOutput(IOutput):
             # set tag merge mode to GST_TAG_MERGE_REPLACE
             merge_mode = gst.TagMergeMode.__enum_values__[2]
     
-            vorbistag.merge_tags(self.tags, merge_mode)
+            if metadata is not None:
+                # Only set tag if metadata is set
+                vorbistag.merge_tags(self.tags, merge_mode)
             vorbistag.set_tag_merge_mode(merge_mode)
             bin.add(vorbistag)
             
