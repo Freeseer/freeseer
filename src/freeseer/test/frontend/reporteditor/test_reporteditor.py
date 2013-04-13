@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012 Free and Open Source Software Learning Centre
+# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -29,61 +29,61 @@ from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
 from PyQt4 import QtGui, QtTest, Qt
 
 class TestReportEditorApp(unittest.TestCase):
-	'''
-	Test cases for ReportEditorApp. 
-	'''
+    '''
+    Test cases for ReportEditorApp. 
+    '''
 
 
-	def setUp(self):
-		'''
-		Stardard init method: runs before each test_* method
+    def setUp(self):
+        '''
+        Stardard init method: runs before each test_* method
 
-		Initializes a QtGui.QApplication and ReportEditorApp object.
-		ReportEditorApp() causes the UI to be rendered.
-		'''
+        Initializes a QtGui.QApplication and ReportEditorApp object.
+        ReportEditorApp() causes the UI to be rendered.
+        '''
 
-		self.app = QtGui.QApplication([])
-		self.report_editor = ReportEditorApp()
-		self.report_editor.show()
+        self.app = QtGui.QApplication([])
+        self.report_editor = ReportEditorApp()
+        self.report_editor.show()
 
-	def tearDown(self):
-		del self.app
+    def tearDown(self):
+        del self.app
 
 
-	def test_close_report_editor(self):
-		'''
-		Tests closing the ReportEditorApp
-		'''
+    def test_close_report_editor(self):
+        '''
+        Tests closing the ReportEditorApp
+        '''
 
-		QtTest.QTest.mouseClick(self.report_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
-		self.assertFalse(self.report_editor.editorWidget.isVisible())
+        QtTest.QTest.mouseClick(self.report_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
+        self.assertFalse(self.report_editor.editorWidget.isVisible())
 
-	
-	def test_file_menu_quit(self):
- 		'''
-		Tests ReportEditorApp's File->Quit
-		'''
+    
+    def test_file_menu_quit(self):
+        '''
+        Tests ReportEditorApp's File->Quit
+        '''
 
-		self.assertTrue(self.report_editor.isVisible())
+        self.assertTrue(self.report_editor.isVisible())
 
-		# File->Menu
-		self.report_editor.actionExit.trigger()
-		self.assertFalse(self.report_editor.isVisible())
+        # File->Menu
+        self.report_editor.actionExit.trigger()
+        self.assertFalse(self.report_editor.isVisible())
 
-	def test_help_menu_about(self):
-		'''
-		Tests ReportEditorApp's Help->About
-		'''
+    def test_help_menu_about(self):
+        '''
+        Tests ReportEditorApp's Help->About
+        '''
 
-		self.assertTrue(self.report_editor.isVisible())
+        self.assertTrue(self.report_editor.isVisible())
 
-		# Help->About   
-		self.report_editor.actionAbout.trigger()
-		self.assertFalse(self.report_editor.hasFocus())
-		self.assertTrue(self.report_editor.aboutDialog.isVisible())
+        # Help->About   
+        self.report_editor.actionAbout.trigger()
+        self.assertFalse(self.report_editor.hasFocus())
+        self.assertTrue(self.report_editor.aboutDialog.isVisible())
 
-		# Click "Close"
-		QtTest.QTest.mouseClick(self.report_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
-		self.assertFalse(self.report_editor.aboutDialog.isVisible())
+        # Click "Close"
+        QtTest.QTest.mouseClick(self.report_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
+        self.assertFalse(self.report_editor.aboutDialog.isVisible())
 
 
