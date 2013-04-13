@@ -143,12 +143,10 @@ class MultiAudio(IAudioMixer):
     def set_input1(self, input1):
         self.input1 = input1
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
-        self.plugman.save()
         
     def set_input2(self, input2):
         self.input2 = input2
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
-        self.plugman.save()
         
     def get_properties(self):
         return ['Input1', 'Input2']
