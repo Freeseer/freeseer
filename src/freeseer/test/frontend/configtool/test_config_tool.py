@@ -59,6 +59,17 @@ class TestConfigToolApp(unittest.TestCase):
 		self.config_tool.show()
 		self.config = Config(homedir)
 
+	def tearDown(self):
+		'''
+		Standard tear down method. Runs after each test_* method.
+
+		This method closes the ConfigToolApp by clicking the "close" button
+		'''
+
+		QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
+		del self.app
+
+
 	def test_general_settings(self):
 		'''
 		Tests for the config tool's General Tab
@@ -259,12 +270,3 @@ class TestConfigToolApp(unittest.TestCase):
 		# Click "Close"
 		QtTest.QTest.mouseClick(self.config_tool.aboutDialog.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.config_tool.aboutDialog.isVisible())
-
-	def tearDown(self):
-		'''
-		Standard tear down method. Runs after each test_* method.
-
-		This method closes the ConfigToolApp by clicking the "close" button
-		'''
-
-		QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)

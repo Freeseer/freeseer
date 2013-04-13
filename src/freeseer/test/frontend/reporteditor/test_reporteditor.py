@@ -46,6 +46,9 @@ class TestReportEditorApp(unittest.TestCase):
 		self.report_editor = ReportEditorApp()
 		self.report_editor.show()
 
+	def tearDown(self):
+		del self.app
+
 
 	def test_close_report_editor(self):
 		'''

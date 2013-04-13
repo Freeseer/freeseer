@@ -50,6 +50,15 @@ class TestTalkEditorApp(unittest.TestCase):
 		self.talk_editor = TalkEditorApp()
 		self.talk_editor.show()
 
+	def tearDown(self):
+		'''
+		Standard tear down method. Runs after each test_* method.
+
+		This method closes the TalkEditorApp by clicking the "close" button
+		'''
+
+		QtTest.QTest.mouseClick(self.talk_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
+		del self.app
 
 	def test_add_talk(self):
 		''' 
@@ -178,13 +187,3 @@ class TestTalkEditorApp(unittest.TestCase):
 		# Click "Close"
 		QtTest.QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.talk_editor.aboutDialog.isVisible())
-
-	
-	def tearDown(self):
-		'''
-		Standard tear down method. Runs after each test_* method.
-
-		This method closes the TalkEditorApp by clicking the "close" button
-		'''
-
-		QtTest.QTest.mouseClick(self.talk_editor.editorWidget.closeButton, Qt.Qt.LeftButton)

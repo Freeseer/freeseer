@@ -51,6 +51,14 @@ class TestRecordApp(unittest.TestCase):
 		self.record_app = RecordApp()
 		self.record_app.show()
 
+	def tearDown(self):
+		'''
+		Generic unittest.TestCase.tearDown()
+		'''
+
+		self.record_app.actionExit.trigger()
+		del self.app
+
 	def test_init_conditions(self):
 		'''
 		Tests the initial state of the RecordApp
@@ -134,12 +142,3 @@ class TestRecordApp(unittest.TestCase):
 		# Click "Close"
 		QtTest.QTest.mouseClick(self.record_app.aboutDialog.closeButton, Qt.Qt.LeftButton)
 		self.assertFalse(self.record_app.aboutDialog.isVisible())
-
-
-	def tearDown(self):
-		'''
-		Generic unittest.TestCase.tearDown()
-		'''
-
-		self.record_app.actionExit.trigger()
-
