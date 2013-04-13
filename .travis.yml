@@ -2,7 +2,19 @@ language: python
 python:
   - "2.7"
 notifications:
-    irc: "irc.freenode.org#freeseer"
+    irc: "irc.freenode.net#freeseer"
+virtualenv:
+  system_site_packages: true
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sudo apt-get install libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql
+  - python -c 'import PyQt4'
+  - python -c 'import PyQt4.QtCore'
+  - python -c 'import PyQt4.QtGui'
+  - sudo apt-get install python-gst0.10 python-gst0.10-dev gstreamer0.10-plugins-good
+  - python -c 'import pygst'
+  - python -c 'import gst'
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -r src/requirements.txt --use-mirrors
 # command to run tests, e.g. python setup.py test
