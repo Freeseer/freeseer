@@ -27,7 +27,7 @@ import unittest
 from PyQt4 import QtGui, QtTest, Qt
 from freeseer.frontend.record.record import RecordApp
 
-from freeseer.framework.gstreamer import Gstreamer
+from freeseer.framework.multimedia import Gstreamer
 
 
 class TestRecordApp(unittest.TestCase):
