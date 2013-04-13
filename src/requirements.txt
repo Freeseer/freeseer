@@ -1,0 +1,2 @@
+Yapsy==1.10.1-pythons2n3
+feedparser==5.1.3
