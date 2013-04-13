@@ -107,7 +107,8 @@ class TestConfigToolApp(unittest.TestCase):
 			self.config.readConfig()
 			if self.config_tool.currentWidget.audioGroupBox.isChecked():
 				self.assertTrue(self.config.enable_audio_recording)
-				self.assertEquals(self.config.audiomixer, "Audio Passthrough")
+				self.assertTrue(self.config.audiomixer == "Audio Passthrough" or \
+					self.config.audiomixer == "Multiple Audio Inputs")
 				self.config_tool.currentWidget.audioGroupBox.setChecked(False)
 			else:
 				self.assertFalse(self.config.enable_audio_recording)
