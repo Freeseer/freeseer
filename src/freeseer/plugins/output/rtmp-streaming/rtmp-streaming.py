@@ -487,32 +487,26 @@ class RTMPOutput(IOutput):
     def set_stream_url(self, text):
         self.url = text
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
-        self.plugman.save()
         
     def set_audio_quality(self):
         self.audio_quality = self.spinbox_audio_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
-        self.plugman.save()
         
     def set_video_bitrate(self):
         self.video_bitrate = self.spinbox_video_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
-        self.plugman.save()
         
     def set_video_tune(self, tune):
         self.video_tune = tune
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", str(self.video_tune))
-        self.plugman.save()
 
     def set_audio_codec(self, codec):
         self.audio_codec = codec
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", str(self.audio_codec))
-        self.plugman.save()
 
     def set_streaming_dest(self, dest):
         self.streaming_dest = dest
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", str(self.streaming_dest))
-        self.plugman.save()
 
         if str(self.streaming_dest) in self.STREAMING_DESTINATION_VALUES:
             index = min([i for i in range(len(self.STREAMING_DESTINATION_VALUES)) \
@@ -526,7 +520,6 @@ class RTMPOutput(IOutput):
     def set_streaming_key(self, text):
         self.streaming_key = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
-        self.plugman.save()
 
     def set_use_justin_api(self, state):
         if state != 0:
@@ -534,7 +527,6 @@ class RTMPOutput(IOutput):
         else:
             self.use_justin_api = 'no'
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API", self.use_justin_api)
-        self.plugman.save()
         self.toggle_consumer_key_secret_fields()
 
     def toggle_consumer_key_secret_fields(self):
@@ -548,17 +540,14 @@ class RTMPOutput(IOutput):
     def set_consumer_key(self, text):
         self.consumer_key = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
-        self.plugman.save()
 
     def set_consumer_secret(self, text):
         self.consumer_secret = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
-        self.plugman.save()
 
     def set_justin_api_persistent(self, text):
         self.justin_api_persistent = str(text)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
-        self.plugman.save()
 
     def apply_justin_settings(self):
         # here is where all the justin.tv streaming presets will be applied
