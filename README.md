@@ -1,4 +1,6 @@
 Freeseer ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
+[![Build Status](https://travis-ci.org/Freeseer/freeseer.png)](https://travis-ci.org/Freeseer/freeseer)
+
 =========
 #### by the Free and Open Source Software Learning Centre (FOSSLC)
 
