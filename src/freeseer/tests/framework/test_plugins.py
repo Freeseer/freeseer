@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import os
 import unittest
 
 import pygst
@@ -40,8 +41,8 @@ class TestPlugins(unittest.TestCase):
         Initializes a PluginManager
 
         '''
-
-        self.manager = PluginManager(settings.configdir)
+        configdir = os.path.abspath(".")
+        self.manager = PluginManager(configdir)
 
     def tearDown(self):
         '''
