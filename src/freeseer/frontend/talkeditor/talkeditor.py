@@ -256,10 +256,3 @@ class TalkEditorApp(FreeseerApp):
         fname = QtGui.QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.db.export_talks_to_csv(fname)
-
-if __name__ == "__main__":
-    import sys
-    app = QtGui.QApplication(sys.argv)
-    main = TalkEditorApp()
-    main.show()
-    sys.exit(app.exec_())

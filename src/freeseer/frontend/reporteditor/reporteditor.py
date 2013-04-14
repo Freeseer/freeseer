@@ -234,9 +234,3 @@ class ReportEditorApp(FreeseerApp):
         fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString, "", "*.csv")
         if fname:
             self.db.export_reports_to_csv(fname)
-
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    main = ReportEditorApp()
-    main.show()
-    sys.exit(app.exec_())

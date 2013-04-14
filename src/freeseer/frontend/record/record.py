@@ -563,9 +563,3 @@ class RecordApp(FreeseerApp):
                 log.info("Paused recording by server's request")
             elif message == 'Resume':
                 log.info("Resumed recording by server's request")
-    
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    main = RecordApp()
-    main.show()
-    sys.exit(app.exec_())

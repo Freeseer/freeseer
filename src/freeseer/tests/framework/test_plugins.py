@@ -23,6 +23,8 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import os
+import shutil
+import tempfile
 import unittest
 
 import pygst
@@ -41,13 +43,14 @@ class TestPlugins(unittest.TestCase):
         Initializes a PluginManager
 
         '''
-        configdir = os.path.abspath(".")
-        self.manager = PluginManager(configdir)
+        self.configdir = tempfile.mkdtemp()
+        self.manager = PluginManager(self.configdir)
 
     def tearDown(self):
         '''
         Generic unittest.TestCase.tearDown()
         '''
+        shutil.rmtree(self.configdir)
         del self.manager
 
     def test_audio_input_bin(self):

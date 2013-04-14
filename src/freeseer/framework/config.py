@@ -46,14 +46,6 @@ class Config:
         self.presentations_file = os.path.abspath('%s/presentations.db' % self.configdir)
         
         #
-        # Video Uploader needs to be reworked to work as a separate tool not
-        # adding any additional requirements to the main Freeseer UIs
-        #
-#        self.uploaderfile = os.path.abspath("{0}/uploader.conf".format(self.configdir))
-#        self.uploader = UploaderConfig(self.uploaderfile)
-        
-        
-        #
         # Set default settings
         #
         
@@ -176,72 +168,3 @@ class Config:
         # Save default settings to new config file
         with open(self.configfile, 'w') as configfile:
             config.write(configfile)
-
-#
-# Removing Video Uploader functions from freeseer core framework
-# Video Uploader should be redesigned to work as an independent tool not adding
-# any additional requirements to the rest of Freeseer
-#
-
-#
-# Classes needed by Video Uploader Tool
-#
-# TODO: This should be reworked so that this config is optional for other frontends.
-#class BaseSubConfig(object):
-#    def __init__(self, filename):
-#        self.config = ConfigParser.ConfigParser()
-#        self.filename = filename
-#        self.sections = []
-#    
-#    def _finishinit(self):
-#        try:
-#            with open(self.filename) as f:
-#                self.config.readfp(f)
-#        except IOError:
-#            for s in self.sections:
-#                s.set_defaults()
-#    def write(self):
-#        with open(self.filename, 'w') as f:
-#            self.config.write(f)
-#            
-#class BaseSectionConfig(object):
-#    defaults = {}
-#    section = ''
-#    
-#    def __init__(self, config):
-#        self.config = config
-#    
-#    def set_defaults(self):
-#        self.config.add_section(self.section)
-#        for k, v in self.defaults.iteritems():
-#            self.config.set(self.section, k, v)
-#            
-#def propertyargs(option, rtype=lambda x:x):
-#    return (lambda self:rtype(self.config.get(self.section, option)),
-#            lambda self, value:self.config.set(self.section, option, value))
-#
-#class UploaderConfig(BaseSubConfig):
-#    def __init__(self, filename):
-#        BaseSubConfig.__init__(self, filename)
-#        self.serverhistory = UploaderServerHistoryConfig(self.config)
-#        self.sections = [self.serverhistory,]
-#        self._finishinit()
-#        
-#class UploaderServerHistoryConfig(BaseSectionConfig):
-#    section = 'serverhistory'
-#    defaults = {'username':'',
-#                'server':'',
-#                'port':str(const.SFTP_DEFAULT_PORT),
-#                'servertype':str(const.NotSelected)}
-#    
-#    username = property(*propertyargs('username'))
-#    server = property(*propertyargs('server'))
-#    port = property(*propertyargs('port'))
-#    servertype = property(*propertyargs('servertype', int))
-            
-# Config class test code
-if __name__ == "__main__":
-    config = Config(os.path.abspath(os.path.expanduser('~/.freeseer/')))
-    print('\nTesting freeseer config file')
-    print('Video Directory at %s' % config.videodir)
-    print('Test complete!')
