@@ -31,7 +31,6 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtNetwork import QTcpServer, QHostAddress
 
 from freeseer.framework.config import Config
-from freeseer.framework.logger import Logger
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
@@ -49,6 +48,8 @@ CLIENT_STATUS = ["Stopped",
                  "Recording",
                  "Paused",
                  "Idle"]
+
+log = logging.getLogger(__name__)
 
 class ServerApp(FreeseerApp):
     
@@ -68,12 +69,8 @@ class ServerApp(FreeseerApp):
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         
-        configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
-        self.logger = Logger(configdir)
-        logging.info("Logger initialized")
-        
         self.server = QTcpServer(self)
-        logging.info("Starting Freeseer Server")
+        log.info("Starting Freeseer Server")
         
         # Setup Widget
         self.mainWidget = ControllerServerWidget()
@@ -145,7 +142,7 @@ class ServerApp(FreeseerApp):
     ### Server Methods
     ###
     def load_settings(self): 
-        logging.info('Loading settings...')
+        log.info('Loading settings...')
         configdir = os.path.abspath(os.path.expanduser('~/.freeseer/'))
         self.config = Config(configdir)
         
@@ -164,7 +161,7 @@ class ServerApp(FreeseerApp):
             self.server.listen(self.ipAddress, PORT)    
             self.status = self.STATUS[1]    # Set Running            
             self.mainWidget.hostCombo.setEnabled(False)
-            logging.info("Started server %s: %s", self.server.serverAddress().toString(), str(self.server.serverPort()))
+            log.info("Started server %s: %s", self.server.serverAddress().toString(), str(self.server.serverPort()))
             
         elif self.status == self.STATUS[1]:      # Check if status is Online
             self.server.close()
@@ -195,7 +192,7 @@ class ServerApp(FreeseerApp):
     '''
     def setPassPhrase(self):
         self.passphrase = self.mainWidget.passEdit.text()
-        logging.info ("Passphrase set to %s", self.passphrase)
+        log.info ("Passphrase set to %s", self.passphrase)
         #self.passPhrase = base64.b64encode(self.passPhrase)
         self.passphrase = str(self.passphrase)
         self.passphrase = pwd_context.encrypt(self.passphrase)
@@ -207,14 +204,14 @@ class ServerApp(FreeseerApp):
     def readPassPhrase(self):
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
-        logging.info("Client said: %s", message)
+        log.info("Client said: %s", message)
         if pwd_context.verify(message, self.passphrase) is False:
             client.disconnectFromHost()
-            logging.info("Client rejected")
+            log.info("Client rejected")
         else:
             self.clients.append(client)
             self.updateList()
-            logging.info("Client accepted")
+            log.info("Client accepted")
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
     
@@ -227,7 +224,7 @@ class ServerApp(FreeseerApp):
             
     def ipComboBoxHandler(self):
         self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
-        logging.info("Server IP changed to: %s", self.ipAddress.toString())
+        log.info("Server IP changed to: %s", self.ipAddress.toString())
     
     ###
     ### Messaging
@@ -236,7 +233,7 @@ class ServerApp(FreeseerApp):
     def startRead(self):
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
-        logging.info("Client said: %s", message)
+        log.info("Client said: %s", message)
         return message
     
     def sendMessage(self, client, message):
@@ -258,7 +255,7 @@ class ServerApp(FreeseerApp):
     
     def clientDisconnected(self):
         client = QtCore.QObject.sender(self)
-        logging.info("Client disconnected")
+        log.info("Client disconnected")
         self.clients.remove(client)
         self.updateList()
         self.updateClientButtons()
@@ -307,7 +304,7 @@ class ServerApp(FreeseerApp):
             elif command == COMMANDS[2]:              # Check if command is Pause
                 c_item.changeStatus(CLIENT_STATUS[2]) # Set Paused
                 
-            logging.info("Sent  %s  command to %s" % (command, c_item.address))
+            log.info("Sent  %s  command to %s" % (command, c_item.address))
                 
         self.updateClientButtons()
     
@@ -323,7 +320,7 @@ class ServerApp(FreeseerApp):
             self.sendMessage(client, command)
             c_item.changeStatus(CLIENT_STATUS[3])  # Set Idle
             
-            logging.info("Sent  %s  command to %s" % (command, c_item.address))
+            log.info("Sent  %s  command to %s" % (command, c_item.address))
             
         self.updateClientButtons()
         
@@ -350,7 +347,7 @@ class ServerApp(FreeseerApp):
             
             for i in range(0, len(self.mainWidget.clientList.selectedItems())):
                 clientStatus = self.mainWidget.clientList.selectedItems()[i].status
-                logging.debug("Client status: %s", clientStatus)
+                log.debug("Client status: %s", clientStatus)
                 
                 if clientStatus == CLIENT_STATUS[1]:    # Client is Recording
                     self.mainWidget.clientStartButton.setText(self.pauseRecordingString)

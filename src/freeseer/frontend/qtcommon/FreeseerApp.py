@@ -35,6 +35,8 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+log = logging.getLogger(__name__)
+
 class FreeseerApp(QtGui.QMainWindow):
     
     def __init__(self):
@@ -118,7 +120,7 @@ class FreeseerApp(QtGui.QMainWindow):
         """
         self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
         
-        logging.info("Switching language to: %s" % action.text())
+        log.info("Switching language to: %s" % action.text())
         self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
 
         self.retranslateFreeseerApp()
@@ -149,7 +151,7 @@ class FreeseerApp(QtGui.QMainWindow):
         
         if self.current_language is None:
             self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
-            logging.debug("Detected user's locale as %s" % self.current_language)
+            log.debug("Detected user's locale as %s" % self.current_language)
         
         for language in self.languages:
             translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.

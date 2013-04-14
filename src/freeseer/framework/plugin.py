@@ -34,6 +34,8 @@ from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
 from PyQt4 import QtCore
 
+log = logging.getLogger(__name__)
+
 class PluginManager(QtCore.QObject):
     '''
     Plugin Manager for Freeseer
@@ -77,7 +79,7 @@ class PluginManager(QtCore.QObject):
         for plugin in self.plugmanc.getAllPlugins():
             plugin.plugin_object.set_plugman(self)
             
-        logging.debug("Plugin manager initialized.")
+        log.debug("Plugin manager initialized.")
         
     def __call__(self):
         pass
@@ -87,7 +89,7 @@ class PluginManager(QtCore.QObject):
             self.config.readfp(open(self.configfile))
         # Config file does not exist, create a default
         except IOError:
-            logging.debug("First run scenario detected. Creating new configuration files.")
+            log.debug("First run scenario detected. Creating new configuration files.")
             self.firstrun = True # If config was corrupt or did not exist, reset defaults.
             self.save()
             return
@@ -103,7 +105,7 @@ class PluginManager(QtCore.QObject):
         self.set_plugin_option("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
         self.set_plugin_option("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.save()
-        logging.info("Default plugins enabled.")
+        log.info("Default plugins enabled.")
         
     def get_plugin_option(self, category, name, option):
         """

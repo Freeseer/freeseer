@@ -40,6 +40,8 @@ from PyQt4 import QtGui, QtCore
 # Freeseer libs
 from freeseer.framework.plugin import IOutput
 
+log = logging.getLogger(__name__)
+
 #
 # Non-standard imports required for plugin but not
 # for freeseer to run.
@@ -49,7 +51,7 @@ try:
     import simplejson
     from oauth import oauth
 except:
-    logging.error("""RTMP-Streaming: Failed to load plugin.
+    log.error("""RTMP-Streaming: Failed to load plugin.
         This plugin requires the following libraries in order operate:
 
             - httplib
@@ -147,7 +149,7 @@ class RTMPOutput(IOutput):
             if 'quality' in audiocodec.get_property_names():
                 audiocodec.set_property("quality", int(self.audio_quality))
             else:
-                logging.debug("WARNING: Missing property: 'quality' on audiocodec; available: " + \
+                log.debug("WARNING: Missing property: 'quality' on audiocodec; available: " + \
                     ','.join(audiocodec.get_property_names()))
             bin.add(audiocodec)
             
@@ -571,7 +573,7 @@ class RTMPOutput(IOutput):
                     QtGui.QMessageBox.Ok, 
                     QtGui.QMessageBox.Ok)
         except KeyError:
-            logging.error("justin.tv API error: Authentication failed. Supplied credentials may be incorrect.")
+            log.error("justin.tv API error: Authentication failed. Supplied credentials may be incorrect.")
             QtGui.QMessageBox.critical(self.widget, 
                 "justin.tv error", 
                 self.gui.uiTranslator.translate('rtmp', "Authentication failed. Supplied credentials for Justin.tv" \
@@ -688,7 +690,7 @@ class JustinApi:
             access_token = oauth.OAuthToken.from_string(result)
             self.save_method(self.to_string())
         except KeyError:
-            logging.error("justin.tv API: failed to obtain an access token")
+            log.error("justin.tv API: failed to obtain an access token")
 
     def get_data(self, endpoint):
         try:
@@ -705,7 +707,7 @@ class JustinApi:
             result = connection.getresponse().read()
             data = simplejson.loads(result)
         except KeyError, simplejson.decoder.JSONDecodeError:
-            logging.error("justin.tv API: failed fetch data from endpoint %s" % endpoint)
+            log.error("justin.tv API: failed fetch data from endpoint %s" % endpoint)
             return dict()
         return data
 
@@ -724,7 +726,7 @@ class JustinApi:
             connection.request('POST', request.http_url, body=request.to_postdata())
             result = connection.getresponse().read()
         except KeyError:
-            logging.error("justin.tv API: failed write data to endpoint %s" % endpoint)
+            log.error("justin.tv API: failed write data to endpoint %s" % endpoint)
             return None
         return result
 

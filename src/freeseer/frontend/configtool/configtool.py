@@ -35,7 +35,6 @@ except AttributeError:
 
 from freeseer import settings, __version__
 from freeseer.framework.config import Config
-from freeseer.framework.logger import Logger
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
@@ -44,7 +43,8 @@ from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
 from AVWidget import AVWidget
 from PluginLoaderWidget import PluginLoaderWidget
-from LoggerWidget import LoggerWidget
+
+log = logging.getLogger(__name__)
 
 class ConfigToolApp(FreeseerApp):
     '''
@@ -72,10 +72,8 @@ class ConfigToolApp(FreeseerApp):
         self.generalWidget = GeneralWidget()
         self.avWidget = AVWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
-        self.loggerWidget = LoggerWidget()
         
         self.config = Config(settings.configdir)
-        self.logger = Logger(settings.configdir)
         self.plugman = PluginManager(settings.configdir)
 
         #
@@ -138,22 +136,6 @@ class ConfigToolApp(FreeseerApp):
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamComboBox.setEnabled)
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamSetupPushButton.setEnabled)
         
-        #
-        # Logger Widget Connections
-        #
-        self.connect(self.loggerWidget.consoleLoggerGroupBox,
-                     QtCore.SIGNAL('toggled(bool)'),
-                     self.toggle_console_logger)
-        self.connect(self.loggerWidget.consoleLoggerLevelComboBox,
-                     QtCore.SIGNAL('activated(const QString&)'),
-                     self.change_console_loglevel)
-        self.connect(self.loggerWidget.syslogLoggerGroupBox,
-                     QtCore.SIGNAL('toggled(bool)'),
-                     self.toggle_syslog_logger)
-        self.connect(self.loggerWidget.syslogLoggerLevelComboBox,
-                     QtCore.SIGNAL('activated(const QString&)'),
-                     self.change_syslog_loglevel)
-        
         self.retranslate()
 
         # load active plugin widgets
@@ -183,7 +165,6 @@ class ConfigToolApp(FreeseerApp):
         self.videoInputString = self.uiTranslator.translate("ConfigToolApp", "VideoInput")
         self.videoMixerString = self.uiTranslator.translate("ConfigToolApp", "VideoMixer")
         self.outputString = self.uiTranslator.translate("ConfigToolApp", "Output")
-        self.loggerString = self.uiTranslator.translate("ConfigToolApp", "Logger")
         
         self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
         self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
@@ -193,7 +174,6 @@ class ConfigToolApp(FreeseerApp):
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(2).setText(0, self.videoInputString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(3).setText(0, self.videoMixerString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(4).setText(0, self.outputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).setText(0, self.loggerString)
         
         self.mainWidget.closePushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
@@ -219,15 +199,6 @@ class ConfigToolApp(FreeseerApp):
         self.avWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
         # --- End AV Widget
         
-        #
-        # Logger Widget
-        #
-        self.loggerWidget.consoleLoggerGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Console Logger"))
-        self.loggerWidget.consoleLoggerLevelLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Log Level"))
-        self.loggerWidget.syslogLoggerGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Syslog Logger"))
-        self.loggerWidget.syslogLoggerLevelLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Log Level"))
-        # --- End LoggerWidget
-
     ###
     ### General
     ###
@@ -255,8 +226,6 @@ class ConfigToolApp(FreeseerApp):
             self.load_option_videomixer_plugins()
         elif option == self.outputString:
             self.load_option_output_plugins()
-        elif option == self.loggerString:
-            self.load_logger_widget()
         else:
             pass
         
@@ -540,104 +509,8 @@ class ConfigToolApp(FreeseerApp):
     def get_plugin_settings_widget(self, plugin):
         widget = plugin.plugin_object.get_widget()
         return widget
-    
-    #
-    # Logger Widget Related
-    # 
-    def load_logger_widget(self):
-        self.mainWidgetLayout.addWidget(self.loggerWidget)
-        self.currentWidget = self.loggerWidget
-        self.currentWidget.show()
-        
-        # Get the config details
-        config = ConfigParser.ConfigParser()
-        config.readfp(open(self.logger.logconf))
-        handlers = config.get('logger_root', 'handlers')
-        handler_list = handlers.split(',')
-        
-        consoleLogger = False
-        syslogLogger = False
-        for handler in handler_list:
-            if handler == "consoleHandler":
-                consoleLogger = True
-            elif handler == "syslogHandler":
-                syslogLogger = True
-                
-        consoleLoggerLevel = config.get('handler_consoleHandler', 'level')
-        syslogLoggerLevel = config.get('handler_syslogHandler', 'level')
-        # --- End Get config details
-        
-        #
-        # Set the Widget with the details gathered from config
-        #
-        log_levels = ["NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
-        
-        # Console Logger
-        if consoleLogger is True:
-            self.loggerWidget.consoleLoggerGroupBox.setChecked(True)
-        else:
-            self.loggerWidget.consoleLoggerGroupBox.setChecked(False)
-        
-        n = 0
-        for level in log_levels:
-            self.loggerWidget.consoleLoggerLevelComboBox.addItem(level)
-        
-            if level == consoleLoggerLevel:
-                self.loggerWidget.consoleLoggerLevelComboBox.setCurrentIndex(n)
-            n += 1
-        # --- End Console Logger
-        
-        # Syslogger
-        if syslogLogger is True:
-            self.loggerWidget.syslogLoggerGroupBox.setChecked(True)
-        else:
-            self.loggerWidget.syslogLoggerGroupBox.setChecked(False)
-            
-        n = 0
-        for level in log_levels:
-            self.loggerWidget.syslogLoggerLevelComboBox.addItem(level)
-        
-            if level == syslogLoggerLevel:
-                self.loggerWidget.syslogLoggerLevelComboBox.setCurrentIndex(n)
-            n += 1
-        # --- End Syslogger
-    
-    def toggle_console_logger(self, state):
-        if self.loggerWidget.consoleLoggerGroupBox.isChecked():
-            self.logger.set_console_logger(True)
-        else:
-            self.logger.set_console_logger(False)
-    
-    def change_console_loglevel(self, level):
-        self.logger.set_console_loglevel(level)
-            
-    def toggle_syslog_logger(self, state):
-        if self.loggerWidget.syslogLoggerGroupBox.isChecked():
-            self.logger.set_syslog_logger(True)
-        else:
-            self.logger.set_syslog_logger(False)
-    
-    def change_syslog_loglevel(self, level):
-        self.logger.set_syslog_loglevel(level)
-
-    # Override
-    
-#    def area_select(self):
-#        self.area_selector = QtAreaSelector(self)
-#        self.area_selector.show()
-#        self.core.logger.log.info('Desktop area selector started.')
-#        self.hide()
-#
-#    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
-#        self.start_x = self.core.config.start_x = start_x
-#        self.start_y = self.core.config.start_y = start_y
-#        self.end_x = self.core.config.end_x = end_x
-#        self.end_y = self.core.config.end_y = end_y
-#        self.core.logger.log.debug('area selector start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
-#        self.show()
-#    
 
     def closeEvent(self, event):
-        logging.info('Exiting configtool...')
+        log.info('Exiting configtool...')
         self.geometry = self.saveGeometry()
         event.accept()

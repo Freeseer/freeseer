@@ -41,6 +41,8 @@ from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from EditorWidget import EditorWidget
 from AddTalkWidget import AddTalkWidget
+
+log = logging.getLogger(__name__)
         
 class TalkEditorApp(FreeseerApp):
     '''
@@ -232,7 +234,7 @@ class TalkEditorApp(FreeseerApp):
         self.presentationModel.select()
 
     def closeEvent(self, event):
-        logging.info('Exiting talk database editor...')
+        log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
         event.accept()
     

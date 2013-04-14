@@ -35,6 +35,8 @@ import gst
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.util import get_record_name
 
+log = logging.getLogger(__name__)
+
 class Gstreamer:
     NULL = 0
     RECORD = 1
@@ -66,7 +68,7 @@ class Gstreamer:
         self.player.add(self.audio_tee)
         self.player.add(self.video_tee)
         
-        logging.debug("Gstreamer initialized.")
+        log.debug("Gstreamer initialized.")
 
     ##
     ## GST Player Functions
@@ -106,7 +108,7 @@ class Gstreamer:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(int(self.window_id))
-            logging.debug("Preview loaded into window.")
+            log.debug("Preview loaded into window.")
             
     def keyboard_event(self, key):
         """
@@ -123,7 +125,7 @@ class Gstreamer:
         """
         self.player.set_state(gst.STATE_PLAYING)
         self.current_state = Gstreamer.RECORD
-        logging.debug("Recording started.")
+        log.debug("Recording started.")
         
     def pause(self):
         """
@@ -131,7 +133,7 @@ class Gstreamer:
         """
         self.player.set_state(gst.STATE_PAUSED)
         self.current_state = Gstreamer.PAUSE
-        logging.debug("Gstreamer paused.")
+        log.debug("Gstreamer paused.")
     
     def stop(self):
         """
@@ -145,7 +147,7 @@ class Gstreamer:
             self.unload_output_plugins()
             
             self.current_state = Gstreamer.STOP
-            logging.debug("Gstreamer stopped.")
+            log.debug("Gstreamer stopped.")
             
     def prepare_metadata(self, presentation):
         """Returns a dictionary of tags and tag values.
@@ -165,7 +167,7 @@ class Gstreamer:
     ##
 
     def load_backend(self, presentation):
-        logging.debug("Loading Output plugins...")
+        log.debug("Loading Output plugins...")
         
         load_plugins = []
         
@@ -187,7 +189,7 @@ class Gstreamer:
                 
         plugins = []
         for plugin in load_plugins:
-            logging.debug("Loading Output: %s", plugin.plugin_object.get_name())
+            log.debug("Loading Output: %s", plugin.plugin_object.get_name())
             
             extension = plugin.plugin_object.get_extension()
 
@@ -196,7 +198,7 @@ class Gstreamer:
 
             # This is to ensure that we don't log a message when extension is None
             if extension is not None:
-                logging.info('Set record name to %s', record_name)
+                log.info('Set record name to %s', record_name)
     
             # Prepare metadata.
             metadata = self.prepare_metadata(presentation)
@@ -216,7 +218,7 @@ class Gstreamer:
             return False
         
         if self.config.enable_audio_recording:
-            logging.debug("Loading Audio Recording plugins...")
+            log.debug("Loading Audio Recording plugins...")
             audiomixer = self.plugman.get_plugin_by_name(self.config.audiomixer, "AudioMixer").plugin_object
             if audiomixer is not None:
                 audiomixer.load_config(self.plugman)
@@ -226,7 +228,7 @@ class Gstreamer:
                 
                 audioinputs = audiomixer.get_inputs()
                 for name, instance in audioinputs:
-                    logging.debug("Loading Audio Mixer Input: %s-%d", name, instance)
+                    log.debug("Loading Audio Mixer Input: %s-%d", name, instance)
                     audio_input = self.plugman.get_plugin_by_name(name, "AudioInput").plugin_object
                     audio_input.set_instance(instance)
                     audio_input.load_config(self.plugman)
@@ -238,7 +240,7 @@ class Gstreamer:
                     return False
         
         if self.config.enable_video_recording:
-            logging.debug("Loading Video Recording plugins...")
+            log.debug("Loading Video Recording plugins...")
             videomixer = self.plugman.get_plugin_by_name(self.config.videomixer, "VideoMixer").plugin_object
             if videomixer is not None:
                 videomixer.load_config(self.plugman)
@@ -248,7 +250,7 @@ class Gstreamer:
                 
                 videoinputs = videomixer.get_inputs()
                 for name, instance in videoinputs:
-                    logging.debug("Loading Video Mixer Input: %s-%d", name, instance)
+                    log.debug("Loading Video Mixer Input: %s-%d", name, instance)
                     video_input = self.plugman.get_plugin_by_name(name, "VideoInput").plugin_object
                     video_input.set_instance(instance)
                     video_input.load_config(self.plugman)
@@ -269,7 +271,7 @@ class Gstreamer:
             bin = plugin.get_output_bin(record_audio, record_video, metadata)
 
             if not bin:
-                logging.error("Failed to load Output plugin: bin returned None")
+                log.error("Failed to load Output plugin: bin returned None")
                 self.unload_output_plugins()
                 return False
             
@@ -304,7 +306,7 @@ class Gstreamer:
         self.audiomixer = mixer.get_audiomixer_bin()
 
         if not self.audiomixer:
-            logging.error("Failed to load AudioMixer plugin: bin returned None")
+            log.error("Failed to load AudioMixer plugin: bin returned None")
             return False
 
         self.player.add(self.audiomixer)
@@ -330,7 +332,7 @@ class Gstreamer:
         self.videomixer = mixer.get_videomixer_bin()
 
         if not self.videomixer:
-            logging.error("Failed to load VideoMixer plugin: bin returned None")
+            log.error("Failed to load VideoMixer plugin: bin returned None")
             return False
 
         self.player.add(self.videomixer)

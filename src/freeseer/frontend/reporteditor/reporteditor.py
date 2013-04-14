@@ -40,7 +40,9 @@ from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 from ReportEditorWidget import ReportEditorWidget
-        
+
+log = logging.getLogger(__name__)
+
 class ReportEditorApp(FreeseerApp):
     '''
     Freeseer report editor main gui class
@@ -201,7 +203,7 @@ class ReportEditorApp(FreeseerApp):
             self.reset()
 
     def closeEvent(self, event):
-        logging.info('Exiting report editor...')
+        log.info('Exiting report editor...')
         self.geometry = self.saveGeometry()
         event.accept()
     

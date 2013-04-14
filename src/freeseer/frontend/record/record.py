@@ -37,7 +37,6 @@ except AttributeError:
 from freeseer import settings, __version__
 from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
-from freeseer.framework.logger import Logger
 from freeseer.framework.multimedia import Gstreamer
 from freeseer.framework.plugin import PluginManager
 from freeseer.framework.presentation import Presentation
@@ -47,6 +46,8 @@ from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
+
+log = logging.getLogger(__name__)
 
 class RecordApp(FreeseerApp):
     """Freeseer's main GUI class."""
@@ -71,7 +72,6 @@ class RecordApp(FreeseerApp):
 
         self.config = Config(settings.configdir)
         self.db = QtDBConnector(settings.configdir)
-        self.logger = Logger(settings.configdir)
         self.plugman = PluginManager(settings.configdir)
         self.media = Gstreamer(self.config, self.plugman, self.mainWidget.previewWidget.winId(), self.audio_feedback)
 
@@ -254,7 +254,7 @@ class RecordApp(FreeseerApp):
     ###
     
     def load_settings(self): 
-        logging.info('Loading settings...')
+        log.info('Loading settings...')
         
         # Load default language.
         actions = self.menuLanguage.actions()
@@ -362,13 +362,13 @@ class RecordApp(FreeseerApp):
     def pause(self, state):
         if (state): # Pause Recording.
             self.media.pause()
-            logging.info("Recording paused.")
+            log.info("Recording paused.")
             self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
             self.timer.stop()
         elif self.mainWidget.recordPushButton.isChecked():
             self.media.record()
-            logging.info("Recording unpaused.")
+            log.info("Recording unpaused.")
             self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
             self.mainWidget.statusLabel.setText(self.recordingString)
             self.timer.start(1000)
@@ -475,7 +475,7 @@ class RecordApp(FreeseerApp):
         i = self.reportWidget.reportCombo.currentIndex()
         
         failure = Failure(talk_id, self.reportWidget.commentEdit.text(), self.reportWidget.options[i], self.reportWidget.releaseCheckBox.isChecked())
-        logging.info("Report Failure: %s, %s, %s, release form? %s" % (talk_id,
+        log.info("Report Failure: %s, %s, %s, release form? %s" % (talk_id,
                                                                        self.reportWidget.commentEdit.text(),
                                                                        self.reportWidget.options[i],
                                                                        self.reportWidget.releaseCheckBox.isChecked()))
@@ -527,14 +527,14 @@ class RecordApp(FreeseerApp):
         elif sys.platform.startswith("win32"):
             os.system("explorer %s" % self.config.videodir)
         else:
-            logging.info("Error: This command is not supported on the current OS.")
+            log.info("Error: This command is not supported on the current OS.")
     
     def closeEvent(self, event):
-        logging.info('Exiting freeseer...')
+        log.info('Exiting freeseer...')
         event.accept()
         
     def keyPressEvent(self, event):
-        logging.debug("Keypressed: %s" % event.key())
+        log.debug("Keypressed: %s" % event.key())
         self.media.keyboard_event(event.key())
     
     '''
@@ -553,16 +553,16 @@ class RecordApp(FreeseerApp):
             self.mainWidget.standbyPushButton.toggle()
             self.mainWidget.recordPushButton.toggle()
             self.clientWidget.sendMessage('Started recording')
-            logging.info("Started recording by server's request")
+            log.info("Started recording by server's request")
         elif message == 'Stop':
             self.mainWidget.recordPushButton.toggle()
-            logging.info("Stopping recording by server's request")
+            log.info("Stopping recording by server's request")
         elif message == 'Pause' or 'Resume':
             self.mainWidget.pauseToolButton.toggle()
             if message == 'Pause':
-                logging.info("Paused recording by server's request")
+                log.info("Paused recording by server's request")
             elif message == 'Resume':
-                logging.info("Resumed recording by server's request")
+                log.info("Resumed recording by server's request")
     
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

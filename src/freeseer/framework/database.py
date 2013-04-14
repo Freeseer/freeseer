@@ -33,6 +33,8 @@ from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
 from freeseer.framework.rss_parser import FeedParser
 
+log = logging.getLogger(__name__)
+
 class QtDBConnector():
     presentationsModel = None
     failuresModel = None
@@ -77,7 +79,7 @@ class QtDBConnector():
             #verify that correct version of database exists
             self.__update_version()
         else:
-            logging.error("Unable to create talkdb file.")
+            log.error("Unable to create talkdb file.")
             
     def __close_table(self):
         """
@@ -130,12 +132,12 @@ class QtDBConnector():
         updaterVersion = [0] #next entry is 300
         
         if len(updaters) != len(updaterVersion) or db_version not in updaterVersion: #not setup properly
-            logging.info('Database upgrade failed.')
+            log.info('Database upgrade failed.')
             return
         for updater in updaters[updaterVersion.index(db_version):]:
             updater()
         QtSql.QSqlQuery('PRAGMA user_version = %i' % program_version)
-        logging.info('Upgraded presentations database from version %i', db_version)
+        log.info('Upgraded presentations database from version %i', db_version)
     
     def __create_presentations_table(self):
         """
@@ -244,7 +246,7 @@ class QtDBConnector():
                                      presentation.event,
                                      presentation.room,
                                      presentation.time))
-        logging.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
+        log.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
         
     def update_presentation(self, talk_id, presentation):
         """
@@ -257,21 +259,21 @@ class QtDBConnector():
                              presentation.room,
                              presentation.time,
                              talk_id))
-        logging.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
+        log.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
         
     def delete_presentation(self, talk_id):
         """
         Removes a Presentation from the database
         """
         query = QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
-        logging.info("Talk %s deleted." % talk_id)
+        log.info("Talk %s deleted." % talk_id)
         
     def clear_database(self):
         """
         Clears the presentations table
         """
         query = QtSql.QSqlQuery('''DELETE FROM presentations''')
-        logging.info("Database cleared.")
+        log.info("Database cleared.")
     
     #
     # Data Model Retrieval 
@@ -361,7 +363,7 @@ class QtDBConnector():
         feedparser = FeedParser(entry)
 
         if len(feedparser.build_data_dictionary()) == 0:
-            logging.info("RSS: No data found.")
+            log.info("RSS: No data found.")
 
         else:
             for presentation in feedparser.build_data_dictionary():
@@ -387,7 +389,7 @@ class QtDBConnector():
                     title = row['Title']
                     speaker = row['Speaker']
                 except KeyError:
-                    logging.error("Missing Key in Row: %s", row)
+                    log.error("Missing Key in Row: %s", row)
                     return
                     
                 try:
@@ -425,7 +427,7 @@ class QtDBConnector():
                 self.insert_presentation(talk)
             
         except IOError:
-            logging.error("CSV: File %s not found", file)
+            log.error("CSV: File %s not found", file)
         
         finally:
             file.close()
@@ -449,7 +451,7 @@ class QtDBConnector():
             
             result = self.get_talks()
             while result.next():
-                logging.debug(unicode(result.value(1).toString()))
+                log.debug(unicode(result.value(1).toString()))
                 writer.writerow({'Title':unicode(result.value(1).toString()),
                                  'Speaker':unicode(result.value(2).toString()),
                                  'Abstract':unicode(result.value(3).toString()),
@@ -551,7 +553,7 @@ class QtDBConnector():
         
         query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
                            (int(failure.talkId), failure.comment, failure.indicator, failure.release))
-        logging.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
+        log.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
     
     def update_failure(self, talk_id, failure):
         """
@@ -563,14 +565,14 @@ class QtDBConnector():
                             failure.indicator,
                             failure.release,
                             failure.talkId))
-        logging.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
+        log.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
     
     def delete_failure(self, talk_id):
         """
         Removes a Presentation from the database
         """
         query = QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
-        logging.info("Failure %s deleted." % talk_id)
+        log.info("Failure %s deleted." % talk_id)
         
     def get_failures_model(self):
         """
@@ -613,7 +615,7 @@ class QtDBConnector():
         
         query = QtSql.QSqlQuery('''INSERT INTO recentconn VALUES("%s", "%d", "%s")''' %
                                    (chost, cport, cpass))
-        logging.info("Recent connection added: %s:%d" % (chost, cport))
+        log.info("Recent connection added: %s:%d" % (chost, cport))
         
     def get_recentconn_model(self):
         """

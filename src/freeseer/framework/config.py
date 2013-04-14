@@ -26,6 +26,8 @@ import ConfigParser
 import os
 import logging
 
+log = logging.getLogger(__name__)
+
 class Config:
     '''
     This class is responsible for reading/writing settings to/from a config file.
@@ -95,7 +97,7 @@ class Config:
         try:
             os.makedirs(self.videodir)
         except OSError:
-            logging.info(u'Video directory exists.')
+            log.info(u'Video directory exists.')
             
     def readConfig(self):
         '''

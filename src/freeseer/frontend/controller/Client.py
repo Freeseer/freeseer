@@ -34,6 +34,8 @@ COMMANDS = ["Stop",
             "Record",
             "Pause"]
 
+log = logging.getLogger(__name__)
+
 class ClientDialog(QtGui.QDialog):
 
     STATUS = ["Not Connected",
@@ -54,7 +56,7 @@ class ClientDialog(QtGui.QDialog):
         self.socket = QTcpSocket()
         self.status = self.STATUS[0]
         
-        logging.info("Starting Client")
+        log.info("Starting Client")
 
         # Properties        
         self.setModal(True)
@@ -136,7 +138,7 @@ class ClientDialog(QtGui.QDialog):
     def connected(self):
         caddr = self.socket.peerName()
         cport = self.socket.peerPort()
-        logging.info("Connected to %s:%s" % (caddr, cport))
+        log.info("Connected to %s:%s" % (caddr, cport))
         
         self.sendPassphrase()
         self.mainWidget.connectButton.setText(self.disconnectString)
@@ -159,7 +161,7 @@ class ClientDialog(QtGui.QDialog):
     def displayError(self, socketError):
         messageBox = QtGui.QMessageBox.critical(self, QtCore.QString('Error!'), 
                                                    QtCore.QString(self.socket.errorString()))
-        logging.error("Socket error %s" % self.socket.errorString())
+        log.error("Socket error %s" % self.socket.errorString())
 
     ##
     ## Connection Related
@@ -175,11 +177,11 @@ class ClientDialog(QtGui.QDialog):
         
         self.connect(self.socket, QtCore.SIGNAL('stateChanged(QAbstractSocket::SocketState)'), self.updateStatus)
 
-        logging.info("Connecting to %s:%s" % (caddr, cport))
+        log.info("Connecting to %s:%s" % (caddr, cport))
         self.socket.connectToHost(caddr, cport)
         
         if not self.socket.waitForConnected(1000):
-            logging.error("Socket error %s", self.socket.errorString())
+            log.error("Socket error %s", self.socket.errorString())
         else:
             # Add to recent connections if connection is successful
             self.addToRecentConnections(caddr, cport, cpass)
@@ -191,7 +193,7 @@ class ClientDialog(QtGui.QDialog):
     Function for disconnecting the client from the host.
     '''
     def disconnectedFromHost(self):
-        logging.info("Disconnected from host")
+        log.info("Disconnected from host")
         self.disconnect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.disconnectFromHost)
         self.connect(self.mainWidget.connectButton, QtCore.SIGNAL('pressed()'), self.connectToServer)
         self.connect(self.mainWidget.passEdit,  QtCore.SIGNAL('textChanged(QString)'), self.enableConnectButton)
@@ -201,7 +203,7 @@ class ClientDialog(QtGui.QDialog):
     Function for sending message to the connected server
     '''  
     def sendMessage(self, message):
-        logging.info("Sending message: %s", message)
+        log.info("Sending message: %s", message)
         block = QtCore.QByteArray()
         block.append(message)
         self.socket.write(block)

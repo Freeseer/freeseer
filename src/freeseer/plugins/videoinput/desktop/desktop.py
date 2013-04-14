@@ -39,6 +39,8 @@ from PyQt4 import QtGui, QtCore
 from freeseer.framework.plugin import IVideoInput
 from freeseer.framework.qt_area_selector import QtAreaSelector
 
+log = logging.getLogger(__name__)
+
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop Source"
     os = ["linux", "linux2", "win32", "cygwin"]
@@ -70,7 +72,7 @@ class DesktopLinuxSrc(IVideoInput):
                 videosrc.set_property("starty", self.start_y)
                 videosrc.set_property("endx", self.end_x)
                 videosrc.set_property("endy", self.end_y)
-                logging.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+                log.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
                 
             if self.desktop == "Window":
                 videosrc.set_property("xname", self.window)
@@ -84,7 +86,7 @@ class DesktopLinuxSrc(IVideoInput):
                 videosrc.set_property("y", self.start_y)
                 videosrc.set_property("width", self.start_x + self.end_x)
                 videosrc.set_property("height", self.start_y + self.end_y)
-                logging.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+                log.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
                 
         bin.add(videosrc)
         
@@ -133,7 +135,7 @@ class DesktopLinuxSrc(IVideoInput):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_y", start_y)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", end_x)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_y", end_y)
-        logging.debug('Area selector start: %sx%s end: %sx%s' % (start_x, start_y, end_x, end_y))
+        log.debug('Area selector start: %sx%s end: %sx%s' % (start_x, start_y, end_x, end_y))
         self.gui.show()        
         self.widget.window().show()
         

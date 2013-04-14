@@ -84,10 +84,6 @@ class ConfigToolWidget(QtGui.QWidget):
         item_1 = QtGui.QTreeWidgetItem(item_0)
         self.optionsTreeWidget.topLevelItem(2).child(4).setText(0, "Output")
         
-        # Logger
-        item_2 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(3).setText(0, "Logger")
-        
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         self.closePushButton = QtGui.QPushButton("Close")
         self.closePushButton.setIcon(closeIcon)

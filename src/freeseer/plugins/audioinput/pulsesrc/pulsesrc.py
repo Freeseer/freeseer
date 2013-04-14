@@ -33,6 +33,8 @@ from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IAudioInput
 
+log = logging.getLogger(__name__)
+
 class PulseSrc(IAudioInput):
     name = "Pulse Audio Source"
     os = ["linux", "linux2"]
@@ -45,7 +47,7 @@ class PulseSrc(IAudioInput):
         
         audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
         audiosrc.set_property('device', self.source)
-        logging.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
+        log.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
         bin.add(audiosrc)
         
         # Setup ghost pad
@@ -106,5 +108,5 @@ class PulseSrc(IAudioInput):
         self.source = self.source_combobox.itemData(index).toString()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
         self.plugman.save()
-        logging.debug('Set pulseaudio source to %s' % self.source)
+        log.debug('Set pulseaudio source to %s' % self.source)
         
