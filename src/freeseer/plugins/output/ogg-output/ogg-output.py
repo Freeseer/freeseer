@@ -40,6 +40,7 @@ class OggOutput(IOutput):
     recordto = IOutput.FILE
     extension = "ogg"
     tags = None
+    matterhorn = 0
     
     # Ogg Output variables
     audio_quality = 0.3
