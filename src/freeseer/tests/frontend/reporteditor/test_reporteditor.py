@@ -22,8 +22,11 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import shutil
+import tempfile
 import unittest
 
+from freeseer import settings
 from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
 
 from PyQt4 import QtGui, QtTest, Qt
@@ -33,7 +36,6 @@ class TestReportEditorApp(unittest.TestCase):
     Test cases for ReportEditorApp. 
     '''
 
-
     def setUp(self):
         '''
         Stardard init method: runs before each test_* method
@@ -41,12 +43,14 @@ class TestReportEditorApp(unittest.TestCase):
         Initializes a QtGui.QApplication and ReportEditorApp object.
         ReportEditorApp() causes the UI to be rendered.
         '''
+        settings.configdir = tempfile.mkdtemp()
 
         self.app = QtGui.QApplication([])
         self.report_editor = ReportEditorApp()
         self.report_editor.show()
 
     def tearDown(self):
+        shutil.rmtree(settings.configdir)
         del self.app
 
 

@@ -22,13 +22,15 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import shutil
+import tempfile
 import unittest
 
 from PyQt4 import QtGui, QtTest, Qt
 from freeseer.frontend.record.record import RecordApp
 
+from freeseer import settings
 from freeseer.framework.multimedia import Gstreamer
-
 
 class TestRecordApp(unittest.TestCase):
     '''
@@ -44,8 +46,8 @@ class TestRecordApp(unittest.TestCase):
 
         Initializes a QtGui.QApplication and RecordApp object.
         RecordApp.show() causes the UI to be rendered.
-
         '''
+        settings.configdir = tempfile.mkdtemp()
 
         self.app = QtGui.QApplication([])
         self.record_app = RecordApp()
@@ -55,6 +57,7 @@ class TestRecordApp(unittest.TestCase):
         '''
         Generic unittest.TestCase.tearDown()
         '''
+        shutil.rmtree(settings.configdir)
 
         self.record_app.actionExit.trigger()
         del self.app

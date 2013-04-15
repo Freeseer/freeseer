@@ -22,12 +22,13 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import shutil
+import tempfile
 import unittest
-
 
 from PyQt4 import QtGui, QtTest, Qt
 
-
+from freeseer import settings
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
 
 class TestTalkEditorApp(unittest.TestCase):
@@ -45,6 +46,7 @@ class TestTalkEditorApp(unittest.TestCase):
         Initializes a QtGui.QApplication and TalkEditorApp object.
         TalkEditorApp.show() causes the UI to be rendered.
         '''
+        settings.configdir = tempfile.mkdtemp()
 
         self.app = QtGui.QApplication([])
         self.talk_editor = TalkEditorApp()
@@ -56,6 +58,7 @@ class TestTalkEditorApp(unittest.TestCase):
 
         This method closes the TalkEditorApp by clicking the "close" button
         '''
+        shutil.rmtree(settings.configdir)
 
         QtTest.QTest.mouseClick(self.talk_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
         del self.app

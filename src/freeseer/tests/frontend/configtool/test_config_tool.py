@@ -22,15 +22,16 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import unittest
 import os
+import shutil
+import tempfile
+import unittest
 
 from PyQt4 import QtGui, QtTest, Qt, QtCore
 
+from freeseer import settings
 from freeseer.framework.config import Config
 from freeseer.frontend.configtool.configtool import ConfigToolApp
-
-homedir = os.path.expanduser("~/.freeseer")
 
 
 class TestConfigToolApp(unittest.TestCase):
@@ -53,11 +54,11 @@ class TestConfigToolApp(unittest.TestCase):
         Initializes a QtGui.QApplication and ConfigToolApp object.
         ConfigToolApp.show() causes the UI to be rendered.
         '''
+        settings.configdir = tempfile.mkdtemp()
 
         self.app = QtGui.QApplication([])
         self.config_tool = ConfigToolApp()
         self.config_tool.show()
-        self.config = Config(homedir)
 
     def tearDown(self):
         '''
@@ -67,6 +68,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
 
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
+        shutil.rmtree(settings.configdir)
         del self.app
 
 
@@ -94,8 +96,8 @@ class TestConfigToolApp(unittest.TestCase):
             self.assertEquals( \
                 self.config_tool.currentWidget.autoHideCheckBox.checkState(), expected_state)   
     
-            self.config.readConfig()
-            self.assertEquals(self.config.auto_hide, expected_state == QtCore.Qt.Checked)
+            self.config_tool.config.readConfig()
+            self.assertEquals(self.config_tool.config.auto_hide, expected_state == QtCore.Qt.Checked)
             
     def test_recording_settings(self):
         '''
@@ -115,14 +117,14 @@ class TestConfigToolApp(unittest.TestCase):
 
         # Checkbox
         for i in range(2):
-            self.config.readConfig()
+            self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.audioGroupBox.isChecked():
-                self.assertTrue(self.config.enable_audio_recording)
-                self.assertTrue(self.config.audiomixer == "Audio Passthrough" or \
-                    self.config.audiomixer == "Multiple Audio Inputs")
+                self.assertTrue(self.config_tool.config.enable_audio_recording)
+                self.assertTrue(self.config_tool.config.audiomixer == "Audio Passthrough" or \
+                    self.config_tool.config.audiomixer == "Multiple Audio Inputs")
                 self.config_tool.currentWidget.audioGroupBox.setChecked(False)
             else:
-                self.assertFalse(self.config.enable_audio_recording)
+                self.assertFalse(self.config_tool.config.enable_audio_recording)
                 self.config_tool.currentWidget.audioGroupBox.setChecked(True)
 
         # Dropdown
@@ -132,15 +134,15 @@ class TestConfigToolApp(unittest.TestCase):
         # Video Input
         # Checkbox
         for i in range(2):
-            self.config.readConfig()
+            self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.videoGroupBox.isChecked():
-                self.assertTrue(self.config.enable_video_recording)
+                self.assertTrue(self.config_tool.config.enable_video_recording)
                 # TODO: Write better test case for this
-                self.assertTrue(self.config.videomixer == "Video Passthrough" or \
-                    self.config.videomixer == "Picture-In-Picture")
+                self.assertTrue(self.config_tool.config.videomixer == "Video Passthrough" or \
+                    self.config_tool.config.videomixer == "Picture-In-Picture")
                 self.config_tool.currentWidget.videoGroupBox.setChecked(False)
             else:
-                self.assertFalse(self.config.enable_video_recording)
+                self.assertFalse(self.config_tool.config.enable_video_recording)
                 self.config_tool.currentWidget.videoGroupBox.setChecked(True)
         
         # Dropdown
@@ -151,15 +153,15 @@ class TestConfigToolApp(unittest.TestCase):
         
         # Checkbox
         for i in range(2):
-            self.config.readConfig()
+            self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.fileGroupBox.isChecked():
-                self.assertTrue(self.config.record_to_file)
+                self.assertTrue(self.config_tool.config.record_to_file)
                 # TODO: Write better test case for this
-                self.assertTrue(self.config.record_to_file_plugin == "Ogg Output" or \
-                    self.config.record_to_file_plugin == "WebM Output")
+                self.assertTrue(self.config_tool.config.record_to_file_plugin == "Ogg Output" or \
+                    self.config_tool.config.record_to_file_plugin == "WebM Output")
                 self.config_tool.currentWidget.fileGroupBox.setChecked(False)
             else:
-                self.assertFalse(self.config.record_to_file)
+                self.assertFalse(self.config_tool.config.record_to_file)
                 self.config_tool.currentWidget.fileGroupBox.setChecked(True)
 
         # Dropdown
@@ -169,14 +171,14 @@ class TestConfigToolApp(unittest.TestCase):
         
         # Checkbox
         for i in range(2):
-            self.config.readConfig()
+            self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.streamGroupBox.isChecked():
-                self.assertTrue(self.config.record_to_stream)
+                self.assertTrue(self.config_tool.config.record_to_stream)
                 # TODO: Write better test case for this
-                #self.assertTrue(self.config.record_to_stream_plugin == None)
+                #self.assertTrue(self.config_tool.config.record_to_stream_plugin == None)
                 self.config_tool.currentWidget.streamGroupBox.setChecked(False)
             else:
-                self.assertFalse(self.config.record_to_stream)
+                self.assertFalse(self.config_tool.config.record_to_stream)
                 self.config_tool.currentWidget.streamGroupBox.setChecked(True)
         
         # Dropdown
