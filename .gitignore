@@ -3,3 +3,6 @@
 
 # Ignore Sphinx's built files, they're added to freeseer.github.com instead.
 build/
+
+# OS Auto-Generated
+*~
