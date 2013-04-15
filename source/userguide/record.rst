@@ -137,12 +137,12 @@ Record Over a Network
 ---------------------
 
 Via Command Line Interface (CLI)
-................................
+********************************
 
 .. todo:: Document using SSH and Freeseer's CLI to record over a network.
 
 Via Graphical User Interface (GUI)
-..................................
+**********************************
 
 The client tool is used for controlling Freeseer over a network.
 The client connects to a running Freeseer :doc:`server`.
