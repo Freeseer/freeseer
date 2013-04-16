@@ -69,7 +69,6 @@ Prerequisits
 + gstreamer0.10-python
 + PyQT development tools
 + python-xlib (Required for video preview plugin)
-+ python-passlib (Optional, for the Freeseer server tool)
 
 
 Ubuntu Linux
@@ -78,7 +77,7 @@ Ubuntu Linux
 ::
 
     $ sudo apt-get install build-essential git qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
-    $ sudo pip yapsy==1.9.2 passlib
+    $ sudo pip yapsy==1.9.2
 
 Fedora Linux
 ************
