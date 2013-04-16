@@ -25,8 +25,6 @@
 import logging
 import os
 
-from passlib.apps import custom_app_context as pwd_context
-
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtNetwork import QTcpServer, QHostAddress
 
@@ -187,33 +185,28 @@ class ServerApp(FreeseerApp):
             self.mainWidget.settingsEdit.setText("%s@%s" % (self.mainWidget.passEdit.text(),
                                                             text))
         
-    '''
-    This function is for changing the passphrase. It saves the new passphrase in the self.passPhrase after encoding it.
-    '''
     def setPassPhrase(self):
+        '''This function is for changing the passphrase'''
         self.passphrase = self.mainWidget.passEdit.text()
-        log.info ("Passphrase set to %s", self.passphrase)
-        #self.passPhrase = base64.b64encode(self.passPhrase)
-        self.passphrase = str(self.passphrase)
-        self.passphrase = pwd_context.encrypt(self.passphrase)
-        
-    '''
-    This function reads the passphrase sent from the client. It decodes the saved passphrase and the one that client sent and compares.
-    Client is accepted if the passphrases match. Otherwise client is rejected
-    '''  
+        log.info("Passphrase set to %s", self.passphrase)
+    
     def readPassPhrase(self):
+        '''This function reads the passphrase sent from the client and compares it
+        with the saved passphrase on server.
+        '''
         client = QtCore.QObject.sender(self)
         message = client.read(client.bytesAvailable())   
         log.info("Client said: %s", message)
-        if pwd_context.verify(message, self.passphrase) is False:
-            client.disconnectFromHost()
-            log.info("Client rejected")
-        else:
+        if message == self.passphrase:
             self.clients.append(client)
             self.updateList()
             log.info("Client accepted")
             self.disconnect(client, QtCore.SIGNAL('readyRead()'), self.readPassPhrase)
             self.connect(client, QtCore.SIGNAL('readyRead()'), self.startRead)
+        else:
+            client.disconnectFromHost()
+            log.info("Client rejected")
+            
     
     def onPassChanged(self):
         """Disable 'Start' button only when the passphrase field is empty."""
