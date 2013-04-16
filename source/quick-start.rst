@@ -47,7 +47,12 @@ After adding this overlay::
 
     emerge -av freeseer
 
-Visit our downloads page at https://github.com/Freeseer/freeseer/downloads
+OpenSUSE
+********
+Freeseer is available in the OpenSUSE repository::
+
+    zypper install freeseer
+
 
 Python Package Index
 ********************
