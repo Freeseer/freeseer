@@ -26,7 +26,7 @@ import logging
 import os
 
 from PyQt4 import QtCore, QtGui
-from PyQt4.QtNetwork import QTcpServer, QHostAddress
+from PyQt4.QtNetwork import QTcpServer, QHostAddress, QNetworkInterface
 
 from freeseer.framework.config import Config
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
@@ -75,6 +75,9 @@ class ServerApp(FreeseerApp):
         self.setCentralWidget(self.mainWidget)
         
         self.mainWidget.hostCombo.addItem(QtCore.QString("0.0.0.0"))
+        addresses = QNetworkInterface().allAddresses()
+        for address in addresses:
+            self.mainWidget.hostCombo.addItem(address.toString())
                 
         #Connections
         self.connect(self.server, QtCore.SIGNAL('newConnection()'), self.acceptConnection)  
@@ -216,7 +219,7 @@ class ServerApp(FreeseerApp):
             self.mainWidget.startButton.setEnabled(False)
             
     def ipComboBoxHandler(self):
-        self.ipAddress = QHostAddress(self.ipComboBox.itemText(self.ipComboBox.currentIndex()))
+        self.ipAddress = QHostAddress(self.mainWidget.hostCombo.itemText(self.mainWidget.hostCombo.currentIndex()))
         log.info("Server IP changed to: %s", self.ipAddress.toString())
     
     ###
