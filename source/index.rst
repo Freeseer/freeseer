@@ -16,7 +16,6 @@ screencasting software for recording and streaming presentations.
    quick-start
    userguide/index
    contribute/index
-   packaging
    troubleshoot/index
 
 
