@@ -13,8 +13,10 @@ screencasting software for recording and streaming presentations.
    :maxdepth: 1
    
    about/index
+   quick-start
    userguide/index
    contribute/index
+   packaging
    troubleshoot/index
 
 
