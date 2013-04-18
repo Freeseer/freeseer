@@ -37,7 +37,7 @@ if sys.platform.startswith("linux"):
 from PyQt4 import QtGui, QtCore
 
 from freeseer.framework.plugin import IVideoInput
-from freeseer.framework.qt_area_selector import QtAreaSelector
+from freeseer.framework.area_selector import AreaSelector
 
 log = logging.getLogger(__name__)
 
@@ -125,12 +125,12 @@ class DesktopLinuxSrc(IVideoInput):
             pass
         
     def area_select(self):
-        self.area_selector = QtAreaSelector(self)
+        self.area_selector = AreaSelector(self)
         self.area_selector.show()
         self.gui.hide()
         self.widget.window().hide()
 
-    def desktopAreaEvent(self, start_x, start_y, end_x, end_y):
+    def areaSelectEvent(self, start_x, start_y, end_x, end_y):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", start_x)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_y", start_y)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", end_x)
