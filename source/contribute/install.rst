@@ -14,6 +14,7 @@ Prerequisites
 * Python 2.7
 * Sqlite3
 * PyQt4
+* gstreamer0.10-python (pygst)
 * python-feedparser
 * python-setuptools
 * yapsy (needs setuptools to install)

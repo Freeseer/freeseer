@@ -71,7 +71,7 @@ Prerequisits
 + Git
 + Python 2.7+
 + sqlite3
-+ gstreamer0.10-python
++ gstreamer0.10-python (pygst)
 + PyQT development tools
 + python-xlib (Required for video preview plugin)
 
@@ -81,8 +81,8 @@ Ubuntu Linux
 
 ::
 
-    $ sudo apt-get install build-essential git qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
-    $ sudo pip yapsy==1.9.2
+    $ sudo apt-get install build-essential git python-gst0.10 python-gst0.10-dev gstreamer0.10-plugins-good qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
+    $ sudo pip install yapsy
 
 Fedora Linux
 ************
@@ -90,7 +90,7 @@ Fedora Linux
 ::
 
     $ sudo yum install git PyQt4-devel python-feedparser.noarch python-setuptools
-    $ sudo pip yapsy==1.9.2
+    $ sudo pip install yapsy
 
 Windows
 *******
