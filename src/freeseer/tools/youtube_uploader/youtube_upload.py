@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012 Free and Open Source Software Learning Centre
+# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -103,10 +103,10 @@ def upload():
 	#if ogg_vfile != "":
 
 # Uploads an ogg or mpg to YouTube, using the metadata from an ogg
-def uploadToYouTube(vpath, vfile, email, password):
+def uploadToYouTube(vpath, vfile, email, password, category='Education'):
 
 	# Get the title and description if video is an ogg file
-	if vfile.lower().endswith(('.ogg', '.mpg')):
+	if vfile.lower().endswith(('.ogg', '.mpg', '.mpeg')):
 		if vfile.lower().endswith('.ogg'):
 			metadata = mutagen.oggvorbis.Open(vpath+"/"+vfile)
 			#print metadata.pprint()
@@ -126,11 +126,7 @@ def uploadToYouTube(vpath, vfile, email, password):
 	else:
 		print vpath+"/"+vfile +" is not an ogg or mpg"
 		return
-
-	# Default category to education for now
-	category = "Education"
-
-	youtube_upload.main_upload(shlex.split("--email="+email+" --password="+password+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath+"/"+vfile))
+	youtube_upload.main_upload(shlex.split("--email="+email+" --password="+password+" --title=\""+title+"\" --category="+category+" --description="+'"'+description+'" ' + vpath+"/"+vfile))
 
 
 

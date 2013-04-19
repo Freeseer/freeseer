@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -21,8 +21,16 @@
 
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
+import sys
+import signal
+from PyQt4 import QtGui
 
-from freeseer.tools.youtube_uploader.youtube_upload import upload
+from freeseer.tools.youtube_uploader.uploader_widget import UploaderGuiApp
 
 if __name__ == "__main__":
-    upload()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    app = QtGui.QApplication(sys.argv)
+    main = UploaderGuiApp()
+    main.show()
+    sys.exit(app.exec_())
+
