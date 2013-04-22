@@ -70,6 +70,7 @@ class TestConfigToolApp(unittest.TestCase):
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
         shutil.rmtree(settings.configdir)
         del self.app
+        del self.config_tool.app
 
 
     def test_general_settings(self):

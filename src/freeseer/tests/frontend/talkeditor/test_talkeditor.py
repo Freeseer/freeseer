@@ -62,6 +62,7 @@ class TestTalkEditorApp(unittest.TestCase):
 
         QtTest.QTest.mouseClick(self.talk_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
         del self.app
+        del self.talk_editor.app
 
     def test_add_talk(self):
         ''' 

@@ -52,6 +52,7 @@ class TestReportEditorApp(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(settings.configdir)
         del self.app
+        del self.report_editor.app
 
 
     def test_close_report_editor(self):
