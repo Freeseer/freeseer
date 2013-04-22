@@ -59,9 +59,6 @@ class AreaSelector(QWidget):
         self.setWindowState(Qt.WindowFullScreen)
         self.setAutoFillBackground(False)
 
-        self.bg = QPixmap.grabWindow(QApplication.desktop().winId())
-        self.screen_geometry = QApplication.desktop().screenGeometry(self)
-        
         self.parent = parent
         self.start_x = 0
         self.start_y = 0
@@ -69,6 +66,11 @@ class AreaSelector(QWidget):
         self.end_y = 0
         self.current_x = 0
         self.current_y = 0
+
+    def showEvent(self, event):
+        '''Update the screen BG when the selector is shown'''
+        self.bg = QPixmap.grabWindow(QApplication.desktop().winId())
+        self.screen_geometry = QApplication.desktop().screenGeometry(self)
 
     def mousePressEvent(self, event):
         '''Save the users starting x/y points'''

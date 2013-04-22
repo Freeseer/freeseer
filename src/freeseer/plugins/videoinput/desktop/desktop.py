@@ -31,10 +31,15 @@ import pygst
 pygst.require("0.10")
 import gst
 
-if sys.platform.startswith("linux"):
-    import Xlib.display
-
-from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QDesktopWidget
+from PyQt4.QtGui import QFormLayout
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QRadioButton
+from PyQt4.QtGui import QSpinBox
+from PyQt4.QtGui import QWidget
 
 from freeseer.framework.plugin import IVideoInput
 from freeseer.framework.area_selector import AreaSelector
@@ -141,44 +146,34 @@ class DesktopLinuxSrc(IVideoInput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
+            self.widget = QWidget()
             
-            layout = QtGui.QFormLayout()
+            layout = QFormLayout()
             self.widget.setLayout(layout)
             
-            self.desktopLabel = QtGui.QLabel("Record Desktop")            
-            self.desktopButton = QtGui.QRadioButton()
+            self.desktopLabel = QLabel("Record Desktop")
+            self.desktopButton = QRadioButton()
             layout.addRow(self.desktopLabel, self.desktopButton)
             
-            areaGroup = QtGui.QHBoxLayout()
-            self.areaLabel = QtGui.QLabel("Record Region")
-            self.areaButton = QtGui.QRadioButton()
-            self.setAreaButton = QtGui.QPushButton("Set")
+            # Record Area of Desktop
+            areaGroup = QHBoxLayout()
+            self.areaLabel = QLabel("Record Region")
+            self.areaButton = QRadioButton()
+            self.setAreaButton = QPushButton("Set")
             areaGroup.addWidget(self.areaButton)
-            areaGroup.addWidget(self.setAreaButton)            
+            areaGroup.addWidget(self.setAreaButton)
             layout.addRow(self.areaLabel, areaGroup)
             
-            if sys.platform.startswith('linux'):
-                windowGroup = QtGui.QHBoxLayout()
-                self.windowLabel = QtGui.QLabel("Record Window")
-                self.windowButton = QtGui.QRadioButton()
-                self.windowList = QtGui.QComboBox()
-                windowGroup.addWidget(self.windowButton)
-                windowGroup.addWidget(self.windowList)
-                layout.addRow(self.windowLabel, windowGroup)
-                
-                self.widget.connect(self.windowButton, QtCore.SIGNAL('clicked()'), self.set_desktop_window)
-                self.widget.connect(self.windowList, QtCore.SIGNAL('currentIndexChanged(const QString &)'), self.set_window)
-            
-            self.screenLabel = QtGui.QLabel("Screen")
-            self.screenSpinBox = QtGui.QSpinBox()
+            # Select screen to record
+            self.screenLabel = QLabel("Screen")
+            self.screenSpinBox = QSpinBox()
             layout.addRow(self.screenLabel, self.screenSpinBox)
             
             # Connections
-            self.widget.connect(self.desktopButton, QtCore.SIGNAL('clicked()'), self.set_desktop_full)
-            self.widget.connect(self.areaButton, QtCore.SIGNAL('clicked()'), self.set_desktop_area)
-            self.widget.connect(self.setAreaButton, QtCore.SIGNAL('clicked()'), self.area_select)
-            self.widget.connect(self.screenSpinBox, QtCore.SIGNAL('valueChanged(int)'), self.set_screen)
+            self.widget.connect(self.desktopButton, SIGNAL('clicked()'), self.set_desktop_full)
+            self.widget.connect(self.areaButton, SIGNAL('clicked()'), self.set_desktop_area)
+            self.widget.connect(self.setAreaButton, SIGNAL('clicked()'), self.area_select)
+            self.widget.connect(self.screenSpinBox, SIGNAL('valueChanged(int)'), self.set_screen)
             
             
         return self.widget
@@ -190,27 +185,12 @@ class DesktopLinuxSrc(IVideoInput):
             self.desktopButton.setChecked(True)
         elif self.desktop == "Area":
             self.areaButton.setChecked(True)
-        elif self.desktop == "Window":
-            self.windowButton.setChecked(True)
         
-        # Xlib is only available on linux
-        if sys.platform.startswith("linux"):
-            display = Xlib.display.Display()
-            self.screenSpinBox.setMaximum(display.screen_count() - 1) # minus 1 since we like to start count at 0
+        # Try to detect how many screens the user has
+        # minus 1 since we like to start count at 0
+        max_screens = QDesktopWidget().screenCount()
+        self.screenSpinBox.setMaximum(max_screens - 1)
             
-            root = display.screen().root
-            windows = root.query_tree().children
-            uniq_wins = []
-            n = 0
-            for win in windows:
-                win_name = win.get_wm_name()
-                if win_name not in uniq_wins and win_name is not None:
-                    uniq_wins.append(win_name)
-                    self.windowList.addItem(win_name)
-                    
-                    if win_name == self.window:
-                        self.windowList.setCurrentIndex(n)
-                    n = n + 1
             
     def set_screen(self, screen):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
@@ -220,9 +200,3 @@ class DesktopLinuxSrc(IVideoInput):
         
     def set_desktop_area(self):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Area")
-        
-    def set_desktop_window(self):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Window")
-        
-    def set_window(self, window):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", window)
