@@ -65,14 +65,6 @@ class Config:
         self.video_preview = True
         self.default_language = "tr_en_US.qm" # Set default language to English if user did not define
 
-        # Lastrun
-        self.start_x = 0
-        self.start_y = 0
-        self.end_x = 0
-        self.end_y = 0
-        
-        self.delay_recording = 0
-
         # Map of resolution names to the actual resolution (both stream and record)
         # Names should include all options available in the GUI
 
@@ -121,13 +113,6 @@ class Config:
             self.record_to_stream_plugin = config.get('Global', 'record_to_stream_plugin')
             self.default_language = config.get('Global', 'Default Language')
             
-            # LastRun Section
-            self.start_x = config.get('lastrun', 'area_start_x')
-            self.start_y = config.get('lastrun', 'area_start_y')
-            self.end_x = config.get('lastrun', 'area_end_x')
-            self.end_y = config.get('lastrun', 'area_end_y')
-            self.delay_recording = config.get('lastrun', 'delay_recording')
-
         except:
             print('Corrupt config found, creating a new one.')
             self.writeConfig()
@@ -153,12 +138,6 @@ class Config:
         config.set('Global','record_to_stream_plugin', self.record_to_stream_plugin)
         config.set('Global', 'Default Language', self.default_language)
         
-        config.add_section('lastrun')
-        config.set('lastrun', 'area_start_x', self.start_x)
-        config.set('lastrun', 'area_start_y', self.start_y)
-        config.set('lastrun', 'area_end_x', self.end_x)
-        config.set('lastrun', 'area_end_y', self.end_y)
-        config.set('lastrun', 'delay_recording', self.delay_recording)
         # Make sure the config directory exists before writing to the configfile 
         try:
             os.makedirs(self.configdir)
