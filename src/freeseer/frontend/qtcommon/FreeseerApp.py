@@ -51,9 +51,11 @@ class FreeseerApp(QtGui.QMainWindow):
         #
         # Translator
         #
+        self.app = QtGui.QApplication.instance()
         self.current_language = None
         self.uiTranslator = QtCore.QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
+        self.app.installTranslator(self.uiTranslator)
         self.langActionGroup = QtGui.QActionGroup(self)
         self.langActionGroup.setExclusive(True)
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
@@ -137,13 +139,13 @@ class FreeseerApp(QtGui.QMainWindow):
         #
         # Menubar
         #
-        self.menuFile.setTitle(self.uiTranslator.translate("FreeseerApp", "&File"))
-        self.menuLanguage.setTitle(self.uiTranslator.translate("FreeseerApp", "&Language"))
-        self.menuHelp.setTitle(self.uiTranslator.translate("FreeseerApp", "&Help"))
+        self.menuFile.setTitle(self.app.translate("FreeseerApp", "&File"))
+        self.menuLanguage.setTitle(self.app.translate("FreeseerApp", "&Language"))
+        self.menuHelp.setTitle(self.app.translate("FreeseerApp", "&Help"))
         
-        self.actionExit.setText(self.uiTranslator.translate("FreeseerApp", "&Quit"))
-        self.actionAbout.setText(self.uiTranslator.translate("FreeseerApp", "&About"))
-        self.actionOnlineHelp.setText(self.uiTranslator.translate("FreeseerApp", "Online Documentation"))
+        self.actionExit.setText(self.app.translate("FreeseerApp", "&Quit"))
+        self.actionAbout.setText(self.app.translate("FreeseerApp", "&About"))
+        self.actionOnlineHelp.setText(self.app.translate("FreeseerApp", "Online Documentation"))
         # --- Menubar
         
     def setupLanguageMenu(self):

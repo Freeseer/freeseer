@@ -102,27 +102,27 @@ class ServerApp(FreeseerApp):
     ### Translation Related
     ###
     def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("ControllerServerApp", "Controller Server"))
+        self.setWindowTitle(self.app.translate("ControllerServerApp", "Controller Server"))
         
         #
         # Reusuable Strings
         #
-        self.serverStatusString = self.uiTranslator.translate("ControllerServerApp", "Server status")
-        self.startServerString = self.uiTranslator.translate("ControllerServerApp", "Start Server")
-        self.stopServerString = self.uiTranslator.translate("ControllerServerApp", "Stop Server")
-        self.startRecordingString = self.uiTranslator.translate("ControllerServerApp", "Start Recording")
-        self.stopRecordingString = self.uiTranslator.translate("ControllerServerApp", "Stop Recording")
-        self.pauseRecordingString = self.uiTranslator.translate("ControllerServerApp", "Pause Recording")
-        self.resumeRecordingString = self.uiTranslator.translate("ControllerServerApp", "Resume Recording")
+        self.serverStatusString = self.app.translate("ControllerServerApp", "Server status")
+        self.startServerString = self.app.translate("ControllerServerApp", "Start Server")
+        self.stopServerString = self.app.translate("ControllerServerApp", "Stop Server")
+        self.startRecordingString = self.app.translate("ControllerServerApp", "Start Recording")
+        self.stopRecordingString = self.app.translate("ControllerServerApp", "Stop Recording")
+        self.pauseRecordingString = self.app.translate("ControllerServerApp", "Pause Recording")
+        self.resumeRecordingString = self.app.translate("ControllerServerApp", "Resume Recording")
         # --- End Reusable Strings
         
         #
         # Server Settings
         #
-        self.mainWidget.toolBox.setItemText(0, self.uiTranslator.translate("ControllerServerApp", "Server Settings"))
-        self.mainWidget.hostLabel.setText(self.uiTranslator.translate("ControllerServerApp", "IP Address"))
-        self.mainWidget.portLabel.setText(self.uiTranslator.translate("ControllerServerApp", "Port"))
-        self.mainWidget.passLabel.setText(self.uiTranslator.translate("ControllerServerApp", "Passphrase"))
+        self.mainWidget.toolBox.setItemText(0, self.app.translate("ControllerServerApp", "Server Settings"))
+        self.mainWidget.hostLabel.setText(self.app.translate("ControllerServerApp", "IP Address"))
+        self.mainWidget.portLabel.setText(self.app.translate("ControllerServerApp", "Port"))
+        self.mainWidget.passLabel.setText(self.app.translate("ControllerServerApp", "Passphrase"))
         
         # Button
         if self.status == self.STATUS[0]:
@@ -134,9 +134,9 @@ class ServerApp(FreeseerApp):
         #
         # Control Clients
         #
-        self.mainWidget.toolBox.setItemText(1, self.uiTranslator.translate("ControllerServerApp", "Control Clients"))
+        self.mainWidget.toolBox.setItemText(1, self.app.translate("ControllerServerApp", "Control Clients"))
         self.updateClientButtons()
-        self.mainWidget.clientDisconnectButton.setText(self.uiTranslator.translate("ControllerServerApp", "Disconnect"))
+        self.mainWidget.clientDisconnectButton.setText(self.app.translate("ControllerServerApp", "Disconnect"))
         # --- End Control Clients
         
     ###

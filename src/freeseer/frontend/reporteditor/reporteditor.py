@@ -110,30 +110,30 @@ class ReportEditorApp(FreeseerApp):
     ### Translation
     ###
     def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("ReportEditorApp", "Freeseer Report Editor"))
+        self.setWindowTitle(self.app.translate("ReportEditorApp", "Freeseer Report Editor"))
         
         #
         # Reusable Strings
         #
-        self.confirmDBClearTitleString = self.uiTranslator.translate("ReportEditorApp", "Clear Database")
-        self.confirmDBClearQuestionString = self.uiTranslator.translate("ReportEditorApp", "Are you sure you want to clear the DB?")
-        self.selectFileString = self.uiTranslator.translate("ReportEditorApp", "Select File")
+        self.confirmDBClearTitleString = self.app.translate("ReportEditorApp", "Clear Database")
+        self.confirmDBClearQuestionString = self.app.translate("ReportEditorApp", "Are you sure you want to clear the DB?")
+        self.selectFileString = self.app.translate("ReportEditorApp", "Select File")
         # --- End Reusable Strings
         
         #
         # EditorWidget
         #
-        self.editorWidget.removeButton.setText(self.uiTranslator.translate("ReportEditorApp", "Remove"))
-        self.editorWidget.clearButton.setText(self.uiTranslator.translate("ReportEditorApp", "Clear"))
-        self.editorWidget.closeButton.setText(self.uiTranslator.translate("ReportEditorApp", "Close"))
+        self.editorWidget.removeButton.setText(self.app.translate("ReportEditorApp", "Remove"))
+        self.editorWidget.clearButton.setText(self.app.translate("ReportEditorApp", "Clear"))
+        self.editorWidget.closeButton.setText(self.app.translate("ReportEditorApp", "Close"))
         
-        self.editorWidget.titleLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Title:"))
-        self.editorWidget.speakerLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Speaker:"))
-        self.editorWidget.descriptionLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Description:"))
-        self.editorWidget.levelLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Level:"))
-        self.editorWidget.eventLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Event:"))
-        self.editorWidget.roomLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Room:"))
-        self.editorWidget.timeLabel.setText(self.uiTranslator.translate("ReportEditorApp", "Time:"))
+        self.editorWidget.titleLabel.setText(self.app.translate("ReportEditorApp", "Title:"))
+        self.editorWidget.speakerLabel.setText(self.app.translate("ReportEditorApp", "Speaker:"))
+        self.editorWidget.descriptionLabel.setText(self.app.translate("ReportEditorApp", "Description:"))
+        self.editorWidget.levelLabel.setText(self.app.translate("ReportEditorApp", "Level:"))
+        self.editorWidget.eventLabel.setText(self.app.translate("ReportEditorApp", "Event:"))
+        self.editorWidget.roomLabel.setText(self.app.translate("ReportEditorApp", "Room:"))
+        self.editorWidget.timeLabel.setText(self.app.translate("ReportEditorApp", "Time:"))
         # --- End EditorWidget
     
     def load_failures_model(self):

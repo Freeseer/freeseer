@@ -118,46 +118,46 @@ class TalkEditorApp(FreeseerApp):
     ### Translation
     ###
     def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("TalkEditorApp", "Freeseer Talk Editor"))
+        self.setWindowTitle(self.app.translate("TalkEditorApp", "Freeseer Talk Editor"))
         
         #
         # Reusable Strings
         #
-        self.confirmDBClearTitleString = self.uiTranslator.translate("TalkEditorApp", "Clear Database")
-        self.confirmDBClearQuestionString = self.uiTranslator.translate("TalkEditorApp", "Are you sure you want to clear the DB?")
+        self.confirmDBClearTitleString = self.app.translate("TalkEditorApp", "Clear Database")
+        self.confirmDBClearQuestionString = self.app.translate("TalkEditorApp", "Are you sure you want to clear the DB?")
         # --- End Reusable Strings
         
         #
         # Menubar
         #
-        self.actionExportCsv.setText(self.uiTranslator.translate("TalkEditorApp", "&Export to CSV"))
+        self.actionExportCsv.setText(self.app.translate("TalkEditorApp", "&Export to CSV"))
         # --- End Menubar
         
         #
         # AddTalkWidget
         #
-        self.addTalkWidget.addTalkGroupBox.setTitle(self.uiTranslator.translate("TalkEditorApp", "Add Talk"))
-        self.addTalkWidget.titleLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Title"))
-        self.addTalkWidget.presenterLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Presenter"))
-        self.addTalkWidget.eventLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Event"))
-        self.addTalkWidget.roomLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Room"))
-        self.addTalkWidget.dateLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Date"))
-        self.addTalkWidget.timeLabel.setText(self.uiTranslator.translate("TalkEditorApp", "Time"))
-        self.addTalkWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
-        self.addTalkWidget.cancelButton.setText(self.uiTranslator.translate("TalkEditorApp", "Cancel"))
+        self.addTalkWidget.addTalkGroupBox.setTitle(self.app.translate("TalkEditorApp", "Add Talk"))
+        self.addTalkWidget.titleLabel.setText(self.app.translate("TalkEditorApp", "Title"))
+        self.addTalkWidget.presenterLabel.setText(self.app.translate("TalkEditorApp", "Presenter"))
+        self.addTalkWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
+        self.addTalkWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
+        self.addTalkWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
+        self.addTalkWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
+        self.addTalkWidget.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
+        self.addTalkWidget.cancelButton.setText(self.app.translate("TalkEditorApp", "Cancel"))
         # --- End AddTalkWidget
         
         #
         # EditorWidget
         #
-        self.editorWidget.rssLabel.setText(self.uiTranslator.translate("TalkEditorApp", "URL"))
-        self.editorWidget.rssPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from RSS"))
-        self.editorWidget.csvLabel.setText(self.uiTranslator.translate("TalkEditorApp", "File"))
-        self.editorWidget.csvPushButton.setText(self.uiTranslator.translate("TalkEditorApp", "Load talks from CSV"))
-        self.editorWidget.addButton.setText(self.uiTranslator.translate("TalkEditorApp", "Add"))
-        self.editorWidget.removeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Remove"))
-        self.editorWidget.clearButton.setText(self.uiTranslator.translate("TalkEditorApp", "Clear"))
-        self.editorWidget.closeButton.setText(self.uiTranslator.translate("TalkEditorApp", "Close"))
+        self.editorWidget.rssLabel.setText(self.app.translate("TalkEditorApp", "URL"))
+        self.editorWidget.rssPushButton.setText(self.app.translate("TalkEditorApp", "Load talks from RSS"))
+        self.editorWidget.csvLabel.setText(self.app.translate("TalkEditorApp", "File"))
+        self.editorWidget.csvPushButton.setText(self.app.translate("TalkEditorApp", "Load talks from CSV"))
+        self.editorWidget.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
+        self.editorWidget.removeButton.setText(self.app.translate("TalkEditorApp", "Remove"))
+        self.editorWidget.clearButton.setText(self.app.translate("TalkEditorApp", "Clear"))
+        self.editorWidget.closeButton.setText(self.app.translate("TalkEditorApp", "Close"))
         # --- End EditorWidget
     
     def load_presentations_model(self):

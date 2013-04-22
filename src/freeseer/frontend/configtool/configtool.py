@@ -152,19 +152,19 @@ class ConfigToolApp(FreeseerApp):
     ###
     
     def retranslate(self):
-        self.setWindowTitle(self.uiTranslator.translate("ConfigToolApp", "Freeseer ConfigTool"))
+        self.setWindowTitle(self.app.translate("ConfigToolApp", "Freeseer ConfigTool"))
         
         #
         # ConfigToolWidget
         #
-        self.generalString = self.uiTranslator.translate("ConfigToolApp", "General")
-        self.avString = self.uiTranslator.translate("ConfigToolApp", "Recording")
-        self.pluginsString = self.uiTranslator.translate("ConfigToolApp", "Plugins")
-        self.audioInputString = self.uiTranslator.translate("ConfigToolApp", "AudioInput")
-        self.audioMixerString = self.uiTranslator.translate("ConfigToolApp", "AudioMixer")
-        self.videoInputString = self.uiTranslator.translate("ConfigToolApp", "VideoInput")
-        self.videoMixerString = self.uiTranslator.translate("ConfigToolApp", "VideoMixer")
-        self.outputString = self.uiTranslator.translate("ConfigToolApp", "Output")
+        self.generalString = self.app.translate("ConfigToolApp", "General")
+        self.avString = self.app.translate("ConfigToolApp", "Recording")
+        self.pluginsString = self.app.translate("ConfigToolApp", "Plugins")
+        self.audioInputString = self.app.translate("ConfigToolApp", "AudioInput")
+        self.audioMixerString = self.app.translate("ConfigToolApp", "AudioMixer")
+        self.videoInputString = self.app.translate("ConfigToolApp", "VideoInput")
+        self.videoMixerString = self.app.translate("ConfigToolApp", "VideoMixer")
+        self.outputString = self.app.translate("ConfigToolApp", "Output")
         
         self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
         self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
@@ -175,28 +175,28 @@ class ConfigToolApp(FreeseerApp):
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(3).setText(0, self.videoMixerString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(4).setText(0, self.outputString)
         
-        self.mainWidget.closePushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Close"))
+        self.mainWidget.closePushButton.setText(self.app.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
         
         #
         # GeneralWidget
         #
-        self.generalWidget.MiscGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Miscellaneous"))
-        self.generalWidget.languageLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Default Language"))
-        self.generalWidget.recordDirLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Record Directory"))
-        self.generalWidget.autoHideCheckBox.setText(self.uiTranslator.translate("ConfigToolApp", "Enable Auto-Hide"))
+        self.generalWidget.MiscGroupBox.setTitle(self.app.translate("ConfigToolApp", "Miscellaneous"))
+        self.generalWidget.languageLabel.setText(self.app.translate("ConfigToolApp", "Default Language"))
+        self.generalWidget.recordDirLabel.setText(self.app.translate("ConfigToolApp", "Record Directory"))
+        self.generalWidget.autoHideCheckBox.setText(self.app.translate("ConfigToolApp", "Enable Auto-Hide"))
         # --- End GeneralWidget
         
         #
         # AV Widget
         #
-        self.avWidget.audioGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Audio Input"))
-        self.avWidget.audioMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Audio Mixer"))
-        self.avWidget.audioMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
+        self.avWidget.audioGroupBox.setTitle(self.app.translate("ConfigToolApp", "Audio Input"))
+        self.avWidget.audioMixerLabel.setText(self.app.translate("ConfigToolApp", "Audio Mixer"))
+        self.avWidget.audioMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
         
-        self.avWidget.videoGroupBox.setTitle(self.uiTranslator.translate("ConfigToolApp", "Video Input"))
-        self.avWidget.videoMixerLabel.setText(self.uiTranslator.translate("ConfigToolApp", "Video Mixer"))
-        self.avWidget.videoMixerSetupPushButton.setText(self.uiTranslator.translate("ConfigToolApp", "Setup"))
+        self.avWidget.videoGroupBox.setTitle(self.app.translate("ConfigToolApp", "Video Input"))
+        self.avWidget.videoMixerLabel.setText(self.app.translate("ConfigToolApp", "Video Mixer"))
+        self.avWidget.videoMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
         # --- End AV Widget
         
     ###

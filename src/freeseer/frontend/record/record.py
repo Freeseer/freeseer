@@ -162,23 +162,23 @@ class RecordApp(FreeseerApp):
     def retranslate(self):
         self.clientWidget.retranslate(self.current_language)
         
-        self.setWindowTitle(self.uiTranslator.translate("RecordApp", "Freeseer - portable presentation recording station"))
+        self.setWindowTitle(self.app.translate("RecordApp", "Freeseer - portable presentation recording station"))
         #
         # Reusable Strings
         #
-        self.standbyString = self.uiTranslator.translate("RecordApp", "Standby")
-        self.recordString = self.uiTranslator.translate("RecordApp", "Record")
-        self.pauseString = self.uiTranslator.translate("RecordApp", "Pause")
-        self.resumeString = self.uiTranslator.translate("RecordApp", "Resume")
-        self.stopString = self.uiTranslator.translate("RecordApp", "Stop")
-        self.hideWindowString = self.uiTranslator.translate("RecordApp", "Hide Main Window")
-        self.showWindowString = self.uiTranslator.translate("RecordApp", "Show Main Window")
+        self.standbyString = self.app.translate("RecordApp", "Standby")
+        self.recordString = self.app.translate("RecordApp", "Record")
+        self.pauseString = self.app.translate("RecordApp", "Pause")
+        self.resumeString = self.app.translate("RecordApp", "Resume")
+        self.stopString = self.app.translate("RecordApp", "Stop")
+        self.hideWindowString = self.app.translate("RecordApp", "Hide Main Window")
+        self.showWindowString = self.app.translate("RecordApp", "Show Main Window")
         
         # Status Bar messages
-        self.idleString = self.uiTranslator.translate("RecordApp", "Idle.")
-        self.readyString = self.uiTranslator.translate("RecordApp", "Ready.")
-        self.recordingString = self.uiTranslator.translate("RecordApp", "Recording...")
-        self.pausedString = self.uiTranslator.translate("RecordApp", "Recording Paused.")
+        self.idleString = self.app.translate("RecordApp", "Idle.")
+        self.readyString = self.app.translate("RecordApp", "Ready.")
+        self.recordingString = self.app.translate("RecordApp", "Recording...")
+        self.pausedString = self.app.translate("RecordApp", "Recording Paused.")
         # --- End Reusable Strings
         
         if self.mainWidget.recordPushButton.isChecked() and self.mainWidget.pauseToolButton.isChecked():
@@ -193,9 +193,9 @@ class RecordApp(FreeseerApp):
         #
         # Menubar
         #
-        self.actionOpenVideoFolder.setText(self.uiTranslator.translate("RecordApp", "&Open Video Directory"))
-        self.actionClient.setText(self.uiTranslator.translate("RecordApp", "&Connect to server"))
-        self.actionReport.setText(self.uiTranslator.translate("RecordApp", "&Report"))
+        self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
+        self.actionClient.setText(self.app.translate("RecordApp", "&Connect to server"))
+        self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
         # --- End Menubar
         
         #
@@ -218,31 +218,31 @@ class RecordApp(FreeseerApp):
             self.mainWidget.recordPushButton.setToolTip(self.recordString)
         self.mainWidget.pauseToolButton.setText(self.pauseString)
         self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
-        self.mainWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event"))
-        self.mainWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room"))
-        self.mainWidget.dateLabel.setText(self.uiTranslator.translate("RecordApp", "Date"))
-        self.mainWidget.talkLabel.setText(self.uiTranslator.translate("RecordApp", "Talk"))
+        self.mainWidget.eventLabel.setText(self.app.translate("RecordApp", "Event"))
+        self.mainWidget.roomLabel.setText(self.app.translate("RecordApp", "Room"))
+        self.mainWidget.dateLabel.setText(self.app.translate("RecordApp", "Date"))
+        self.mainWidget.talkLabel.setText(self.app.translate("RecordApp", "Talk"))
         # --- End RecordingWidget
         
         #
         # ReportWidget
         #
-        self.reportWidget.setWindowTitle(self.uiTranslator.translate("RecordApp", "Reporting Tool"))
-        self.reportWidget.titleLabel.setText(self.uiTranslator.translate("RecordApp", "Title:"))
-        self.reportWidget.speakerLabel.setText(self.uiTranslator.translate("RecordApp", "Speaker:"))
-        self.reportWidget.eventLabel.setText(self.uiTranslator.translate("RecordApp", "Event:"))
-        self.reportWidget.roomLabel.setText(self.uiTranslator.translate("RecordApp", "Room:"))
-        self.reportWidget.timeLabel.setText(self.uiTranslator.translate("RecordApp", "Time:"))
-        self.reportWidget.commentLabel.setText(self.uiTranslator.translate("RecordApp", "Comment"))
-        self.reportWidget.releaseCheckBox.setText(self.uiTranslator.translate("RecordApp", "Release Received"))
-        self.reportWidget.closeButton.setText(self.uiTranslator.translate("RecordApp", "Close"))
-        self.reportWidget.reportButton.setText(self.uiTranslator.translate("RecordApp", "Report"))
+        self.reportWidget.setWindowTitle(self.app.translate("RecordApp", "Reporting Tool"))
+        self.reportWidget.titleLabel.setText(self.app.translate("RecordApp", "Title:"))
+        self.reportWidget.speakerLabel.setText(self.app.translate("RecordApp", "Speaker:"))
+        self.reportWidget.eventLabel.setText(self.app.translate("RecordApp", "Event:"))
+        self.reportWidget.roomLabel.setText(self.app.translate("RecordApp", "Room:"))
+        self.reportWidget.timeLabel.setText(self.app.translate("RecordApp", "Time:"))
+        self.reportWidget.commentLabel.setText(self.app.translate("RecordApp", "Comment"))
+        self.reportWidget.releaseCheckBox.setText(self.app.translate("RecordApp", "Release Received"))
+        self.reportWidget.closeButton.setText(self.app.translate("RecordApp", "Close"))
+        self.reportWidget.reportButton.setText(self.app.translate("RecordApp", "Report"))
         
         # Logic for translating the report options
-        noissues = self.uiTranslator.translate("RecordApp", "No Issues")
-        noaudio = self.uiTranslator.translate("RecordApp", "No Audio")
-        novideo = self.uiTranslator.translate("RecordApp", "No Video")
-        noaudiovideo = self.uiTranslator.translate("RecordApp", "No Audio/Video")
+        noissues = self.app.translate("RecordApp", "No Issues")
+        noaudio = self.app.translate("RecordApp", "No Audio")
+        novideo = self.app.translate("RecordApp", "No Video")
+        noaudiovideo = self.app.translate("RecordApp", "No Audio/Video")
         self.reportWidget.options = [noissues, noaudio, novideo, noaudiovideo]
         self.reportWidget.reportCombo.clear()
         for i in self.reportWidget.options:

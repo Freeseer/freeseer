@@ -81,6 +81,7 @@ class ClientDialog(QtGui.QDialog):
         self.hide()
         
         # Translations
+        self.app = QtGui.QApplication.instance()
         self.current_language = "en_US"
         self.uiTranslator = QtCore.QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
@@ -96,33 +97,33 @@ class ClientDialog(QtGui.QDialog):
             
         self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
         
-        self.setWindowTitle(self.uiTranslator.translate("ControllerClientApp", "Controller Client"))
+        self.setWindowTitle(self.app.translate("ControllerClientApp", "Controller Client"))
         #
         # Reusable Strings
         #
-        self.clientStatusString = self.uiTranslator.translate("ControllerClientApp", "Status")
-        self.connectString = self.uiTranslator.translate("ControllerClientApp", "Connect")
-        self.disconnectString = self.uiTranslator.translate("ControllerClientApp", "Disconnect")
+        self.clientStatusString = self.app.translate("ControllerClientApp", "Status")
+        self.connectString = self.app.translate("ControllerClientApp", "Connect")
+        self.disconnectString = self.app.translate("ControllerClientApp", "Disconnect")
         # --- End Reusable Strings
         
         #
         # Connection Settings
         #
-        self.mainWidget.toolBox.setItemText(0, self.uiTranslator.translate("ControllerClientApp", "Connection Settings"))
-        self.mainWidget.hostLabel.setText(self.uiTranslator.translate("ControllerClientApp", "Host name (or IP Address)"))
-        self.mainWidget.portLabel.setText(self.uiTranslator.translate("ControllerClientApp", "Port"))
-        self.mainWidget.passLabel.setText(self.uiTranslator.translate("ControllerClientApp", "Passphrase"))
+        self.mainWidget.toolBox.setItemText(0, self.app.translate("ControllerClientApp", "Connection Settings"))
+        self.mainWidget.hostLabel.setText(self.app.translate("ControllerClientApp", "Host name (or IP Address)"))
+        self.mainWidget.portLabel.setText(self.app.translate("ControllerClientApp", "Port"))
+        self.mainWidget.passLabel.setText(self.app.translate("ControllerClientApp", "Passphrase"))
         if self.status == self.STATUS[3]:
-            self.mainWidget.connectButton.setText(self.uiTranslator.translate("ControllerClientApp", self.disconnectString))
+            self.mainWidget.connectButton.setText(self.app.translate("ControllerClientApp", self.disconnectString))
         else:
-            self.mainWidget.connectButton.setText(self.uiTranslator.translate("ControllerClientApp", self.connectString))
+            self.mainWidget.connectButton.setText(self.app.translate("ControllerClientApp", self.connectString))
         self.updateStatus()
         # --- End Connection Settings
         
         #
         # Recent Connections
         #
-        self.mainWidget.toolBox.setItemText(1, self.uiTranslator.translate("ControllerClientApp", "Recent Connections"))
+        self.mainWidget.toolBox.setItemText(1, self.app.translate("ControllerClientApp", "Recent Connections"))
         # --- End Recent Connections
         
     ##
