@@ -4,19 +4,6 @@ Server
 The *Freeseer Server* tool communicates with the :doc:`Freeseer Record </userguide/record>` tool over a network.
 The server can be used to **start**, **stop**, **pause**, and **resume recording**.
 
-Dependencies
-------------
-
-The PassLib library is required to run the server.
-
-To install it using pip::
-
-    pip install passlib
-
-To install it using easy_install::
-
-    easy_install passlib
-
 Usage
 -----
 

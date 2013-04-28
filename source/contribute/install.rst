@@ -18,7 +18,6 @@ Prerequisites
 * python-feedparser
 * python-setuptools
 * yapsy (needs setuptools to install)
-* passlib (this is required for the server)
 
 Installers
 ----------
@@ -39,15 +38,3 @@ Alternatively, you can clone the project with git:
     $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
 
 Potential contributors should :ref:`fork Freeseer <fork-freeseer-label>`.
-
-.. todo:: Add build instructions (or just link to readme)
-
-Installation of passlib for Freeseer Server          
-*******************************************
-
-Passlib needs to be installed to run the Freeseer Server.
-It can be easily installed using this command:
-
-::
-
-    $ sudo easy_install passlib
