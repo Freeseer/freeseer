@@ -24,25 +24,25 @@ Freeseer.
 .. seealso::
 
    * Set up Git and your GitHub account
-     :math:`\rightarrow` `help.github.com <http://help.github.com>`_
+     → `help.github.com <http://help.github.com>`_
    
    * Learn by doing
-     :math:`\rightarrow` `Try Git <http://try.github.com/>`_
+     → `Try Git <http://try.github.com/>`_
    
    * Learn by watching
-     :math:`\rightarrow` `Git Videos <http://git-scm.com/videos>`_
+     → `Git Videos <http://git-scm.com/videos>`_
 
    * Learn by reading
-     :math:`\rightarrow` `Pro Git book <http://book.git-scm.com>`_ (free)
+     → `Pro Git book <http://book.git-scm.com>`_ (free)
 
    * Forgetful?
-     :math:`\rightarrow` `Git Cheat Sheet <https://na1.salesforce.com/help/doc/en/salesforce_git_developer_cheatsheet.pdf>`_
+     → `Git Cheat Sheet <https://na1.salesforce.com/help/doc/en/salesforce_git_developer_cheatsheet.pdf>`_
 
    * Eclipse is your preferred IDE?
-     :math:`\rightarrow` `Eclipse Git Plugin <https://github.com/blog/1181-eclipse-git-plugin-2-0-released>`_
+     → `Eclipse Git Plugin <https://github.com/blog/1181-eclipse-git-plugin-2-0-released>`_
 
    * Prefer GUIs over CLIs?
-     :math:`\rightarrow` `GitHub for Windows <http://windows.github.com/>`_ or
+     → `GitHub for Windows <http://windows.github.com/>`_ or
      `GitHub for Mac <http://mac.github.com/>`_
 
 
