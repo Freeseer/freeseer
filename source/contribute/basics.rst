@@ -157,7 +157,7 @@ When you reference an issue via a commit message, the commit that contains the
 reference will appear as a note on the issue's page. This is useful if you
 want to easily see which commits are related to the issue.
 `See an example of this in practice.
-<https://github.com/Freeseer/freeseer/issues/258#commit-ref-c578203>`_
+<https://github.com/Freeseer/freeseer/issues/258#ref-commit-c578203>`_
 
 There are two ways to reference issues.
 For example, let's reference issue 123 from a commit message.
@@ -168,7 +168,7 @@ For example, let's reference issue 123 from a commit message.
 Using the long form, you can also reference issues that belong to different
 repositories on GitHub. This is called a cross-repo reference.
 `See an example of this in practice.
-<https://github.com/Freeseer/freeseer/issues/266#commit-ref-619d989>`_
+<https://github.com/Freeseer/freeseer/issues/266#ref-commit-619d989>`_
 
 To close an issue, place a supported keyword directly in front of the reference.
 E.g. `'Close #123'`, `'Fix gh-123'`.
