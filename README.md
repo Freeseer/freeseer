@@ -1,5 +1,6 @@
-[![freeseer](https://github.com/Freeseer/freeseer.github.com/raw/master/img/banner.png
+[![freeseer](https://github.com/Freeseer/freeseer.github.io/raw/master/img/banner.png
 "Freeseer by FOSSLC")](http://freeseer.github.com)
+[![Build Status](https://travis-ci.org/Freeseer/freeseer.png)](https://travis-ci.org/Freeseer/freeseer-docs)
 
 Freeseer's Documentation
 ------------------------
