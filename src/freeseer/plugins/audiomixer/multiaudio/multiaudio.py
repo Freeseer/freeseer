@@ -147,28 +147,3 @@ class MultiAudio(IAudioMixer):
     def set_input2(self, input2):
         self.input2 = input2
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
-        
-    def get_properties(self):
-        return ['Input1', 'Input2']
-        
-    def get_property_value(self, p):
-        if p == 'Input1':
-            return self.input1
-        elif p == 'Input2':
-            return self.input2
-        else:
-            return "There's no property with such name"
-        
-    def set_property_value(self, p, value):
-        if value not in self.plugman.get_audioinput_plugins():
-            print "Choose an available Input"
-            #TODO List available options
-            return
-            
-        if p == 'Input1':
-            self.set_input1(value)
-        elif p == 'Input2':
-            self.set_input2(value)
-        else:
-            return "Error: There's no property with such name"
-        
