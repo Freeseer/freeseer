@@ -130,22 +130,3 @@ class VideoPreview(IOutput):
             
     def set_leakyqueue(self, value):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
-        
-    def get_properties(self):
-        return ['PreviewSink', 'LeakyQueue']
-    
-    def get_property_value(self, property):
-        if property == 'PreviewSink':
-            return self.previewsink
-        elif property == 'LeakyQueue':
-            return self.leakyqueue
-        else:
-            return "There's no property with such name"
-        
-    def set_property_value(self, property, value):
-        if property == 'PreviewSink':
-            self.set_previewsink(value)
-        elif property == 'LeakyQueue':
-            self.set_leakyqueue(value)
-        else:
-            return "Error: There's no property with such name" 

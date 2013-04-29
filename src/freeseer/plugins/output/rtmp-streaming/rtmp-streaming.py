@@ -580,39 +580,6 @@ class RTMPOutput(IOutput):
                     " may be incorrect."), 
                 QtGui.QMessageBox.Ok,
                 QtGui.QMessageBox.Ok)
-            
-    def get_properties(self):
-        return ['StreamURL', 'AudioQuality', 'VideoBitrate', 'VideoTune', 'AudioCodec', 'Streaming Destination']
-    
-    def get_property_value(self, property):
-        if property == "StreamURL":
-            return self.url
-        elif property == "AudioQuality":
-            return self.audio_quality
-        elif property == "VideoBitrate":
-            return self.video_bitrate
-        elif property == "VideoTune":
-            return self.video_tune
-        elif property == "AudioCodec":
-            return self.audio_codec
-        else:
-            return "There's no property with such name"
-        
-    def set_property_value(self, property, value):
-        if property == "StreamURL":
-            return self.set_stream_url(value)
-        elif property == "AudioQuality":
-            return self.set_audio_quality(value)
-        elif property == "VideoBitrate":
-            return self.set_video_bitrate(value)
-        elif property == "VideoTune":
-            return self.set_video_tune(value)
-        elif property == "AudioCodec":
-            return self.set_audio_codec(value)
-        elif property == "Streaming Destination":
-            return self.set_streaming_dest(value)
-        else:
-            return "Error: There's no property with such name" 
 
 class JustinApi:
     addr = 'api.justin.tv'
