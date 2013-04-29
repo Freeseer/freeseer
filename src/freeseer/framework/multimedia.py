@@ -32,6 +32,7 @@ import pygst
 pygst.require("0.10")
 import gst
 
+from freeseer.framework.presentation import Presentation
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.util import get_record_name
 
@@ -43,11 +44,12 @@ class Gstreamer:
     PAUSE = 2
     STOP = 3
     
-    def __init__(self, config, plugman, window_id=None, audio_feedback=None):
+    def __init__(self, config, plugman, window_id=None, audio_feedback=None, cli=False):
         self.config = config
         self.plugman = plugman
         self.window_id = window_id
         self.audio_feedback_event = audio_feedback
+        self.cli = cli
         
         self.record_audio = False
         self.record_video = False
@@ -88,7 +90,7 @@ class Gstreamer:
         elif message.structure is not None:
             s = message.structure.get_name()
 
-            if s == 'level':
+            if s == 'level' and self.audio_feedback_event is not None:
                 msg = message.structure.to_string()
                 rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
                 
@@ -104,18 +106,20 @@ class Gstreamer:
         if message.structure is None:
             return
         message_name = message.structure.get_name()
-        if message_name == 'prepare-xwindow-id':
+        if message_name == 'prepare-xwindow-id' and self.window_id is not None:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
             imagesink.set_xwindow_id(int(self.window_id))
             log.debug("Preview loaded into window.")
             
-    def keyboard_event(self, key):
-        """
-        Keyboard event handler.
-        """
-        pass
-            
+    def set_window_id(self, window_id):
+        """Sets the Window ID which GStreamer should paint on"""
+        self.window_id = window_id
+
+    def set_audio_feedback_handler(self, audio_feedback):
+        """Sets the handler for Audio Feedback levels"""
+        self.audio_feedback_event = audio_feedback
+        
     ##
     ## Recording functions
     ##
@@ -166,7 +170,7 @@ class Gstreamer:
     ## Plugin Loading
     ##
 
-    def load_backend(self, presentation):
+    def load_backend(self, presentation=None, filename=None):
         log.debug("Loading Output plugins...")
         
         load_plugins = []
@@ -179,11 +183,11 @@ class Gstreamer:
             p = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output")
             load_plugins.append(p)
             
-        if self.config.audio_feedback:
+        if self.config.audio_feedback and not self.cli:
             p = self.plugman.get_plugin_by_name("Audio Feedback", "Output")
             load_plugins.append(p)
-            
-        if self.config.video_preview:
+           
+        if self.config.video_preview and not self.cli:
             p = self.plugman.get_plugin_by_name("Video Preview", "Output")
             load_plugins.append(p)
                 
@@ -194,7 +198,15 @@ class Gstreamer:
             extension = plugin.plugin_object.get_extension()
 
             # Create a filename to record to.
-            record_name = get_record_name(presentation, extension, self.config.videodir)
+            if presentation is None and filename is not None:
+                record_name = get_record_name(extension, filename=filename, path=self.config.videodir)
+                presentation = Presentation(filename)
+            elif presentation is not None:
+                record_name = get_record_name(extension, presentation=presentation, path=self.config.videodir)
+            else:
+                # Invalid combination you must pass in a presentation or a filename
+                logging.error("Failed to configure recording name. No presentation or filename provided.")
+                return False
 
             # This is to ensure that we don't log a message when extension is None
             if extension is not None:

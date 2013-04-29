@@ -35,17 +35,15 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import settings, __version__
-from freeseer.framework.config import Config
-from freeseer.framework.database import QtDBConnector
-from freeseer.framework.multimedia import Gstreamer
-from freeseer.framework.plugin import PluginManager
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.controller.Client import ClientDialog
-from freeseer.frontend.record.ReportDialog import ReportDialog
+from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
+from freeseer.frontend.record.ReportDialog import ReportDialog
+
 
 log = logging.getLogger(__name__)
 
@@ -53,15 +51,18 @@ class RecordApp(FreeseerApp):
     """Freeseer's main GUI class."""
     def __init__(self):
         FreeseerApp.__init__(self)
+
+        self.controller = RecordingController()
+        self.config = self.controller.config
+        self.db = self.controller.db
+
         self.resize(550, 450)
-        
-        self.talks_to_save = []
-        self.talks_to_delete = []
         
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
         self.reportWidget = ReportDialog()
         self.reportWidget.setModal(True)
+        self.clientWidget = ClientDialog(self.config.configdir, self.db)
         
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
         
@@ -69,15 +70,9 @@ class RecordApp(FreeseerApp):
         self.geometry = None
         self.current_event = None
         self.current_room = None
+        self.controller.set_window_id(self.mainWidget.previewWidget.winId())
+        self.controller.set_audio_feedback_handler(self.audio_feedback)
 
-        self.config = Config(settings.configdir)
-        self.db = QtDBConnector(settings.configdir)
-        self.plugman = PluginManager(settings.configdir)
-        self.media = Gstreamer(self.config, self.plugman, self.mainWidget.previewWidget.winId(), self.audio_feedback)
-
-        # ClientDialog needs to be loaded after core to get the config directory        
-        self.clientWidget = ClientDialog(self.config.configdir, self.db)
-        
         # Set timer for recording how much time elapsed during a recording
         self.reset_timer()
         self.timer = QtCore.QTimer(self)
@@ -253,7 +248,8 @@ class RecordApp(FreeseerApp):
     ### UI Logic
     ###
     
-    def load_settings(self): 
+    def load_settings(self):
+        """Load settings for Freeseer"""
         log.info('Loading settings...')
         
         # Load default language.
@@ -282,6 +278,11 @@ class RecordApp(FreeseerApp):
         return self.mainWidget.talkComboBox.model().index(i, 1).data(QtCore.Qt.DisplayRole).toString()
     
     def standby(self, state):
+        """Prepares the GStreamer pipelines for recording
+
+        Sets the pipeline to paused state so that initiating a recording
+        does not have a delay due to GStreamer initialization.
+        """
         def toggle_gui(state):
             """Toggles GUI components when standby is pressed"""
             self.mainWidget.standbyPushButton.setHidden(state)
@@ -297,7 +298,7 @@ class RecordApp(FreeseerApp):
         if (state): # Prepare the pipelines
             if self.load_backend():
                 toggle_gui(True)
-                self.media.pause()
+                self.controller.pause()
                 self.mainWidget.statusLabel.setText(self.readyString)
             else:
                 toggle_gui(False)
@@ -314,7 +315,7 @@ class RecordApp(FreeseerApp):
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
             self.systray.showMessage("Recording", "RECORDING")
-            self.media.record()
+            self.controller.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
 
@@ -335,7 +336,7 @@ class RecordApp(FreeseerApp):
             logo_rec = QtGui.QPixmap(":/freeseer/logo.png")
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
-            self.media.stop()
+            self.controller.stop()
             self.mainWidget.pauseToolButton.setChecked(False)
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
@@ -360,22 +361,22 @@ class RecordApp(FreeseerApp):
                             self.mainWidget.talkComboBox.setCurrentIndex(i)
             
     def pause(self, state):
+        """Pause the recording"""
         if (state): # Pause Recording.
-            self.media.pause()
+            self.controller.pause()
             log.info("Recording paused.")
             self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
             self.timer.stop()
         elif self.mainWidget.recordPushButton.isChecked():
-            self.media.record()
+            self.controller.record()
             log.info("Recording unpaused.")
             self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
             self.mainWidget.statusLabel.setText(self.recordingString)
             self.timer.start(1000)
             
-    def load_backend(self, talk=None):
-        if talk is not None: self.media.stop()
-        
+    def load_backend(self):
+        """Prepares the backend for recording"""
         if self.current_presentation():
             presentation = self.current_presentation()
 
@@ -384,7 +385,7 @@ class RecordApp(FreeseerApp):
         else:
             presentation = Presentation(title=unicode("default"))
         
-        if self.media.load_backend(presentation): return True
+        if self.controller.load_backend(presentation): return True
         else: return False  # Error something failed while loading the backend
 
     def update_timer(self):
@@ -407,6 +408,7 @@ class RecordApp(FreeseerApp):
         self.time_seconds = 0
         
     def toggle_audio_feedback(self, enabled):
+        """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
 
     ###
@@ -532,10 +534,6 @@ class RecordApp(FreeseerApp):
     def closeEvent(self, event):
         log.info('Exiting freeseer...')
         event.accept()
-        
-    def keyPressEvent(self, event):
-        log.debug("Keypressed: %s" % event.key())
-        self.media.keyboard_event(event.key())
     
     '''
     Client functions

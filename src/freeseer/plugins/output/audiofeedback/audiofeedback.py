@@ -94,18 +94,3 @@ class AudioFeedback(IOutput):
             
     def set_feedbacksink(self, feedbacksink):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
-        
-    def get_properties(self):
-        return ['FeedbackSink']
-    
-    def get_property_value(self, property):
-        if property == "FeedbackSink":
-            return self.feedbacksink
-        else:
-            return "There's no property with such name"
-        
-    def set_property_value(self, property, value):
-        if(property == "FeedbackSink"):
-            self.set_feedbacksink(value)          
-        else:
-            return "Error: There's no property with such name" 

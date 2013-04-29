@@ -43,7 +43,7 @@ class PluginManager(QtCore.QObject):
     Provides the core functionality which enables plugin support in.
     '''
     
-    def __init__(self, configdir):
+    def __init__(self, configdir, profile=None):
         QtCore.QObject.__init__(self)
         
         self.firstrun = False
@@ -51,7 +51,12 @@ class PluginManager(QtCore.QObject):
         self.plugmanc = PluginManagerSingleton.get()
         
         self.configdir = configdir
-        self.configfile = os.path.abspath("%s/plugin.conf" % self.configdir)
+
+        if profile:
+            # Use profile if specified
+            self.configfile = os.path.abspath(os.path.join(self.configdir, "profiles", profile, "plugin.conf"))
+        else:
+            self.configfile = os.path.abspath(os.path.join(self.configdir, "plugin.conf"))
         
         self.config = ConfigParser.ConfigParser()
         self.load()
@@ -326,21 +331,6 @@ class IBackendPlugin(IPlugin):
         to load any required configurations for the plugin widget.
         """
         pass
-    
-    # CLI Functions
-    
-    """
-    These 3 following methods must be implemented if it's expected from a plugin to be
-    handled through CLI
-    """    
-    def get_properties(self):
-        raise NotImplementedError("Plugins supported by CLI should implement this!")
-    
-    def get_property_value(self, property):
-        raise NotImplementedError("Plugins supported by CLI should implement this!")
-    
-    def set_property_value(self, property, value):
-        raise NotImplementedError("Plugins supported by CLI should implement this!")
 
 class IAudioInput(IBackendPlugin):
     CATEGORY = "AudioInput"
