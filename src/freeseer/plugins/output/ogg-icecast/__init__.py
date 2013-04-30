@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-lib
 import ConfigParser
 
+# GStreamer
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer
 from freeseer.framework.plugin import IOutput
+
+# .freeseer-plugin custom
+import widget
 
 class OggIcecast(IOutput):
     name = "Ogg Icecast"
@@ -142,7 +149,7 @@ class OggIcecast(IOutput):
         
         try:
             self.ip = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "IP")
-            self.port = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port")
+            self.port = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port"))
             self.password = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Password")
             self.mount = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Mount")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
@@ -150,57 +157,40 @@ class OggIcecast(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", self.port)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", self.password)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", self.mount)
+        except TypeError:
+            # Temp fix for issue when reading framerate the 2nd time causes TypeError
+            pass
     
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
+            self.widget = widget.ConfigWidget()
             
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.label_ip = QtGui.QLabel("IP")
-            self.lineedit_ip = QtGui.QLineEdit()
-            layout.addRow(self.label_ip, self.lineedit_ip)
-            
-            self.label_port = QtGui.QLabel("Port")
-            self.lineedit_port = QtGui.QLineEdit()
-            layout.addRow(self.label_port, self.lineedit_port)
-            
-            self.label_password = QtGui.QLabel("Password")
-            self.lineedit_password = QtGui.QLineEdit()
-            layout.addRow(self.label_password, self.lineedit_password)
-            
-            self.label_mount = QtGui.QLabel("Mount")
-            self.lineedit_mount = QtGui.QLineEdit()
-            layout.addRow(self.label_mount, self.lineedit_mount)
-            
-            self.widget.connect(self.lineedit_ip, QtCore.SIGNAL('editingFinished()'), self.set_ip)
-            self.widget.connect(self.lineedit_port, QtCore.SIGNAL('editingFinished()'), self.set_port)
-            self.widget.connect(self.lineedit_password, QtCore.SIGNAL('editingFinished()'), self.set_password)
-            self.widget.connect(self.lineedit_mount, QtCore.SIGNAL('editingFinished()'), self.set_mount)
+            self.widget.connect(self.widget.lineedit_ip, SIGNAL('editingFinished()'), self.set_ip)
+            self.widget.connect(self.widget.spinbox_port, SIGNAL('valueChanged(int)'), self.set_port)
+            self.widget.connect(self.widget.lineedit_password, SIGNAL('editingFinished()'), self.set_password)
+            self.widget.connect(self.widget.lineedit_mount, SIGNAL('editingFinished()'), self.set_mount)
             
         return self.widget
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
             
-        self.lineedit_ip.setText(self.ip)
-        self.lineedit_port.setText(self.port)
-        self.lineedit_password.setText(self.password)
-        self.lineedit_mount.setText(self.mount)
+        self.widget.lineedit_ip.setText(self.ip)
+        self.widget.spinbox_port.setValue(self.port)
+        self.widget.lineedit_password.setText(self.password)
+        self.widget.lineedit_mount.setText(self.mount)
 
     def set_ip(self):
-        ip = str(self.lineedit_ip.text())
+        ip = str(self.widget.lineedit_ip.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", ip)
         
-    def set_port(self):
-        port = str(self.lineedit_port.text())
+    def set_port(self, port):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", port)
         
     def set_password(self):
-        password = str(self.lineedit_password.text())
+        password = str(self.widget.lineedit_password.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", password)
         
     def set_mount(self):
-        mount = str(self.lineedit_mount.text())
+        mount = str(self.widget.lineedit_mount.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", mount)

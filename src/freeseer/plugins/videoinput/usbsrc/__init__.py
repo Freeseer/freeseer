@@ -23,17 +23,24 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 import os
 import sys
 
+# GStreamer modules
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt modules
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer modules
 from freeseer.framework.plugin import IVideoInput
+
+# .freeseer-plugin custom modules
+import widget
 
 class USBSrc(IVideoInput):
     name = "USB Source"
@@ -76,19 +83,11 @@ class USBSrc(IVideoInput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.label = QtGui.QLabel("Video Device")
-            self.combobox = QtGui.QComboBox()
-            self.combobox.setMinimumWidth(150)
-            layout.addRow(self.label, self.combobox)
+            self.widget = widget.ConfigWidget()
             
             # Connections
-            self.widget.connect(self.combobox, 
-                                QtCore.SIGNAL('currentIndexChanged(int)'), 
+            self.widget.connect(self.widget.devicesCombobox,
+                                SIGNAL('currentIndexChanged(int)'),
                                 self.set_device)
             
         return self.widget
@@ -97,12 +96,12 @@ class USBSrc(IVideoInput):
         self.load_config(plugman)
                 
         # Load the combobox with inputs
-        self.combobox.clear()
+        self.widget.devicesCombobox.clear()
         n = 0
         for device, devurl in self.get_devices().items():
-            self.combobox.addItem(device, devurl)
+            self.widget.devicesCombobox.addItem(device, devurl)
             if device == self.device:
-                self.combobox.setCurrentIndex(n)
+                self.widget.devicesCombobox.setCurrentIndex(n)
             n = n + 1
             
     def get_devices(self):
@@ -143,5 +142,5 @@ class USBSrc(IVideoInput):
         return devicemap
     
     def set_device(self, device):
-        devname = self.combobox.itemData(device).toString()
+        devname = self.widget.devicesCombobox.itemData(device).toString()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", devname)

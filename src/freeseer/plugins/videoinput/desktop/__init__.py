@@ -23,26 +23,26 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-lib
 import ConfigParser
 import logging
 import sys
 
+# GStreamer modules
 import pygst
 pygst.require("0.10")
 import gst
 
+# PyQt4 modules
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QDesktopWidget
-from PyQt4.QtGui import QFormLayout
-from PyQt4.QtGui import QHBoxLayout
-from PyQt4.QtGui import QLabel
-from PyQt4.QtGui import QPushButton
-from PyQt4.QtGui import QRadioButton
-from PyQt4.QtGui import QSpinBox
-from PyQt4.QtGui import QWidget
 
+# Freeseer modules
 from freeseer.framework.plugin import IVideoInput
 from freeseer.framework.area_selector import AreaSelector
+
+# .freeseer-plugin custom modules
+import widget
 
 log = logging.getLogger(__name__)
 
@@ -146,34 +146,13 @@ class DesktopLinuxSrc(IVideoInput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QWidget()
-            
-            layout = QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.desktopLabel = QLabel("Record Desktop")
-            self.desktopButton = QRadioButton()
-            layout.addRow(self.desktopLabel, self.desktopButton)
-            
-            # Record Area of Desktop
-            areaGroup = QHBoxLayout()
-            self.areaLabel = QLabel("Record Region")
-            self.areaButton = QRadioButton()
-            self.setAreaButton = QPushButton("Set")
-            areaGroup.addWidget(self.areaButton)
-            areaGroup.addWidget(self.setAreaButton)
-            layout.addRow(self.areaLabel, areaGroup)
-            
-            # Select screen to record
-            self.screenLabel = QLabel("Screen")
-            self.screenSpinBox = QSpinBox()
-            layout.addRow(self.screenLabel, self.screenSpinBox)
+            self.widget = widget.ConfigWidget()
             
             # Connections
-            self.widget.connect(self.desktopButton, SIGNAL('clicked()'), self.set_desktop_full)
-            self.widget.connect(self.areaButton, SIGNAL('clicked()'), self.set_desktop_area)
-            self.widget.connect(self.setAreaButton, SIGNAL('clicked()'), self.area_select)
-            self.widget.connect(self.screenSpinBox, SIGNAL('valueChanged(int)'), self.set_screen)
+            self.widget.connect(self.widget.desktopButton, SIGNAL('clicked()'), self.set_desktop_full)
+            self.widget.connect(self.widget.areaButton, SIGNAL('clicked()'), self.set_desktop_area)
+            self.widget.connect(self.widget.setAreaButton, SIGNAL('clicked()'), self.area_select)
+            self.widget.connect(self.widget.screenSpinBox, SIGNAL('valueChanged(int)'), self.set_screen)
             
             
         return self.widget
@@ -182,14 +161,14 @@ class DesktopLinuxSrc(IVideoInput):
         self.load_config(plugman)
         
         if self.desktop == "Full":
-            self.desktopButton.setChecked(True)
+            self.widget.desktopButton.setChecked(True)
         elif self.desktop == "Area":
-            self.areaButton.setChecked(True)
+            self.widget.areaButton.setChecked(True)
         
         # Try to detect how many screens the user has
         # minus 1 since we like to start count at 0
         max_screens = QDesktopWidget().screenCount()
-        self.screenSpinBox.setMaximum(max_screens - 1)
+        self.widget.screenSpinBox.setMaximum(max_screens - 1)
             
             
     def set_screen(self, screen):

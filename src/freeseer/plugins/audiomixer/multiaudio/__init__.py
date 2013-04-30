@@ -23,13 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Aaron Brubacher
 '''
 
+# python-libs
 import ConfigParser
+
+# GStreamer
 import pygst
 pygst.require('0.10')
 import gst
-from PyQt4 import QtGui, QtCore
 
+# PyQt
+from PyQt4.QtCore import SIGNAL
+
+# Freeseer
 from freeseer.framework.plugin import IAudioMixer
+
+# .freeseer-plugin custom
+import widget
 
 class MultiAudio(IAudioMixer):
     name = 'Multiple Audio Inputs'
@@ -84,58 +93,41 @@ class MultiAudio(IAudioMixer):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            layout = QtGui.QGridLayout()
-            self.widget.setLayout(layout)
+            self.widget = widget.ConfigWidget()
             
-            self.source1_label = QtGui.QLabel('Source 1')
-            self.source1_combobox = QtGui.QComboBox()
-            self.source1_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            self.source1_button = QtGui.QPushButton("Setup") 
-            layout.addWidget(self.source1_label, 0, 0)
-            layout.addWidget(self.source1_combobox, 0, 1)
-            layout.addWidget(self.source1_button, 0, 2)
-            self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
-            self.widget.connect(self.source1_button, QtCore.SIGNAL('clicked()'), self.source1_setup)
-            
-            self.source2_label = QtGui.QLabel('Source 2')
-            self.source2_combobox = QtGui.QComboBox()
-            self.source2_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            self.source2_button = QtGui.QPushButton("Setup") 
-            layout.addWidget(self.source2_label, 1, 0)
-            layout.addWidget(self.source2_combobox, 1, 1)
-            layout.addWidget(self.source2_button, 1, 2)
-            self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
-            self.widget.connect(self.source2_button, QtCore.SIGNAL('clicked()'), self.source2_setup)
+            self.widget.connect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
+            self.widget.connect(self.widget.source1_button, SIGNAL('clicked()'), self.source1_setup)
+            self.widget.connect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
+            self.widget.connect(self.widget.source2_button, SIGNAL('clicked()'), self.source2_setup)
         return self.widget
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
         plugins = self.plugman.get_audioinput_plugins()
-        self.widget.disconnect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
-        self.widget.disconnect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
-        self.source1_combobox.clear()
-        self.source2_combobox.clear()
+        self.widget.disconnect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
+        self.widget.disconnect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
+        self.widget.source1_combobox.clear()
+        self.widget.source2_combobox.clear()
         for i, source in enumerate(plugins):
             name = source.plugin_object.get_name()
-            self.source1_combobox.addItem(name)
+            self.widget.source1_combobox.addItem(name)
             if self.input1 == name:
-                self.source1_combobox.setCurrentIndex(i)
-            self.source2_combobox.addItem(name)
+                self.widget.source1_combobox.setCurrentIndex(i)
+            self.widget.source2_combobox.addItem(name)
             if self.input2 == name:
-                self.source2_combobox.setCurrentIndex(i)
-        self.widget.connect(self.source1_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
-        self.widget.connect(self.source2_combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
+                self.widget.source2_combobox.setCurrentIndex(i)
+        self.widget.connect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
+        self.widget.connect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
         
     def source1_setup(self):
-        plugin_name = str(self.source1_combobox.currentText())
+        plugin_name = str(self.widget.source1_combobox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
         
     def source2_setup(self):
-        plugin_name = str(self.source2_combobox.currentText())
+        plugin_name = str(self.widget.source2_combobox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()

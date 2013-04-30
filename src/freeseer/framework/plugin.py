@@ -49,6 +49,8 @@ class PluginManager(QtCore.QObject):
         self.firstrun = False
         PluginManagerSingleton.setBehaviour([ConfigurablePluginManager])
         self.plugmanc = PluginManagerSingleton.get()
+        locator = self.plugmanc.getPluginLocator()
+        locator.setPluginInfoExtension("freeseer-plugin")
         
         self.configdir = configdir
 

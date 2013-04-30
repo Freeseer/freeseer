@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 
+# GStreamer modules
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt modules
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer modules
 from freeseer.framework.plugin import IVideoMixer
+
+# .freeseer-plugin custom modules
+import widget
 
 class VideoPassthrough(IVideoMixer):
     name = "Video Passthrough"
@@ -117,48 +124,15 @@ class VideoPassthrough(IVideoMixer):
     
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.label = QtGui.QLabel("Video Input")
-            self.combobox = QtGui.QComboBox()
-            layout.addRow(self.label, self.combobox)
-            
-            self.videocolourLabel = QtGui.QLabel(self.widget.tr("Colour Format"))
-            self.videocolourComboBox = QtGui.QComboBox()
-            self.videocolourComboBox.addItem("video/x-raw-rgb")
-            self.videocolourComboBox.addItem("video/x-raw-yuv")
-            self.videocolourComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            layout.addRow(self.videocolourLabel, self.videocolourComboBox)
-            
-            self.framerateLabel = QtGui.QLabel("Framerate")
-            self.framerateLayout = QtGui.QHBoxLayout()
-            self.framerateSlider = QtGui.QSlider()
-            self.framerateSlider.setOrientation(QtCore.Qt.Horizontal)
-            self.framerateSlider.setMinimum(0)
-            self.framerateSlider.setMaximum(60)
-            self.framerateSpinBox = QtGui.QSpinBox()
-            self.framerateSpinBox.setMinimum(0)
-            self.framerateSpinBox.setMaximum(60)
-            self.framerateLayout.addWidget(self.framerateSlider)
-            self.framerateLayout.addWidget(self.framerateSpinBox)
-            layout.addRow(self.framerateLabel, self.framerateLayout)
-            
-            self.videoscaleLabel = QtGui.QLabel("Video Scale")
-            self.videoscaleComboBox = QtGui.QComboBox()
-            self.videoscaleComboBox.addItem("NOSCALE")
-            self.videoscaleComboBox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            layout.addRow(self.videoscaleLabel, self.videoscaleComboBox)
+            self.widget = widget.ConfigWidget()
             
             # Connections
-            self.widget.connect(self.combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
-            self.widget.connect(self.framerateSlider, QtCore.SIGNAL("valueChanged(int)"), self.framerateSpinBox.setValue)
-            self.widget.connect(self.framerateSpinBox, QtCore.SIGNAL("valueChanged(int)"), self.framerateSlider.setValue)
-            self.widget.connect(self.videocolourComboBox, QtCore.SIGNAL("currentIndexChanged(const QString&)"), self.set_videocolour)
-            self.widget.connect(self.framerateSlider, QtCore.SIGNAL("valueChanged(int)"), self.set_framerate)
-            self.widget.connect(self.framerateSpinBox, QtCore.SIGNAL("valueChanged(int)"), self.set_framerate)
+            self.widget.connect(self.widget.inputCombobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
+            self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.widget.framerateSpinBox.setValue)
+            self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.widget.framerateSlider.setValue)
+            self.widget.connect(self.widget.videocolourComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videocolour)
+            self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.set_framerate)
+            self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.set_framerate)
             
         return self.widget
 
@@ -171,18 +145,18 @@ class VideoPassthrough(IVideoMixer):
             sources.append(plugin.plugin_object.get_name())
                 
         # Load the combobox with inputs
-        self.combobox.clear()
+        self.widget.inputCombobox.clear()
         n = 0
         for i in sources:
-            self.combobox.addItem(i)
+            self.widget.inputCombobox.addItem(i)
             if i == self.input1:
-                self.combobox.setCurrentIndex(n)
+                self.widget.inputCombobox.setCurrentIndex(n)
             n = n + 1
             
-        vcolour_index = self.videocolourComboBox.findText(self.input_type)
-        self.videocolourComboBox.setCurrentIndex(vcolour_index)
+        vcolour_index = self.widget.videocolourComboBox.findText(self.input_type)
+        self.widget.videocolourComboBox.setCurrentIndex(vcolour_index)
         
-        self.framerateSlider.setValue(self.framerate)
+        self.widget.framerateSlider.setValue(self.framerate)
 
     def set_input(self, input):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
