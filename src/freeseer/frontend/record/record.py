@@ -324,9 +324,6 @@ class RecordApp(FreeseerApp):
                 self.hide_window()
                 self.visibilityAction.setText(self.showWindowString)
                 
-            if (self.config.delay_recording>0):
-                time.sleep(float(self.config.delay_recording))
-
             self.mainWidget.statusLabel.setText(self.recordingString)
             
             # Start timer.
