@@ -183,7 +183,7 @@ class TalkEditorApp(FreeseerApp):
                                     "", # level
                                     unicode(self.addTalkWidget.eventLineEdit.text()),
                                     unicode(self.addTalkWidget.roomLineEdit.text()),
-                                    unicode(datetime.toString()))
+                                    unicode(datetime.toString(QtCore.Qt.ISODate)))
         
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
