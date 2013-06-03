@@ -6,4 +6,4 @@ Module = videotestsrc
 Author = Thanh Ha
 Version = 0.2
 Website = http://fosslc.org
-Description = Basic Gstreamer videotestsrc
+Description = Basic GStreamer videotestsrc

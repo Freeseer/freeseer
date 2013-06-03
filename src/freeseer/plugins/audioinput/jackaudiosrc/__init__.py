@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 
+# GStreamer
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer
 from freeseer.framework.plugin import IAudioInput
+
+# .freeseer-plugin custom
+import widget
 
 class JackAudioSrc(IAudioInput):
     name = "Jack Audio Source"
@@ -72,54 +79,35 @@ class JackAudioSrc(IAudioInput):
     
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
+            self.widget = widget.ConfigWidget()
             
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.label_client = QtGui.QLabel("Client")
-            self.lineedit_client = QtGui.QLineEdit()
-            layout.addRow(self.label_client, self.lineedit_client)
-            
-            self.label_connect = QtGui.QLabel("Connect")
-            self.lineedit_connect = QtGui.QLineEdit()
-            layout.addRow(self.label_connect, self.lineedit_connect)
-            
-            self.label_server = QtGui.QLabel("Server")
-            self.lineedit_server = QtGui.QLineEdit()
-            layout.addRow(self.label_server, self.lineedit_server)
-            
-            self.label_clientname = QtGui.QLabel("Client Name")
-            self.lineedit_clientname = QtGui.QLineEdit()
-            layout.addRow(self.label_clientname, self.lineedit_clientname)
-            
-            self.widget.connect(self.lineedit_client, QtCore.SIGNAL('editingFinished()'), self.set_client)
-            self.widget.connect(self.lineedit_connect, QtCore.SIGNAL('editingFinished()'), self.set_connect)
-            self.widget.connect(self.lineedit_server, QtCore.SIGNAL('editingFinished()'), self.set_server)
-            self.widget.connect(self.lineedit_clientname, QtCore.SIGNAL('editingFinished()'), self.set_clientname)
+            self.widget.connect(self.widget.lineedit_client, SIGNAL('editingFinished()'), self.set_client)
+            self.widget.connect(self.widget.lineedit_connect, SIGNAL('editingFinished()'), self.set_connect)
+            self.widget.connect(self.widget.lineedit_server, SIGNAL('editingFinished()'), self.set_server)
+            self.widget.connect(self.widget.lineedit_clientname, SIGNAL('editingFinished()'), self.set_clientname)
             
         return self.widget
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
             
-        self.lineedit_client.setText(self.client)
-        self.lineedit_connect.setText(self.connect)
-        self.lineedit_server.setText(self.server)
-        self.lineedit_clientname.setText(self.clientname)
+        self.widget.lineedit_client.setText(self.client)
+        self.widget.lineedit_connect.setText(self.connect)
+        self.widget.lineedit_server.setText(self.server)
+        self.widget.lineedit_clientname.setText(self.clientname)
 
     def set_client(self):
-        client = str(self.lineedit_client.text())
+        client = str(self.widget.lineedit_client.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", client)
         
     def set_connect(self):
-        connect = str(self.lineedit_connect.text())
+        connect = str(self.widget.lineedit_connect.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", connect)
         
     def set_server(self):
-        server = str(self.lineedit_server.text())
+        server = str(self.widget.lineedit_server.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", server)
         
     def set_clientname(self):
-        clientname = str(self.lineedit_clientname.text())
+        clientname = str(self.widget.lineedit_clientname.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", clientname)

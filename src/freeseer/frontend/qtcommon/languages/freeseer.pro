@@ -7,7 +7,7 @@ SOURCES = ../AboutDialog.py \
           ../../talkeditor/talkeditor.py \
           ../../controller/Client.py \
           ../../controller/Server.py \
-          ../../../plugins/output/rtmp-streaming/rtmp-streaming.py
+          ../../../plugins/output/rtmp-streaming/__init__.py
 
 TRANSLATIONS = tr_en_US.ts \
                tr_ar_EG.ts \ 

@@ -23,15 +23,23 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
+import ConfigParser
 import logging
 
-import ConfigParser
+# GStreamer
 import pygst
 pygst.require("0.10")
 import gst
-from PyQt4 import QtGui, QtCore
 
+# PyQt
+from PyQt4.QtCore import SIGNAL
+
+# Freeseer
 from freeseer.framework.plugin import IAudioInput
+
+# .freeseer-plugin custom
+import widget
 
 log = logging.getLogger(__name__)
 
@@ -79,33 +87,31 @@ class PulseSrc(IAudioInput):
     
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
+            self.widget = widget.ConfigWidget()
             
-            self.source_label = QtGui.QLabel('Source')
-            self.source_combobox = QtGui.QComboBox()
-            self.source_combobox.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
-            layout.addRow(self.source_label, self.source_combobox)
-            
-            self.widget.connect(self.source_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_source)
+            self.widget.connect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
         return self.widget
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
         sources = self.__get_sources()
-        self.widget.disconnect(self.source_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_source) #stop signals while populating
-        self.source_combobox.clear()
+
+        # stop signals while populating
+        self.widget.disconnect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
+
+        self.widget.source_combobox.clear()
         for i, source in enumerate(sources):
-            self.source_combobox.addItem(source[1], userData=source[0])
+            self.widget.source_combobox.addItem(source[1], userData=source[0])
             if self.source == source[0]:
-                self.source_combobox.setCurrentIndex(i)
-        self.widget.connect(self.source_combobox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_source)
+                self.widget.source_combobox.setCurrentIndex(i)
+
+        # reconnect the signals
+        self.widget.connect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
         
 
     def set_source(self, index):
-        self.source = self.source_combobox.itemData(index).toString()
+        self.source = self.widget.source_combobox.itemData(index).toString()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
         self.plugman.save()
         log.debug('Set pulseaudio source to %s' % self.source)

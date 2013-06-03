@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 
+# GStreamer modules
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt modules
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer modules
 from freeseer.framework.plugin import IVideoMixer
+
+# .freeseer-plugin custom modules
+import widget
 
 class PictureInPicture(IVideoMixer):
     name = "Picture-In-Picture"
@@ -154,29 +161,12 @@ class PictureInPicture(IVideoMixer):
     def get_widget(self):
         
         if self.widget is None:
-            self.widget = QtGui.QWidget()
+            self.widget = widget.ConfigWidget()
             
-            layout = QtGui.QGridLayout()
-            self.widget.setLayout(layout)
-            
-            self.mainInputLabel = QtGui.QLabel("Main Source")
-            self.mainInputComboBox = QtGui.QComboBox()
-            self.mainInputSetupButton = QtGui.QPushButton("Setup")
-            layout.addWidget(self.mainInputLabel, 0, 0)
-            layout.addWidget(self.mainInputComboBox, 0, 1)
-            layout.addWidget(self.mainInputSetupButton, 0, 2)
-            
-            self.pipInputLabel = QtGui.QLabel("PIP Source")
-            self.pipInputComboBox = QtGui.QComboBox()
-            self.pipInputSetupButton = QtGui.QPushButton("Setup")
-            layout.addWidget(self.pipInputLabel, 1, 0)
-            layout.addWidget(self.pipInputComboBox, 1, 1)
-            layout.addWidget(self.pipInputSetupButton, 1, 2)
-            
-            self.widget.connect(self.mainInputComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_maininput)
-            self.widget.connect(self.mainInputSetupButton, QtCore.SIGNAL('clicked()'), self.open_mainInputSetup)
-            self.widget.connect(self.pipInputComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_pipinput)
-            self.widget.connect(self.pipInputSetupButton, QtCore.SIGNAL('clicked()'), self.open_pipInputSetup)
+            self.widget.connect(self.widget.mainInputComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_maininput)
+            self.widget.connect(self.widget.mainInputSetupButton, SIGNAL('clicked()'), self.open_mainInputSetup)
+            self.widget.connect(self.widget.pipInputComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_pipinput)
+            self.widget.connect(self.widget.pipInputSetupButton, SIGNAL('clicked()'), self.open_pipInputSetup)
             
         return self.widget
     
@@ -189,21 +179,21 @@ class PictureInPicture(IVideoMixer):
             sources.append(plugin.plugin_object.get_name())
         
         # Load the main combobox with inputs
-        self.mainInputComboBox.clear()
+        self.widget.mainInputComboBox.clear()
         n = 0
         for i in sources:
-            self.mainInputComboBox.addItem(i)
+            self.widget.mainInputComboBox.addItem(i)
             if i == self.input1: # Find the current main input source and set it
-                self.mainInputComboBox.setCurrentIndex(n)
+                self.widget.mainInputComboBox.setCurrentIndex(n)
             n = n +1
         
         # Load the pip combobox with inputs
-        self.pipInputComboBox.clear()
+        self.widget.pipInputComboBox.clear()
         n = 0
         for i in sources:
-            self.pipInputComboBox.addItem(i)
+            self.widget.pipInputComboBox.addItem(i)
             if i == self.input2: # Find the current pip input source and set it
-                self.pipInputComboBox.setCurrentIndex(n)
+                self.widget.pipInputComboBox.setCurrentIndex(n)
             n = n +1
         
             
@@ -211,7 +201,7 @@ class PictureInPicture(IVideoMixer):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
         
     def open_mainInputSetup(self):
-        plugin_name = str(self.mainInputComboBox.currentText())
+        plugin_name = str(self.widget.mainInputComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
@@ -220,7 +210,7 @@ class PictureInPicture(IVideoMixer):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
         
     def open_pipInputSetup(self):
-        plugin_name = str(self.pipInputComboBox.currentText())
+        plugin_name = str(self.widget.pipInputComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()

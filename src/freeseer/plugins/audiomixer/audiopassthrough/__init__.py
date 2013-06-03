@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 
+# GStreamer
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer
 from freeseer.framework.plugin import IAudioMixer
+
+# .freeseer-plugin custom
+import widget
 
 class AudioPassthrough(IAudioMixer):
     name = "Audio Passthrough"
@@ -77,17 +84,9 @@ class AudioPassthrough(IAudioMixer):
     
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
+            self.widget = widget.ConfigWidget()
             
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.label = QtGui.QLabel("Audio Input")
-            self.combobox = QtGui.QComboBox()
-            self.combobox.setMinimumWidth(150)
-            layout.addRow(self.label, self.combobox)
-            
-            self.widget.connect(self.combobox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
+            self.widget.connect(self.widget.combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
             
         return self.widget
 
@@ -100,12 +99,12 @@ class AudioPassthrough(IAudioMixer):
             sources.append(plugin.plugin_object.get_name())
                 
         # Load the combobox with inputs
-        self.combobox.clear()
+        self.widget.combobox.clear()
         n = 0
         for i in sources:
-            self.combobox.addItem(i)
+            self.widget.combobox.addItem(i)
             if i == self.input1:
-                self.combobox.setCurrentIndex(n)
+                self.widget.combobox.setCurrentIndex(n)
             n = n +1
 
     def set_input(self, input):

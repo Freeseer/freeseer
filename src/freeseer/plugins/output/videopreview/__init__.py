@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 
+# GStreamer
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQT
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer
 from freeseer.framework.plugin import IOutput
+
+# .freeseer-plugin custom
+import widget
 
 class VideoPreview(IOutput):
     name = "Video Preview"
@@ -83,35 +90,15 @@ class VideoPreview(IOutput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            # Preview
-            self.previewLabel = QtGui.QLabel(self.widget.tr("Preview"))
-            self.previewComboBox = QtGui.QComboBox()
-            self.previewComboBox.addItem("autovideosink")
-            self.previewComboBox.addItem("ximagesink")
-            self.previewComboBox.addItem("xvimagesink")
-            self.previewComboBox.addItem("gconfvideosink")
-            
-            layout.addRow(self.previewLabel, self.previewComboBox)
-            
-            self.widget.connect(self.previewComboBox, 
-                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
-                                self.set_previewsink)
+            self.widget = widget.ConfigWidget()
 
-            # Leaky Queue
-            # Allows user to set queue in video to be leaky - required to work with RTMP streaming plugin
-            self.leakyQueueLabel = QtGui.QLabel(self.widget.tr("Leaky Queue"))
-            self.leakyQueueComboBox = QtGui.QComboBox()
-            self.leakyQueueComboBox.addItems(self.LEAKY_VALUES)
-            
-            layout.addRow(self.leakyQueueLabel, self.leakyQueueComboBox)
-                        
-            self.widget.connect(self.leakyQueueComboBox, 
-                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+            self.widget.leakyQueueComboBox.addItems(self.LEAKY_VALUES)
+
+            self.widget.connect(self.widget.previewComboBox, 
+                                SIGNAL('currentIndexChanged(const QString&)'), 
+                                self.set_previewsink)
+            self.widget.connect(self.widget.leakyQueueComboBox, 
+                                SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_leakyqueue)
 
         return self.widget
@@ -119,11 +106,11 @@ class VideoPreview(IOutput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
-        previewIndex = self.previewComboBox.findText(self.previewsink)
-        self.previewComboBox.setCurrentIndex(previewIndex)
+        previewIndex = self.widget.previewComboBox.findText(self.previewsink)
+        self.widget.previewComboBox.setCurrentIndex(previewIndex)
             
-        leakyQueueIndex = self.leakyQueueComboBox.findText(self.leakyqueue)
-        self.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
+        leakyQueueIndex = self.widget.leakyQueueComboBox.findText(self.leakyqueue)
+        self.widget.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
             
     def set_previewsink(self, previewsink):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)

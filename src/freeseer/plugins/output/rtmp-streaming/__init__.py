@@ -245,6 +245,9 @@ class RTMPOutput(IOutput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_dest)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API", self.use_justin_api)
+        except TypeError:
+            # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
+            pass
 
         try:
             self.justin_api_persistent = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object")

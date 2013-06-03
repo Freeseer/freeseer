@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 
+# GStreamer modules
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt4 modules
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer modules
 from freeseer.framework.plugin import IVideoInput
+
+# .freeseer-plugin custom modules
+import widget
 
 class VideoTestSrc(IVideoInput):
     name = "Video Test Source"
@@ -77,41 +84,21 @@ class VideoTestSrc(IVideoInput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            
-            layout = QtGui.QVBoxLayout()
-            self.widget.setLayout(layout)
-            
-            #
-            # Settings
-            #
-            
-            self.liveCheckBox = QtGui.QCheckBox("Live Source")
-            layout.addWidget(self.liveCheckBox)
-            
-            formWidget = QtGui.QWidget()
-            formLayout = QtGui.QFormLayout()
-            formWidget.setLayout(formLayout)
-            layout.addWidget(formWidget)
-            
-            self.patternLabel = QtGui.QLabel("Pattern")
-            self.patternComboBox = QtGui.QComboBox()
+            self.widget = widget.ConfigWidget()
+
             for i in self.PATTERNS:
-                self.patternComboBox.addItem(i)
-            
-            formLayout.addRow(self.patternLabel, self.patternComboBox)
-            
-            self.widget.connect(self.liveCheckBox, QtCore.SIGNAL('toggled(bool)'), self.set_live)
-            self.widget.connect(self.patternComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_pattern)
-            
+                self.widget.patternComboBox.addItem(i)
+
+            self.widget.connect(self.widget.liveCheckBox, SIGNAL('toggled(bool)'), self.set_live)
+            self.widget.connect(self.widget.patternComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_pattern)
         return self.widget
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
-        self.liveCheckBox.setChecked(bool(self.live))
-        patternIndex = self.patternComboBox.findText(self.pattern)
-        self.patternComboBox.setCurrentIndex(patternIndex)
+        self.widget.liveCheckBox.setChecked(bool(self.live))
+        patternIndex = self.widget.patternComboBox.findText(self.pattern)
+        self.widget.patternComboBox.setCurrentIndex(patternIndex)
 
     def set_live(self, checked):
         self.live = checked

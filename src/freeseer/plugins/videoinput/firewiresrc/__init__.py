@@ -23,16 +23,23 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+# python-libs
 import ConfigParser
 import os
 
+# GStreamer modules
 import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt4 modules
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer modules
 from freeseer.framework.plugin import IVideoInput
+
+# .freeseer-plugin custom modules
+import widget
 
 class FirewireSrc(IVideoInput):
     name = "Firewire Source"
@@ -94,18 +101,11 @@ class FirewireSrc(IVideoInput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
-            
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            
-            self.label = QtGui.QLabel("Video Device")
-            self.combobox = QtGui.QComboBox()
-            layout.addRow(self.label, self.combobox)
+            self.widget = widget.ConfigWidget()
             
             # Connections
-            self.widget.connect(self.combobox, 
-                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+            self.widget.connect(self.widget.devicesCombobox, 
+                                SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_device)
                         
         return self.widget
@@ -114,12 +114,12 @@ class FirewireSrc(IVideoInput):
         self.load_config(plugman)
                 
         # Load the combobox with inputs
-        self.combobox.clear()
+        self.widget.devicesCombobox.clear()
         n = 0
         for i in self.device_list:
-            self.combobox.addItem(i)
+            self.widget.devicesCombobox.addItem(i)
             if i == self.device:
-                self.combobox.setCurrentIndex(n)
+                self.widget.devicesCombobox.setCurrentIndex(n)
             n = n +1
             
     def set_device(self, device):

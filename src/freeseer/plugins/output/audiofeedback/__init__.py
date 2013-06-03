@@ -23,15 +23,22 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
-
-import pygst
+# python-lib
 import ConfigParser
+
+# GStreamer
+import pygst
 pygst.require("0.10")
 import gst
 
-from PyQt4 import QtGui, QtCore
+# PyQt
+from PyQt4.QtCore import SIGNAL
 
+# Freeseer
 from freeseer.framework.plugin import IOutput
+
+# .freeseer-plugin
+import widget
 
 class AudioFeedback(IOutput):
     name = "Audio Feedback"
@@ -69,19 +76,10 @@ class AudioFeedback(IOutput):
         
     def get_widget(self):
         if self.widget is None:
-            self.widget = QtGui.QWidget()
+            self.widget = widget.ConfigWidget()
             
-            layout = QtGui.QFormLayout()
-            self.widget.setLayout(layout)
-            self.feedbackLabel = QtGui.QLabel(self.widget.tr("Feedback"))
-            self.feedbackComboBox = QtGui.QComboBox()
-            self.feedbackComboBox.addItem("autoaudiosink")
-            self.feedbackComboBox.addItem("alsasink")
-            
-            layout.addRow(self.feedbackLabel, self.feedbackComboBox)
-            
-            self.widget.connect(self.feedbackComboBox, 
-                                QtCore.SIGNAL('currentIndexChanged(const QString&)'), 
+            self.widget.connect(self.widget.feedbackComboBox, 
+                                SIGNAL('currentIndexChanged(const QString&)'), 
                                 self.set_feedbacksink)
             
         return self.widget
@@ -89,8 +87,8 @@ class AudioFeedback(IOutput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
-        feedbackIndex = self.feedbackComboBox.findText(self.feedbacksink)
-        self.feedbackComboBox.setCurrentIndex(feedbackIndex)
+        feedbackIndex = self.widget.feedbackComboBox.findText(self.feedbacksink)
+        self.widget.feedbackComboBox.setCurrentIndex(feedbackIndex)
             
     def set_feedbacksink(self, feedbacksink):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
