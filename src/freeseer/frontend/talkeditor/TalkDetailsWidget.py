@@ -32,7 +32,7 @@ from PyQt4.QtGui import QGridLayout
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QLineEdit
-from PyQt4.QtGui import QTextEdit
+from PyQt4.QtGui import QPlainTextEdit
 from PyQt4.QtGui import QTimeEdit
 from PyQt4.QtGui import QWidget
 
@@ -49,23 +49,23 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.titleLabel, 0, 0, 1, 1)
         self.layout.addWidget(self.titleLineEdit, 0, 1, 1, 3)
 
-        self.eventLabel = QLabel('Event')
-        self.eventLineEdit = QLineEdit()
-        self.roomLabel = QLabel('Room')
-        self.roomLineEdit = QLineEdit()
-        self.layout.addWidget(self.eventLabel, 1, 0, 1, 1)
-        self.layout.addWidget(self.eventLineEdit, 1, 1, 1, 1)
-        self.layout.addWidget(self.roomLabel, 1, 2, 1, 1)
-        self.layout.addWidget(self.roomLineEdit, 1, 3, 1, 1)
-
         self.presenterLabel = QLabel('Presenter')
         self.presenterLineEdit = QLineEdit()
         self.categoryLabel = QLabel('Category')
         self.categoryLineEdit = QLineEdit()
-        self.layout.addWidget(self.presenterLabel, 2, 0, 1, 1)
-        self.layout.addWidget(self.presenterLineEdit, 2, 1, 1, 1)
-        self.layout.addWidget(self.categoryLabel, 2, 2, 1, 1)
-        self.layout.addWidget(self.categoryLineEdit, 2, 3, 1, 1)
+        self.layout.addWidget(self.presenterLabel, 1, 0, 1, 1)
+        self.layout.addWidget(self.presenterLineEdit, 1, 1, 1, 1)
+        self.layout.addWidget(self.categoryLabel, 1, 2, 1, 1)
+        self.layout.addWidget(self.categoryLineEdit, 1, 3, 1, 1)
+
+        self.eventLabel = QLabel('Event')
+        self.eventLineEdit = QLineEdit()
+        self.roomLabel = QLabel('Room')
+        self.roomLineEdit = QLineEdit()
+        self.layout.addWidget(self.eventLabel, 2, 0, 1, 1)
+        self.layout.addWidget(self.eventLineEdit, 2, 1, 1, 1)
+        self.layout.addWidget(self.roomLabel, 2, 2, 1, 1)
+        self.layout.addWidget(self.roomLineEdit, 2, 3, 1, 1)
 
         self.dateLayout = QHBoxLayout()
         self.dateLabel = QLabel('Date')
@@ -80,7 +80,7 @@ class TalkDetailsWidget(QWidget):
 
         self.descriptionLabel = QLabel('Description')
         self.descriptionLabel.setAlignment(Qt.AlignTop)
-        self.descriptionTextEdit = QTextEdit()
+        self.descriptionTextEdit = QPlainTextEdit()
         self.layout.addWidget(self.descriptionLabel, 4, 0, 1, 1)
         self.layout.addWidget(self.descriptionTextEdit, 4, 1, 1, 3)
 
