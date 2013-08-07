@@ -48,8 +48,10 @@ class TalkEditorApp(FreeseerApp):
     '''
     Freeseer talk database editor main gui class
     '''
-    def __init__(self, core=None):
+    def __init__(self, recordapp=None):
         FreeseerApp.__init__(self)
+
+        self.recordapp = recordapp
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -197,6 +199,11 @@ class TalkEditorApp(FreeseerApp):
         self.presentationModel.select()
         
         self.hide_add_talk_widget()
+
+        # If this is launched from the recording app
+        # refresh the talk list
+        if self.recordapp:
+            self.recordapp.load_event_list()
 
     def remove_talk(self):
         try:

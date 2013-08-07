@@ -55,8 +55,10 @@ class ConfigToolApp(FreeseerApp):
     ConfigTool is used to tune settings used by the Freeseer Application
     '''
 
-    def __init__(self, core=None):
+    def __init__(self, recordapp=None):
         FreeseerApp.__init__(self)
+
+        self.recordapp = recordapp
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)

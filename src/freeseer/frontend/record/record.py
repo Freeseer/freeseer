@@ -39,10 +39,12 @@ from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
+from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
 from freeseer.frontend.record.ReportDialog import ReportDialog
+from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
 
 
 log = logging.getLogger(__name__)
@@ -58,11 +60,18 @@ class RecordApp(FreeseerApp):
 
         self.resize(550, 450)
         
+        # Setup custom widgets
         self.mainWidget = RecordingWidget()
         self.setCentralWidget(self.mainWidget)
         self.reportWidget = ReportDialog()
         self.reportWidget.setModal(True)
         self.clientWidget = ClientDialog(self.config.configdir, self.db)
+        self.configToolApp = ConfigToolApp(self)
+        self.configToolApp.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.configToolApp.setWindowFlags(QtCore.Qt.Dialog)
+        self.talkEditorApp = TalkEditorApp(self)
+        self.talkEditorApp.setWindowModality(QtCore.Qt.ApplicationModal)
+        self.talkEditorApp.setWindowFlags(QtCore.Qt.Dialog)
         
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
         
@@ -81,6 +90,20 @@ class RecordApp(FreeseerApp):
         #
         # Setup Menubar
         #
+
+        # Build the options Menu, TalkEditor and ConfigTool
+        self.menuOptions = QtGui.QMenu(self.menubar)
+        self.menuOptions.setObjectName(_fromUtf8("menuOptions"))
+        self.menubar.insertMenu(self.menuHelp.menuAction(), self.menuOptions)
+        self.actionConfigTool = QtGui.QAction(self)
+        self.actionConfigTool.setShortcut("Ctrl+C")
+        self.actionConfigTool.setObjectName(_fromUtf8("actionConfigTool"))
+        self.actionTalkEditor = QtGui.QAction(self)
+        self.actionTalkEditor.setShortcut("Ctrl+E")
+        self.actionTalkEditor.setObjectName(_fromUtf8("actionTalkEditor"))
+        self.menuOptions.addAction(self.actionConfigTool)
+        self.menuOptions.addAction(self.actionTalkEditor)
+
         folderIcon = QtGui.QIcon.fromTheme("folder")
         self.actionOpenVideoFolder = QtGui.QAction(self)
         self.actionOpenVideoFolder.setShortcut("Ctrl+O")
@@ -128,7 +151,9 @@ class RecordApp(FreeseerApp):
         self.connect(self.mainWidget.audioFeedbackCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_feedback)
 
         # Main Window Connections
-        #self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
+        self.connect(self.actionConfigTool, QtCore.SIGNAL('triggered()'), self.open_configtool)
+        self.connect(self.actionTalkEditor, QtCore.SIGNAL('triggered()'), self.open_talkeditor)
+        self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
 
@@ -188,6 +213,9 @@ class RecordApp(FreeseerApp):
         #
         # Menubar
         #
+        self.menuOptions.setTitle(self.app.translate("RecordApp", "&Options"))
+        self.actionConfigTool.setText(self.app.translate("RecordApp", "&ConfigTool"))
+        self.actionTalkEditor.setText(self.app.translate("RecordApp", "Talk&Editor"))
         self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
         self.actionClient.setText(self.app.translate("RecordApp", "&Connect to server"))
         self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
@@ -558,3 +586,12 @@ class RecordApp(FreeseerApp):
                 log.info("Paused recording by server's request")
             elif message == 'Resume':
                 log.info("Resumed recording by server's request")
+
+    ###
+    ### Utility
+    ###
+    def open_configtool(self):
+        self.configToolApp.show()
+
+    def open_talkeditor(self):
+        self.talkEditorApp.show()
