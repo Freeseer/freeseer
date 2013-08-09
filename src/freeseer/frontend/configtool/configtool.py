@@ -300,6 +300,10 @@ class ConfigToolApp(FreeseerApp):
     def toggle_autohide(self, state):
         self.config.auto_hide = state
         self.config.writeConfig()
+
+        # Make recordapp to update it's config
+        if self.recordapp:
+            self.recordapp.config.readConfig()
             
     ###
     ### AV Related

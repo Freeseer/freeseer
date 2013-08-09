@@ -351,6 +351,7 @@ class RecordApp(FreeseerApp):
             if(self.config.auto_hide == True):
                 self.hide_window()
                 self.visibilityAction.setText(self.showWindowString)
+                log.debug('auto-hide is enabled, main window is now hidden in systray.');
                 
             self.mainWidget.statusLabel.setText(self.recordingString)
             
