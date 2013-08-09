@@ -30,10 +30,13 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QFormLayout
 from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtGui import QSlider
 from PyQt4.QtGui import QSpinBox
+from PyQt4.QtGui import QStackedWidget
+from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
 class ConfigWidget(QWidget):
@@ -45,8 +48,21 @@ class ConfigWidget(QWidget):
         self.setLayout(layout)
         
         self.inputLabel = QLabel("Video Input")
+        self.inputLayout = QHBoxLayout()
         self.inputCombobox = QComboBox()
-        layout.addRow(self.inputLabel, self.inputCombobox)
+        self.inputSettingsToolButton = QToolButton()
+        self.inputSettingsToolButton.setText("Settings")
+        configIcon = QIcon.fromTheme("preferences-other")
+        self.inputSettingsToolButton.setIcon(configIcon)
+        self.inputSettingsToolButton.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.inputSettingsToolButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.inputSettingsStack = QStackedWidget()
+        blankWidget = QWidget()
+        self.inputSettingsStack.addWidget(blankWidget)
+        self.inputSettingsStack.addWidget(self.inputSettingsToolButton)
+        self.inputLayout.addWidget(self.inputCombobox)
+        self.inputLayout.addWidget(self.inputSettingsStack)
+        layout.addRow(self.inputLabel, self.inputLayout)
         
         self.videocolourLabel = QLabel(self.tr("Colour Format"))
         self.videocolourComboBox = QComboBox()

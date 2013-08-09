@@ -26,9 +26,15 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QFormLayout
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QSizePolicy
+from PyQt4.QtGui import QStackedWidget
+from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
 class ConfigWidget(QWidget):
@@ -40,6 +46,19 @@ class ConfigWidget(QWidget):
         self.setLayout(layout)
 
         self.label = QLabel("Audio Input")
+        self.inputLayout = QHBoxLayout()
         self.combobox = QComboBox()
         self.combobox.setMinimumWidth(150)
-        layout.addRow(self.label, self.combobox)
+        self.inputSettingsToolButton = QToolButton()
+        self.inputSettingsToolButton.setText("Settings")
+        configIcon = QIcon.fromTheme("preferences-other")
+        self.inputSettingsToolButton.setIcon(configIcon)
+        self.inputSettingsToolButton.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.inputSettingsToolButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.inputSettingsStack = QStackedWidget()
+        blankWidget = QWidget()
+        self.inputSettingsStack.addWidget(blankWidget)
+        self.inputSettingsStack.addWidget(self.inputSettingsToolButton)
+        self.inputLayout.addWidget(self.combobox)
+        self.inputLayout.addWidget(self.inputSettingsStack)
+        layout.addRow(self.label, self.inputLayout)

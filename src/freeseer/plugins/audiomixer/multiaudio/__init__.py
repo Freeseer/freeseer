@@ -87,7 +87,7 @@ class MultiAudio(IAudioMixer):
         try:
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1')
             self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2')
-        except ConfigParser.NoSectionError:
+        except ConfigParser.NoSectionError, ConfigParser.NoOptionError:
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
         
@@ -105,8 +105,6 @@ class MultiAudio(IAudioMixer):
         self.load_config(plugman)
         
         plugins = self.plugman.get_audioinput_plugins()
-        self.widget.disconnect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
-        self.widget.disconnect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
         self.widget.source1_combobox.clear()
         self.widget.source2_combobox.clear()
         for i, source in enumerate(plugins):
@@ -117,8 +115,6 @@ class MultiAudio(IAudioMixer):
             self.widget.source2_combobox.addItem(name)
             if self.input2 == name:
                 self.widget.source2_combobox.setCurrentIndex(i)
-        self.widget.connect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
-        self.widget.connect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
         
     def source1_setup(self):
         plugin_name = str(self.widget.source1_combobox.currentText())
@@ -133,9 +129,18 @@ class MultiAudio(IAudioMixer):
         plugin.plugin_object.get_dialog()
         
     def set_input1(self, input1):
-        self.input1 = input1
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 1", input1)
+
+        plugin = self.plugman.get_plugin_by_name(input1, "AudioInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.source1_stack.setCurrentIndex(1)
+        else: self.widget.source1_stack.setCurrentIndex(0)
         
     def set_input2(self, input2):
-        self.input2 = input2
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 2", input2)
+
+        plugin = self.plugman.get_plugin_by_name(input2, "AudioInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.source2_stack.setCurrentIndex(1)
+        else: self.widget.source2_stack.setCurrentIndex(0)
+

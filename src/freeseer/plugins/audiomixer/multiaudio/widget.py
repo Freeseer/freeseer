@@ -26,11 +26,14 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Aaron Brubacher
 '''
 
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QGridLayout
+from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QLabel
-from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSizePolicy
+from PyQt4.QtGui import QStackedWidget
+from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
 class ConfigWidget(QWidget):
@@ -44,15 +47,33 @@ class ConfigWidget(QWidget):
         self.source1_label = QLabel('Source 1')
         self.source1_combobox = QComboBox()
         self.source1_combobox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
-        self.source1_button = QPushButton("Setup") 
+        self.source1_button = QToolButton() 
+        self.source1_button.setText("Settings")
+        configIcon = QIcon.fromTheme("preferences-other")
+        self.source1_button.setIcon(configIcon)
+        self.source1_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.source1_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.source1_stack = QStackedWidget()
+        blankWidget = QWidget()
+        self.source1_stack.addWidget(blankWidget)
+        self.source1_stack.addWidget(self.source1_button)
         layout.addWidget(self.source1_label, 0, 0)
         layout.addWidget(self.source1_combobox, 0, 1)
-        layout.addWidget(self.source1_button, 0, 2)
+        layout.addWidget(self.source1_stack, 0, 2)
         
         self.source2_label = QLabel('Source 2')
         self.source2_combobox = QComboBox()
         self.source2_combobox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
-        self.source2_button = QPushButton("Setup") 
+        self.source2_button = QToolButton() 
+        self.source2_button.setText("Settings")
+        self.source2_button.setIcon(configIcon)  # reuse icon from source1
+        self.source2_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
+        self.source2_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.source2_stack = QStackedWidget()
+        blankWidget = QWidget()
+        self.source2_stack.addWidget(blankWidget)
+        self.source2_stack.addWidget(self.source2_button)
         layout.addWidget(self.source2_label, 1, 0)
         layout.addWidget(self.source2_combobox, 1, 1)
-        layout.addWidget(self.source2_button, 1, 2)
+        layout.addWidget(self.source2_stack, 1, 2)
+

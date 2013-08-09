@@ -109,3 +109,9 @@ class AudioPassthrough(IAudioMixer):
 
     def set_input(self, input):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", input)
+
+        plugin = self.plugman.get_plugin_by_name(input, "AudioInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.inputSettingsStack.setCurrentIndex(1)
+        else: self.widget.inputSettingsStack.setCurrentIndex(0)
+

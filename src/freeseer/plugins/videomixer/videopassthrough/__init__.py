@@ -160,6 +160,11 @@ class VideoPassthrough(IVideoMixer):
 
     def set_input(self, input):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
+
+        plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.inputSettingsStack.setCurrentIndex(1)
+        else: self.widget.inputSettingsStack.setCurrentIndex(0)
         
     def set_videocolour(self, input_type):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", input_type)

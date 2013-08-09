@@ -199,6 +199,11 @@ class PictureInPicture(IVideoMixer):
             
     def set_maininput(self, input):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
+
+        plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.mainInputSetupStack.setCurrentIndex(1)
+        else: self.widget.mainInputSetupStack.setCurrentIndex(0)
         
     def open_mainInputSetup(self):
         plugin_name = str(self.widget.mainInputComboBox.currentText())
@@ -208,6 +213,11 @@ class PictureInPicture(IVideoMixer):
         
     def set_pipinput(self, input):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
+
+        plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.pipInputSetupStack.setCurrentIndex(1)
+        else: self.widget.pipInputSetupStack.setCurrentIndex(0)
         
     def open_pipInputSetup(self):
         plugin_name = str(self.widget.pipInputComboBox.currentText())
