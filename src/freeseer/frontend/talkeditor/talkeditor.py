@@ -103,6 +103,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         
         # CSV Widget
+        self.connect(self.editorWidget.csvLineEdit, QtCore.SIGNAL('returnPressed()'), self.editorWidget.csvPushButton.click)
         self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.editorWidget.csvPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_csv)
         self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
