@@ -386,34 +386,34 @@ class QtDBConnector():
             reader = csv.DictReader(file)
             for row in reader:
                 try:
-                    title = row['Title']
-                    speaker = row['Speaker']
+                    title   = unicode(row['Title'], 'utf-8')
+                    speaker = unicode(row['Speaker'], 'utf-8')
                 except KeyError:
                     log.error("Missing Key in Row: %s", row)
                     return
                     
                 try:
-                    abstract = row['Abstract'] # Description
+                    abstract = unicode(row['Abstract'], 'utf-8') # Description
                 except KeyError:
                     abstract = ''
                 
                 try:
-                    level = row['Level']
+                    level = unicode(row['Level'], 'utf-8')
                 except KeyError:
                     level = ''
                 
                 try:
-                    event = row['Event']
+                    event = unicode(row['Event'], 'utf-8')
                 except KeyError:
                     event = ''
                 
                 try:
-                    room = row['Room']
+                    room = unicode(row['Room'], 'utf-8')
                 except KeyError:
                     room = ''
                 
                 try:
-                    time = row['Time']
+                    time = unicode(row['Time'], 'utf-8')
                 except KeyError:
                     time = ''
                 
@@ -433,8 +433,6 @@ class QtDBConnector():
             file.close()
                  
     def export_talks_to_csv(self, fname):
-        #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
-
         fieldNames = ('Title',
                       'Speaker',
                       'Abstract',
@@ -452,13 +450,13 @@ class QtDBConnector():
             result = self.get_talks()
             while result.next():
                 log.debug(unicode(result.value(1).toString()))
-                writer.writerow({'Title':unicode(result.value(1).toString()),
-                                 'Speaker':unicode(result.value(2).toString()),
-                                 'Abstract':unicode(result.value(3).toString()),
-                                 'Level':unicode(result.value(4).toString()),
-                                 'Event':unicode(result.value(5).toString()),
-                                 'Room':unicode(result.value(6).toString()),
-                                 'Time':unicode(result.value(7).toString())})   
+                writer.writerow({'Title':    unicode(result.value(1).toString()).encode('utf-8'),
+                                 'Speaker':  unicode(result.value(2).toString()).encode('utf-8'),
+                                 'Abstract': unicode(result.value(3).toString()).encode('utf-8'),
+                                 'Level':    unicode(result.value(4).toString()).encode('utf-8'),
+                                 'Event':    unicode(result.value(5).toString()).encode('utf-8'),
+                                 'Room':     unicode(result.value(6).toString()).encode('utf-8'),
+                                 'Time':     unicode(result.value(7).toString()).encode('utf-8')})   
         finally:
             file.close()
     
@@ -480,15 +478,15 @@ class QtDBConnector():
             
             result = self.get_reports()
             for report in result:
-                writer.writerow({'Title':report.presentation.title,
-                                 'Speaker':report.presentation.speaker,
-                                 'Abstract':report.presentation.description,
-                                 'Level':report.presentation.level,
-                                 'Event':report.presentation.event,
-                                 'Room':report.presentation.room,
-                                 'Time':report.presentation.time,
-                                 'Problem':report.failure.indicator,
-                                 'Error':report.failure.comment})
+                writer.writerow({'Title':    report.presentation.title.encode('utf-8'),
+                                 'Speaker':  report.presentation.speaker.encode('utf-8'),
+                                 'Abstract': report.presentation.description.encode('utf-8'),
+                                 'Level':    report.presentation.level.encode('utf-8'),
+                                 'Event':    report.presentation.event.encode('utf-8'),
+                                 'Room':     report.presentation.room.encode('utf-8'),
+                                 'Time':     report.presentation.time.encode('utf-8'),
+                                 'Problem':  report.failure.indicator.encode('utf-8'),
+                                 'Error':    report.failure.comment.encode('utf-8')})
         finally:
             file.close()
             
