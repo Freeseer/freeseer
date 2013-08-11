@@ -321,7 +321,7 @@ class IBackendPlugin(IPlugin):
 
         # Only load configuration the first the user opens widget
         if not self.config_loaded:
-            log.debug(self.name + " loading configuraiton into widget.")
+            log.debug(self.name + " loading configuration into widget.")
             self.config_loaded = True
             self.widget_load_config(self.plugman)
 
