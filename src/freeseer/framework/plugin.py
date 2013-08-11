@@ -286,6 +286,8 @@ class IBackendPlugin(IPlugin):
     # list of supported OSes per:
     #    http://docs.python.org/2/library/sys.html#sys.platform
     os = []
+
+    config_loaded = False
     
     def __init__(self):
         IPlugin.__init__(self)
@@ -316,9 +318,15 @@ class IBackendPlugin(IPlugin):
     
     def get_dialog(self):
         widget = self.get_widget()
+
+        # Only load configuration the first the user opens widget
+        if not self.config_loaded:
+            log.debug(self.name + " loading configuraiton into widget.")
+            self.config_loaded = True
+            self.widget_load_config(self.plugman)
+
         if widget is not None:
             self.gui.show_plugin_widget_dialog(widget)
-            self.widget_load_config(self.plugman)
     
     def get_widget(self):
         """
