@@ -129,6 +129,7 @@ class MultiAudio(IAudioMixer):
         plugin.plugin_object.get_dialog()
         
     def set_input1(self, input1):
+        self.input1 = input1
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 1", input1)
 
         plugin = self.plugman.get_plugin_by_name(input1, "AudioInput")
@@ -137,6 +138,7 @@ class MultiAudio(IAudioMixer):
         else: self.widget.source1_stack.setCurrentIndex(0)
         
     def set_input2(self, input2):
+        self.input2 = input2
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 2", input2)
 
         plugin = self.plugman.get_plugin_by_name(input2, "AudioInput")

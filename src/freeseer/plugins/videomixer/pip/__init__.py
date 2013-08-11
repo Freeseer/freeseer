@@ -198,6 +198,7 @@ class PictureInPicture(IVideoMixer):
         
             
     def set_maininput(self, input):
+        self.input1 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
 
         plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
@@ -212,6 +213,7 @@ class PictureInPicture(IVideoMixer):
         plugin.plugin_object.get_dialog()
         
     def set_pipinput(self, input):
+        self.input2 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
 
         plugin = self.plugman.get_plugin_by_name(input, "VideoInput")

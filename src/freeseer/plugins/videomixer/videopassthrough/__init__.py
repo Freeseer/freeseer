@@ -133,6 +133,7 @@ class VideoPassthrough(IVideoMixer):
             self.widget.connect(self.widget.videocolourComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videocolour)
             self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.set_framerate)
             self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.set_framerate)
+            self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
             
         return self.widget
 
@@ -158,7 +159,12 @@ class VideoPassthrough(IVideoMixer):
         
         self.widget.framerateSlider.setValue(self.framerate)
 
+    def source1_setup(self):
+        plugin = self.plugman.get_plugin_by_name(self.input1, "VideoInput")
+        plugin.plugin_object.get_dialog()
+
     def set_input(self, input):
+        self.input1 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
 
         plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
