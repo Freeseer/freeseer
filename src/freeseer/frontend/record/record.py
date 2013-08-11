@@ -520,7 +520,7 @@ class RecordApp(FreeseerApp):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             self.systray.menu.popup(QCursor.pos())
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
-            self.mainWidget.recordPushButton.toggle()
+            self.toggle_record_button()
 
     def hide_window(self):
         self.geometry = self.saveGeometry()
@@ -543,6 +543,7 @@ class RecordApp(FreeseerApp):
             self.visibilityAction.setText(self.showWindowString)
 
     def toggle_record_button(self):
+        self.mainWidget.standbyPushButton.toggle()
         self.mainWidget.recordPushButton.toggle()
 
     def audio_feedback(self, value):
