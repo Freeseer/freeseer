@@ -28,6 +28,7 @@ import sys
 import time
 
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtGui import QCursor
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -517,9 +518,7 @@ class RecordApp(FreeseerApp):
     
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
-            self.hide_window() 
-            self.visibilityAction.setText(self.showWindowString)
-            
+            self.systray.menu.popup(QCursor.pos())
         if reason == QtGui.QSystemTrayIcon.DoubleClick:
             self.mainWidget.recordPushButton.toggle()
 
