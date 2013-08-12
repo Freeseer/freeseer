@@ -54,8 +54,9 @@ class PulseSrc(IAudioInput):
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
         
         audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
-        audiosrc.set_property('device', self.source)
-        log.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
+        if self.source != '':
+            audiosrc.set_property('device', self.source)
+            log.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
         bin.add(audiosrc)
         
         # Setup ghost pad
