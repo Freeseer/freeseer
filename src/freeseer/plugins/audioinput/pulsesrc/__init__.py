@@ -89,17 +89,16 @@ class PulseSrc(IAudioInput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
         sources = self.__get_sources()
-
-        # stop signals while populating
-        self.widget.disconnect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
 
         self.widget.source_combobox.clear()
         for i, source in enumerate(sources):
@@ -107,8 +106,8 @@ class PulseSrc(IAudioInput):
             if self.source == source[0]:
                 self.widget.source_combobox.setCurrentIndex(i)
 
-        # reconnect the signals
-        self.widget.connect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
+        # Finally connect the signals
+        self.__enable_connections()
         
 
     def set_source(self, index):

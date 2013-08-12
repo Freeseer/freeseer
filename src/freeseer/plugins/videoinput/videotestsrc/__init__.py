@@ -89,9 +89,11 @@ class VideoTestSrc(IVideoInput):
             for i in self.PATTERNS:
                 self.widget.patternComboBox.addItem(i)
 
-            self.widget.connect(self.widget.liveCheckBox, SIGNAL('toggled(bool)'), self.set_live)
-            self.widget.connect(self.widget.patternComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_pattern)
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.liveCheckBox, SIGNAL('toggled(bool)'), self.set_live)
+        self.widget.connect(self.widget.patternComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_pattern)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -99,6 +101,9 @@ class VideoTestSrc(IVideoInput):
         self.widget.liveCheckBox.setChecked(bool(self.live))
         patternIndex = self.widget.patternComboBox.findText(self.pattern)
         self.widget.patternComboBox.setCurrentIndex(patternIndex)
+
+        # Finally enable connections
+        self.__enable_connections()
 
     def set_live(self, checked):
         self.live = checked

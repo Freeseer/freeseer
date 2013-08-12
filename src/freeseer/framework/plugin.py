@@ -334,6 +334,14 @@ class IBackendPlugin(IPlugin):
         Used by Freeseer configtool 
         """
         return None
+
+    def __enable_connections(self):
+        """
+        Implement this method to setup Qt SIGNALs/SLOTS.
+
+        This should be enabled after loading the widget config.
+        """
+        pass
     
     def widget_load_config(self, plugman):
         """

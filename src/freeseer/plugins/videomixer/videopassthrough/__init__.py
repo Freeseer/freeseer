@@ -125,17 +125,17 @@ class VideoPassthrough(IVideoMixer):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            # Connections
-            self.widget.connect(self.widget.inputCombobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
-            self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.widget.framerateSpinBox.setValue)
-            self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.widget.framerateSlider.setValue)
-            self.widget.connect(self.widget.videocolourComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videocolour)
-            self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.set_framerate)
-            self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.set_framerate)
-            self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.inputCombobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
+        self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.widget.framerateSpinBox.setValue)
+        self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.widget.framerateSlider.setValue)
+        self.widget.connect(self.widget.videocolourComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videocolour)
+        self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.set_framerate)
+        self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.set_framerate)
+        self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -158,6 +158,9 @@ class VideoPassthrough(IVideoMixer):
         self.widget.videocolourComboBox.setCurrentIndex(vcolour_index)
         
         self.widget.framerateSlider.setValue(self.framerate)
+
+        # Finally enable connections
+        self.__enable_connections()
 
     def source1_setup(self):
         plugin = self.plugman.get_plugin_by_name(self.input1, "VideoInput")

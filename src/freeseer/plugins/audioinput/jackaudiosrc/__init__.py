@@ -80,13 +80,14 @@ class JackAudioSrc(IAudioInput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.lineedit_client, SIGNAL('editingFinished()'), self.set_client)
-            self.widget.connect(self.widget.lineedit_connect, SIGNAL('editingFinished()'), self.set_connect)
-            self.widget.connect(self.widget.lineedit_server, SIGNAL('editingFinished()'), self.set_server)
-            self.widget.connect(self.widget.lineedit_clientname, SIGNAL('editingFinished()'), self.set_clientname)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.lineedit_client, SIGNAL('editingFinished()'), self.set_client)
+        self.widget.connect(self.widget.lineedit_connect, SIGNAL('editingFinished()'), self.set_connect)
+        self.widget.connect(self.widget.lineedit_server, SIGNAL('editingFinished()'), self.set_server)
+        self.widget.connect(self.widget.lineedit_clientname, SIGNAL('editingFinished()'), self.set_clientname)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -95,6 +96,9 @@ class JackAudioSrc(IAudioInput):
         self.widget.lineedit_connect.setText(self.connect)
         self.widget.lineedit_server.setText(self.server)
         self.widget.lineedit_clientname.setText(self.clientname)
+
+        # Finally enable connections
+        self.__enable_connections()
 
     def set_client(self):
         client = str(self.widget.lineedit_client.text())

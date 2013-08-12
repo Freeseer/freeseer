@@ -162,13 +162,14 @@ class PictureInPicture(IVideoMixer):
         
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.mainInputComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_maininput)
-            self.widget.connect(self.widget.mainInputSetupButton, SIGNAL('clicked()'), self.open_mainInputSetup)
-            self.widget.connect(self.widget.pipInputComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_pipinput)
-            self.widget.connect(self.widget.pipInputSetupButton, SIGNAL('clicked()'), self.open_pipInputSetup)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.mainInputComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_maininput)
+        self.widget.connect(self.widget.mainInputSetupButton, SIGNAL('clicked()'), self.open_mainInputSetup)
+        self.widget.connect(self.widget.pipInputComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_pipinput)
+        self.widget.connect(self.widget.pipInputSetupButton, SIGNAL('clicked()'), self.open_pipInputSetup)
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -195,8 +196,10 @@ class PictureInPicture(IVideoMixer):
             if i == self.input2: # Find the current pip input source and set it
                 self.widget.pipInputComboBox.setCurrentIndex(n)
             n = n +1
-        
-            
+
+        # Finally enable connections
+        self.__enable_connections()
+
     def set_maininput(self, input):
         self.input1 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)

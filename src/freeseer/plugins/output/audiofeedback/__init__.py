@@ -77,18 +77,20 @@ class AudioFeedback(IOutput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.feedbackComboBox, 
-                                SIGNAL('currentIndexChanged(const QString&)'), 
-                                self.set_feedbacksink)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.feedbackComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_feedbacksink)
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
         
         feedbackIndex = self.widget.feedbackComboBox.findText(self.feedbacksink)
         self.widget.feedbackComboBox.setCurrentIndex(feedbackIndex)
-            
+
+        # Finally enable connections
+        self.__enable_connections()
+
     def set_feedbacksink(self, feedbacksink):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)

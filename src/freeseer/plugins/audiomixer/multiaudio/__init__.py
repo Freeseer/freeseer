@@ -94,12 +94,14 @@ class MultiAudio(IAudioMixer):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
-            self.widget.connect(self.widget.source1_button, SIGNAL('clicked()'), self.source1_setup)
-            self.widget.connect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
-            self.widget.connect(self.widget.source2_button, SIGNAL('clicked()'), self.source2_setup)
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.source1_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input1)
+        self.widget.connect(self.widget.source1_button, SIGNAL('clicked()'), self.source1_setup)
+        self.widget.connect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
+        self.widget.connect(self.widget.source2_button, SIGNAL('clicked()'), self.source2_setup)
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -115,6 +117,9 @@ class MultiAudio(IAudioMixer):
             self.widget.source2_combobox.addItem(name)
             if self.input2 == name:
                 self.widget.source2_combobox.setCurrentIndex(i)
+
+        # Finally enable connections
+        self.__enable_connections()
         
     def source1_setup(self):
         plugin_name = str(self.widget.source1_combobox.currentText())

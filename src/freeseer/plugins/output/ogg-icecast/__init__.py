@@ -164,13 +164,14 @@ class OggIcecast(IOutput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.lineedit_ip, SIGNAL('editingFinished()'), self.set_ip)
-            self.widget.connect(self.widget.spinbox_port, SIGNAL('valueChanged(int)'), self.set_port)
-            self.widget.connect(self.widget.lineedit_password, SIGNAL('editingFinished()'), self.set_password)
-            self.widget.connect(self.widget.lineedit_mount, SIGNAL('editingFinished()'), self.set_mount)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.lineedit_ip, SIGNAL('editingFinished()'), self.set_ip)
+        self.widget.connect(self.widget.spinbox_port, SIGNAL('valueChanged(int)'), self.set_port)
+        self.widget.connect(self.widget.lineedit_password, SIGNAL('editingFinished()'), self.set_password)
+        self.widget.connect(self.widget.lineedit_mount, SIGNAL('editingFinished()'), self.set_mount)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -179,6 +180,9 @@ class OggIcecast(IOutput):
         self.widget.spinbox_port.setValue(self.port)
         self.widget.lineedit_password.setText(self.password)
         self.widget.lineedit_mount.setText(self.mount)
+
+        # Finally enable connections
+        self.__enable_connections()
 
     def set_ip(self):
         ip = str(self.widget.lineedit_ip.text())

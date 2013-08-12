@@ -102,13 +102,11 @@ class FirewireSrc(IVideoInput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            # Connections
-            self.widget.connect(self.widget.devicesCombobox, 
-                                SIGNAL('currentIndexChanged(const QString&)'), 
-                                self.set_device)
-                        
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.devicesCombobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_device)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -121,6 +119,9 @@ class FirewireSrc(IVideoInput):
             if i == self.device:
                 self.widget.devicesCombobox.setCurrentIndex(n)
             n = n +1
+
+        # Finally enable connections
+        self.__enable_connections()
             
     def set_device(self, device):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)

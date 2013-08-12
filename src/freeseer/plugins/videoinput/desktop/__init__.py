@@ -148,14 +148,13 @@ class DesktopLinuxSrc(IVideoInput):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
             
-            # Connections
-            self.widget.connect(self.widget.desktopButton, SIGNAL('clicked()'), self.set_desktop_full)
-            self.widget.connect(self.widget.areaButton, SIGNAL('clicked()'), self.set_desktop_area)
-            self.widget.connect(self.widget.setAreaButton, SIGNAL('clicked()'), self.area_select)
-            self.widget.connect(self.widget.screenSpinBox, SIGNAL('valueChanged(int)'), self.set_screen)
-            
-            
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.desktopButton, SIGNAL('clicked()'), self.set_desktop_full)
+        self.widget.connect(self.widget.areaButton, SIGNAL('clicked()'), self.set_desktop_area)
+        self.widget.connect(self.widget.setAreaButton, SIGNAL('clicked()'), self.area_select)
+        self.widget.connect(self.widget.screenSpinBox, SIGNAL('valueChanged(int)'), self.set_screen)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -169,7 +168,9 @@ class DesktopLinuxSrc(IVideoInput):
         # minus 1 since we like to start count at 0
         max_screens = QDesktopWidget().screenCount()
         self.widget.screenSpinBox.setMaximum(max_screens - 1)
-            
+
+        # Finally enable connections
+        self.__enable_connections()
             
     def set_screen(self, screen):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)

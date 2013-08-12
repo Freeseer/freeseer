@@ -91,17 +91,13 @@ class VideoPreview(IOutput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-
             self.widget.leakyQueueComboBox.addItems(self.LEAKY_VALUES)
 
-            self.widget.connect(self.widget.previewComboBox, 
-                                SIGNAL('currentIndexChanged(const QString&)'), 
-                                self.set_previewsink)
-            self.widget.connect(self.widget.leakyQueueComboBox, 
-                                SIGNAL('currentIndexChanged(const QString&)'), 
-                                self.set_leakyqueue)
-
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.previewComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_previewsink)
+        self.widget.connect(self.widget.leakyQueueComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_leakyqueue)
     
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -111,6 +107,9 @@ class VideoPreview(IOutput):
             
         leakyQueueIndex = self.widget.leakyQueueComboBox.findText(self.leakyqueue)
         self.widget.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
+
+        # Finally enable connections
+        self.__enable_connections()
             
     def set_previewsink(self, previewsink):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)

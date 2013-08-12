@@ -171,12 +171,13 @@ class OggOutput(IOutput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-                        
-            self.widget.connect(self.widget.spinbox_audio_quality, SIGNAL('valueChanged(double)'), self.set_audio_quality)
-            self.widget.connect(self.widget.spinbox_video_quality, SIGNAL('valueChanged(int)'), self.set_video_bitrate)
-            self.widget.connect(self.widget.checkbox_matterhorn, SIGNAL('stateChanged(int)'), self.set_matterhorn)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.spinbox_audio_quality, SIGNAL('valueChanged(double)'), self.set_audio_quality)
+        self.widget.connect(self.widget.spinbox_video_quality, SIGNAL('valueChanged(int)'), self.set_video_bitrate)
+        self.widget.connect(self.widget.checkbox_matterhorn, SIGNAL('stateChanged(int)'), self.set_matterhorn)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -184,6 +185,9 @@ class OggOutput(IOutput):
         self.widget.spinbox_audio_quality.setValue(float(self.audio_quality))
         self.widget.spinbox_video_quality.setValue(int(self.video_bitrate))
         self.widget.checkbox_matterhorn.setCheckState(int(self.matterhorn))
+
+        # Finally enable connections
+        self.__enable_connections()
 
     def set_audio_quality(self):
         self.audio_quality = self.widget.spinbox_audio_quality.value()

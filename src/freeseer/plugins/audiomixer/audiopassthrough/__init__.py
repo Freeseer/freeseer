@@ -85,11 +85,12 @@ class AudioPassthrough(IAudioMixer):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            self.widget.connect(self.widget.combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
-            self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
+        self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -107,6 +108,9 @@ class AudioPassthrough(IAudioMixer):
             if i == self.input1:
                 self.widget.combobox.setCurrentIndex(n)
             n = n +1
+
+        # Finally enable connections
+        self.__enable_connections()
 
     def source1_setup(self):
         plugin = self.plugman.get_plugin_by_name(self.input1, "AudioInput")

@@ -84,13 +84,11 @@ class USBSrc(IVideoInput):
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
-            # Connections
-            self.widget.connect(self.widget.devicesCombobox,
-                                SIGNAL('currentIndexChanged(int)'),
-                                self.set_device)
-            
+
         return self.widget
+
+    def __enable_connections(self):
+        self.widget.connect(self.widget.devicesCombobox, SIGNAL('currentIndexChanged(int)'), self.set_device)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -103,6 +101,9 @@ class USBSrc(IVideoInput):
             if device == self.device:
                 self.widget.devicesCombobox.setCurrentIndex(n)
             n = n + 1
+
+        # Finally enable connections
+        self.__enable_connections()
             
     def get_devices(self):
         """
