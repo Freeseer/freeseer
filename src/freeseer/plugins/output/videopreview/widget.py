@@ -40,7 +40,7 @@ class ConfigWidget(QWidget):
         self.setLayout(layout)
 
         # Preview
-        self.previewLabel = QLabel(self.tr("Preview"))
+        self.previewLabel = QLabel("Preview")
         self.previewComboBox = QComboBox()
         self.previewComboBox.addItem("autovideosink")
         self.previewComboBox.addItem("ximagesink")
@@ -51,7 +51,7 @@ class ConfigWidget(QWidget):
 
         # Leaky Queue
         # Allows user to set queue in video to be leaky - required to work with RTMP streaming plugin
-        self.leakyQueueLabel = QLabel(self.tr("Leaky Queue"))
+        self.leakyQueueLabel = QLabel("Leaky Queue")
         self.leakyQueueComboBox = QComboBox()
         
         layout.addRow(self.leakyQueueLabel, self.leakyQueueComboBox)

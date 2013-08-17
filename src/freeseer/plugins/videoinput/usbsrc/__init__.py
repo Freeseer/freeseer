@@ -145,3 +145,9 @@ class USBSrc(IVideoInput):
     def set_device(self, device):
         devname = self.widget.devicesCombobox.itemData(device).toString()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", devname)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.devicesLabel.setText(self.gui.app.translate('plugin-usb', 'Video Device'))

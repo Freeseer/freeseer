@@ -180,3 +180,11 @@ class DesktopLinuxSrc(IVideoInput):
         
     def set_desktop_area(self):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Area")
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.desktopLabel.setText(self.gui.app.translate('plugin-desktop', 'Record Desktop'))
+        self.widget.areaLabel.setText(self.gui.app.translate('plugin-desktop', 'Record Region'))
+        self.widget.screenLabel.setText(self.gui.app.translate('plugin-desktop', 'Screen'))

@@ -112,3 +112,11 @@ class VideoTestSrc(IVideoInput):
     def set_pattern(self, pattern):
         self.pattern = pattern
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.patternLabel.setText(self.gui.app.translate('plugin-videotest', 'Pattern'))
+        self.widget.liveCheckBox.setText(self.gui.app.translate('plugin-videotest', 'Live Source'))
+        self.widget.liveCheckBox.setToolTip(self.gui.app.translate('plugin-videotest', 'Act as a live video source'))

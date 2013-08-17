@@ -116,3 +116,10 @@ class VideoPreview(IOutput):
             
     def set_leakyqueue(self, value):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.previewLabel.setText(self.gui.app.translate('plugin-videopreview', 'Preview'))
+        self.widget.leakyQueueLabel.setText(self.gui.app.translate('plugin-videopreview', 'Leaky Queue'))

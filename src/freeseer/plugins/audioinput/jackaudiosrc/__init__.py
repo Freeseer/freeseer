@@ -115,3 +115,12 @@ class JackAudioSrc(IAudioInput):
     def set_clientname(self):
         clientname = str(self.widget.lineedit_clientname.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", clientname)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.label_client.setText(self.gui.app.translate('plugin-jackaudio', 'Client'))
+        self.widget.label_connect.setText(self.gui.app.translate('plugin-jackaudio', 'Connect'))
+        self.widget.label_server.setText(self.gui.app.translate('plugin-jackaudio', 'Server'))
+        self.widget.label_clientname.setText(self.gui.app.translate('plugin-jackaudio', 'Client Name'))

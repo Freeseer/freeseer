@@ -198,3 +198,12 @@ class OggIcecast(IOutput):
     def set_mount(self):
         mount = str(self.widget.lineedit_mount.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", mount)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.label_ip.setText(self.gui.app.translate('plugin-icecast', 'IP'))
+        self.widget.label_port.setText(self.gui.app.translate('plugin-icecast', 'Port'))
+        self.widget.label_password.setText(self.gui.app.translate('plugin-icecast', 'Password'))
+        self.widget.label_mount.setText(self.gui.app.translate('plugin-icecast', 'Mount'))

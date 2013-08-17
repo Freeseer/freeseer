@@ -128,3 +128,9 @@ class AudioPassthrough(IAudioMixer):
         if plugin.plugin_object.get_widget() is not None:
             self.widget.inputSettingsStack.setCurrentIndex(1)
         else: self.widget.inputSettingsStack.setCurrentIndex(0)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.label.setText(self.gui.app.translate('plugin-audio-passthrough', 'Source'))

@@ -245,3 +245,10 @@ class PictureInPicture(IVideoMixer):
         if plugin.plugin_object.get_widget() is not None:
             self.widget.pipInputSetupStack.setCurrentIndex(1)
         else: self.widget.pipInputSetupStack.setCurrentIndex(0)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.mainInputLabel.setText(self.gui.app.translate('plugin-pip', 'Main Source'))
+        self.widget.pipInputLabel.setText(self.gui.app.translate('plugin-pip', 'PIP Source'))
