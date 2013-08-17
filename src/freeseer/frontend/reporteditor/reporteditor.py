@@ -119,6 +119,12 @@ class ReportEditorApp(FreeseerApp):
         self.confirmDBClearQuestionString = self.app.translate("ReportEditorApp", "Are you sure you want to clear the DB?")
         self.selectFileString = self.app.translate("ReportEditorApp", "Select File")
         # --- End Reusable Strings
+
+        #
+        # Menubar
+        #
+        self.actionExportCsv.setText(self.app.translate("ReportEditorApp", "&Export to CSV"))
+        # --- End Menubar
         
         #
         # EditorWidget
