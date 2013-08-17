@@ -186,6 +186,7 @@ class PictureInPicture(IVideoMixer):
             self.widget.mainInputComboBox.addItem(i)
             if i == self.input1: # Find the current main input source and set it
                 self.widget.mainInputComboBox.setCurrentIndex(n)
+                self.__enable_maininput_setup(self.input1)
             n = n +1
         
         # Load the pip combobox with inputs
@@ -195,37 +196,52 @@ class PictureInPicture(IVideoMixer):
             self.widget.pipInputComboBox.addItem(i)
             if i == self.input2: # Find the current pip input source and set it
                 self.widget.pipInputComboBox.setCurrentIndex(n)
+                self.__enable_pipinput_setup(self.input2)
             n = n +1
 
         # Finally enable connections
         self.__enable_connections()
 
+    ###
+    ### Main Input Functions
+    ###
+
     def set_maininput(self, input):
         self.input1 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
-
-        plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
-        if plugin.plugin_object.get_widget() is not None:
-            self.widget.mainInputSetupStack.setCurrentIndex(1)
-        else: self.widget.mainInputSetupStack.setCurrentIndex(0)
+        self.__enable_maininput_setup(self.input1)
         
     def open_mainInputSetup(self):
         plugin_name = str(self.widget.mainInputComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
-        
+
+    def __enable_maininput_setup(self, source):
+        '''Activates the source setup button if it has configurable settings'''
+        plugin = self.plugman.get_plugin_by_name(source, "VideoInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.mainInputSetupStack.setCurrentIndex(1)
+        else: self.widget.mainInputSetupStack.setCurrentIndex(0)
+    
+    ###
+    ### PIP Functions
+    ###
+
     def set_pipinput(self, input):
         self.input2 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
-
-        plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
-        if plugin.plugin_object.get_widget() is not None:
-            self.widget.pipInputSetupStack.setCurrentIndex(1)
-        else: self.widget.pipInputSetupStack.setCurrentIndex(0)
+        self.__enable_pipinput_setup(self.input2)
         
     def open_pipInputSetup(self):
         plugin_name = str(self.widget.pipInputComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "VideoInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
+
+    def __enable_pipinput_setup(self, source):
+        '''Activates the source setup button if it has configurable settings'''
+        plugin = self.plugman.get_plugin_by_name(source, "VideoInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.pipInputSetupStack.setCurrentIndex(1)
+        else: self.widget.pipInputSetupStack.setCurrentIndex(0)

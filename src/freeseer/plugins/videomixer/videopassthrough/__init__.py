@@ -152,12 +152,16 @@ class VideoPassthrough(IVideoMixer):
             self.widget.inputCombobox.addItem(i)
             if i == self.input1:
                 self.widget.inputCombobox.setCurrentIndex(n)
+                self.__enable_source_setup(self.input1)
             n = n + 1
             
         vcolour_index = self.widget.videocolourComboBox.findText(self.input_type)
         self.widget.videocolourComboBox.setCurrentIndex(vcolour_index)
         
+        # Need to set both the Slider and Spingbox since connections
+        # are not yet loaded at this point
         self.widget.framerateSlider.setValue(self.framerate)
+        self.widget.framerateSpinBox.setValue(self.framerate)
 
         # Finally enable connections
         self.__enable_connections()
@@ -169,12 +173,15 @@ class VideoPassthrough(IVideoMixer):
     def set_input(self, input):
         self.input1 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
+        self.__enable_source_setup(self.input1)
 
-        plugin = self.plugman.get_plugin_by_name(input, "VideoInput")
+    def __enable_source_setup(self, source):
+        '''Activates the source setup button if it has configurable settings'''
+        plugin = self.plugman.get_plugin_by_name(source, "VideoInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.inputSettingsStack.setCurrentIndex(1)
         else: self.widget.inputSettingsStack.setCurrentIndex(0)
-        
+
     def set_videocolour(self, input_type):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
         

@@ -107,6 +107,7 @@ class AudioPassthrough(IAudioMixer):
             self.widget.combobox.addItem(i)
             if i == self.input1:
                 self.widget.combobox.setCurrentIndex(n)
+                self.__enable_source_setup(self.input1)
             n = n +1
 
         # Finally enable connections
@@ -119,9 +120,11 @@ class AudioPassthrough(IAudioMixer):
     def set_input(self, input):
         self.input1 = input
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", input)
+        self.__enable_source_setup(self.input1)
 
-        plugin = self.plugman.get_plugin_by_name(input, "AudioInput")
+    def __enable_source_setup(self, source):
+        '''Activates the source setup button if it has configurable settings'''
+        plugin = self.plugman.get_plugin_by_name(source, "AudioInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.inputSettingsStack.setCurrentIndex(1)
         else: self.widget.inputSettingsStack.setCurrentIndex(0)
-

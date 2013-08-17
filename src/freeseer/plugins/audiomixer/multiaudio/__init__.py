@@ -114,40 +114,55 @@ class MultiAudio(IAudioMixer):
             self.widget.source1_combobox.addItem(name)
             if self.input1 == name:
                 self.widget.source1_combobox.setCurrentIndex(i)
+                self.__enable_source1_setup(self.input1)
             self.widget.source2_combobox.addItem(name)
             if self.input2 == name:
                 self.widget.source2_combobox.setCurrentIndex(i)
+                self.__enable_source2_setup(self.input2)
 
         # Finally enable connections
         self.__enable_connections()
-        
+
+    ###
+    ### Source 1
+    ###
+
     def source1_setup(self):
         plugin_name = str(self.widget.source1_combobox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
         
+    def set_input1(self, input1):
+        self.input1 = input1
+        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 1", input1)
+        self.__enable_source1_setup(self.input1)
+
+    def __enable_source1_setup(self, source):
+        '''Activates the source setup button if it has configurable settings'''
+        plugin = self.plugman.get_plugin_by_name(source, "AudioInput")
+        if plugin.plugin_object.get_widget() is not None:
+            self.widget.source1_stack.setCurrentIndex(1)
+        else: self.widget.source1_stack.setCurrentIndex(0)
+
+    ###
+    ### Source 2
+    ###
+
     def source2_setup(self):
         plugin_name = str(self.widget.source2_combobox.currentText())
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
         
-    def set_input1(self, input1):
-        self.input1 = input1
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 1", input1)
-
-        plugin = self.plugman.get_plugin_by_name(input1, "AudioInput")
-        if plugin.plugin_object.get_widget() is not None:
-            self.widget.source1_stack.setCurrentIndex(1)
-        else: self.widget.source1_stack.setCurrentIndex(0)
-        
     def set_input2(self, input2):
         self.input2 = input2
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 2", input2)
+        self.__enable_source2_setup(self.input2)
 
-        plugin = self.plugman.get_plugin_by_name(input2, "AudioInput")
+    def __enable_source2_setup(self, source):
+        '''Activates the source setup button if it has configurable settings'''
+        plugin = self.plugman.get_plugin_by_name(source, "AudioInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.source2_stack.setCurrentIndex(1)
         else: self.widget.source2_stack.setCurrentIndex(0)
-
