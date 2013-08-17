@@ -166,3 +166,10 @@ class MultiAudio(IAudioMixer):
         if plugin.plugin_object.get_widget() is not None:
             self.widget.source2_stack.setCurrentIndex(1)
         else: self.widget.source2_stack.setCurrentIndex(0)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.source1_label.setText(self.gui.app.translate('plugin-multiaudio', 'Source 1'))
+        self.widget.source2_label.setText(self.gui.app.translate('plugin-multiaudio', 'Source 2'))

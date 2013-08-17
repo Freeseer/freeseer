@@ -318,8 +318,9 @@ class IBackendPlugin(IPlugin):
     
     def get_dialog(self):
         widget = self.get_widget()
+        self.retranslate() # Translate the UI
 
-        # Only load configuration the first the user opens widget
+        # Only load configuration the first time the user opens widget
         if not self.config_loaded:
             log.debug(self.name + " loading configuration into widget.")
             self.config_loaded = True
@@ -348,6 +349,10 @@ class IBackendPlugin(IPlugin):
         Implement this when using a plugin widget. This function should be used
         to load any required configurations for the plugin widget.
         """
+        pass
+
+    def retranslate(self):
+        """Implement this function to allow translation of UI components in the widget"""
         pass
 
 class IAudioInput(IBackendPlugin):

@@ -206,3 +206,12 @@ class OggOutput(IOutput):
         """
         self.matterhorn = state
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", str(self.matterhorn))
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.label_audio_quality.setText(self.gui.app.translate('plugin-ogg-output', 'Audio Quality'))
+        self.widget.label_video_quality.setText(self.gui.app.translate('plugin-ogg-output', 'Video Quality (kb/s)'))
+        self.widget.label_matterhorn.setText(self.gui.app.translate('plugin-ogg-output', 'Matterhorn Metadata'))
+        self.widget.label_matterhorn.setToolTip(self.gui.app.translate('plugin-ogg-output', 'Generates Matterhorn Metadata in XML format'))

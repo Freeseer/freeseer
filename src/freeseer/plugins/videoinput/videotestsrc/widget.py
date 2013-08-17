@@ -42,6 +42,7 @@ class ConfigWidget(QWidget):
         self.setLayout(layout)
         
         self.liveCheckBox = QCheckBox("Live Source")
+        self.liveCheckBox.setToolTip('Act as a live video source')
         layout.addWidget(self.liveCheckBox)
         
         formWidget = QWidget()
