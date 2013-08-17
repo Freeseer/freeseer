@@ -38,7 +38,7 @@ class ConfigWidget(QWidget):
 
         layout = QFormLayout()
         self.setLayout(layout)
-        self.feedbackLabel = QLabel(self.tr("Feedback"))
+        self.feedbackLabel = QLabel("Feedback")
         self.feedbackComboBox = QComboBox()
         self.feedbackComboBox.addItem("autoaudiosink")
         self.feedbackComboBox.addItem("alsasink")

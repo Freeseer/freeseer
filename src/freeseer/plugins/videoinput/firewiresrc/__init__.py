@@ -125,3 +125,9 @@ class FirewireSrc(IVideoInput):
             
     def set_device(self, device):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.devicesLabel.setText(self.gui.app.translate('plugin-firewire', 'Video Device'))

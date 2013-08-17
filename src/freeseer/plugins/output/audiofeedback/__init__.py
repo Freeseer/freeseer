@@ -94,3 +94,9 @@ class AudioFeedback(IOutput):
 
     def set_feedbacksink(self, feedbacksink):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.feedbackLabel.setText(self.gui.app.translate('plugin-audiofeedback', 'Feedback'))

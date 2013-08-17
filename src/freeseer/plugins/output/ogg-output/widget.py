@@ -69,5 +69,6 @@ class ConfigWidget(QWidget):
         # Misc.
         #
         self.label_matterhorn = QLabel("Matterhorn Metadata")
+        self.label_matterhorn.setToolTip("Generates Matterhorn Metadata in XML format")
         self.checkbox_matterhorn = QCheckBox()
         layout.addRow(self.label_matterhorn, self.checkbox_matterhorn)

@@ -187,3 +187,12 @@ class VideoPassthrough(IVideoMixer):
         
     def set_framerate(self, framerate):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.inputLabel.setText(self.gui.app.translate('plugin-video-passthrough', 'Video Input'))
+        self.widget.videocolourLabel.setText(self.gui.app.translate('plugin-video-passthrough', 'Colour Format'))
+        self.widget.framerateLabel.setText(self.gui.app.translate('plugin-video-passthrough', 'Framerate'))
+        self.widget.videoscaleLabel.setText(self.gui.app.translate('plugin-video-passthrough', 'Video Scale'))

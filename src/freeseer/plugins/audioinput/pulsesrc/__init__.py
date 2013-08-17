@@ -115,4 +115,9 @@ class PulseSrc(IAudioInput):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
         self.plugman.save()
         log.debug('Set pulseaudio source to %s' % self.source)
-        
+
+    ###
+    ### Translations
+    ###
+    def retranslate(self):
+        self.widget.source_label.setText(self.gui.app.translate('plugin-pulseaudio', 'Source'))
