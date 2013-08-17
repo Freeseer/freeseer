@@ -118,7 +118,10 @@ class RecordApp(FreeseerApp):
         self.actionClient.setIcon(self.icon)
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionOpenVideoFolder)
-        self.menuFile.insertAction(self.actionExit, self.actionClient)
+        # Hide the controller client configuration screen for Freeseer 3.0.0
+        # release. This feature's not ready for public use so lets keep it
+        # hidden for now.
+        #self.menuFile.insertAction(self.actionExit, self.actionClient)
         self.menuHelp.addAction(self.actionReport)
         # --- End Menubar
 
