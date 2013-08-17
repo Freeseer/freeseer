@@ -39,6 +39,7 @@ from PyQt4 import QtGui, QtCore
 
 # Freeseer libs
 from freeseer.framework.plugin import IOutput
+from freeseer.framework.plugin import PluginError
 
 log = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ except:
 
         If you wish to use this plugin please ensure these libraries are installed on your system.
         """)
+    raise PluginError("Plugin missing required dependencies.")
 
 class RTMPOutput(IOutput):
 

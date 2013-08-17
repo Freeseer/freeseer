@@ -502,3 +502,7 @@ class IOutput(IBackendPlugin):
             node.text = metadata[key]		
        
         return ET.ElementTree(root)
+
+class PluginError(Exception):
+    def __init__(self, message):
+        self.message = message
