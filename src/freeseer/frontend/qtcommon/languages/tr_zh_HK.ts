@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
+<!DOCTYPE TS>
+<TS version="2.0" language="zh_HK" sourcelanguage="en_CA">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -45,7 +46,7 @@
     <message>
         <location filename="../AboutDialog.py" line="100"/>
         <source>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</translation>
     </message>
 </context>
 <context>
@@ -218,7 +219,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="171"/>
         <source>Save Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>保存配置</translation>
     </message>
 </context>
 <context>
@@ -372,7 +373,7 @@
     <message>
         <location filename="../../qtcommon/FreeseerApp.py" line="148"/>
         <source>Online Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>在線文檔</translation>
     </message>
 </context>
 <context>
@@ -410,7 +411,7 @@
     <message>
         <location filename="../../record/record.py" line="220"/>
         <source>&amp;Options</source>
-        <translation type="unfinished">選項(&amp;O)</translation>
+        <translation>選項(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="246"/>
@@ -575,12 +576,12 @@
     <message>
         <location filename="../../record/record.py" line="221"/>
         <source>&amp;ConfigTool</source>
-        <translation type="unfinished"></translation>
+        <translation>配置工具(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="222"/>
         <source>Talk&amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>演講編輯器(&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -623,7 +624,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="126"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished">輸出到CSV(&amp;E)</translation>
+        <translation>輸出到CSV(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="182"/>
@@ -811,7 +812,7 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="136"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished">輸出到CSV(&amp;E)</translation>
+        <translation>輸出到CSV(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="158"/>
@@ -837,7 +838,7 @@
     <message>
         <location filename="../../../plugins/audiomixer/audiopassthrough/__init__.py" line="136"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>音源</translation>
     </message>
 </context>
 <context>
@@ -845,7 +846,7 @@
     <message>
         <location filename="../../../plugins/output/audiofeedback/__init__.py" line="102"/>
         <source>Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>反饋</translation>
     </message>
 </context>
 <context>
@@ -853,17 +854,17 @@
     <message>
         <location filename="../../../plugins/videoinput/desktop/__init__.py" line="188"/>
         <source>Record Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>記錄桌面</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/desktop/__init__.py" line="189"/>
         <source>Record Region</source>
-        <translation type="unfinished"></translation>
+        <translation>記錄局部</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/desktop/__init__.py" line="190"/>
         <source>Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>記錄屏幕</translation>
     </message>
 </context>
 <context>
@@ -871,7 +872,7 @@
     <message>
         <location filename="../../../plugins/videoinput/firewiresrc/__init__.py" line="133"/>
         <source>Video Device</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻設備</translation>
     </message>
 </context>
 <context>
@@ -879,22 +880,22 @@
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="206"/>
         <source>IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="207"/>
         <source>Port</source>
-        <translation type="unfinished">端口</translation>
+        <translation>端口</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="208"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>密碼</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="209"/>
         <source>Mount</source>
-        <translation type="unfinished"></translation>
+        <translation>掛載</translation>
     </message>
 </context>
 <context>
@@ -902,22 +903,22 @@
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="123"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>客戶端</translation>
     </message>
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="124"/>
         <source>Connect</source>
-        <translation type="unfinished">接通</translation>
+        <translation>接通</translation>
     </message>
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="125"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>服務器</translation>
     </message>
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="126"/>
         <source>Client Name</source>
-        <translation type="unfinished"></translation>
+        <translation>客戶端名稱</translation>
     </message>
 </context>
 <context>
@@ -925,12 +926,12 @@
     <message>
         <location filename="../../../plugins/audiomixer/multiaudio/__init__.py" line="174"/>
         <source>Source 1</source>
-        <translation type="unfinished"></translation>
+        <translation>音源 1</translation>
     </message>
     <message>
         <location filename="../../../plugins/audiomixer/multiaudio/__init__.py" line="175"/>
         <source>Source 2</source>
-        <translation type="unfinished"></translation>
+        <translation>音源 2</translation>
     </message>
 </context>
 <context>
@@ -938,22 +939,22 @@
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="214"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>音頻質量</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="215"/>
         <source>Video Quality (kb/s)</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻質量</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="216"/>
         <source>Matterhorn Metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>馬特元數據</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="217"/>
         <source>Generates Matterhorn Metadata in XML format</source>
-        <translation type="unfinished"></translation>
+        <translation>生成XML格式馬特元數據</translation>
     </message>
 </context>
 <context>
@@ -961,12 +962,12 @@
     <message>
         <location filename="../../../plugins/videomixer/pip/__init__.py" line="253"/>
         <source>Main Source</source>
-        <translation type="unfinished"></translation>
+        <translation>主要來源</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/pip/__init__.py" line="254"/>
         <source>PIP Source</source>
-        <translation type="unfinished"></translation>
+        <translation>PIP來源</translation>
     </message>
 </context>
 <context>
@@ -974,7 +975,7 @@
     <message>
         <location filename="../../../plugins/audioinput/pulsesrc/__init__.py" line="123"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>音源</translation>
     </message>
 </context>
 <context>
@@ -982,7 +983,7 @@
     <message>
         <location filename="../../../plugins/videoinput/usbsrc/__init__.py" line="153"/>
         <source>Video Device</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻設備</translation>
     </message>
 </context>
 <context>
@@ -990,22 +991,22 @@
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="195"/>
         <source>Video Input</source>
-        <translation type="unfinished">視頻輸入</translation>
+        <translation>視頻輸入</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="196"/>
         <source>Colour Format</source>
-        <translation type="unfinished"></translation>
+        <translation>色彩格式</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="197"/>
         <source>Framerate</source>
-        <translation type="unfinished"></translation>
+        <translation>幀速率</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="198"/>
         <source>Video Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>視頻尺寸</translation>
     </message>
 </context>
 <context>
@@ -1013,12 +1014,12 @@
     <message>
         <location filename="../../../plugins/output/videopreview/__init__.py" line="124"/>
         <source>Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>預覽</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/videopreview/__init__.py" line="125"/>
         <source>Leaky Queue</source>
-        <translation type="unfinished"></translation>
+        <translation>Leaky Queue</translation>
     </message>
 </context>
 <context>
@@ -1026,17 +1027,17 @@
     <message>
         <location filename="../../../plugins/videoinput/videotestsrc/__init__.py" line="120"/>
         <source>Pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>模式</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/videotestsrc/__init__.py" line="121"/>
         <source>Live Source</source>
-        <translation type="unfinished"></translation>
+        <translation>現場視頻源</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/videotestsrc/__init__.py" line="122"/>
         <source>Act as a live video source</source>
-        <translation type="unfinished"></translation>
+        <translation>作為現場視頻源</translation>
     </message>
 </context>
 <context>
@@ -1044,30 +1045,33 @@
     <message>
         <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="335"/>
         <source>*For RTMP streaming, all other outputs must be set to leaky</source>
-        <translation type="unfinished"></translation>
+        <translation>當使用RTMP流媒體協議時，所有其他輸出比粗設置為leaky</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="370"/>
         <source>*See: http://www.justin.tv/broadcast/adv_other
 You must be logged in to obtain your Streaming Key</source>
-        <translation type="unfinished"></translation>
+        <translation>详见: http://www.justin.tv/broadcast/adv_other
+您必須登錄以獲取流媒體密鑰</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="408"/>
         <source>Overwrite custom settings for justin.tv</source>
-        <translation type="unfinished"></translation>
+        <translation>覆蓋justin.tv的自定義設置</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="573"/>
         <source>An authorization URL should have opened in your browser.
 If not, go open the following URL to allow freeseer to manage your justin.tv channel.
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>認證URL應該已經在您的瀏覽器窗口打開.
+如果沒有的話,請點擊以下URL以允許freeseer管理您的justin.tv頻道.
+%1</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="582"/>
         <source>Authentication failed. Supplied credentials for Justin.tv may be incorrect.</source>
-        <translation type="unfinished"></translation>
+        <translation>認證失敗。您所提供的Justin.tv的認證信息可能不正確。</translation>
     </message>
 </context>
 </TS>
