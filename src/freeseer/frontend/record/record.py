@@ -218,8 +218,8 @@ class RecordApp(FreeseerApp):
         # Menubar
         #
         self.menuOptions.setTitle(self.app.translate("RecordApp", "&Options"))
-        self.actionConfigTool.setText(self.app.translate("RecordApp", "&ConfigTool"))
-        self.actionTalkEditor.setText(self.app.translate("RecordApp", "Talk&Editor"))
+        self.actionConfigTool.setText(self.app.translate("RecordApp", "&Configuration"))
+        self.actionTalkEditor.setText(self.app.translate("RecordApp", "&Edit Talks"))
         self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
         self.actionClient.setText(self.app.translate("RecordApp", "&Connect to server"))
         self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
