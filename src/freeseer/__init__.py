@@ -18,7 +18,7 @@ is available on GitHub.
 """
 
 NAME = 'freeseer'
-__version__ = '3.0.0-beta3'
+__version__ = '3.0.0-beta4'
 __author__ = "Free and Open Source Software Learning Center"
 __email__ = "fosslc@gmail.com"
 URL = 'http://github.com/Freeseer/freeseer'
