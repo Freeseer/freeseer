@@ -102,16 +102,17 @@ Windows
 * GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7 (https://code.google.com/p/ossbuild/downloads/list)
 * GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 (https://code.google.com/p/ossbuild/downloads/list)
 * PyQt-Py2.7-x86-gpl-4.8.5-1 (http://www.riverbankcomputing.com/software/pyqt/download)
-    * Windows 32-bit packages are recommended (pygtk-all-in-one package does not have a 64-bit installer yet)
+* PyGTK py2.7 all-in-one (http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/)
+    * Windows 32-bit packages are recommended because pygtk-all-in-one package does not have a 64-bit installer.
     * On Windows, add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
 
 The following can be installed via pip::
 
     pip install feedparser
     pip instlal pygtk
-    pip install yapsy==1.9.2
+    pip install yapsy
 
-          
+
 Git Clone Repository
 ********************
 
