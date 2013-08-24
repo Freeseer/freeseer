@@ -4,6 +4,6 @@ Module = desktop
 
 [Documentation]
 Author = Thanh Ha
-Version = 0.4
+Version = 3.0.0
 Website = http://fosslc.org
 Description = Desktop source for recording your desktop.

@@ -4,6 +4,6 @@ Module = ogg-icecast
 
 [Documentation]
 Author = Thanh Ha
-Version = 0.2
+Version = 3.0.0
 Website = http://fosslc.org
 Description = Ogg Video Output plugin records theora/vorbis to stream to an icecast server.

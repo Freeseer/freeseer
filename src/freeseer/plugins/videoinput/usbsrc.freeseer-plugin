@@ -4,6 +4,6 @@ Module = usbsrc
 
 [Documentation]
 Author = Thanh Ha
-Version = 0.5
+Version = 3.0.0
 Website = http://fosslc.org
 Description = Allows recording from a USB Device such as Webcams, Framegrabbers, etc...

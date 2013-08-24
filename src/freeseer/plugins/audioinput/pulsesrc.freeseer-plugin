@@ -4,6 +4,6 @@ Module = pulsesrc
 
 [Documentation]
 Author = Thanh Ha
-Version = 0.2
+Version = 3.0.0
 Website = http://fosslc.org
 Description = Pulse Audio Sound Source
