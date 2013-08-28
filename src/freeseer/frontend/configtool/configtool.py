@@ -220,16 +220,14 @@ class ConfigToolApp(FreeseerApp):
     ###
 
     def show_save_profile_dialog(self):
-        profile, ok = QInputDialog().getText(self ,"Save Profile", "Profile Name", QLineEdit.Normal)
+        profile, ok = QInputDialog().getText(self, "Save Profile", "Profile Name", QLineEdit.Normal)
         
-        # Validate alphanumeric and dashes allowed
-        valid = re.match('^[\w-]+$', profile) is not None
-        
-        if not valid:
-            QMessageBox.information(None, "Invalid name", "Invalid characters used. Only alphanumeric and dashes allowed.")
+        if ok:
+            if re.match('^[\w-]+$', profile):
+                self.config.saveProfile(profile)
+            else:
+                QMessageBox.information(None, "Invalid name","Invalid characters used. Only alphanumeric and dashes allowed.")
 
-        if ok and valid: self.config.saveProfile(profile)
-        
     ###
     ### General
     ###
