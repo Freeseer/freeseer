@@ -6,6 +6,8 @@ You can run Freeseer locally and have the presenter record their desktop,
 but a much more useful configuration is when Freeseer is used from a dedicated
 laptop to record VGA output from the presenter's laptop.
 
+.. _equipment-label:
+
 Equipment Needed
 -------------
 * A working installation of Freeseer on a dedicated computer for recording
