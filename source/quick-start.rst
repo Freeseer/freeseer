@@ -1,35 +1,27 @@
 Quick-Start Guide
 =================
 
-Freeseer by the Free and Open Source Software Learning Centre (FOSSLC)
+Freeseer is a free and open source screencasting application, primarily
+developed for capturing and streaming computer-aided presentations at conferences.
 
-Freeseer is a free and open source screencasting application.
-Its primary purpose is capturing or streaming video at conferences.
+It's been successfully used to capture presentations, demos, training material,
+and other videos. It's capable of handling large conferences with many talks
+in various rooms.
 
-It's been successfully used to capture presentations, demos, training material, and other videos.
-It can easily handle very large conferences with many talks using varied hardware and operating systems.
-
-It is one of a few such tools that can also record VGA output or video
-from external sources such as FireWire and USB.
+With Freeseer, you can record video from external sources such as FireWire and
+USB (e.g. webcam or another computer's screen via VGA output [#f1]_).
 
 Freeseer is written in Python, uses Qt4 for its GUI, and Gstreamer for video/audio processing.
+And it's based on open standards so it supports royalty free audio and video codecs.
 
-Freeseer is based on open standards and supports royalty free audio and video codecs.
-
-Curious why Freeseer exists? `Read our history`_
-
-.. _Read our history: http://fosslc.org/drupal/node/596
+`Read our history <http://fosslc.org/drupal/node/596>`_ to find out why Freeseer
+was created.
 
 
-Documentation
--------------
-Read our documentation at http://freeseer.github.com/docs
-
-
-Install Freeseer from a package
--------------------------------
+Installing Freeseer from a package
+-----------------------------------
 Use this option if you just want to run Freeseer. If you plan on developing
-Freeseer, skip to the next section :ref:`install-for-dev`.
+Freeseer, skip to the next section: :ref:`install-for-dev`.
 
 Arch Linux
 **********
@@ -56,7 +48,7 @@ Freeseer is available in the OpenSUSE repository::
 
 Python Package Index
 ********************
-Freeseer can also be installed via pip::
+Freeseer can also be installed with pip::
 
     pip install freeseer
 
@@ -66,7 +58,7 @@ Freeseer can also be installed via pip::
 Installing Freeseer for Development
 -----------------------------------
 
-Prerequisits
+Dependencies
 ************
 + Git
 + Python 2.7+
@@ -75,17 +67,19 @@ Prerequisits
 + PyQT development tools
 + python-xlib (Required for video preview plugin)
 
-
 Ubuntu Linux
-************
+^^^^^^^^^^^^
 
 ::
 
-    $ sudo apt-get install build-essential git python-gst0.10 python-gst0.10-dev gstreamer0.10-plugins-good qt4-qmake pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
+    $ sudo apt-get install -y build-essential git python-gst0.10 \
+      python-gst0.10-dev gstreamer0.10-plugins-good qt4-qmake pyqt4-dev-tools \
+      libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev \
+      python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
     $ sudo pip install yapsy
 
 Fedora Linux
-************
+^^^^^^^^^^^^
 
 ::
 
@@ -93,67 +87,67 @@ Fedora Linux
     $ sudo pip install yapsy
 
 Windows
-*******
+^^^^^^^
 
-.. note::  x86 version recommended when there is a choice
+.. note::  x86 version recommended whenever there is a choice.
 
-* python 2.7.* x86 (http://www.python.org/getit/)
-* setuptools-0.6c11.win32-py2.7 (https://pypi.python.org/pypi/setuptools#files)
-* GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7 (https://code.google.com/p/ossbuild/downloads/list)
-* GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 (https://code.google.com/p/ossbuild/downloads/list)
-* PyQt-Py2.7-x86-gpl-4.8.5-1 (http://www.riverbankcomputing.com/software/pyqt/download)
-* PyGTK py2.7 all-in-one (http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/)
+- `python 2.7.* x86 <http://www.python.org/getit/>`_
+- `setuptools-0.6c11.win32-py2.7 <https://pypi.python.org/pypi/setuptools#files>`_
+- `GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7 <https://code.google.com/p/ossbuild/downloads/list>`_
+- `GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 <https://code.google.com/p/ossbuild/downloads/list>`_
+- `PyQt-Py2.7-x86-gpl-4.8.5-1 <http://www.riverbankcomputing.com/software/pyqt/download>`_
+- `PyGTK py2.7 all-in-one <http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/>`_
     * Windows 32-bit packages are recommended because pygtk-all-in-one package does not have a 64-bit installer.
-    * On Windows, add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
+    * Add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
 
-The following can be installed via pip::
+Install the following packages with pip::
 
     pip install feedparser
-    pip instlal pygtk
+    pip install pygtk
     pip install yapsy
 
 
-Git Clone Repository
+Get the source code
 ********************
 
-If your a developer and want to contribute to Freeseer clone the project with git::
-
-    $ git clone git@github.com:Freeseer/freeseer.git
+If you plan on contributing to Freeseer, you'll need to :ref:`fork and clone the
+project <fork-freeseer-label>`.
 
 
 Running Freeseer
 ----------------
 
-Once you have the prerequisite components you can run Freeseer using the following commands::
+Once you've installed the dependencies, you can run the various Freeseer tools::
 
     $ freeseer-record  # Recording tool
     $ freeseer-config  # Configuration tool
     $ freeseer-talkeditor  # Talk-list editor
 
-.. note:: If you are developing freeseer these scripts are in the src/ directory of the repo.
+.. note:: For development purposes, these scripts are in the ``src/`` directory of the repo.
 
 
-Bug tracker
------------
-Have a bug? Please create an issue here on GitHub!
+Issue tracker
+-------------
+Found an issue? Open an issue on GitHub!
 
 https://github.com/Freeseer/freeseer/issues
 
 
 IRC channel
 -----------
-Drop by our [#freeseer](irc://irc.freenode.net/#freeseer) channel on irc.freenode.net to get an instant response.
+Drop by our `#freeseer <irc://irc.freenode.net/#freeseer>`_ channel on
+irc.freenode.net to chat with us.
 
 http://webchat.freenode.net/?channels=#freeseer
 
 
 Mailing list
 ------------
-Have a question? Ask on our mailing list!
+We have a mailing list that's also a discussion group.
 
-freeseer@googlegroups.com
+http://groups.google.com/group/freeseer
 
-[Subscribe to mailing list](http://groups.google.com/group/freeseer)
+Once you've joined the group, you can email subscribers at freeseer@googlegroups.com.
 
 
 Authors
@@ -172,8 +166,12 @@ Copyright and license
 Licensed under the GNU General Public License, version 3 (GPLv3);
 you may not use this work except in compliance with the GPLv3.
 
-You may obtain a copy of the GPLv3 in the `LICENSE file`_, or at:
-
-http://www.fsf.org/licensing/licenses/gpl.html
+You may obtain a copy of the GPLv3 in the `LICENSE file`_, or at
+http://www.fsf.org/licensing/licenses/gpl.html.
 
 .. _LICENSE file: https://raw.github.com/Freeseer/freeseer/a0497fabdc5a548d0dea4f6fb4925aa41a6d62e8/src/LICENSE
+
+.. rubric:: Footnotes
+
+.. [#f1] :ref:`Requires a VGA capture device <equipment-label>`, also known as a
+         frame grabber.
