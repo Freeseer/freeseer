@@ -51,8 +51,9 @@ class USBSrc(IVideoInput):
         super(USBSrc, self).__init__()
 
         # Initialize a default device if there is None
-        if self.device is None:
-            self.device = self.get_devices().itervalues().next();
+        devices = self.get_devices();
+        if devices and self.device is None:
+            self.device = devices.itervalues().next();
 
     def get_videoinput_bin(self):
         """
