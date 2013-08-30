@@ -46,22 +46,22 @@ class FirewireSrc(IVideoInput):
     os = ["linux", "linux2"]
     device = "/dev/fw1"
     device_list = []
-    
+
     def __init__(self):
         IVideoInput.__init__(self)
-        
+
         #
         # Detect available devices
         #
         i = 1
         path = "/dev/fw"
         devpath = path + str(i)
-        
+
         while os.path.exists(devpath):
             self.device_list.append(devpath)
             i=i+1
             devpath=path + str(i)
-    
+
     def get_videoinput_bin(self):
         bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
 
@@ -70,35 +70,35 @@ class FirewireSrc(IVideoInput):
         dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
         dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
         dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
-        
+
         # Add Elements
         bin.add(videosrc)
         bin.add(dv1394q1)
         bin.add(dv1394dvdemux)
         bin.add(dv1394q2)
         bin.add(dv1394dvdec)
-        
+
         # Link Elements
         videosrc.link(dv1394q1)
         dv1394q1.link(dv1394dvdemux)
         dv1394dvdemux.link(dv1394q2)
         dv1394q2.link(dv1394dvdec)
-        
+
         # Setup ghost pad
         pad = dv1394dvdec.get_pad("src")
         ghostpad = gst.GhostPad("videosrc", pad)
         bin.add_pad(ghostpad)
-        
+
         return bin
-    
+
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.device = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", self.device)
-        
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -106,11 +106,11 @@ class FirewireSrc(IVideoInput):
         return self.widget
 
     def __enable_connections(self):
-        self.widget.connect(self.widget.devicesCombobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_device)
+        self.widget.connect(self.widget.devicesCombobox, SIGNAL('activated(const QString&)'), self.set_device)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-                
+
         # Load the combobox with inputs
         self.widget.devicesCombobox.clear()
         n = 0
@@ -122,7 +122,7 @@ class FirewireSrc(IVideoInput):
 
         # Finally enable connections
         self.__enable_connections()
-            
+
     def set_device(self, device):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
 
