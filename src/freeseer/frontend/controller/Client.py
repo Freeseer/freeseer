@@ -220,7 +220,7 @@ class ClientDialog(QtGui.QDialog):
     '''
     def readMessage(self):
         message = self.socket.read(self.socket.bytesAvailable()) 
-        logging("Server said:%s", message)  
+        log.info("Server said: %s", message)  
         return message
 
     ##
