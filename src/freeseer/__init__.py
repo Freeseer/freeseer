@@ -25,6 +25,20 @@ URL = 'http://github.com/Freeseer/freeseer'
 WWW = 'http://freeseer.github.com'
 BLOG = 'http://fosslc.org'
 DESCRIPTION = 'Video recording and streaming software'
+LONG_DESCRIPTION = '''
+Freeseer is a tool for capturing or streaming video.
+
+It enables you to capture great presentations, demos, training material,
+and other videos. It handles desktop screen-casting with ease.
+
+Freeseer is one of a few such tools that can also record vga output
+or video from external sources such as firewire, usb, s-video, or rca.
+
+It is particularly good at handling very large conferences with hundreds
+of talks and speakers using varied hardware and operating systems.
+
+Freeseer itself can run on commodity hardware such as a laptop or desktop.
+'''
 COPYRIGHT = 'Copyright (c) 2011-2013 Free and Open Source Software Learning Centre'
 
 # Setup Default Logger configuration
