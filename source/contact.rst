@@ -9,7 +9,7 @@ and offer support online.
 Mailing List
 ------------
 
-Join the Freeseer development list at http://groups.google.com/group/freeseer.
+Join the Freeseer discussion group at http://groups.google.com/group/freeseer.
 Once you've joined, you can post and receive updates through the website, or
 through freeseer@googlegroups.com.
 
@@ -23,11 +23,14 @@ through freeseer@googlegroups.com.
 IRC Channel
 -----------
 
-Chat live with Freeseer community members in our IRC channel.
-Here are the connection details: 
+Instant message with the Freeseer community on IRC.
 
-* IRC Server: `irc.freenode.net`
-* Channel/Room: `#freeseer`
+* Server: irc.freenode.net
+* Channel: #freeseer
+
+.. seealso::
+   `The role of IRC in open source development and applications for using IRC
+   <https://code.google.com/p/google-summer-of-code/wiki/Irc>`_
 
 IRC Clients
 ^^^^^^^^^^^
@@ -44,7 +47,7 @@ To quickly get started:
     $ irssi
     # Then, from irssi's prompt:
     /connect irc.freenode.net
-    /nick <your-nickname>
+    /nick your-nickname
     /join #freeseer
 
 .. tip::
@@ -52,11 +55,11 @@ To quickly get started:
   - To get someone's attention on IRC, mention their username
 
     - Some IRC clients (like irssi) support autocompletion via the tab key
-  - Shortcuts exists, such as ``/j`` for ``/join`` and ``/w`` for ``/who``
-  - To block activity messages in the room:
+  - Some clients support shortcuts, such as ``/j`` for ``/join`` and ``/w`` for ``/who``
+  - To block activity messages in a channel:
     ``/ignore -channels #freeseer * JOINS PARTS QUITS NICKS``
 
-    - You can specificy more rooms by comma separating them
+    - You can specificy more channels by comma separating them
 
 Channel Bot
 ^^^^^^^^^^^
@@ -68,9 +71,9 @@ He'll respond to certain queries. Try asking him for help::
 
   <You> [o__o]: help
 
-He can **look up GitHub issues** for you, just type ``gh<issue-number>``::
+He'll gladly fetch GitHub issues for you, just type ``gh#<issue-number>``::
 
- <You> gh1
+ <You> gh#1
  <[o__o]> Package freeseer for Fedora.: https://github.com/Freeseer/freeseer/issues/1
 
 He also keeps a **log of our channel**. Read any discussions you missed at
@@ -85,13 +88,9 @@ You can also find Freeseer community members on various channels across the web:
 * Like `FOSSLC's Facebook Page <https://www.facebook.com/FreeAndOpenSourceSoftwareLearningCentre>`_
 * Read and comment on `FOSSLC's blog <http://www.fosslc.org/drupal/category/community/freeseer>`_
 
-.. seealso::
+.. note::
 
-    The FOSSLC blog doesn't contain *all* Freeseer blog posts.
-    Part of the Freeseer community prefers to blog about Freeseer on their
-    personal blogs.
-
-.. TODO: see IRC notes on http://code.google.com/p/google-summer-of-code/wiki/Irc
+    Part of the Freeseer community prefers to blog about Freeseer on their personal blogs.
 
 Toll-free Phone Number
 ----------------------
@@ -99,10 +98,6 @@ Toll-free Phone Number
 Call for free at **1-877-253-0617 x27**.
 If Andrew (our project leader) isn't available to answer the call,
 then you'll be asked to leave a voicemail message.
-
-We're thinking of setting up a system that forwards these voicemails to our mailing list.
-Stay tuned! 
-
 
 Google+ Hangouts
 ----------------
@@ -114,9 +109,8 @@ Here's some tips for joining our next video chat:
 
 * Add `Andrew Ross <http://gplus.to/aross>`_ to your G+ circles,
   he leads the discussion and starts the hangout
-* Have a webcam ready
+* Have a webcam ready (not recommended for slow connections)
 * Have a headset ready (optional but recommended)
-
 
 Using the Appropriate Communication Method
 ------------------------------------------
@@ -133,7 +127,7 @@ Using the Appropriate Communication Method
     git, general questions about Freeseer
   - Off-topic discussions are allowed, as long as they don't interrupt any
     on-going discussions
-- Don't use **Twitter**, **Facebook**, or the **blog** to contact us. Those
+- Don't contact us through **Twitter**, **Facebook**, or the **blog**. Those
   services are mainly used to broadcast information to the public, and they are
   not necessarily ran by us (i.e. Freeseer contributors).
 - Use the **toll-free phone number** if you need to contact Andrew urgently.
