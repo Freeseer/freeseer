@@ -4,6 +4,6 @@ Module = audiotestsrc
 
 [Documentation]
 Author = Thanh Ha
-Version = 3.0.0
+Version = 3.0.9999
 Website = http://fosslc.org
 Description = Test source that generates basic audio signals.

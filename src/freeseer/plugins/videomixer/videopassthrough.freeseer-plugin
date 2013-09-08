@@ -4,6 +4,6 @@ Module = videopassthrough
 
 [Documentation]
 Author = Thanh Ha
-Version = 3.0.0
+Version = 3.0.9999
 Website = http://fosslc.org
 Description = Simple passthrough mixer for video. Takes a single video source and sends it through with only ffmpegcolorspace filtering.
