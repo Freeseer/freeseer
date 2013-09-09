@@ -18,7 +18,7 @@ Though designed for capturing presentations, it can also be used to capture demo
 Freeseer is written in Python, uses Qt4 for its GUI, and Gstreamer for video/audio processing.
 Freeseer is based on open standards and supports royalty free audio and video codecs.
 
-Freeseer's source code is licensed under the `GNU General Public License <http://www.gnu.org/licenses/gpl.html>`_ and 
+Freeseer's source code is licensed under the `GNU General Public License <http://www.gnu.org/licenses/gpl.html>`_ and
 is available on `GitHub <http://github.com/Freeseer/freeseer>`_.
 
 
@@ -28,7 +28,7 @@ Who We Are
 We're an open source community of developers, writers, designers, bloggers, students, and open source enthusiasts
 whose goal is to make meaningful software with world-class documentation (inspired by ThinkUp and GitHub).
 
-You're reading the very beginning of that effort. This documentation is an incomplete, work-in-progress. Please 
+You're reading the very beginning of that effort. This documentation is an incomplete, work-in-progress. Please
 join us and help :doc:`fill in the gaps </contribute/documentation>`.
 
 
@@ -79,12 +79,14 @@ to later share with others.
 
 What Freeseer Can Do
 --------------------
-.. TODO: Add a video
-.. .. sidebar:: Freeseer's Features in Action
 
-..    .. raw:: html
+.. topic:: Introduction to Freeseer v2.5 (outdated video, but still demonstrates the essence of Freeseer)
 
-..        <iframe title="YouTube video player" style="width: 100%; height:250px; border: 0;" src=""></iframe> 
+   .. raw:: html
+
+      <iframe type="text/html" width="100%" height="500"
+       src="http://www.youtube-nocookie.com/embed/wOr1ZeQG__k?rel=0&autohide=1&showinfo=0&theme=light"
+       frameborder="0"></iframe>
 
 At its heart, Freeseer is a screencasting tool. Freeseer helps you record your desktop and audio,
 whether you're recording hundreds of talks at a conference or making a how-to video at home.
