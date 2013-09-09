@@ -3,6 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. meta::
+   :author: Free and Open Source Software Learning Centre
+   :description: Record your next conference with Freeseer, a free and open source screencasting tool designed for capturing talks.
+   :keywords: freeseer, screencast software, screen capture, conference recording, presentation recording, free, open source
+
 Freeseer: Conference Recording Made Easy
 ========================================
 
