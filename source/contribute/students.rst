@@ -1,21 +1,19 @@
 Student
 =======
 
-Welcome aboard! We love working with students. We try to recruit the best and
-brightest students and have them solve fun and challenging problems.
-We've worked with students through Google Summer of Code (GSoC),
-Undergraduate Capstone Open Source Projects (UCOSP), and Fedora Summer Coding.
+We love working with students and having them solve fun and challenging problems.
+For many, it's their first time contributing to an open source project.
+We've had students from Google Summer of Code (GSoC), Undergraduate Capstone
+Open Source Projects (UCOSP), and Fedora Summer Coding.
 
 Getting Started
 ---------------
 #. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
 #. Introduce yourself to the Freeseer community via the
-   :ref:`mailing list <mailing-list-label>` and tell us:
+   :ref:`mailing list <mailing-list-label>`
 
-   - your GitHub username
-   - why you chose Freeseer
-   - what you hope to learn
-   - and a little about yourself (e.g. hobbies, education, favourite movie, etc)
+   - Include your GitHub username so we can add you to the `Freeseer organization
+     <https://github.com/Freeseer?tab=members>`_
 #. Join us in our :ref:`IRC channel <irc-label>`
    
    - Tell us who you are if your nickname isn't obvious, or update your whois info
@@ -45,15 +43,13 @@ Depending on which program you're participating in, you may have to attend a
 `sprint <http://en.wikipedia.org/wiki/Sprint_(software_development)>`_ with your
 new teammates. We usually let students brainstorm at the sprint what to work on.
 
-If you've followed the steps above, you should have a copy of the
-`project design document <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
+If you've followed the steps above, you should have a copy of the `project design document
+<https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
 on your Google Docs/Drive account. The reason we ask that you keep it on Google's
-cloud is so that we, the mentors, can easily organize and comment on all the
-design documents from the students.
+cloud is so that we, the mentors, can easily find and comment on your document.
 
 .. important::
-  Verify that your sharing settings allow us to view and comment on the
-  document!
+  Verify that your sharing settings allow us to view and comment on the document!
 
 You may modify the design document by adding or removing sections that you think
 are relevant or irrelevant to your project.
@@ -70,8 +66,7 @@ mailing list and include a link so they can view it on Google Docs/Drive.
 We'll give you feedback so you can make any changes if necessary.
 
 .. tip::
-  You can start working on your project while your design document is still in
-  progress.
+  You can start working on your project while your design document is still in progress.
 
 Because Freeseer is still a relatively young project and has a small codebase,
 there is lots of room for improvement. This means that your contributions will
@@ -84,20 +79,26 @@ alternative!
 Stay In Touch
 -------------
 
-A good analogy is driving to a destination. Imagine a friend is driving and you're the navigator in the passenger seat.
-The more updates you give your driver, the sooner and safer you'll get to your destination.
-On the other hand, rarely updating your driver with directions can get you easily lost or you may not reach your destination on time.
+A good analogy is driving to a destination. Imagine a friend is driving and
+you're the navigator. The more updates you give your driver, the sooner and
+safer you'll get to your destination. On the other hand, rarely updating your
+driver with directions can get you easily lost or you may not reach your
+destination on time.
 
-Same goes with your teammates in a project.
-If you update them frequently, they can help you out often and give you feedback on your work so there's less chance of screwing up.
-But if no one knows what you're working on or if you're having difficulties, then by the time they find out it may be too late to
-make changes or get help.
+Same goes with your teammates in a project. If you update them frequently, they
+can help you out often and give you feedback on your work so there's less chance
+of screwing up. But if no one knows what you're working on or if you're having
+difficulties, then by the time they find out it may be too late to make changes
+or get help.
 
-In addition to being active on the mailing list and IRC, you'll be required to write a few blog posts about your progress.
-There's usually one at the beginning, one at the midpoint of the term, and one at the end, but feel free to write more!
+In addition to being active on the mailing list and IRC, you'll be required to
+write a few blog posts about your progress. There's usually one at the
+beginning, one at the midpoint of the term, and one at the end, but feel free to
+write more!
 
-You may write your blog posts at `fosslc.org <http://www.fosslc.org>`_ (you'll have to register an account first).
-Or, if you prefer, you may use your own blog. Just tell us on the mailing list where we can read your latest blog post.
+You may write your blog posts at `fosslc.org <http://www.fosslc.org>`_ (you'll
+have to register an account first).  Or, if you prefer, you may use your own
+blog. Just tell us on the mailing list where we can read your latest blog post.
 
 
 Expectations
@@ -117,5 +118,5 @@ How To Succeed
 * Choose an appropriate project that you can realistically accomplish
 * We don't expect you to be completely qualified, that's the point, you're here to learn
 
-For more info, check out these `videos from a GSoC information session <http://fosslc.org/drupal/node/374>`_ held at
-the University of Toronto.
+.. seealso::
+  `How to succeed or fail at Google Summer of Code <http://fosslc.org/drupal/node/374>`_
