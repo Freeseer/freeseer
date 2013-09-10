@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ from freeseer.framework.util import get_record_name
 
 log = logging.getLogger(__name__)
 
-class Gstreamer:
+class Multimedia:
     NULL = 0
     RECORD = 1
     PAUSE = 2
@@ -54,7 +54,7 @@ class Gstreamer:
         self.record_audio = False
         self.record_video = False
 
-        self.current_state = Gstreamer.NULL
+        self.current_state = Multimedia.NULL
 
         # Initialize Player
         self.player = gst.Pipeline('player')
@@ -126,7 +126,7 @@ class Gstreamer:
         Start recording.
         """
         self.player.set_state(gst.STATE_PLAYING)
-        self.current_state = Gstreamer.RECORD
+        self.current_state = Multimedia.RECORD
         log.debug("Recording started.")
 
     def pause(self):
@@ -134,21 +134,21 @@ class Gstreamer:
         Pause recording.
         """
         self.player.set_state(gst.STATE_PAUSED)
-        self.current_state = Gstreamer.PAUSE
+        self.current_state = Multimedia.PAUSE
         log.debug("Gstreamer paused.")
 
     def stop(self):
         """
         Stop recording.
         """
-        if self.current_state != Gstreamer.NULL and self.current_state != Gstreamer.STOP:
+        if self.current_state != Multimedia.NULL and self.current_state != Multimedia.STOP:
             self.player.set_state(gst.STATE_NULL)
 
             self.unload_audiomixer()
             self.unload_videomixer()
             self.unload_output_plugins()
 
-            self.current_state = Gstreamer.STOP
+            self.current_state = Multimedia.STOP
             log.debug("Gstreamer stopped.")
 
     def prepare_metadata(self, presentation):

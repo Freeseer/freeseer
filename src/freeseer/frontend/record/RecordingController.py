@@ -25,7 +25,7 @@
 from freeseer import settings, __version__
 from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
-from freeseer.framework.multimedia import Gstreamer
+from freeseer.framework.multimedia import Multimedia
 from freeseer.framework.plugin import PluginManager
 
 class RecordingController:
@@ -33,7 +33,7 @@ class RecordingController:
         self.config = Config(settings.configdir, profile=profile)
         self.db = QtDBConnector(settings.configdir)
         self.plugman = PluginManager(settings.configdir, profile=profile)
-        self.media = Gstreamer(self.config, self.plugman, cli=cli)
+        self.media = Multimedia(self.config, self.plugman, cli=cli)
 
     def set_window_id(self, window_id):
         """Sets the Window ID which GStreamer should paint on"""
@@ -72,7 +72,7 @@ class RecordingController:
             talkid = unicode(query.value(0).toString())
             title = unicode(query.value(1).toString())
             speaker = unicode(query.value(2).toString())
-            
+
             print("{talkid}: {speaker} - {title}".format(talkid=talkid, speaker=speaker, title=title))
 
     ###
