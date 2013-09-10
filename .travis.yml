@@ -8,17 +8,17 @@ virtualenv:
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  - sudo apt-get update
-  - sudo apt-get install libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install libqt4-sql-sqlite python-qt4 python-qt4-dev python-qt4-sql
   - python -c 'import PyQt4'
   - python -c 'import PyQt4.QtCore'
   - python -c 'import PyQt4.QtGui'
-  - sudo apt-get install python-gst0.10 python-gst0.10-dev gstreamer0.10-plugins-good
+  - sudo apt-get -qq install python-gst0.10 python-gst0.10-dev gstreamer0.10-plugins-good
   - python -c 'import pygst'
   - python -c 'import gst'
-  - sudo apt-get install gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly
-  - sudo apt-get install gstreamer0.10-pulseaudio
-  - sudo apt-get install gstreamer0.10-alsa
+  - sudo apt-get -qq install gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly
+  - sudo apt-get -qq install gstreamer0.10-pulseaudio
+  - sudo apt-get -qq install gstreamer0.10-alsa
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -r requirements.txt --use-mirrors
 # command to run tests, e.g. python setup.py test
