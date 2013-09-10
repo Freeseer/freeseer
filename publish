@@ -35,7 +35,8 @@ set -o errexit
 # Verify all parameters are set.
 #set -o nounset
 
-# Build the HTML output.
+# Remove old content and build the new HTML output.
+rm --recursive --dir ./build/html/*
 make html
 
 echo "Locating freeseer.github.io repository..."
@@ -47,8 +48,8 @@ if [ "$REPO" = "" ]; then echo "freeseer.github.io repo not found!"; exit 1; fi
 # Keep track of freeseer-docs location.
 DOCS="$( cd "$( dirname "$0" )" && pwd )"
 
-# Silently switch to freeseer.github.com/docs. Exit if directory doesn't exist.
-pushd "$REPO/docs" >/dev/null || { echo "You don't have the latest revision!"; exit 1; }
+# Silently switch to freeseer.github.io, or exit if directory doesn't exist.
+pushd "$REPO" >/dev/null || { echo "You don't have the latest revision!"; exit 1; }
 
 echo "Copying docs..."
 cp -rp $DOCS/build/html/* .
@@ -74,7 +75,7 @@ else
   git commit -m 'Updating docs'
 fi
 
-echo "Deploying to GitHub..."
+echo "Deploying to GitHub Pages..."
 if !(`git push origin master --quiet`)  # May require user's GitHub password.
 then
   echo "***error: Changes not deployed to GitHub, push failed"
