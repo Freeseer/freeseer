@@ -40,6 +40,7 @@ from PyQt4.QtGui import QTimeEdit
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 
+
 class AddTalkWidget(QWidget):
     '''
     classdocs

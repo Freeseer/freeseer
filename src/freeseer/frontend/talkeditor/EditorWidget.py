@@ -43,6 +43,7 @@ from PyQt4.QtGui import QWidget
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
+
 class EditorWidget(QWidget):
     '''
     classdocs
