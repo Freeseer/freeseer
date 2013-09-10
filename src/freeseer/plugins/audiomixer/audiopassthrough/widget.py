@@ -37,8 +37,9 @@ from PyQt4.QtGui import QStackedWidget
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 

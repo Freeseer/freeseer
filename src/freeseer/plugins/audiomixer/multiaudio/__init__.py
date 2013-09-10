@@ -40,57 +40,58 @@ from freeseer.framework.plugin import IAudioMixer
 # .freeseer-plugin custom
 import widget
 
+
 class MultiAudio(IAudioMixer):
     name = 'Multiple Audio Inputs'
     os = ['linux', 'linux2', 'win32', 'cygwin', 'darwin']
     input1 = None
     input2 = None
     widget = None
-    
+
     def get_audiomixer_bin(self):
         mixerbin = gst.Bin()
-        
+
         audiomixer = gst.element_factory_make('adder', 'audiomixer')
         mixerbin.add(audiomixer)
-        
+
         # ghost pads
         sinkpad1 = audiomixer.get_pad('sink%d')
         sink_ghostpad1 = gst.GhostPad('sink1', sinkpad1)
         mixerbin.add_pad(sink_ghostpad1)
-        
+
         sinkpad2 = audiomixer.get_pad('sink%d')
         sink_ghostpad2 = gst.GhostPad('sink2', sinkpad2)
         mixerbin.add_pad(sink_ghostpad2)
-        
+
         srcpad = audiomixer.get_pad('src')
         src_ghostpad = gst.GhostPad('src', srcpad)
         mixerbin.add_pad(src_ghostpad)
-        
+
         return mixerbin
 
     def get_inputs(self):
         inputs = [(self.input1, 0), (self.input2, 1)]
         return inputs
-    
+
     def load_inputs(self, player, mixer, inputs):
         input1 = inputs[0]
         player.add(input1)
         input1.link(mixer)
-        
+
         input2 = inputs[1]
         player.add(input2)
         input2.link(mixer)
-        
+
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1')
             self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2')
         except ConfigParser.NoSectionError, ConfigParser.NoOptionError:
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
-        
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -102,10 +103,10 @@ class MultiAudio(IAudioMixer):
         self.widget.connect(self.widget.source1_button, SIGNAL('clicked()'), self.source1_setup)
         self.widget.connect(self.widget.source2_combobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input2)
         self.widget.connect(self.widget.source2_button, SIGNAL('clicked()'), self.source2_setup)
-    
+
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+
         plugins = self.plugman.get_audioinput_plugins()
         self.widget.source1_combobox.clear()
         self.widget.source2_combobox.clear()
@@ -132,7 +133,7 @@ class MultiAudio(IAudioMixer):
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
         plugin.plugin_object.set_instance(0)
         plugin.plugin_object.get_dialog()
-        
+
     def set_input1(self, input1):
         self.input1 = input1
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 1", input1)
@@ -143,7 +144,8 @@ class MultiAudio(IAudioMixer):
         plugin = self.plugman.get_plugin_by_name(source, "AudioInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.source1_stack.setCurrentIndex(1)
-        else: self.widget.source1_stack.setCurrentIndex(0)
+        else:
+            self.widget.source1_stack.setCurrentIndex(0)
 
     ###
     ### Source 2
@@ -154,7 +156,7 @@ class MultiAudio(IAudioMixer):
         plugin = self.plugman.get_plugin_by_name(plugin_name, "AudioInput")
         plugin.plugin_object.set_instance(1)
         plugin.plugin_object.get_dialog()
-        
+
     def set_input2(self, input2):
         self.input2 = input2
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input 2", input2)
@@ -165,7 +167,8 @@ class MultiAudio(IAudioMixer):
         plugin = self.plugman.get_plugin_by_name(source, "AudioInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.source2_stack.setCurrentIndex(1)
-        else: self.widget.source2_stack.setCurrentIndex(0)
+        else:
+            self.widget.source2_stack.setCurrentIndex(0)
 
     ###
     ### Translations

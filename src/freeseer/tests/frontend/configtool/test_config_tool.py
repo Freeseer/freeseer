@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2012, 2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -27,11 +27,16 @@ import shutil
 import tempfile
 import unittest
 
+import pep8
+
 from PyQt4 import QtGui, QtTest, Qt, QtCore
 
 from freeseer import settings
 from freeseer.framework.config import Config
 from freeseer.frontend.configtool.configtool import ConfigToolApp
+
+from freeseer.tests import pep8_options
+from freeseer.tests import pep8_report
 
 
 class TestConfigToolApp(unittest.TestCase):
@@ -72,12 +77,11 @@ class TestConfigToolApp(unittest.TestCase):
         del self.app
         del self.config_tool.app
 
-
     def test_general_settings(self):
         '''
         Tests for the config tool's General Tab
         '''
-        
+
         # General tab
         self.assertTrue(self.config_tool.currentWidget == self.config_tool.generalWidget)
 
@@ -94,12 +98,12 @@ class TestConfigToolApp(unittest.TestCase):
             if state == QtCore.Qt.Unchecked:
                 expected_state = QtCore.Qt.Checked
             self.config_tool.currentWidget.autoHideCheckBox.click()
-            self.assertEquals( \
-                self.config_tool.currentWidget.autoHideCheckBox.checkState(), expected_state)   
-    
+            self.assertEquals(
+                self.config_tool.currentWidget.autoHideCheckBox.checkState(), expected_state)
+
             self.config_tool.config.readConfig()
             self.assertEquals(self.config_tool.config.auto_hide, expected_state == QtCore.Qt.Checked)
-            
+
     def test_recording_settings(self):
         '''
         Tests for config tool's Recording tab
@@ -107,13 +111,13 @@ class TestConfigToolApp(unittest.TestCase):
 
         # Select "Recording" tab
         item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.avString, QtCore.Qt.MatchExactly)
-        self.assertFalse(len(item) == 0 or item[0] == None)
+        self.assertFalse(len(item) == 0 or item[0] is None)
         self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
 
         # Recording tab
         self.assertTrue(self.config_tool.currentWidget == self.config_tool.avWidget)
-    
+
         # Audio Input
 
         # Checkbox
@@ -121,7 +125,7 @@ class TestConfigToolApp(unittest.TestCase):
             self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.audioGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.enable_audio_recording)
-                self.assertTrue(self.config_tool.config.audiomixer == "Audio Passthrough" or \
+                self.assertTrue(self.config_tool.config.audiomixer == "Audio Passthrough" or
                     self.config_tool.config.audiomixer == "Multiple Audio Inputs")
                 self.config_tool.currentWidget.audioGroupBox.setChecked(False)
             else:
@@ -131,7 +135,6 @@ class TestConfigToolApp(unittest.TestCase):
         # Dropdown
         # TODO
 
-
         # Video Input
         # Checkbox
         for i in range(2):
@@ -139,26 +142,25 @@ class TestConfigToolApp(unittest.TestCase):
             if self.config_tool.currentWidget.videoGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.enable_video_recording)
                 # TODO: Write better test case for this
-                self.assertTrue(self.config_tool.config.videomixer == "Video Passthrough" or \
+                self.assertTrue(self.config_tool.config.videomixer == "Video Passthrough" or
                     self.config_tool.config.videomixer == "Picture-In-Picture")
                 self.config_tool.currentWidget.videoGroupBox.setChecked(False)
             else:
                 self.assertFalse(self.config_tool.config.enable_video_recording)
                 self.config_tool.currentWidget.videoGroupBox.setChecked(True)
-        
-        # Dropdown
-        # TODO      
 
+        # Dropdown
+        # TODO
 
         # Record to File
-        
+
         # Checkbox
         for i in range(2):
             self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.fileGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.record_to_file)
                 # TODO: Write better test case for this
-                self.assertTrue(self.config_tool.config.record_to_file_plugin == "Ogg Output" or \
+                self.assertTrue(self.config_tool.config.record_to_file_plugin == "Ogg Output" or
                     self.config_tool.config.record_to_file_plugin == "WebM Output")
                 self.config_tool.currentWidget.fileGroupBox.setChecked(False)
             else:
@@ -168,8 +170,8 @@ class TestConfigToolApp(unittest.TestCase):
         # Dropdown
         # TODO
 
-        # Record to Stream  
-        
+        # Record to Stream
+
         # Checkbox
         for i in range(2):
             self.config_tool.config.readConfig()
@@ -181,10 +183,9 @@ class TestConfigToolApp(unittest.TestCase):
             else:
                 self.assertFalse(self.config_tool.config.record_to_stream)
                 self.config_tool.currentWidget.streamGroupBox.setChecked(True)
-        
+
         # Dropdown
         # TODO
-
 
     def test_plugin_audio_input_settings(self):
         '''
@@ -198,7 +199,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
         Tests for config tool's Plugins->Audio Mixer tab
         '''
-        
+
         # TODO
         pass
 
@@ -206,7 +207,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
         Tests for config tool's Plugins->Video Input tab
         '''
-        
+
         # TODO
         pass
 
@@ -214,7 +215,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
         Tests for config tool's Plugins->Video Mixer tab
         '''
-        
+
         # TODO
         pass
 
@@ -222,7 +223,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
         Tests for config tool's Plugins->Output tab
         '''
-        
+
         # TODO
         pass
 
@@ -237,12 +238,11 @@ class TestConfigToolApp(unittest.TestCase):
         # TODO
         pass
 
-    
     def test_close_configtool(self):
         '''
         Tests for config tool's close button
         '''
-        
+
         self.assertTrue(self.config_tool.mainWidget.isVisible())
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
         self.assertFalse(self.config_tool.mainWidget.isVisible())
@@ -251,9 +251,9 @@ class TestConfigToolApp(unittest.TestCase):
         '''
         Tests for config tool's File->Quit
         '''
-        
+
         self.assertTrue(self.config_tool.isVisible())
-    
+
         # File->Quit
         self.config_tool.actionExit.trigger()
         self.assertFalse(self.config_tool.isVisible())
@@ -262,7 +262,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
         Tests for config tool's Help->About
         '''
-        
+
         self.assertTrue(self.config_tool.isVisible())
 
         # Help->About
@@ -273,3 +273,9 @@ class TestConfigToolApp(unittest.TestCase):
         # Click "Close"
         QtTest.QTest.mouseClick(self.config_tool.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.config_tool.aboutDialog.isVisible())
+
+    def test_pep8(self):
+        checker = pep8.StyleGuide(**pep8_options)
+        report = checker.check_files(['freeseer/tests/frontend/configtool',
+                                      'freeseer/frontend/configtool'])
+        pep8_report(self, report)

@@ -33,24 +33,25 @@ from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QVBoxLayout()
         self.setLayout(layout)
-        
+
         self.liveCheckBox = QCheckBox("Live Source")
         self.liveCheckBox.setToolTip('Act as a live video source')
         layout.addWidget(self.liveCheckBox)
-        
+
         formWidget = QWidget()
         formLayout = QFormLayout()
         formWidget.setLayout(formLayout)
         layout.addWidget(formWidget)
-        
+
         self.patternLabel = QLabel("Pattern")
         self.patternComboBox = QComboBox()
-        
+
         formLayout.addRow(self.patternLabel, self.patternComboBox)

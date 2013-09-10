@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -36,6 +36,7 @@ from PyQt4.QtGui import QTextOption
 from PyQt4.QtGui import QToolTip
 from PyQt4.QtGui import QWidget
 
+
 class AreaSelector(QWidget):
     '''
     This class provides a simple app for allowing the user to select an area
@@ -43,8 +44,8 @@ class AreaSelector(QWidget):
     points are recorded when the user presses the left mouse button and the
     end points are recorded when the user releases the mouse button. The
     result start and end points are then returned to the parent class as
-    through the desktopAreaEvent() function. 
-    
+    through the desktopAreaEvent() function.
+
     The parent class using this app must implement the deskopAreaEvent
     function.
     '''
@@ -76,7 +77,7 @@ class AreaSelector(QWidget):
         '''Save the users starting x/y points'''
         self.start_x = event.globalX()
         self.start_y = event.globalY()
-        
+
     def mouseReleaseEvent(self, event):
         '''Save the users end x/y points'''
         self.end_x = event.globalX()
@@ -99,10 +100,10 @@ class AreaSelector(QWidget):
 
     def _acceptSelection(self):
         '''Accept the selection and close the area selector app'''
-        if not self.parent == None:
+        if not self.parent is None:
             self.parent.areaSelectEvent(self.start_x, self.start_y, self.end_x, self.end_y)
         self.close()
-        
+
     def paintEvent(self, event):
         '''
         Paints area the user is currently selecting starting from point
@@ -130,12 +131,12 @@ class AreaSelector(QWidget):
         # Figure out text x-coordinates
         screen_width = self.screen_geometry.width()
         text_width = 800
-        text_start_x = screen_width/2 - text_width/2
+        text_start_x = screen_width / 2 - text_width / 2
 
         # Figure out text y-coordinates
         screen_height = self.screen_geometry.height()
         text_height = 200
-        text_start_y = screen_height/2 - text_height/2
+        text_start_y = screen_height / 2 - text_height / 2
 
         textoption = QTextOption(Qt.AlignCenter)
         textbox = QRectF(text_start_x, text_start_y, text_width, text_height)

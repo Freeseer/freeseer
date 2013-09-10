@@ -27,31 +27,34 @@ import os
 import sys
 import unicodedata
 
+
 def format_size(num):
-    for x in ['bytes','KB','MB','GB','TB']:
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
         if num < 1024.0:
             return "%3.1f %s" % (num, x)
         num /= 1024.0
+
 
 def get_free_space(directory):
         """ Return directory free space (in human readable form) """
         if sys.platform in ["win32", "cygwin"]:
             free_bytes = ctypes.c_ulonglong(0)
-            ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(directory), 
+            ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(directory),
                                                        None, None, ctypes.pointer(free_bytes))
             space = free_bytes.value
         else:
             space = os.statvfs(directory).f_bfree * os.statvfs(directory).f_frsize
-            
+
         return format_size(space)
 
 ###
 ### Filename related functions
 ###
 
+
 def get_record_name(extension, presentation=None, filename=None, path="."):
     """Returns the filename to use when recording.
-    
+
     If a record name with a .None extension is returned, the record name
     will just be ignored by the output plugin (e.g. Video Preview plugin).
 
@@ -63,26 +66,27 @@ def get_record_name(extension, presentation=None, filename=None, path="."):
         recordname = filename
     else:
         return None
-    
+
     count = 0
     tempname = recordname
-    
+
     # Add a number to the end of a duplicate record name so we don't
     # overwrite existing files
     while(os.path.exists(os.path.join(path, "%s.%s" % (tempname, extension)))):
         tempname = "{0}-{1}".format(recordname, count)
-        count+=1
+        count += 1
 
     recordname = "%s.%s" % (tempname, extension)
 
     return recordname
+
 
 def make_record_name(presentation):
     """Create an 'EVENT-ROOM-SPEAKER-TITLE' record name.
 
     If any information is missing, we blank it out intelligently
     And if we have nothing for some reason, we use "default"
-    """    
+    """
     event = make_shortname(presentation.event)
     title = make_shortname(presentation.title)
     room = make_shortname(presentation.room)
@@ -90,7 +94,7 @@ def make_record_name(presentation):
 
     recordname = ""  # TODO: add substrings to a list then ''.join(list) -- better practice
 
-    if event != "": # TODO: empty strings are falsy, use 'if not string:'
+    if event != "":  # TODO: empty strings are falsy, use 'if not string:'
         if recordname != "":
             recordname = recordname + "-" + event
         else:
@@ -116,12 +120,13 @@ def make_record_name(presentation):
 
     # Convert unicode filenames to their equivalent ascii so that
     # we don't run into issues with gstreamer or filesystems.
-    recordname = unicodedata.normalize('NFKD', recordname).encode('ascii','ignore')
+    recordname = unicodedata.normalize('NFKD', recordname).encode('ascii', 'ignore')
 
     if recordname != "":
         return recordname
 
     return "default"
+
 
 def make_shortname(string):
     """Returns the first 6 characters of a string in uppercase.

@@ -54,6 +54,7 @@ from AddTalkWidget import AddTalkWidget
 
 log = logging.getLogger(__name__)
 
+
 class TalkEditorApp(FreeseerApp):
     '''
     Freeseer talk database editor main gui class
@@ -192,14 +193,15 @@ class TalkEditorApp(FreeseerApp):
         datetime = QDateTime(date, time)
         presentation = Presentation(unicode(self.addTalkWidget.titleLineEdit.text()),
                                     unicode(self.addTalkWidget.presenterLineEdit.text()),
-                                    "", # description
-                                    "", # level
+                                    "",  # description
+                                    "",  # level
                                     unicode(self.addTalkWidget.eventLineEdit.text()),
                                     unicode(self.addTalkWidget.roomLineEdit.text()),
                                     unicode(datetime.toString(Qt.ISODate)))
 
         # Do not add talks if they are empty strings
-        if (len(presentation.title) == 0): return
+        if (len(presentation.title) == 0):
+            return
 
         self.db.insert_presentation(presentation)
 

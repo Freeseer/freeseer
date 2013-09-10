@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -40,40 +40,41 @@ from freeseer.framework.plugin import IOutput
 # .freeseer-plugin
 import widget
 
+
 class AudioFeedback(IOutput):
     name = "Audio Feedback"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     type = IOutput.AUDIO
     recordto = IOutput.OTHER
-    
+
     # variables
     feedbacksink = "autoaudiosink"
-    
+
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin()
-        
+
         audioqueue = gst.element_factory_make("queue", "audioqueue")
         bin.add(audioqueue)
-        
+
         audiosink = gst.element_factory_make(self.feedbacksink, "audiosink")
         bin.add(audiosink)
-        
+
         # Setup ghost pad
         pad = audioqueue.get_pad("sink")
         ghostpad = gst.GhostPad("sink", pad)
         bin.add_pad(ghostpad)
-        
+
         audioqueue.link(audiosink)
-        
+
         return bin
-    
+
     def load_config(self, plugman):
         self.plugman = plugman
         try:
             self.feedbacksink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
         except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
-        
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -82,10 +83,10 @@ class AudioFeedback(IOutput):
 
     def __enable_connections(self):
         self.widget.connect(self.widget.feedbackComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.set_feedbacksink)
-    
+
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+
         feedbackIndex = self.widget.feedbackComboBox.findText(self.feedbacksink)
         self.widget.feedbackComboBox.setCurrentIndex(feedbackIndex)
 

@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -40,48 +40,48 @@ from freeseer.framework.plugin import IAudioMixer
 # .freeseer-plugin custom
 import widget
 
+
 class AudioPassthrough(IAudioMixer):
     name = "Audio Passthrough"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     input1 = None
     widget = None
-    
+
     def get_audiomixer_bin(self):
         bin = gst.Bin()
-        
+
         audiomixer = gst.element_factory_make("adder", "audiomixer")
         bin.add(audiomixer)
-        
+
         # Setup ghost pad
         sinkpad = audiomixer.get_pad("sink%d")
         sink_ghostpad = gst.GhostPad("sink", sinkpad)
         bin.add_pad(sink_ghostpad)
-        
+
         srcpad = audiomixer.get_pad("src")
         src_ghostpad = gst.GhostPad("src", srcpad)
         bin.add_pad(src_ghostpad)
-        
+
         return bin
-        
+
     def get_inputs(self):
         inputs = [(self.input1, 0)]
         return inputs
-        
+
     def load_inputs(self, player, mixer, inputs):
         # Load inputs
         input = inputs[0]
         player.add(input)
         input.link(mixer)
 
-
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input")
         except ConfigParser.NoSectionError:
             self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
-    
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -94,12 +94,12 @@ class AudioPassthrough(IAudioMixer):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+
         sources = []
         plugins = self.plugman.get_audioinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
-                
+
         # Load the combobox with inputs
         self.widget.combobox.clear()
         n = 0
@@ -108,7 +108,7 @@ class AudioPassthrough(IAudioMixer):
             if i == self.input1:
                 self.widget.combobox.setCurrentIndex(n)
                 self.__enable_source_setup(self.input1)
-            n = n +1
+            n = n + 1
 
         # Finally enable connections
         self.__enable_connections()
@@ -127,7 +127,8 @@ class AudioPassthrough(IAudioMixer):
         plugin = self.plugman.get_plugin_by_name(source, "AudioInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.inputSettingsStack.setCurrentIndex(1)
-        else: self.widget.inputSettingsStack.setCurrentIndex(0)
+        else:
+            self.widget.inputSettingsStack.setCurrentIndex(0)
 
     ###
     ### Translations

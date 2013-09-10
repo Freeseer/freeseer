@@ -24,41 +24,40 @@
 
 from PyQt4 import QtGui
 
-#from freeseer.frontend.qtcommon.Resource import resource_rc
 
 class ControllerServerWidget(QtGui.QWidget):
     def __init__(self):
         QtGui.QWidget.__init__(self)
         self.resize(400, 300)
-        
+
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         self.statusLabel = QtGui.QLabel("Status: ")
         self.mainLayout.addWidget(self.statusLabel)
-        
+
         #
         # Configuration Layout
         #
         self.configLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.configLayout)
-        
+
         self.settingsEdit = QtGui.QLineEdit()
         self.settingsEdit.setReadOnly(True)
         self.mainLayout.addWidget(self.settingsEdit)
-        
+
         self.toolBox = QtGui.QToolBox()
         self.mainLayout.addWidget(self.toolBox)
-        
+
         #
         # Server Configuration
         #
-        
+
         self.connWidget = QtGui.QWidget()
         self.connLayout = QtGui.QGridLayout()
         self.connWidget.setLayout(self.connLayout)
         self.toolBox.addItem(self.connWidget, "Server Settings")
-        
+
         self.hostLabel = QtGui.QLabel("IP Address")
         self.hostCombo = QtGui.QComboBox()
         self.hostCombo.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
@@ -72,7 +71,7 @@ class ControllerServerWidget(QtGui.QWidget):
         self.connLayout.addWidget(self.portLabel, 0, 1)
         self.connLayout.addWidget(self.hostCombo, 1, 0)
         self.connLayout.addWidget(self.portEdit, 1, 1)
-        
+
         self.passLabel = QtGui.QLabel("Passphrase")
         self.passEdit = QtGui.QLineEdit()
         self.passEdit.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
@@ -81,30 +80,30 @@ class ControllerServerWidget(QtGui.QWidget):
         self.connLayout.addWidget(self.passLabel, 2, 0)
         self.connLayout.addWidget(self.passEdit, 3, 0)
         self.connLayout.addWidget(self.startButton, 3, 1)
-        
+
         #
         # Connected Clients
         #
-        
+
         self.clientListWidget = QtGui.QWidget()
         self.toolBox.addItem(self.clientListWidget, "Control Clients")
-        
+
         self.clientListLayout = QtGui.QHBoxLayout()
         self.clientListWidget.setLayout(self.clientListLayout)
         self.clientList = QtGui.QListWidget()
         self.clientList.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
         self.clientListLayout.addWidget(self.clientList)
-        
+
         self.clientListButtonsLayout = QtGui.QVBoxLayout()
         self.clientListLayout.addLayout(self.clientListButtonsLayout)
-        
+
         self.clientStartButton = QtGui.QPushButton("Start Recording")
         self.clientStopButton = QtGui.QPushButton("Stop Recording")
         self.clientDisconnectButton = QtGui.QPushButton("Disconnect")
         self.clientListButtonsLayout.addWidget(self.clientStartButton)
         self.clientListButtonsLayout.addWidget(self.clientStopButton)
         self.clientListButtonsLayout.addWidget(self.clientDisconnectButton)
-        
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)

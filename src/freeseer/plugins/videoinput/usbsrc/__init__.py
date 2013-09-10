@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -42,6 +42,7 @@ from freeseer.framework.plugin import IVideoInput
 # .freeseer-plugin custom modules
 import widget
 
+
 class USBSrc(IVideoInput):
     name = "USB Source"
     os = ["linux", "linux2", "win32", "cygwin"]
@@ -51,15 +52,15 @@ class USBSrc(IVideoInput):
         super(USBSrc, self).__init__()
 
         # Initialize a default device if there is None
-        devices = self.get_devices();
+        devices = self.get_devices()
         if devices and self.device is None:
-            self.device = devices.itervalues().next();
+            self.device = devices.itervalues().next()
 
     def get_videoinput_bin(self):
         """
         Return the video input object in gstreamer bin format.
         """
-        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
+        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = None
         if sys.platform.startswith("linux"):

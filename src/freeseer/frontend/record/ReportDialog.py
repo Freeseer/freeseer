@@ -31,22 +31,23 @@ except AttributeError:
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
+
 class ReportDialog(QtGui.QDialog):
     """
-    Failure report Dialog for the Freeseer Project. 
+    Failure report Dialog for the Freeseer Project.
 
     """
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
-        
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-        
+
         self.mainWidget = QtGui.QWidget()
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         boldFont = QtGui.QFont()
         boldFont.setBold(True)
 
@@ -56,7 +57,7 @@ class ReportDialog(QtGui.QDialog):
         self.mainLayout.addLayout(self.reportLayout)
         self.buttonLayout = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.buttonLayout)
-        
+
         # Talk infomation
         self.titleLabel = QtGui.QLabel("Title:")
         self.titleLabel2 = QtGui.QLabel()
@@ -78,13 +79,13 @@ class ReportDialog(QtGui.QDialog):
         self.infoLayout.addRow(self.eventLabel, self.eventLabel2)
         self.infoLayout.addRow(self.roomLabel, self.roomLabel2)
         self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
-        
+
         #Report
         self.commentLabel = QtGui.QLabel("Comment")
         self.commentEdit = QtGui.QLineEdit()
-        
+
         self.reportCombo = QtGui.QComboBox()
-        # Prototype for report options. Please define these in the 
+        # Prototype for report options. Please define these in the
         # record.py logic file under retranslate() so that translations
         # work.
 #        self.options = ['No Audio', 'No Video', 'No Audio/Video']
@@ -92,16 +93,16 @@ class ReportDialog(QtGui.QDialog):
 #            self.reportCombo.addItem(i)
 
         self.releaseCheckBox = QtGui.QCheckBox("Release Received")
-        
+
         self.reportLayout.addWidget(self.commentLabel)
         self.reportLayout.addWidget(self.commentEdit)
         self.reportLayout.addWidget(self.reportCombo)
         self.reportLayout.addWidget(self.releaseCheckBox)
-        
+
         #Buttons
         self.reportButton = QtGui.QPushButton("Report")
         self.closeButton = QtGui.QPushButton("Close")
-        
+
         self.buttonLayout.addWidget(self.closeButton)
         self.buttonLayout.addWidget(self.reportButton)
         self.connect(self.closeButton, QtCore.SIGNAL("clicked()"), self.close)

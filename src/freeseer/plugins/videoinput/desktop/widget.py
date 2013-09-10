@@ -34,18 +34,19 @@ from PyQt4.QtGui import QRadioButton
 from PyQt4.QtGui import QSpinBox
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QFormLayout()
         self.setLayout(layout)
-        
+
         self.desktopLabel = QLabel("Record Desktop")
         self.desktopButton = QRadioButton()
         layout.addRow(self.desktopLabel, self.desktopButton)
-        
+
         # Record Area of Desktop
         areaGroup = QHBoxLayout()
         self.areaLabel = QLabel("Record Region")
@@ -54,7 +55,7 @@ class ConfigWidget(QWidget):
         areaGroup.addWidget(self.areaButton)
         areaGroup.addWidget(self.setAreaButton)
         layout.addRow(self.areaLabel, areaGroup)
-        
+
         # Select screen to record
         self.screenLabel = QLabel("Screen")
         self.screenSpinBox = QSpinBox()

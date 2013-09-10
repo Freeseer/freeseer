@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -41,6 +41,7 @@ from freeseer.framework.plugin import IVideoInput
 # .freeseer-plugin custom modules
 import widget
 
+
 class FirewireSrc(IVideoInput):
     name = "Firewire Source"
     os = ["linux", "linux2"]
@@ -59,17 +60,17 @@ class FirewireSrc(IVideoInput):
 
         while os.path.exists(devpath):
             self.device_list.append(devpath)
-            i=i+1
-            devpath=path + str(i)
+            i = i + 1
+            devpath = path + str(i)
 
     def get_videoinput_bin(self):
-        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
+        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = gst.element_factory_make("dv1394src", "videosrc")
-        dv1394q1 =  gst.element_factory_make('queue', 'dv1394q1')
-        dv1394dvdemux =  gst.element_factory_make('dvdemux', 'dv1394dvdemux')
-        dv1394q2 =  gst.element_factory_make('queue', 'dv1394q2')
-        dv1394dvdec =  gst.element_factory_make('dvdec', 'dv1394dvdec')
+        dv1394q1 = gst.element_factory_make('queue', 'dv1394q1')
+        dv1394dvdemux = gst.element_factory_make('dvdemux', 'dv1394dvdemux')
+        dv1394q2 = gst.element_factory_make('queue', 'dv1394q2')
+        dv1394dvdec = gst.element_factory_make('dvdec', 'dv1394dvdec')
 
         # Add Elements
         bin.add(videosrc)
@@ -118,7 +119,7 @@ class FirewireSrc(IVideoInput):
             self.widget.devicesCombobox.addItem(i)
             if i == self.device:
                 self.widget.devicesCombobox.setCurrentIndex(n)
-            n = n +1
+            n = n + 1
 
         # Finally enable connections
         self.__enable_connections()

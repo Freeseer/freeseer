@@ -31,8 +31,9 @@ from PyQt4.QtGui import QFormLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
@@ -46,12 +47,12 @@ class ConfigWidget(QWidget):
         self.previewComboBox.addItem("ximagesink")
         self.previewComboBox.addItem("xvimagesink")
         self.previewComboBox.addItem("gconfvideosink")
-        
+
         layout.addRow(self.previewLabel, self.previewComboBox)
 
         # Leaky Queue
         # Allows user to set queue in video to be leaky - required to work with RTMP streaming plugin
         self.leakyQueueLabel = QLabel("Leaky Queue")
         self.leakyQueueComboBox = QComboBox()
-        
+
         layout.addRow(self.leakyQueueLabel, self.leakyQueueComboBox)

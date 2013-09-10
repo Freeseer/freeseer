@@ -28,6 +28,7 @@ http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
+
 class GeneralWidget(QtGui.QWidget):
     '''
     classdocs
@@ -38,19 +39,19 @@ class GeneralWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        
+
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         #
         # General
         #
-        
+
         self.MiscLayout = QtGui.QVBoxLayout()
         self.MiscGroupBox = QtGui.QGroupBox("General")
         self.MiscGroupBox.setLayout(self.MiscLayout)
         self.mainLayout.addWidget(self.MiscGroupBox)
-        
+
         self.languageLayout = QtGui.QHBoxLayout()
         self.MiscLayout.addLayout(self.languageLayout)
         self.languageLabel = QtGui.QLabel("Default Language")
@@ -59,10 +60,10 @@ class GeneralWidget(QtGui.QWidget):
         self.languageLabel.setBuddy(self.languageComboBox)
         self.languageLayout.addWidget(self.languageLabel)
         self.languageLayout.addWidget(self.languageComboBox)
-        
+
         self.recordDirLayout = QtGui.QHBoxLayout()
         self.MiscLayout.addLayout(self.recordDirLayout)
-        
+
         self.recordDirLabel = QtGui.QLabel("Record Directory")
         self.recordDirLineEdit = QtGui.QLineEdit()
         self.recordDirLabel.setBuddy(self.recordDirLineEdit)
@@ -70,11 +71,11 @@ class GeneralWidget(QtGui.QWidget):
         self.recordDirLayout.addWidget(self.recordDirLabel)
         self.recordDirLayout.addWidget(self.recordDirLineEdit)
         self.recordDirLayout.addWidget(self.recordDirPushButton)
-        
+
         self.autoHideCheckBox = QtGui.QCheckBox("Enable Auto-Hide")
         self.MiscLayout.addWidget(self.autoHideCheckBox)
-        
-        
+
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)

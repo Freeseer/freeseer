@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2012, 2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,10 +26,16 @@ import shutil
 import tempfile
 import unittest
 
+import pep8
+
 from PyQt4 import QtGui, QtTest, Qt
 
 from freeseer import settings
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
+
+from freeseer.tests import pep8_options
+from freeseer.tests import pep8_report
+
 
 class TestTalkEditorApp(unittest.TestCase):
     '''
@@ -65,12 +71,12 @@ class TestTalkEditorApp(unittest.TestCase):
         del self.talk_editor.app
 
     def test_add_talk(self):
-        ''' 
+        '''
         Tests a user creating a talk and adding it.
         '''
 
         QtTest.QTest.mouseClick(self.talk_editor.editorWidget.addButton, Qt.Qt.LeftButton)
-        self.assertFalse(self.talk_editor.editorWidget.isVisible()) 
+        self.assertFalse(self.talk_editor.editorWidget.isVisible())
         self.assertTrue(self.talk_editor.addTalkWidget.isVisible())
 
         mTitle = "This is a test"
@@ -90,19 +96,19 @@ class TestTalkEditorApp(unittest.TestCase):
         # find our talk (ensure it was added)
         found = False
         row_count = self.talk_editor.editorWidget.editor.model().rowCount() - 1
-        while row_count >= 0 and not found: # should be at the end, but you never know
+        while row_count >= 0 and not found:  # should be at the end, but you never know
             if self.talk_editor.editorWidget.editor.model().index(row_count, 1).data() == mTitle and \
-                self.talk_editor.editorWidget.editor.model().index(row_count, 2).data() == mPresenter and \
-                self.talk_editor.editorWidget.editor.model().index(row_count, 5).data() == mEvent and \
-                self.talk_editor.editorWidget.editor.model().index(row_count, 6).data() == mRoom:
-                found = True
-                # TODO: Select this row
+                    self.talk_editor.editorWidget.editor.model().index(row_count, 2).data() == mPresenter and \
+                    self.talk_editor.editorWidget.editor.model().index(row_count, 5).data() == mEvent and \
+                    self.talk_editor.editorWidget.editor.model().index(row_count, 6).data() == mRoom:
+                    found = True
+                    # TODO: Select this row
             row_count -= 1
 
         self.assertTrue(found, "Couldn't find talk just inserted...")
 
         # now delete the talk we just created
-        QtTest.QTest.mouseClick(self.talk_editor.editorWidget.removeButton, Qt.Qt.LeftButton);
+        QtTest.QTest.mouseClick(self.talk_editor.editorWidget.removeButton, Qt.Qt.LeftButton)
 
     def test_add_talk_cancel(self):
         '''
@@ -110,7 +116,7 @@ class TestTalkEditorApp(unittest.TestCase):
         '''
 
         QtTest.QTest.mouseClick(self.talk_editor.editorWidget.addButton, Qt.Qt.LeftButton)
-        self.assertFalse(self.talk_editor.editorWidget.isVisible()) 
+        self.assertFalse(self.talk_editor.editorWidget.isVisible())
         self.assertTrue(self.talk_editor.addTalkWidget.isVisible())
 
         QtTest.QTest.mouseClick(self.talk_editor.addTalkWidget.cancelButton, Qt.Qt.LeftButton)
@@ -119,14 +125,13 @@ class TestTalkEditorApp(unittest.TestCase):
 
     def test_close_talkeditor(self):
         '''
-        Tests the "close" button. 
-        Although we close the app using this button after every test (in tearDown()), 
+        Tests the "close" button.
+        Although we close the app using this button after every test (in tearDown()),
         we are not guaranteed a valid test case in tearDown().
-        ''' 
+        '''
 
         QtTest.QTest.mouseClick(self.talk_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.talk_editor.editorWidget.isVisible())
-
 
     def test_clear_all_talks(self):
         '''
@@ -145,7 +150,7 @@ class TestTalkEditorApp(unittest.TestCase):
             self.talk_editor.addTalkWidget.eventLineEdit.setText(mEvent)
             self.talk_editor.addTalkWidget.roomLineEdit.setText(mRoom)
 
-            # date and time are prepopulated 
+            # date and time are prepopulated
 
             # add in the talk
             QtTest.QTest.mouseClick(self.talk_editor.addTalkWidget.addButton, Qt.Qt.LeftButton)
@@ -161,7 +166,7 @@ class TestTalkEditorApp(unittest.TestCase):
         #QtTest.QTest.mouseClick(self.talk_editor.editorWidget.clearButton, Qt.Qt.LeftButton)
         # TODO: get the pop-up box's focus and click the button
 
-        # hit the clear button, hit yes. Empty DB   
+        # hit the clear button, hit yes. Empty DB
         #QtTest.QTest.mouseClick(self.talk_editor.editorWidget.clearButton, Qt.Qt.LeftButton)
         # TODO: get the pop-up box's focus and click the button
 
@@ -191,3 +196,9 @@ class TestTalkEditorApp(unittest.TestCase):
         # Click "Close"
         QtTest.QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.talk_editor.aboutDialog.isVisible())
+
+    def test_pep8(self):
+        checker = pep8.StyleGuide(**pep8_options)
+        report = checker.check_files(['freeseer/tests/frontend/talkeditor',
+                                      'freeseer/frontend/talkeditor'])
+        pep8_report(self, report)
