@@ -16,7 +16,7 @@ Using the Report Editor
 ***********************
 
 Selecting a report will show all the given details belonging to the
-talk, on the right pane of the window. 
+talk, on the right pane of the window.
 
 There are a few operations which can be performed from this interface:
 
