@@ -31,14 +31,15 @@ from PyQt4.QtGui import QFormLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QFormLayout()
         self.setLayout(layout)
-        
+
         self.devicesLabel = QLabel("Video Device")
         self.devicesCombobox = QComboBox()
         self.devicesCombobox.setMinimumWidth(150)

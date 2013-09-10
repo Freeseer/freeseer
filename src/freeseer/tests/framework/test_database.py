@@ -32,6 +32,7 @@ from PyQt4 import QtSql
 from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 
+
 class TestDatabase(unittest.TestCase):
     def setUp(self):
         '''

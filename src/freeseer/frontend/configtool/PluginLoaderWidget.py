@@ -28,6 +28,7 @@ http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
+
 class PluginLoaderWidget(QtGui.QWidget):
     '''
     classdocs
@@ -38,21 +39,21 @@ class PluginLoaderWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        
+
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         self.listWidget = QtGui.QListWidget()
         self.listWidget.setAlternatingRowColors(True)
         self.mainLayout.addWidget(self.listWidget)
-        
+
     def getListWidgetPlugin(self, plugin, plugin_category, plugman):
         plugin_name = plugin.plugin_object.get_name()
-        
+
         widget = QtGui.QWidget()
         layout = QtGui.QHBoxLayout()
         widget.setLayout(layout)
-        
+
         # Display Plugin's meta data in a tooltip
         pluginTooltip = """
         <table>
@@ -76,35 +77,35 @@ class PluginLoaderWidget(QtGui.QWidget):
             <td><b>%(description)s</b></td>
         </tr>
         </table>
-        """ % {"name" : plugin.name,
-               "version" : plugin.version,
-               "author" : plugin.author,
-               "website" : plugin.website,
-               "description" : plugin.description}
+        """ % {"name": plugin.name,
+               "version": plugin.version,
+               "author": plugin.author,
+               "website": plugin.website,
+               "description": plugin.description}
         widget.setToolTip(pluginTooltip)
 
         # Plugin Label / Description
         textLayout = QtGui.QVBoxLayout()
         layout.addLayout(textLayout)
-        
+
         pluginLabel = QtGui.QLabel(plugin_name)
         pluginLabel.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
         pluginLabelFont = QtGui.QFont()
         pluginLabelFont.setPointSize(11)
         pluginLabelFont.setBold(True)
         pluginLabel.setFont(pluginLabelFont)
-        
+
         pluginDescLabel = QtGui.QLabel(plugin.description)
         pluginDescLabel.setSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Maximum)
         pluginDescLabelFont = QtGui.QFont()
         pluginDescLabelFont.setPointSize(10)
         pluginDescLabelFont.setItalic(True)
         pluginDescLabel.setFont(pluginDescLabelFont)
-        
+
         textLayout.addWidget(pluginLabel)
         textLayout.addWidget(pluginDescLabel)
         # --- End Label / Description
-        
+
         # If plugin supports configuration, show a configuration button.
         if plugin.plugin_object.get_widget() is not None:
             pluginConfigToolButton = QtGui.QToolButton()
@@ -113,10 +114,10 @@ class PluginLoaderWidget(QtGui.QWidget):
             pluginConfigToolButton.setIcon(configIcon)
             pluginConfigToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
             pluginConfigToolButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
-            
+
             layout.addWidget(pluginConfigToolButton)
             self.connect(pluginConfigToolButton, QtCore.SIGNAL('clicked()'), plugin.plugin_object.get_dialog)
-        
+
         return widget
 
 if __name__ == "__main__":

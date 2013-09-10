@@ -37,17 +37,18 @@ except AttributeError:
 
 log = logging.getLogger(__name__)
 
+
 class FreeseerApp(QtGui.QMainWindow):
-    
+
     def __init__(self):
         super(FreeseerApp, self).__init__()
         self.icon = QtGui.QIcon()
         self.icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(self.icon)
-        
+
         self.aboutDialog = AboutDialog()
         self.aboutDialog.setModal(True)
-        
+
         #
         # Translator
         #
@@ -61,12 +62,12 @@ class FreeseerApp(QtGui.QMainWindow):
         QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
         self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
         # --- Translator
-        
+
         #
         # Setup Menubar
         #
         self.menubar = self.menuBar()
-        
+
         self.menubar.setGeometry(QtCore.QRect(0, 0, 500, 50))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
@@ -75,13 +76,13 @@ class FreeseerApp(QtGui.QMainWindow):
         self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
         self.menuHelp = QtGui.QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
-        
+
         exitIcon = QtGui.QIcon.fromTheme("application-exit")
         self.actionExit = QtGui.QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         self.actionExit.setIcon(exitIcon)
-        
+
         helpIcon = QtGui.QIcon.fromTheme("help-contents")
         self.actionOnlineHelp = QtGui.QAction(self)
         self.actionOnlineHelp.setObjectName(_fromUtf8("actionOnlineHelp"))
@@ -90,7 +91,7 @@ class FreeseerApp(QtGui.QMainWindow):
         self.actionAbout = QtGui.QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.actionAbout.setIcon(self.icon)
-        
+
         # Actions
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
@@ -98,14 +99,14 @@ class FreeseerApp(QtGui.QMainWindow):
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuLanguage.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
-        
+
         self.setupLanguageMenu()
         # --- End Menubar
-        
+
         self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
         self.connect(self.actionOnlineHelp, QtCore.SIGNAL('triggered()'), self.openOnlineHelp)
-        
+
         self.retranslateFreeseerApp()
         self.aboutDialog.retranslate("en_US")
 
@@ -113,7 +114,7 @@ class FreeseerApp(QtGui.QMainWindow):
         """Opens a link to the Freeseer Online Help"""
         url = QtCore.QUrl("http://freeseer.github.com/docs/")
         QtGui.QDesktopServices.openUrl(url)
-        
+
     def translate(self, action):
         """Translates the GUI via menu action.
 
@@ -121,20 +122,20 @@ class FreeseerApp(QtGui.QMainWindow):
         called and the language to be changed to is retrieved.
         """
         self.current_language = str(action.data().toString()).strip("tr_").rstrip(".qm")
-        
+
         log.info("Switching language to: %s" % action.text())
         self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
 
         self.retranslateFreeseerApp()
         self.aboutDialog.retranslate(self.current_language)
         self.retranslate()
-        
+
     def retranslate(self):
         """
         Reimplement this function to provide translations to your app.
         """
         pass
-        
+
     def retranslateFreeseerApp(self):
         #
         # Menubar
@@ -142,30 +143,30 @@ class FreeseerApp(QtGui.QMainWindow):
         self.menuFile.setTitle(self.app.translate("FreeseerApp", "&File"))
         self.menuLanguage.setTitle(self.app.translate("FreeseerApp", "&Language"))
         self.menuHelp.setTitle(self.app.translate("FreeseerApp", "&Help"))
-        
+
         self.actionExit.setText(self.app.translate("FreeseerApp", "&Quit"))
         self.actionAbout.setText(self.app.translate("FreeseerApp", "&About"))
         self.actionOnlineHelp.setText(self.app.translate("FreeseerApp", "Online Documentation"))
         # --- Menubar
-        
+
     def setupLanguageMenu(self):
         self.languages = QtCore.QDir(":/languages").entryList()
-        
+
         if self.current_language is None:
             self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
             log.debug("Detected user's locale as %s" % self.current_language)
-        
+
         for language in self.languages:
             translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.
             translator.load(":/languages/%s" % language)
             language_display_text = translator.translate("Translation", "Language Display Text")
-            
+
             languageAction = QtGui.QAction(self)
             languageAction.setCheckable(True)
             languageAction.setText(language_display_text)
             languageAction.setData(language)
             self.menuLanguage.addAction(languageAction)
             self.langActionGroup.addAction(languageAction)
-            
+
             if self.current_language == str(language).strip("tr_").rstrip(".qm"):
                 languageAction.setChecked(True)

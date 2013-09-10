@@ -24,36 +24,35 @@
 
 from PyQt4 import QtCore, QtGui
 
-#from freeseer.frontend.qtcommon.Resource import resource_rc
 
 class ControllerClientWidget(QtGui.QWidget):
     def __init__(self):
-        QtGui.QWidget.__init__(self) 
-        
+        QtGui.QWidget.__init__(self)
+
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         self.statusLabel = QtGui.QLabel("Status: ")
         self.mainLayout.addWidget(self.statusLabel)
-        
+
         #
         # Configuration Layout
         #
         self.configLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.configLayout)
-        
+
         self.toolBox = QtGui.QToolBox()
         self.mainLayout.addWidget(self.toolBox)
-        
+
         #
         # Connection Settings
         #
- 
+
         self.connWidget = QtGui.QWidget()
         self.connLayout = QtGui.QGridLayout()
         self.connWidget.setLayout(self.connLayout)
         self.toolBox.addItem(self.connWidget, "Connection Settings")
-        
+
         self.hostLabel = QtGui.QLabel("Host name (or IP Address)")
         self.hostEdit = QtGui.QLineEdit()
         self.hostEdit.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
@@ -67,7 +66,7 @@ class ControllerClientWidget(QtGui.QWidget):
         self.connLayout.addWidget(self.portLabel, 0, 1)
         self.connLayout.addWidget(self.hostEdit, 1, 0)
         self.connLayout.addWidget(self.portEdit, 1, 1)
-        
+
         self.passLabel = QtGui.QLabel("Passphrase")
         self.passEdit = QtGui.QLineEdit()
         self.passEdit.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Fixed)
@@ -76,37 +75,37 @@ class ControllerClientWidget(QtGui.QWidget):
         self.connLayout.addWidget(self.passLabel, 2, 0)
         self.connLayout.addWidget(self.passEdit, 3, 0)
         self.connLayout.addWidget(self.connectButton, 3, 1)
-        
+
         #
         # Recent Connections
         #
-        
+
         self.recentConnList = QtGui.QTableView()
         self.recentConnList.setShowGrid(False)
         self.recentConnList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.toolBox.addItem(self.recentConnList, "Recent Connections")
-        
+
         #
         # Qt Connections
         #
-        
+
         self.connect(self.hostEdit, QtCore.SIGNAL("textEdited(const QString &)"), self.copy_settings)
-        
+
     def copy_settings(self, value):
         """
         Copies settings in the Host field to port and passphrase if the string format is correct
-        
+
         Format: passphrase@host:port
         """
-        
+
         if ":" in value and "@" in value:
             splitport = str(value).rsplit(":", 1)
             splitpass = splitport[0].rsplit("@", 1)
-            
+
             host = splitpass[1]
             port = int(splitport[1])
             passphrase = splitpass[0]
-            
+
             # set the appropriate config boxes
             self.hostEdit.setText(host)
             self.portEdit.setValue(port)

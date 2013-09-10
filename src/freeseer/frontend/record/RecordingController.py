@@ -28,6 +28,7 @@ from freeseer.framework.database import QtDBConnector
 from freeseer.framework.multimedia import Multimedia
 from freeseer.framework.plugin import PluginManager
 
+
 class RecordingController:
     def __init__(self, cli=False, profile=None):
         self.config = Config(settings.configdir, profile=profile)
@@ -57,8 +58,10 @@ class RecordingController:
 
     def load_backend(self, presentation=None):
         """Prepares the backend for recording"""
-        if self.media.load_backend(presentation): return True
-        else: return False  # Error something failed while loading the backend
+        if self.media.load_backend(presentation):
+            return True
+        else:
+            return False  # Error something failed while loading the backend
 
     def print_talks(self):
         query = self.db.get_talks()

@@ -43,53 +43,54 @@ from ReportEditorWidget import ReportEditorWidget
 
 log = logging.getLogger(__name__)
 
+
 class ReportEditorApp(FreeseerApp):
     '''
     Freeseer report editor main gui class
     '''
     def __init__(self, core=None):
         FreeseerApp.__init__(self)
-        
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.resize(960, 400)
-        
+
         self.mainWidget = QtGui.QWidget()
         self.mainLayout = QtGui.QHBoxLayout()
         self.mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.mainWidget)
-        
+
         self.editorWidget = ReportEditorWidget()
         self.editorWidget.editor.setColumnHidden(5, True)
-        
+
         self.mainLayout.addWidget(self.editorWidget)
-        
+
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
-        
+
         self.config = Config(settings.configdir)
         self.db = QtDBConnector(settings.configdir)
-        
+
         #
         # Setup Menubar
         #
         self.actionExportCsv = QtGui.QAction(self)
         self.actionExportCsv.setObjectName(_fromUtf8("actionExportCsv"))
-        
+
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionExportCsv)
         # --- End Menubar
-        
+
         #
         # Report Editor Connections
         #
-        
+
         # Editor Widget
         self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
-        
+
         # Main Window Connections
         self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_reports_to_csv)
         self.connect(self.editorWidget.editor, QtCore.SIGNAL('clicked (const QModelIndex&)'), self.editorSelectionChanged)
@@ -111,7 +112,7 @@ class ReportEditorApp(FreeseerApp):
     ###
     def retranslate(self):
         self.setWindowTitle(self.app.translate("ReportEditorApp", "Freeseer Report Editor"))
-        
+
         #
         # Reusable Strings
         #
@@ -125,14 +126,14 @@ class ReportEditorApp(FreeseerApp):
         #
         self.actionExportCsv.setText(self.app.translate("ReportEditorApp", "&Export to CSV"))
         # --- End Menubar
-        
+
         #
         # EditorWidget
         #
         self.editorWidget.removeButton.setText(self.app.translate("ReportEditorApp", "Remove"))
         self.editorWidget.clearButton.setText(self.app.translate("ReportEditorApp", "Clear"))
         self.editorWidget.closeButton.setText(self.app.translate("ReportEditorApp", "Close"))
-        
+
         self.editorWidget.titleLabel.setText(self.app.translate("ReportEditorApp", "Title:"))
         self.editorWidget.speakerLabel.setText(self.app.translate("ReportEditorApp", "Speaker:"))
         self.editorWidget.descriptionLabel.setText(self.app.translate("ReportEditorApp", "Description:"))
@@ -141,7 +142,7 @@ class ReportEditorApp(FreeseerApp):
         self.editorWidget.roomLabel.setText(self.app.translate("ReportEditorApp", "Room:"))
         self.editorWidget.timeLabel.setText(self.app.translate("ReportEditorApp", "Time:"))
         # --- End EditorWidget
-    
+
     def load_failures_model(self):
         # Load Presentation Model
         self.failureModel = self.db.get_failures_model()
@@ -152,21 +153,22 @@ class ReportEditorApp(FreeseerApp):
     def hide_add_talk_widget(self):
         self.editorWidget.setHidden(False)
         self.addTalkWidget.setHidden(True)
-    
+
     def add_talk(self):
         date = self.addTalkWidget.dateEdit.date()
         time = self.addTalkWidget.timeEdit.time()
         datetime = QtCore.QDateTime(date, time)
         presentation = Presentation(unicode(self.addTalkWidget.titleLineEdit.text()),
                                     unicode(self.addTalkWidget.presenterLineEdit.text()),
-                                    "", # description
-                                    "", # level
+                                    "",  # description
+                                    "",  # level
                                     unicode(self.addTalkWidget.eventLineEdit.text()),
                                     unicode(self.addTalkWidget.roomLineEdit.text()),
                                     unicode(datetime.toString()))
-        
+
         # Do not add talks if they are empty strings
-        if (len(presentation.title) == 0): return
+        if (len(presentation.title) == 0):
+            return
 
         self.db.insert_presentation(presentation)
 
@@ -175,7 +177,7 @@ class ReportEditorApp(FreeseerApp):
         self.addTalkWidget.presenterLineEdit.clear()
 
         self.failureModel.select()
-        
+
         self.hide_add_talk_widget()
 
     def remove_talk(self):
@@ -183,28 +185,28 @@ class ReportEditorApp(FreeseerApp):
             row_clicked = self.editorWidget.editor.currentIndex().row()
         except:
             return
-        
+
         self.failureModel.removeRow(row_clicked)
         self.failureModel.select()
-        
+
     def reset(self):
         self.db.clear_report_db()
         self.failureModel.select()
-        
+
     def confirm_reset(self):
         """
         Presents a confirmation dialog to ask the user if they are sure they
         wish to remove the report database.
-        
+
         If Yes call the reset() function.
         """
         confirm = QtGui.QMessageBox.question(self,
                     self.confirmDBClearTitleString,
                     self.confirmDBClearQuestionString,
-                    QtGui.QMessageBox.Yes | 
+                    QtGui.QMessageBox.Yes |
                     QtGui.QMessageBox.No,
                     QtGui.QMessageBox.No)
-        
+
         if confirm == QtGui.QMessageBox.Yes:
             self.reset()
 
@@ -212,11 +214,11 @@ class ReportEditorApp(FreeseerApp):
         log.info('Exiting report editor...')
         self.geometry = self.saveGeometry()
         event.accept()
-    
+
     def editorSelectionChanged(self, index):
         talkId = self.failureModel.record(index.row()).value(0).toString()
         self.updatePresentationInfo(talkId)
-        
+
     def updatePresentationInfo(self, talkId):
         p = self.db.get_presentation(talkId)
         if p is not None:
@@ -235,7 +237,7 @@ class ReportEditorApp(FreeseerApp):
             self.editorWidget.eventLabel2.setText("Talk not found")
             self.editorWidget.roomLabel2.setText("Talk not found")
             self.editorWidget.timeLabel2.setText("Talk not found")
-        
+
     def export_reports_to_csv(self):
         fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString, "", "*.csv")
         if fname:

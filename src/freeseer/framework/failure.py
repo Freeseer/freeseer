@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,14 +22,15 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-class Failure():    
+
+class Failure():
     '''
     This class is responsible for encapsulate data about failures
     and its database related operations
     '''
 
     def __init__(self, talkID, comment, indicator, release=False):
-        
+
         '''
         Initialize a failure report instance
         '''
@@ -38,8 +39,9 @@ class Failure():
         self.indicator = indicator
         self.release = release
 
+
 class Report():
-    def __init__(self, presentation, failure):    
+    def __init__(self, presentation, failure):
         '''
         Initialize a report instance
         '''

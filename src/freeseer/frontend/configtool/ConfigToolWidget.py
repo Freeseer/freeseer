@@ -34,8 +34,7 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
-   
-#import resource_rc
+
 
 class ConfigToolWidget(QtGui.QWidget):
     '''
@@ -47,17 +46,17 @@ class ConfigToolWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        
+
         self.mainLayout = QtGui.QHBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         #
         # Left panel
         #
-        
+
         self.leftPanelLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.leftPanelLayout)
-        
+
         # General
         self.optionsTreeWidget = QtGui.QTreeWidget()
         self.optionsTreeWidget.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Minimum)
@@ -65,11 +64,11 @@ class ConfigToolWidget(QtGui.QWidget):
         self.optionsTreeWidget.headerItem().setText(0, "1")
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(0).setText(0, "General")
-        
+
         # AV
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(1).setText(0, "AV Config")
-        
+
         # Plugins
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(2).setText(0, "Plugins")
@@ -83,21 +82,21 @@ class ConfigToolWidget(QtGui.QWidget):
         self.optionsTreeWidget.topLevelItem(2).child(3).setText(0, "VideoMixer")
         item_1 = QtGui.QTreeWidgetItem(item_0)
         self.optionsTreeWidget.topLevelItem(2).child(4).setText(0, "Output")
-        
+
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         self.closePushButton = QtGui.QPushButton("Close")
         self.closePushButton.setIcon(closeIcon)
         self.leftPanelLayout.addWidget(self.optionsTreeWidget)
         self.leftPanelLayout.addWidget(self.closePushButton)
-        
+
         self.optionsTreeWidget.expandAll()
-        
+
         #
         # Right panel
         #
         self.rightPanelWidget = QtGui.QWidget()
         self.mainLayout.addWidget(self.rightPanelWidget)
-        
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)

@@ -31,8 +31,9 @@ from PyQt4.QtGui import QFormLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
@@ -42,5 +43,5 @@ class ConfigWidget(QWidget):
         self.feedbackComboBox = QComboBox()
         self.feedbackComboBox.addItem("autoaudiosink")
         self.feedbackComboBox.addItem("alsasink")
-        
+
         layout.addRow(self.feedbackLabel, self.feedbackComboBox)

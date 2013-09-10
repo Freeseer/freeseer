@@ -30,6 +30,7 @@ from PyQt4 import QtCore, QtGui
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
+
 class ReportEditorWidget(QtGui.QWidget):
     '''
     classdocs
@@ -40,18 +41,18 @@ class ReportEditorWidget(QtGui.QWidget):
         Constructor
         '''
         QtGui.QWidget.__init__(self, parent)
-        
+
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         #
         # ReportEditor Layout
         #
         self.editorLayout = QtGui.QHBoxLayout()
         self.mainLayout.addLayout(self.editorLayout)
-        
+
         self.buttonsLayout = QtGui.QVBoxLayout()
-        
+
         self.editorLayout.addLayout(self.buttonsLayout)
 
         boldFont = QtGui.QFont()
@@ -61,7 +62,7 @@ class ReportEditorWidget(QtGui.QWidget):
         removeIcon = QtGui.QIcon.fromTheme("list-remove")
         clearIcon = QtGui.QIcon.fromTheme("edit-clear")
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
-        
+
         #self.addButton = QtGui.QPushButton("Add")
         #self.addButton.setIcon(addIcon)
         self.removeButton = QtGui.QPushButton("Remove")
@@ -75,18 +76,18 @@ class ReportEditorWidget(QtGui.QWidget):
         self.buttonsLayout.addWidget(self.clearButton)
         self.buttonsLayout.addStretch(0)
         self.buttonsLayout.addWidget(self.closeButton)
-        
+
         self.editor = QtGui.QTableView()
         self.editor.setAlternatingRowColors(True)
         self.editor.setSortingEnabled(True)
-        
+
         self.tableLayout = QtGui.QGridLayout()
         self.tableLayout.addWidget(self.editor)
         self.editorLayout.addLayout(self.tableLayout)
-        
+
         self.infoLayout = QtGui.QFormLayout()
         self.editorLayout.addLayout(self.infoLayout)
-        
+
         self.titleLabel = QtGui.QLabel("Title :")
         self.titleLabel2 = QtGui.QLabel()
         self.titleLabel2.setFont(boldFont)
@@ -108,7 +109,7 @@ class ReportEditorWidget(QtGui.QWidget):
         self.timeLabel = QtGui.QLabel("Time :")
         self.timeLabel2 = QtGui.QLabel()
         self.timeLabel2.setFont(boldFont)
-        
+
         self.infoLayout.addRow(self.titleLabel, self.titleLabel2)
         self.infoLayout.addRow(self.speakerLabel, self.speakerLabel2)
         self.infoLayout.addRow(self.descriptionLabel, self.descriptionLabel2)
@@ -116,7 +117,7 @@ class ReportEditorWidget(QtGui.QWidget):
         self.infoLayout.addRow(self.eventLabel, self.eventLabel2)
         self.infoLayout.addRow(self.roomLabel, self.roomLabel2)
         self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
-        
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)

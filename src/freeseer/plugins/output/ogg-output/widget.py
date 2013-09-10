@@ -33,18 +33,19 @@ from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QSpinBox
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QFormLayout()
         self.setLayout(layout)
-        
+
         #
         # Audio Quality
         #
-        
+
         self.label_audio_quality = QLabel("Audio Quality")
         self.spinbox_audio_quality = QDoubleSpinBox()
         self.spinbox_audio_quality.setMinimum(0.0)
@@ -53,18 +54,18 @@ class ConfigWidget(QWidget):
         self.spinbox_audio_quality.setDecimals(1)
         self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
         layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
-        
+
         #
         # Video Quality
         #
-        
+
         self.label_video_quality = QLabel("Video Quality (kb/s)")
         self.spinbox_video_quality = QSpinBox()
         self.spinbox_video_quality.setMinimum(0)
         self.spinbox_video_quality.setMaximum(16777215)
         self.spinbox_video_quality.setValue(2400)           # Default value 2400
         layout.addRow(self.label_video_quality, self.spinbox_video_quality)
-        
+
         #
         # Misc.
         #

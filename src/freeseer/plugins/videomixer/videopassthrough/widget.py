@@ -39,14 +39,15 @@ from PyQt4.QtGui import QStackedWidget
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QFormLayout()
         self.setLayout(layout)
-        
+
         self.inputLabel = QLabel("Video Input")
         self.inputLayout = QHBoxLayout()
         self.inputCombobox = QComboBox()
@@ -63,14 +64,14 @@ class ConfigWidget(QWidget):
         self.inputLayout.addWidget(self.inputCombobox)
         self.inputLayout.addWidget(self.inputSettingsStack)
         layout.addRow(self.inputLabel, self.inputLayout)
-        
+
         self.videocolourLabel = QLabel(self.tr("Colour Format"))
         self.videocolourComboBox = QComboBox()
         self.videocolourComboBox.addItem("video/x-raw-rgb")
         self.videocolourComboBox.addItem("video/x-raw-yuv")
         self.videocolourComboBox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
         layout.addRow(self.videocolourLabel, self.videocolourComboBox)
-        
+
         self.framerateLabel = QLabel("Framerate")
         self.framerateLayout = QHBoxLayout()
         self.framerateSlider = QSlider()
@@ -83,7 +84,7 @@ class ConfigWidget(QWidget):
         self.framerateLayout.addWidget(self.framerateSlider)
         self.framerateLayout.addWidget(self.framerateSpinBox)
         layout.addRow(self.framerateLabel, self.framerateLayout)
-        
+
         self.videoscaleLabel = QLabel("Video Scale")
         self.videoscaleComboBox = QComboBox()
         self.videoscaleComboBox.addItem("NOSCALE")

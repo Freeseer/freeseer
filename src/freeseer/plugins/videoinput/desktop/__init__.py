@@ -46,31 +46,32 @@ import widget
 
 log = logging.getLogger(__name__)
 
+
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop Source"
     os = ["linux", "linux2", "win32", "cygwin"]
-    
+
     # ximagesrc
     desktop = "Full"
     screen = 0
     window = ""
-    
+
     # Area Select
     start_x = 0
     start_y = 0
     end_x = 0
     end_y = 0
-    
+
     def get_videoinput_bin(self):
         """
         Return the video input object in gstreamer bin format.
         """
-        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
-        
+        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+
         videosrc = None
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("ximagesrc", "videosrc")
-            
+
             # Configure coordinates if we're not recording full desktop
             if self.desktop == "Area":
                 videosrc.set_property("startx", self.start_x)
@@ -78,13 +79,13 @@ class DesktopLinuxSrc(IVideoInput):
                 videosrc.set_property("endx", self.end_x)
                 videosrc.set_property("endy", self.end_y)
                 log.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
-                
+
             if self.desktop == "Window":
                 videosrc.set_property("xname", self.window)
-            
+
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dx9screencapsrc", "videosrc")
-            
+
             # Configure coordinates if we're not recording full desktop
             if self.desktop == "Area":
                 videosrc.set_property("x", self.start_x)
@@ -92,23 +93,23 @@ class DesktopLinuxSrc(IVideoInput):
                 videosrc.set_property("width", self.start_x + self.end_x)
                 videosrc.set_property("height", self.start_y + self.end_y)
                 log.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
-                
+
         bin.add(videosrc)
-        
+
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
         bin.add(colorspace)
         videosrc.link(colorspace)
-        
+
         # Setup ghost pad
         pad = colorspace.get_pad("src")
         ghostpad = gst.GhostPad("videosrc", pad)
         bin.add_pad(ghostpad)
-        
+
         return bin
-    
+
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.desktop = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop")
             self.screen = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Screen")
@@ -128,7 +129,7 @@ class DesktopLinuxSrc(IVideoInput):
         except TypeError:
             # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
             pass
-        
+
     def area_select(self):
         self.area_selector = AreaSelector(self)
         self.area_selector.show()
@@ -141,13 +142,13 @@ class DesktopLinuxSrc(IVideoInput):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", end_x)
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_y", end_y)
         log.debug('Area selector start: %sx%s end: %sx%s' % (start_x, start_y, end_x, end_y))
-        self.gui.show()        
+        self.gui.show()
         self.widget.window().show()
-        
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            
+
         return self.widget
 
     def __enable_connections(self):
@@ -158,12 +159,12 @@ class DesktopLinuxSrc(IVideoInput):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+
         if self.desktop == "Full":
             self.widget.desktopButton.setChecked(True)
         elif self.desktop == "Area":
             self.widget.areaButton.setChecked(True)
-        
+
         # Try to detect how many screens the user has
         # minus 1 since we like to start count at 0
         max_screens = QDesktopWidget().screenCount()
@@ -171,13 +172,13 @@ class DesktopLinuxSrc(IVideoInput):
 
         # Finally enable connections
         self.__enable_connections()
-            
+
     def set_screen(self, screen):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
-        
+
     def set_desktop_full(self):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Full")
-        
+
     def set_desktop_area(self):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Area")
 

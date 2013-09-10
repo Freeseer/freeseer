@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -40,6 +40,7 @@ from freeseer.framework.plugin import IOutput
 # .freeseer-plugin custom
 import widget
 
+
 class OggOutput(IOutput):
     name = "Ogg Output"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
@@ -48,97 +49,96 @@ class OggOutput(IOutput):
     extension = "ogg"
     tags = None
     matterhorn = 0
-    
+
     # Ogg Output variables
     audio_quality = 0.3
     video_bitrate = 2400
-    
+
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
-        
+
         if metadata is not None:
             self.set_metadata(metadata)
             if self.matterhorn == 2:  # checked
-                self.generate_xml_metadata(metadata).write(self.location+".xml")
-            
+                self.generate_xml_metadata(metadata).write(self.location + ".xml")
+
         # Muxer
         muxer = gst.element_factory_make("oggmux", "muxer")
         bin.add(muxer)
-        
+
         # File sink
         filesink = gst.element_factory_make('filesink', 'filesink')
         filesink.set_property('location', self.location)
         bin.add(filesink)
-        
+
         #
         # Setup Audio Pipeline if Audio Recording is Enabled
         #
         if audio:
             audioqueue = gst.element_factory_make("queue", "audioqueue")
             bin.add(audioqueue)
-            
+
             audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
             bin.add(audioconvert)
-            
+
             audiolevel = gst.element_factory_make('level', 'audiolevel')
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
-            
+
             audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
             audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
-            
+
             # Setup metadata
             vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
             # set tag merge mode to GST_TAG_MERGE_REPLACE
             merge_mode = gst.TagMergeMode.__enum_values__[2]
-    
+
             if metadata is not None:
                 # Only set tag if metadata is set
                 vorbistag.merge_tags(self.tags, merge_mode)
             vorbistag.set_tag_merge_mode(merge_mode)
             bin.add(vorbistag)
-            
+
             # Setup ghost pads
             audiopad = audioqueue.get_pad("sink")
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
-            
+
             # Link Elements
             audioqueue.link(audioconvert)
             audioconvert.link(audiolevel)
             audiolevel.link(audiocodec)
             audiocodec.link(vorbistag)
             vorbistag.link(muxer)
-        
-        
+
         #
         # Setup Video Pipeline
         #
         if video:
             videoqueue = gst.element_factory_make("queue", "videoqueue")
             bin.add(videoqueue)
-            
+
             videocodec = gst.element_factory_make("theoraenc", "videocodec")
             videocodec.set_property("bitrate", int(self.video_bitrate))
             bin.add(videocodec)
-            
+
             # Setup ghost pads
             videopad = videoqueue.get_pad("sink")
             video_ghostpad = gst.GhostPad("videosink", videopad)
             bin.add_pad(video_ghostpad)
-            
+
             # Link Elements
             videoqueue.link(videocodec)
             videocodec.link(muxer)
-        
+
         #
         # Link muxer to filesink
         #
         muxer.link(filesink)
-        
+
         return bin
-    
+
     def set_metadata(self, data):
         '''
         Populate global tag list variable with file metadata for
@@ -152,10 +152,10 @@ class OggOutput(IOutput):
             else:
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
-            
+
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
             self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
@@ -167,7 +167,7 @@ class OggOutput(IOutput):
         except TypeError:
             # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
             pass
-    
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -181,7 +181,7 @@ class OggOutput(IOutput):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+
         self.widget.spinbox_audio_quality.setValue(float(self.audio_quality))
         self.widget.spinbox_video_quality.setValue(int(self.video_bitrate))
         self.widget.checkbox_matterhorn.setCheckState(int(self.matterhorn))
@@ -192,15 +192,15 @@ class OggOutput(IOutput):
     def set_audio_quality(self):
         self.audio_quality = self.widget.spinbox_audio_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
-        
+
     def set_video_bitrate(self):
         self.video_bitrate = self.widget.spinbox_video_quality.value()
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
-        
+
     def set_matterhorn(self, state):
         """
         Enables or Disables Matterhorn metadata generation.
-        
+
         If enabled filename.xml will be created along side the video file
         containing matterhorn metadata in xml format.
         """

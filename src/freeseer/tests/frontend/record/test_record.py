@@ -26,10 +26,16 @@ import shutil
 import tempfile
 import unittest
 
+import pep8
+
 from PyQt4 import QtGui, QtTest, Qt
-from freeseer.frontend.record.record import RecordApp
 
 from freeseer import settings
+from freeseer.frontend.record.record import RecordApp
+
+from freeseer.tests import pep8_options
+from freeseer.tests import pep8_report
+
 
 class TestRecordApp(unittest.TestCase):
     '''
@@ -103,7 +109,6 @@ class TestRecordApp(unittest.TestCase):
         # Click the Record button again in 5 seconds with the left mouse button
 #       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordPushButton, Qt.Qt.LeftButton)
 
-
     def test_reset_timer(self):
         '''
         Tests RecordApp.reset_timer()
@@ -116,7 +121,6 @@ class TestRecordApp(unittest.TestCase):
         # reset timer and check that the values are 0
         self.record_app.reset_timer()
         self.assertTrue(self.record_app.time_minutes == 0 and self.record_app.time_seconds == 0)
-
 
     def test_file_menu_quit(self):
         '''
@@ -144,3 +148,9 @@ class TestRecordApp(unittest.TestCase):
         # Click "Close"
         QtTest.QTest.mouseClick(self.record_app.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.record_app.aboutDialog.isVisible())
+
+    def test_pep8(self):
+        checker = pep8.StyleGuide(**pep8_options)
+        report = checker.check_files(['freeseer/tests/frontend/record',
+                                      'freeseer/frontend/record'])
+        pep8_report(self, report)

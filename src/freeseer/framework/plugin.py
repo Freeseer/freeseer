@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -36,22 +36,23 @@ from PyQt4 import QtCore
 
 log = logging.getLogger(__name__)
 
+
 class PluginManager(QtCore.QObject):
     '''
     Plugin Manager for Freeseer
-    
+
     Provides the core functionality which enables plugin support in.
     '''
-    
+
     def __init__(self, configdir, profile=None):
         QtCore.QObject.__init__(self)
-        
+
         self.firstrun = False
         PluginManagerSingleton.setBehaviour([ConfigurablePluginManager])
         self.plugmanc = PluginManagerSingleton.get()
         locator = self.plugmanc.getPluginLocator()
         locator.setPluginInfoExtension("freeseer-plugin")
-        
+
         self.configdir = configdir
 
         if profile:
@@ -59,52 +60,52 @@ class PluginManager(QtCore.QObject):
             self.configfile = os.path.abspath(os.path.join(self.configdir, "profiles", profile, "plugin.conf"))
         else:
             self.configfile = os.path.abspath(os.path.join(self.configdir, "plugin.conf"))
-        
+
         self.config = ConfigParser.ConfigParser()
         self.load()
         self.plugmanc.setConfigParser(self.config, self.save)
-        
+
         # Get the path where the installed plugins are located on systems where
         # freeseer is installed.
         pluginpath = "%s/../plugins" % os.path.dirname(os.path.abspath(__file__))
-        
-        self.plugmanc.setPluginPlaces([pluginpath, 
-                                       os.path.expanduser("~/.freeseer/plugins"), 
+
+        self.plugmanc.setPluginPlaces([pluginpath,
+                                       os.path.expanduser("~/.freeseer/plugins"),
                                        "freeseer/plugins"])
         self.plugmanc.setCategoriesFilter({
-            "AudioInput" : IAudioInput,
-            "AudioMixer" : IAudioMixer,
-            "VideoInput" : IVideoInput,
-            "VideoMixer" : IVideoMixer,
-            "Output" : IOutput})
+            "AudioInput": IAudioInput,
+            "AudioMixer": IAudioMixer,
+            "VideoInput": IVideoInput,
+            "VideoMixer": IVideoMixer,
+            "Output":     IOutput})
         self.plugmanc.collectPlugins()
-        
+
         # If config was corrupt or did not exist, reset default plugins.
-        if self.firstrun == True:
+        if self.firstrun:
             self.set_default_plugins()
-            
+
         for plugin in self.plugmanc.getAllPlugins():
             plugin.plugin_object.set_plugman(self)
-            
+
         log.debug("Plugin manager initialized.")
-        
+
     def __call__(self):
         pass
-    
+
     def load(self):
         try:
             self.config.readfp(open(self.configfile))
         # Config file does not exist, create a default
         except IOError:
             log.debug("First run scenario detected. Creating new configuration files.")
-            self.firstrun = True # If config was corrupt or did not exist, reset defaults.
+            self.firstrun = True  # If config was corrupt or did not exist, reset defaults.
             self.save()
             return
-            
+
     def save(self):
         with open(self.configfile, 'w') as configfile:
             self.config.write(configfile)
-        
+
     def set_default_plugins(self):
         """
         Default the passthrough mixers and ogg output plugins.
@@ -113,11 +114,11 @@ class PluginManager(QtCore.QObject):
         self.set_plugin_option("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
         self.save()
         log.info("Default plugins enabled.")
-        
+
     def get_plugin_option(self, category, name, option):
         """
         Returns the value stored in the config for a plugin option
-        
+
         Parameters:
             category    - category to check
             name        - name of the plugin
@@ -126,11 +127,11 @@ class PluginManager(QtCore.QObject):
             value of plugin option
         """
         return self.plugmanc.readOptionFromPlugin(category, name, option)
-    
+
     def set_plugin_option(self, category, name, option, value):
         """
         Stores a value to the config for a plugin option
-        
+
         Parameters:
             category    - category to check
             name        - name of the plugin
@@ -140,7 +141,7 @@ class PluginManager(QtCore.QObject):
             none
         """
         self.plugmanc.registerOptionFromPlugin(category, name, option, value)
-        
+
     ##
     ## Functions related to getting plugins supported by user's OS
     ##
@@ -149,34 +150,34 @@ class PluginManager(QtCore.QObject):
         """
         Determines if the user's OS as detected by sys.platform is supported by
         the plugin.
-        
+
         Parameters: plugin - a plugin object
         Returns: true/false
         """
         return sys.platform in plugin.plugin_object.get_supported_os()
-        
+
     def _get_supported_plugins(self, unfiltered_plugins):
         """
         Returns a list of plugins supported by the users OS as detected by
         python's sys.platform library.
-        
+
         Parameters:
             unfiltered plugins - list of plugins to filter
         Returns:
             list of supported plugins
         """
         plugins = []
-        
+
         for plugin in unfiltered_plugins:
             if self._os_supported(plugin):
                 plugins.append(plugin)
-                
+
         return plugins
-        
+
     def get_plugin_by_name(self, name, category):
         """
         Takes a name & category and returns the plugin with that name.
-        
+
         Parameters:
             name        - name of the plugin
             category    - category to search
@@ -184,12 +185,12 @@ class PluginManager(QtCore.QObject):
             plugin
         """
         return self.plugmanc.getPluginByName(name, category)
-        
+
     def get_all_plugins(self):
         """
         Returns a list of all plugins supported by the users OS as detected by
         python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -197,12 +198,12 @@ class PluginManager(QtCore.QObject):
         """
         unfiltered_plugins = self.plugmanc.getAllPlugins()
         return self._get_supported_plugins(unfiltered_plugins)
-        
+
     def get_plugins_of_category(self, category):
         """
         Returns a list of all plugins in category supported by the users OS as
         detected by python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -210,12 +211,12 @@ class PluginManager(QtCore.QObject):
         """
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory(category)
         return self._get_supported_plugins(unfiltered_plugins)
-        
+
     def get_audioinput_plugins(self):
         """
         Returns a list of plugins that are supported by the users OS as
         detected by python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -223,12 +224,12 @@ class PluginManager(QtCore.QObject):
         """
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory("AudioInput")
         return self._get_supported_plugins(unfiltered_plugins)
-    
+
     def get_audiomixer_plugins(self):
         """
         Returns a list of plugins that are supported by the users OS as
         detected by python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -236,12 +237,12 @@ class PluginManager(QtCore.QObject):
         """
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory("AudioMixer")
         return self._get_supported_plugins(unfiltered_plugins)
-    
+
     def get_videoinput_plugins(self):
         """
         Returns a list of plugins that are supported by the users OS as
         detected by python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -249,12 +250,12 @@ class PluginManager(QtCore.QObject):
         """
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory("VideoInput")
         return self._get_supported_plugins(unfiltered_plugins)
-    
+
     def get_videomixer_plugins(self):
         """
         Returns a list of plugins that are supported by the users OS as
         detected by python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -262,12 +263,12 @@ class PluginManager(QtCore.QObject):
         """
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory("VideoMixer")
         return self._get_supported_plugins(unfiltered_plugins)
-    
+
     def get_output_plugins(self):
         """
         Returns a list of plugins that are supported by the users OS as
         detected by python's sys.platform library.
-        
+
         Parameters:
             none
         Returns:
@@ -282,43 +283,43 @@ class IBackendPlugin(IPlugin):
     name = None
     widget = None
     CATEGORY = "Undefined"
-    
+
     # list of supported OSes per:
     #    http://docs.python.org/2/library/sys.html#sys.platform
     os = []
 
     config_loaded = False
-    
+
     def __init__(self):
         IPlugin.__init__(self)
-    
+
     def get_name(self):
         return self.name
-        
+
     def get_supported_os(self):
         """
         Returns a list of OSes supported by the plugin
         """
         return self.os
-    
+
     def get_config_name(self):
         return "%s-%s" % (self.name, self.instance)
-    
+
     def load_config(self, plugman):
         pass
-    
+
     def set_plugman(self, plugman):
         self.plugman = plugman
-        
+
     def set_instance(self, instance=0):
         self.instance = instance
-        
+
     def set_gui(self, gui):
         self.gui = gui
-    
+
     def get_dialog(self):
         widget = self.get_widget()
-        self.retranslate() # Translate the UI
+        self.retranslate()  # Translate the UI
 
         # Only load configuration the first time the user opens widget
         if not self.config_loaded:
@@ -328,11 +329,11 @@ class IBackendPlugin(IPlugin):
 
         if widget is not None:
             self.gui.show_plugin_widget_dialog(widget)
-    
+
     def get_widget(self):
         """
         Implement this method to return the settings widget (Qt based).
-        Used by Freeseer configtool 
+        Used by Freeseer configtool
         """
         return None
 
@@ -343,7 +344,7 @@ class IBackendPlugin(IPlugin):
         This should be enabled after loading the widget config.
         """
         pass
-    
+
     def widget_load_config(self, plugman):
         """
         Implement this when using a plugin widget. This function should be used
@@ -355,77 +356,36 @@ class IBackendPlugin(IPlugin):
         """Implement this function to allow translation of UI components in the widget"""
         pass
 
+
 class IAudioInput(IBackendPlugin):
     CATEGORY = "AudioInput"
-    
+
     def __init__(self):
         IBackendPlugin.__init__(self)
-    
+
     def get_audioinput_bin(self):
         raise NotImplementedError
-    
+
+
 class IAudioMixer(IBackendPlugin):
     CATEGORY = "AudioMixer"
-    
+
     def __init__(self):
         IBackendPlugin.__init__(self)
-    
+
     def get_audiomixer_bin(self):
         raise NotImplementedError
-    
+
     def get_inputs(self):
         """
         Returns a list of tuples containing the input name and instance number that the audio mixer needs
         in order to initialize it's pipelines.
-        
+
         This should be used so that the code that calls it can
         gather the required inputs before calling load_inputs().
         """
         raise NotImplementedError
-    
-    def load_inputs(self, player, mixer, inputs):
-        """
-        This method is responsible for loading the inputs needed
-        by the mixer.
-        """
-        raise NotImplementedError
-    
-class IVideoInput(IBackendPlugin):
-    CATEGORY = "VideoInput"
-    
-    def __init__(self):
-        IBackendPlugin.__init__(self)
-    
-    def get_videoinput_bin(self):
-        """
-        Returns the Gstreamer Bin for the video input plugin.
-        MUST be overridded when creating a video input plugin.
-        """
-        raise NotImplementedError
-    
-class IVideoMixer(IBackendPlugin):
-    CATEGORY = "VideoMixer"
-    
-    def __init__(self):
-        IBackendPlugin.__init__(self)
-    
-    def get_videomixer_bin(self):
-        """
-        Returns the Gstreamer Bin for the video mixer plugin.
-        MUST be overridded when creating a video mixer plugin.
-        """
-        raise NotImplementedError
-    
-    def get_inputs(self):
-        """
-        Returns a list of tuples containing the input name and instance number that the video mixer needs
-        in order to initialize it's pipelines.
-        
-        This should be used so that the code that calls it can
-        gather the required inputs before calling load_inputs().
-        """
-        raise NotImplementedError
-    
+
     def load_inputs(self, player, mixer, inputs):
         """
         This method is responsible for loading the inputs needed
@@ -433,30 +393,76 @@ class IVideoMixer(IBackendPlugin):
         """
         raise NotImplementedError
 
+
+class IVideoInput(IBackendPlugin):
+    CATEGORY = "VideoInput"
+
+    def __init__(self):
+        IBackendPlugin.__init__(self)
+
+    def get_videoinput_bin(self):
+        """
+        Returns the Gstreamer Bin for the video input plugin.
+        MUST be overridded when creating a video input plugin.
+        """
+        raise NotImplementedError
+
+
+class IVideoMixer(IBackendPlugin):
+    CATEGORY = "VideoMixer"
+
+    def __init__(self):
+        IBackendPlugin.__init__(self)
+
+    def get_videomixer_bin(self):
+        """
+        Returns the Gstreamer Bin for the video mixer plugin.
+        MUST be overridded when creating a video mixer plugin.
+        """
+        raise NotImplementedError
+
+    def get_inputs(self):
+        """
+        Returns a list of tuples containing the input name and instance number that the video mixer needs
+        in order to initialize it's pipelines.
+
+        This should be used so that the code that calls it can
+        gather the required inputs before calling load_inputs().
+        """
+        raise NotImplementedError
+
+    def load_inputs(self, player, mixer, inputs):
+        """
+        This method is responsible for loading the inputs needed
+        by the mixer.
+        """
+        raise NotImplementedError
+
+
 class IOutput(IBackendPlugin):
     #
     # static variables
     #
     CATEGORY = "Output"
-    
+
     # recordto
     FILE = 0
     STREAM = 1
     OTHER = 2
-    
+
     # type
     AUDIO = 0
     VIDEO = 1
     BOTH = 2
-    
+
     #
     # variables
     #
-    recordto = None # recordto: FILE, STREAM, OTHER
-    type = None # Types: AUDIO, VIDEO, BOTH
+    recordto = None  # recordto: FILE, STREAM, OTHER
+    type = None  # Types: AUDIO, VIDEO, BOTH
     extension = None
     location = None
-    
+
     metadata_order = [
         "title",
         "artist",
@@ -468,40 +474,41 @@ class IOutput(IBackendPlugin):
 
     def __init__(self):
         IBackendPlugin.__init__(self)
-    
+
     def get_recordto(self):
         return self.recordto
-    
+
     def get_type(self):
         return self.type
-    
+
     def get_output_bin(self, audio=True, video=True, metadata=None):
         """
         Returns the Gstreamer Bin for the output plugin.
         MUST be overridded when creating an output plugin.
         """
         raise NotImplementedError
-    
+
     def get_extension(self):
         return self.extension
-    
+
     def set_recording_location(self, location):
         self.location = location
 
     def set_metadata(self, data):
         """
-        Set the metadata if supported by Output plugin. 
+        Set the metadata if supported by Output plugin.
         """
         pass
 
     def generate_xml_metadata(self, metadata):
         root = ET.Element('metadata')
-        
+
         for key in self.metadata_order:
             node = ET.SubElement(root, key)
-            node.text = metadata[key]		
-       
+            node.text = metadata[key]
+
         return ET.ElementTree(root)
+
 
 class PluginError(Exception):
     def __init__(self, message):

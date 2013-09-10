@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -40,6 +40,7 @@ from freeseer.framework.plugin import IOutput
 # .freeseer-plugin custom
 import widget
 
+
 class OggIcecast(IOutput):
     name = "Ogg Icecast"
     os = ["linux", "linux2"]
@@ -47,89 +48,89 @@ class OggIcecast(IOutput):
     recordto = IOutput.STREAM
     extension = "ogg"
     tags = None
-    
+
     # Icecast server variables
     ip = "127.0.0.1"
     port = 8000
     password = "hackme"
     mount = "stream.ogg"
-    
+
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
-        
+
         if metadata is not None:
             self.set_metadata(metadata)
-            
+
         # Muxer
         muxer = gst.element_factory_make("oggmux", "muxer")
         bin.add(muxer)
-        
+
         icecast = gst.element_factory_make("shout2send", "icecast")
         icecast.set_property("ip", self.ip)
         icecast.set_property("port", self.port)
         icecast.set_property("password", self.password)
         icecast.set_property("mount", self.mount)
         bin.add(icecast)
-        
+
         #
         # Setup Audio Pipeline
         #
         if audio:
             audioqueue = gst.element_factory_make("queue", "audioqueue")
             bin.add(audioqueue)
-            
+
             audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
             bin.add(audioconvert)
-            
+
             audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
             bin.add(audiocodec)
-            
+
             # Setup metadata
             vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
             # set tag merge mode to GST_TAG_MERGE_REPLACE
             merge_mode = gst.TagMergeMode.__enum_values__[2]
-    
+
             if metadata is not None:
                 # Only set tag if metadata is set
                 vorbistag.merge_tags(self.tags, merge_mode)
             vorbistag.set_tag_merge_mode(merge_mode)
             bin.add(vorbistag)
-            
+
             # Setup ghost pads
             audiopad = audioqueue.get_pad("sink")
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
-            
+
             # Link elements
             audioqueue.link(audioconvert)
             audioconvert.link(audiocodec)
             audiocodec.link(vorbistag)
             vorbistag.link(muxer)
-        
+
         #
         # Setup Video Pipeline
         #
         if video:
             videoqueue = gst.element_factory_make("queue", "videoqueue")
             bin.add(videoqueue)
-            
+
             videocodec = gst.element_factory_make("theoraenc", "videocodec")
             bin.add(videocodec)
-            
+
             videopad = videoqueue.get_pad("sink")
             video_ghostpad = gst.GhostPad("videosink", videopad)
             bin.add_pad(video_ghostpad)
-            
+
             videoqueue.link(videocodec)
             videocodec.link(muxer)
-        
+
         #
         # Link muxer to icecast
         #
         muxer.link(icecast)
-        
+
         return bin
-    
+
     def set_metadata(self, data):
         '''
         Populate global tag list variable with file metadata for
@@ -146,7 +147,7 @@ class OggIcecast(IOutput):
 
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.ip = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "IP")
             self.port = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port"))
@@ -160,7 +161,7 @@ class OggIcecast(IOutput):
         except TypeError:
             # Temp fix for issue when reading framerate the 2nd time causes TypeError
             pass
-    
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -175,7 +176,7 @@ class OggIcecast(IOutput):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-            
+
         self.widget.lineedit_ip.setText(self.ip)
         self.widget.spinbox_port.setValue(self.port)
         self.widget.lineedit_password.setText(self.password)
@@ -187,14 +188,14 @@ class OggIcecast(IOutput):
     def set_ip(self):
         ip = str(self.widget.lineedit_ip.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", ip)
-        
+
     def set_port(self, port):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", port)
-        
+
     def set_password(self):
         password = str(self.widget.lineedit_password.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", password)
-        
+
     def set_mount(self):
         mount = str(self.widget.lineedit_mount.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", mount)

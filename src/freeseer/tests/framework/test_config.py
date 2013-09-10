@@ -29,6 +29,7 @@ import unittest
 
 from freeseer.framework.config import Config
 
+
 class TestConfig(unittest.TestCase):
 
     def setUp(self):
