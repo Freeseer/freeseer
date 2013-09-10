@@ -65,7 +65,7 @@ Once your changes are complete and look fine, they are ready to be deployed to
 the online documentation at http://freeseer.github.com/docs.
 
 We want the files in `./build/html/` to go to the
-[freeseer.github.com](https://github.com/Freeseer/freeseer.github.com) repo.
+[freeseer.github.io](https://github.com/Freeseer/freeseer.github.io) repo.
 
 A [script is provided](https://github.com/Freeseer/freeseer-docs/blob/master/publish.sh)
 to easily build and publish the documentation online:
@@ -78,10 +78,10 @@ To add your own one-liner commit message, add it as an argument:
 
 Or for a more manual approach, you can place the output directly in your local freeseer.github.com repo:
 
-    $ sphinx-build -b html source path/to/freeseer.github.com/docs/
-    # Don't forget to commit and push the changes in freeseer.github.com!
+    $ sphinx-build -b html source path/to/freeseer.github.io/
+    # Don't forget to commit and push the changes in freeseer.github.io!
 
 **Note:** This script is only intended for people with **write access** to the
-[freeseer.github.com repo](http://github.com/freeseer/freeseer.github.com). It
+[freeseer.github.io repo](http://github.com/freeseer/freeseer.github.io). It
 builds the Sphinx output, copies the newly produced HTML files to your local
 freeseer.github.com repo, then pushes them to GitHub.
