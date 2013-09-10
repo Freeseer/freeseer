@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2012, 2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,6 @@ from PyQt4 import QtGui, QtTest, Qt
 from freeseer.frontend.record.record import RecordApp
 
 from freeseer import settings
-from freeseer.framework.multimedia import Gstreamer
 
 class TestRecordApp(unittest.TestCase):
     '''
@@ -66,14 +65,14 @@ class TestRecordApp(unittest.TestCase):
         '''
         Tests the initial state of the RecordApp
         '''
-        
+
         # TODO
         pass
 
     def test_standby_to_recording(self):
         '''
         Tests pre and post conditions when entering Standby, Record, Stop modes
-        
+
         '''
 
         # TODO: ROADBLOCK
@@ -81,10 +80,10 @@ class TestRecordApp(unittest.TestCase):
         # Due to this, when the unitest clicks "Record", the preview has not yet been initialized
         # and Freeseer freezes
         # It is not trivial or clear how to detect whether or not the preview has loaded
-        # It turns out that even if the state is GStreamer.PAUSE, the preview has not quite loaded
+        # It turns out that even if the state is Multimedia.PAUSE, the preview has not quite loaded
 
 #       self.assertTrue(self.record_app.mainWidget.standbyPushButton.isVisible(), "[PRE STANDBY] Expected Standby button to be visible")
-#       self.assertFalse(self.record_app.mainWidget.recordPushButton.isVisible(), "[PRE STANDBY] Expected Record button to be invisible")   
+#       self.assertFalse(self.record_app.mainWidget.recordPushButton.isVisible(), "[PRE STANDBY] Expected Record button to be invisible")
 
         # Click the Standby button with the left mouse button
 #       QtTest.QTest.mouseClick(self.record_app.mainWidget.standbyPushButton, Qt.Qt.LeftButton)
@@ -93,10 +92,10 @@ class TestRecordApp(unittest.TestCase):
 #       self.assertTrue(self.record_app.mainWidget.recordPushButton.isVisible(), "[STANDBY] Expected Record button to be visible")
 
         # TODO: Check if preview has loaded
-        
+
         # Click the Record button with the left mouse button
 #       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordPushButton, Qt.Qt.LeftButton)
-        
+
 #       self.assertFalse(self.record_app.mainWidget.standbyPushButton.isVisible(), "[RECORDING] Expected Standby button to be invisible")
 #       self.assertTrue(self.record_app.mainWidget.recordPushButton.isVisible(), "[RECORDING] Expected Record button to be visible")
 #       self.assertTrue(self.record_app.mainWidget.recordPushButton.text() == self.record_app.stopString, "[RECORDING] Incorrect button text for this phase")
@@ -105,10 +104,10 @@ class TestRecordApp(unittest.TestCase):
 #       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordPushButton, Qt.Qt.LeftButton)
 
 
-    def test_reset_timer(self): 
+    def test_reset_timer(self):
         '''
         Tests RecordApp.reset_timer()
-        '''     
+        '''
 
         # set our own values
         self.record_app.time_minutes = 15
@@ -125,7 +124,7 @@ class TestRecordApp(unittest.TestCase):
         '''
 
         self.assertTrue(self.record_app.isVisible())
-    
+
         # File->Menu
         self.record_app.actionExit.trigger()
         self.assertFalse(self.record_app.isVisible())
@@ -137,11 +136,11 @@ class TestRecordApp(unittest.TestCase):
 
         self.assertTrue(self.record_app.isVisible())
 
-        # Help->About   
+        # Help->About
         self.record_app.actionAbout.trigger()
         self.assertFalse(self.record_app.hasFocus())
         self.assertTrue(self.record_app.aboutDialog.isVisible())
-    
+
         # Click "Close"
         QtTest.QTest.mouseClick(self.record_app.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.record_app.aboutDialog.isVisible())
