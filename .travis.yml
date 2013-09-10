@@ -22,4 +22,20 @@ before_install:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -r requirements.txt --use-mirrors
 # command to run tests, e.g. python setup.py test
-script:  cd src && python setup.py test
+script:
+  - pwd && cd src
+  - python setup.py test
+  - cd ..
+after_success:
+  # Test building deployable packages
+  - pwd && cd src
+  - python setup.py bdist_egg
+  - python setup.py sdist
+  - cd ..
+  # Test installing the built packages
+  - pwd && cd src/dist
+  - pip install freeseer-*.tar.gz
+  - echo "y" | pip uninstall freeseer
+  - easy_install freeseer-*.egg
+  - echo "y" | pip uninstall freeseer
+  - cd ../..
