@@ -4,7 +4,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -28,11 +28,22 @@ http://wiki.github.com/Freeseer/freeseer/
 
 import sys
 
-from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QComboBox
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QLineEdit
+from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QTableView
+from PyQt4.QtGui import QToolButton
+from PyQt4.QtGui import QVBoxLayout
+from PyQt4.QtGui import QWidget
 
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
-class EditorWidget(QtGui.QWidget):
+class EditorWidget(QWidget):
     '''
     classdocs
     '''
@@ -41,115 +52,115 @@ class EditorWidget(QtGui.QWidget):
         '''
         Constructor
         '''
-        QtGui.QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent)
 
-        self.mainLayout = QtGui.QVBoxLayout()
+        self.mainLayout = QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
+
         #
         # Import Layout
         #
-        self.importLayout = QtGui.QHBoxLayout()
+        self.importLayout = QHBoxLayout()
         self.mainLayout.addLayout(self.importLayout)
-        
-        self.importTypeComboBox = QtGui.QComboBox()
+
+        self.importTypeComboBox = QComboBox()
         self.importTypeComboBox.addItem("RSS")
         self.importTypeComboBox.addItem("CSV")
         self.importLayout.addWidget(self.importTypeComboBox)
-        
+
         #
         # RSS Layout
         #
-        self.rssWidget = QtGui.QWidget()
-        self.rssLayout = QtGui.QHBoxLayout()
+        self.rssWidget = QWidget()
+        self.rssLayout = QHBoxLayout()
         self.rssWidget.setLayout(self.rssLayout)
-        
-        self.rssLabel = QtGui.QLabel("URL")
-        self.rssLineEdit = QtGui.QLineEdit()
-        if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+
+        self.rssLabel = QLabel("URL")
+        self.rssLineEdit = QLineEdit()
+        if hasattr(QLineEdit(), 'setPlaceholderText'):
             self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
         self.rssLabel.setBuddy(self.rssLineEdit)
-        self.rssPushButton = QtGui.QPushButton("Load talks from RSS")
-        rss_icon = QtGui.QIcon()
-        rss_icon.addPixmap(QtGui.QPixmap(":/multimedia/rss.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.rssPushButton = QPushButton("Load talks from RSS")
+        rss_icon = QIcon()
+        rss_icon.addPixmap(QPixmap(":/multimedia/rss.png"), QIcon.Normal, QIcon.Off)
         self.rssPushButton.setIcon(rss_icon)
-        
+
         self.rssLayout.addWidget(self.rssLabel)
         self.rssLayout.addWidget(self.rssLineEdit)
         self.rssLayout.addWidget(self.rssPushButton)
         self.importLayout.addWidget(self.rssWidget)
-        
+
         #
         # CSV Layout
         #
-        self.csvWidget = QtGui.QWidget()
+        self.csvWidget = QWidget()
         self.csvWidget.hide()
-        self.csvLayout = QtGui.QHBoxLayout()
+        self.csvLayout = QHBoxLayout()
         self.csvWidget.setLayout(self.csvLayout)
-        
-        self.csvLabel = QtGui.QLabel("File")
-        self.csvLineEdit = QtGui.QLineEdit()
+
+        self.csvLabel = QLabel("File")
+        self.csvLineEdit = QLineEdit()
 
         if sys.platform == 'win32':
-            if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+            if hasattr(QLineEdit(), 'setPlaceholderText'):
                 self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
         else:
-            if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+            if hasattr(QLineEdit(), 'setPlaceholderText'):
                 self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
         self.csvLabel.setBuddy(self.csvLineEdit)
-        self.csvFileSelectButton = QtGui.QToolButton()
+        self.csvFileSelectButton = QToolButton()
         self.csvFileSelectButton.setText("...")
-        self.csvPushButton = QtGui.QPushButton("Load talks from CSV")
-        
+        self.csvPushButton = QPushButton("Load talks from CSV")
+
         self.csvLayout.addWidget(self.csvLabel)
         self.csvLayout.addWidget(self.csvLineEdit)
         self.csvLayout.addWidget(self.csvFileSelectButton)
         self.csvLayout.addWidget(self.csvPushButton)
         self.importLayout.addWidget(self.csvWidget)
-        
+
         #
         # Editor Layout
         #
-        self.editorLayout = QtGui.QHBoxLayout()
+        self.editorLayout = QHBoxLayout()
         self.mainLayout.addLayout(self.editorLayout)
-        
-        self.buttonsLayout = QtGui.QVBoxLayout()
+
+        self.buttonsLayout = QVBoxLayout()
         self.editorLayout.addLayout(self.buttonsLayout)
-        
-        addIcon = QtGui.QIcon.fromTheme("list-add")
-        removeIcon = QtGui.QIcon.fromTheme("list-remove")
-        clearIcon = QtGui.QIcon.fromTheme("edit-clear")
-        closeIcon = QtGui.QIcon.fromTheme("application-exit")
-        
-        self.addButton = QtGui.QPushButton("Add")
+
+        addIcon = QIcon.fromTheme("list-add")
+        removeIcon = QIcon.fromTheme("list-remove")
+        clearIcon = QIcon.fromTheme("edit-clear")
+        closeIcon = QIcon.fromTheme("application-exit")
+
+        self.addButton = QPushButton("Add")
         self.addButton.setIcon(addIcon)
-        self.removeButton = QtGui.QPushButton("Remove")
+        self.removeButton = QPushButton("Remove")
         self.removeButton.setIcon(removeIcon)
-        self.clearButton = QtGui.QPushButton("Clear")
+        self.clearButton = QPushButton("Clear")
         self.clearButton.setIcon(clearIcon)
-        self.closeButton = QtGui.QPushButton("Close")
+        self.closeButton = QPushButton("Close")
         self.closeButton.setIcon(closeIcon)
         self.buttonsLayout.addWidget(self.addButton)
         self.buttonsLayout.addWidget(self.removeButton)
         self.buttonsLayout.addWidget(self.clearButton)
         self.buttonsLayout.addStretch(0)
         self.buttonsLayout.addWidget(self.closeButton)
-        
-        self.editor = QtGui.QTableView()
+
+        self.editor = QTableView()
         self.editor.setAlternatingRowColors(True)
         self.editor.setSortingEnabled(True)
         self.editorLayout.addWidget(self.editor)
-        
+
         #
         # Widget Connections
         #
-        
-        self.connect(self.importTypeComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.switch_import_plugin)
-        
+
+        self.connect(self.importTypeComboBox, SIGNAL('currentIndexChanged(const QString&)'), self.switch_import_plugin)
+
     def switch_import_plugin(self, plugin):
         self.rssWidget.hide()
         self.csvWidget.hide()
-        
+
         if plugin == "RSS":
             self.rssWidget.show()
         elif plugin == "CSV":
@@ -157,7 +168,8 @@ class EditorWidget(QtGui.QWidget):
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    from PyQt4.QtGui import QApplication
+    app = QApplication(sys.argv)
     main = EditorWidget()
     main.show()
     sys.exit(app.exec_())

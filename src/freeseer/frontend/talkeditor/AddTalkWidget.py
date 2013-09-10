@@ -4,7 +4,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -25,9 +25,22 @@ http://wiki.github.com/Freeseer/freeseer/
 
 @author: Thanh Ha
 '''
-from PyQt4 import QtCore, QtGui
 
-class AddTalkWidget(QtGui.QWidget):
+from PyQt4.QtCore import QDate
+from PyQt4.QtCore import QTime
+from PyQt4.QtGui import QDateEdit
+from PyQt4.QtGui import QFormLayout
+from PyQt4.QtGui import QGroupBox
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QLineEdit
+from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QTimeEdit
+from PyQt4.QtGui import QVBoxLayout
+from PyQt4.QtGui import QWidget
+
+class AddTalkWidget(QWidget):
     '''
     classdocs
     '''
@@ -36,83 +49,84 @@ class AddTalkWidget(QtGui.QWidget):
         '''
         Constructor
         '''
-        QtGui.QWidget.__init__(self, parent)
-        self.mainLayout = QtGui.QVBoxLayout()
+        QWidget.__init__(self, parent)
+        self.mainLayout = QVBoxLayout()
         self.setLayout(self.mainLayout)
-        
-        self.addTalkGroupBox = QtGui.QGroupBox("Add Talk")
+
+        self.addTalkGroupBox = QGroupBox("Add Talk")
         self.mainLayout.addWidget(self.addTalkGroupBox)
-        
-        self.addTalkLayout = QtGui.QFormLayout()
+
+        self.addTalkLayout = QFormLayout()
         self.addTalkGroupBox.setLayout(self.addTalkLayout)
-        
+
         # Title
-        self.titleLabel = QtGui.QLabel("Title")
-        self.titleLineEdit = QtGui.QLineEdit()
-        if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+        self.titleLabel = QLabel("Title")
+        self.titleLineEdit = QLineEdit()
+        if hasattr(QLineEdit(), 'setPlaceholderText'):
             self.titleLineEdit.setPlaceholderText("Title of the presentation")
         self.titleLabel.setBuddy(self.titleLineEdit)
         self.addTalkLayout.addRow(self.titleLabel, self.titleLineEdit)
-        
+
         # Presenter
-        self.presenterLabel = QtGui.QLabel("Presenter")
-        self.presenterLineEdit = QtGui.QLineEdit()
-        if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+        self.presenterLabel = QLabel("Presenter")
+        self.presenterLineEdit = QLineEdit()
+        if hasattr(QLineEdit(), 'setPlaceholderText'):
             self.presenterLineEdit.setPlaceholderText("Name person or people presenting (comma separated)")
         self.presenterLabel.setBuddy(self.presenterLineEdit)
         self.addTalkLayout.addRow(self.presenterLabel, self.presenterLineEdit)
-        
+
         # Event
-        self.eventLabel = QtGui.QLabel("Event")
-        self.eventLineEdit = QtGui.QLineEdit()
-        if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+        self.eventLabel = QLabel("Event")
+        self.eventLineEdit = QLineEdit()
+        if hasattr(QLineEdit(), 'setPlaceholderText'):
             self.eventLineEdit.setPlaceholderText("The name of the Event this talk is being presented at")
         self.eventLabel.setBuddy(self.eventLineEdit)
         self.addTalkLayout.addRow(self.eventLabel, self.eventLineEdit)
-        
+
         # Room
-        self.roomLabel = QtGui.QLabel("Room")
-        self.roomLineEdit = QtGui.QLineEdit()
-        if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
+        self.roomLabel = QLabel("Room")
+        self.roomLineEdit = QLineEdit()
+        if hasattr(QLineEdit(), 'setPlaceholderText'):
             self.roomLineEdit.setPlaceholderText("The Room in which the presentation is taking place")
         self.roomLabel.setBuddy(self.roomLineEdit)
         self.addTalkLayout.addRow(self.roomLabel, self.roomLineEdit)
-        
-        # Date 
-        current_date = QtCore.QDate()
-        self.dateLabel = QtGui.QLabel("Date")
-        self.dateEdit = QtGui.QDateEdit()
+
+        # Date
+        current_date = QDate()
+        self.dateLabel = QLabel("Date")
+        self.dateEdit = QDateEdit()
         self.dateEdit.setDate(current_date.currentDate())
         self.dateLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.dateLabel, self.dateEdit)
-        
+
         self.dateEdit.setCalendarPopup(True)
-        
+
         # Time
-        current_time = QtCore.QTime()
-        self.timeLabel = QtGui.QLabel("Time")
-        self.timeEdit = QtGui.QTimeEdit()
+        current_time = QTime()
+        self.timeLabel = QLabel("Time")
+        self.timeEdit = QTimeEdit()
         self.timeEdit.setTime(current_time.currentTime())
         self.timeLabel.setBuddy(self.dateEdit)
         self.addTalkLayout.addRow(self.timeLabel, self.timeEdit)
-        
+
         # Buttons
-        addIcon = QtGui.QIcon.fromTheme("list-add")
-        cancelIcon = QtGui.QIcon.fromTheme("edit-clear")
-        
-        self.buttonsWidget = QtGui.QHBoxLayout()
-        self.addButton = QtGui.QPushButton("Add")
+        addIcon = QIcon.fromTheme("list-add")
+        cancelIcon = QIcon.fromTheme("edit-clear")
+
+        self.buttonsWidget = QHBoxLayout()
+        self.addButton = QPushButton("Add")
         self.addButton.setIcon(addIcon)
-        self.cancelButton = QtGui.QPushButton("Cancel")
+        self.cancelButton = QPushButton("Cancel")
         self.cancelButton.setIcon(cancelIcon)
         self.buttonsWidget.addWidget(self.addButton)
         self.buttonsWidget.addWidget(self.cancelButton)
         self.addTalkLayout.addRow(None, self.buttonsWidget)
-        
+
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
+    from PyQt4.QtGui import QApplication
+    app = QApplication(sys.argv)
     main = AddTalkWidget()
     main.show()
     sys.exit(app.exec_())
