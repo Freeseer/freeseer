@@ -8,4 +8,4 @@ Quick-Start: http://freeseer.github.io/quick-start.html
 
 Documentation: http://freeseer.github.io
 
-Contribute to the documentation project: https://github.com/Freeseer/freeseer-docs
+Contribute to the documentation project: https://github.com/Freeseer/freeseer-docs#readme
