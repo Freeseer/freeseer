@@ -41,7 +41,8 @@ There were issues such as costs, ownership, portability, and simplicity. There h
 Freeseer began in 2009 as an in-house solution for FOSSLC to record conference talks.
 Many people have contributed since then and development is still on-going.
 
-You can read more about Freeseer's history at `fosslc.org <http://fosslc.org/drupal/node/596>`_.
+.. seealso::
+   `Freeseer's history <http://fosslc.org/drupal/node/596>`_
 
 
 Expectations Around Sharing Freeseer
