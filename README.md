@@ -4,8 +4,8 @@ Freeseer ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
 
 Downloads: https://github.com/Freeseer/freeseer/releases
 
-Quick-Start Guide: http://freeseer.github.io/docs/quick-start.html
+Quick-Start: http://freeseer.github.io/quick-start.html
 
-Read our documentation at http://freeseer.github.com/docs
+Documentation: http://freeseer.github.io
 
 Contribute to the documentation project: https://github.com/Freeseer/freeseer-docs
