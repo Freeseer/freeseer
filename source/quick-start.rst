@@ -135,10 +135,8 @@ https://github.com/Freeseer/freeseer/issues
 
 IRC channel
 -----------
-Drop by our `#freeseer <irc://irc.freenode.net/#freeseer>`_ channel on
-irc.freenode.net to chat with us.
-
-http://webchat.freenode.net/?channels=#freeseer
+Drop by our `#freeseer channel <http://webchat.freenode.net/?channels=#freeseer>`_
+on irc.freenode.net to chat with us.
 
 
 Mailing list
