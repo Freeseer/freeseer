@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012-2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2012, 2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,14 +26,20 @@ import shutil
 import tempfile
 import unittest
 
-from freeseer import settings
-from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
+import pep8
 
 from PyQt4 import QtGui, QtTest, Qt
 
+from freeseer import settings
+from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
+
+from freeseer.tests import pep8_options
+from freeseer.tests import pep8_report
+
+
 class TestReportEditorApp(unittest.TestCase):
     '''
-    Test cases for ReportEditorApp. 
+    Test cases for ReportEditorApp.
     '''
 
     def setUp(self):
@@ -54,7 +60,6 @@ class TestReportEditorApp(unittest.TestCase):
         del self.app
         del self.report_editor.app
 
-
     def test_close_report_editor(self):
         '''
         Tests closing the ReportEditorApp
@@ -63,7 +68,6 @@ class TestReportEditorApp(unittest.TestCase):
         QtTest.QTest.mouseClick(self.report_editor.editorWidget.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.report_editor.editorWidget.isVisible())
 
-    
     def test_file_menu_quit(self):
         '''
         Tests ReportEditorApp's File->Quit
@@ -82,7 +86,7 @@ class TestReportEditorApp(unittest.TestCase):
 
         self.assertTrue(self.report_editor.isVisible())
 
-        # Help->About   
+        # Help->About
         self.report_editor.actionAbout.trigger()
         self.assertFalse(self.report_editor.hasFocus())
         self.assertTrue(self.report_editor.aboutDialog.isVisible())
@@ -91,4 +95,8 @@ class TestReportEditorApp(unittest.TestCase):
         QtTest.QTest.mouseClick(self.report_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.report_editor.aboutDialog.isVisible())
 
-
+    def test_pep8(self):
+        checker = pep8.StyleGuide(**pep8_options)
+        report = checker.check_files(['freeseer/tests/frontend/reporteditor',
+                                      'freeseer/frontend/reporteditor'])
+        pep8_report(self, report)

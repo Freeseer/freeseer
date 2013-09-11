@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -40,32 +40,33 @@ from freeseer.framework.plugin import IAudioInput
 # .freeseer-plugin custom
 import widget
 
+
 class JackAudioSrc(IAudioInput):
     name = "Jack Audio Source"
     os = ["linux", "linux2"]
-    
+
     # jackaudio variables
     client = ""
     connect = ""
     server = ""
     clientname = ""
-    
+
     def get_audioinput_bin(self):
-        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
-        
+        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+
         audiosrc = gst.element_factory_make("jackaudiosrc", "audiosrc")
         bin.add(audiosrc)
-        
+
         # Setup ghost pad
         pad = audiosrc.get_pad("src")
         ghostpad = gst.GhostPad("audiosrc", pad)
         bin.add_pad(ghostpad)
-        
+
         return bin
 
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.client = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Client")
             self.connect = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Connect")
@@ -76,7 +77,7 @@ class JackAudioSrc(IAudioInput):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", self.connect)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", self.server)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", self.clientname)
-    
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -91,7 +92,7 @@ class JackAudioSrc(IAudioInput):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-            
+
         self.widget.lineedit_client.setText(self.client)
         self.widget.lineedit_connect.setText(self.connect)
         self.widget.lineedit_server.setText(self.server)
@@ -103,15 +104,15 @@ class JackAudioSrc(IAudioInput):
     def set_client(self):
         client = str(self.widget.lineedit_client.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", client)
-        
+
     def set_connect(self):
         connect = str(self.widget.lineedit_connect.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", connect)
-        
+
     def set_server(self):
         server = str(self.widget.lineedit_server.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", server)
-        
+
     def set_clientname(self):
         clientname = str(self.widget.lineedit_clientname.text())
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", clientname)

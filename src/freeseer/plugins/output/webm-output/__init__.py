@@ -1,7 +1,7 @@
 '''
 freeseer - vga/presentation capture software
 
-Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 http://fosslc.org
 
 This program is free software: you can redistribute it and/or modify
@@ -31,6 +31,7 @@ import gst
 # Freeseer
 from freeseer.framework.plugin import IOutput
 
+
 class WebMOutput(IOutput):
     name = "WebM Output"
     os = ["linux", "linux2", "win32", "cygwin"]
@@ -38,86 +39,86 @@ class WebMOutput(IOutput):
     recordto = IOutput.FILE
     extension = "webm"
     tags = None
-    
+
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
-        
+
         if metadata is not None:
             self.set_metadata(metadata)
-            
+
         # Muxer
         muxer = gst.element_factory_make("webmmux", "muxer")
         bin.add(muxer)
-        
+
         filesink = gst.element_factory_make('filesink', 'filesink')
         filesink.set_property('location', self.location)
         bin.add(filesink)
-        
+
         #
         # Setup Audio Pipeline
         #
         if audio:
             audioqueue = gst.element_factory_make("queue", "audioqueue")
             bin.add(audioqueue)
-            
+
             audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
             bin.add(audioconvert)
-            
+
             audiolevel = gst.element_factory_make('level', 'audiolevel')
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
-            
+
             audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
             bin.add(audiocodec)
-            
+
             # Setup metadata
             vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
             # set tag merge mode to GST_TAG_MERGE_REPLACE
             merge_mode = gst.TagMergeMode.__enum_values__[2]
-    
+
             if metadata is not None:
                 # Only set tag if metadata is set
                 vorbistag.merge_tags(self.tags, merge_mode)
             vorbistag.set_tag_merge_mode(merge_mode)
             bin.add(vorbistag)
-            
+
             # Setup ghost pads
             audiopad = audioqueue.get_pad("sink")
             audio_ghostpad = gst.GhostPad("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
-            
+
             # Link Elements
             audioqueue.link(audioconvert)
             audioconvert.link(audiolevel)
             audiolevel.link(audiocodec)
             audiocodec.link(vorbistag)
             vorbistag.link(muxer)
-        
+
         #
         # Setup Video Pipeline
         #
         if video:
             videoqueue = gst.element_factory_make("queue", "videoqueue")
             bin.add(videoqueue)
-            
+
             videocodec = gst.element_factory_make("vp8enc", "videocodec")
             bin.add(videocodec)
-            
+
             videopad = videoqueue.get_pad("sink")
             video_ghostpad = gst.GhostPad("videosink", videopad)
             bin.add_pad(video_ghostpad)
-            
+
             # Link Elements
             videoqueue.link(videocodec)
             videocodec.link(muxer)
-        
+
         #
         # Link muxer to filesink
         #
         muxer.link(filesink)
-        
+
         return bin
-    
+
     def set_metadata(self, data):
         '''
         Populate global tag list variable with file metadata for

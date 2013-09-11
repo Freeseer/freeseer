@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 
 import sys
 from PyQt4 import QtCore, QtGui
+
 
 class QtKeyGrabber(QtGui.QWidget):
     '''
@@ -57,9 +58,10 @@ class QtKeyGrabber(QtGui.QWidget):
         else:
             other = event.text()
         if other:
-            if self.modifiers.has_key(QtCore.Qt.Key_Control):
+            if QtCore.Qt.Key_Control in self.modifiers:
                 self.key_string = u'+'.join(self.modifiers.values() + [unicode(chr(event.key()))])
-            else: self.key_string = u'+'.join(self.modifiers.values() + [unicode(other)])
+            else:
+                self.key_string = u'+'.join(self.modifiers.values() + [unicode(other)])
         else:
             self.key_string = u'+'.join(self.modifiers.values())
         if (self.parent.core.config.key_rec == 'Ctrl+Shift+R'):
@@ -67,22 +69,23 @@ class QtKeyGrabber(QtGui.QWidget):
 
     def keyReleaseEvent(self, event):
         if event.key() == QtCore.Qt.Key_Shift:
-            if self.modifiers.has_key(QtCore.Qt.Key_Shift):
+            if QtCore.Qt.Key_Shift in self.modifiers:
                 del self.modifiers[QtCore.Qt.Key_Shift]
         elif event.key() == QtCore.Qt.Key_Control:
-            if self.modifiers.has_key(QtCore.Qt.Key_Control):
+            if QtCore.Qt.Key_Control in self.modifiers:
                 del self.modifiers[QtCore.Qt.Key_Control]
         elif event.key() == QtCore.Qt.Key_Alt:
-            if self.modifiers.has_key(QtCore.Qt.Key_Alt):
+            if QtCore.Qt.Key_Alt in self.modifiers:
                 del self.modifiers[QtCore.Qt.Key_Alt]
         elif event.key() == QtCore.Qt.Key_Meta:
-            if self.modifiers.has_key(QtCore.Qt.Key_Meta):
+            if QtCore.Qt.Key_Meta in self.modifiers:
                 del self.modifiers[QtCore.Qt.Key_Meta]
         #print len(self.modifiers)
         if len(self.modifiers) == 0:
-            if self.flag == True:
+            if self.flag:
                 self.parent.grab_rec_set(self.key_string)
-            else: self.parent.grab_stop_set(self.key_string)
+            else:
+                self.parent.grab_stop_set(self.key_string)
             self.close()
 
 if __name__ == "__main__":

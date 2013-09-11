@@ -38,6 +38,7 @@ from freeseer.framework.util import get_record_name
 
 log = logging.getLogger(__name__)
 
+
 class Multimedia:
     NULL = 0
     RECORD = 1
@@ -156,13 +157,13 @@ class Multimedia:
 
         To be used for populating the current recording's file metadata.
         """
-        return { "title" : presentation.title,
-                 "artist" : presentation.speaker,
-                 "performer" : presentation.speaker,
-                 "album" : presentation.event,
-                 "location" : presentation.room,
-                 "date" : str(datetime.date.today()),
-                 "comment" : presentation.description }
+        return {"title":     presentation.title,
+                "artist":    presentation.speaker,
+                "performer": presentation.speaker,
+                "album":     presentation.event,
+                "location":  presentation.room,
+                "date":      str(datetime.date.today()),
+                "comment":   presentation.description}
 
     ##
     ## Plugin Loading
@@ -297,8 +298,10 @@ class Multimedia:
                     self.output_plugins.append(bin)
             elif type == IOutput.BOTH:
                 self.player.add(bin)
-                if record_audio: self.audio_tee.link_pads("src%d", bin, "audiosink")
-                if record_video: self.video_tee.link_pads("src%d", bin, "videosink")
+                if record_audio:
+                    self.audio_tee.link_pads("src%d", bin, "audiosink")
+                if record_video:
+                    self.video_tee.link_pads("src%d", bin, "videosink")
                 self.output_plugins.append(bin)
 
         return True

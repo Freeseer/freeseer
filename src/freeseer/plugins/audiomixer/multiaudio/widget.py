@@ -36,18 +36,19 @@ from PyQt4.QtGui import QStackedWidget
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QGridLayout()
         self.setLayout(layout)
-        
+
         self.source1_label = QLabel('Source 1')
         self.source1_combobox = QComboBox()
         self.source1_combobox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
-        self.source1_button = QToolButton() 
+        self.source1_button = QToolButton()
         self.source1_button.setText("Settings")
         configIcon = QIcon.fromTheme("preferences-other")
         self.source1_button.setIcon(configIcon)
@@ -60,11 +61,11 @@ class ConfigWidget(QWidget):
         layout.addWidget(self.source1_label, 0, 0)
         layout.addWidget(self.source1_combobox, 0, 1)
         layout.addWidget(self.source1_stack, 0, 2)
-        
+
         self.source2_label = QLabel('Source 2')
         self.source2_combobox = QComboBox()
         self.source2_combobox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
-        self.source2_button = QToolButton() 
+        self.source2_button = QToolButton()
         self.source2_button.setText("Settings")
         self.source2_button.setIcon(configIcon)  # reuse icon from source1
         self.source2_button.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
@@ -76,4 +77,3 @@ class ConfigWidget(QWidget):
         layout.addWidget(self.source2_label, 1, 0)
         layout.addWidget(self.source2_combobox, 1, 1)
         layout.addWidget(self.source2_stack, 1, 2)
-

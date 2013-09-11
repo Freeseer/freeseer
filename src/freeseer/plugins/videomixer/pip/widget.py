@@ -36,14 +36,15 @@ from PyQt4.QtGui import QStackedWidget
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QGridLayout()
         self.setLayout(layout)
-        
+
         self.mainInputLabel = QLabel("Main Source")
         self.mainInputComboBox = QComboBox()
         self.mainInputSetupButton = QToolButton()
@@ -59,12 +60,12 @@ class ConfigWidget(QWidget):
         layout.addWidget(self.mainInputLabel, 0, 0)
         layout.addWidget(self.mainInputComboBox, 0, 1)
         layout.addWidget(self.mainInputSetupStack, 0, 2)
-        
+
         self.pipInputLabel = QLabel("PIP Source")
         self.pipInputComboBox = QComboBox()
         self.pipInputSetupButton = QToolButton()
         self.pipInputSetupButton.setText("Settings")
-        self.pipInputSetupButton.setIcon(configIcon) # reuse the one from main input
+        self.pipInputSetupButton.setIcon(configIcon)  # reuse the one from main input
         self.pipInputSetupButton.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Maximum)
         self.pipInputSetupButton.setToolButtonStyle(Qt.ToolButtonIconOnly)
         self.pipInputSetupStack = QStackedWidget()
@@ -74,4 +75,3 @@ class ConfigWidget(QWidget):
         layout.addWidget(self.pipInputLabel, 1, 0)
         layout.addWidget(self.pipInputComboBox, 1, 1)
         layout.addWidget(self.pipInputSetupStack, 1, 2)
-

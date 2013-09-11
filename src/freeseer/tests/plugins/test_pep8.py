@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012, 2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2013 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,33 +24,16 @@
 
 import unittest
 
-from freeseer.framework.presentation import Presentation
+import pep8
+
+from freeseer.tests import pep8_options
+from freeseer.tests import pep8_report
 
 
-#
-# Note: The Presentation class doesn't really need to be tested
-# since all the functionality is set and referenced using
-# public attributes.
-#
-# This test class was implemented as a quick-and-easy demo
-# and proof-of-concept for Freeseer's test framework
-#
-
-
-class TestPresentation(unittest.TestCase):
-
-    def setUp(self):
-        '''
-        Generic unittest.TestCase.setUp()
-        '''
-
-        self.pres = Presentation("John Doe", event="haha", time="NOW")
-
-    def test_correct_time_set(self):
-        self.assertTrue(self.pres.time == "NOW")
-
-    def test_speaker_not_first_param(self):
-        self.assertNotEquals(self.pres.speaker, "John Doe")
-
-    def test_event_is_default(self):
-        self.assertTrue(self.pres.event == "haha")
+class TestPlugins(unittest.TestCase):
+    def test_pep8(self):
+        '''Ensure freeseer plugins conform to pep8'''
+        checker = pep8.StyleGuide(**pep8_options)
+        report = checker.check_files(['freeseer/tests/plugins',
+                                      'freeseer/plugins'])
+        pep8_report(self, report)

@@ -40,74 +40,75 @@ from freeseer.framework.plugin import IVideoMixer
 # .freeseer-plugin custom modules
 import widget
 
+
 class VideoPassthrough(IVideoMixer):
     name = "Video Passthrough"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     input1 = None
     widget = None
-    
+
     # VideoPassthrough variables
     input_type = "video/x-raw-rgb"
     framerate = 30
     resolution = "NOSCALE"
-    
+
     def get_videomixer_bin(self):
         bin = gst.Bin()
-        
+
         # Video Rate
         videorate = gst.element_factory_make("videorate", "videorate")
         bin.add(videorate)
         videorate_cap = gst.element_factory_make("capsfilter",
-                                                    "video_rate_cap")
+                                                 "video_rate_cap")
         videorate_cap.set_property("caps",
                         gst.caps_from_string("%s, framerate=%d/1" % (self.input_type, self.framerate)))
         bin.add(videorate_cap)
         # --- End Video Rate
-        
+
         # Video Scaler (Resolution)
         videoscale = gst.element_factory_make("videoscale", "videoscale")
         bin.add(videoscale)
         videoscale_cap = gst.element_factory_make("capsfilter",
-                                                    "videoscale_cap")
+                                                  "videoscale_cap")
         if self.resolution != "NOSCALE":
             videoscale_cap.set_property('caps',
                                         gst.caps_from_string('%s, width=640, height=480' % (self.input_type)))
         bin.add(videoscale_cap)
         # --- End Video Scaler
-        
+
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
         bin.add(colorspace)
-        
+
         # Link Elements
         videorate.link(videorate_cap)
         videorate_cap.link(videoscale)
         videoscale.link(videoscale_cap)
         videoscale_cap.link(colorspace)
-        
+
         # Setup ghost pad
         sinkpad = videorate.get_pad("sink")
         sink_ghostpad = gst.GhostPad("sink", sinkpad)
         bin.add_pad(sink_ghostpad)
-        
+
         srcpad = colorspace.get_pad("src")
         src_ghostpad = gst.GhostPad("src", srcpad)
         bin.add_pad(src_ghostpad)
-        
+
         return bin
-    
+
     def get_inputs(self):
         inputs = [(self.input1, 0)]
         return inputs
-        
+
     def load_inputs(self, player, mixer, inputs):
         # Load source
         input = inputs[0]
         player.add(input)
         input.link(mixer)
-   
+
     def load_config(self, plugman):
         self.plugman = plugman
-        
+
         try:
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input")
             self.input_type = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type")
@@ -121,7 +122,7 @@ class VideoPassthrough(IVideoMixer):
         except TypeError:
             # Temp fix for issue when reading framerate the 2nd time causes TypeError
             pass
-    
+
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -139,12 +140,12 @@ class VideoPassthrough(IVideoMixer):
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
-        
+
         sources = []
         plugins = self.plugman.get_videoinput_plugins()
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
-                
+
         # Load the combobox with inputs
         self.widget.inputCombobox.clear()
         n = 0
@@ -154,10 +155,10 @@ class VideoPassthrough(IVideoMixer):
                 self.widget.inputCombobox.setCurrentIndex(n)
                 self.__enable_source_setup(self.input1)
             n = n + 1
-            
+
         vcolour_index = self.widget.videocolourComboBox.findText(self.input_type)
         self.widget.videocolourComboBox.setCurrentIndex(vcolour_index)
-        
+
         # Need to set both the Slider and Spingbox since connections
         # are not yet loaded at this point
         self.widget.framerateSlider.setValue(self.framerate)
@@ -180,11 +181,12 @@ class VideoPassthrough(IVideoMixer):
         plugin = self.plugman.get_plugin_by_name(source, "VideoInput")
         if plugin.plugin_object.get_widget() is not None:
             self.widget.inputSettingsStack.setCurrentIndex(1)
-        else: self.widget.inputSettingsStack.setCurrentIndex(0)
+        else:
+            self.widget.inputSettingsStack.setCurrentIndex(0)
 
     def set_videocolour(self, input_type):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
-        
+
     def set_framerate(self, framerate):
         self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
 

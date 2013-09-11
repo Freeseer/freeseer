@@ -31,8 +31,9 @@ from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
@@ -42,15 +43,15 @@ class ConfigWidget(QWidget):
         self.label_client = QLabel("Client")
         self.lineedit_client = QLineEdit()
         layout.addRow(self.label_client, self.lineedit_client)
-        
+
         self.label_connect = QLabel("Connect")
         self.lineedit_connect = QLineEdit()
         layout.addRow(self.label_connect, self.lineedit_connect)
-        
+
         self.label_server = QLabel("Server")
         self.lineedit_server = QLineEdit()
         layout.addRow(self.label_server, self.lineedit_server)
-        
+
         self.label_clientname = QLabel("Client Name")
         self.lineedit_clientname = QLineEdit()
         layout.addRow(self.label_clientname, self.lineedit_clientname)

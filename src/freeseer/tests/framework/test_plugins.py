@@ -34,6 +34,7 @@ import gst
 from freeseer import settings
 from freeseer.framework.plugin import PluginManager
 
+
 class TestPlugins(unittest.TestCase):
 
     def setUp(self):

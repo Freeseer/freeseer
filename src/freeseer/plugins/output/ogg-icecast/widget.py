@@ -32,28 +32,29 @@ from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QSpinBox
 from PyQt4.QtGui import QWidget
 
+
 class ConfigWidget(QWidget):
-    
+
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
         layout = QFormLayout()
         self.setLayout(layout)
-        
+
         self.label_ip = QLabel("IP")
         self.lineedit_ip = QLineEdit()
         layout.addRow(self.label_ip, self.lineedit_ip)
-        
+
         self.label_port = QLabel("Port")
         self.spinbox_port = QSpinBox()
         self.spinbox_port.setMinimum(0)
         self.spinbox_port.setMaximum(65535)
         layout.addRow(self.label_port, self.spinbox_port)
-        
+
         self.label_password = QLabel("Password")
         self.lineedit_password = QLineEdit()
         layout.addRow(self.label_password, self.lineedit_password)
-        
+
         self.label_mount = QLabel("Mount")
         self.lineedit_mount = QLineEdit()
         layout.addRow(self.label_mount, self.lineedit_mount)

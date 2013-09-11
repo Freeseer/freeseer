@@ -29,19 +29,20 @@ import gst
 
 from freeseer.framework.plugin import IAudioInput
 
+
 class ALSASrc(IAudioInput):
     name = "ALSA Source"
     os = ["linux", "linux2"]
-    
+
     def get_audioinput_bin(self):
-        bin = gst.Bin() # Do not pass a name so that we can load this input more than once.
-        
+        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+
         audiosrc = gst.element_factory_make("alsasrc", "audiosrc")
         bin.add(audiosrc)
-        
+
         # Setup ghost pad
         pad = audiosrc.get_pad("src")
         ghostpad = gst.GhostPad("audiosrc", pad)
         bin.add_pad(ghostpad)
-        
+
         return bin
