@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,10 +22,19 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QString
+from PyQt4.QtCore import QTranslator
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QDialog
+from PyQt4.QtGui import QDialogButtonBox
+from PyQt4.QtGui import QGridLayout
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QWidget
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
+    _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
@@ -40,7 +49,7 @@ HEADPHONES_ARTIST = u'Ben Fleming'
 HEADPHONES_LINK = u'http://mediadesign.deviantart.com/'
 
 
-class AboutDialog(QtGui.QDialog):
+class AboutDialog(QDialog):
     """
     Common About Dialog for the Freeseer Project. This should be used for the
     about dialog when including one in GUIs.
@@ -53,34 +62,34 @@ class AboutDialog(QtGui.QDialog):
           |  Close Button
     """
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent)
 
         self.current_language = "en_US"
-        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator = QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
 
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon = QIcon()
+        icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
-        self.layout = QtGui.QGridLayout()
+        self.layout = QGridLayout()
         self.setLayout(self.layout)
 
         # Left Top corner of grid, Logo
-        self.logo = QtGui.QLabel("Logo")
-        self.logo.setPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")))
+        self.logo = QLabel("Logo")
+        self.logo.setPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")))
         self.layout.addWidget(self.logo, 0, 0)
 
         # Right Top corner of grid, Infos
-        self.aboutInfo = QtGui.QLabel("About Info", openExternalLinks=True)
+        self.aboutInfo = QLabel("About Info", openExternalLinks=True)
         self.aboutInfo.setWordWrap(True)
         self.layout.addWidget(self.aboutInfo, 0, 1)
 
         # Right Bottom corner of grid, Close Button
-        self.buttonBox = QtGui.QDialogButtonBox()
-        self.closeButton = self.buttonBox.addButton("Close", QtGui.QDialogButtonBox.AcceptRole)
+        self.buttonBox = QDialogButtonBox()
+        self.closeButton = self.buttonBox.addButton("Close", QDialogButtonBox.AcceptRole)
         self.layout.addWidget(self.buttonBox, 1, 1)
-        self.connect(self.closeButton, QtCore.SIGNAL("clicked()"), self.close)
+        self.connect(self.closeButton, SIGNAL("clicked()"), self.close)
 
         self.retranslate()
 

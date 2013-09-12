@@ -24,26 +24,41 @@
 
 import logging
 
-from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QDir
+from PyQt4.QtCore import QLocale
+from PyQt4.QtCore import QRect
+from PyQt4.QtCore import QString
+from PyQt4.QtCore import QTextCodec
+from PyQt4.QtCore import QTranslator
+from PyQt4.QtCore import QUrl
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QAction
+from PyQt4.QtGui import QActionGroup
+from PyQt4.QtGui import QApplication
+from PyQt4.QtGui import QDesktopServices
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QMainWindow
+from PyQt4.QtGui import QMenu
+from PyQt4.QtGui import QPixmap
 
 from freeseer import __version__
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon.Resource import resource_rc
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
+    _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
 log = logging.getLogger(__name__)
 
 
-class FreeseerApp(QtGui.QMainWindow):
+class FreeseerApp(QMainWindow):
 
     def __init__(self):
         super(FreeseerApp, self).__init__()
-        self.icon = QtGui.QIcon()
-        self.icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.icon = QIcon()
+        self.icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(self.icon)
 
         self.aboutDialog = AboutDialog()
@@ -52,15 +67,15 @@ class FreeseerApp(QtGui.QMainWindow):
         #
         # Translator
         #
-        self.app = QtGui.QApplication.instance()
+        self.app = QApplication.instance()
         self.current_language = None
-        self.uiTranslator = QtCore.QTranslator()
+        self.uiTranslator = QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
         self.app.installTranslator(self.uiTranslator)
-        self.langActionGroup = QtGui.QActionGroup(self)
+        self.langActionGroup = QActionGroup(self)
         self.langActionGroup.setExclusive(True)
-        QtCore.QTextCodec.setCodecForTr(QtCore.QTextCodec.codecForName('utf-8'))
-        self.connect(self.langActionGroup, QtCore.SIGNAL('triggered(QAction *)'), self.translate)
+        QTextCodec.setCodecForTr(QTextCodec.codecForName('utf-8'))
+        self.connect(self.langActionGroup, SIGNAL('triggered(QAction *)'), self.translate)
         # --- Translator
 
         #
@@ -68,27 +83,27 @@ class FreeseerApp(QtGui.QMainWindow):
         #
         self.menubar = self.menuBar()
 
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 500, 50))
+        self.menubar.setGeometry(QRect(0, 0, 500, 50))
         self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
+        self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        self.menuLanguage = QtGui.QMenu(self.menubar)
+        self.menuLanguage = QMenu(self.menubar)
         self.menuLanguage.setObjectName(_fromUtf8("menuLanguage"))
-        self.menuHelp = QtGui.QMenu(self.menubar)
+        self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName(_fromUtf8("menuHelp"))
 
-        exitIcon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionExit = QtGui.QAction(self)
+        exitIcon = QIcon.fromTheme("application-exit")
+        self.actionExit = QAction(self)
         self.actionExit.setShortcut("Ctrl+Q")
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         self.actionExit.setIcon(exitIcon)
 
-        helpIcon = QtGui.QIcon.fromTheme("help-contents")
-        self.actionOnlineHelp = QtGui.QAction(self)
+        helpIcon = QIcon.fromTheme("help-contents")
+        self.actionOnlineHelp = QAction(self)
         self.actionOnlineHelp.setObjectName(_fromUtf8("actionOnlineHelp"))
         self.actionOnlineHelp.setIcon(helpIcon)
 
-        self.actionAbout = QtGui.QAction(self)
+        self.actionAbout = QAction(self)
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.actionAbout.setIcon(self.icon)
 
@@ -103,17 +118,17 @@ class FreeseerApp(QtGui.QMainWindow):
         self.setupLanguageMenu()
         # --- End Menubar
 
-        self.connect(self.actionExit, QtCore.SIGNAL('triggered()'), self.close)
-        self.connect(self.actionAbout, QtCore.SIGNAL('triggered()'), self.aboutDialog.show)
-        self.connect(self.actionOnlineHelp, QtCore.SIGNAL('triggered()'), self.openOnlineHelp)
+        self.connect(self.actionExit, SIGNAL('triggered()'), self.close)
+        self.connect(self.actionAbout, SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.actionOnlineHelp, SIGNAL('triggered()'), self.openOnlineHelp)
 
         self.retranslateFreeseerApp()
         self.aboutDialog.retranslate("en_US")
 
     def openOnlineHelp(self):
         """Opens a link to the Freeseer Online Help"""
-        url = QtCore.QUrl("http://freeseer.github.com/docs/")
-        QtGui.QDesktopServices.openUrl(url)
+        url = QUrl("http://freeseer.github.com/docs/")
+        QDesktopServices.openUrl(url)
 
     def translate(self, action):
         """Translates the GUI via menu action.
@@ -150,18 +165,18 @@ class FreeseerApp(QtGui.QMainWindow):
         # --- Menubar
 
     def setupLanguageMenu(self):
-        self.languages = QtCore.QDir(":/languages").entryList()
+        self.languages = QDir(":/languages").entryList()
 
         if self.current_language is None:
-            self.current_language = QtCore.QLocale.system().name()  # Retrieve Current Locale from the operating system.
+            self.current_language = QLocale.system().name()  # Retrieve Current Locale from the operating system.
             log.debug("Detected user's locale as %s" % self.current_language)
 
         for language in self.languages:
-            translator = QtCore.QTranslator()  # Create a translator to translate Language Display Text.
+            translator = QTranslator()  # Create a translator to translate Language Display Text.
             translator.load(":/languages/%s" % language)
             language_display_text = translator.translate("Translation", "Language Display Text")
 
-            languageAction = QtGui.QAction(self)
+            languageAction = QAction(self)
             languageAction.setCheckable(True)
             languageAction.setText(language_display_text)
             languageAction.setData(language)
