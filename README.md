@@ -2,14 +2,12 @@
 "Freeseer by FOSSLC")](http://freeseer.github.com)
 [![Build Status](https://travis-ci.org/Freeseer/freeseer.png)](https://travis-ci.org/Freeseer/freeseer-docs)
 
-Freeseer's Documentation
-------------------------
+Freeseer Documentation
+----------------------
 
-The Freeseer team uses a tool called [Sphinx](http://sphinx.pocoo.org) to create
-the project's documentation.
-
-Sphinx uses [reStructuredText](http://docutils.sf.net/rst.html) as its markup
-language.
+We use [Sphinx](http://sphinx.pocoo.org) to generate the project's documentation.
+Documentation is written in [reStructuredText](http://docutils.sf.net/rst.html)
+and stored in .rst files.
 
 We chose Sphinx for several reasons:
 
@@ -22,47 +20,40 @@ We chose Sphinx for several reasons:
 
 Getting Started
 ---------------
-The best place to start is the [Sphinx](http://sphinx.pocoo.org) website.
-But if you're in a hurry, here's the gist of what you need to know:
+The [Sphinx](http://sphinx.pocoo.org) website covers everything, but here's the
+gist of what you need:
 
-Install the Sphinx package with `sudo easy_install -U Sphinx`.
+1. [Install Sphinx](http://sphinx-doc.org/latest/install.html): `pip install -U sphinx`
+2. Use the [reStructuredText Primer](http://sphinx.pocoo.org/rest.html) as a reference when writing
 
-For an overview of basic tasks:
+Build & Preview your Changes
+----------------------------
 
-* [Sphinx tutorial](http://sphinx.pocoo.org/tutorial.html)
+**Note:** You need to have the [freeseer repository](https://github.com/freeseer/freeseer)
+          checked out at the same top level directory as the freeseer-docs repository.
+          This allows the Freeseer source code to be discoverable when
+          generating documentation from docstrings. Note that these docstrings
+          must be written in reStructuredText format and Sphinx markup can be used.
 
-For a brief introduction on reStructuredText concepts and syntax:
+Once you've made your changes to the documentation, rebuild the HTML output.
 
-* [reStructuredText Primer](http://sphinx.pocoo.org/rest.html)
-* [Sphinx cheat](http://matplotlib.sourceforge.net/sampledoc/cheatsheet.html)
-  [sheet](http://openalea.gforge.inria.fr/doc/openalea/doc/_build/html/source/sphinx/rest_syntax.html)
+    $ cd freeseer-docs/
+    $ make html
 
+Your updated HTML files should be in`freeseer-docs/build/html/`,
+and you can view them with your web browser.
 
-Preview your Changes
---------------------
-
-Note: You need to install Sphinx to preview your changes.
-
-Once you've made your changes to the documentation, you need to rebuild the HTML
-files using `make html`.
-
-    cd freeseer-docs/
-    make html
-
-Your updated HTML files should be in`freeseer-docs/build/html/`.  
-Open the relevant HTML file(s) with your favourite web browser!
-
-**Tip:** GitHub can render reStructredText. View an `.rst` file to see how it looks.
+**Tip:** GitHub can render reStructredText (but doesn't support Sphinx markup).
+         View any .rst file to see how it looks.
 
 **Tip:** View the underlying reStructuredText of any webpage built with Sphinx
-by clicking the "Show Source" link on the page you're on.
-
+         by clicking the "Show Source" link on the page you're on.
 
 Publish to the Web
 -------------------
 
 Once your changes are complete and look fine, they are ready to be deployed to
-the online documentation at http://freeseer.github.com/docs.
+the online documentation at http://freeseer.github.io.
 
 We want the files in `./build/html/` to go to the
 [freeseer.github.io](https://github.com/Freeseer/freeseer.github.io) repo.
