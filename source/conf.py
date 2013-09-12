@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Freeseer'
-copyright = u'© 2013 Free and Open Source Software Learning Centre'
+copyright = u'© 2011, 2013 Free and Open Source Software Learning Centre'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
