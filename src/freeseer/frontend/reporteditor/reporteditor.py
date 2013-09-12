@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -25,14 +25,25 @@
 import logging
 import sys
 
-from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QDateTime
+from PyQt4.QtCore import QString
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QAction
+from PyQt4.QtGui import QFileDialog
+from PyQt4.QtGui import QHeaderView
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QMessageBox
+from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QWidget
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
+    _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import settings, __version__
+from freeseer import settings
+from freeseer import __version__
 from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
@@ -51,13 +62,13 @@ class ReportEditorApp(FreeseerApp):
     def __init__(self, core=None):
         FreeseerApp.__init__(self)
 
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon = QIcon()
+        icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
         self.resize(960, 400)
 
-        self.mainWidget = QtGui.QWidget()
-        self.mainLayout = QtGui.QHBoxLayout()
+        self.mainWidget = QWidget()
+        self.mainLayout = QHBoxLayout()
         self.mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.mainWidget)
 
@@ -75,7 +86,7 @@ class ReportEditorApp(FreeseerApp):
         #
         # Setup Menubar
         #
-        self.actionExportCsv = QtGui.QAction(self)
+        self.actionExportCsv = QAction(self)
         self.actionExportCsv.setObjectName(_fromUtf8("actionExportCsv"))
 
         # Actions
@@ -87,13 +98,13 @@ class ReportEditorApp(FreeseerApp):
         #
 
         # Editor Widget
-        self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
-        self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
+        self.connect(self.editorWidget.removeButton, SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.editorWidget.clearButton, SIGNAL('clicked()'), self.confirm_reset)
+        self.connect(self.editorWidget.closeButton, SIGNAL('clicked()'), self.close)
 
         # Main Window Connections
-        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_reports_to_csv)
-        self.connect(self.editorWidget.editor, QtCore.SIGNAL('clicked (const QModelIndex&)'), self.editorSelectionChanged)
+        self.connect(self.actionExportCsv, SIGNAL('triggered()'), self.export_reports_to_csv)
+        self.connect(self.editorWidget.editor, SIGNAL('clicked (const QModelIndex&)'), self.editorSelectionChanged)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -148,7 +159,7 @@ class ReportEditorApp(FreeseerApp):
         self.failureModel = self.db.get_failures_model()
         editor = self.editorWidget.editor
         editor.setModel(self.failureModel)
-        editor.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
+        editor.horizontalHeader().setResizeMode(QHeaderView.Stretch)
 
     def hide_add_talk_widget(self):
         self.editorWidget.setHidden(False)
@@ -157,7 +168,7 @@ class ReportEditorApp(FreeseerApp):
     def add_talk(self):
         date = self.addTalkWidget.dateEdit.date()
         time = self.addTalkWidget.timeEdit.time()
-        datetime = QtCore.QDateTime(date, time)
+        datetime = QDateTime(date, time)
         presentation = Presentation(unicode(self.addTalkWidget.titleLineEdit.text()),
                                     unicode(self.addTalkWidget.presenterLineEdit.text()),
                                     "",  # description
@@ -200,14 +211,14 @@ class ReportEditorApp(FreeseerApp):
 
         If Yes call the reset() function.
         """
-        confirm = QtGui.QMessageBox.question(self,
+        confirm = QMessageBox.question(self,
                     self.confirmDBClearTitleString,
                     self.confirmDBClearQuestionString,
-                    QtGui.QMessageBox.Yes |
-                    QtGui.QMessageBox.No,
-                    QtGui.QMessageBox.No)
+                    QMessageBox.Yes |
+                    QMessageBox.No,
+                    QMessageBox.No)
 
-        if confirm == QtGui.QMessageBox.Yes:
+        if confirm == QMessageBox.Yes:
             self.reset()
 
     def closeEvent(self, event):
@@ -239,6 +250,6 @@ class ReportEditorApp(FreeseerApp):
             self.editorWidget.timeLabel2.setText("Talk not found")
 
     def export_reports_to_csv(self):
-        fname = QtGui.QFileDialog.getSaveFileName(self, self.selectFileString, "", "*.csv")
+        fname = QFileDialog.getSaveFileName(self, self.selectFileString, "", "*.csv")
         if fname:
             self.db.export_reports_to_csv(fname)
