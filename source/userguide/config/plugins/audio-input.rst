@@ -1,21 +1,8 @@
-Audio Input
-===========
+Audio Input Plugins
+===================
 
-*TODO*
-
-
-ALSA Source
------------
-
-
-Pulse Audio Source
-------------------
-
-
-Audio Test Source
------------------
-
-
-Auto Audio Source
------------------
-
+.. automodule:: freeseer.plugins.audioinput.alsasrc
+.. automodule:: freeseer.plugins.audioinput.audiotestsrc
+.. automodule:: freeseer.plugins.audioinput.autoaudiosrc
+.. automodule:: freeseer.plugins.audioinput.jackaudiosrc
+.. automodule:: freeseer.plugins.audioinput.pulsesrc

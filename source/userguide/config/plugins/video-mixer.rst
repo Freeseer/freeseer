@@ -1,17 +1,5 @@
-Video Mixer
-===========
+Video Mixer Plugins
+===================
 
-*TODO*
-
-
-Picture-In-Picture
-------------------
-
-
-Input Selector
---------------
-
-
-Video Passthrough
------------------
-
+.. automodule:: freeseer.plugins.videomixer.videopassthrough
+.. automodule:: freeseer.plugins.videomixer.pip

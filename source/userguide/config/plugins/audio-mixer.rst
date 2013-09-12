@@ -1,13 +1,5 @@
-Audio Mixer
-===========
+Audio Mixer Plugins
+===================
 
-*TODO*
-
-
-Audio Passthrough
------------------
-
-
-Adder
------
-
+.. automodule:: freeseer.plugins.audiomixer.audiopassthrough
+.. automodule:: freeseer.plugins.audiomixer.multiaudio

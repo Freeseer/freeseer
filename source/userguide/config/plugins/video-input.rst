@@ -1,25 +1,7 @@
-Video Input
-===========
+Video Input Plugins
+===================
 
-*TODO*
-
-
-Desktop-Windows Source
-----------------------
-
-
-Firewire Source
----------------
-
-
-Desktop-Linux Source
---------------------
-
-
-USB Source
-----------
-
-
-Video Test Source
------------------
-
+.. automodule:: freeseer.plugins.videoinput.desktop
+.. automodule:: freeseer.plugins.videoinput.firewiresrc
+.. automodule:: freeseer.plugins.videoinput.usbsrc
+.. automodule:: freeseer.plugins.videoinput.videotestsrc

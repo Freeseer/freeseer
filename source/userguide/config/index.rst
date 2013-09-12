@@ -12,6 +12,7 @@ General
 
 Plugins
 -------
+
 See :doc:`Plugins </plugins/index>`.
 
 
