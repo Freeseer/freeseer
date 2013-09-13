@@ -1,6 +1,8 @@
 Freeseer ![Freeseer](http://i.imgur.com/tqivk.png "Freeseer logo")
 =========
-[![Build Status](https://travis-ci.org/Freeseer/freeseer.png)](https://travis-ci.org/Freeseer/freeseer)
+[![Build Status](https://travis-ci.org/Freeseer/freeseer.png?branch=master)](https://travis-ci.org/Freeseer/freeseer)
+[![PyPi version](https://pypip.in/v/freeseer/badge.png)](https://crate.io/packages/freeseer/)
+[![PyPi downloads](https://pypip.in/d/freeseer/badge.png)](https://crate.io/packages/freeseer/)
 
 Downloads: https://github.com/Freeseer/freeseer/releases
 
