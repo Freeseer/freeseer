@@ -1,6 +1,6 @@
 [Core]
 Name = Ogg Output
-Module = ogg-output
+Module = ogg_output
 
 [Documentation]
 Author = Thanh Ha

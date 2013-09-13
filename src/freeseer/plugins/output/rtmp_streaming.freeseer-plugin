@@ -1,6 +1,6 @@
 [Core]
 Name = RTMP Streaming
-Module = rtmp-streaming
+Module = rtmp_streaming
 
 [Documentation]
 Author = Jonathan Shen & Mike Chong

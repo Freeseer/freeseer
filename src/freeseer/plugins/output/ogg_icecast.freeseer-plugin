@@ -1,6 +1,6 @@
 [Core]
 Name = Ogg Icecast
-Module = ogg-icecast
+Module = ogg_icecast
 
 [Documentation]
 Author = Thanh Ha

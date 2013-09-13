@@ -1,6 +1,6 @@
 [Core]
 Name = WebM Output
-Module = webm-output
+Module = webm_output
 
 [Documentation]
 Author = Thanh Ha
