@@ -1,3 +1,5 @@
+:orphan:
+
 .. meta::
    :http-equiv=refresh: 5; url=http://freeseer.github.io
    :author: Free and Open Source Software Learning Centre
