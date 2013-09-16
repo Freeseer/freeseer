@@ -9,7 +9,8 @@ laptop to record VGA output from the presenter's laptop.
 .. _equipment-label:
 
 Equipment Needed
--------------
+----------------
+
 * A working installation of Freeseer on a dedicated computer for recording
 * VGA Capture Device
 
@@ -30,6 +31,7 @@ Setup
 
 Preparation (Avoiding Common Errors)
 ------------------------------------
+
 * Presentations that contain lots of animations or quick movements (e.g. live demos)
   are best recorded with a higher-end frame grabber since they output higher FPS.
 * Use the Talk Editor tool to enter all the talks and their info beforehand.
