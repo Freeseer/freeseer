@@ -1,51 +1,33 @@
-How to Report a Bug or Make a Feature Request
-=============================================
+Reporting Bugs & Requesting Features
+====================================
 
-Step 1: Search
---------------
+.. rubric:: 1. Search
 
-We troubleshoot and discuss features in public community spaces, so if you've
-found a bug or have an idea, take a few minutes to see if it's already been
-discussed.
+We troubleshoot and discuss features in public. If you've found a bug or have
+an idea, take a few minutes to see if it's already been documented.
 
-Search our :doc:`documentation </index>`, :ref:`mailing list
-<mailing-list-label>`, and `issue tracker
-<https://github.com/Freeseer/freeseer/issues>`_ to make sure your problem or
-idea hasn't already been documented or discussed. If it has, follow up on the
-existing mailing list thread or issue tracker comment thread to discuss further.
+Search our :doc:`documentation </index>`, :ref:`mailing list <mailing-list-label>`,
+`issue tracker <https://github.com/Freeseer/freeseer/issues>`_, and
+`IRC log <https://botbot.me/freenode/freeseer/>`_.
 
-If your problem or idea hasn't been addressed before, continue to Step 2.
+.. rubric:: 2. Ask
 
+Contact us before opening a new issue, otherwise you risk it being closed for
+reasons such as it being a known issue, previously rejected idea, or off-topic.
 
-Step 2: Don't File An Issue... Yet
-----------------------------------
+Hop in our :ref:`IRC channel <irc-label>` or send an email to the
+:ref:`mailing list <mailing-list-label>` and describe your problem or idea.
 
-`Freeseer's issue tracker <https://github.com/Freeseer/freeseer/issues>`_ is
-public, but try not to file a new issue unless the problem or feature
-request has been discussed with the Freeseer community.
-If you file a new issue without discussing, you risk it being closed for reasons
-such as it being a known issue, previously rejected idea, or off-topic.
+Keep in mind that none of us are paid to work on Freeseer, we are all volunteers
+helping out in our free time. You may not get an immediate response.
 
+.. rubric:: 3. Open a new issue
 
-Step 3: Contact the Community
------------------------------
+After searching and contacting us, `open an issue
+<https://github.com/Freeseer/freeseer/issues/new>`_ if none exist and
+reference any existing related issues that you know of.
 
-Send an email to our :ref:`mailing list <mailing-list-label>` describing your
-problem or idea. You may also use our :ref:`IRC channel <irc-label>`
-if you think it's a minor issue, but mailing list is preferred.
-Please be specific and courteous when communicating.
-
-Thanks for helping improve Freeseer, and for respecting the community's time
-and public spaces!
-
-Step 4: File a New Issue using a Template
------------------------------------------
-| You can find templates for bug reports and feature requests, below.
-| We ask that new contributors follow these templates closely.
-
-.. important::
-    Please assign the appropriate label(s) to classify your issue.
-    You will see a list of options when reporting your issue.
+If you're a new contributor, please use one of the templates below.
 
 Bug Report Template
 *******************
@@ -74,7 +56,7 @@ For bug reports, describe step by step exactly what you did and what went wrong.
 
     Any other comments? (E.g. Freeseer version, Python version, operating system, error messages, etc.)
 
-Another, more concise, bug template::
+Or use this conciser template::
 
     Steps:
     1.
@@ -90,17 +72,14 @@ Another, more concise, bug template::
 Feature Request Template
 ************************
 
-For feature ideas, describe exactly how you think the new functionality should
-work, and include mockups and screenshots if you can. Sell your idea to the
-community by clearly explaining its benefits and use cases, and how you plan to
-help make the feature.
-
 ::
 
-    Purpose of this new feature:
+    Purpose of feature (pros, cons, use cases):
 
 
     Describe the feature and its functionality:
 
 
     Mockups / Screenshots / Examples:
+
+Of course you can also argue feature removal.
