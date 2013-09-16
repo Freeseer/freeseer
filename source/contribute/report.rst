@@ -1,16 +1,15 @@
 How to Report a Bug or Make a Feature Request
 =============================================
 
-Freeseer is an open source project built by volunteers, who troubleshoot and
-discuss features in public community spaces. If you've found a bug or have an
-idea for Freeseer, here's what you can do to get help or feedback.
-
-
 Step 1: Search
 --------------
 
-To avoid duplicate work, search our :doc:`documentation </index>`,
-:ref:`mailing list <mailing-list-label>`, and `issue tracker
+We troubleshoot and discuss features in public community spaces, so if you've
+found a bug or have an idea, take a few minutes to see if it's already been
+discussed.
+
+Search our :doc:`documentation </index>`, :ref:`mailing list
+<mailing-list-label>`, and `issue tracker
 <https://github.com/Freeseer/freeseer/issues>`_ to make sure your problem or
 idea hasn't already been documented or discussed. If it has, follow up on the
 existing mailing list thread or issue tracker comment thread to discuss further.
@@ -74,7 +73,7 @@ For bug reports, describe step by step exactly what you did and what went wrong.
 
 
     Any other comments? (E.g. Freeseer version, Python version, operating system, error messages, etc.)
-    
+
 Another, more concise, bug template::
 
     Steps:
@@ -93,7 +92,7 @@ Feature Request Template
 
 For feature ideas, describe exactly how you think the new functionality should
 work, and include mockups and screenshots if you can. Sell your idea to the
-community by clearly explaining its benefits and use cases, and how you plan to 
+community by clearly explaining its benefits and use cases, and how you plan to
 help make the feature.
 
 ::

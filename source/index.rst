@@ -12,15 +12,12 @@ Freeseer: Conference Recording Made Easy
 ========================================
 
 Welcome to the official documentation for `Freeseer <http://freeseer.github.com>`_,
-screencasting software for recording and streaming presentations. 
+screencasting software for recording and streaming presentations.
 
 .. toctree::
    :maxdepth: 1
-   
+
    about/index
    quick-start
    userguide/index
    contribute/index
-   troubleshoot/index
-
-
