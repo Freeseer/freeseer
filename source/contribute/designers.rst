@@ -1,13 +1,13 @@
-UI or UX Designer
-=================
+Designer
+========
 
-Design and User Experience have started to play a bigger role in open source software projects.
-Getting developers to contribute to open source projects is much easier than getting designers. We want to change that, we think designers deserve some love too.
+Whether you're a graphical designer, user interface designer, or user experience
+designer, we can use your help. Design is becoming increasingly important in
+open source projects, yet finding designers to contribute remains challenging.
 
-We know UI and UX are hard (something many developers don't like to admit), and we need your help. Critique our design, show us where we can improve, or improve it for us. If you're a designer, we're all ears.
+Good design is hard, so we need your help. Critique our design, show us where we
+can improve, and help us make the improvements. Create wireframes, mock-ups,
+sketches, and prototypes.
 
-Our goal is to make Freeseer a beautiful, usable app, that's simple enough for a first time user and advanced enough for power users.
-Help us get there by mocking up screenshots, devising wireframes that improve Freeseer's look and feel and user interface, or creating some beautiful icons.
-
-We recommend `Mockingbird <http://gomockingbird.com>`_ for creating and sharing wireframes easily.
-Alternatively, if you prefer to hand draw your mockups, just take a screenshot and show us on the mailing list.
+Our goal is to make Freeseer a highly usable app that's simple enough for
+a first time user and advanced enough for power users.
