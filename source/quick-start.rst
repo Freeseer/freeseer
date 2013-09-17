@@ -111,7 +111,7 @@ Get the source code
 ********************
 
 If you plan on contributing to Freeseer, you'll need to :ref:`fork and clone the
-project <fork-freeseer-label>`.
+project <fork-freeseer>`.
 
 
 Running Freeseer
@@ -171,5 +171,5 @@ http://www.fsf.org/licensing/licenses/gpl.html.
 
 .. rubric:: Footnotes
 
-.. [#f1] :ref:`Requires a VGA capture device <equipment-label>`, also known as a
+.. [#f1] :ref:`Requires a VGA capture device <equipment>`, also known as a
          frame grabber.

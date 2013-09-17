@@ -39,7 +39,7 @@ feature <https://github.com/blog/844-forking-with-the-edit-button>`_.
 
 We want to make contributing documentation as easy as possible.
 If you're not comfortable using git or GitHub but want to contribute documentation,
-write your documentation elsewhere and then email it to :ref:`Freeseer's mailing list <mailing-list-label>`
+write your documentation elsewhere and then email it to :ref:`Freeseer's mailing list <mailing-list>`
 for review and inclusion into this documentation.
 
 

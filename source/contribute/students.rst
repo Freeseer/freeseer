@@ -10,14 +10,14 @@ Getting Started
 ---------------
 #. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
 #. Introduce yourself to the Freeseer community via the
-   :ref:`mailing list <mailing-list-label>`
+   :ref:`mailing list <mailing-list>`
 
    - Include your GitHub username so we can add you to the `Freeseer organization
      <https://github.com/Freeseer?tab=members>`_
-#. Join us in our :ref:`IRC channel <irc-label>`
+#. Join us in our :ref:`IRC channel <irc>`
    
    - Tell us who you are if your nickname isn't obvious, or update your whois info
-#. :ref:`Fork & clone Freeseer <fork-freeseer-label>` and get it up and running
+#. :ref:`Fork & clone Freeseer <fork-freeseer>` and get it up and running
 #. Take a look at the `project evaluation document
    <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_,
    use it as a guide

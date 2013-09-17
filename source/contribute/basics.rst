@@ -46,7 +46,7 @@ Freeseer.
      `GitHub for Mac <http://mac.github.com/>`_
 
 
-.. _fork-freeseer-label:
+.. _fork-freeseer:
 
 Forking and Cloning Freeseer
 ----------------------------

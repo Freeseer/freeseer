@@ -6,7 +6,7 @@ Contact Us
 The Freeseer community is available to brainstorm, ask and answer questions,
 and offer support online.
 
-.. _mailing-list-label:
+.. _mailing-list:
 
 Mailing List
 ------------
@@ -20,7 +20,7 @@ through freeseer@googlegroups.com.
   <http://box674.bluehost.com/mailman/listinfo/freeseer_fosslc.org>`_
   (freeseer@fosslc.org) is deprecated and should no longer be used.
 
-.. _irc-label:
+.. _irc:
 
 IRC Channel
 -----------

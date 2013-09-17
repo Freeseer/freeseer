@@ -6,7 +6,7 @@ Reporting Bugs & Requesting Features
 We troubleshoot and discuss features in public. If you've found a bug or have
 an idea, take a few minutes to see if it's already been documented.
 
-Search our :doc:`documentation </index>`, :ref:`mailing list <mailing-list-label>`,
+Search our :doc:`documentation </index>`, :ref:`mailing list <mailing-list>`,
 `issue tracker <https://github.com/Freeseer/freeseer/issues>`_, and
 `IRC log <https://botbot.me/freenode/freeseer/>`_.
 
@@ -15,8 +15,8 @@ Search our :doc:`documentation </index>`, :ref:`mailing list <mailing-list-label
 Contact us before opening a new issue, otherwise you risk it being closed for
 reasons such as it being a known issue, previously rejected idea, or off-topic.
 
-Hop in our :ref:`IRC channel <irc-label>` or send an email to the
-:ref:`mailing list <mailing-list-label>` and describe your problem or idea.
+Hop in our :ref:`IRC channel <irc>` or send an email to the
+:ref:`mailing list <mailing-list>` and describe your problem or idea.
 
 Keep in mind that none of us are paid to work on Freeseer, we are all volunteers
 helping out in our free time. You may not get an immediate response.

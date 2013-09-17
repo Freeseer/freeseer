@@ -37,4 +37,4 @@ Alternatively, you can clone the project with git:
 
     $ git clone git@github.com:Freeseer/freeseer.git  # Clones a copy of the master repo
 
-Potential contributors should :ref:`fork Freeseer <fork-freeseer-label>`.
+Potential contributors should :ref:`fork Freeseer <fork-freeseer>`.
