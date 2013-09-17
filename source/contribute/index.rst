@@ -1,20 +1,13 @@
 Contributor Guide
 =================
 
-At Freeseer, we know that software development isn't just about code. We're looking for writers, designers, power users, 
-and user experience experts to collaborate with us to make a world-class platform. All are welcome. 
+We value developers, but a project doesn't just run on code contributions.
+Writers, designers, power users, and others all play a role in our success.
 
-Where to Start?
----------------
-
-The most frequently-asked question we get from potential contributors is "Where do I begin?"
-Our answer is always "What are your skills? What are you most interested in working on?"
-
-Freeseer is just as much about community as it is about code, so if you're brand new, the first step is to get onto the
-:doc:`community mailing list </contact>` and introduce yourself. Tell us what your skills are and what you're most
-excited about in Freeseer, and how you'd like to help. The community can help point you in the right direction. 
-
-How you can contribute to a great open source project depends on your skillset.
+How you can contribute depends on your skillset and interests. If you need help
+deciding, :doc:`tell us </contact>` what your skills are and what you're most
+excited about in Freeseer, and how you'd like to help. The community can point
+you in the right direction.
 
 I am a...
 ---------
