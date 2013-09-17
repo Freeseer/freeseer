@@ -1,25 +1,3 @@
-.. Where to start
-.. Installing Freeseer
-.. I am a ...
-..   Power user
-..   Translator
-..   Technical Writer
-..   Intern
-..   Developer
-..   UI/UX Designer
-.. Basics
-..   Forking the project
-..   Our git branching model (based on http://nvie.com/posts/a-successful-git-branching-model/, Fork + Pull Model)
-..   Starting a new task
-..   Updating & merging & conflicts (include diagram overviewing local and remote repos)
-..   Renaming branches (locally & remotely)
-..   Best practices
-..     Sharing code snippets quickly
-..     Using a gist to keep track of personal tasks
-..     When to use which communication medium
-..     Be bold but communicate often
-..     Committing and closing issues
-
 Contributor Guide
 =================
 
