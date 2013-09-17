@@ -17,7 +17,6 @@ I am a...
 
    students
    developers/index
-   documentation
    translation
    designers
    powerusers
