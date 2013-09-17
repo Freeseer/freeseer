@@ -119,7 +119,7 @@ your local master branch to pull in changes from upstream.
 6. Rebase frequently to incorporate changes from upstream. ::
 
    $ git checkout master
-   $ git pull upstream master # At this point you can also use just git pull
+   $ git pull upstream master
    $ git checkout my-topic-branch
    $ git rebase master
 
