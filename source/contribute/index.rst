@@ -22,23 +22,6 @@ I am a...
    designers
    powerusers
 
-.. student/intern
-.. developer
-.. technical writer
-.. translator
-.. UI designer / UX expert
-.. power user
-
-If you're interested in lending a hand, please do :doc:`get in touch </contact>`.
-
-Installing Freeseer
--------------------
-
-.. toctree::
-   :maxdepth: 2
-
-   install
-
 Basics
 ------
 
