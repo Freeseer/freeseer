@@ -18,8 +18,7 @@ I am a...
    students
    developers/index
    translation
-   designers
-   powerusers
+   designers-and-powerusers
 
 Basics
 ------

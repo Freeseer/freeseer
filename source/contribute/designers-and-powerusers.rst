@@ -11,3 +11,10 @@ sketches, and prototypes.
 
 Our goal is to make Freeseer a highly usable app that's simple enough for
 a first time user and advanced enough for power users.
+
+Power User
+==========
+
+Power users have installed and upgraded Freeseer, know its ins and outs, and
+have used it to record several talks. They can help with mailing list and IRC
+support, issue tracker management, documentation, and suggestions.
