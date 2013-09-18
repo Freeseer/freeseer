@@ -41,6 +41,22 @@ Getting Started
   As a student, you can apply for a **free micro account** at
   `github.com/edu <http://github.com/edu>`_ and get 5 private repositories!
 
+What Happens at the Sprint
+--------------------------
+
+Depending on which program you're participating in, you may have to attend
+a `sprint <http://en.wikipedia.org/wiki/Sprint_(software_development)>`_ with
+your new teammates. Use the sprint to ask questions, help your teammates,
+brainstorm what to work on, get started on your project proposal, open a pull
+request, make new friends, and generally have a good time.
+
+We'll also decide on a time for our weekly G+ hangouts, which are done `scrum
+style <http://en.wikipedia.org/wiki/Scrum_(software_development)#Meetings>`_.
+Each team member will briefly update the others with what they've accomplished
+since the last meeting, what they will be working on next, and any stumbling
+blocks they ran into. Any detailed discussion should happen outside the meeting.
+
+
 Deciding What To Work On
 ------------------------
 
