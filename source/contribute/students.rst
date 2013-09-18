@@ -60,45 +60,34 @@ blocks they ran into. Any detailed discussion should happen outside the meeting.
 Deciding What To Work On
 ------------------------
 
-We let students choose their projects. There are no set work hours -- we think
-you work best when you want to work. Meet your deadlines and you'll be fine.
+We let students choose their projects. We'll suggest a couple of project ideas.
+You can also look through our `open issues
+<https://github.com/Freeseer/freeseer/issues?labels=&page=1&state=open>`_ or
+come up with your own idea and open an issue for it.
 
-Depending on which program you're participating in, you may have to attend a
-`sprint <http://en.wikipedia.org/wiki/Sprint_(software_development)>`_ with your
-new teammates. We usually let students brainstorm at the sprint what to work on.
-
-If you've followed the steps above, you should have a copy of the `project design document
+You should have a copy of the `project proposal document
 <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
-on your Google Docs/Drive account. The reason we ask that you keep it on Google's
-cloud is so that we, the mentors, can easily find and comment on your document.
+on your Google Drive. Feel free to add or remove sections that you think are
+relevant or irrelevant to your project. It also includes a timeline to help
+schedule your work. There are no set work hours -- meet your deadlines and
+you'll be fine. Decide with your professor and/or project mentor when your
+exact end date will be.
 
-.. important::
-  Verify that your sharing settings allow us to view and comment on the document!
+Done is better than perfect when it comes to your proposal. Don't spend too much
+(or too little) time on it. Iterate on it quickly and often, you don't need
+a highly polished document on your first try.
 
-You may modify the design document by adding or removing sections that you think
-are relevant or irrelevant to your project.
-It also includes a timeline to help schedule your work.
-Decide with your professor and/or project mentor when your exact end date will be.
-
-We don't expect your design document to be perfect right away.
-Don't spend too much (or too little) time on it. In this case it's better to
-release early and release often as opposed to a highly polished document on your
-first try.
-
-When you finish your first draft of the document, notify everyone on the
-mailing list and include a link so they can view it on Google Docs/Drive.
+When you finish your first draft of the proposal, notify everyone on the
+mailing list and include a link so they can view it on Google Drive.
 We'll give you feedback so you can make any changes if necessary.
 
+.. note::
+  You can `add or update translations
+  <http://freeseer.github.io/docs/contribute/translation.html>`_
+  in addition to your main project.
+
 .. tip::
-  You can start working on your project while your design document is still in progress.
-
-Because Freeseer is still a relatively young project and has a small codebase,
-there is lots of room for improvement. This means that your contributions will
-have a huge impact on the future of Freeseer! Due to the small size of our
-community, you'll also have a lot of responsibility. We learn a lot from working
-with students, don't be shy to point out when we're wrong or to suggest a better
-alternative!
-
+  Start working on your project while your proposal is still in progress.
 
 Stay In Touch
 -------------
