@@ -89,30 +89,29 @@ We'll give you feedback so you can make any changes if necessary.
 .. tip::
   Start working on your project while your proposal is still in progress.
 
-Stay In Touch
--------------
+Communicate
+-----------
 
-A good analogy is driving to a destination. Imagine a friend is driving and
-you're the navigator. The more updates you give your driver, the sooner and
-safer you'll get to your destination. On the other hand, rarely updating your
-driver with directions can get you easily lost or you may not reach your
-destination on time.
+One of the biggest indicators of success is staying in touch with us.
+If we don't know what's happening on your side, we can't help you.
+If we don't hear from you, we usually won't go looking after you.
 
-Same goes with your teammates in a project. If you update them frequently, they
-can help you out often and give you feedback on your work so there's less chance
-of screwing up. But if no one knows what you're working on or if you're having
-difficulties, then by the time they find out it may be too late to make changes
-or get help.
+Make an effort to hang out in the IRC channel daily (lurking is fine).
+Participate in the mandatory weekly status update meetings. Be responsive on
+GitHub and the mailing list.
 
-In addition to being active on the mailing list and IRC, you'll be required to
-write a few blog posts about your progress. There's usually one at the
-beginning, one at the midpoint of the term, and one at the end, but feel free to
-write more!
+You'll also be required to write weekly blog posts about your progress. These
+will cover the updates you'll discuss in the weekly meetings, but you can go
+into more detail on your blog. You may write your blog posts at `fosslc.org
+<http://www.fosslc.org>`_ if you don't want to use a personal blog. Remember to
+tell us on the mailing list where we can read your latest blog post.
 
-You may write your blog posts at `fosslc.org <http://www.fosslc.org>`_ (you'll
-have to register an account first).  Or, if you prefer, you may use your own
-blog. Just tell us on the mailing list where we can read your latest blog post.
+Your updates in the weekly meetings and blog posts shouldn't come as a big
+surprise to us. If that's the case, you should probably be communicating more
+often.
 
+.. seealso::
+  `How to succeed or fail at Google Summer of Code <http://fosslc.org/drupal/node/374>`_
 
 Expectations
 ------------
