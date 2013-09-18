@@ -117,18 +117,10 @@ Expectations
 ------------
 
 * Be available for others to contact you
-* Communicate often: be active on IRC, the mailing list, and status updates
+* Keep up to the date with the mailing list
+* Communicate often, at the very least lurk on IRC
 * Be a team player, not just a teammate
-* Post updates often, let us know when you completed a feature or if you're having difficulty
-* Ask for help when you need it!
-* 8-10 hours of work per week
-
-
-How To Succeed
---------------
-
-* Choose an appropriate project that you can realistically accomplish
-* We don't expect you to be completely qualified, that's the point, you're here to learn
-
-.. seealso::
-  `How to succeed or fail at Google Summer of Code <http://fosslc.org/drupal/node/374>`_
+* Don't be afraid to ask for help
+* Treat your project as a scientific experiment; a failed outcome is not
+  a failed project if well documented
+* 8-10 hours of work per week, as much as any other course
