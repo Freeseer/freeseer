@@ -8,25 +8,33 @@ Open Source Projects (UCOSP), and Fedora Summer Coding.
 
 Getting Started
 ---------------
-#. `Register a (free) GitHub account <https://github.com/>`_ if you don't have one
-#. Introduce yourself to the Freeseer community via the
-   :ref:`mailing list <mailing-list>`
+#. `Create a GitHub account <https://github.com/signup/free>`_
+#. Introduce yourself on our :ref:`mailing list <mailing-list>`
 
    - Include your GitHub username so we can add you to the `Freeseer organization
      <https://github.com/Freeseer?tab=members>`_
-#. Join us in our :ref:`IRC channel <irc>`
-   
-   - Tell us who you are if your nickname isn't obvious, or update your whois info
-#. :ref:`Fork & clone Freeseer <fork-freeseer>` and get it up and running
-#. Take a look at the `project evaluation document
-   <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_,
-   use it as a guide
-#. Make a copy of the `project design document
+#. Get familiar with IRC and start hanging out in :ref:`#freeseer on Freenode <irc>`
+#. :ref:`Fork & clone Freeseer <fork-freeseer>`
+#. Get Freeseer up and running, play around with it, look at the source code
+#. Read over the `assessment document
+   <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_
+#. Copy the `project proposal document
    <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
-   on Google Docs
+   to your Google Drive
    
-   - ``File`` > ``Make a copy``
+   - ``File`` → ``Make a copy``
+   - Change the sharing settings so **anyone with the link can view and
+     comment**, then share the link with us
    - Replace the highlighted sections with your own content
+#. Bookmark the style guides that we use:
+   `PEP 8 <http://www.python.org/dev/peps/pep-0008/>`_ and
+   `Google's Python Style Guide
+   <http://google-styleguide.googlecode.com/svn/trunk/pyguide.html>`_
+
+   - Reference them when writing code
+#. Sign up for a blogging platform (or use your own website)
+
+   - Share the URL on the mailing list
 #. Start thinking of ways how you can improve Freeseer!
 
 .. tip::
