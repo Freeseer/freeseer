@@ -1,32 +1,31 @@
 Translator
 ==========
 
-We want to adapt Freeseer for as many non-native environments as possible, especially other nations and cultures.
-There should be no language barrier between Freeseer and our users.
-You can help in our localization efforts.
-
+We want to adapt Freeseer for as many non-native environments as possible. There
+should be no language barrier between Freeseer and our users. Help us in our
+localization efforts.
 
 Add a Translation
 -----------------
 
 1. Open the **Qt Linguist** tool --
-   it should come with your installation of **PyQt**
+   it should come with your installation of PyQt
 
 2. Translation files are located in
-   ``<path-to-freeseer>/src/freeseer/frontend/qtcommon/languages/``.
-   If a file for your language exists, continue to step 3.
-   Otherwise, you'll need to `update translation resources`_ first.
+   ``freeseer/src/freeseer/frontend/qtcommon/languages/``
+
+   - If a file for your language exists, continue to step 3
+   - Otherwise, you'll need to `update translation resources`_ first
 
 
-3. Using Qt Linguist, open a translation (``.ts``) file for your language
+3. Using Qt Linguist, open translation (.ts) files for languages you wish to add
   
-4. Once you've completed the translation, `send a pull request
+4. Once the translation is complete, `send a pull request
    <https://help.github.com/articles/creating-a-pull-request>`_
-   containing only the ``.ts`` file(s) that you modified.
 
 .. seealso::
-  `Qt Linguist documentation for translators
-  <http://doc.qt.digia.com/qt/linguist-translators.html>`_
+  `Qt Linguist manual for translators
+  <http://qt-project.org/doc/qt-4.8/linguist-translators.html>`_
 
 
 Update Translation Resources
