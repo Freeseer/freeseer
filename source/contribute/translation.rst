@@ -32,30 +32,26 @@ Update Translation Resources
 ----------------------------
 
 For new translations to appear in Freeseer, you need to update the translation
-resources. This task is typically left to a developer, not a translator.
-Please ask a developer to update the translation resources before you attempt to.
+resources. This task is typically left to a developer, not a translator. If you
+feel uncomfortable doing these steps, please ask a developer to update the
+translation resources.
 
-1. Update Translation Files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: 1. Update Translation Files
 
 This step only needs to be completed if a developer wrote code that contains
 new translation strings in the user-interface. To update translation files::
 
-   cd <path-to-freeseer>/src/freeseer/frontend/qtcommon/languages
-   pylupdate4 freeseer.pro
+   $ cd freeseer/src/freeseer/frontend/qtcommon/languages
+   $ pylupdate4 freeseer.pro
   
 The ``freeseer.pro`` file specifies which source files contain translation
 strings, as well as which translation files need to be updated and/or created.
 If you want to translate to a new language, add a new locale for that language.
 
-2. Add Qt Translation Files to Freeseer-monitored List
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: 2. Add Qt Translation Files to Freeseer-monitored List
 
-Next, you need to update the list of monitored translations by editing the
-``resource.qrc`` file:: 
-   
-   cd <path-to-freeseer>/src/freeseer/frontend/qtcommon
-   <text-editor> resource.qrc
+Next, you need to update the list of monitored translations by editing
+``freeseer/src/freeseer/frontend/qtcommon/resource.qrc``.
    
 Add the following line::
 
@@ -67,13 +63,12 @@ For example, for an American English translation::
    <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>
 
 
-3. Update Qt Resource Files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: 3. Update Qt Resource Files
 
-When translations are ready to be used, they need to be imported into Qt's resource files.
-We included a script to automate the process. Simply run::
+When translations are ready to be used, they need to be imported into Qt's
+resource files. We included a script to automate the process. Simply run::
 
-   cd <path-to-freeseer>/src/freeseer/frontend/qtcommon
-   make
+   $ cd freeseer/src/freeseer/frontend/qtcommon
+   $ make
 
-You should now see your translation(s) the next time you run Freeseer.
+You should now see your translations the next time you run Freeseer.
