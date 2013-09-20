@@ -82,9 +82,8 @@ mailing list and include a link so they can view it on Google Drive.
 We'll give you feedback so you can make any changes if necessary.
 
 .. note::
-  You can `add or update translations
-  <http://freeseer.github.io/docs/contribute/translation.html>`_
-  in addition to your main project.
+  You can :doc:`add or update translations <translation>` in addition
+  to your main project.
 
 .. tip::
   Start working on your project while your proposal is still in progress.
