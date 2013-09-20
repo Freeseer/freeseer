@@ -31,7 +31,7 @@ import shlex
 import mutagen.oggvorbis
 
 from lib.youtube_upload import youtube_upload
-import completer
+from lib import completer
 
 def upload():
 	#------- Trying to default to the video directory
@@ -45,6 +45,7 @@ def upload():
 	email = raw_input("Email (user@example.com): ")
 	password = getpass.getpass()
 	#vfile = browse_video_directory()
+	completer.completer()
 	vfile = raw_input("File or Directory: ")
 	uploadTest(vfile, email, password)
 
