@@ -511,7 +511,7 @@ def main(arguments):
       metavar="STRING", help='Captcha token')
     parser.add_option('', '--captcha-response', dest='captcha_response', type="string",
       metavar="STRING", help='Captcha response')
-
+    
     options, args = parser.parse_args(arguments)
     run_main(parser, options, args)
 
