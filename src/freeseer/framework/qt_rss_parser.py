@@ -22,3 +22,11 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+from PyQt4 import QtXml
+
+class QtFeedParser:
+    '''
+    A RSS parser used when addding presentations
+    '''
+
+
