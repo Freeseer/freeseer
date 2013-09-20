@@ -44,8 +44,10 @@ def upload():
 	email = raw_input("Email (user@example.com): ")
 	password = getpass.getpass()
 	#vfile = browse_video_directory()
-	vfile = raw_input("File or Directory: "+vpath+"/")
+	vfile = raw_input("File or Directory: ")
+	uploadTest(vfile, email, password)
 
+	'''
 	# Check whether the file exists, and ask again if not
 	while os.path.exists(vpath+"/"+vfile) == False:
 		print "Cannot find file or directory " + vpath+"/"+vfile
@@ -56,12 +58,13 @@ def upload():
 		for root, dirs, files in os.walk(vpath+"/"+vfile):
 			i=0
 			while i < len(files):
-				#print str(root)+"/"+files[i-1]
+				print str(root)+"/"+files[i-1]
 				uploadToYouTube(str(root), files[i-1], email, password)
 				i=i+1
 	# Otherwise just upload the one video
 	else:
 		uploadToYouTube(vpath, vfile, email, password)
+	'''
 
 	#ogg_vfile = ""
 	#mpg_vfile = vfile	
@@ -130,10 +133,36 @@ def uploadToYouTube(vpath, vfile, email, password):
 	# Default category to education for now
 	category = "Education"
 
-	youtube_upload.main_upload(shlex.split("--email="+email+" --password="+password+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath+"/"+vfile))
+	youtube_upload.upload_video(shlex.split("--email="+email+" --password="+password+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath+"/"+vfile))
 
 
+def uploadTest(vfile, email, password):
+	# Get the title and description if video is an ogg file
+	if vfile.lower().endswith(('.ogg', '.mpg')):
+		if vfile.lower().endswith('.ogg'):
+			metadata = mutagen.oggvorbis.Open(vfile)
+			#print metadata.pprint()
+			try:
+				title = metadata["title"][0]
+			except KeyError:
+				title = vfile
 
+			try:
+				description = metadata["description"][0]
+			except KeyError:
+				description = ""		
+	
+		else:
+			title = vfile
+			description = ""
+	else:
+		print vfile +" is not an ogg or mpg"
+		return
+
+	# Default category to education for now
+	category = "Education"
+
+	youtube_upload.upload_video(shlex.split("--email="+email+" --password="+password+" --title="+title+" --category="+category+" --description="+'"'+description+'" ' + vpath+"/"+vfile))
 
 
 #----------------------------------
