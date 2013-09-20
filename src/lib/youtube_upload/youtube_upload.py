@@ -71,11 +71,12 @@ class OptionsMissing(Exception): pass
 class BadAuthentication(Exception): pass
 class CaptchaRequired(Exception): pass
 class ParseError(Exception): pass
+class VideoNotFound(Exception): pass
 class UnsuccessfulHTTPResponseCode(Exception): pass
 
-VERSION = "0.7.1"
+VERSION = "0.7.3"
 DEVELOPER_KEY = "AI39si7iJ5TSVP3U_j4g3GGNZeI6uJl6oPLMxiyMst24zo1FEgnLzcG4i" + \
-                "SE0t2pLvi-O03cW918xz9JFaf_Hn-XwRTTK7i1Img"
+  "SE0t2pLvi-O03cW918xz9JFaf_Hn-XwRTTK7i1Img"
 
 EXIT_CODES = {
     # Non-retryable
@@ -85,20 +86,26 @@ EXIT_CODES = {
     InvalidCategory: 3,
     CaptchaRequired: 4, # retry with options --captcha-token and --captcha-response
     ParseError: 5,
+    VideoNotFound: 6,
     # Retryable
     UnsuccessfulHTTPResponseCode: 100,
 }
 
+def to_utf8(s):
+    """Re-encode string from the default system encoding to UTF-8."""
+    current = locale.getpreferredencoding()
+    return (s.decode(current).encode("UTF-8") if s and current != "UTF-8" else s)
+
 def debug(obj, fd=sys.stderr):
     """Write obj to standard error."""
     string = str(obj.encode(get_encoding(fd), "backslashreplace")
-                 if isinstance(obj, unicode) else obj)
+        if isinstance(obj, unicode) else obj)
     fd.write(string + "\n")
 
 def catch_exceptions(exit_codes, fun, *args, **kwargs):
     """
-    Wrap fun(*args, **kwargs) and catch raised exceptions specified in
-    the dictionary exit_codes ({ExceptionClass: exit_code_to_return}).
+    Catch exceptions on 'fun(*args, **kwargs)' and return the exit code specified 
+    in the 'exit_codes' dictionary. Returns 0 if no exception is raised.
     """
     try:
         fun(*args, **kwargs)
@@ -147,6 +154,9 @@ def post(url, files_params, extra_params, show_progressbar=True):
     elif show_progressbar:
         debug("Install python-progressbar to see a nice progress bar")
         bar = None
+    else:
+        bar = None
+        
     body_container = StringIO.StringIO()
     headers_container = StringIO.StringIO()
     c.setopt(c.WRITEFUNCTION, body_container.write)
@@ -154,10 +164,11 @@ def post(url, files_params, extra_params, show_progressbar=True):
     c.perform()
     http_code = c.getinfo(pycurl.HTTP_CODE)
     c.close()
+    
     if bar:
         bar.finish()
     headers = dict([s.strip() for s in line.split(":", 1)] for line in
-                   headers_container.getvalue().splitlines() if ":" in line)
+      headers_container.getvalue().splitlines() if ":" in line)
     return http_code, headers, body_container.getvalue()
 
 class Youtube:
@@ -165,7 +176,7 @@ class Youtube:
     CATEGORIES_SCHEME = "http://gdata.youtube.com/schemas/2007/categories.cat"
 
     def __init__(self, developer_key, source="tokland-youtube_upload",
-                 client_id="tokland-youtube_upload"):
+            client_id="tokland-youtube_upload"):
         """Login and preload available categories."""
         service = gdata.youtube.service.YouTubeService()
         service.ssl = False # SSL is not yet supported by the API
@@ -179,7 +190,6 @@ class Youtube:
         self.service.email = email
         self.service.password = password
         self.service.ProgrammaticLogin(captcha_token, captcha_response)
-        self.categories = self.get_categories()
 
     def get_upload_form_data(self, path, *args, **kwargs):
         """Return dict with keys 'post_url' and 'token' with upload info."""
@@ -200,13 +210,40 @@ class Youtube:
 
     def add_video_to_playlist(self, video_id, playlist_uri, title=None, description=None):
         """Add video to playlist."""
-        expected = "http:\/\/gdata\.youtube\.com\/feeds\/api\/playlists/"
+        expected = r"http://gdata.youtube.com/feeds/api/playlists/"
         if not re.match("^" + expected, playlist_uri):
-            raise ParseError("expecting playlist feed URL (%s/ID), but got '%s'" %
-                  (expected, playlist_uri))
+            raise ParseError("expecting playlist feed URL (%sID), but got '%s'" %
+                  (expected.decode("string-escape"), playlist_uri))
         playlist_video_entry = self.service.AddPlaylistVideoEntryToPlaylist(
             playlist_uri, video_id, title, description)
         return playlist_video_entry
+
+    def update_metadata(self, url, title, description):
+        """Change metadata of a video."""
+        entry = self._get_feed_from_url(url)
+        if title:
+            entry.media.title = gdata.media.Title(text=title)
+        if description:
+            entry.media.description = \
+                gdata.media.Description(description_type='plain', text=description) 
+        return self.service.UpdateVideoEntry(entry)
+
+    def delete_video_from_playlist(self, video_id, playlist_uri):
+        """Delete video from playlist."""
+        expected = r"http://gdata.youtube.com/feeds/api/playlists/"
+        if not re.match("^" + expected, playlist_uri):
+            raise ParseError("expecting playlist feed URL (%sID), but got '%s'" %
+                  (expected.decode("string-escape"), playlist_uri))
+        entries = self.service.GetYouTubePlaylistVideoFeed(playlist_uri).entry
+        
+        for entry in entries:
+            url, entry_id = get_entry_info(entry)
+            if video_id == entry_id:
+                playlist_video_entry_id = entry.id.text.split('/')[-1]
+                self.service.DeletePlaylistVideoEntry(playlist_uri, playlist_video_entry_id)
+                break
+        else:
+            raise VideoNotFound("Video %s not found in playlist %s" % (video_id, playlist_uri)) 
 
     def check_upload_status(self, video_id):
         """
@@ -216,8 +253,14 @@ class Youtube:
         """
         return self.service.CheckUploadStatus(video_id=video_id)
 
+    def _get_feed_from_url(self, url):
+        template = 'http://gdata.youtube.com/feeds/api/users/default/uploads/%s' 
+        video_id = get_video_id_from_url(url)
+        return self.service.GetYouTubeVideoEntry(template % video_id)
+
     def _create_video_entry(self, title, description, category, keywords=None,
-                            location=None, private=False, unlisted=False):
+            location=None, private=False, unlisted=False):
+        self.categories = self.get_categories()
         if category not in self.categories:
             valid = " ".join(self.categories.keys())
             raise InvalidCategory("Invalid category '%s' (valid: %s)" % (category, valid))
@@ -237,11 +280,12 @@ class Youtube:
         else:
             where = None
         kwargs = {
-          "namespace": YOUTUBE_NAMESPACE,
-          "attributes": {'action': 'list', 'permission': 'denied'},
+            "namespace": YOUTUBE_NAMESPACE,
+            "attributes": {'action': 'list', 'permission': 'denied'},
         }
         extension = ([ExtensionElement('accessControl', **kwargs)] if unlisted else None)
-        return gdata.youtube.YouTubeVideoEntry(media=media_group, geo=where, extension_elements=extension)
+        return gdata.youtube.YouTubeVideoEntry(media=media_group, geo=where,
+            extension_elements=extension)
 
     @classmethod
     def get_categories(cls):
@@ -250,7 +294,7 @@ class Youtube:
             """Return pair (term, label) for a (non-deprecated) XML element."""
             if all(not(str(x.tag).endswith("deprecated")) for x in element.getchildren()):
                 return (element.get("term"), element.get("label"))
-        xmldata = urllib.urlopen(cls.CATEGORIES_SCHEME).read()
+        xmldata = str(urllib.urlopen(cls.CATEGORIES_SCHEME).read())
         xml = ElementTree.XML(xmldata)
         return dict(compact(map(get_pair, xml)))
 
@@ -291,70 +335,58 @@ def wait_processing(youtube_obj, video_id):
             break
         time.sleep(5)
 
-def main_upload(arguments, output=sys.stdout):
-    """Upload video to Youtube."""
-    usage = """Usage: %prog [OPTIONS] VIDEO_PATH ...
+def upload_video(youtube, options, video_path, total_videos, index):
+    """Upload video with index (for split videos)."""
+    title = to_utf8(options.title)
+    description = to_utf8(options.description or "").decode("string-escape")
+    namespace = dict(title=title, n=index+1, total=total_videos)
+    complete_title = (string.Template(options.title_template).substitute(**namespace)
+      if total_videos > 1 else title)
+    args = [video_path, complete_title, description,
+            options.category, options.keywords]
+    kwargs = {
+      "private": options.private,
+      "location": parse_location(options.location),
+      "unlisted": options.unlisted,
+    }
 
-    Upload videos to youtube."""
-    parser = optparse.OptionParser(usage, version=VERSION)
+    if options.get_upload_form_data:
+        data = youtube.get_upload_form_data(*args, **kwargs)
+        return "\n".join([video_path, data["token"], data["post_url"]])
+    elif options.api_upload or not pycurl:
+        if not options.api_upload:
+            debug("Install pycurl to upload the video using HTTP")
+        debug("Start upload using basic gdata API: %s" % video_path)
+        entry = youtube.upload_video(*args, **kwargs)
+        url, video_id = get_entry_info(entry)
+    else: # upload with curl
+        data = youtube.get_upload_form_data(*args, **kwargs)
+        entry = data["entry"]
+        debug("Start upload using a HTTP post: %s -> %s" % (video_path, data["post_url"]))
+        http_code, headers, body = post(data["post_url"], 
+            {"file": video_path}, {"token": data["token"]}, 
+            show_progressbar=not(options.hide_progressbar))
+        if http_code != 302:
+            raise UnsuccessfulHTTPResponseCode(
+                "HTTP code on upload: %d (expected 302)" % http_code)
+        params = dict(s.split("=", 1) for s in headers["Location"].split("?", 1)[1].split("&"))
+        if params["status"] !=  "200":
+            raise UnsuccessfulHTTPResponseCode(
+                "HTTP status on upload link: %s (expected 200)" % params["status"])
+        video_id = params["id"]
+        url = "http://www.youtube.com/watch?v=%s" % video_id
+    if options.wait_processing:
+        wait_processing(youtube, video_id)
+    return url
 
-    # Required options
-    parser.add_option('-m', '--email', dest='email', type="string",
-        help='Authentication user email')
-    parser.add_option('-p', '--password', dest='password', type="string",
-        help='Authentication user password')
-    parser.add_option('-t', '--title', dest='title', type="string",
-        help='Video(s) title')
-    parser.add_option('-c', '--category', dest='category', type="string",
-        help='Video(s) category')
-
-    # Side commands
-    parser.add_option('', '--get-categories', dest='get_categories',
-        action="store_true", default=False, help='Show video categories')
-    parser.add_option('', '--create-playlist', dest='create_playlist', type="string",
-        default=None, metavar="TITLE|DESCRIPTION|PRIVATE (0=no, 1=yes)",
-        help='Create new playlist and add uploaded video(s) to it')
-
-    # Optional options
-    parser.add_option('-d', '--description', dest='description', type="string",
-        help='Video(s) description')
-    parser.add_option('', '--keywords', dest='keywords', type="string",
-        help='Video(s) keywords (separated by commas: tag1,tag2,...)')
-    parser.add_option('', '--title-template', dest='title_template', type="string",
-        default="$title [$n/$total]", metavar="STRING",
-        help='Title template to use on multiple videos (default: $title [$n/$total])')
-    parser.add_option('', '--private', dest='private',
-        action="store_true", default=False, help='Set uploaded video(s) as private')
-    parser.add_option('', '--unlisted', dest='unlisted',
-        action="store_true", default=False, help='Set uploaded video(s) as unlisted')
-    parser.add_option('', '--location', dest='location', type="string", default=None,
-        metavar="LAT,LON", help='Video(s) location (lat, lon). example: "43.3,5.42"')
-
-    # Upload options
-    parser.add_option('', '--api-upload', dest='api_upload',
-        action="store_true", default=False, help="Use the API upload instead of pycurl")
-    parser.add_option('', '--get-upload-form-info', dest='get_upload_form_data',
-        action="store_true", default=False, help="Don't upload, get the form info (PATH, TOKEN, URL)")
-
-    # Playlist options
-    parser.add_option('', '--add-to-playlist', dest='add_to_playlist', type="string", default=None,
-        metavar="URI", help='Add video(s) to an existing playlist')
-    parser.add_option('', '--wait-processing', dest='wait_processing', action="store_true",
-        default=False, help='Wait until the video(s) has been processed')
-
-    # Captcha options
-    parser.add_option('', '--captcha-token', dest='captcha_token', type="string",
-      metavar="STRING", help='Captcha token')
-    parser.add_option('', '--captcha-response', dest='captcha_response', type="string",
-      metavar="STRING", help='Captcha response')
-
-    options, args = parser.parse_args(arguments)
-
+def run_main(parser, options, args, output=sys.stdout):
+    """Run the main scripts from the parsed options/args."""
     if options.get_categories:
         output.write(" ".join(Youtube.get_categories().keys()) + "\n")
         return
-    elif options.create_playlist or options.add_to_playlist:
-        required_options = ["email", "password"]
+    elif (options.create_playlist or options.add_to_playlist or 
+         options.delete_from_playlist or options.update_metadata):
+        required_options = ["email"]
     else:
         if not args:
             parser.print_usage()
@@ -393,56 +425,95 @@ def main_upload(arguments, output=sys.stdout):
         playlist_uri = youtube.create_playlist(title, description, (private == "1"))
         debug("Playlist created: %s" % playlist_uri)
         output.write(playlist_uri+"\n")
-        return
-
-    if options.add_to_playlist:
+    elif options.update_metadata:
+        if not args:
+            parser.print_usage()
+            raise VideoArgumentMissing("Specify a video URL to upload")
+        url = args[0]            
+        updated = youtube.update_metadata(url, options.title, options.description)
+        debug("Video metadata updated: %s" % url)
+    elif options.add_to_playlist:
         for url in args:
             debug("Adding video (%s) to playlist: %s" % (url, options.add_to_playlist))
             video_id = get_video_id_from_url(url)
             youtube.add_video_to_playlist(video_id, options.add_to_playlist)
-        return
-
-    videos = args
-    for index, video_path in enumerate(videos):
-        namespace = dict(title=options.title, n=index+1, total=len(videos))
-        complete_title = (string.Template(options.title_template).substitute(**namespace)
-                          if len(videos) > 1 else options.title)
-        args = [video_path, complete_title, options.description,
-                options.category, options.keywords]
-        kwargs = {
-          "private": options.private,
-          "location": parse_location(options.location),
-          "unlisted": options.unlisted,
-        }
-
-        if options.get_upload_form_data:
-            data = youtube.get_upload_form_data(*args, **kwargs)
-            output.write("\n".join([video_path, data["token"], data["post_url"]]) + "\n")
-            continue
-        elif options.api_upload or not pycurl:
-            if not options.api_upload:
-                debug("Install pycurl to upload the video using HTTP")
-            debug("Start upload using basic gdata API: %s" % video_path)
-            entry = youtube.upload_video(*args, **kwargs)
-            url, video_id = get_entry_info(entry)
-        else: # upload with curl
-            data = youtube.get_upload_form_data(*args, **kwargs)
-            entry = data["entry"]
-            debug("Start upload using a HTTP post: %s" % video_path)
-            http_code, headers, body = \
-                post(data["post_url"], {"file": video_path}, {"token": data["token"]})
-            if http_code != 302:
-                raise UnsuccessfulHTTPResponseCode(
-                    "HTTP code on upload: %d (expected 302)" % http_code)
-            params = dict(s.split("=", 1) for s in headers["Location"].split("?", 1)[1].split("&"))
-            if params["status"] !=  "200":
-                raise UnsuccessfulHTTPResponseCode(
-                    "HTTP status on upload link: %s (expected 200)" % params["status"])
-            video_id = params["id"]
-            url = "http://www.youtube.com/watch?v=%s" % video_id
-        if options.wait_processing:
-            wait_processing(youtube, video_id)
+    elif options.delete_from_playlist:
+        playlist = options.delete_from_playlist
+        for url in args:
+            video_id = get_video_id_from_url(url)
+            debug("delete video (%s) from playlist: %s; video-id: %s" % 
+              (url, playlist, video_id))
+            youtube.delete_video_from_playlist(video_id, playlist)
+    else:
+      for index, video_path in enumerate(args):
+        url = upload_video(youtube, options, video_path, len(args), index)
         output.write(url + "\n")
 
+def main(arguments):
+    """Upload video to Youtube."""
+    usage = """Usage: %prog [OPTIONS] VIDEO_PATH ...
+
+    Upload videos to youtube."""
+    parser = optparse.OptionParser(usage, version=VERSION)
+
+    # Required options
+    parser.add_option('-m', '--email', dest='email', type="string",
+        help='Authentication email or Youtube username')
+    parser.add_option('-p', '--password', dest='password', type="string",
+        help='Authentication password')
+    parser.add_option('-t', '--title', dest='title', type="string",
+        help='Video(s) title')
+    parser.add_option('-c', '--category', dest='category', type="string",
+        help='Video(s) category')
+
+    # Side commands
+    parser.add_option('', '--get-categories', dest='get_categories',
+        action="store_true", default=False, help='Show video categories')
+    parser.add_option('', '--create-playlist', dest='create_playlist', type="string",
+        default=None, metavar="TITLE|DESCRIPTION|PRIVATE (0=no, 1=yes)",
+        help='Create new playlist and add uploaded video(s) to it')
+
+    # Optional options
+    parser.add_option('-d', '--description', dest='description', type="string",
+        help='Video(s) description')
+    parser.add_option('', '--keywords', dest='keywords', type="string",
+        help='Video(s) keywords (separated by commas: tag1,tag2,...)')
+    parser.add_option('', '--title-template', dest='title_template', type="string",
+        default="$title [$n/$total]", metavar="STRING",
+        help='Title template to use on multiple videos (default: $title [$n/$total])')
+    parser.add_option('', '--private', dest='private',
+        action="store_true", default=False, help='Set uploaded video(s) as private')
+    parser.add_option('', '--unlisted', dest='unlisted',
+        action="store_true", default=False, help='Set uploaded video(s) as unlisted')
+    parser.add_option('', '--location', dest='location', type="string", default=None,
+        metavar="LAT,LON", help='Video(s) location (lat, lon). example: "43.3,5.42"')
+    parser.add_option('', '--update-metadata', dest='update_metadata', 
+        action="store_true", default=False, help='Update video metadata (title/description)')
+
+    # Upload options
+    parser.add_option('', '--api-upload', dest='api_upload',
+        action="store_true", default=False, help="Use the API upload instead of pycurl")
+    parser.add_option('', '--get-upload-form-info', dest='get_upload_form_data',
+        action="store_true", default=False, help="Don't upload, get the form info (PATH, TOKEN, URL)")
+    parser.add_option('', '--hide-progressbar', dest='hide_progressbar',
+        action="store_true", default=False, help="Hide progressbar on uploads")
+
+    # Playlist options
+    parser.add_option('', '--add-to-playlist', dest='add_to_playlist', type="string", default=None,
+        metavar="URI", help='Add video(s) to an existing playlist')
+    parser.add_option('', '--delete-from-playlist', dest='delete_from_playlist', type="string", default=None,
+        metavar="URI", help='Delete video(s) from an existing playlist')
+    parser.add_option('', '--wait-processing', dest='wait_processing', action="store_true",
+        default=False, help='Wait until the video(s) has been processed')
+
+    # Captcha options
+    parser.add_option('', '--captcha-token', dest='captcha_token', type="string",
+      metavar="STRING", help='Captcha token')
+    parser.add_option('', '--captcha-response', dest='captcha_response', type="string",
+      metavar="STRING", help='Captcha response')
+
+    options, args = parser.parse_args(arguments)
+    run_main(parser, options, args)
+
 if __name__ == '__main__':
-    sys.exit(catch_exceptions(EXIT_CODES, main_upload, sys.argv[1:]))
+    sys.exit(catch_exceptions(EXIT_CODES, main, sys.argv[1:]))
