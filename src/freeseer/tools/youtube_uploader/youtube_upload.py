@@ -31,6 +31,7 @@ import shlex
 import mutagen.oggvorbis
 
 from lib.youtube_upload import youtube_upload
+import completer
 
 def upload():
 	#------- Trying to default to the video directory
