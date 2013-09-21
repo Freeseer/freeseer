@@ -27,7 +27,6 @@ import ConfigParser
 import os
 import getpass
 import shlex
-import subprocess
 
 import mutagen.oggvorbis
 
@@ -47,6 +46,7 @@ def upload():
     email = raw_input("Email (user@example.com): ")
     password = getpass.getpass()
     #vfile = browse_video_directory()
+    # Enable tab completion
     completer()
     vfile = raw_input("File or Directory: " + vpath)
     # Check whether the file exists, and ask again if not
@@ -139,6 +139,7 @@ def uploadToYouTube(vpath, vfile, email, password):
 
     # Default category to education for now
     category = "Education"
+    # Call 3rd parth library
     youtube_upload.main(
         shlex.split("-m" + email + " -p" + password + " -t" + escape(title) + " -c" + category + " " + vpath + vfile))
 
@@ -166,6 +167,8 @@ def browse_video_directory():
     # self.generalWidget.recordDirLineEdit.setText(videodir)
     # self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
 """
+
+# escape video title
 
 
 def escape(s):
