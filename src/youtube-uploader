@@ -30,7 +30,10 @@ from freeseer.tools.youtube_uploader.youtube_upload import upload
 from freeseer.frontend.youtubeuploader.YoutubeUploaderWidget import YoutubeUploaderWidget
 
 if __name__ == "__main__":
-	app = QtGui.QApplication(sys.argv)
-	gui = YoutubeUploaderWidget()
-	gui.show()
-	app.exec_()
+	if len(sys.argv) > 1:
+		upload()
+	else:
+		app = QtGui.QApplication(sys.argv)
+		gui = YoutubeUploaderWidget()
+		gui.show()
+		app.exec_()

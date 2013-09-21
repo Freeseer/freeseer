@@ -67,7 +67,7 @@ def upload():
 
     # Otherwise just upload the one video
     else:
-        uploadToYouTube(vpath, vfile, email, password)
+        uploadToYouTube(vpath + vfile, email, password)
 
     # ogg_vfile = ""
     # mpg_vfile = vfile
@@ -112,13 +112,13 @@ def upload():
 # Uploads an ogg or mpg to YouTube, using the metadata from an ogg
 
 
-def uploadToYouTube(vpath, vfile, email, password):
+def uploadToYouTube(vfile, email, password):
 
     # Get the title and description if video is an ogg file
     if vfile.lower().endswith(('.ogg', '.mpg')):
 
         if vfile.lower().endswith('.ogg'):
-            metadata = mutagen.oggvorbis.Open(vpath + vfile)
+            metadata = mutagen.oggvorbis.Open(vfile)
             # print metadata.pprint()
             try:
                 title = metadata["title"][0]
@@ -134,14 +134,14 @@ def uploadToYouTube(vpath, vfile, email, password):
             title = vfile
             description = ""
     else:
-        print vpath + vfile + " is not an ogg or mpg"
+        print vfile + " is not an ogg or mpg"
         return
 
     # Default category to education for now
     category = "Education"
     # Call 3rd parth library
     youtube_upload.main(
-        shlex.split("-m" + email + " -p" + password + " -t" + escape(title) + " -c" + category + " " + vpath + vfile))
+        shlex.split("-m" + email + " -p" + password + " -t" + escape(title) + " -c" + category + " " + vfile))
 
 
 #----------------------------------

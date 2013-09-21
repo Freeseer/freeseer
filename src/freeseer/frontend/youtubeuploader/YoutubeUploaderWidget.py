@@ -6,6 +6,7 @@
 import sys
 from PyQt4 import QtGui, QtCore
 
+from lib.youtube_upload import youtube_upload
 
 class YoutubeUploaderWidget(QtGui.QWidget):
 
@@ -62,27 +63,25 @@ class YoutubeUploaderWidget(QtGui.QWidget):
 
         # Timer for the animation
         self.timer = QtCore.QBasicTimer()
-        self.step = 0
 
+    # returns the file name via file picker
     def get_fname(self):
-        # returns the file name via file picker
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file')
         if fname:
             self.chooseLabel.setText(fname)
         else:
             self.chooseLabel.setText('No file selected')
 
+    # animation for progressbar
     def timerEvent(self, e):
-        # animation for progressbar
-        if self.step >= 100:
+        if youtube_upload.currentProgress >= 100:
             self.timer.stop()
             self.uploadBtn.setText('Finished')
             return
-        self.step = self.step + 1
-        self.pbar.setValue(self.step)
+        self.pbar.setValue(youtube_upload.currentProgress)
 
+    # handler for upload
     def upload(self):
-        # handler for upload
         if self.timer.isActive():
             self.timer.stop()
             self.uploadBtn.setText('Start')
