@@ -201,6 +201,9 @@ class TalkEditorApp(FreeseerApp):
         self.presentationModel = self.db.get_presentations_model()
         self.tableView.setModel(self.presentationModel)
 
+        #Fill table whitespace.
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+
         # Hide the ID field
         self.tableView.setColumnHidden(0, True)
 
@@ -213,7 +216,8 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.eventLineEdit, 5)
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
         self.mapper.addMapping(self.talkDetailsWidget.descriptionTextEdit, 3)
-    
+        
+
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
 
