@@ -26,6 +26,7 @@ import logging
 import os
 import sys
 import time
+import subprocess
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QCursor
@@ -58,6 +59,7 @@ class RecordApp(FreeseerApp):
         self.controller = RecordingController()
         self.config = self.controller.config
         self.db = self.controller.db
+        self.recently_recorded_video = None
 
         self.resize(550, 450)
 
@@ -153,6 +155,7 @@ class RecordApp(FreeseerApp):
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.record)
         self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
         self.connect(self.mainWidget.audioFeedbackCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_feedback)
+        self.connect(self.mainWidget.playPushButton, QtCore.SIGNAL('toggled(bool)'), self.play_video)
 
         # Main Window Connections
         self.connect(self.actionConfigTool, QtCore.SIGNAL('triggered()'), self.open_configtool)
@@ -197,6 +200,7 @@ class RecordApp(FreeseerApp):
         self.stopString = self.app.translate("RecordApp", "Stop")
         self.hideWindowString = self.app.translate("RecordApp", "Hide Main Window")
         self.showWindowString = self.app.translate("RecordApp", "Show Main Window")
+        self.playVideoString = self.app.translate("RecordApp", "Play Video")
 
         # Status Bar messages
         self.idleString = self.app.translate("RecordApp", "Idle.")
@@ -239,6 +243,7 @@ class RecordApp(FreeseerApp):
         #
         # RecordingWidget
         #
+        self.mainWidget.playPushButton.setText(self.playVideoString)
         self.mainWidget.standbyPushButton.setText(self.standbyString)
         self.mainWidget.standbyPushButton.setToolTip(self.standbyString)
         if self.mainWidget.recordPushButton.isChecked():
@@ -345,6 +350,9 @@ class RecordApp(FreeseerApp):
             toggle_gui(False)
             self.mainWidget.standbyPushButton.setChecked(False)
 
+        self.mainWidget.playPushButton.setVisible(False)
+        self.mainWidget.playPushButton.setEnabled(False)
+
     def record(self, state):
         """The logic for recording and stopping recording."""
 
@@ -385,6 +393,10 @@ class RecordApp(FreeseerApp):
             self.timer.stop()
             self.reset_timer()
 
+            #Show playback button
+            self.mainWidget.playPushButton.setVisible(True)
+            self.mainWidget.playPushButton.setEnabled(True)
+
             # Select next talk if there is one within 15 minutes.
             if self.current_event and self.current_room:
                 starttime = QtCore.QDateTime().currentDateTime()
@@ -420,7 +432,8 @@ class RecordApp(FreeseerApp):
         else:
             presentation = Presentation(title=unicode("default"))
 
-        if self.controller.load_backend(presentation):
+        initialized, self.recently_recorded_video = self.controller.load_backend(presentation)
+        if initialized:
             return True
         else:
             return False  # Error something failed while loading the backend
@@ -569,6 +582,15 @@ class RecordApp(FreeseerApp):
     def closeEvent(self, event):
         log.info('Exiting freeseer...')
         event.accept()
+
+    '''
+    This function plays the most recently recorded video
+    '''
+    def play_video(self):
+        if sys.platform.startswith("linux"):
+            subprocess.call(["xdg-open", "{}/{}".format(self.config.videodir, self.recently_recorded_video)])
+        if sys.platform.startswith("win32"):
+            os.system("start {}".format(os.path.join(self.config.videodir, self.recently_recorded_video)))
 
     '''
     Client functions

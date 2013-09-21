@@ -100,6 +100,18 @@ class RecordingWidget(QtGui.QWidget):
         self.controlRow.addWidget(self.pauseToolButton)
         self.connect(self.pauseToolButton, QtCore.SIGNAL("toggled(bool)"), self.setPauseIcon)
 
+        playbackIcon = QtGui.QIcon.fromTheme("video-x-generic")
+        self.playPushButton = QtGui.QPushButton()
+        self.playPushButton.setText("Play Video")
+        self.playPushButton.setToolTip("Play last recorded Video")
+        self.playPushButton.setIcon(playbackIcon)
+        self.playPushButton.setMinimumSize(QtCore.QSize(40, 40))
+        self.playPushButton.setMaximumSize(QtCore.QSize(120, 40))
+        self.playPushButton.setHidden(True)
+        self.playPushButton.setEnabled(False)
+        self.playPushButton.setCheckable(True)
+        self.controlRow.addWidget(self.playPushButton)
+
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.filterBarLayout)
