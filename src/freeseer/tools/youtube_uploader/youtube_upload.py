@@ -42,36 +42,35 @@ def upload():
     # Config location
     configfile = os.path.abspath("%s/freeseer.conf" % configdir)
     config.readfp(open(configfile))
-    vpath = config.get('Global', 'video_directory')
-
+    vpath = config.get('Global', 'video_directory') + "/"
+    os.chdir(vpath)
     email = raw_input("Email (user@example.com): ")
     password = getpass.getpass()
     #vfile = browse_video_directory()
     completer()
-    vfile = raw_input("File: ")
-    uploadTest(vfile, email, password)
+    vfile = raw_input("File or Directory: " + vpath)
+    # Check whether the file exists, and ask again if not
+    while os.path.exists(vpath + vfile) == False:
+        print "Cannot find file or directory " + vpath + vfile
+        vfile = raw_input("File or Directory: " + vpath)
 
-    '''
-	# Check whether the file exists, and ask again if not
-	while os.path.exists(vpath+"/"+vfile) == False:
-		print "Cannot find file or directory " + vpath+"/"+vfile
-		vfile = raw_input("File or Directory: "+vpath+"/")
-	
-	# If the vfile is a directory then walk through the directory and upload all it's videos
-	if os.path.isdir(vpath+"/"+vfile):
-		for root, dirs, files in os.walk(vpath+"/"+vfile):
-			i=0
-			while i < len(files):
-				print str(root)+"/"+files[i-1]
-				uploadToYouTube(str(root), files[i-1], email, password)
-				i=i+1
-	# Otherwise just upload the one video
-	else:
-		uploadToYouTube(vpath, vfile, email, password)
-	'''
+    # If the vfile is a directory then walk through the directory and upload
+    # all it's videos
+    if os.path.isdir(vpath + vfile):
 
-    #ogg_vfile = ""
-    #mpg_vfile = vfile
+        for root, dirs, files in os.walk(vpath + vfile):
+            i = 0
+            while i < len(files):
+                print str(root) + files[i - 1]
+                uploadToYouTube(str(root), files[i - 1], email, password)
+                i = i + 1
+
+    # Otherwise just upload the one video
+    else:
+        uploadToYouTube(vpath, vfile, email, password)
+
+    # ogg_vfile = ""
+    # mpg_vfile = vfile
     # This was for checking if the file video was an ogg or an mpg, checking if there existed a converted version already,
     # and converting it. Leaving it for now since conversion may be done in
     # the future.
@@ -117,8 +116,9 @@ def uploadToYouTube(vpath, vfile, email, password):
 
     # Get the title and description if video is an ogg file
     if vfile.lower().endswith(('.ogg', '.mpg')):
+
         if vfile.lower().endswith('.ogg'):
-            metadata = mutagen.oggvorbis.Open(vpath + "/" + vfile)
+            metadata = mutagen.oggvorbis.Open(vpath + vfile)
             # print metadata.pprint()
             try:
                 title = metadata["title"][0]
@@ -134,48 +134,14 @@ def uploadToYouTube(vpath, vfile, email, password):
             title = vfile
             description = ""
     else:
-        print vpath + "/" + vfile + " is not an ogg or mpg"
+        print vpath + vfile + " is not an ogg or mpg"
         return
 
     # Default category to education for now
     category = "Education"
+    youtube_upload.main(
+        shlex.split("-m" + email + " -p" + password + " -t" + escape(title) + " -c" + category + " " + vpath + vfile))
 
-    p = subprocess.Popen(command, shell=True,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT)(shlex.split("--email=" + email + " --password=" + password + " --title=" +
-                                                               title + " --category=" + category + " --description=" + '"' + description + '" ' + vpath + "/" + vfile))
-
-
-def uploadTest(vfile, email, password):
-    # Get the title and description if video is an ogg file
-    if vfile.lower().endswith(('.ogg', '.mpg')):
-        if vfile.lower().endswith('.ogg'):
-            metadata = mutagen.oggvorbis.Open(vfile)
-            # print metadata.pprint()
-            try:
-                #title = metadata["title"][0]
-                title = "test3"
-            except KeyError:
-                title = "test3"
-
-            try:
-                description = metadata["description"][0]
-            except KeyError:
-                description = ""
-
-        else:
-            title = "test3"
-            description = ""
-    else:
-        print vfile + " is not an ogg or mpg"
-        return
-
-    # Default category to education for now
-    category = "Education"
-    #This is a hack, needs to be fixed
-    command = "/home/alex/git/freeseer/src/lib/youtube_upload/youtube_upload.py -m" + email + " -p" + \
-        password + " -t" + title + " -c" + category + " " + vfile
-    os.system(command)
 
 #----------------------------------
 
@@ -197,6 +163,10 @@ def browse_video_directory():
 
     return videodir
 
-    #self.generalWidget.recordDirLineEdit.setText(videodir)
-    #self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
+    # self.generalWidget.recordDirLineEdit.setText(videodir)
+    # self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
 """
+
+
+def escape(s):
+    return "'" + s.replace("'", "'\\''") + "'"
