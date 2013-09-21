@@ -26,6 +26,7 @@ import logging
 import os
 import sys
 import time
+import subprocess
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QCursor
@@ -58,6 +59,7 @@ class RecordApp(FreeseerApp):
         self.controller = RecordingController()
         self.config = self.controller.config
         self.db = self.controller.db
+        self.recently_recorded_video = None
 
         self.resize(550, 450)
 
@@ -111,6 +113,11 @@ class RecordApp(FreeseerApp):
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         self.actionOpenVideoFolder.setIcon(folderIcon)
 
+        self.actionPlayVideo = QtGui.QAction(self)
+        self.actionPlayVideo.setShortcut("Ctrl+P")
+        self.actionPlayVideo.setObjectName(_fromUtf8("actionPlayVideo"))
+        self.actionPlayVideo.setEnabled(False)
+
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
 
@@ -118,6 +125,7 @@ class RecordApp(FreeseerApp):
         self.actionClient.setIcon(self.icon)
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionOpenVideoFolder)
+        self.menuFile.insertAction(self.actionExit, self.actionPlayVideo)
         # Hide the controller client configuration screen for Freeseer 3.0.0
         # release. This feature's not ready for public use so lets keep it
         # hidden for now.
@@ -160,6 +168,7 @@ class RecordApp(FreeseerApp):
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
+        self.connect(self.actionPlayVideo, QtCore.SIGNAL('triggered()'), self.play_video)
 
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
@@ -223,6 +232,7 @@ class RecordApp(FreeseerApp):
         self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
         self.actionClient.setText(self.app.translate("RecordApp", "&Connect to server"))
         self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
+        self.actionPlayVideo.setText(self.app.translate("RecordApp", "&Play Video"))
         # --- End Menubar
 
         #
@@ -371,6 +381,7 @@ class RecordApp(FreeseerApp):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
+            self.actionPlayVideo.setEnabled(True)
 
             # Finally set the standby button back to unchecked position.
             self.standby(False)
@@ -415,7 +426,9 @@ class RecordApp(FreeseerApp):
         else:
             presentation = Presentation(title=unicode("default"))
 
-        if self.controller.load_backend(presentation):
+        retHolder = self.controller.load_backend(presentation)
+        self.recently_recorded_video = retHolder[1]
+        if retHolder[0]:
             return True
         else:
             return False  # Error something failed while loading the backend
@@ -563,6 +576,15 @@ class RecordApp(FreeseerApp):
     def closeEvent(self, event):
         log.info('Exiting freeseer...')
         event.accept()
+
+    '''
+    This function plays the most recently recorded video
+    '''
+    def play_video(self):
+        if sys.platform.startswith("linux"):
+            subprocess.call(["xdg-open", "{}/{}".format(self.config.videodir, self.recently_recorded_video)])
+        if sys.platform.startswith("win32"):
+            os.system("start {}".format(os.path.join(self.config.videodir, self.recently_recorded_video)))
 
     '''
     Client functions

@@ -58,8 +58,9 @@ class RecordingController:
 
     def load_backend(self, presentation=None):
         """Prepares the backend for recording"""
-        if self.media.load_backend(presentation):
-            return True
+        retHolder = self.media.load_backend(presentation)
+        if retHolder[0]:
+            return True, retHolder[1]
         else:
             return False  # Error something failed while loading the backend
 
