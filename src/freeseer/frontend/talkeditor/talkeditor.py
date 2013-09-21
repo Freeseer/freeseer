@@ -40,6 +40,7 @@ from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QTableView
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QFileDialog
 
 # Freeseer modules
 from freeseer import settings, __version__
@@ -138,8 +139,8 @@ class TalkEditorApp(FreeseerApp):
         
         # CSV Widget
         # self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
-        # self.connect(self.editorWidget.csvPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_csv)
-        # self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
+        self.connect(self.commandButtons.exportButton, SIGNAL('clicked()'), self.export_talks_to_csv)
+        #self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -308,7 +309,7 @@ class TalkEditorApp(FreeseerApp):
             self.presentationModel.select()
     
     def export_talks_to_csv(self):
-        dirpath = str(self.editorWidget.csvLineEdit.text())
-        fname = QtGui.QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
+        #dirpath = str(self.editorWidget.csvLineEdit.text())
+        fname = QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.db.export_talks_to_csv(fname)
