@@ -27,8 +27,11 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QIcon
+
 
 class CommandButtons(QWidget):
 
@@ -39,16 +42,33 @@ class CommandButtons(QWidget):
         self.layout = QHBoxLayout()
         self.setLayout(self.layout)
 
-        self.addButton = QPushButton('Add')
-        self.duplicateButton = QPushButton('Duplicate')
+        #addIcon = QIcon.fromTheme("list-add")
+        duplicateIcon = QIcon.fromTheme("go-jump")
+        importIcon = QIcon.fromTheme("document-open")
+        exportIcon = QIcon.fromTheme("document-save")
+        removeIcon = QIcon.fromTheme("list-remove")
+        removeAllIcon = QIcon.fromTheme("window-close")
+
         self.importButton = QPushButton('Import')
+        self.importButton.setIcon(importIcon)
         self.exportButton = QPushButton('Export')
+        self.exportButton.setIcon(exportIcon)
         self.removeButton = QPushButton('Remove')
-        self.layout.addWidget(self.addButton)
-        self.layout.addWidget(self.duplicateButton)
+        self.removeButton.setIcon(removeIcon)
+        self.removeAllButton = QPushButton('Remove All')
+        self.removeAllButton.setIcon(removeAllIcon)
+        self.searchLineEdit = QLineEdit()
+        self.searchLineEdit.setPlaceholderText("Search...")
+        self.searchIcon = QIcon.fromTheme("edit-find")
+        self.searchButton = QPushButton('Search')
+        self.searchButton.setIcon(self.searchIcon)
         self.layout.addWidget(self.importButton)
         self.layout.addWidget(self.exportButton)
         self.layout.addWidget(self.removeButton)
+        self.layout.addWidget(self.removeAllButton)
+        self.layout.addStretch()
+        self.layout.addWidget(self.searchLineEdit)
+        self.layout.addWidget(self.searchButton)
         self.layout.addStretch()
 
 if __name__ == "__main__":
