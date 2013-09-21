@@ -129,11 +129,11 @@ class TalkEditorApp(FreeseerApp):
         # self.connect(self.addTalkWidget.cancelButton, QtCore.SIGNAL('clicked()'), self.hide_add_talk_widget)
         # self.addTalkWidget.setHidden(True)
         
-        # Editor Widget
+        # Command Buttons 
         # self.connect(self.editorWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), self.editorWidget.rssPushButton.click)
         # self.connect(self.editorWidget.rssPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
         # self.connect(self.editorWidget.addButton, QtCore.SIGNAL('clicked()'), self.show_add_talk_widget)
-        # self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.commandButtons.removeButton, SIGNAL('clicked()'), self.remove_talk)
         # self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         # self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         
@@ -257,7 +257,7 @@ class TalkEditorApp(FreeseerApp):
 
     def remove_talk(self):
         try:
-            row_clicked = self.editorWidget.editor.currentIndex().row()
+            row_clicked = self.tableView.currentIndex().row()
         except:
             return
         
