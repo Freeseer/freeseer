@@ -141,7 +141,7 @@ def uploadToYouTube(vfile, email, password):
     category = "Education"
     # Call 3rd parth library
     youtube_upload.main(
-        shlex.split("-m" + email + " -p" + password + " -t" + escape(title) + " -c" + category + " " + vfile))
+        shlex.split("-m" + email + " -p" + password + " -t" + escape(title) + " -c" + category + " " + escape(vfile)))
 
 
 #----------------------------------
