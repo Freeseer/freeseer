@@ -36,6 +36,7 @@ from PyQt4.QtGui import QPlainTextEdit
 from PyQt4.QtGui import QTimeEdit
 from PyQt4.QtGui import QWidget
 
+
 class TalkDetailsWidget(QWidget):
 
     def __init__(self, parent=None):

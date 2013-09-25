@@ -28,23 +28,38 @@ http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
-class ImportWidget(QtGui, QWidget):
-	''' 
-	classdocs 
-	'''
 
-	def __init__(self, parent=None):
-		'''
-		Constructor
-		'''
-		QtGui.QWidget.__init__(self, parent)
-		self.mainLayout = QtGui.QVBoxLayout()
-		self.setLayout(self.mainLayout)
+class ImportTalksWidget(QtGui.QWidget):
 
+    '''
+    classdocs
+    '''
+
+    def __init__(self, parent=None):
+        '''
+        Constructor
+        '''
+        QtGui.QWidget.__init__(self, parent)
+        self.mainLayout = QtGui.QVBoxLayout()
+        self.setLayout(self.mainLayout)
+
+        self.importTalksGroupBox = QtGui.QGroupBox("Import Talks")
+        self.mainLayout.addWidget(self.importTalksGroupBox)
+
+        self.importTalksLayout = QtGui.QFormLayout()
+        self.importTalksGroupBox.setLayout(self.importTalksLayout)
+
+        # Buttons
+        cancelIcon = QtGui.QIcon.fromTheme("edit-clear")
+
+        self.cancelButton = QtGui.QPushButton("Cancel")
+        self.cancelButton.setIcon(cancelIcon)
+        self.importCSVButton = QtGui.QPushButton("Import from CSV")
+        self.importRSSButton = QtGui.QPushButton("Import from RSS")
 
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
-    main = ImportWidget()
+    main = ImportTalksWidget()
     main.show()
     sys.exit(app.exec_())
