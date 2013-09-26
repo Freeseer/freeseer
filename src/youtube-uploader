@@ -27,13 +27,13 @@ import sys
 from PyQt4 import QtGui, QtCore
 
 from freeseer.tools.youtube_uploader.youtube_upload import upload
-from freeseer.frontend.youtubeuploader.YoutubeUploaderWidget import YoutubeUploaderWidget
+from freeseer.frontend.uploader.UploadWidget import UploadWidget
 
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		upload()
 	else:
 		app = QtGui.QApplication(sys.argv)
-		gui = YoutubeUploaderWidget()
+		gui = UploadWidget()
 		gui.show()
 		app.exec_()

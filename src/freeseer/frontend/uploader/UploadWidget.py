@@ -31,95 +31,81 @@ import threading
 
 import mutagen.oggvorbis
 
+from PyQt4.QtGui import QMainWindow, QVBoxLayout, QLabel, QApplication, QLineEdit, QLabel, QPushButton, QProgressBar, QFileDialog, QWidget
+from PyQt4.QtCore import SIGNAL, QBasicTimer
 
-from PyQt4 import QtGui, QtCore
 
-
-class YoutubeUploaderWidget(QtGui.QWidget):
+class UploadWidget(QWidget):
 
     def __init__(self):
         # create GUI
-        QtGui.QMainWindow.__init__(self)
+        QMainWindow.__init__(self)
         self.setWindowTitle('Upload to Youtube')
         # Set the window dimensions
         self.resize(300, 75)
 
         # vertical layout for widgets
-        self.vbox = QtGui.QVBoxLayout()
+        self.vbox = QVBoxLayout()
         self.setLayout(self.vbox)
 
         # username label
-        self.usernameLabel = QtGui.QLabel('Username:')
+        self.usernameLabel = QLabel('Username:')
         self.vbox.addWidget(self.usernameLabel)
 
         # username text input
-        self.usernameInput = QtGui.QLineEdit(self)
+        self.usernameInput = QLineEdit(self)
         self.vbox.addWidget(self.usernameInput)
 
         # password label
-        self.passwordLabel = QtGui.QLabel('Password:')
+        self.passwordLabel = QLabel('Password:')
         self.vbox.addWidget(self.passwordLabel)
 
         # password input
-        self.passwordInput = QtGui.QLineEdit(self)
-        self.passwordInput.setEchoMode(QtGui.QLineEdit.Password)
+        self.passwordInput = QLineEdit(self)
+        self.passwordInput.setEchoMode(QLineEdit.Password)
         self.vbox.addWidget(self.passwordInput)
 
         # Choose file label
-        self.chooseLabel = QtGui.QLabel('No file selected')
+        self.chooseLabel = QLabel('No file selected')
         self.vbox.addWidget(self.chooseLabel)
 
         # Choose file button
-        self.chooseBtn = QtGui.QPushButton('Choose file', self)
+        self.chooseBtn = QPushButton('Choose file', self)
         self.vbox.addWidget(self.chooseBtn)
 
         # connect button event to handler get_fname
         self.connect(
-            self.chooseBtn, QtCore.SIGNAL('clicked()'), self.get_fname)
+            self.chooseBtn, SIGNAL('clicked()'), self.get_fname)
 
         # Progress bar for uploading file
-        self.pbar = QtGui.QProgressBar(self)
+        self.pbar = QProgressBar(self)
         self.vbox.addWidget(self.pbar)
 
         # Upload button
-        self.uploadBtn = QtGui.QPushButton('Upload', self)
+        self.uploadBtn = QPushButton('Upload', self)
         self.vbox.addWidget(self.uploadBtn)
 
         # Connect clicked signal to mock upload animation handler
-        self.connect(self.uploadBtn, QtCore.SIGNAL('clicked()'), self.upload)
-
-        self.uploader = youtube_upload
+        #self.connect(self.uploadBtn, SIGNAL('clicked()'), self.upload)
 
         # Timer for the animation
-        self.timer = QtCore.QBasicTimer()
+        self.timer = QBasicTimer()
 
     # returns the file name via file picker
     def get_fname(self):
-        self.fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file')
+        self.fname = QFileDialog.getOpenFileName(self, 'Select file')
         if self.fname:
             self.chooseLabel.setText(self.fname)
         else:
             self.chooseLabel.setText('No file selected')
 
     # animation for progressbar
-    def timerEvent(self, e):
-        print "hello"
-        if self.uploader.currentProgress[0] >= 100:
-            self.timer.stop()
-            self.uploadBtn.setText('Finished')
-            return
-        self.pbar.setValue(self.uploader.currentProgress[0])
+    #def timerEvent(self, e):
+
 
     # handler for upload
-    def upload(self):
-        self.uploadToYouTube(
-            str(self.fname), str(self.usernameInput.text()), str(self.passwordInput.text()))
-        if self.timer.isActive():
-            self.timer.stop()
-            self.uploadBtn.setText('Start')
-        else:
-            self.timer.start(100, self)
-            self.uploadBtn.setText('Stop')
+    #def upload(self):
+
 
     def uploadToYouTube(self, vfile, email, password):
         # Get the title and description if video is an ogg file
@@ -155,7 +141,7 @@ def escape(s):
     return "'" + s.replace("'", "'\\''") + "'"
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    gui = YoutubeUploaderWidget()
+    app = QApplication(sys.argv)
+    gui = UploadWidget()
     gui.show()
     app.exec_()
