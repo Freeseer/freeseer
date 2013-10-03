@@ -8,6 +8,12 @@ Open Source Projects (UCOSP), and Fedora Summer Coding.
 
 Getting Started
 ---------------
+
+.. sidebar:: Step 7: Alter sharing settings for your proposal
+
+   .. image:: /images/sharing-settings.png
+      :scale: 65%
+
 #. `Create a GitHub account <https://github.com/signup/free>`_
 #. Introduce yourself on our :ref:`mailing list <mailing-list>`
 
@@ -36,6 +42,7 @@ Getting Started
 
    - Share the URL on the mailing list
 #. Start thinking of ways how you can improve Freeseer!
+
 
 .. tip::
   As a student, you can apply for a **free micro account** at
