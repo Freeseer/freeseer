@@ -1,6 +1,9 @@
 Basics
 ======
 
+.. contents::
+   :local:
+
 Git & GitHub
 ------------
 
