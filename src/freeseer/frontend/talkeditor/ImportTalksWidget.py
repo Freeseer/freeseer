@@ -44,7 +44,7 @@ class ImportTalksWidget(QtGui.QWidget):
         self.setLayout(self.mainLayout)
 
         self.importTalksGroupBox = QtGui.QGroupBox("Import Talks")
-        self.mainLayout.addWidget(self.importTalksGroupBox)
+
 
         self.importTalksLayout = QtGui.QFormLayout()
         self.importTalksGroupBox.setLayout(self.importTalksLayout)
@@ -56,6 +56,14 @@ class ImportTalksWidget(QtGui.QWidget):
         self.cancelButton.setIcon(cancelIcon)
         self.importCSVButton = QtGui.QPushButton("Import from CSV")
         self.importRSSButton = QtGui.QPushButton("Import from RSS")
+
+        #Layout
+        self.mainLayout.addWidget(self.importTalksGroupBox)
+        self.mainLayout.addWidget(self.importCSVButton)
+        self.mainLayout.addWidget(self.importRSSButton)
+        self.mainLayout.addWidget(self.cancelButton)
+
+
 
 if __name__ == "__main__":
     import sys

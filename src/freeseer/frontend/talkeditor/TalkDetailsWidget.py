@@ -52,12 +52,12 @@ class TalkDetailsWidget(QWidget):
 
         self.presenterLabel = QLabel('Presenter')
         self.presenterLineEdit = QLineEdit()
-        self.categoryLabel = QLabel('Category')
-        self.categoryLineEdit = QLineEdit()
+        self.levelLabel = QLabel('Lwevel')
+        self.levelLineEdit = QLineEdit()
         self.layout.addWidget(self.presenterLabel, 1, 0, 1, 1)
         self.layout.addWidget(self.presenterLineEdit, 1, 1, 1, 1)
-        self.layout.addWidget(self.categoryLabel, 1, 2, 1, 1)
-        self.layout.addWidget(self.categoryLineEdit, 1, 3, 1, 1)
+        self.layout.addWidget(self.levelLabel, 1, 2, 1, 1)
+        self.layout.addWidget(self.levelLineEdit, 1, 3, 1, 1)
 
         self.eventLabel = QLabel('Event')
         self.eventLineEdit = QLineEdit()

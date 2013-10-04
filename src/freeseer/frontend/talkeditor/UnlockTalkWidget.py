@@ -55,8 +55,10 @@ class UnlockTalkWidget(QDialog):
 
         self.unlockButton = QPushButton('Unlock')
         self.cancelButton = QPushButton('Cancel')
-        self.buttonBox.addButton(self.unlockButton, QDialogButtonBox.AcceptRole)
-        self.buttonBox.addButton(self.cancelButton, QDialogButtonBox.RejectRole)
+        self.buttonBox.addButton(
+            self.unlockButton, QDialogButtonBox.AcceptRole)
+        self.buttonBox.addButton(
+            self.cancelButton, QDialogButtonBox.RejectRole)
 
 if __name__ == "__main__":
     import sys
