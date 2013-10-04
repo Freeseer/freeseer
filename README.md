@@ -1,5 +1,5 @@
 [![freeseer](https://github.com/Freeseer/freeseer.github.io/raw/master/img/banner.png
-"Freeseer by FOSSLC")](http://freeseer.github.com)
+"Freeseer by FOSSLC")](http://freeseer.github.io)
 [![Build Status](https://travis-ci.org/Freeseer/freeseer.png)](https://travis-ci.org/Freeseer/freeseer-docs)
 
 Freeseer Documentation
@@ -67,7 +67,7 @@ To add your own one-liner commit message, add it as an argument:
 
     $ ./publish 'Fix a typo.'
 
-Or for a more manual approach, you can place the output directly in your local freeseer.github.com repo:
+Or for a more manual approach, you can place the output directly in your local freeseer.github.io repo:
 
     $ sphinx-build -b html source path/to/freeseer.github.io/
     # Don't forget to commit and push the changes in freeseer.github.io!
@@ -75,4 +75,4 @@ Or for a more manual approach, you can place the output directly in your local f
 **Note:** This script is only intended for people with **write access** to the
 [freeseer.github.io repo](http://github.com/freeseer/freeseer.github.io). It
 builds the Sphinx output, copies the newly produced HTML files to your local
-freeseer.github.com repo, then pushes them to GitHub.
+freeseer.github.io repo, then pushes them to GitHub.

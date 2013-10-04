@@ -10,7 +10,7 @@ About Freeseer
     From large conferences with hundreds of talks to presentations in classrooms,
     anyone can use Freeseer to capture talks.
 
-`Freeseer <http://freeseer.github.com>`_ (pronounced *free-see-ar*) is a free, open source, cross-platform application that
+`Freeseer <http://freeseer.github.io>`_ (pronounced *free-see-ar*) is a free, open source, cross-platform application that
 captures or streams your desktop. It's designed for capturing presentations, and has been succesfully used at many
 open source conferences to record hundreds of talks (which can be seen at `fosslc.org <http://fosslc.org>`_).
 Though designed for capturing presentations, it can also be used to capture demos, training materials, lectures, and other videos.

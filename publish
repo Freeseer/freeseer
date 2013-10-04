@@ -2,7 +2,7 @@
 
 # Builds the HTML documentation files from the reStructuredText source,
 # then copies the HTML files created by Sphinx, from the 'freeseer-docs' repo
-# to the 'freeseer.github.com' repo. Finally, publishes the updated
+# to the 'freeseer.github.io' repo. Finally, publishes the updated
 # documentation by staging the files, commiting, and pushing them.
 #
 # A one-line commit message for git is an optional argument.
@@ -27,7 +27,7 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # For support, questions, suggestions or any other inquiries, visit:
-# http://freeseer.github.com
+# http://freeseer.github.io
 
 # Exit on error.
 set -o errexit
