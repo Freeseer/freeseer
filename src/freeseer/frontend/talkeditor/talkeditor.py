@@ -82,7 +82,6 @@ class TalkEditorApp(FreeseerApp):
         self.setCentralWidget(self.mainWidget)
         self.mainLayout.setAlignment(QtCore.Qt.AlignTop)
 
-
         # Add the Title Row (Use BOLD / Big Font)
         self.titleLayout = QHBoxLayout()
         self.talkEditorLabel = QLabel('Talk Editor')
@@ -94,7 +93,6 @@ class TalkEditorApp(FreeseerApp):
             self.titleLayout.addWidget(self.backButton)
         self.titleLayout.addStretch()
 
-
         # Add custom widgets
         self.commandButtons = CommandButtons()
         self.tableView = QTableView()
@@ -102,13 +100,10 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget = TalkDetailsWidget()
         self.importTalksWidget = ImportTalksWidget()
         self.mainLayout.addWidget(self.importTalksWidget)
-        
-        #
         self.mainLayout.addLayout(self.titleLayout)
         self.mainLayout.addSpacing(10)
         self.mainLayout.addWidget(self.commandButtons)
         self.mainLayout.addWidget(self.tableView)
-        
         self.mainLayout.addWidget(self.talkDetailsWidget)
         self.mainLayout.addWidget(self.importTalksWidget)
         # --- End Layout
@@ -129,30 +124,23 @@ class TalkEditorApp(FreeseerApp):
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionExportCsv)
         # --- End Menubar
-
-        #
-        # Setup Table View 
-        #
-
+        
         #
         # Table View Connections
         #
-        #self.connect(self.tableView.)
-        #self.tableView.selectionModel().selectionChanged.connect(self.selChanged)
-        
+        # self.connect(self.tableView.)
+        # self.tableView.selectionModel().selectionChanged.connect(self.selChanged)
         self.tableView.clicked.connect(self.clickedSlot)
 
-
-       
         #
         # Talk Editor Connections
         #
-
         self.connect(self.tableView, SIGNAL(
             'activated(const QModelIndex)'), self.talk_selected)
 
         # Add Talk Widget
-        self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.commandButtons.addButton,
+                     SIGNAL('clicked()'), self.add_talk)
         # self.connect(self.addTalkWidget.cancelButton, QtCore.SIGNAL('clicked()'), self.hide_add_talk_widget)
         # self.addTalkWidget.setHidden(True)
 
@@ -190,7 +178,7 @@ class TalkEditorApp(FreeseerApp):
                 self.translate(action)
                 break
 
-        #Load Talk Database        
+        # Load Talk Database
         self.load_presentations_model()
 
     #
@@ -220,7 +208,6 @@ class TalkEditorApp(FreeseerApp):
         # AddTalkWidget
         #
         # self.addTalkWidget.addTalkGroupBox.setTitle(self.app.translate("TalkEditorApp", "Add Talk"))
-        
         # self.addTalkWidget.titleLabel.setText(self.app.translate("TalkEditorApp", "Title"))
         # self.addTalkWidget.presenterLabel.setText(self.app.translate("TalkEditorApp", "Presenter"))
         # self.addTalkWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
@@ -265,36 +252,30 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
         self.mapper.addMapping(self.talkDetailsWidget.descriptionTextEdit, 3)
 
-        #self.talkDetailsWidget.titleLineEdit.setText(self.presentationModel.index(0,0).data)
-    
-    
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
         print "sel changed"
 
-    def clickedSlot(self,index):
-            print "Column is " + str(index.column())
-            print "Cell is" + str(index.data().toString())
-            print "Row is " + str(index.row())
-            #self.talkDetailsWidget.titleLineEdit.setText(index.data().toString())
-            self.talkDetailsWidget.titleLineEdit.setText(self.presentationModel.record(index.row()).value(1).toString())
-            self.talkDetailsWidget.presenterLineEdit.setText(self.presentationModel.record(index.row()).value(2).toString())
-            self.talkDetailsWidget.descriptionTextEdit.setPlainText(self.presentationModel.record(index.row()).value(3).toString())
-            self.talkDetailsWidget.levelLineEdit.setText(self.presentationModel.record(index.row()).value(4).toString())
-            self.talkDetailsWidget.eventLineEdit.setText(self.presentationModel.record(index.row()).value(5).toString())
-            self.talkDetailsWidget.roomLineEdit.setText(self.presentationModel.record(index.row()).value(6).toString())
-            
-            
-            #self.talkDetailsWidget.dateEdit.setDate(self.presentationModel.record(index.row()).value(6))
-            
-            day = self.presentationModel.record(index.row()).value(7).day()
-            month = self.presentationModel.record(index.row()).value(7).month()
-            year = self.presentationModel.record(index.row()).value(7).year()
-
-
-            self.talkDetailsWidget.dateEdit.date().setDate(year, month, day) 
-
-
+    #Update EditorWidget with data from clicked row
+    def clickedSlot(self, index):
+            # self.talkDetailsWidget.titleLineEdit.setText(index.data().toString())
+            self.talkDetailsWidget.titleLineEdit.setText(
+                self.presentationModel.record(index.row()).value(1).toString())
+            self.talkDetailsWidget.presenterLineEdit.setText(
+                self.presentationModel.record(index.row()).value(2).toString())
+            self.talkDetailsWidget.descriptionTextEdit.setPlainText(
+                self.presentationModel.record(index.row()).value(3).toString())
+            self.talkDetailsWidget.levelLineEdit.setText(
+                self.presentationModel.record(index.row()).value(4).toString())
+            self.talkDetailsWidget.eventLineEdit.setText(
+                self.presentationModel.record(index.row()).value(5).toString())
+            self.talkDetailsWidget.roomLineEdit.setText(
+                self.presentationModel.record(index.row()).value(6).toString())
+            # self.talkDetailsWidget.dateEdit.setDate(self.presentationModel.record(index.row()).value(6))
+            #day = self.presentationModel.record(index.row()).value(7).day()
+            #month = self.presentationModel.record(index.row()).value(7).month()
+            #year = self.presentationModel.record(index.row()).value(7).year()
+            #self.talkDetailsWidget.dateEdit.date().setDate(year, month, day)
 
     def show_import_talks_widget(self):
         self.commandButtons.setHidden(True)
@@ -302,13 +283,12 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.setHidden(True)
         self.importTalksWidget.setHidden(False)
 
-
     def hide_import_talks_widget(self):
         self.commandButtons.setHidden(False)
         self.tableView.setHidden(False)
         self.talkDetailsWidget.setHidden(False)
         self.importTalksWidget.setHidden(True)
-    
+
     def add_talk(self):
         date = self.talkDetailsWidget.dateEdit.date()
         time = self.talkDetailsWidget.timeEdit.time()
@@ -346,14 +326,11 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.eventLineEdit.clear()
         self.talkDetailsWidget.roomLineEdit.clear()
 
-        #Update Model, Refreshes TableView
+        # Update Model, Refreshes TableView
         self.presentationModel.select()
 
-        #Select Last Row 
-        self.tableView.selectRow(self.presentationModel.rowCount()-1)
-
-
-
+        # Select Last Row
+        self.tableView.selectRow(self.presentationModel.rowCount() - 1)
 
     def remove_talk(self):
         try:
@@ -364,13 +341,11 @@ class TalkEditorApp(FreeseerApp):
         self.presentationModel.removeRow(row_clicked)
         self.presentationModel.select()
 
-
     def load_talk(self):
         try:
             row_clicked = self.tableView.currentIndex().row()
         except:
             return
-
 
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
 
