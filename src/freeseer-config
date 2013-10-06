@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,14 +22,37 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import signal
+
 import sys
 
-from PyQt4 import QtGui
+if len(sys.argv) > 1:
+    '''If arguments are passed, act as a commandline'''
+    import argparse
+    from freeseer.settings import configdir
+    from freeseer.framework.util import reset
+    from freeseer.framework.util import reset_configuration
+    from freeseer.framework.util import reset_database
 
-from freeseer.frontend.configtool.configtool import ConfigToolApp
+    parser = argparse.ArgumentParser(description='Freeseer Configuration Utility')
+    parser.add_argument("--reset", help="Reset's Freeseer (removes the Freeseer configuration directory)",
+        action="store_true")
+    parser.add_argument("--reset-configuration", help="Reset's Freeseer configuration (removes freeseer.conf and plugins.conf)", action="store_true")
+    parser.add_argument("--reset-database", help="Reset's Freeseer database (removes presentations.db)", action="store_true")
+    args = parser.parse_args()
 
-if __name__ == "__main__":
+    if args.reset:
+        reset(configdir)
+    elif args.reset_configuration:
+        reset_configuration(configdir)
+    elif args.reset_database:
+        reset_database(configdir)
+
+else:
+    '''Launch Freeseer Configuration GUI if no arguments are passed'''
+    import signal
+    from PyQt4 import QtGui
+    from freeseer.frontend.configtool.configtool import ConfigToolApp
+
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QtGui.QApplication(sys.argv)
     main = ConfigToolApp()

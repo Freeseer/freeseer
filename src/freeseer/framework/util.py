@@ -24,6 +24,7 @@
 
 import ctypes
 import os
+import shutil
 import sys
 import unicodedata
 
@@ -136,3 +137,51 @@ def make_shortname(string):
     bad_chars = set("!@#$%^&*()+=|:;{}[]',? <>~`/\\")
     string = "".join(ch for ch in string if ch not in bad_chars)
     return string[0:6].upper()
+
+###
+### Handy functions for reseting Freeseer configuration
+###
+
+def reset(configdir):
+    """Deletes the Freeseer configuration directory"""
+    if validate_configdir(configdir):
+        print 'This will wipe out your freeseer configuration directory.'
+        if confirm_yes() is True:
+            shutil.rmtree(configdir)
+    else:
+        print "%s is not a invalid configuration directory." % configdir
+
+def reset_configuration(configdir):
+    """Deletes the Freeseer configuration files freeseer.conf and plugin.conf"""
+    if validate_configdir(configdir):
+        freeseer_conf = os.path.join(configdir, 'freeseer.conf')
+        plugin_conf = os.path.join(configdir, 'plugin.conf')
+
+        os.remove(freeseer_conf)
+        os.remove(plugin_conf)
+    else:
+        print "%s is not a invalid configuration directory." % configdir
+
+def reset_database(configdir):
+    """Deletes the Freeseer database file"""
+    if validate_configdir(configdir):
+        dbfile = os.path.join(configdir, 'presentations.db')
+        os.remove(dbfile)
+    else:
+        print "%s is not a invalid configuration directory." % configdir
+
+def validate_configdir(configdir):
+    """Validate that the configdir is not one of the blacklisted directories"""
+    if (configdir and configdir != '/' and
+                      configdir != '~' and
+                      configdir != os.path.abspath(os.path.expanduser('~'))):
+        return True
+
+    return False
+
+def confirm_yes():
+    """Prompts the user to confirm by typing 'yes' in response"""
+    confirm = raw_input("Enter 'yes' to confirm: ")
+    if confirm == 'yes':
+        return True
+    return False
