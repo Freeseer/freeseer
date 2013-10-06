@@ -42,6 +42,7 @@ from PyQt4.QtGui import QTableView
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QFileDialog
+
 # Freeseer modules
 from freeseer import settings, __version__
 from freeseer.framework.config import Config
@@ -271,11 +272,10 @@ class TalkEditorApp(FreeseerApp):
                 self.presentationModel.record(index.row()).value(5).toString())
             self.talkDetailsWidget.roomLineEdit.setText(
                 self.presentationModel.record(index.row()).value(6).toString())
-            # self.talkDetailsWidget.dateEdit.setDate(self.presentationModel.record(index.row()).value(6))
-            #day = self.presentationModel.record(index.row()).value(7).day()
-            #month = self.presentationModel.record(index.row()).value(7).month()
-            #year = self.presentationModel.record(index.row()).value(7).year()
-            #self.talkDetailsWidget.dateEdit.date().setDate(year, month, day)
+            self.talkDetailsWidget.dateEdit.setDate(
+                self.presentationModel.record(index.row()).value(7).toDate())
+            self.talkDetailsWidget.timeEdit.setTime(
+                self.presentationModel.record(index.row()).value(7).toDateTime().time())
 
     def show_import_talks_widget(self):
         self.commandButtons.setHidden(True)
