@@ -138,9 +138,11 @@ def make_shortname(string):
     string = "".join(ch for ch in string if ch not in bad_chars)
     return string[0:6].upper()
 
+
 ###
 ### Handy functions for reseting Freeseer configuration
 ###
+
 
 def reset(configdir):
     """Deletes the Freeseer configuration directory"""
@@ -150,6 +152,7 @@ def reset(configdir):
             shutil.rmtree(configdir)
     else:
         print "%s is not a invalid configuration directory." % configdir
+
 
 def reset_configuration(configdir):
     """Deletes the Freeseer configuration files freeseer.conf and plugin.conf"""
@@ -162,6 +165,7 @@ def reset_configuration(configdir):
     else:
         print "%s is not a invalid configuration directory." % configdir
 
+
 def reset_database(configdir):
     """Deletes the Freeseer database file"""
     if validate_configdir(configdir):
@@ -169,6 +173,7 @@ def reset_database(configdir):
         os.remove(dbfile)
     else:
         print "%s is not a invalid configuration directory." % configdir
+
 
 def validate_configdir(configdir):
     """Validate that the configdir is not one of the blacklisted directories"""
@@ -178,6 +183,7 @@ def validate_configdir(configdir):
         return True
 
     return False
+
 
 def confirm_yes():
     """Prompts the user to confirm by typing 'yes' in response"""
