@@ -52,7 +52,7 @@ class TalkDetailsWidget(QWidget):
 
         self.presenterLabel = QLabel('Presenter')
         self.presenterLineEdit = QLineEdit()
-        self.levelLabel = QLabel('Lwevel')
+        self.levelLabel = QLabel('Level')
         self.levelLineEdit = QLineEdit()
         self.layout.addWidget(self.presenterLabel, 1, 0, 1, 1)
         self.layout.addWidget(self.presenterLineEdit, 1, 1, 1, 1)
