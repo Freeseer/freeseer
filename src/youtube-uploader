@@ -22,7 +22,18 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
+import sys
+
+from PyQt4 import QtGui, QtCore
+
 from freeseer.tools.youtube_uploader.youtube_upload import upload
+from freeseer.frontend.uploader.UploadWidget import UploadWidget
 
 if __name__ == "__main__":
-    upload()
+	if len(sys.argv) > 1:
+		upload()
+	else:
+		app = QtGui.QApplication(sys.argv)
+		gui = UploadWidget()
+		gui.show()
+		app.exec_()

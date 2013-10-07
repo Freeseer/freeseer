@@ -134,6 +134,8 @@ def post(url, files_params, extra_params, show_progressbar=True):
     """Post files to a given URL."""
     def progress(bar, maxval, download_t, download_d, upload_t, upload_d):
         bar.update(min(maxval, upload_d))
+        if upload_d > 0:
+            currentProgress[0] = round((float(maxval) / upload_d) * 100)
     c = pycurl.Curl()
     file_params2 = [(key, (pycurl.FORM_FILE, path)) for (key, path) in files_params.items()]
     items = extra_params.items() + file_params2
@@ -511,7 +513,7 @@ def main(arguments):
       metavar="STRING", help='Captcha token')
     parser.add_option('', '--captcha-response', dest='captcha_response', type="string",
       metavar="STRING", help='Captcha response')
-
+    
     options, args = parser.parse_args(arguments)
     run_main(parser, options, args)
 
