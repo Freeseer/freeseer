@@ -27,6 +27,9 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 from PyQt4.QtCore import Qt
+from PyQt4.QtCore import QTime
+from PyQt4.QtCore import QDate
+
 from PyQt4.QtGui import QDateEdit
 from PyQt4.QtGui import QGridLayout
 from PyQt4.QtGui import QHBoxLayout
@@ -74,12 +77,23 @@ class TalkDetailsWidget(QWidget):
         self.dateEdit = QDateEdit()
         self.timeLabel = QLabel('Time')
         self.timeEdit = QTimeEdit()
+
+        currentTime = QTime()
+        currentDate = QDate()
+
+        self.dateEdit.setDate(currentDate.currentDate())
+        self.dateLabel.setBuddy(self.dateEdit)
+        self.timeEdit.setTime(currentTime.currentTime())
+        self.timeLabel.setBuddy(self.dateEdit)
+        
         self.dateLayout.addWidget(self.dateEdit)
         self.timeLayout.addWidget(self.timeEdit)
         self.layout.addWidget(self.dateLabel, 3, 0, 1, 1)
         self.layout.addLayout(self.dateLayout, 3, 1, 1, 1)
         self.layout.addWidget(self.timeLabel, 3, 2, 1, 1)
         self.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
+
+
 
         self.descriptionLabel = QLabel('Description')
         self.descriptionLabel.setAlignment(Qt.AlignTop)
