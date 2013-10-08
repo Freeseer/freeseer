@@ -62,13 +62,23 @@ on GitHub, please write your commit messages in accordance with this style::
     Notice that the above summary message does not end with a period,
     and there's a blank line between the summary and body text.
 
+    If the commit fixes an issue, start the summary line with "Fix",
+    followed by the issue number. E.g. "Fix #123 Add foo to bar".
+
     - Bullet points (hyphens or asterisks) are allowed
 
     - No ending period needed and wrap at 72 chars
 
     - Put a space after bullet points and blank lines between them
 
+    - Use imperative, present tense: "fix", not "fixed" or "fixes"
+
     - Add any references to related issues on GitHub if possible
+
+    Last paragraph should reference related issues and pull requests.
+    Fix #123
+    Close #321
+    Related to #404
 
 If you can describe your commit with just a summary line, you may use
 git commit's message argument::
