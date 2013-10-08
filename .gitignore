@@ -16,3 +16,6 @@ MANIFEST
 .spyderproject
 .directory
 .settings
+
+# Coveralls Generated
+.coverage
