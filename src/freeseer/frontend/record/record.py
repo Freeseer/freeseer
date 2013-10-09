@@ -346,7 +346,6 @@ class RecordApp(FreeseerApp):
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
-            self.systray.showMessage("Recording", "RECORDING")
             self.controller.record()
             self.mainWidget.recordPushButton.setText(self.stopString)
             self.recordAction.setText(self.stopString)
