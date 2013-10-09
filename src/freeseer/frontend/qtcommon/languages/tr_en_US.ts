@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en_US" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.0" language="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -45,7 +46,7 @@
     <message>
         <location filename="../AboutDialog.py" line="100"/>
         <source>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</translation>
     </message>
 </context>
 <context>
@@ -218,7 +219,7 @@
     <message>
         <location filename="../../configtool/configtool.py" line="171"/>
         <source>Save Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Save Profile</translation>
     </message>
 </context>
 <context>
@@ -410,7 +411,7 @@
     <message>
         <location filename="../../record/record.py" line="220"/>
         <source>&amp;Options</source>
-        <translation type="unfinished">&amp;Options</translation>
+        <translation>&amp;Options</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="246"/>
@@ -575,12 +576,12 @@
     <message>
         <location filename="../../record/record.py" line="221"/>
         <source>&amp;ConfigTool</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;ConfigTool</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="222"/>
         <source>Talk&amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Talk&amp;Editor</translation>
     </message>
 </context>
 <context>
@@ -623,7 +624,7 @@
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="126"/>
         <source>&amp;Export to CSV</source>
-        <translation type="unfinished">&amp;Export to CSV</translation>
+        <translation>&amp;Export to CSV</translation>
     </message>
     <message>
         <location filename="../../reporteditor/reporteditor.py" line="182"/>
@@ -842,7 +843,7 @@
     <message>
         <location filename="../../../plugins/audiomixer/audiopassthrough/__init__.py" line="136"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source</translation>
     </message>
 </context>
 <context>
@@ -850,7 +851,7 @@
     <message>
         <location filename="../../../plugins/output/audiofeedback/__init__.py" line="102"/>
         <source>Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback</translation>
     </message>
 </context>
 <context>
@@ -858,17 +859,17 @@
     <message>
         <location filename="../../../plugins/videoinput/desktop/__init__.py" line="188"/>
         <source>Record Desktop</source>
-        <translation type="unfinished"></translation>
+        <translation>Record Desktop</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/desktop/__init__.py" line="189"/>
         <source>Record Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Record Region</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/desktop/__init__.py" line="190"/>
         <source>Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Screen</translation>
     </message>
 </context>
 <context>
@@ -876,7 +877,7 @@
     <message>
         <location filename="../../../plugins/videoinput/firewiresrc/__init__.py" line="133"/>
         <source>Video Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Device</translation>
     </message>
 </context>
 <context>
@@ -884,22 +885,22 @@
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="206"/>
         <source>IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="207"/>
         <source>Port</source>
-        <translation type="unfinished">Port</translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="208"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-icecast/__init__.py" line="209"/>
         <source>Mount</source>
-        <translation type="unfinished"></translation>
+        <translation>Mount</translation>
     </message>
 </context>
 <context>
@@ -907,22 +908,22 @@
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="123"/>
         <source>Client</source>
-        <translation type="unfinished"></translation>
+        <translation>Client</translation>
     </message>
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="124"/>
         <source>Connect</source>
-        <translation type="unfinished">Connect</translation>
+        <translation>Connect</translation>
     </message>
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="125"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Server</translation>
     </message>
     <message>
         <location filename="../../../plugins/audioinput/jackaudiosrc/__init__.py" line="126"/>
         <source>Client Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Client Name</translation>
     </message>
 </context>
 <context>
@@ -930,12 +931,12 @@
     <message>
         <location filename="../../../plugins/audiomixer/multiaudio/__init__.py" line="174"/>
         <source>Source 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Source 1</translation>
     </message>
     <message>
         <location filename="../../../plugins/audiomixer/multiaudio/__init__.py" line="175"/>
         <source>Source 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Source 2</translation>
     </message>
 </context>
 <context>
@@ -943,22 +944,22 @@
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="214"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Quality</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="215"/>
         <source>Video Quality (kb/s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Quality (kb/s)</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="216"/>
         <source>Matterhorn Metadata</source>
-        <translation type="unfinished"></translation>
+        <translation>Matterhorn Metadata</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/ogg-output/__init__.py" line="217"/>
         <source>Generates Matterhorn Metadata in XML format</source>
-        <translation type="unfinished"></translation>
+        <translation>Generates Matterhorn Metadata in XML format</translation>
     </message>
 </context>
 <context>
@@ -966,12 +967,12 @@
     <message>
         <location filename="../../../plugins/videomixer/pip/__init__.py" line="253"/>
         <source>Main Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Main Source</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/pip/__init__.py" line="254"/>
         <source>PIP Source</source>
-        <translation type="unfinished"></translation>
+        <translation>PIP Source</translation>
     </message>
 </context>
 <context>
@@ -979,7 +980,7 @@
     <message>
         <location filename="../../../plugins/audioinput/pulsesrc/__init__.py" line="123"/>
         <source>Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source</translation>
     </message>
 </context>
 <context>
@@ -987,7 +988,7 @@
     <message>
         <location filename="../../../plugins/videoinput/usbsrc/__init__.py" line="153"/>
         <source>Video Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Device</translation>
     </message>
 </context>
 <context>
@@ -995,22 +996,22 @@
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="195"/>
         <source>Video Input</source>
-        <translation type="unfinished">Video Input</translation>
+        <translation>Video Input</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="196"/>
         <source>Colour Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Color Format</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="197"/>
         <source>Framerate</source>
-        <translation type="unfinished"></translation>
+        <translation>Framerate</translation>
     </message>
     <message>
         <location filename="../../../plugins/videomixer/videopassthrough/__init__.py" line="198"/>
         <source>Video Scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Video Scale</translation>
     </message>
 </context>
 <context>
@@ -1018,12 +1019,12 @@
     <message>
         <location filename="../../../plugins/output/videopreview/__init__.py" line="124"/>
         <source>Preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Preview</translation>
     </message>
     <message>
         <location filename="../../../plugins/output/videopreview/__init__.py" line="125"/>
         <source>Leaky Queue</source>
-        <translation type="unfinished"></translation>
+        <translation>Leaky Queue</translation>
     </message>
 </context>
 <context>
@@ -1031,17 +1032,17 @@
     <message>
         <location filename="../../../plugins/videoinput/videotestsrc/__init__.py" line="120"/>
         <source>Pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Pattern</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/videotestsrc/__init__.py" line="121"/>
         <source>Live Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Source</translation>
     </message>
     <message>
         <location filename="../../../plugins/videoinput/videotestsrc/__init__.py" line="122"/>
         <source>Act as a live video source</source>
-        <translation type="unfinished"></translation>
+        <translation>Act as a live video source</translation>
     </message>
 </context>
 <context>
