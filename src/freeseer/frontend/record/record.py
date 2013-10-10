@@ -201,8 +201,10 @@ class RecordApp(FreeseerApp):
         # Status Bar messages
         self.idleString = self.app.translate("RecordApp", "Idle.")
         self.readyString = self.app.translate("RecordApp", "Ready.")
-        self.recordingString = self.app.translate("RecordApp", "Recording...")
+        self.recordingString = self.app.translate("RecordApp", "Recording")
         self.pausedString = self.app.translate("RecordApp", "Recording Paused.")
+        self.freeSpaceString = self.app.translate("RecordApp", "Free Space:")
+        self.elapsedTimeString = self.app.translate("RecordApp", "Elapsed Time:")
         # --- End Reusable Strings
 
         if self.mainWidget.recordPushButton.isChecked() and self.mainWidget.pauseToolButton.isChecked():
@@ -212,7 +214,9 @@ class RecordApp(FreeseerApp):
         elif self.mainWidget.standbyPushButton.isChecked():
             self.mainWidget.statusLabel.setText(self.readyString)
         else:
-            self.mainWidget.statusLabel.setText(self.idleString)
+            self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
+                                                                       get_free_space(self.config.videodir),
+                                                                       self.idleString))
 
         #
         # Menubar
@@ -331,7 +335,9 @@ class RecordApp(FreeseerApp):
             if self.load_backend():
                 toggle_gui(True)
                 self.controller.pause()
-                self.mainWidget.statusLabel.setText(self.readyString)
+                self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
+                                                                       get_free_space(self.config.videodir),
+                                                                       self.readyString))
             else:
                 toggle_gui(False)
                 self.mainWidget.standbyPushButton.setChecked(False)
@@ -356,8 +362,6 @@ class RecordApp(FreeseerApp):
                 self.visibilityAction.setText(self.showWindowString)
                 log.debug('auto-hide is enabled, main window is now hidden in systray.')
 
-            self.mainWidget.statusLabel.setText(self.recordingString)
-
             # Start timer.
             self.timer.start(1000)
 
@@ -370,6 +374,9 @@ class RecordApp(FreeseerApp):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
+            self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
+                                                                       get_free_space(self.config.videodir),
+                                                                       self.idleString))
 
             # Finally set the standby button back to unchecked position.
             self.standby(False)
@@ -401,7 +408,6 @@ class RecordApp(FreeseerApp):
             self.controller.record()
             log.info("Recording unpaused.")
             self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
-            self.mainWidget.statusLabel.setText(self.recordingString)
             self.timer.start(1000)
 
     def load_backend(self):
@@ -430,8 +436,9 @@ class RecordApp(FreeseerApp):
             self.time_seconds = 0
             self.time_minutes += 1
 
-        self.mainWidget.statusLabel.setText("Free Space: %s --- Elapsed Time: %s" %
-                        (get_free_space(self.config.videodir), time))
+        self.mainWidget.statusLabel.setText("{} --- {} {} --- {} {}".format(self.recordingString, self.freeSpaceString,
+                                                                     get_free_space(self.config.videodir),
+                                                                     self.elapsedTimeString, time))
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
