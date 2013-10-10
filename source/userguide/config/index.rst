@@ -1,7 +1,7 @@
 .. _config:
 
-Settings
-========
+Configuration (Settings)
+========================
 
 *TODO: freeseer-config*
 
