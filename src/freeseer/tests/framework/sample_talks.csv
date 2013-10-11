@@ -1,0 +1,90 @@
+Title,Speaker,Abstract,Level,Event,Room,Time
+Intro to Freeseer,Thanh Ha,,,SC2011,T105,
+"Git at Eclipse.org: EGit, JGit and Gerrit",Chris Aniszczyk,"Over the past few years, many open source projects have left the shackles of traditional centralized version control systems like CVS/SVN and adopted a distributed version control system like Git. This talk will given an introduction to the Eclipse Foundation's move to Git, including discussion about the EGit and JGit projects at the Eclipse Foundation. Furthermore, there will be discussion about the Gerrit, the Git code review tool. Finally, we'll discuss some of the lessons learned moving to Git in a large organization such as Eclipse.",Intermediate,SC2011,None,2011-08-22T15:52
+Building NetBSD,David Maxwell,"People who are interested in learning about operating systems have a lot of topics to absorb, but the very first barrier that gets in people's way is that you need to be able to build the software. If you can't build it, you can't make changes. If building it is painful, you'll find other things to do with your time.
+	The NetBSD Project has a build system that goes far beyond what many other projects implement. Come to this talk about learn about
+	build.sh and the features available that make multi-architecture and embedded development environments a breeze with NetBSD.
+	NetBSD website: http://www.NetBSD.org/",Beginner,SC2011,None,2011-08-17T20:29
+"Explosions, fast cars, and hot, naked data: <3 from Open Data Ottawa",Edward Ocampo-Gooding [@edwardog],"Explosions, fast cars, and hot, naked data.
+
+	[Cue screenshot of stuff blowing up around Megan Fox in Transformers, but with her head replaced with Edwards, Daniels, and RMSs]
+
+	Open Data Ottawaco-conspirators Daniel Beauchamp and Edward Ocampo-Goodingwill lead you down the path of eXtreme radical awesomeness as the blow your mind, pointing out the coolest new open data apps, data repositories,ideasand their impacts on the human species.
+
+	Better yet: well tell you about whats desperately needed that you, desperado hacker extraordinaire could implement, and proceed to bask in everlasting fame and appreciation by your fellow citizens, pets, and politicians alike.
+
+	Seriously though, this is going to be a pretty epic talk. If youre looking to be filled in on whats going on in the open data space and are curious about what you could do to make a real difference (and end up working with skilled designers, statisticians, librarians, and bartenders), you want to come to this talk.
+
+	Follow @opendataottawa on Twitter and check us out on BuzzData",Beginner,SC2011,None,None
+Lecture Broadcast and Capture using BigBlueButton,Fred Dixon,"BigBlueButton is an open source web conferencing system for distance education. It's goal is to enable remote students to have a high-quality learning experience. The #1 requested feature we've had over the last year is to integrate record and playback of a session.
+
+	
+	Fred Dixon and Richard Alam, two of the BigBlueButton committers, will describe the architecture and implementation of record and playback as well as demonstrate the integration with Moodle to show how an educational institution can use BigBlueButton to setup virtual classrooms, record lectures, and provide students access to the recorded content from within the Moodle interface.
+
+	We will also demonstrate an prototype integration with popcorn.js (Mozilla project) using it as a playback client for the recorded content.",Intermediate,SC2011,None,None
+Put the 5 in HTML,Frédéric Harper,"As the Web is evolving, the standards must keep the pace. The new version of HTML gives you the power to get the most out of the Web. It's now easier to make awesome websites and inspiring applications.Let's see together some of the last features of HTML5 and how you can unleash a more beautiful Web!",Intermediate,SC2011,None,2011-08-19T10:21
+The Architecture of IRCan's High Resiliency Environment,Patrick Naubert,"In this session, we will go through the architecture used to provide a cloud computing environment to be used in Intellectual Resources Canada's High Resiliency Environment. This will be a technical presentation with emphasis on the Open Source components selected and their interaction. A parallel will be drawn between the service levels promised to the HRE participants, and the features of each selected FLOSS component.",Intermediate,SC2011,None,None
+What does the financial crisis have to do with software?,"Joseph Potvin, Coordinator, ERA-ART","All present-day monetary systems and their supporting analytical systems are implemented in the form of computer programs, and all but the tiniest fraction of money is purely digital. In Code is Law, Lawrence Lessig has observed that these computer programs and databases are the de facto official operational translations of legislation, regulations, policies, standards and agreements. A computer program is defined in copyright legislation and trade agreements as a type of literary work that exists as a set of instructions or statements, expressed, fixed, embodied or stored in any manner, that is to be used directly or indirectly in a computer in order to bring about a specific result. Rather than being neutral algorithms, they are literary works with a social purpose.
+	The financial crisis is, in its substance, the protracted crash of a complex network of database-driven computer programs. Many of the steps now taken by monetary authorities (such as quantitative easing and bailouts) actually involve teams of programmers writing new software directly to production systems, to arbitrarily populate database fields with what is effectively dummy data, in order to prevent certain of the fields which are supposed to be constrained to amounts greater than zero, from reaching zero, or going negative, or in some cases ending up null, because nobody knows what the number is.
+	People of a free and democratic society can rightly demand free/libre access, transparency and accountability for the computer programs and databases used in monetary systems operations, analysis and reporting.
+	The foreign exchange (forex) market establishes relative value of currencies. This session will outline a potential component part of such a system. ERA-ART (The Earth-Reserve Archetype (ERA) Developers Group / Le Groupe de dveloppeurs de l'Archtype d'une rserve de la Terre (ART) www.era-art.org is an initiative to design, develop and operate a system for currency exchange rate determination based upon:
+
+
+		Good Transparency Practices for Monetary Policy by Central Banks in the International Monetary Fund's Code of Good Practices on Transparency in Monetary and Financial Policies http://www.imf.org/external/np/mae/mft/code/index.htm#goodtrans2;
+
+		World Data System Policy of the International Council for Science (ICSU) http://www.icsu-wds.org/organization/data-policy
+
+		Free Software Definition of the Free Software Foundation (FSF) http://www.gnu.org/philosophy/free-sw.html
+
+		Independently verifiable indicators of change in ecosystem integrity and resource availability, mapped to geographic data on the currency of invoicing, and tracked from base year to present.
+
+
+	Earth Reserve indices will be available for voluntary use by any two parties engaged in a foreign exchange transaction. If the Earth-Reserve exchange system manages to incrementally gain a portion of forex market share, then to that extent, information feedback fostering macroeconomic resilience would become one of the core functions of money.
+	When the Earth Reserve indices are used to gauge currency exchange rates in a multi-jurisdictional multi-currency setting, relative resource and ecosystem degradation in a given currency's region of use, compared with the base year, will cause that currency to become more expensive to buy against other currencies, so that goods and services exchanged for that currency will become more expensive. In general, jobs and incomes will be attracted towards currency zones where ecosystem integrity and resource availability are relatively improved from a base year.",Intermediate,SC2011,None,None
+The power of code generation: Dependency Injection in the Browser,Mike Brock,"The new JSR-299 (Context Dependency Injection) specification brings with it the potential to build better applications faster, safer and in a more maintainable way. This talk will focus on JBoss Errai framework, which brings the CDI programming model to client code in the browser, by leveraging the GWT compiler and showing how the advantages can be leveraged to make truly powerful next generation web applications using CDI's powerful, yet simple, type-safe and decoupled eventing as a means of communicating between the client and the server.",Intermediate,SC2011,None,2011-08-27T11:00
+Test Driven Development web development with postgres or mysql.,Michael Richardson,"Test Driven Development is about writing the test cases first, and then writing the code. To use this method, a programmer needs to actually be able to quickly write test cases.
+
+	Web site development falls into two flavours: legacy development is where your only tool for testing is a browser, and modern development using some kind of systematic unit testing such as occurs with Django or Ruby on Rails.  Rewriting an application into a modern framework is not always an option, and one can be stuck with an older language with poor support, or an older application with no framework.
+
+	Even with frameworks, it is often difficult to test web services applications where there are multiple web servers necessary.
+
+	This talk presents some fast ways to get testing up and running, and to separate oneself from endlessly reconfiguring the database servers on your development platform.",Intermediate,SC2011,None,None
+Imploding vs. drifting apart: the shifting density of free/libre/open source communities,Mekki MacAulay,"The practices of peer production communities impact the ability of their participants to contribute effectively. This presentation reflects on a draft paper that examines the role of recursive and adaptive practices in enabling participation in free/libre/open source communities. Using data gathered through in-depth interviews with participants and analyzed from a strategy as practice perspective the talk will paint a picture of the constant tension between recursive and adaptive practices that focus on the core or the periphery of communities. This perspective complements and extends the traditional notion that participation in free/libre/open source communities is primarily governed by incentive mechanisms by providing rich accounts of how successful communities thrive, while unsuccessful communities implode or drift apart based on the careful management of their practices at the different stages in their life cycle. The practical implications for peer production communities and avenues for future research will also be discussed.",Intermediate,SC2011,None,None
+Tiki Wiki CMS Groupware - Software the Wiki Way,Pascal St-Jean,"With over 1000 features and preferences, Tiki is the Open Source Collaboration  Content Management System with the most features. It is also one of the largest open source communities with over 250 code contributors and a new commit every hour. How can such a large code base with so many contributors function cohesively and work together to create a great piece of software?
+	Nelson Ko and Pascal St-Jean, both active Tiki developers and consultants, will dive into the ins and outs of the Tiki Community and present the pros and cons of the Wiki Way of Software Development. Along the way comparing Tikis evolution to that of Wikipedias, highlighting the bumps in the road, the growing pains and benefits of such an open and collaborative development model.",Intermediate,SC2011,None,None
+"Open Data - Successes, Pitfalls and Advocacy",Richard Weait,"Open Data is booming. Like the Wild West, with too few Sheriffs, exciting things can happen in the blink of an eye. This presentation will:
+
+
+		demonstrate successful and important applications of Open Data
+
+		discuss threats to Open Data
+
+		discuss best pracitces for Open Data communities",Beginner,SC2011,None,None
+"OpenStreetMap - Location, Location, Location",Richard Weait,"OpenStreetMap is geographic data that you can use and improve. This presentation will:
+
+
+		cover a brief history of OpenStreetMap
+
+		show you why you want to be involved in OpenStreetMap
+
+		familiarize you with common solutions using OpenStreetMap
+
+		familiarize you with the OpenStreetMap tool set
+
+
+	Plan to join us at the Mapping Party on Sunday for peer-coaching on OpenStreetMap data surveys and editing tools.",Beginner,SC2011,None,None
+PostgreSQL replication,Steve Singer,"PostgreSQL is an open source relational database system that features a high level of standards complience and support for most programming languages. PostgreSQL offers a number of different options for data replication. This talk will provide an introduction to database replication in PostgreSQL and explain the different types of problems that replication can solve. The talk will explain how the built in WAL shipping replication works, how to set it up and discuss the limitations. The Slony replication system will be explained including the basic steps involved in setting up a Slony cluster and how Slony can be used to solve common problems",Intermediate,SC2011,None,None
+Why We Need to Open-Source The Monetary System,Tim Inkpen,"The on-going financial crisis have led a growing number of people to raise questions about our monetary system. This talk will cover, at a high level, some of the major flaws that are inherent in the current sytem's design, along with looking at specific examples of projects that are attempting to create open-source monetary systems.
+	Specific topics include:
+	Problems with the Current Monetary System
+	Close source vs. Open Source Monetary Systems
+	Monoculture vs. Polyculture monetary System
+	Debt-based vs. Obligation based monetary system
+	Monetary System Design Issues
+	BitCoin
+	Examples of Open-Source Monetary System",Beginner,SC2011,None,None
+Dancer: a Perl Micro Web Application Framework,Yanick Champoux,"Dancer is a micro web application framework written in Perl. It aims to be intuitive, minimalist and to have a very expressive syntax.
+
+	This talk will showcase its best dance moves through the creation of a web application. By the end of the routine, you'll know enough to create an application, leverage the many plugins available to ease development, and get it ready for the dance floor.
+
+	Dancer website: http://perldancer.org/",Intermediate,SC2011,None,None

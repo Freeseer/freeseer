@@ -1,0 +1,9 @@
+[Core]
+Name = Rss FeedParser
+Module = rss_feedparser
+
+[Documentation]
+Author = Rio Lowry
+Version = 3.0.9999
+Website = http://fosslc.org
+Description = Rss FeedParser plugin provides a RSS parser used when adding presentations
