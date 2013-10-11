@@ -90,3 +90,18 @@ class TestDatabase(unittest.TestCase):
     def test_get_talks_model(self):
         """Simply test that a model is returned"""
         self.assertIsInstance(self.db.get_talks_model("SC2011", "T105"), QtSql.QSqlQueryModel)
+
+    def test_add_talks_from_rss(self):
+        """Test that talks are retrieved from the RSS feed"""
+
+        feed1 = "http://fosslc.org/drupal/presentations_rss/summercamp2010"
+        feed2 = "http://fosslc.org/drupal/presentations_rss/sc2011"
+
+        presentation1 = Presentation("Managing map data in a database", "Andrew Ross")
+        presentation2 = Presentation("Building NetBSD", "David Maxwell")
+
+        self.db.add_talks_from_rss(feed1)
+        self.assertTrue(self.db.presentation_exists(presentation1))
+
+        self.db.add_talks_from_rss(feed2)
+        self.assertTrue(self.db.presentation_exists(presentation2))
