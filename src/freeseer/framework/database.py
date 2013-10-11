@@ -28,10 +28,11 @@ import os
 
 from PyQt4 import QtSql
 
+from freeseer import settings
 from freeseer import __version__
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
-from freeseer.framework.rss_parser import FeedParser
+from freeseer.framework.plugin import PluginManager
 
 log = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ class QtDBConnector():
         """
         self.configdir = configdir
         self.talkdb_file = os.path.abspath("%s/%s" % (self.configdir, talkdb_file))
+        self.plugman = PluginManager(self.configdir)
 
         if not os.path.isfile(self.talkdb_file):
             file = open(self.talkdb_file, 'w')
@@ -357,16 +359,14 @@ class QtDBConnector():
     ## Import / Export Functions
     ##
 
-    def add_talks_from_rss(self, rss):
+    def add_talks_from_rss(self, feed_url):
         """Adds talks from an rss feed."""
-        entry = str(rss)
-        feedparser = FeedParser(entry)
+        plugin = self.plugman.get_plugin_by_name("Rss FeedParser", "Importer")
+        feedparser = plugin.plugin_object
+        presentations = feedparser.get_presentations(feed_url)
 
-        if len(feedparser.build_data_dictionary()) == 0:
-            log.info("RSS: No data found.")
-
-        else:
-            for presentation in feedparser.build_data_dictionary():
+        if presentations:
+            for presentation in presentations:
                 talk = Presentation(presentation["Title"],
                                     presentation["Speaker"],
                                     presentation["Abstract"],  # Description
@@ -376,61 +376,31 @@ class QtDBConnector():
                                     presentation["Time"])
                 self.insert_presentation(talk)
 
+        else:
+            log.info("RSS: No data found.")
+
     def add_talks_from_csv(self, fname):
         """Adds talks from a csv file.
 
         Title and speaker must be present.
         """
-        file = open(fname, 'r')
-        try:
-            reader = csv.DictReader(file)
-            for row in reader:
-                try:
-                    title   = unicode(row['Title'], 'utf-8')
-                    speaker = unicode(row['Speaker'], 'utf-8')
-                except KeyError:
-                    log.error("Missing Key in Row: %s", row)
-                    return
+        plugin = self.plugman.get_plugin_by_name("CSV Importer", "Importer")
+        importer = plugin.plugin_object
+        presentations = importer.get_presentations(fname)
 
-                try:
-                    abstract = unicode(row['Abstract'], 'utf-8')  # Description
-                except KeyError:
-                    abstract = ''
-
-                try:
-                    level = unicode(row['Level'], 'utf-8')
-                except KeyError:
-                    level = ''
-
-                try:
-                    event = unicode(row['Event'], 'utf-8')
-                except KeyError:
-                    event = ''
-
-                try:
-                    room = unicode(row['Room'], 'utf-8')
-                except KeyError:
-                    room = ''
-
-                try:
-                    time = unicode(row['Time'], 'utf-8')
-                except KeyError:
-                    time = ''
-
-                talk = Presentation(title,
-                                    speaker,
-                                    abstract,
-                                    level,
-                                    event,
-                                    room,
-                                    time)
+        if presentations:
+            for presentation in presentations:
+                talk = Presentation(presentation["Title"],
+                                    presentation["Speaker"],
+                                    presentation["Abstract"],  # Description
+                                    presentation["Level"],
+                                    presentation["Event"],
+                                    presentation["Room"],
+                                    presentation["Time"])
                 self.insert_presentation(talk)
 
-        except IOError:
-            log.error("CSV: File %s not found", file)
-
-        finally:
-            file.close()
+        else:
+            log.info("CSV: No data found.")
 
     def export_talks_to_csv(self, fname):
         fieldNames = ('Title',
