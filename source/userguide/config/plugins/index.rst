@@ -1,9 +1,6 @@
 Plugins
 =======
 
-.. todo:: Document all plugins
-
-
 .. toctree::
    :maxdepth: 2
 
