@@ -131,13 +131,13 @@ class TalkEditorApp(FreeseerApp):
         #
         # self.connect(self.tableView.)
         # self.tableView.selectionModel().selectionChanged.connect(self.selChanged)
-        self.tableView.clicked.connect(self.clickedSlot)
+        #self.tableView.clicked.connect(self.clickedSlot)
 
         #
         # Talk Editor Connections
         #
         self.connect(self.tableView, SIGNAL(
-            'activated(const QModelIndex)'), self.talk_selected)
+            'clicked(const QModelIndex)'), self.talk_selected)
 
         # Add Talk Widget
         self.connect(self.commandButtons.addButton,
