@@ -75,6 +75,7 @@ class TalkDetailsWidget(QWidget):
         self.timeLayout = QHBoxLayout()
         self.dateLabel = QLabel('Date')
         self.dateEdit = QDateEdit()
+        self.dateEdit.setCalendarPopup(True)
         self.timeLabel = QLabel('Time')
         self.timeEdit = QTimeEdit()
 
