@@ -156,9 +156,8 @@ class TalkEditorApp(FreeseerApp):
         self.importTalksWidget.setHidden(True)
 
         # Command Buttons
-        # self.connect(self.editorWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), self.editorWidget.rssPushButton.click)
-        # self.connect(self.editorWidget.rssPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
-        # self.connect(self.editorWidget.addButton, QtCore.SIGNAL('clicked()'), self.show_add_talk_widget)
+        self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), self.importTalksWidget.importRSSButton.click)
+        self.connect(self.importTalksWidget.importRSSButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
         self.connect(self.commandButtons.removeButton,
                      SIGNAL('clicked()'), self.remove_talk)
         # self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
@@ -167,10 +166,10 @@ class TalkEditorApp(FreeseerApp):
                      SIGNAL('clicked()'), self.show_import_talks_widget)
 
         # CSV Widget
-        # self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
+        self.connect(self.importTalksWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.commandButtons.exportButton,
                      SIGNAL('clicked()'), self.export_talks_to_csv)
-        #self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
+        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -377,9 +376,10 @@ class TalkEditorApp(FreeseerApp):
             self.reset()
 
     def add_talks_from_rss(self):
-        rss_url = unicode(self.editorWidget.rssLineEdit.text())
+        rss_url = unicode(self.importTalksWidget.rssLineEdit.text())
         self.db.add_talks_from_rss(rss_url)
         self.presentationModel.select()
+        self.hide_import_talks_widget()
 
     def closeEvent(self, event):
         log.info('Exiting talk database editor...')
@@ -387,21 +387,22 @@ class TalkEditorApp(FreeseerApp):
         event.accept()
 
     def csv_file_select(self):
-        dirpath = str(self.editorWidget.csvLineEdit.text())
-        fname = QtGui.QFileDialog.getOpenFileName(
+        dirpath = str(self.importTalksWidget.csvLineEdit.text())
+        fname = QFileDialog.getOpenFileName(
             self, 'Select file', "", "*.csv")
         if fname:
-            self.editorWidget.csvLineEdit.setText(fname)
+            self.importTalksWidget.csvLineEdit.setText(fname)
 
     def add_talks_from_csv(self):
-        fname = self.editorWidget.csvLineEdit.text()
+        fname = self.importTalksWidget.csvLineEdit.text()
 
         if fname:
             self.db.add_talks_from_csv(fname)
             self.presentationModel.select()
+        self.hide_import_talks_widget()
 
     def export_talks_to_csv(self):
-        #dirpath = str(self.editorWidget.csvLineEdit.text())
+        dirpath = str(self.importTalksWidget.csvLineEdit.text())
         fname = QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.db.export_talks_to_csv(fname)
