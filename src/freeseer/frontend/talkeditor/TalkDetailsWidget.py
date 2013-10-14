@@ -27,16 +27,16 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 from PyQt4.QtCore import Qt
-from PyQt4.QtCore import QTime
-from PyQt4.QtCore import QDate
+#from PyQt4.QtCore import QTime
+from PyQt4.QtCore import QDateTime
 
-from PyQt4.QtGui import QDateEdit
+from PyQt4.QtGui import QDateTimeEdit
 from PyQt4.QtGui import QGridLayout
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QPlainTextEdit
-from PyQt4.QtGui import QTimeEdit
+#from PyQt4.QtGui import QTimeEdit
 from PyQt4.QtGui import QWidget
 
 
@@ -71,28 +71,28 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.roomLabel, 2, 2, 1, 1)
         self.layout.addWidget(self.roomLineEdit, 2, 3, 1, 1)
 
-        self.dateLayout = QHBoxLayout()
-        self.timeLayout = QHBoxLayout()
-        self.dateLabel = QLabel('Date')
-        self.dateEdit = QDateEdit()
-        self.dateEdit.setCalendarPopup(True)
-        self.timeLabel = QLabel('Time')
-        self.timeEdit = QTimeEdit()
+        self.dateTimeLayout = QHBoxLayout()
+        #self.timeLayout = QHBoxLayout()
+        self.dateTimeLabel = QLabel('Date and Time')
+        self.dateTimeEdit = QDateTimeEdit()
+        self.dateTimeEdit.setCalendarPopup(True)
+        #self.timeLabel = QLabel('Time')
+        #self.timeEdit = QTimeEdit()
 
-        currentTime = QTime()
-        currentDate = QDate()
+        currentDateTime = QDateTime()
+        #currentDate = QDate()
 
-        self.dateEdit.setDate(currentDate.currentDate())
-        self.dateLabel.setBuddy(self.dateEdit)
-        self.timeEdit.setTime(currentTime.currentTime())
-        self.timeLabel.setBuddy(self.dateEdit)
+        self.dateTimeEdit.setDateTime(currentDateTime.currentDateTime())
+        #self.dateLabel.setBuddy(self.dateEdit)
+        #self.timeEdit.setTime(currentTime.currentTime())
+        #self.timeLabel.setBuddy(self.dateEdit)
         
-        self.dateLayout.addWidget(self.dateEdit)
-        self.timeLayout.addWidget(self.timeEdit)
-        self.layout.addWidget(self.dateLabel, 3, 0, 1, 1)
-        self.layout.addLayout(self.dateLayout, 3, 1, 1, 1)
-        self.layout.addWidget(self.timeLabel, 3, 2, 1, 1)
-        self.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
+        self.dateTimeLayout.addWidget(self.dateTimeEdit)
+        #self.timeLayout.addWidget(self.timeEdit)
+        self.layout.addWidget(self.dateTimeLabel, 3, 0, 1, 1)
+        self.layout.addLayout(self.dateTimeLayout, 3, 1, 1, 1)
+        #self.layout.addWidget(self.timeLabel, 3, 2, 1, 1)
+        #sself.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
 
 
 
