@@ -436,9 +436,9 @@ class RecordApp(FreeseerApp):
             self.time_seconds = 0
             self.time_minutes += 1
 
-        self.mainWidget.statusLabel.setText("{} --- {} {} --- {} {}".format(self.recordingString, self.freeSpaceString,
-                                                                     get_free_space(self.config.videodir),
-                                                                     self.elapsedTimeString, time))
+        self.mainWidget.statusLabel.setText("{} {} --- {} {} --- {}".format(self.elapsedTimeString, time,
+                                                                     self.freeSpaceString, get_free_space(self.config.videodir),
+                                                                     self.recordingString))
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
