@@ -113,10 +113,12 @@ class RecordApp(FreeseerApp):
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         self.actionOpenVideoFolder.setIcon(folderIcon)
 
+        playbackIcon = Qt.Gui.QIcon.fromTheme("video-x-generic")
         self.actionPlayVideo = QtGui.QAction(self)
         self.actionPlayVideo.setShortcut("Ctrl+P")
         self.actionPlayVideo.setObjectName(_fromUtf8("actionPlayVideo"))
         self.actionPlayVideo.setEnabled(False)
+        self.actionPlayVideo.setIcon(playbackIcon)
 
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
