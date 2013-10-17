@@ -147,29 +147,32 @@ class TalkEditorApp(FreeseerApp):
         # self.addTalkWidget.setHidden(True)
 
         # Import Widget
-        self.connect(self.importTalksWidget.importCSVButton,
-                     SIGNAL('clicked()'), self.add_talks_from_csv)
-        self.connect(self.importTalksWidget.importRSSButton,
-                     SIGNAL('clicked()'), self.add_talks_from_rss)
+        self.connect(self.importTalksWidget.csvRadioButton,
+                     SIGNAL('toggled(bool)'), self.toggle_import)
+        #self.connect(self.importTalksWidget.importCSVButton,
+        #             SIGNAL('clicked()'), self.add_talks_from_csv)
+        #self.connect(self.importTalksWidget.importRSSButton,
+        #             SIGNAL('clicked()'), self.add_talks_from_rss)
+        self.connect(self.importTalksWidget.importButton,
+                     SIGNAL('clicked()'), self.import_talks)
         self.connect(self.importTalksWidget.cancelButton,
                      SIGNAL('clicked()'), self.hide_import_talks_widget)
         self.importTalksWidget.setHidden(True)
 
-        # Command Buttons
-        self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), self.importTalksWidget.importRSSButton.click)
-        self.connect(self.importTalksWidget.importRSSButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
+        self.connect(self.importTalksWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
+        self.connect(self.importTalksWidget.csvLineEdit, QtCore.SIGNAL('returnPressed()'), self.importTalksWidget.importButton.click)
+        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
+        self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), self.importTalksWidget.importButton.click)
+        #self.connect(self.importTalksWidget.importRSSButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
         self.connect(self.commandButtons.removeButton,
                      SIGNAL('clicked()'), self.remove_talk)
+        # Command Buttons
         # self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         # self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.commandButtons.importButton,
                      SIGNAL('clicked()'), self.show_import_talks_widget)
-
-        # CSV Widget
-        self.connect(self.importTalksWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.commandButtons.exportButton,
                      SIGNAL('clicked()'), self.export_talks_to_csv)
-        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -258,7 +261,6 @@ class TalkEditorApp(FreeseerApp):
 
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
-        print "sel changed"
 
     #Update EditorWidget with data from clicked row
     #def clickedSlot(self, index):
@@ -279,6 +281,16 @@ class TalkEditorApp(FreeseerApp):
     #            self.presentationModel.record(index.row()).value(7).toDate())
     #        self.talkDetailsWidget.timeEdit.setTime(
     #            self.presentationModel.record(index.row()).value(7).toDateTime().time())
+    def toggle_import(self):
+        if self.importTalksWidget.csvRadioButton.isChecked():
+            self.importTalksWidget.csvLineEdit.setEnabled(True)
+            self.importTalksWidget.csvFileSelectButton.setEnabled(True)
+            self.importTalksWidget.rssLineEdit.setEnabled(False)
+        else:
+            self.importTalksWidget.csvLineEdit.setEnabled(False)
+            self.importTalksWidget.csvFileSelectButton.setEnabled(False)
+            self.importTalksWidget.rssLineEdit.setEnabled(True)
+
 
     def show_import_talks_widget(self):
         self.commandButtons.setHidden(True)
@@ -399,6 +411,14 @@ class TalkEditorApp(FreeseerApp):
         if fname:
             self.db.add_talks_from_csv(fname)
             self.presentationModel.select()
+        self.hide_import_talks_widget()
+
+    def import_talks(self):
+        print "Import Talks"
+        if self.importTalksWidget.csvRadioButton.isChecked():
+            self.add_talks_from_csv()
+        else:
+            self.add_talks_from_rss
         self.hide_import_talks_widget()
 
     def export_talks_to_csv(self):
