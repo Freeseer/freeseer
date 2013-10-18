@@ -15,7 +15,6 @@ If you ever have to refer to this guide, then please :doc:`let us know
 .. toctree::
    :maxdepth: 1
 
-   install
    record
    talkeditor
    config/index
