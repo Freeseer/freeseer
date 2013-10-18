@@ -1,13 +1,15 @@
 User Guide
 ==========
 
-Freeseer is an extensible platform with core features, and features added by plugins. This user guide runs down all the
-Freeseer features offered by both the core applications and the default plugins which are distributed with it.
+Freeseer is an extensible platform with core features, and features added by
+plugins. This user guide aims to cover all Freeseer's features offered by the
+core applications and the default plugins which are distributed with it.
 
-We believe that if an application is well designed, it'll be self-explanatory and no documentation on usage should exist.
-Our goal is for Freeseer to become that straightforward to use, but we're not there yet.
+Our goal is for Freeseer to become so straightforward to use that this user
+guide should be seldom referenced, but we're not there yet.
 
-If you ever have to refer to this guide, then please :doc:`let us know </contact>` what we can improve in Freeseer's design!
+If you ever have to refer to this guide, then please :doc:`let us know
+</contact>` how we can improve Freeseer!
 
 
 .. toctree::
