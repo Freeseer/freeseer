@@ -113,7 +113,7 @@ class RecordApp(FreeseerApp):
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         self.actionOpenVideoFolder.setIcon(folderIcon)
 
-        playbackIcon = Qt.Gui.QIcon.fromTheme("video-x-generic")
+        playbackIcon = QtGui.QIcon.fromTheme("video-x-generic")
         self.actionPlayVideo = QtGui.QAction(self)
         self.actionPlayVideo.setShortcut("Ctrl+P")
         self.actionPlayVideo.setObjectName(_fromUtf8("actionPlayVideo"))
@@ -428,9 +428,8 @@ class RecordApp(FreeseerApp):
         else:
             presentation = Presentation(title=unicode("default"))
 
-        retHolder = self.controller.load_backend(presentation)
-        self.recently_recorded_video = retHolder[1]
-        if retHolder[0]:
+        initialized, self.recently_recorded_video = self.controller.load_backend(presentation)
+        if initialized:
             return True
         else:
             return False  # Error something failed while loading the backend
