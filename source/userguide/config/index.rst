@@ -28,7 +28,3 @@ Plugins
 -------
 
 See :doc:`Plugins </plugins/index>`.
-
-
-Logger
-------
