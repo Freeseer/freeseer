@@ -27,4 +27,4 @@ The freeseer-config tool has a few command line options.
 Plugins
 -------
 
-See :doc:`Plugins </plugins/index>`.
+See :doc:`plugins/index`.
