@@ -94,7 +94,7 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.dateTimeLabel, 3, 0, 1, 1)
         self.layout.addLayout(self.dateTimeLayout, 3, 1, 1, 1)
         #self.layout.addWidget(self.timeLabel, 3, 2, 1, 1)
-        #sself.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
+        #self.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
 
         self.descriptionLabel = QLabel('Description')
         self.descriptionLabel.setAlignment(Qt.AlignTop)
