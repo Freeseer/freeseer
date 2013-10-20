@@ -75,6 +75,8 @@ class TalkDetailsWidget(QWidget):
         #self.timeLayout = QHBoxLayout()
         self.dateTimeLabel = QLabel('Date and Time')
         self.dateTimeEdit = QDateTimeEdit()
+        self.dateTimeEdit.setDisplayFormat("yyyy-mm-dd'T'hh:mm")
+
         self.dateTimeEdit.setCalendarPopup(True)
         #self.timeLabel = QLabel('Time')
         #self.timeEdit = QTimeEdit()
@@ -83,18 +85,16 @@ class TalkDetailsWidget(QWidget):
         #currentDate = QDate()
 
         self.dateTimeEdit.setDateTime(currentDateTime.currentDateTime())
-        #self.dateLabel.setBuddy(self.dateEdit)
-        #self.timeEdit.setTime(currentTime.currentTime())
-        #self.timeLabel.setBuddy(self.dateEdit)
-        
+        # self.dateLabel.setBuddy(self.dateEdit)
+        # self.timeEdit.setTime(currentTime.currentTime())
+        # self.timeLabel.setBuddy(self.dateEdit)
+
         self.dateTimeLayout.addWidget(self.dateTimeEdit)
-        #self.timeLayout.addWidget(self.timeEdit)
+        # self.timeLayout.addWidget(self.timeEdit)
         self.layout.addWidget(self.dateTimeLabel, 3, 0, 1, 1)
         self.layout.addLayout(self.dateTimeLayout, 3, 1, 1, 1)
         #self.layout.addWidget(self.timeLabel, 3, 2, 1, 1)
         #sself.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
-
-
 
         self.descriptionLabel = QLabel('Description')
         self.descriptionLabel.setAlignment(Qt.AlignTop)

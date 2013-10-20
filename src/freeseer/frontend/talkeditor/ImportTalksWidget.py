@@ -29,6 +29,7 @@ http://wiki.github.com/Freeseer/freeseer/
 from PyQt4 import QtCore, QtGui
 import sys
 
+
 class ImportTalksWidget(QtGui.QWidget):
 
     '''
@@ -45,7 +46,6 @@ class ImportTalksWidget(QtGui.QWidget):
 
         self.importTalksGroupBox = QtGui.QGroupBox("Import Talks")
 
-
         self.importTalksLayout = QtGui.QFormLayout()
         self.importTalksGroupBox.setLayout(self.importTalksLayout)
 
@@ -56,9 +56,7 @@ class ImportTalksWidget(QtGui.QWidget):
         self.cancelButton = QtGui.QPushButton("Cancel")
         self.cancelButton.setIcon(cancelIcon)
 
-        
-
-        #Radio Button Group
+        # Radio Button Group
         self.buttonGroup = QtGui.QButtonGroup(self.mainLayout)
         self.csvRadioButton = QtGui.QRadioButton("CSV File")
         self.csvRadioButton.setChecked(True)
@@ -66,10 +64,9 @@ class ImportTalksWidget(QtGui.QWidget):
         self.buttonGroup.addButton(self.csvRadioButton)
         self.buttonGroup.addButton(self.rssRadioButton)
 
-        
-        #CSV Layout
+        # CSV Layout
         self.csvLayout = QtGui.QHBoxLayout()
-        
+
         self.csvWidget = QtGui.QWidget()
         self.csvWidget.setLayout(self.csvLayout)
 
@@ -78,20 +75,22 @@ class ImportTalksWidget(QtGui.QWidget):
 
         if sys.platform == 'win32':
             if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
-                self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
+                self.csvLineEdit.setPlaceholderText(
+                    "C:\Example\Freeseer2011.csv")
         else:
             if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
-                self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
-        #self.csvLabel.setBuddy(self.csvLineEdit)
+                self.csvLineEdit.setPlaceholderText(
+                    "/home/freeseer/Example/Freeseer2011.csv")
+        # self.csvLabel.setBuddy(self.csvLineEdit)
         self.csvFileSelectButton = QtGui.QToolButton()
         self.csvFileSelectButton.setText("...")
         #self.importCSVButton = QtGui.QPushButton("Load talks from CSV")
-        
+
         self.csvLayout.addWidget(self.csvRadioButton)
-        #self.csvLayout.addWidget(self.csvLabel)
+        # self.csvLayout.addWidget(self.csvLabel)
         self.csvLayout.addWidget(self.csvLineEdit)
         self.csvLayout.addWidget(self.csvFileSelectButton)
-        #self.csvLayout.addWidget(self.importCSVButton)
+        # self.csvLayout.addWidget(self.importCSVButton)
 
         #
         # RSS Layout
@@ -99,31 +98,29 @@ class ImportTalksWidget(QtGui.QWidget):
         self.rssWidget = QtGui.QWidget()
         self.rssLayout = QtGui.QHBoxLayout()
         self.rssWidget.setLayout(self.rssLayout)
-        
+
         #self.rssLabel = QtGui.QLabel("RSS URL")
         self.rssLineEdit = QtGui.QLineEdit()
         self.rssLineEdit.setEnabled(False)
         if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
             self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
-        #self.rssLabel.setBuddy(self.rssLineEdit)
+        # self.rssLabel.setBuddy(self.rssLineEdit)
         #self.importRSSButton = QtGui.QPushButton("Load talks from RSS")
         #rss_icon = QtGui.QIcon()
         #rss_icon.addPixmap(QtGui.QPixmap(":/multimedia/rss.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #self.importRSSButton.setIcon(rss_icon)
-        
+        # self.importRSSButton.setIcon(rss_icon)
+
         self.rssLayout.addWidget(self.rssRadioButton)
-        #self.rssLayout.addWidget(self.rssLabel)
+        # self.rssLayout.addWidget(self.rssLabel)
         self.rssLayout.addWidget(self.rssLineEdit)
-        #self.rssLayout.addWidget(self.importRSSButton)
+        # self.rssLayout.addWidget(self.importRSSButton)
 
-
-        #Layout
+        # Layout
         self.mainLayout.addWidget(self.importTalksGroupBox)
         self.mainLayout.addWidget(self.csvWidget)
         self.mainLayout.addWidget(self.rssWidget)
         self.mainLayout.addWidget(self.importButton)
         self.mainLayout.addWidget(self.cancelButton)
-
 
 
 if __name__ == "__main__":
