@@ -9,7 +9,7 @@ General
 
 
 Command line
-************
+------------
 
 The freeseer-config tool has a few command line options.
 
