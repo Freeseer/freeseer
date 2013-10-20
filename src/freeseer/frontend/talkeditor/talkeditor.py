@@ -392,9 +392,15 @@ class TalkEditorApp(FreeseerApp):
 
     def add_talks_from_rss(self):
         rss_url = unicode(self.importTalksWidget.rssLineEdit.text())
-        self.db.add_talks_from_rss(rss_url)
-        self.presentationModel.select()
-        self.hide_import_talks_widget()
+        if rss_url:
+            self.db.add_talks_from_rss(rss_url)
+            self.presentationModel.select()
+            self.hide_import_talks_widget()
+        else:
+            error = QMessageBox()
+            error.setText("Please enter a RSS URL")
+            error.exec_()
+        
 
     def closeEvent(self, event):
         log.info('Exiting talk database editor...')
