@@ -169,10 +169,12 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL(
             'returnPressed()'), self.importTalksWidget.importButton.click)
         #self.connect(self.importTalksWidget.importRSSButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
+
+        # Command Buttons
         self.connect(self.commandButtons.removeButton,
                      SIGNAL('clicked()'), self.remove_talk)
-        # Command Buttons
-        # self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
+        self.connect(self.commandButtons.removeAllButton,
+                     SIGNAL('clicked()'), self.confirm_reset)
         # self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.commandButtons.importButton,
                      SIGNAL('clicked()'), self.show_import_talks_widget)
@@ -380,14 +382,14 @@ class TalkEditorApp(FreeseerApp):
         
         If Yes call the reset() function.
         """
-        confirm = QtGui.QMessageBox.question(self,
-                                             self.confirmDBClearTitleString,
-                                             self.confirmDBClearQuestionString,
-                                             QtGui.QMessageBox.Yes |
-                                             QtGui.QMessageBox.No,
-                                             QtGui.QMessageBox.No)
+        confirm = QMessageBox.question(self,
+                                       self.confirmDBClearTitleString,
+                                       self.confirmDBClearQuestionString,
+                                       QMessageBox.Yes |
+                                       QMessageBox.No,
+                                       QMessageBox.No)
 
-        if confirm == QtGui.QMessageBox.Yes:
+        if confirm == QMessageBox.Yes:
             self.reset()
 
     def add_talks_from_rss(self):

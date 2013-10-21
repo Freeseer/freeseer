@@ -44,11 +44,13 @@ class CommandButtons(QWidget):
         self.importButton = QPushButton('Import')
         self.exportButton = QPushButton('Export')
         self.removeButton = QPushButton('Remove')
+        self.removeAllButton = QPushButton('Remove All')
         self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.duplicateButton)
         self.layout.addWidget(self.importButton)
         self.layout.addWidget(self.exportButton)
         self.layout.addWidget(self.removeButton)
+        self.layout.addWidget(self.removeAllButton)
         self.layout.addStretch()
 
 if __name__ == "__main__":
