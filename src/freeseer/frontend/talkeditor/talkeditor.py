@@ -18,7 +18,6 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
@@ -128,38 +127,21 @@ class TalkEditorApp(FreeseerApp):
         # --- End Menubar
 
         #
-        # Table View Connections
-        #
-        # self.connect(self.tableView.)
-        # self.tableView.selectionModel().selectionChanged.connect(self.selChanged)
-        # self.tableView.clicked.connect(self.clickedSlot)
-
-        #
-        # Talk Editor Connections
+        # TableView Connections
         #
         self.connect(self.tableView, SIGNAL(
             'activated(const QModelIndex)'), self.talk_selected)
         self.connect(self.tableView, SIGNAL(
             'selChanged(const QModelIndex)'), self.talk_selected)
-        # Add Talk Widget
-        self.connect(self.commandButtons.addButton,
-                     SIGNAL('clicked()'), self.add_talk)
-        # self.connect(self.addTalkWidget.cancelButton, QtCore.SIGNAL('clicked()'), self.hide_add_talk_widget)
-        # self.addTalkWidget.setHidden(True)
 
         # Import Widget
         self.connect(self.importTalksWidget.csvRadioButton,
                      SIGNAL('toggled(bool)'), self.toggle_import)
-        # self.connect(self.importTalksWidget.importCSVButton,
-        #             SIGNAL('clicked()'), self.add_talks_from_csv)
-        # self.connect(self.importTalksWidget.importRSSButton,
-        #             SIGNAL('clicked()'), self.add_talks_from_rss)
         self.connect(self.importTalksWidget.importButton,
                      SIGNAL('clicked()'), self.import_talks)
         self.connect(self.importTalksWidget.cancelButton,
                      SIGNAL('clicked()'), self.hide_import_talks_widget)
         self.importTalksWidget.setHidden(True)
-
         self.connect(self.importTalksWidget.csvFileSelectButton,
                      QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.importTalksWidget.csvLineEdit, QtCore.SIGNAL(
@@ -168,14 +150,14 @@ class TalkEditorApp(FreeseerApp):
             'triggered()'), self.export_talks_to_csv)
         self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL(
             'returnPressed()'), self.importTalksWidget.importButton.click)
-        #self.connect(self.importTalksWidget.importRSSButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
 
         # Command Buttons
+        self.connect(self.commandButtons.addButton,
+                     SIGNAL('clicked()'), self.add_talk)
         self.connect(self.commandButtons.removeButton,
                      SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.commandButtons.removeAllButton,
                      SIGNAL('clicked()'), self.confirm_reset)
-        # self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.commandButtons.importButton,
                      SIGNAL('clicked()'), self.show_import_talks_widget)
         self.connect(self.commandButtons.exportButton,
@@ -230,17 +212,26 @@ class TalkEditorApp(FreeseerApp):
         # --- End AddTalkWidget
 
         #
-        # EditorWidget
+        # Import Talks Widget Translations
         #
-        # self.editorWidget.rssLabel.setText(self.app.translate("TalkEditorApp", "URL"))
-        # self.editorWidget.rssPushButton.setText(self.app.translate("TalkEditorApp", "Load talks from RSS"))
-        # self.editorWidget.csvLabel.setText(self.app.translate("TalkEditorApp", "File"))
-        # self.editorWidget.csvPushButton.setText(self.app.translate("TalkEditorApp", "Load talks from CSV"))
-        # self.editorWidget.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
-        # self.editorWidget.removeButton.setText(self.app.translate("TalkEditorApp", "Remove"))
-        # self.editorWidget.clearButton.setText(self.app.translate("TalkEditorApp", "Clear"))
-        # self.editorWidget.closeButton.setText(self.app.translate("TalkEditorApp", "Close"))
-        # --- End EditorWidget
+        # self.importTalksWidget.rssLabel.setText(
+        #    self.app.translate("TalkEditorApp", "URL"))
+        # self.importTalksWidget.csvLabel.setText(
+        #    self.app.translate("TalkEditorApp", "File"))
+        # self.importTalksWidget.importButton.setText(
+        #    self.app.translate("TalkEditorApp", "Import"))
+        # --- End Talks Widget Translations
+
+        #
+        # Command Button Translations
+        #
+        # self.commandButtons.addButton.setText(
+        #    self.app.translate("TalkEditorApp", "Add"))
+        # self.commandButtons.removeButton.setText(
+        #    self.app.translate("TalkEditorApp", "Remove"))
+        # self.commandButtons.removeAllButton.setText(
+        #    self.app.translate("TalkEditorApp", "Remove All"))
+        # --- End Command Butotn Translations
 
     def load_presentations_model(self):
         # Load Presentation Model
@@ -268,25 +259,6 @@ class TalkEditorApp(FreeseerApp):
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
 
-    # Update EditorWidget with data from clicked row
-    # def clickedSlot(self, index):
-    # self.talkDetailsWidget.titleLineEdit.setText(index.data().toString())
-    #        self.talkDetailsWidget.titleLineEdit.setText(
-    #            self.presentationModel.record(index.row()).value(1).toString())
-    #        self.talkDetailsWidget.presenterLineEdit.setText(
-    #            self.presentationModel.record(index.row()).value(2).toString())
-    #        self.talkDetailsWidget.descriptionTextEdit.setPlainText(
-    #            self.presentationModel.record(index.row()).value(3).toString())
-    #        self.talkDetailsWidget.levelLineEdit.setText(
-    #            self.presentationModel.record(index.row()).value(4).toString())
-    #        self.talkDetailsWidget.eventLineEdit.setText(
-    #            self.presentationModel.record(index.row()).value(5).toString())
-    #        self.talkDetailsWidget.roomLineEdit.setText(
-    #            self.presentationModel.record(index.row()).value(6).toString())
-    #        self.talkDetailsWidget.dateEdit.setDate(
-    #            self.presentationModel.record(index.row()).value(7).toDate())
-    #        self.talkDetailsWidget.timeEdit.setTime(
-    # self.presentationModel.record(index.row()).value(7).toDateTime().time())
     def toggle_import(self):
         if self.importTalksWidget.csvRadioButton.isChecked():
             self.importTalksWidget.csvLineEdit.setEnabled(True)
@@ -379,7 +351,7 @@ class TalkEditorApp(FreeseerApp):
         """
         Presents a confirmation dialog to ask the user if they are sure they
         wish to remove the talk database.
-        
+
         If Yes call the reset() function.
         """
         confirm = QMessageBox.question(self,
