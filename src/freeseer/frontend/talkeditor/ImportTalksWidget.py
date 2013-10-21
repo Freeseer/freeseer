@@ -51,10 +51,7 @@ class ImportTalksWidget(QtGui.QWidget):
 
         # Buttons
         self.importButton = QtGui.QPushButton("Import")
-
-        cancelIcon = QtGui.QIcon.fromTheme("edit-clear")
         self.cancelButton = QtGui.QPushButton("Cancel")
-        self.cancelButton.setIcon(cancelIcon)
 
         # Radio Button Group
         self.buttonGroup = QtGui.QButtonGroup(self.mainLayout)
@@ -83,7 +80,8 @@ class ImportTalksWidget(QtGui.QWidget):
                     "/home/freeseer/Example/Freeseer2011.csv")
         # self.csvLabel.setBuddy(self.csvLineEdit)
         self.csvFileSelectButton = QtGui.QToolButton()
-        self.csvFileSelectButton.setText("...")
+        csvFileSelectButton = QtGui.QIcon.fromTheme("folder")
+        self.csvFileSelectButton.setIcon(csvFileSelectButton)
         #self.importCSVButton = QtGui.QPushButton("Load talks from CSV")
 
         self.csvLayout.addWidget(self.csvRadioButton)
@@ -116,11 +114,18 @@ class ImportTalksWidget(QtGui.QWidget):
         # self.rssLayout.addWidget(self.importRSSButton)
 
         # Layout
+
         self.mainLayout.addWidget(self.importTalksGroupBox)
         self.mainLayout.addWidget(self.csvWidget)
         self.mainLayout.addWidget(self.rssWidget)
-        self.mainLayout.addWidget(self.importButton)
-        self.mainLayout.addWidget(self.cancelButton)
+
+        self.importCommandButtonsWidget = QtGui.QWidget()
+        self.importCommandButtonsLayout = QtGui.QHBoxLayout()
+        self.importCommandButtonsWidget.setLayout(self.importCommandButtonsLayout)
+        self.importCommandButtonsLayout.addWidget(self.importButton)
+        self.importCommandButtonsLayout.addWidget(self.cancelButton)
+        self.mainLayout.addWidget(self.importCommandButtonsWidget)
+
 
 
 if __name__ == "__main__":
