@@ -400,7 +400,6 @@ class TalkEditorApp(FreeseerApp):
             error = QMessageBox()
             error.setText("Please enter a RSS URL")
             error.exec_()
-        
 
     def closeEvent(self, event):
         log.info('Exiting talk database editor...')
