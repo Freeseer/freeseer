@@ -75,7 +75,7 @@ Ubuntu Linux
     $ sudo apt-get install -y build-essential git python-gst0.10 \
       python-gst0.10-dev gstreamer0.10-plugins-good qt4-qmake pyqt4-dev-tools \
       libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev \
-      python-qt4-sql python2.7-dev python-feedparser python-setuptools python-xlib
+      python-qt4-sql python2.7-dev python-feedparser python-pip python-xlib
     $ sudo pip install yapsy
 
 Fedora Linux
