@@ -23,7 +23,8 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 pep8_options = {'max_line_length': 160,
-                'ignore': ['E128',   # Ignore under indents
+                'ignore': ['E127',   # Ignore over indents
+                           'E128',   # Ignore under indents
                            'E221',   # Multiple whitespace before operator
                            'E241']}  # Ignore multiple whitespaces after :
 

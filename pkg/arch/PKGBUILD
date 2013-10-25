@@ -1,13 +1,16 @@
-# Contributor: Thanh Ha <thanh.ha@alumni.carleton.ca>
+# Maintainer: Thanh Ha <thanh.ha@alumni.carleton.ca>
+#
+# Repository: https://github.com/Freeseer/freeseer
+
 pkgname=freeseer-git
-pkgver=20130911
-pkgrel=2
+pkgver=20131006
+pkgrel=1
 pkgdesc="This project contains code for a video capture utility capable of capturing presentations. It captures vga output and audio and mixes them together to produce a video thus enabling you to capture great presentations, demos, or training material easily."
 arch=('i686' 'x86_64')
 url="https://github.com/Freeseer/freeseer"
 license=('GPLv3')
 groups=()
-depends=(python2 python2-pyqt python2-feedparser gstreamer0.10-python python2-yapsy)
+depends=(python2 python2-pyqt python2-feedparser gstreamer0.10-python python2-yapsy gstreamer0.10-good-plugins)
 makedepends=(git)
 optdepends=()
 provides=()
@@ -39,3 +42,4 @@ build() {
   cp *.py $pkgdir/usr/lib/python2.7/site-packages/freeseer/
   cp -r framework frontend plugins $pkgdir/usr/lib/python2.7/site-packages/freeseer/
 }
+
