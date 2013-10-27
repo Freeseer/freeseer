@@ -123,6 +123,7 @@ class ImportTalksWidget(QtGui.QWidget):
         self.importCommandButtonsLayout = QtGui.QHBoxLayout()
         self.importCommandButtonsWidget.setLayout(
             self.importCommandButtonsLayout)
+        self.importCommandButtonsLayout.addStretch()
         self.importCommandButtonsLayout.addWidget(self.importButton)
         self.importCommandButtonsLayout.addWidget(self.cancelButton)
         self.mainLayout.addWidget(self.importCommandButtonsWidget)
