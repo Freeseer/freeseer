@@ -128,9 +128,24 @@ class QtDBConnector():
                             SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
         
-        updaters = [update_2xto30]
+        def update_30to31():
+            """
+            Incremental update of database from 3.0 and older to 3.1.
+
+            """
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old') #temporary table
+            self.__create_presentations_table()
+            QtSql.QSqlQuery("""INSERT INTO presentations 
+                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Level to Category')
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Time to Date')
+            QtSql.QSqlQuery('ALTER TABLE presentations ADD COLUMN Time timestamp')
+            QtSql.QSqlQuery('UPDATE table SET Date = Time')
+            QtSql.QSqlQuery('DROP TABLE presentations_old')
+
+
+        updaters = [update_30to31]
         updaterVersion = [0] #next entry is 300
-        
         if len(updaters) != len(updaterVersion) or db_version not in updaterVersion: #not setup properly
             log.info('Database upgrade failed.')
             return
@@ -149,9 +164,10 @@ class QtDBConnector():
                                         Title varchar(255),
                                         Speaker varchar(100),
                                         Description text,
-                                        Level varchar(25),
+                                        Category varchar(25),
                                         Event varchar(100),
                                         Room varchar(25),
+                                        Date timestamp,
                                         Time timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
         
@@ -165,6 +181,7 @@ class QtDBConnector():
                                     "",
                                     "SC2011",
                                     "T105",
+                                    "",
                                     "")
         self.insert_presentation(presentation)
         
@@ -212,10 +229,11 @@ class QtDBConnector():
             p = Presentation(unicode(result.value(1).toString()),    # title
                              unicode(result.value(2).toString()),    # speaker
                              unicode(result.value(3).toString()),    # description
-                             unicode(result.value(4).toString()),    # level
+                             unicode(result.value(4).toString()),    # category
                              unicode(result.value(5).toString()),    # event
                              unicode(result.value(6).toString()),    # room
-                             unicode(result.value(7).toString()))    # time
+                             unicode(result.value(7).toString()))    # date
+                             unicode(result.value(8).toString()))    # time
         else:
             p = None
             
@@ -238,13 +256,14 @@ class QtDBConnector():
         """
         Insert a Presentation into the database.
         """
-        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
+        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
                                     (presentation.title,
                                      presentation.speaker,
                                      presentation.description,
-                                     presentation.level,
+                                     presentation.category,
                                      presentation.event,
                                      presentation.room,
+                                     presentation.date,
                                      presentation.time))
         log.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
         
@@ -307,7 +326,7 @@ class QtDBConnector():
         Useful for Qt GUI based Frontends to load the Model into Views.
         """
         self.datesModel = QtSql.QSqlQueryModel()
-        self.datesModel.setQuery("SELECT DISTINCT date(Time) FROM presentations WHERE Event='%s' and Room='%s' ORDER BY Time ASC" % (event, room))
+        self.datesModel.setQuery("SELECT DISTINCT date(Time) FROM presentations WHERE Event='%s' and Room='%s' ORDER BY Date ASC" % (event, room))
         
         return self.datesModel
     
@@ -330,10 +349,10 @@ class QtDBConnector():
         self.talksModel = QtSql.QSqlQueryModel()
         if date == "":
             self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
-                                   WHERE Event='%s' and Room='%s' ORDER BY Time ASC" % (event, room))
+                                   WHERE Event='%s' and Room='%s' ORDER BY Date ASC" % (event, room))
         else:
             self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
-                                   WHERE Event='%s' and Room='%s' and date(Time) LIKE '%s' ORDER BY Time ASC" % (event, room, date))
+                                   WHERE Event='%s' and Room='%s' and date(Date) LIKE '%s' ORDER BY Date ASC" % (event, room, date))
             
         return self.talksModel
     
@@ -342,10 +361,10 @@ class QtDBConnector():
         Returns the talkID of the first talk found between a starttime, and endtime for a specified event/room.
         Else return None
         """
-        query = QtSql.QSqlQuery("SELECT Id, Time FROM presentations \
+        query = QtSql.QSqlQuery("SELECT Id, Date FROM presentations \
                                  WHERE Event='%s' AND Room='%s' \
-                                 AND Time BETWEEN '%s' \
-                                              AND '%s' ORDER BY Time ASC" % (event, room, starttime, endtime))
+                                 AND Date BETWEEN '%s' \
+                                              AND '%s' ORDER BY Date ASC" % (event, room, starttime, endtime))
         query.next()
         if query.isValid():
             return query.value(0)
@@ -356,7 +375,7 @@ class QtDBConnector():
     ##
     ## Import / Export Functions
     ##
-    
+    # Needs to be updated for category field, separate date and time fields
     def add_talks_from_rss(self, rss):
         """Adds talks from an rss feed."""
         entry = str(rss)
@@ -376,6 +395,7 @@ class QtDBConnector():
                                     presentation["Time"])
                 self.insert_presentation(talk)
     
+    # Needs to be updated to accept csv files with updated fields (category, time, date)
     def add_talks_from_csv(self, fname):
         """Adds talks from a csv file.
         
@@ -431,7 +451,8 @@ class QtDBConnector():
         
         finally:
             file.close()
-                 
+    
+    # Needs to be updated to accept csv files with updated fields (category, time, date)         
     def export_talks_to_csv(self, fname):
         #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
 
@@ -462,6 +483,7 @@ class QtDBConnector():
         finally:
             file.close()
     
+    # Needs to be updated to accept csv files with updated fields (category, time, date)
     def export_reports_to_csv(self, fname):
         fieldNames = ('Title',
                       'Speaker',
