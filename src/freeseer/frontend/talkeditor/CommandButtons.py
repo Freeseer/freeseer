@@ -29,6 +29,7 @@ http://wiki.github.com/Freeseer/freeseer/
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QIcon
 
 class CommandButtons(QWidget):
 
@@ -39,12 +40,27 @@ class CommandButtons(QWidget):
         self.layout = QHBoxLayout()
         self.setLayout(self.layout)
 
+        addIcon = QIcon.fromTheme("list-add")
+        duplicateIcon = QIcon.fromTheme("go-jump")
+        importIcon = QIcon.fromTheme("document-open")
+        exportIcon = QIcon.fromTheme("document-save")
+        removeIcon = QIcon.fromTheme("list-remove")
+        removeAllIcon = QIcon.fromTheme("window-close")
+
+
+
         self.addButton = QPushButton('Add')
+        self.addButton.setIcon(addIcon)
         self.duplicateButton = QPushButton('Duplicate')
+        self.duplicateButton.setIcon(duplicateIcon)
         self.importButton = QPushButton('Import')
+        self.importButton.setIcon(importIcon)
         self.exportButton = QPushButton('Export')
+        self.exportButton.setIcon(exportIcon)
         self.removeButton = QPushButton('Remove')
+        self.removeButton.setIcon(removeIcon)
         self.removeAllButton = QPushButton('Remove All')
+        self.removeAllButton.setIcon(removeAllIcon)
         self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.duplicateButton)
         self.layout.addWidget(self.importButton)
