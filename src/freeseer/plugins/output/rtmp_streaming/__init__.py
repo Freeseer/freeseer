@@ -85,9 +85,9 @@ import pickle
 import webbrowser
 
 # GStreamer libs
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # Qt libs
 from PyQt4 import QtGui, QtCore
@@ -161,17 +161,17 @@ class RTMPOutput(IOutput):
     # Streams flv content to [self.url]
     # TODO - Error handling - verify pad setup
     def get_output_bin(self, audio=True, video=True, metadata=None):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
         if metadata is not None:
             self.set_metadata(metadata)
 
         # Muxer
-        muxer = gst.element_factory_make("flvmux", "muxer")
+        muxer = Gst.ElementFactory.make("flvmux", "muxer")
 
         # Setup metadata
         # set tag merge mode to GST_TAG_MERGE_REPLACE
-        merge_mode = gst.TagMergeMode.__enum_values__[2]
+        merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
         if metadata is not None:
             # Only set tag if metadata is set
@@ -184,7 +184,7 @@ class RTMPOutput(IOutput):
         audio_codec = self.audio_codec
 
         # RTMP sink
-        rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
+        rtmpsink = Gst.ElementFactory.make('rtmpsink', 'rtmpsink')
         rtmpsink.set_property('location', url)
         bin.add(rtmpsink)
 
@@ -192,17 +192,17 @@ class RTMPOutput(IOutput):
         # Setup Audio Pipeline if Audio Recording is Enabled
         #
         if audio:
-            audioqueue = gst.element_factory_make("queue", "audioqueue")
+            audioqueue = Gst.ElementFactory.make("queue", "audioqueue")
             bin.add(audioqueue)
 
-            audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
+            audioconvert = Gst.ElementFactory.make("audioconvert", "audioconvert")
             bin.add(audioconvert)
 
-            audiolevel = gst.element_factory_make('level', 'audiolevel')
+            audiolevel = Gst.ElementFactory.make('level', 'audiolevel')
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
 
-            audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
+            audiocodec = Gst.ElementFactory.make(audio_codec, "audiocodec")
 
             if 'quality' in audiocodec.get_property_names():
                 audiocodec.set_property("quality", int(self.audio_quality))
@@ -212,8 +212,8 @@ class RTMPOutput(IOutput):
             bin.add(audiocodec)
 
             # Setup ghost pads
-            audiopad = audioqueue.get_pad("sink")
-            audio_ghostpad = gst.GhostPad("audiosink", audiopad)
+            audiopad = audioqueue.get_static_pad("sink")
+            audio_ghostpad = Gst.GhostPad.new("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
 
             # Link Elements
@@ -226,18 +226,18 @@ class RTMPOutput(IOutput):
         # Setup Video Pipeline
         #
         if video:
-            videoqueue = gst.element_factory_make("queue", "videoqueue")
+            videoqueue = Gst.ElementFactory.make("queue", "videoqueue")
             bin.add(videoqueue)
 
-            videocodec = gst.element_factory_make("x264enc", "videocodec")
+            videocodec = Gst.ElementFactory.make("x264enc", "videocodec")
             videocodec.set_property("bitrate", int(self.video_bitrate))
             if self.video_tune != 'none':
                 videocodec.set_property('tune', self.video_tune)
             bin.add(videocodec)
 
             # Setup ghost pads
-            videopad = videoqueue.get_pad("sink")
-            video_ghostpad = gst.GhostPad("videosink", videopad)
+            videopad = videoqueue.get_static_pad("sink")
+            video_ghostpad = Gst.GhostPad.new("videosink", videopad)
             bin.add_pad(video_ghostpad)
 
             # Link Elements
@@ -270,10 +270,10 @@ class RTMPOutput(IOutput):
         Populate global tag list variable with file metadata for
         vorbistag audio element
         '''
-        self.tags = gst.TagList()
+        self.tags = Gst.TagList()
 
         for tag in data.keys():
-            if(gst.tag_exists(tag)):
+            if(Gst.tag_exists(tag)):
                 self.tags[tag] = data[tag]
             else:
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")

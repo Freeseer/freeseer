@@ -33,9 +33,9 @@ testing and debugging Freeseer.
 import ConfigParser
 
 # GStreamer modules
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt4 modules
 from PyQt4.QtCore import SIGNAL
@@ -61,16 +61,16 @@ class VideoTestSrc(IVideoInput):
                 "chroma-zone-plate", "ball", "smpte100", "bar"]
 
     def get_videoinput_bin(self):
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
-        videosrc = gst.element_factory_make("videotestsrc", "videosrc")
+        videosrc = Gst.ElementFactory.make("videotestsrc", "videosrc")
         videosrc.set_property("pattern", self.pattern)
         videosrc.set_property("is-live", self.live)
         bin.add(videosrc)
 
         # Setup ghost pad
-        pad = videosrc.get_pad("src")
-        ghostpad = gst.GhostPad("videosrc", pad)
+        pad = videosrc.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("videosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin

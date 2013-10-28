@@ -32,9 +32,9 @@ An audio mixer plugin that combines 2 audio sources into a single output.
 import ConfigParser
 
 # GStreamer
-import pygst
-pygst.require('0.10')
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -54,22 +54,22 @@ class MultiAudio(IAudioMixer):
     widget = None
 
     def get_audiomixer_bin(self):
-        mixerbin = gst.Bin()
+        mixerbin = Gst.Bin()
 
-        audiomixer = gst.element_factory_make('adder', 'audiomixer')
+        audiomixer = Gst.ElementFactory.make('adder', 'audiomixer')
         mixerbin.add(audiomixer)
 
         # ghost pads
-        sinkpad1 = audiomixer.get_pad('sink%d')
-        sink_ghostpad1 = gst.GhostPad('sink1', sinkpad1)
+        sinkpad1 = audiomixer.get_static_pad('sink%d')
+        sink_ghostpad1 = Gst.GhostPad.new('sink1', sinkpad1)
         mixerbin.add_pad(sink_ghostpad1)
 
-        sinkpad2 = audiomixer.get_pad('sink%d')
-        sink_ghostpad2 = gst.GhostPad('sink2', sinkpad2)
+        sinkpad2 = audiomixer.get_static_pad('sink%d')
+        sink_ghostpad2 = Gst.GhostPad.new('sink2', sinkpad2)
         mixerbin.add_pad(sink_ghostpad2)
 
-        srcpad = audiomixer.get_pad('src')
-        src_ghostpad = gst.GhostPad('src', srcpad)
+        srcpad = audiomixer.get_static_pad('src')
+        src_ghostpad = Gst.GhostPad.new('src', srcpad)
         mixerbin.add_pad(src_ghostpad)
 
         return mixerbin

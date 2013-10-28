@@ -25,12 +25,20 @@
 import datetime
 import logging
 import os
-
+"""
 import gobject
 gobject.threads_init()
 import pygst
 pygst.require("0.10")
 import gst
+"""
+#Comment out for now, Nick
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
+
+GObject.threads_init()
+Gst.init(None)
 
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.plugin import IOutput
@@ -58,7 +66,7 @@ class Multimedia:
         self.current_state = Multimedia.NULL
 
         # Initialize Player
-        self.player = gst.Pipeline('player')
+        self.player = Gst.Pipeline()
         bus = self.player.get_bus()
         bus.add_signal_watch()
         bus.enable_sync_message_emission()
@@ -66,8 +74,8 @@ class Multimedia:
         bus.connect('sync-message::element', self.on_sync_message)
 
         # Initialize Entry Points
-        self.audio_tee = gst.element_factory_make('tee', 'audio_tee')
-        self.video_tee = gst.element_factory_make('tee', 'video_tee')
+        self.audio_tee = Gst.ElementFactory.make('tee', 'audio_tee')
+        self.video_tee = Gst.ElementFactory.make('tee', 'video_tee')
         self.player.add(self.audio_tee)
         self.player.add(self.video_tee)
 
@@ -79,10 +87,10 @@ class Multimedia:
     def on_message(self, bus, message):
         t = message.type
 
-        if t == gst.MESSAGE_EOS:
+        if t == Gst.MESSAGE_EOS:
             self.stop()
 
-        elif t == gst.MESSAGE_ERROR:
+        elif t == Gst.MESSAGE_ERROR:
             err, debug = message.parse_error()
             log.error(str(err) + str(debug))
 
@@ -102,13 +110,15 @@ class Multimedia:
                 self.audio_feedback_event(percent)
 
     def on_sync_message(self, bus, message):
-        if message.structure is None:
+        if message.get_structure() is None:
             return
-        message_name = message.structure.get_name()
-        if message_name == 'prepare-xwindow-id' and self.window_id is not None:
+        message_name = message.get_structure().get_name()
+        if message_name == 'prepare-window-handle' and self.window_id is not None:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
+            #imagesink.set_window_handle(int(self.window_id))
             imagesink.set_xwindow_id(int(self.window_id))
+
             log.debug("Preview loaded into window.")
 
     def set_window_id(self, window_id):
@@ -126,7 +136,7 @@ class Multimedia:
         """
         Start recording.
         """
-        self.player.set_state(gst.STATE_PLAYING)
+        self.player.set_state(Gst.State.PLAYING)
         self.current_state = Multimedia.RECORD
         log.debug("Recording started.")
 
@@ -134,7 +144,7 @@ class Multimedia:
         """
         Pause recording.
         """
-        self.player.set_state(gst.STATE_PAUSED)
+        self.player.set_state(Gst.State.PAUSED)
         self.current_state = Multimedia.PAUSE
         log.debug("Gstreamer paused.")
 
@@ -143,7 +153,7 @@ class Multimedia:
         Stop recording.
         """
         if self.current_state != Multimedia.NULL and self.current_state != Multimedia.STOP:
-            self.player.set_state(gst.STATE_NULL)
+            self.player.set_state(Gst.State.NULL)
 
             self.unload_audiomixer()
             self.unload_videomixer()

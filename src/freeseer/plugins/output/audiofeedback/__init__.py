@@ -33,9 +33,9 @@ speakers.
 import ConfigParser
 
 # GStreamer
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -57,17 +57,17 @@ class AudioFeedback(IOutput):
     feedbacksink = "autoaudiosink"
 
     def get_output_bin(self, audio=True, video=False, metadata=None):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
-        audioqueue = gst.element_factory_make("queue", "audioqueue")
+        audioqueue = Gst.ElementFactory.make("queue", "audioqueue")
         bin.add(audioqueue)
 
-        audiosink = gst.element_factory_make(self.feedbacksink, "audiosink")
+        audiosink = Gst.ElementFactory.make(self.feedbacksink, "audiosink")
         bin.add(audiosink)
 
         # Setup ghost pad
-        pad = audioqueue.get_pad("sink")
-        ghostpad = gst.GhostPad("sink", pad)
+        pad = audioqueue.get_static_pad("sink")
+        ghostpad = Gst.GhostPad.new("sink", pad)
         bin.add_pad(ghostpad)
 
         audioqueue.link(audiosink)

@@ -33,9 +33,9 @@ Picture-In-Picture mode.
 import ConfigParser
 
 # GStreamer modules
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
@@ -55,22 +55,22 @@ class PictureInPicture(IVideoMixer):
     widget = None
 
     def get_videomixer_bin(self):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
-        videomixer = gst.element_factory_make("videomixer", "videomixer")
+        videomixer = Gst.ElementFactory.make("videomixer", "videomixer")
         bin.add(videomixer)
 
-        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
+        colorspace = Gst.ElementFactory.make("videoconvert", "colorspace")
         bin.add(colorspace)
         videomixer.link(colorspace)
 
         # Picture-In-Picture
-        videobox = gst.element_factory_make("videobox", "videobox")
+        videobox = Gst.ElementFactory.make("videobox", "videobox")
         bin.add(videobox)
 
         videobox.link(videomixer)
 
-        videobox2 = gst.element_factory_make("videobox", "videobox2")
+        videobox2 = Gst.ElementFactory.make("videobox", "videobox2")
         bin.add(videobox2)
 
         videobox2.set_property("alpha", 0.6)
@@ -81,16 +81,16 @@ class PictureInPicture(IVideoMixer):
         videobox2.link(videomixer)
 
         # Setup ghost pad
-        sinkpad = videobox.get_pad("sink")
-        sink_ghostpad = gst.GhostPad("sink_main", sinkpad)
+        sinkpad = videobox.get_static_pad("sink")
+        sink_ghostpad = Gst.GhostPad.new("sink_main", sinkpad)
         bin.add_pad(sink_ghostpad)
 
-        pip_sinkpad = videobox2.get_pad("sink")
-        pip_ghostpad = gst.GhostPad("sink_pip", pip_sinkpad)
+        pip_sinkpad = videobox2.get_static_pad("sink")
+        pip_ghostpad = Gst.GhostPad.new("sink_pip", pip_sinkpad)
         bin.add_pad(pip_ghostpad)
 
-        srcpad = colorspace.get_pad("src")
-        src_ghostpad = gst.GhostPad("src", srcpad)
+        srcpad = colorspace.get_static_pad("src")
+        src_ghostpad = Gst.GhostPad.new("src", srcpad)
         bin.add_pad(src_ghostpad)
 
         return bin
@@ -104,15 +104,15 @@ class PictureInPicture(IVideoMixer):
         input1 = inputs[0]
 
         # Create videoscale element in order to scale to dimensions not supported by camera
-        mainsrc_scale = gst.element_factory_make("videoscale", "mainsrc_scale")
+        mainsrc_scale = Gst.ElementFactory.make("videoscale", "mainsrc_scale")
 
         # Create ffmpegcolorspace element to convert from what camera supports to rgb
-        mainsrc_colorspace = gst.element_factory_make("ffmpegcolorspace", "mainsrc_colorspace")
+        mainsrc_colorspace = Gst.ElementFactory.make("ffmpegcolorspace", "mainsrc_colorspace")
 
         # Create capsfilter for limiting to x-raw-rgb pixel video format and setting dimensions
-        mainsrc_capsfilter = gst.element_factory_make("capsfilter", "mainsrc_capsfilter")
+        mainsrc_capsfilter = Gst.ElementFactory.make("capsfilter", "mainsrc_capsfilter")
         mainsrc_capsfilter.set_property('caps',
-                        gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
+                        Gst.caps_from_string('video/x-raw, format=Y444, width=640, height=480'))
 
         mainsrc_elements = [input1, mainsrc_scale, mainsrc_capsfilter, mainsrc_colorspace]
 
@@ -125,19 +125,19 @@ class PictureInPicture(IVideoMixer):
         mainsrc_capsfilter.link(mainsrc_colorspace)
 
         # Link colorspace element to sink pad for pixel format conversion
-        srcpad = mainsrc_colorspace.get_pad("src")
-        sinkpad = mixer.get_pad("sink_main")
+        srcpad = mainsrc_colorspace.get_static_pad("src")
+        sinkpad = mixer.get_static_pad("sink_main")
         srcpad.link(sinkpad)
 
         # Load the secondary source
         input2 = inputs[1]
 
         # Create gst elements as above, but set smaller dimensions
-        pipsrc_scale = gst.element_factory_make("videoscale", "pipsrc_scale")
-        pipsrc_colorspace = gst.element_factory_make("ffmpegcolorspace", "pipsrc_colorspace")
-        pipsrc_capsfilter = gst.element_factory_make("capsfilter", "pipsrc_capsfilter")
+        pipsrc_scale = Gst.ElementFactory.make("videoscale", "pipsrc_scale")
+        pipsrc_colorspace = Gst.ElementFactory.make("ffmpegcolorspace", "pipsrc_colorspace")
+        pipsrc_capsfilter = gst.ElementFactory.make("capsfilter", "pipsrc_capsfilter")
         pipsrc_capsfilter.set_property('caps',
-                        gst.caps_from_string('video/x-raw-rgb, width=200, height=150'))
+                        Gst.caps_from_string('video/x-raw, format=Y444, width=200, height=150'))
 
         pipsrc_elements = [input2, pipsrc_scale, pipsrc_capsfilter, pipsrc_colorspace]
 
@@ -150,8 +150,8 @@ class PictureInPicture(IVideoMixer):
         pipsrc_capsfilter.link(pipsrc_colorspace)
 
         # Link colorspace element to sink pad for pixel format conversion
-        srcpad = pipsrc_colorspace.get_pad("src")
-        sinkpad = mixer.get_pad("sink_pip")
+        srcpad = pipsrc_colorspace.get_static_pad("src")
+        sinkpad = mixer.get_static_pad("sink_pip")
         srcpad.link(sinkpad)
 
     def load_config(self, plugman):

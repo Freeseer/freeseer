@@ -33,9 +33,9 @@ import ConfigParser
 import logging
 
 # GStreamer
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -57,17 +57,17 @@ class PulseSrc(IAudioInput):
     source = ''
 
     def get_audioinput_bin(self):
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
-        audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
+        audiosrc = Gst.ElementFactory.make("pulsesrc", "audiosrc")
         if self.source != '':
             audiosrc.set_property('device', self.source)
             log.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
         bin.add(audiosrc)
 
         # Setup ghost pad
-        pad = audiosrc.get_pad("src")
-        ghostpad = gst.GhostPad("audiosrc", pad)
+        pad = audiosrc.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("audiosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin
@@ -77,7 +77,7 @@ class PulseSrc(IAudioInput):
         Get a list of pairs in the form (name, description) for each pulseaudio source.
         """
         result = []
-        audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
+        audiosrc = Gst.ElementFactory.make("pulsesrc", "audiosrc")
         audiosrc.probe_property_name('device')
         names = audiosrc.probe_get_values_name('device')
         #should be getting actual device description, but .get_property('device-name') does not work

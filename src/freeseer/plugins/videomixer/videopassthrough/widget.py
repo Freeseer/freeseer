@@ -67,8 +67,8 @@ class ConfigWidget(QWidget):
 
         self.videocolourLabel = QLabel(self.tr("Colour Format"))
         self.videocolourComboBox = QComboBox()
-        self.videocolourComboBox.addItem("video/x-raw-rgb")
-        self.videocolourComboBox.addItem("video/x-raw-yuv")
+        self.videocolourComboBox.addItem("video/x-raw")
+        self.videocolourComboBox.addItem("video/x-raw")
         self.videocolourComboBox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
         layout.addRow(self.videocolourLabel, self.videocolourComboBox)
 

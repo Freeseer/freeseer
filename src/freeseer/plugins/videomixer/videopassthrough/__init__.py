@@ -34,9 +34,9 @@ as well.
 import ConfigParser
 
 # GStreamer modules
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
@@ -55,35 +55,35 @@ class VideoPassthrough(IVideoMixer):
     widget = None
 
     # VideoPassthrough variables
-    input_type = "video/x-raw-rgb"
+    input_type = "video/x-raw" 
     framerate = 30
     resolution = "NOSCALE"
 
     def get_videomixer_bin(self):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
         # Video Rate
-        videorate = gst.element_factory_make("videorate", "videorate")
+        videorate = Gst.ElementFactory.make("videorate", "videorate")
         bin.add(videorate)
-        videorate_cap = gst.element_factory_make("capsfilter",
+        videorate_cap = Gst.ElementFactory.make("capsfilter",
                                                  "video_rate_cap")
         videorate_cap.set_property("caps",
-                        gst.caps_from_string("%s, framerate=%d/1" % (self.input_type, self.framerate)))
+                        Gst.caps_from_string("%s, framerate=%d/1, format=Y444" % (self.input_type, self.framerate)))
         bin.add(videorate_cap)
         # --- End Video Rate
 
         # Video Scaler (Resolution)
-        videoscale = gst.element_factory_make("videoscale", "videoscale")
+        videoscale = Gst.ElementFactory.make("videoscale", "videoscale")
         bin.add(videoscale)
-        videoscale_cap = gst.element_factory_make("capsfilter",
+        videoscale_cap = Gst.ElementFactory.make("capsfilter",
                                                   "videoscale_cap")
         if self.resolution != "NOSCALE":
             videoscale_cap.set_property('caps',
-                                        gst.caps_from_string('%s, width=640, height=480' % (self.input_type)))
+                                        Gst.caps_from_string('%s, width=640, height=480, format=Y444' % (self.input_type)))
         bin.add(videoscale_cap)
         # --- End Video Scaler
 
-        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
+        colorspace = Gst.ElementFactory.make("videoconvert", "colorspace")
         bin.add(colorspace)
 
         # Link Elements
@@ -93,12 +93,12 @@ class VideoPassthrough(IVideoMixer):
         videoscale_cap.link(colorspace)
 
         # Setup ghost pad
-        sinkpad = videorate.get_pad("sink")
-        sink_ghostpad = gst.GhostPad("sink", sinkpad)
+        sinkpad = videorate.get_static_pad("sink")
+        sink_ghostpad = Gst.GhostPad.new("sink", sinkpad)
         bin.add_pad(sink_ghostpad)
 
-        srcpad = colorspace.get_pad("src")
-        src_ghostpad = gst.GhostPad("src", srcpad)
+        srcpad = colorspace.get_static_pad("src")
+        src_ghostpad = Gst.GhostPad.new("src", srcpad)
         bin.add_pad(src_ghostpad)
 
         return bin
