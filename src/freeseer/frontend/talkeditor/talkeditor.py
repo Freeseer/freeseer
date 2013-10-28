@@ -185,7 +185,7 @@ class TalkEditorApp(FreeseerApp):
         # Reusable Strings
         #
         self.confirmDBClearTitleString = self.app.translate(
-            "TalkEditorApp", "Clear Database")
+            "TalkEditorApp", "Remove All Talks from Database")
         self.confirmDBClearQuestionString = self.app.translate(
             "TalkEditorApp", "Are you sure you want to clear the DB?")
         # --- End Reusable Strings
@@ -198,39 +198,43 @@ class TalkEditorApp(FreeseerApp):
         # --- End Menubar
 
         #
-        # AddTalkWidget
+        # TalkDetailsWidget
         #
-        # self.addTalkWidget.addTalkGroupBox.setTitle(self.app.translate("TalkEditorApp", "Add Talk"))
-        # self.addTalkWidget.titleLabel.setText(self.app.translate("TalkEditorApp", "Title"))
-        # self.addTalkWidget.presenterLabel.setText(self.app.translate("TalkEditorApp", "Presenter"))
-        # self.addTalkWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
-        # self.addTalkWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
-        # self.addTalkWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
-        # self.addTalkWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
-        # self.addTalkWidget.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
-        # self.addTalkWidget.cancelButton.setText(self.app.translate("TalkEditorApp", "Cancel"))
-        # --- End AddTalkWidget
+        self.talkDetailsWidget.titleLabel.setText(self.app.translate("TalkEditorApp", "Title"))
+        self.talkDetailsWidget.presenterLabel.setText(self.app.translate("TalkEditorApp", "Presenter"))
+        self.talkDetailsWidget.categoryLabel.setText(self.app.translate("TalkEditorApp", "Category"))
+        self.talkDetailsWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
+        self.talkDetailsWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
+        self.talkDetailsWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
+        self.talkDetailsWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
+        # --- End TalkDetailsWidget
 
         #
         # Import Talks Widget Translations
         #
-        # self.importTalksWidget.rssLabel.setText(
-        #    self.app.translate("TalkEditorApp", "URL"))
-        # self.importTalksWidget.csvLabel.setText(
-        #    self.app.translate("TalkEditorApp", "File"))
-        # self.importTalksWidget.importButton.setText(
-        #    self.app.translate("TalkEditorApp", "Import"))
+        self.importTalksWidget.rssRadioButton.setText(
+           self.app.translate("TalkEditorApp", "RSS URL"))
+        self.importTalksWidget.csvRadioButton.setText(
+           self.app.translate("TalkEditorApp", "CSV File"))
+        self.importTalksWidget.importButton.setText(
+           self.app.translate("TalkEditorApp", "Import"))
         # --- End Talks Widget Translations
 
         #
         # Command Button Translations
         #
-        # self.commandButtons.addButton.setText(
-        #    self.app.translate("TalkEditorApp", "Add"))
-        # self.commandButtons.removeButton.setText(
-        #    self.app.translate("TalkEditorApp", "Remove"))
-        # self.commandButtons.removeAllButton.setText(
-        #    self.app.translate("TalkEditorApp", "Remove All"))
+        self.commandButtons.addButton.setText(
+           self.app.translate("TalkEditorApp", "Add"))
+        self.commandButtons.duplicateButton.setText(
+           self.app.translate("TalkEditorApp", "Duplicate"))
+        self.commandButtons.importButton.setText(
+           self.app.translate("TalkEditorApp", "Import"))
+        self.commandButtons.exportButton.setText(
+           self.app.translate("TalkEditorApp", "Export"))
+        self.commandButtons.removeButton.setText(
+           self.app.translate("TalkEditorApp", "Remove"))
+        self.commandButtons.removeAllButton.setText(
+           self.app.translate("TalkEditorApp", "Remove All"))
         # --- End Command Butotn Translations
 
     def load_presentations_model(self):
@@ -249,12 +253,12 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.setModel(self.presentationModel)
         self.mapper.addMapping(self.talkDetailsWidget.titleLineEdit, 1)
         self.mapper.addMapping(self.talkDetailsWidget.presenterLineEdit, 2)
-        self.mapper.addMapping(self.talkDetailsWidget.levelLineEdit, 4)
+        self.mapper.addMapping(self.talkDetailsWidget.categoryLineEdit, 4)
         self.mapper.addMapping(self.talkDetailsWidget.eventLineEdit, 5)
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
         self.mapper.addMapping(self.talkDetailsWidget.descriptionTextEdit, 3)
-        self.mapper.addMapping(self.talkDetailsWidget.dateTimeEdit, 7)
-        #self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 7)
+        self.mapper.addMapping(self.talkDetailsWidget.dateEdit, 7)
+        self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
 
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
@@ -294,7 +298,7 @@ class TalkEditorApp(FreeseerApp):
                 self.talkDetailsWidget.descriptionTextEdit.toPlainText(
                 )),
             unicode(
-                self.talkDetailsWidget.levelLineEdit.text(
+                self.talkDetailsWidget.categoryLineEdit.text(
                 )),
             unicode(
                 self.talkDetailsWidget.eventLineEdit.text(
@@ -314,7 +318,7 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.titleLineEdit.clear()
         self.talkDetailsWidget.presenterLineEdit.clear()
         self.talkDetailsWidget.descriptionTextEdit.clear()
-        self.talkDetailsWidget.levelLineEdit.clear()
+        self.talkDetailsWidget.categoryLineEdit.clear()
         self.talkDetailsWidget.eventLineEdit.clear()
         self.talkDetailsWidget.roomLineEdit.clear()
 
