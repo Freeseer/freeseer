@@ -18,6 +18,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../AboutDialog.py" line="100"/>
+        <source>Copyright (C) 2011 The Free and Open Source Software Learning Centre</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../AboutDialog.py" line="101"/>
         <source>Freeseer is licensed under the GPL version 3. This software is provided &apos;as-is&apos;,without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.</source>
         <translation type="unfinished"></translation>
@@ -37,16 +42,11 @@
         <source>Headphones graphics by</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../AboutDialog.py" line="100"/>
-        <source>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ConfigToolApp</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="164"/>
+        <location filename="../../configtool/configtool.py" line="173"/>
         <source>Freeseer ConfigTool</source>
         <translation type="unfinished"></translation>
     </message>
@@ -81,145 +81,160 @@
         <translation type="obsolete">&amp;Darüber</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="192"/>
+        <location filename="../../configtool/configtool.py" line="198"/>
         <source>Close</source>
         <translation>Ende</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="208"/>
+        <location filename="../../configtool/configtool.py" line="214"/>
         <source>Audio Mixer</source>
         <translation>Audio Mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="213"/>
+        <location filename="../../configtool/configtool.py" line="219"/>
         <source>Setup</source>
         <translation>Setup</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="212"/>
+        <location filename="../../configtool/configtool.py" line="218"/>
         <source>Video Mixer</source>
         <translation>Video Mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="198"/>
+        <location filename="../../configtool/configtool.py" line="204"/>
         <source>Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="200"/>
+        <location filename="../../configtool/configtool.py" line="206"/>
         <source>Record Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="201"/>
+        <location filename="../../configtool/configtool.py" line="207"/>
         <source>Enable Auto-Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="174"/>
+        <location filename="../../configtool/configtool.py" line="225"/>
+        <source>Console Logger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="228"/>
+        <source>Log Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="227"/>
+        <source>Syslog Logger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="178"/>
         <source>General</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="176"/>
+        <location filename="../../configtool/configtool.py" line="180"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="177"/>
+        <location filename="../../configtool/configtool.py" line="181"/>
         <source>AudioInput</source>
         <translation>Audioeingang</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="178"/>
+        <location filename="../../configtool/configtool.py" line="182"/>
         <source>AudioMixer</source>
         <translation>Audio Mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="179"/>
+        <location filename="../../configtool/configtool.py" line="183"/>
         <source>VideoInput</source>
         <translation>Videoeingang</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="180"/>
+        <location filename="../../configtool/configtool.py" line="184"/>
         <source>VideoMixer</source>
         <translation>Video Mixer</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="181"/>
+        <location filename="../../configtool/configtool.py" line="185"/>
         <source>Output</source>
         <translation>Ausgabe</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="199"/>
+        <location filename="../../configtool/configtool.py" line="186"/>
+        <source>Logger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="205"/>
         <source>Default Language</source>
         <translation>Standardsprache</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="175"/>
+        <location filename="../../configtool/configtool.py" line="179"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="207"/>
+        <location filename="../../configtool/configtool.py" line="213"/>
         <source>Audio Input</source>
         <translation>Audioeingang</translation>
     </message>
     <message>
-        <location filename="../../configtool/configtool.py" line="211"/>
+        <location filename="../../configtool/configtool.py" line="217"/>
         <source>Video Input</source>
         <translation>Videoeingang</translation>
-    </message>
-    <message>
-        <location filename="../../configtool/configtool.py" line="169"/>
-        <source>Save Profile</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ControllerClientApp</name>
     <message>
-        <location filename="../../controller/Client.py" line="100"/>
+        <location filename="../../controller/Client.py" line="97"/>
         <source>Controller Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="104"/>
+        <location filename="../../controller/Client.py" line="101"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="105"/>
+        <location filename="../../controller/Client.py" line="102"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="106"/>
+        <location filename="../../controller/Client.py" line="103"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="112"/>
+        <location filename="../../controller/Client.py" line="109"/>
         <source>Connection Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="113"/>
+        <location filename="../../controller/Client.py" line="110"/>
         <source>Host name (or IP Address)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="114"/>
+        <location filename="../../controller/Client.py" line="111"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="115"/>
+        <location filename="../../controller/Client.py" line="112"/>
         <source>Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Client.py" line="126"/>
+        <location filename="../../controller/Client.py" line="123"/>
         <source>Recent Connections</source>
         <translation type="unfinished"></translation>
     </message>
@@ -227,72 +242,72 @@
 <context>
     <name>ControllerServerApp</name>
     <message>
-        <location filename="../../controller/Server.py" line="105"/>
+        <location filename="../../controller/Server.py" line="107"/>
         <source>Controller Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="110"/>
+        <location filename="../../controller/Server.py" line="112"/>
         <source>Server status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="111"/>
+        <location filename="../../controller/Server.py" line="113"/>
         <source>Start Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="112"/>
+        <location filename="../../controller/Server.py" line="114"/>
         <source>Stop Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="113"/>
+        <location filename="../../controller/Server.py" line="115"/>
         <source>Start Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="114"/>
+        <location filename="../../controller/Server.py" line="116"/>
         <source>Stop Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="115"/>
+        <location filename="../../controller/Server.py" line="117"/>
         <source>Pause Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="116"/>
+        <location filename="../../controller/Server.py" line="118"/>
         <source>Resume Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="122"/>
+        <location filename="../../controller/Server.py" line="124"/>
         <source>Server Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="123"/>
+        <location filename="../../controller/Server.py" line="125"/>
         <source>IP Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="124"/>
+        <location filename="../../controller/Server.py" line="126"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="125"/>
+        <location filename="../../controller/Server.py" line="127"/>
         <source>Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="137"/>
+        <location filename="../../controller/Server.py" line="139"/>
         <source>Control Clients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../controller/Server.py" line="139"/>
+        <location filename="../../controller/Server.py" line="141"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -300,32 +315,32 @@
 <context>
     <name>FreeseerApp</name>
     <message>
-        <location filename="../../qtcommon/FreeseerApp.py" line="142"/>
+        <location filename="../../qtcommon/FreeseerApp.py" line="138"/>
         <source>&amp;File</source>
         <translation>&amp;Feile</translation>
     </message>
     <message>
-        <location filename="../../qtcommon/FreeseerApp.py" line="143"/>
+        <location filename="../../qtcommon/FreeseerApp.py" line="139"/>
         <source>&amp;Language</source>
         <translation>&amp;Sprache</translation>
     </message>
     <message>
-        <location filename="../../qtcommon/FreeseerApp.py" line="144"/>
+        <location filename="../../qtcommon/FreeseerApp.py" line="140"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../../qtcommon/FreeseerApp.py" line="146"/>
+        <location filename="../../qtcommon/FreeseerApp.py" line="142"/>
         <source>&amp;Quit</source>
         <translation>&amp;Verlasse</translation>
     </message>
     <message>
-        <location filename="../../qtcommon/FreeseerApp.py" line="147"/>
+        <location filename="../../qtcommon/FreeseerApp.py" line="143"/>
         <source>&amp;About</source>
         <translation>&amp;Darüber</translation>
     </message>
     <message>
-        <location filename="../../qtcommon/FreeseerApp.py" line="148"/>
+        <location filename="../../qtcommon/FreeseerApp.py" line="144"/>
         <source>Online Documentation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -333,27 +348,27 @@
 <context>
     <name>RecordApp</name>
     <message>
-        <location filename="../../record/record.py" line="160"/>
+        <location filename="../../record/record.py" line="174"/>
         <source>Freeseer - portable presentation recording station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="165"/>
+        <location filename="../../record/record.py" line="179"/>
         <source>Record</source>
         <translation>Rekord</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="168"/>
+        <location filename="../../record/record.py" line="182"/>
         <source>Stop</source>
         <translation>Halt</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="169"/>
+        <location filename="../../record/record.py" line="183"/>
         <source>Hide Main Window</source>
         <translation>Hauptfenster ausblenden</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="170"/>
+        <location filename="../../record/record.py" line="184"/>
         <source>Show Main Window</source>
         <translation>Hauptfenster anzeigen</translation>
     </message>
@@ -378,7 +393,7 @@
         <translation type="obsolete">&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="191"/>
+        <location filename="../../record/record.py" line="205"/>
         <source>&amp;Open Video Directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -393,137 +408,137 @@
         <translation type="obsolete">&amp;Darüber</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="216"/>
+        <location filename="../../record/record.py" line="230"/>
         <source>Event</source>
         <translation>Ereignis</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="217"/>
+        <location filename="../../record/record.py" line="231"/>
         <source>Room</source>
         <translation>Zimmer</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="218"/>
+        <location filename="../../record/record.py" line="232"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="219"/>
+        <location filename="../../record/record.py" line="233"/>
         <source>Talk</source>
         <translation>Präsentation</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="166"/>
+        <location filename="../../record/record.py" line="180"/>
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="174"/>
+        <location filename="../../record/record.py" line="188"/>
         <source>Ready.</source>
         <translation>Bereit.</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="175"/>
+        <location filename="../../record/record.py" line="189"/>
         <source>Recording...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="176"/>
+        <location filename="../../record/record.py" line="190"/>
         <source>Recording Paused.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="164"/>
+        <location filename="../../record/record.py" line="178"/>
         <source>Standby</source>
         <translation>Standby-Modus</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="167"/>
+        <location filename="../../record/record.py" line="181"/>
         <source>Resume</source>
         <translation>Fortsetze</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="173"/>
+        <location filename="../../record/record.py" line="187"/>
         <source>Idle.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="193"/>
+        <location filename="../../record/record.py" line="207"/>
         <source>&amp;Report</source>
         <translation>&amp;Bericht</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="226"/>
+        <location filename="../../record/record.py" line="240"/>
         <source>Title:</source>
         <translation>Titel:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="227"/>
+        <location filename="../../record/record.py" line="241"/>
         <source>Speaker:</source>
         <translation>Sprecher:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="228"/>
+        <location filename="../../record/record.py" line="242"/>
         <source>Event:</source>
         <translation>Ereignis:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="229"/>
+        <location filename="../../record/record.py" line="243"/>
         <source>Room:</source>
         <translation>Zimmer:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="230"/>
+        <location filename="../../record/record.py" line="244"/>
         <source>Time:</source>
         <translation>Zeit:</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="231"/>
+        <location filename="../../record/record.py" line="245"/>
         <source>Comment</source>
         <translation>Kommentar</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="233"/>
+        <location filename="../../record/record.py" line="247"/>
         <source>Close</source>
         <translation>Ende</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="234"/>
+        <location filename="../../record/record.py" line="248"/>
         <source>Report</source>
         <translation>Bericht</translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="238"/>
+        <location filename="../../record/record.py" line="252"/>
         <source>No Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="239"/>
+        <location filename="../../record/record.py" line="253"/>
         <source>No Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="240"/>
+        <location filename="../../record/record.py" line="254"/>
         <source>No Audio/Video</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="232"/>
+        <location filename="../../record/record.py" line="246"/>
         <source>Release Received</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="237"/>
+        <location filename="../../record/record.py" line="251"/>
         <source>No Issues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="225"/>
+        <location filename="../../record/record.py" line="239"/>
         <source>Reporting Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../record/record.py" line="192"/>
+        <location filename="../../record/record.py" line="206"/>
         <source>&amp;Connect to server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -531,17 +546,17 @@
 <context>
     <name>ReportEditorApp</name>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="113"/>
+        <location filename="../../reporteditor/reporteditor.py" line="111"/>
         <source>Freeseer Report Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="118"/>
+        <location filename="../../reporteditor/reporteditor.py" line="116"/>
         <source>Clear Database</source>
         <translation>Klare Datenbank</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="119"/>
+        <location filename="../../reporteditor/reporteditor.py" line="117"/>
         <source>Are you sure you want to clear the DB?</source>
         <translation>Klare Datenbank?</translation>
     </message>
@@ -581,57 +596,57 @@
         <translation type="obsolete">&amp;Darüber</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="126"/>
+        <location filename="../../reporteditor/reporteditor.py" line="124"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="127"/>
+        <location filename="../../reporteditor/reporteditor.py" line="125"/>
         <source>Clear</source>
         <translation>Lösche</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="128"/>
+        <location filename="../../reporteditor/reporteditor.py" line="126"/>
         <source>Close</source>
         <translation>Ende</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="130"/>
+        <location filename="../../reporteditor/reporteditor.py" line="128"/>
         <source>Title:</source>
         <translation>Titel:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="131"/>
+        <location filename="../../reporteditor/reporteditor.py" line="129"/>
         <source>Speaker:</source>
         <translation>Sprecher:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="132"/>
+        <location filename="../../reporteditor/reporteditor.py" line="130"/>
         <source>Description:</source>
         <translation>Beschreibung:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="133"/>
+        <location filename="../../reporteditor/reporteditor.py" line="131"/>
         <source>Level:</source>
         <translation>Ebene:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="134"/>
+        <location filename="../../reporteditor/reporteditor.py" line="132"/>
         <source>Event:</source>
         <translation>Ereignis:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="135"/>
+        <location filename="../../reporteditor/reporteditor.py" line="133"/>
         <source>Room:</source>
         <translation>Zimmer:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="136"/>
+        <location filename="../../reporteditor/reporteditor.py" line="134"/>
         <source>Time:</source>
         <translation>Zeit:</translation>
     </message>
     <message>
-        <location filename="../../reporteditor/reporteditor.py" line="120"/>
+        <location filename="../../reporteditor/reporteditor.py" line="118"/>
         <source>Select File</source>
         <translation>Wählen Sie Datei</translation>
     </message>
@@ -639,17 +654,17 @@
 <context>
     <name>TalkEditorApp</name>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="181"/>
+        <location filename="../../talkeditor/talkeditor.py" line="119"/>
         <source>Freeseer Talk Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="124"/>
         <source>Clear Database</source>
-        <translation type="obsolete">Klare Datenbank</translation>
+        <translation>Klare Datenbank</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="189"/>
+        <location filename="../../talkeditor/talkeditor.py" line="125"/>
         <source>Are you sure you want to clear the DB?</source>
         <translation>Klare Datenbank?</translation>
     </message>
@@ -684,115 +699,95 @@
         <translation type="obsolete">&amp;Darüber</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="203"/>
+        <location filename="../../talkeditor/talkeditor.py" line="137"/>
+        <source>Add Talk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../talkeditor/talkeditor.py" line="138"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="204"/>
+        <location filename="../../talkeditor/talkeditor.py" line="139"/>
         <source>Presenter</source>
         <translation>Sprecher</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="206"/>
+        <location filename="../../talkeditor/talkeditor.py" line="140"/>
         <source>Event</source>
         <translation>Ereignis</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="207"/>
+        <location filename="../../talkeditor/talkeditor.py" line="141"/>
         <source>Room</source>
         <translation>Zimmer</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="208"/>
+        <location filename="../../talkeditor/talkeditor.py" line="142"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="209"/>
+        <location filename="../../talkeditor/talkeditor.py" line="143"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="226"/>
+        <location filename="../../talkeditor/talkeditor.py" line="155"/>
         <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../talkeditor/talkeditor.py" line="145"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="151"/>
         <source>URL</source>
-        <translation type="obsolete">URL</translation>
+        <translation>URL</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="234"/>
+        <location filename="../../talkeditor/talkeditor.py" line="152"/>
+        <source>Load talks from RSS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../talkeditor/talkeditor.py" line="156"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="157"/>
         <source>Clear</source>
-        <translation type="obsolete">Lösche</translation>
+        <translation>Lösche</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="158"/>
         <source>Close</source>
-        <translation type="obsolete">Ende</translation>
+        <translation>Ende</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="196"/>
+        <location filename="../../talkeditor/talkeditor.py" line="131"/>
         <source>&amp;Export to CSV</source>
         <translation type="unfinished">&amp;Export nach CSV</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="153"/>
         <source>File</source>
-        <translation type="obsolete">Feile</translation>
+        <translation>Feile</translation>
     </message>
     <message>
-        <location filename="../../talkeditor/talkeditor.py" line="187"/>
-        <source>Remove All Talks from Database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="205"/>
-        <source>Category</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="215"/>
-        <source>RSS URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="217"/>
-        <source>CSV File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="230"/>
-        <source>Import</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="228"/>
-        <source>Duplicate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="232"/>
-        <source>Export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../talkeditor/talkeditor.py" line="236"/>
-        <source>Remove All</source>
+        <location filename="../../talkeditor/talkeditor.py" line="154"/>
+        <source>Load talks from CSV</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Translation</name>
     <message>
-        <location filename="../../configtool/configtool.py" line="94"/>
+        <location filename="../../configtool/configtool.py" line="88"/>
         <source>Language Display Text</source>
         <translation>Deutsch</translation>
     </message>
@@ -800,30 +795,30 @@
 <context>
     <name>rtmp</name>
     <message>
-        <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="333"/>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="307"/>
         <source>*For RTMP streaming, all other outputs must be set to leaky</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="368"/>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="342"/>
         <source>*See: http://www.justin.tv/broadcast/adv_other
 You must be logged in to obtain your Streaming Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="406"/>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="380"/>
         <source>Overwrite custom settings for justin.tv</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="571"/>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="556"/>
         <source>An authorization URL should have opened in your browser.
 If not, go open the following URL to allow freeseer to manage your justin.tv channel.
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../plugins/output/rtmp-streaming/__init__.py" line="580"/>
+        <location filename="../../../plugins/output/rtmp-streaming/rtmp-streaming.py" line="565"/>
         <source>Authentication failed. Supplied credentials for Justin.tv may be incorrect.</source>
         <translation type="unfinished"></translation>
     </message>
