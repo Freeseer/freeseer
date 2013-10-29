@@ -159,6 +159,7 @@ class QtDBConnector():
         Creates the presentations table in the database. Should be used to
         initialize a new table.
         """
+        print "table created"
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS presentations
                                        (Id INTEGER PRIMARY KEY,
                                         Title varchar(255),
@@ -232,7 +233,7 @@ class QtDBConnector():
                              unicode(result.value(4).toString()),    # category
                              unicode(result.value(5).toString()),    # event
                              unicode(result.value(6).toString()),    # room
-                             unicode(result.value(7).toString()))    # date
+                             unicode(result.value(7).toString()),    # date
                              unicode(result.value(8).toString()))    # time
         else:
             p = None
@@ -256,7 +257,7 @@ class QtDBConnector():
         """
         Insert a Presentation into the database.
         """
-        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
+        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s","%s")''' %
                                     (presentation.title,
                                      presentation.speaker,
                                      presentation.description,
