@@ -288,7 +288,7 @@ class TalkEditorApp(FreeseerApp):
     def add_talk(self):
         date = self.talkDetailsWidget.dateEdit.date()
         time = self.talkDetailsWidget.timeEdit.time()
-        datetime = QtCore.QDateTime(date, time)
+        #datetime = QtCore.QDateTime(date, time)
         presentation = Presentation(
             unicode(self.talkDetailsWidget.titleLineEdit.text()),
             unicode(
@@ -306,7 +306,10 @@ class TalkEditorApp(FreeseerApp):
             unicode(
                 self.talkDetailsWidget.roomLineEdit.text(
                 )),
-            unicode(datetime.toString(QtCore.Qt.ISODate)))
+            unicode(date.toString(QtCore.Qt.ISODate
+                )),
+            unicode(time.toString(QtCore.Qt.ISODate)))
+
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):
