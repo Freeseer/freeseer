@@ -423,6 +423,10 @@ class QtDBConnector():
                     category = row['Category']
                 except KeyError:
                     category = ''
+                try:
+                    category = row['Level']
+                except KeyError:
+                    category = ''
                 
                 try:
                     event = row['Event']
