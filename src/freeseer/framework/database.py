@@ -125,7 +125,7 @@ class QtDBConnector():
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old') #temporary table
             self.__create_presentations_table()
             QtSql.QSqlQuery("""INSERT INTO presentations 
-                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
+                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time from presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
         
         def update_30to31():
@@ -136,8 +136,8 @@ class QtDBConnector():
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old') #temporary table
             self.__create_presentations_table()
             QtSql.QSqlQuery("""INSERT INTO presentations 
-                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
-            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Level to Category')
+                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time from presentations_old""")
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Category to Category')
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Time to Date')
             QtSql.QSqlQuery('ALTER TABLE presentations ADD COLUMN Time timestamp')
             QtSql.QSqlQuery('UPDATE table SET Date = Time')
@@ -183,7 +183,8 @@ class QtDBConnector():
                                     "SC2011",
                                     "T105",
                                     "",
-                                    "")
+                                    ""
+                                    )
         self.insert_presentation(presentation)
         
     def get_talks(self):
@@ -257,7 +258,7 @@ class QtDBConnector():
         """
         Insert a Presentation into the database.
         """
-        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s","%s")''' %
+        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
                                     (presentation.title,
                                      presentation.speaker,
                                      presentation.description,
@@ -390,7 +391,7 @@ class QtDBConnector():
                 talk = Presentation(presentation["Title"],
                                     presentation["Speaker"],
                                     presentation["Abstract"],  # Description
-                                    presentation["Level"],
+                                    presentation["Category"],
                                     presentation["Event"],
                                     presentation["Room"],
                                     presentation["Time"])
@@ -419,9 +420,9 @@ class QtDBConnector():
                     abstract = ''
                 
                 try:
-                    level = row['Level']
+                    category = row['Category']
                 except KeyError:
-                    level = ''
+                    category = ''
                 
                 try:
                     event = row['Event']
@@ -441,7 +442,7 @@ class QtDBConnector():
                 talk = Presentation(title,
                                     speaker,
                                     abstract,
-                                    level,
+                                    category,
                                     event,
                                     room,
                                     time)
@@ -460,7 +461,7 @@ class QtDBConnector():
         fieldNames = ('Title',
                       'Speaker',
                       'Abstract',
-                      'Level',
+                      'Category',
                       'Event',
                       'Room',
                       'Time')
@@ -477,7 +478,7 @@ class QtDBConnector():
                 writer.writerow({'Title':unicode(result.value(1).toString()),
                                  'Speaker':unicode(result.value(2).toString()),
                                  'Abstract':unicode(result.value(3).toString()),
-                                 'Level':unicode(result.value(4).toString()),
+                                 'Category':unicode(result.value(4).toString()),
                                  'Event':unicode(result.value(5).toString()),
                                  'Room':unicode(result.value(6).toString()),
                                  'Time':unicode(result.value(7).toString())})   
@@ -489,7 +490,7 @@ class QtDBConnector():
         fieldNames = ('Title',
                       'Speaker',
                       'Abstract',
-                      'Level',
+                      'Category',
                       'Event',
                       'Room',
                       'Time',
@@ -506,7 +507,7 @@ class QtDBConnector():
                 writer.writerow({'Title':report.presentation.title,
                                  'Speaker':report.presentation.speaker,
                                  'Abstract':report.presentation.description,
-                                 'Level':report.presentation.level,
+                                 'Category':report.presentation.category,
                                  'Event':report.presentation.event,
                                  'Room':report.presentation.room,
                                  'Time':report.presentation.time,
