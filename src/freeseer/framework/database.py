@@ -273,11 +273,12 @@ class QtDBConnector():
         """
         Update an existing Presentation in the database.
         """
-        query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
+        query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"  WHERE Id="%s"''' %
                             (presentation.title,
                              presentation.speaker,
                              presentation.event,
                              presentation.room,
+                             presentation.date,
                              presentation.time,
                              talk_id))
         log.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
@@ -391,13 +392,13 @@ class QtDBConnector():
                 talk = Presentation(presentation["Title"],
                                     presentation["Speaker"],
                                     presentation["Abstract"],  # Description
-                                    presentation["Category"],
+                                    presentation["Category"],  # TODO Needs to consider 'level'
                                     presentation["Event"],
                                     presentation["Room"],
+                                    presentation["Date"],
                                     presentation["Time"])
                 self.insert_presentation(talk)
     
-    # Needs to be updated to accept csv files with updated fields (category, time, date)
     def add_talks_from_csv(self, fname):
         """Adds talks from a csv file.
         
@@ -423,10 +424,12 @@ class QtDBConnector():
                     category = row['Category']
                 except KeyError:
                     category = ''
-                try:
-                    category = row['Level']
-                except KeyError:
-                    category = ''
+                
+                if (category == ''):
+                    try:
+                        category = row['Level'] #Old field name
+                    except KeyError:
+                        category = ''
                 
                 try:
                     event = row['Event']
@@ -439,16 +442,25 @@ class QtDBConnector():
                     room = ''
                 
                 try:
+                    date = row['Date']
+                except KeyError:
+                    date = ''
+                
+                try:
                     time = row['Time']
                 except KeyError:
                     time = ''
                 
+                if (date == '' and time !=''): #Fills date if older version csv file
+                    date = time
+
                 talk = Presentation(title,
                                     speaker,
                                     abstract,
                                     category,
                                     event,
                                     room,
+                                    date,
                                     time)
                 self.insert_presentation(talk)
             
@@ -468,6 +480,7 @@ class QtDBConnector():
                       'Category',
                       'Event',
                       'Room',
+                      'Date',
                       'Time')
         
         try:
@@ -485,7 +498,8 @@ class QtDBConnector():
                                  'Category':unicode(result.value(4).toString()),
                                  'Event':unicode(result.value(5).toString()),
                                  'Room':unicode(result.value(6).toString()),
-                                 'Time':unicode(result.value(7).toString())})   
+                                 'Date':unicode(result.value(7).toString()),
+                                 'Time':unicode(result.value(8).toString())})   
         finally:
             file.close()
     
@@ -497,6 +511,7 @@ class QtDBConnector():
                       'Category',
                       'Event',
                       'Room',
+                      'Date',
                       'Time',
                       'Problem',
                       'Error')
@@ -514,6 +529,7 @@ class QtDBConnector():
                                  'Category':report.presentation.category,
                                  'Event':report.presentation.event,
                                  'Room':report.presentation.room,
+                                 'Date':report.presentation.date,
                                  'Time':report.presentation.time,
                                  'Problem':report.failure.indicator,
                                  'Error':report.failure.comment})
