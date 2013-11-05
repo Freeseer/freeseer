@@ -268,7 +268,8 @@ class QtDBConnector():
                 presentation.level = presentation.category
 
         #Duplicate time to date field for older RSS / CSV formats
-        if (presentation.date == '' and presentation.time != ''):
+        # If date is empty, and time has a full DateTime, split the DateTime to both Date and Time
+        if (presentation.date == '' and presentation.time != '' and len(presentation.time) == 16):
             presentation.date = presentation.time
             presentation.date = presentation.date[:-6]
             presentation.time = presentation.time[11:]
