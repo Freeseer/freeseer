@@ -69,11 +69,11 @@ class OggOutput(IOutput):
                 self.generate_xml_metadata(metadata).write(self.location + ".xml")
 
         # Muxer
-        muxer = Gst.ElementFactory.make("oggmux", "muxer")
+        muxer = Gst.ElementFactory.make("oggmux", None)
         bin.add(muxer)
 
         # File sink
-        filesink = Gst.ElementFactory.make('filesink', 'filesink')
+        filesink = Gst.ElementFactory.make('filesink', None)
         filesink.set_property('location', self.location)
         bin.add(filesink)
 
@@ -81,22 +81,22 @@ class OggOutput(IOutput):
         # Setup Audio Pipeline if Audio Recording is Enabled
         #
         if audio:
-            audioqueue = Gst.ElementFactory.make("queue", "audioqueue")
+            audioqueue = Gst.ElementFactory.make("queue", None)
             bin.add(audioqueue)
 
-            audioconvert = Gst.ElementFactory.make("audioconvert", "audioconvert")
+            audioconvert = Gst.ElementFactory.make("audioconvert", None)
             bin.add(audioconvert)
 
-            audiolevel = Gst.ElementFactory.make('level', 'audiolevel')
+            audiolevel = Gst.ElementFactory.make('level', None)
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
 
-            audiocodec = Gst.ElementFactory.make("vorbisenc", "audiocodec")
+            audiocodec = Gst.ElementFactory.make("vorbisenc", None)
             audiocodec.set_property("quality", float(self.audio_quality))
             bin.add(audiocodec)
 
             # Setup metadata
-            vorbistag = Gst.ElementFactory.make("vorbistag", "vorbistag")
+            vorbistag = Gst.ElementFactory.make("vorbistag", None)
             # set tag merge mode to GST_TAG_MERGE_REPLACE
             merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
@@ -122,16 +122,16 @@ class OggOutput(IOutput):
         # Setup Video Pipeline
         #
         if video:
-            videoqueue = Gst.ElementFactory.make("queue", "videoqueue")
+            videoqueue = Gst.ElementFactory.make("queue", None)
             bin.add(videoqueue)
 
-            videocodec = Gst.ElementFactory.make("theoraenc", "videocodec")
-            videocodec.set_property("bitrate", int(self.video_bitrate))
+            videocodec = Gst.ElementFactory.make("theoraenc", None)
+            #videocodec.set_property("bitrate", int(self.video_bitrate))
             bin.add(videocodec)
 
             # Setup ghost pads
             videopad = videoqueue.get_static_pad("sink")
-            video_ghostpad = Gst.GhostPad.new("videosink", videopad)
+            video_ghostpad = Gst.GhostPad.new("sink", videopad)
             bin.add_pad(video_ghostpad)
 
             # Link Elements
@@ -142,7 +142,6 @@ class OggOutput(IOutput):
         # Link muxer to filesink
         #
         muxer.link(filesink)
-
         return bin
 
     def set_metadata(self, data):

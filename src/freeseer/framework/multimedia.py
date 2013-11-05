@@ -74,8 +74,8 @@ class Multimedia:
         bus.connect('sync-message::element', self.on_sync_message)
 
         # Initialize Entry Points
-        self.audio_tee = Gst.ElementFactory.make('tee', 'audio_tee')
-        self.video_tee = Gst.ElementFactory.make('tee', 'video_tee')
+        self.audio_tee = Gst.ElementFactory.make('tee', None)
+        self.video_tee = Gst.ElementFactory.make('tee', None)
         self.player.add(self.audio_tee)
         self.player.add(self.video_tee)
 
@@ -117,7 +117,8 @@ class Multimedia:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
             #imagesink.set_window_handle(int(self.window_id))
-            imagesink.set_xwindow_id(int(self.window_id))
+            #The window currently will appear outside of FreeSeer
+            #imagesink.set_xwindow_id(int(self.window_id))
 
             log.debug("Preview loaded into window.")
 
@@ -308,10 +309,13 @@ class Multimedia:
                     self.output_plugins.append(bin)
             elif type == IOutput.BOTH:
                 self.player.add(bin)
+                #I think pads can't be linked like this in GST 1.0, Nick
                 if record_audio:
-                    self.audio_tee.link_pads("src%d", bin, "audiosink")
+                    #self.audio_tee.link_pads("src%d", bin, "audiosink")
+                    self.audio_tee.link(bin)
                 if record_video:
-                    self.video_tee.link_pads("src%d", bin, "videosink")
+                    #self.video_tee.link_pads("src%d", bin, "videosink")
+                    self.video_tee.link(bin)
                 self.output_plugins.append(bin)
 
         return True

@@ -131,10 +131,16 @@ class WebMOutput(IOutput):
         vorbistag audio element
         '''
         self.tags = Gst.TagList()
-
         for tag in data.keys():
             if(Gst.tag_exists(tag)):
-                self.tags[tag] = data[tag]
+                #self.tags[tag] = data[tag]
+                #self.tags.add_value(Gst.TagMergeMode.__enum_values__[4], tag, data[tag])
+                Gst.TagList_Add_Value()
+                #Gst.tag_list_add_value()
+                #print tag
+                #print data[tag]
+                #Tag stuff seems broken, commenting out for now. Nick
+                print "I should be tagging meta data"
             else:
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
