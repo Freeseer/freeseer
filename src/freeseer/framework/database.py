@@ -27,6 +27,7 @@ import logging
 import os
 
 from PyQt4 import QtSql
+from PyQt4.QtCore import QDate
 
 from freeseer import __version__
 from freeseer.framework.presentation import Presentation
@@ -258,6 +259,21 @@ class QtDBConnector():
         """
         Insert a Presentation into the database.
         """
+        #Handle old field names
+        #Level to Category
+        if hasattr(presentation, 'level'):
+            print "has level" 
+            print presentation.level
+            if (presentation.level == '' and presentation.category != ''):
+                presentation.level = presentation.category
+
+        #Duplicate time to date field for older RSS / CSV formats
+        if (presentation.date == '' and presentation.time != ''):
+            presentation.date = presentation.time
+            presentation.date = presentation.date[:-6]
+            presentation.time = presentation.time[11:]
+
+
         query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
                                     (presentation.title,
                                      presentation.speaker,
@@ -392,7 +408,8 @@ class QtDBConnector():
                 talk = Presentation(presentation["Title"],
                                     presentation["Speaker"],
                                     presentation["Abstract"],  # Description
-                                    presentation["Category"],  # TODO Needs to consider 'level'
+                                    presentation["Category"],
+                                    presentation["Level"],  
                                     presentation["Event"],
                                     presentation["Room"],
                                     presentation["Date"],
@@ -424,12 +441,14 @@ class QtDBConnector():
                     category = row['Category']
                 except KeyError:
                     category = ''
-                
-                if (category == ''):
-                    try:
-                        category = row['Level'] #Old field name
-                    except KeyError:
-                        category = ''
+
+                try:
+                    level = row['Level']
+                except KeyError:
+                    level = ''
+
+                if (category == '' and level != ''): #Check for old csv namings
+                    category = level
                 
                 try:
                     event = row['Event']
@@ -450,9 +469,6 @@ class QtDBConnector():
                     time = row['Time']
                 except KeyError:
                     time = ''
-                
-                if (date == '' and time !=''): #Fills date if older version csv file
-                    date = time
 
                 talk = Presentation(title,
                                     speaker,
