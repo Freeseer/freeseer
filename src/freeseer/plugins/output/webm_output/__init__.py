@@ -64,41 +64,49 @@ class WebMOutput(IOutput):
         # Setup Audio Pipeline
         #
         if audio:
-            audioqueue = Gst.ElementFactory.make("queue", "audioqueue")
-            bin.add(audioqueue)
 
-            audioconvert = Gst.ElementFactory.make("audioconvert", "audioconvert")
-            bin.add(audioconvert)
-
-            audiolevel = Gst.ElementFactory.make('level', 'audiolevel')
+            #Create audio elements
+            q1 = Gst.ElementFactory.make('queue', None)
+            enc = Gst.ElementFactory.make('vorbisenc', None)
+            q2 = Gst.ElementFactory.make('queue', None)
+            audioconvert = Gst.ElementFactory.make("audioconvert", None)
+            audiolevel = Gst.ElementFactory.make('level', None)
             audiolevel.set_property('interval', 20000000)
+
+            #Currently tagging is broken and will need to be moved up in the code
+
+            # # Setup metadata
+            # #vorbistag = Gst.ElementFactory.make("vorbistag", "vorbistag")
+            # # set tag merge mode to GST_TAG_MERGE_REPLACE
+            # #merge_mode = Gst.TagMergeMode.__enum_values__[2]
+
+            # #if metadata is not None:
+            #     # Only set tag if metadata is set
+            #     #vorbistag.merge_tags(self.tags, merge_mode)
+            # #vorbistag.set_tag_merge_mode(merge_mode)
+            # #bin.add(vorbistag)
+
+
+            
+            #Add the audio elements to the bin
+            bin.add(q1)
             bin.add(audiolevel)
+            bin.add(audioconvert)
+            bin.add(enc)
+            bin.add(q2)
 
-            audiocodec = Gst.ElementFactory.make("vorbisenc", "audiocodec")
-            bin.add(audiocodec)
-
-            # Setup metadata
-            vorbistag = Gst.ElementFactory.make("vorbistag", "vorbistag")
-            # set tag merge mode to GST_TAG_MERGE_REPLACE
-            merge_mode = Gst.TagMergeMode.__enum_values__[2]
-
-            if metadata is not None:
-                # Only set tag if metadata is set
-                vorbistag.merge_tags(self.tags, merge_mode)
-            vorbistag.set_tag_merge_mode(merge_mode)
-            bin.add(vorbistag)
+            #link the audio elements
+            q1.link(audiolevel)
+            audiolevel.link(audioconvert)
+            audioconvert.link(enc)
+            enc.link(q2)
+            q2.link(muxer)
 
             # Setup ghost pads
-            audiopad = audioqueue.get_static_pad("sink")
+            audiopad = q1.get_static_pad("sink")
             audio_ghostpad = Gst.GhostPad.new("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
 
-            # Link Elements
-            audioqueue.link(audioconvert)
-            audioconvert.link(audiolevel)
-            audiolevel.link(audiocodec)
-            audiocodec.link(vorbistag)
-            vorbistag.link(muxer)
 
         #
         # Setup Video Pipeline
@@ -133,9 +141,10 @@ class WebMOutput(IOutput):
         self.tags = Gst.TagList()
         for tag in data.keys():
             if(Gst.tag_exists(tag)):
+                #tagging is not currently working
                 #self.tags[tag] = data[tag]
                 #self.tags.add_value(Gst.TagMergeMode.__enum_values__[4], tag, data[tag])
-                Gst.TagList_Add_Value()
+                #Gst.TagList_Add_Value()
                 #Gst.tag_list_add_value()
                 #print tag
                 #print data[tag]
