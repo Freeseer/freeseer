@@ -43,7 +43,9 @@ class AutoAudioSrc(IAudioInput):
     def get_audioinput_bin(self):
         bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
-        audiosrc = Gst.ElementFactory.make("autoaudiosrc", "audiosrc")
+        # audiosrc = Gst.ElementFactory.make("autoaudiosrc", None)
+        # autoaudiosrc causes python to lock up in Windows
+        audiosrc = Gst.ElementFactory.make("audiotestsrc", None)
         bin.add(audiosrc)
 
         # Setup ghost pad
