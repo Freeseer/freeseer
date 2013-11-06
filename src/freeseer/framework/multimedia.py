@@ -309,13 +309,10 @@ class Multimedia:
                     self.output_plugins.append(bin)
             elif type == IOutput.BOTH:
                 self.player.add(bin)
-                #I think pads can't be linked like this in GST 1.0, Nick
                 if record_audio:
-                    #self.audio_tee.link_pads("src%d", bin, "audiosink")
-                    self.audio_tee.link(bin)
+                    self.audio_tee.link_pads("src_%u", bin, "audiosink")
                 if record_video:
-                    #self.video_tee.link_pads("src%d", bin, "videosink")
-                    self.video_tee.link(bin)
+                    self.video_tee.link_pads("src_%u", bin, "videosink")
                 self.output_plugins.append(bin)
 
         return True

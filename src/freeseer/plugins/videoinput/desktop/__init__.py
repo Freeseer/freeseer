@@ -93,6 +93,7 @@ class DesktopLinuxSrc(IVideoInput):
             #This is being replaced with the test source as dx9screencaosrc has not been
             #ported to GStreamer 1.0.5
             videosrc = Gst.ElementFactory.make("videotestsrc", "videosrc")
+            print "test source in place of desktop"
 
             # Configure coordinates if we're not recording full desktop
             if self.desktop == "Area":

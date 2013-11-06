@@ -62,8 +62,6 @@ class AudioPassthrough(IAudioMixer):
 
         # Setup ghost pad
         sinkpad = audiomixer.get_request_pad("sink_%u")
-        print "DOOM CHICKEN!!!"
-        print sinkpad
         sink_ghostpad = Gst.GhostPad.new("sink", sinkpad)
         bin.add_pad(sink_ghostpad)
 

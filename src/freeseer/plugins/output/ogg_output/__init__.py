@@ -81,42 +81,49 @@ class OggOutput(IOutput):
         # Setup Audio Pipeline if Audio Recording is Enabled
         #
         if audio:
-            audioqueue = Gst.ElementFactory.make("queue", None)
-            bin.add(audioqueue)
-
+            
+            #Create audio elements
+            q1 = Gst.ElementFactory.make('queue', None)
+            enc = Gst.ElementFactory.make('vorbisenc', None)
+            enc.set_property("quality", float(self.audio_quality))
+            q2 = Gst.ElementFactory.make('queue', None)
             audioconvert = Gst.ElementFactory.make("audioconvert", None)
-            bin.add(audioconvert)
-
             audiolevel = Gst.ElementFactory.make('level', None)
             audiolevel.set_property('interval', 20000000)
+
+            
+            #Add the audio elements to the bin
+            bin.add(q1)
             bin.add(audiolevel)
+            bin.add(audioconvert)
+            bin.add(enc)
+            bin.add(q2)
 
-            audiocodec = Gst.ElementFactory.make("vorbisenc", None)
-            audiocodec.set_property("quality", float(self.audio_quality))
-            bin.add(audiocodec)
+            #link the audio elements
+            q1.link(audiolevel)
+            audiolevel.link(audioconvert)
+            audioconvert.link(enc)
+            enc.link(q2)
+            q2.link(muxer)
 
-            # Setup metadata
-            vorbistag = Gst.ElementFactory.make("vorbistag", None)
-            # set tag merge mode to GST_TAG_MERGE_REPLACE
-            merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
-            if metadata is not None:
-                # Only set tag if metadata is set
-                vorbistag.merge_tags(self.tags, merge_mode)
-            vorbistag.set_tag_merge_mode(merge_mode)
-            bin.add(vorbistag)
+            #Currently tagging is broken and will need to be moved up in the code
+
+            # # Setup metadata
+            # #vorbistag = Gst.ElementFactory.make("vorbistag", None)
+            # # set tag merge mode to GST_TAG_MERGE_REPLACE
+            # #merge_mode = Gst.TagMergeMode.__enum_values__[2]
+
+            # # if metadata is not None:
+            # #     # Only set tag if metadata is set
+            # #     vorbistag.merge_tags(self.tags, merge_mode)
+            # # vorbistag.set_tag_merge_mode(merge_mode)
+            # # bin.add(vorbistag)
 
             # Setup ghost pads
-            audiopad = audioqueue.get_static_pad("sink")
+            audiopad = q1.get_static_pad("sink")
             audio_ghostpad = Gst.GhostPad.new("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
-
-            # Link Elements
-            audioqueue.link(audioconvert)
-            audioconvert.link(audiolevel)
-            audiolevel.link(audiocodec)
-            audiocodec.link(vorbistag)
-            vorbistag.link(muxer)
 
         #
         # Setup Video Pipeline
@@ -126,12 +133,13 @@ class OggOutput(IOutput):
             bin.add(videoqueue)
 
             videocodec = Gst.ElementFactory.make("theoraenc", None)
+            #Setting the bit rate like this will cause this plugin not to work, currently
             #videocodec.set_property("bitrate", int(self.video_bitrate))
             bin.add(videocodec)
 
             # Setup ghost pads
             videopad = videoqueue.get_static_pad("sink")
-            video_ghostpad = Gst.GhostPad.new("sink", videopad)
+            video_ghostpad = Gst.GhostPad.new("videosink", videopad)
             bin.add_pad(video_ghostpad)
 
             # Link Elements
