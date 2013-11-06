@@ -28,6 +28,7 @@ which audio source to use. Not configurable.
 
 @author: Thanh Ha
 '''
+import sys
 
 import gi
 gi.require_version('Gst', '1.0')
@@ -42,10 +43,14 @@ class AutoAudioSrc(IAudioInput):
 
     def get_audioinput_bin(self):
         bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        if sys.platform.startswith("linux"):
+            audiosrc = Gst.ElementFactory.make("autoaudiosrc", None)
 
-        # audiosrc = Gst.ElementFactory.make("autoaudiosrc", None)
-        # autoaudiosrc causes python to lock up in Windows
-        audiosrc = Gst.ElementFactory.make("audiotestsrc", None)
+        elif sys.platform in ["win32", "cygwin"]:
+            # autoaudiosrc causes python to lock up in Windows
+            audiosrc = Gst.ElementFactory.make("audiotestsrc", None)
+
+            
         bin.add(audiosrc)
 
         # Setup ghost pad
