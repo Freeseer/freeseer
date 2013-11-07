@@ -71,14 +71,14 @@ class USBSrc(IVideoInput):
 
         videosrc = None
         if sys.platform.startswith("linux"):
-            videosrc = Gst.ElementFactory.make("v4l2src", "videosrc")
-            videosrc.set_property("device", self.device)
+            videosrc = Gst.ElementFactory.make("autovideosrc", "videosrc")
+            #videosrc.set_property("device", self.device)
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = Gst.ElementFactory.make("dshowvideosrc", "videosrc")
-            videosrc.set_property("device-name", self.device)
+            #videosrc.set_property("device-name", self.device)
         bin.add(videosrc)
 
-        colorspace = Gst.ElementFactory.make("ffmpegcolorspace", "colorspace")
+        colorspace = Gst.ElementFactory.make("videoconvert", "colorspace")
         bin.add(colorspace)
         videosrc.link(colorspace)
 
@@ -140,13 +140,13 @@ class USBSrc(IVideoInput):
         devicemap = {}
 
         if sys.platform.startswith("linux"):
-            videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.probe_property_name('device')
-            devices = videosrc.probe_get_values_name('device')
+            videosrc = Gst.ElementFactory.make("v4l2src", "videosrc")
+            #videosrc.probe_property_name('device')
+            #devices = videosrc.probe_get_values_name('device')
 
-            for device in devices:
-                videosrc.set_property('device', device)
-                devicemap[videosrc.get_property('device-name')] = device
+            # for device in devices:
+            #     videosrc.set_property('device', device)
+            #     devicemap[videosrc.get_property('device-name')] = device
 
         elif sys.platform in ["win32", "cygwin"]:
             #videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")

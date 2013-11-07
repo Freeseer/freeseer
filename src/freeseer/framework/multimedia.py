@@ -87,18 +87,18 @@ class Multimedia:
     def on_message(self, bus, message):
         t = message.type
 
-        if t == Gst.MESSAGE_EOS:
+        if t == Gst.MessageType.EOS:
             self.stop()
 
-        elif t == Gst.MESSAGE_ERROR:
+        elif t == Gst.MessageType.ERROR:
             err, debug = message.parse_error()
             log.error(str(err) + str(debug))
 
-        elif message.structure is not None:
-            s = message.structure.get_name()
+        elif message.get_structure() is not None:
+            s = message.get_structure().get_name()
 
             if s == 'level' and self.audio_feedback_event is not None:
-                msg = message.structure.to_string()
+                msg = message.get_structure().get_name().to_string()
                 rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
 
                 # This is an inaccurate representation of decibels into percent
