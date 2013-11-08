@@ -26,27 +26,39 @@ in a pull request
 - Summary describing the changes
 - Points to and from the correct branches
 
+  - From your development branch to Freeseer's master branch
+- Reference any related issues or resources
+
 in the code
 ^^^^^^^^^^^
 
 - Code should follow our :doc:`coding-guidelines`
+- Code is well documented
+
+  - Documentation should also exist in our online documentation for any new features
 - Logic of the code makes sense
 - Code is efficient and readable
+- Code is modular
+
+  - Similar code should be put in functions
+  - Functions should be small and focus on one thing
 - Your code is thoroughly documented and uses
   `docstrings <http://google-styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_ where appropriate
-- You've rebased your work on the current state of the Freeseer/freeseer development tree
+- Your branch can be merged cleanly into master
 
-.. todo: All existing unit tests pass (refer to testing docs)
-.. todo: You've added tests for your new code
+  - No merge conflicts
+  - Your branch includes the latest commits from master (rebase to avoid merge commits)
+- Includes unit tests for the new code
+- All unit tests pass
 
 in the commits
 ^^^^^^^^^^^^^^
 
 - Each commit should represent one type of change
-- Your commit messages are as descriptive as possible
-- Your commit messages follow our `formatting guidelines
+- Commit messages are as descriptive as possible
+- Commit messages follow our `formatting guidelines
   <../best-practices.html#properly-style-your-commit-messages>`_
-- `Squash multiple commits related to a single change into a single commit
+- `Squash related commits into a single commit
   <http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html>`_
 
 Tips

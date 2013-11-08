@@ -9,9 +9,6 @@ Freeseer is written in `Python <http://python.org>`_ and uses the `Qt framework
 <http://qt.nokia.com/products>`_ for the interface and `GStreamer
 <http://www.gstreamer.net>`_ as the multimedia framework.
 
-We aim for test-driven and document-driven development, so write your tests and
-docs first.
-
 Note that some of the existing code may not be well documented or may not follow
 our coding guidelines and styleguides that we use. If you come across this,
 please notify us by opening an issue, or open a Pull Request if you'd like to
