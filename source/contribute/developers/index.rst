@@ -18,6 +18,6 @@ fix it.
    :maxdepth: 2
 
    testing
-   coding-guidelines
+   styleguide
    plugins
    pull-requests-and-code-review
