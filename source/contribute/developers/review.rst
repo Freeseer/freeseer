@@ -1,5 +1,5 @@
-Pull Requests & Code Review
-===========================
+Code Review
+===========
 
 We use `Pull Requests <https://help.github.com/articles/using-pull-requests>`_
 on GitHub for code reviews and merging changes into Freeseer/freeseer.

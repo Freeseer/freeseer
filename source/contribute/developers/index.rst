@@ -17,7 +17,7 @@ fix it.
 .. toctree::
    :maxdepth: 1
 
-   testing
    styleguide
+   testing
    plugins
-   pull-requests-and-code-review
+   review
