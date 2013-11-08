@@ -15,7 +15,7 @@ please notify us by opening an issue, or open a Pull Request if you'd like to
 fix it.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    testing
    styleguide
