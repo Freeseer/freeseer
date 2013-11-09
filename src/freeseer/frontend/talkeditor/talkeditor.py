@@ -272,7 +272,6 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
 
     def talk_selected(self, model):
-        print "selected " + str(model.row())
         self.mapper.setCurrentIndex(model.row())
 
     def toggle_import(self):
@@ -352,10 +351,8 @@ class TalkEditorApp(FreeseerApp):
             rows_selected = self.tableView.selectionModel().selectedRows()
         except:
             return
-        print rows_selected
-        print row_clicked
-        for row in reversed(rows_selected):
-            print row.row()
+        
+        for row in reversed(rows_selected): #Reversed because rows in list change position once row is removed
             self.presentationModel.removeRow(row.row())
         self.presentationModel.select()
 
