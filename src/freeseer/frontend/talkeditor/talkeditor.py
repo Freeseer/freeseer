@@ -211,41 +211,48 @@ class TalkEditorApp(FreeseerApp):
         #
         # TalkDetailsWidget
         #
-        self.talkDetailsWidget.titleLabel.setText(self.app.translate("TalkEditorApp", "Title"))
-        self.talkDetailsWidget.presenterLabel.setText(self.app.translate("TalkEditorApp", "Presenter"))
-        self.talkDetailsWidget.categoryLabel.setText(self.app.translate("TalkEditorApp", "Category"))
-        self.talkDetailsWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
-        self.talkDetailsWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
-        self.talkDetailsWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
-        self.talkDetailsWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
+        self.talkDetailsWidget.titleLabel.setText(
+            self.app.translate("TalkEditorApp", "Title"))
+        self.talkDetailsWidget.presenterLabel.setText(
+            self.app.translate("TalkEditorApp", "Presenter"))
+        self.talkDetailsWidget.categoryLabel.setText(
+            self.app.translate("TalkEditorApp", "Category"))
+        self.talkDetailsWidget.eventLabel.setText(
+            self.app.translate("TalkEditorApp", "Event"))
+        self.talkDetailsWidget.roomLabel.setText(
+            self.app.translate("TalkEditorApp", "Room"))
+        self.talkDetailsWidget.dateLabel.setText(
+            self.app.translate("TalkEditorApp", "Date"))
+        self.talkDetailsWidget.timeLabel.setText(
+            self.app.translate("TalkEditorApp", "Time"))
         # --- End TalkDetailsWidget
 
         #
         # Import Talks Widget Translations
         #
         self.importTalksWidget.rssRadioButton.setText(
-           self.app.translate("TalkEditorApp", "RSS URL"))
+            self.app.translate("TalkEditorApp", "RSS URL"))
         self.importTalksWidget.csvRadioButton.setText(
-           self.app.translate("TalkEditorApp", "CSV File"))
+            self.app.translate("TalkEditorApp", "CSV File"))
         self.importTalksWidget.importButton.setText(
-           self.app.translate("TalkEditorApp", "Import"))
+            self.app.translate("TalkEditorApp", "Import"))
         # --- End Talks Widget Translations
 
         #
         # Command Button Translations
         #
         self.commandButtons.addButton.setText(
-           self.app.translate("TalkEditorApp", "Add"))
+            self.app.translate("TalkEditorApp", "Add"))
         self.commandButtons.duplicateButton.setText(
-           self.app.translate("TalkEditorApp", "Duplicate"))
+            self.app.translate("TalkEditorApp", "Duplicate"))
         self.commandButtons.importButton.setText(
-           self.app.translate("TalkEditorApp", "Import"))
+            self.app.translate("TalkEditorApp", "Import"))
         self.commandButtons.exportButton.setText(
-           self.app.translate("TalkEditorApp", "Export"))
+            self.app.translate("TalkEditorApp", "Export"))
         self.commandButtons.removeButton.setText(
-           self.app.translate("TalkEditorApp", "Remove"))
+            self.app.translate("TalkEditorApp", "Remove"))
         self.commandButtons.removeAllButton.setText(
-           self.app.translate("TalkEditorApp", "Remove All"))
+            self.app.translate("TalkEditorApp", "Remove All"))
         # --- End Command Butotn Translations
 
     def load_presentations_model(self):
@@ -318,9 +325,8 @@ class TalkEditorApp(FreeseerApp):
                 self.talkDetailsWidget.roomLineEdit.text(
                 )),
             unicode(date.toString(QtCore.Qt.ISODate
-                )),
+                                  )),
             unicode(time.toString(QtCore.Qt.ISODate)))
-
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):
@@ -351,8 +357,9 @@ class TalkEditorApp(FreeseerApp):
             rows_selected = self.tableView.selectionModel().selectedRows()
         except:
             return
-        
-        for row in reversed(rows_selected): #Reversed because rows in list change position once row is removed
+
+        # Reversed because rows in list change position once row is removed
+        for row in reversed(rows_selected):
             self.presentationModel.removeRow(row.row())
         self.presentationModel.select()
 
