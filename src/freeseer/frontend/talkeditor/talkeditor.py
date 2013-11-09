@@ -42,6 +42,7 @@ from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QFileDialog
 from PyQt4.QtGui import QMessageBox
+from PyQt4.QtGui import QItemSelectionModel
 
 # Freeseer modules
 from freeseer import settings, __version__
@@ -121,9 +122,12 @@ class TalkEditorApp(FreeseerApp):
         #
         self.actionExportCsv = QAction(self)
         self.actionExportCsv.setObjectName('actionExportCsv')
+        self.actionRemoveAll = QAction(self)
+        self.actionRemoveAll.setObjectName('actionRemoveAll')
 
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionExportCsv)
+        self.menuFile.insertAction(self.actionExit, self.actionRemoveAll)
         # --- End Menubar
 
         #
@@ -131,6 +135,8 @@ class TalkEditorApp(FreeseerApp):
         #
         self.connect(self.tableView, SIGNAL(
             'activated(const QModelIndex)'), self.talk_selected)
+        self.connect(self.tableView, SIGNAL(
+            'selected(const QModelIndex)'), self.talk_selected)
         self.connect(self.tableView, SIGNAL(
             'selChanged(const QModelIndex)'), self.talk_selected)
 
@@ -146,10 +152,12 @@ class TalkEditorApp(FreeseerApp):
                      QtCore.SIGNAL('clicked()'), self.csv_file_select)
         self.connect(self.importTalksWidget.csvLineEdit, QtCore.SIGNAL(
             'returnPressed()'), self.importTalksWidget.importButton.click)
-        self.connect(self.actionExportCsv, QtCore.SIGNAL(
-            'triggered()'), self.export_talks_to_csv)
         self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL(
             'returnPressed()'), self.importTalksWidget.importButton.click)
+        self.connect(self.actionExportCsv, QtCore.SIGNAL(
+            'triggered()'), self.export_talks_to_csv)
+        self.connect(self.actionRemoveAll, QtCore.SIGNAL(
+            'triggered()'), self.confirm_reset)
 
         # Command Buttons
         self.connect(self.commandButtons.addButton,
@@ -195,6 +203,9 @@ class TalkEditorApp(FreeseerApp):
         #
         self.actionExportCsv.setText(
             self.app.translate("TalkEditorApp", "&Export to CSV"))
+        self.actionRemoveAll.setText(
+            self.app.translate("TalkEditorApp", "&Remove All Talks"))
+
         # --- End Menubar
 
         #
@@ -261,6 +272,7 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
 
     def talk_selected(self, model):
+        print "selected " + str(model.row())
         self.mapper.setCurrentIndex(model.row())
 
     def toggle_import(self):
