@@ -24,14 +24,15 @@
 
 from os import path
 
-class Presentation(object):	
+
+class Presentation(object):
+
     '''
     This class is responsible for encapsulate data about presentations
     and its database related operations
     '''
 
-    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default",date ="", time=""):
-        
+    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", time=""):
         '''
         Initialize a presentation instance
         '''
@@ -44,23 +45,27 @@ class Presentation(object):
         self.date = date
         self.time = time
 
+
 class PresentationFile(Presentation):
+
     '''
     This class represents a presentation that has been already been written 
     to a file and the metadata that has been loaded from it
     '''
+
     def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", time=""):
-        Presentation.__init__(self, title, speaker, description, category, event, room, date, time)
-        
+        Presentation.__init__(
+            self, title, speaker, description, category, event, room, date, time)
+
         self.filename = ""
         self.album = ""
         self.tracknumber = None
         self.filedate = None
         self.duration = None
         self.filesize = None
-        
-    artist = property(lambda self: self.speaker, 
+
+    artist = property(lambda self: self.speaker,
                       lambda self, value: self.__setattr__('speaker', value))
-    
+
     filebase = property(lambda self: path.basename(self.filename))
     filepath = property(lambda self: path.dirname(self.filename))

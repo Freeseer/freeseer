@@ -350,10 +350,6 @@ class TalkEditorApp(FreeseerApp):
 
     def remove_talk(self):
         try:
-            row_clicked = self.tableView.currentIndex().row()
-        except:
-            return
-        try:
             rows_selected = self.tableView.selectionModel().selectedRows()
         except:
             return
