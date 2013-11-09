@@ -138,7 +138,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.tableView, SIGNAL(
             'selected(const QModelIndex)'), self.talk_selected)
         self.connect(self.tableView, SIGNAL(
-            'selChanged(const QModelIndex)'), self.talk_selected)
+            'clicked(const QModelIndex)'), self.talk_selected)
 
         # Import Widget
         self.connect(self.importTalksWidget.csvRadioButton,
@@ -348,8 +348,15 @@ class TalkEditorApp(FreeseerApp):
             row_clicked = self.tableView.currentIndex().row()
         except:
             return
-
-        self.presentationModel.removeRow(row_clicked)
+        try:
+            rows_selected = self.tableView.selectionModel().selectedRows()
+        except:
+            return
+        print rows_selected
+        print row_clicked
+        for row in reversed(rows_selected):
+            print row.row()
+            self.presentationModel.removeRow(row.row())
         self.presentationModel.select()
 
     def load_talk(self):
