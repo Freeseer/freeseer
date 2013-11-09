@@ -125,7 +125,7 @@ class QtDBConnector():
             """
             Incremental update of database from 2.x and older to 3.0.
             """
-            #temporary table
+            # temporary table
             QtSql.QSqlQuery(
                 'ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
@@ -138,7 +138,7 @@ class QtDBConnector():
             Incremental update of database from 3.0 and older to 3.1.
 
             """
-            #temporary table
+            # temporary table
             QtSql.QSqlQuery(
                 'ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
@@ -155,7 +155,7 @@ class QtDBConnector():
 
         updaters = [update_30to31]
         updaterVersion = [0]  # next entry is 300
-        #not setup properly
+        # not setup properly
         if len(updaters) != len(updaterVersion) or db_version not in updaterVersion:
             log.info('Database upgrade failed.')
             return
