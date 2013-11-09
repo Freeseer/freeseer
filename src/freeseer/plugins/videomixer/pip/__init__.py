@@ -102,22 +102,29 @@ class PictureInPicture(IVideoMixer):
     def load_inputs(self, player, mixer, inputs):
         # Load main source
         input1 = inputs[0]
+        player.add(input1)
 
         # Create videoscale element in order to scale to dimensions not supported by camera
         mainsrc_scale = Gst.ElementFactory.make("videoscale", "mainsrc_scale")
+        player.add(mainsrc_scale)
 
         # Create ffmpegcolorspace element to convert from what camera supports to rgb
-        mainsrc_colorspace = Gst.ElementFactory.make("ffmpegcolorspace", "mainsrc_colorspace")
+        mainsrc_colorspace = Gst.ElementFactory.make("videoconvert", "mainsrc_colorspace")
+        player.add(mainsrc_colorspace)
 
         # Create capsfilter for limiting to x-raw-rgb pixel video format and setting dimensions
         mainsrc_capsfilter = Gst.ElementFactory.make("capsfilter", "mainsrc_capsfilter")
         mainsrc_capsfilter.set_property('caps',
                         Gst.caps_from_string('video/x-raw, format=Y444, width=640, height=480'))
+        player.add(mainsrc_capsfilter)
 
-        mainsrc_elements = [input1, mainsrc_scale, mainsrc_capsfilter, mainsrc_colorspace]
+        #This lambda function causes errors in Windows. Which makes not sense as the second one
+        #on line 152 works
+
+        #mainsrc_elements = [input1, mainsrc_scale, mainsrc_capsfilter, mainsrc_colorspace]
 
         # Add elements to player in list order
-        map(lambda element: player.add(element), mainsrc_elements)
+        #map(lambda element: player.add(element), mainsrc_elements)
 
         # Link elements in a specific order
         input1.link(mainsrc_scale)
@@ -134,8 +141,8 @@ class PictureInPicture(IVideoMixer):
 
         # Create gst elements as above, but set smaller dimensions
         pipsrc_scale = Gst.ElementFactory.make("videoscale", "pipsrc_scale")
-        pipsrc_colorspace = Gst.ElementFactory.make("ffmpegcolorspace", "pipsrc_colorspace")
-        pipsrc_capsfilter = gst.ElementFactory.make("capsfilter", "pipsrc_capsfilter")
+        pipsrc_colorspace = Gst.ElementFactory.make("videoconvert", "pipsrc_colorspace")
+        pipsrc_capsfilter = Gst.ElementFactory.make("capsfilter", "pipsrc_capsfilter")
         pipsrc_capsfilter.set_property('caps',
                         Gst.caps_from_string('video/x-raw, format=Y444, width=200, height=150'))
 
