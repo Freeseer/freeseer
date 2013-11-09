@@ -31,6 +31,7 @@ from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QIcon
 
+
 class CommandButtons(QWidget):
 
     def __init__(self, parent=None):
@@ -46,8 +47,6 @@ class CommandButtons(QWidget):
         exportIcon = QIcon.fromTheme("document-save")
         removeIcon = QIcon.fromTheme("list-remove")
         removeAllIcon = QIcon.fromTheme("window-close")
-
-
 
         self.addButton = QPushButton('Add')
         self.addButton.setIcon(addIcon)
