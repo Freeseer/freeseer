@@ -2,7 +2,7 @@ Code Review
 ===========
 
 We use `Pull Requests <https://help.github.com/articles/using-pull-requests>`_
-on GitHub for code reviews and merging changes into Freeseer/freeseer.
+on GitHub for code reviews and merging proposed changes.
 
 Pull requests let you tell others about changes you've pushed to a GitHub
 repository. Once a pull request is sent, we can review the set of changes,
