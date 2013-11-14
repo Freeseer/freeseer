@@ -25,17 +25,11 @@
 import datetime
 import logging
 import os
-"""
-import gobject
-gobject.threads_init()
-import pygst
-pygst.require("0.10")
-import gst
-"""
-#Comment out for now, Nick
+import sys
+
 import gi
 gi.require_version('Gst', '1.0')
-from gi.repository import GObject, Gst
+from gi.repository import GObject, Gst, GstVideo
 
 GObject.threads_init()
 Gst.init(None)
@@ -116,10 +110,7 @@ class Multimedia:
         if message_name == 'prepare-window-handle' and self.window_id is not None:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
-            #imagesink.set_window_handle(int(self.window_id))
-            #The window currently will appear outside of FreeSeer
-            #imagesink.set_xwindow_id(int(self.window_id))
-
+            imagesink.set_window_handle(int(self.window_id))
             log.debug("Preview loaded into window.")
 
     def set_window_id(self, window_id):
