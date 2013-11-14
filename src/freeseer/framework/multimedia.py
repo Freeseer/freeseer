@@ -79,8 +79,10 @@ class Multimedia:
     ## GST Player Functions
     ##
     def on_message(self, bus, message):
+        # This mothod never seems to be run in Windows
+        # print "This message came from on_message"
+        # print t
         t = message.type
-
         if t == Gst.MessageType.EOS:
             self.stop()
 
@@ -90,23 +92,25 @@ class Multimedia:
 
         elif message.get_structure() is not None:
             s = message.get_structure().get_name()
-
             if s == 'level' and self.audio_feedback_event is not None:
-                msg = message.get_structure().get_name().to_string()
-                rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
+                msg = message.get_structure().get_name()
+                #This code causes Linux to throw errors
+                # rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
 
-                # This is an inaccurate representation of decibels into percent
-                # conversion, this code should be revisited.
-                try:
-                    percent = (int(round(rms_dB)) + 50) * 2
-                except OverflowError:
-                    percent = 0
-                self.audio_feedback_event(percent)
+                # # This is an inaccurate representation of decibels into percent
+                # # conversion, this code should be revisited.
+                # try:
+                #     percent = (int(round(rms_dB)) + 50) * 2
+                # except OverflowError:
+                #     percent = 0
+                # self.audio_feedback_event(percent)
 
     def on_sync_message(self, bus, message):
         if message.get_structure() is None:
             return
         message_name = message.get_structure().get_name()
+        # print "This message came from on_sync_message"
+        # print message_name
         if message_name == 'prepare-window-handle' and self.window_id is not None:
             imagesink = message.src
             imagesink.set_property('force-aspect-ratio', True)
