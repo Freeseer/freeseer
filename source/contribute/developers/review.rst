@@ -32,7 +32,7 @@ in a pull request
 in the code
 ^^^^^^^^^^^
 
-- Code should follow our :doc:`coding-guidelines`
+- Code should follow our :doc:`styleguide`
 - Code is well documented
 
   - Documentation should also exist in our online documentation for any new features
