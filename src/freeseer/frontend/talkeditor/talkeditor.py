@@ -186,25 +186,7 @@ class TalkEditorApp(FreeseerApp):
         self.load_presentations_model()
 
         # Setup Autocompletion
-        self.titleCompleter = QCompleter(self.titleList)
-        self.titleCompleter.setCaseSensitivity(Qt.CaseInsensitive)
-        self.speakerCompleter = QCompleter(self.speakerList)
-        self.speakerCompleter.setCaseSensitivity(Qt.CaseInsensitive)
-        self.categoryCompleter = QCompleter(self.categoryList)
-        self.categoryCompleter.setCaseSensitivity(Qt.CaseInsensitive)
-        self.eventCompleter = QCompleter(self.eventList)
-        self.eventCompleter.setCaseSensitivity(Qt.CaseInsensitive)
-        self.roomCompleter = QCompleter(self.roomList)
-        self.roomCompleter.setCaseSensitivity(Qt.CaseInsensitive)
-
-
-        self.talkDetailsWidget.titleLineEdit.setCompleter(self.titleCompleter)
-        self.talkDetailsWidget.presenterLineEdit.setCompleter(
-            self.speakerCompleter)
-        self.talkDetailsWidget.categoryLineEdit.setCompleter(
-            self.categoryCompleter)
-        self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
-        self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
+        self.update_autocomple_fields()
 
     #
     # Translation
@@ -379,6 +361,8 @@ class TalkEditorApp(FreeseerApp):
         # Select Last Row
         self.tableView.selectRow(self.presentationModel.rowCount() - 1)
 
+        self.update_autocomple_fields()
+
     def remove_talk(self):
         try:
             rows_selected = self.tableView.selectionModel().selectedRows()
@@ -431,6 +415,8 @@ class TalkEditorApp(FreeseerApp):
             error.setText("Please enter a RSS URL")
             error.exec_()
 
+
+
     def closeEvent(self, event):
         log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
@@ -461,8 +447,37 @@ class TalkEditorApp(FreeseerApp):
         else:
             self.add_talks_from_rss()
 
+        self.update_autocomple_fields()
+
+
     def export_talks_to_csv(self):
         dirpath = str(self.importTalksWidget.csvLineEdit.text())
         fname = QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.db.export_talks_to_csv(fname)
+
+    def update_autocomple_fields(self):
+        self.titleList = QStringList(self.db.get_titleList())
+        self.speakerList = QStringList(self.db.get_speakerList())
+        self.categoryList = QStringList(self.db.get_categoryList())
+        self.eventList = QStringList(self.db.get_eventList())
+        self.roomList = QStringList(self.db.get_roomList())
+
+        self.titleCompleter = QCompleter(self.titleList)
+        self.titleCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.speakerCompleter = QCompleter(self.speakerList)
+        self.speakerCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.categoryCompleter = QCompleter(self.categoryList)
+        self.categoryCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.eventCompleter = QCompleter(self.eventList)
+        self.eventCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.roomCompleter = QCompleter(self.roomList)
+        self.roomCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+
+        self.talkDetailsWidget.titleLineEdit.setCompleter(self.titleCompleter)
+        self.talkDetailsWidget.presenterLineEdit.setCompleter(
+            self.speakerCompleter)
+        self.talkDetailsWidget.categoryLineEdit.setCompleter(
+            self.categoryCompleter)
+        self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
+        self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
