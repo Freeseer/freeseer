@@ -27,6 +27,7 @@ import sys
 
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
+from PyQt4.QtCore import QStringList
 from PyQt4 import QtCore
 from PyQt4.QtGui import QAbstractItemView
 from PyQt4.QtGui import QAction
@@ -43,6 +44,8 @@ from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QFileDialog
 from PyQt4.QtGui import QMessageBox
 from PyQt4.QtGui import QItemSelectionModel
+from PyQt4.QtGui import QCompleter
+from PyQt4.QtCore import Qt
 
 # Freeseer modules
 from freeseer import settings, __version__
@@ -182,6 +185,27 @@ class TalkEditorApp(FreeseerApp):
         # Load Talk Database
         self.load_presentations_model()
 
+        # Setup Autocompletion
+        self.titleCompleter = QCompleter(self.titleList)
+        self.titleCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.speakerCompleter = QCompleter(self.speakerList)
+        self.speakerCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.categoryCompleter = QCompleter(self.categoryList)
+        self.categoryCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.eventCompleter = QCompleter(self.eventList)
+        self.eventCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+        self.roomCompleter = QCompleter(self.roomList)
+        self.roomCompleter.setCaseSensitivity(Qt.CaseInsensitive)
+
+
+        self.talkDetailsWidget.titleLineEdit.setCompleter(self.titleCompleter)
+        self.talkDetailsWidget.presenterLineEdit.setCompleter(
+            self.speakerCompleter)
+        self.talkDetailsWidget.categoryLineEdit.setCompleter(
+            self.categoryCompleter)
+        self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
+        self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
+
     #
     # Translation
     #
@@ -278,6 +302,13 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.dateEdit, 7)
         self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
 
+        # Load StringLists
+        self.titleList = QStringList(self.db.get_titleList())
+        self.speakerList = QStringList(self.db.get_speakerList())
+        self.categoryList = QStringList(self.db.get_categoryList())
+        self.eventList = QStringList(self.db.get_eventList())
+        self.roomList = QStringList(self.db.get_roomList())
+
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
 
@@ -357,7 +388,6 @@ class TalkEditorApp(FreeseerApp):
         # Reversed because rows in list change position once row is removed
         for row in reversed(rows_selected):
             self.presentationModel.removeRow(row.row())
-        self.presentationModel.select()
 
     def load_talk(self):
         try:

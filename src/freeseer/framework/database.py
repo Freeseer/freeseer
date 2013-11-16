@@ -28,6 +28,7 @@ import os
 
 from PyQt4 import QtSql
 from PyQt4.QtCore import QDate
+from PyQt4.QtCore import QStringList
 
 from freeseer import __version__
 from freeseer.framework.presentation import Presentation
@@ -86,7 +87,7 @@ class QtDBConnector():
 
     def __close_table(self):
         """
-        This function is used to close the connection the the database.    
+        This function is used to close the connection the the database.
         """
         self.talkdb.close()
 
@@ -129,7 +130,7 @@ class QtDBConnector():
             QtSql.QSqlQuery(
                 'ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
-            QtSql.QSqlQuery("""INSERT INTO presentations 
+            QtSql.QSqlQuery("""INSERT INTO presentations
                             SELECT Id, Title, Speaker, Description, Category, Event, Room, Time from presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
@@ -142,7 +143,7 @@ class QtDBConnector():
             QtSql.QSqlQuery(
                 'ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
-            QtSql.QSqlQuery("""INSERT INTO presentations 
+            QtSql.QSqlQuery("""INSERT INTO presentations
                             SELECT Id, Title, Speaker, Description, Category, Event, Room, Time from presentations_old""")
             QtSql.QSqlQuery(
                 'ALTER TABLE presentations RENAME COLUMN Category to Category')
@@ -255,6 +256,52 @@ class QtDBConnector():
             p = None
 
         return p
+
+    def get_titleList(self):
+        """
+        Return a stringList of all titles
+        """
+        tempList = QStringList()
+        result = QtSql.QSqlQuery('''SELECT Title FROM presentations''')
+        while(result.next()):
+            tempList.append(result.value(0).toString())
+        return tempList
+    def get_speakerList(self):
+        """
+        Return a stringList of all Speakers
+        """
+        tempList = QStringList()
+        result = QtSql.QSqlQuery('''SELECT Speaker FROM presentations''')
+        while(result.next()):
+            tempList.append(result.value(0).toString())
+        return tempList
+    def get_categoryList(self):
+        """
+        Return a stringList of all Speakers
+        """
+        tempList = QStringList()
+        result = QtSql.QSqlQuery('''SELECT category FROM presentations''')
+        while(result.next()):
+            tempList.append(result.value(0).toString())
+        return tempList
+    def get_eventList(self):
+        """
+        Return a stringList of all events
+        """
+        tempList = QStringList()
+        result = QtSql.QSqlQuery('''SELECT Event FROM presentations''')
+        while(result.next()):
+            tempList.append(result.value(0).toString())
+        return tempList
+    def get_roomList(self):
+        """
+        Return a stringList of all rooms
+        """
+        tempList = QStringList()
+        result = QtSql.QSqlQuery('''SELECT Room FROM presentations''')
+        while(result.next()):
+            tempList.append(result.value(0).toString())
+        return tempList
 
     def presentation_exists(self, presentation):
         """
@@ -441,7 +488,7 @@ class QtDBConnector():
 
     def add_talks_from_csv(self, fname):
         """Adds talks from a csv file.
-        
+
         Title and speaker must be present.
         """
         file = open(fname, 'r')
@@ -584,7 +631,7 @@ class QtDBConnector():
 
     def __create_failures_table(self):
         """
-        Create the failures table in the database 
+        Create the failures table in the database
         Should be used to initialize a new table.
         """
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
@@ -603,7 +650,7 @@ class QtDBConnector():
     def get_report(self, talkid):
         """
         Return a failure from a given talkid
-        
+
         Returned value is a Failure object
         """
         result = QtSql.QSqlQuery(
@@ -686,7 +733,7 @@ class QtDBConnector():
 
     def __create_recentconn_table(self):
         """
-        Create the recentconn table in the database 
+        Create the recentconn table in the database
         Should be used to initialize a new table.
         """
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS recentconn
