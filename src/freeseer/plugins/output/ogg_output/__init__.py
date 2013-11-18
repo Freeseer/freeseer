@@ -32,10 +32,12 @@ video and Vorbis encoding for Audio.
 # python-libs
 import ConfigParser
 
+
 # GStreamer
 import gi
 gi.require_version('Gst', '1.0')
-from gi.repository import GObject, Gst
+from gi.repository import GObject, Gst, GstTag
+from gi.repository import GLib
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -91,7 +93,17 @@ class OggOutput(IOutput):
             audiolevel = Gst.ElementFactory.make('level', None)
             audiolevel.set_property('interval', 20000000)
 
-            
+            # # Setup metadata
+            vorbistag = Gst.ElementFactory.make("vorbistag", None)
+            #set tag merge mode to GST_TAG_MERGE_REPLACE
+            merge_mode = Gst.TagMergeMode.__enum_values__[2]            
+
+            if metadata is not None:
+                # Only set tag if metadata is set
+                vorbistag.merge_tags(self.tags, merge_mode)
+            vorbistag.set_tag_merge_mode(merge_mode)
+            bin.add(vorbistag)
+
             #Add the audio elements to the bin
             bin.add(q1)
             bin.add(audiolevel)
@@ -103,22 +115,16 @@ class OggOutput(IOutput):
             q1.link(audiolevel)
             audiolevel.link(audioconvert)
             audioconvert.link(enc)
-            enc.link(q2)
+            enc.link(vorbistag)
+            vorbistag.link(q2)
             q2.link(muxer)
 
 
             #Currently tagging is broken and will need to be moved up in the code
 
-            # # Setup metadata
-            # #vorbistag = Gst.ElementFactory.make("vorbistag", None)
-            # # set tag merge mode to GST_TAG_MERGE_REPLACE
-            # #merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
-            # # if metadata is not None:
-            # #     # Only set tag if metadata is set
-            # #     vorbistag.merge_tags(self.tags, merge_mode)
-            # # vorbistag.set_tag_merge_mode(merge_mode)
-            # # bin.add(vorbistag)
+
+
 
             # Setup ghost pads
             audiopad = q1.get_static_pad("sink")
@@ -157,15 +163,24 @@ class OggOutput(IOutput):
         Populate global tag list variable with file metadata for
         vorbistag audio element
         '''
-        self.tags = Gst.TagList()
+        self.tags = Gst.TagList.new_empty()
+        print self.tags
+        #Set merge mode, pull to top of file if this works
+        merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
         for tag in data.keys():
             if(Gst.tag_exists(tag)):
-                #self.tags[tag] = data[tag]
-                #Tag stuff seems broken, commenting out for now. Nick
-                print "I should be tagging meta data"
+                if tag == "date":
+                    s_date = data[tag].split("-")
+                    Tag_date = GLib.Date() 
+                    Tag_date.set_day(int(s_date[2]))
+                    Tag_date.set_month(s_date[1])
+                    Tag_date.set_year(int(s_date[0]))
+                    self.tags.add_value(merge_mode, tag, Tag_date)
+                else:
+                    self.tags.add_value(merge_mode, tag, str(data[tag]))
             else:
-                #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
+                self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
 
     def load_config(self, plugman):
