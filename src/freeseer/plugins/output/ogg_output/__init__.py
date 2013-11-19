@@ -102,13 +102,13 @@ class OggOutput(IOutput):
                 # Only set tag if metadata is set
                 vorbistag.merge_tags(self.tags, merge_mode)
             vorbistag.set_tag_merge_mode(merge_mode)
-            bin.add(vorbistag)
-
+            
             #Add the audio elements to the bin
             bin.add(q1)
             bin.add(audiolevel)
             bin.add(audioconvert)
             bin.add(enc)
+            bin.add(vorbistag)
             bin.add(q2)
 
             #link the audio elements
@@ -118,13 +118,6 @@ class OggOutput(IOutput):
             enc.link(vorbistag)
             vorbistag.link(q2)
             q2.link(muxer)
-
-
-            #Currently tagging is broken and will need to be moved up in the code
-
-
-
-
 
             # Setup ghost pads
             audiopad = q1.get_static_pad("sink")
@@ -139,8 +132,7 @@ class OggOutput(IOutput):
             bin.add(videoqueue)
 
             videocodec = Gst.ElementFactory.make("theoraenc", None)
-            #Setting the bit rate like this will cause this plugin not to work, currently
-            #videocodec.set_property("bitrate", int(self.video_bitrate))
+            videocodec.set_property("bitrate", int(self.video_bitrate))
             bin.add(videocodec)
 
             # Setup ghost pads
