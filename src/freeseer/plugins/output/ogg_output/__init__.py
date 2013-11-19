@@ -164,8 +164,6 @@ class OggOutput(IOutput):
         vorbistag audio element
         '''
         self.tags = Gst.TagList.new_empty()
-        print self.tags
-        #Set merge mode, pull to top of file if this works
         merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
         for tag in data.keys():

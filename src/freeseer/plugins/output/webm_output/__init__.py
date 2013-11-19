@@ -32,7 +32,7 @@ and Vorbis encoding for audio.
 # GStreamer
 import gi
 gi.require_version('Gst', '1.0')
-from gi.repository import GObject, Gst
+from gi.repository import GObject, Gst, GLib
 
 # Freeseer
 from freeseer.framework.plugin import IOutput
@@ -73,18 +73,16 @@ class WebMOutput(IOutput):
             audiolevel = Gst.ElementFactory.make('level', None)
             audiolevel.set_property('interval', 20000000)
 
-            #Currently tagging is broken and will need to be moved up in the code
+            #Setup metadata
+            vorbistag = Gst.ElementFactory.make("vorbistag", None)
+            #set tag merge mode to GST_TAG_MERGE_REPLACE
+            merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
-            # # Setup metadata
-            # #vorbistag = Gst.ElementFactory.make("vorbistag", "vorbistag")
-            # # set tag merge mode to GST_TAG_MERGE_REPLACE
-            # #merge_mode = Gst.TagMergeMode.__enum_values__[2]
-
-            # #if metadata is not None:
-            #     # Only set tag if metadata is set
-            #     #vorbistag.merge_tags(self.tags, merge_mode)
-            # #vorbistag.set_tag_merge_mode(merge_mode)
-            # #bin.add(vorbistag)
+            if metadata is not None:
+                # Only set tag if metadata is set
+                vorbistag.merge_tags(self.tags, merge_mode)
+            vorbistag.set_tag_merge_mode(merge_mode)
+            
 
 
             
@@ -93,13 +91,15 @@ class WebMOutput(IOutput):
             bin.add(audiolevel)
             bin.add(audioconvert)
             bin.add(enc)
+            bin.add(vorbistag)
             bin.add(q2)
 
             #link the audio elements
             q1.link(audiolevel)
             audiolevel.link(audioconvert)
             audioconvert.link(enc)
-            enc.link(q2)
+            enc.link(vorbistag)
+            vorbistag.link(q2)
             q2.link(muxer)
 
             # Setup ghost pads
@@ -138,18 +138,19 @@ class WebMOutput(IOutput):
         Populate global tag list variable with file metadata for
         vorbistag audio element
         '''
-        self.tags = Gst.TagList()
+        self.tags = Gst.TagList.new_empty()
+        merge_mode = Gst.TagMergeMode.__enum_values__[2]
         for tag in data.keys():
             if(Gst.tag_exists(tag)):
-                #tagging is not currently working
-                #self.tags[tag] = data[tag]
-                #self.tags.add_value(Gst.TagMergeMode.__enum_values__[4], tag, data[tag])
-                #Gst.TagList_Add_Value()
-                #Gst.tag_list_add_value()
-                #print tag
-                #print data[tag]
-                #Tag stuff seems broken, commenting out for now. Nick
-                print "I should be tagging meta data"
+                if tag == "date":
+                    s_date = data[tag].split("-")
+                    Tag_date = GLib.Date() 
+                    Tag_date.set_day(int(s_date[2]))
+                    Tag_date.set_month(s_date[1])
+                    Tag_date.set_year(int(s_date[0]))
+                    self.tags.add_value(merge_mode, tag, Tag_date)
+                else:
+                    self.tags.add_value(merge_mode, tag, str(data[tag]))
             else:
-                #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
+                self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
