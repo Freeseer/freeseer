@@ -101,6 +101,7 @@ class TalkEditorApp(FreeseerApp):
         # Add custom widgets
         self.commandButtons = CommandButtons()
         self.tableView = QTableView()
+        self.tableView.setSortingEnabled(True)
         self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.talkDetailsWidget = TalkDetailsWidget()
         self.importTalksWidget = ImportTalksWidget()
@@ -415,8 +416,6 @@ class TalkEditorApp(FreeseerApp):
             error.setText("Please enter a RSS URL")
             error.exec_()
 
-
-
     def closeEvent(self, event):
         log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
@@ -448,7 +447,6 @@ class TalkEditorApp(FreeseerApp):
             self.add_talks_from_rss()
 
         self.update_autocomple_fields()
-
 
     def export_talks_to_csv(self):
         dirpath = str(self.importTalksWidget.csvLineEdit.text())
