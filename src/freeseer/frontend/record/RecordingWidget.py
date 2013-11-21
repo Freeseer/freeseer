@@ -100,6 +100,14 @@ class RecordingWidget(QtGui.QWidget):
         self.controlRow.addWidget(self.pauseToolButton)
         self.connect(self.pauseToolButton, QtCore.SIGNAL("toggled(bool)"), self.setPauseIcon)
 
+        self.playToolButton = QtGui.QToolButton()
+        self.playToolButton.setText("Play Video")
+        self.playToolButton.setMinimumSize(QtCore.QSize(40, 40))
+        self.playToolButton.setHidden(True)
+        self.playToolButton.setEnabled(False)
+        self.playToolButton.setCheckable(True)
+        self.controlRow.addWidget(self.playToolButton)
+
         # Filter bar
         self.filterBarLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.filterBarLayout)

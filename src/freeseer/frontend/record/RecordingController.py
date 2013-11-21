@@ -58,8 +58,9 @@ class RecordingController:
 
     def load_backend(self, presentation=None):
         """Prepares the backend for recording"""
-        if self.media.load_backend(presentation):
-            return True
+        initialized, filename_for_frontend = self.media.load_backend(presentation)
+        if initialized:
+            return True, filename_for_frontend
         else:
             return False  # Error something failed while loading the backend
 

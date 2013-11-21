@@ -172,6 +172,8 @@ class Multimedia:
     def load_backend(self, presentation=None, filename=None):
         log.debug("Loading Output plugins...")
 
+        filename_for_frontend = None
+
         load_plugins = []
 
         if self.config.record_to_file:
@@ -210,6 +212,7 @@ class Multimedia:
             # This is to ensure that we don't log a message when extension is None
             if extension is not None:
                 log.info('Set record name to %s', record_name)
+                filename_for_frontend = record_name
 
             # Prepare metadata.
             metadata = self.prepare_metadata(presentation)
@@ -273,7 +276,7 @@ class Multimedia:
                     self.unload_audiomixer()
                     return False
 
-        return True
+        return True, filename_for_frontend
 
     def load_output_plugins(self, plugins, record_audio, record_video, metadata):
         self.output_plugins = []
