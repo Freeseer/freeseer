@@ -113,13 +113,6 @@ class RecordApp(FreeseerApp):
         self.actionOpenVideoFolder.setObjectName(_fromUtf8("actionOpenVideoFolder"))
         self.actionOpenVideoFolder.setIcon(folderIcon)
 
-        playbackIcon = QtGui.QIcon.fromTheme("video-x-generic")
-        self.actionPlayVideo = QtGui.QAction(self)
-        self.actionPlayVideo.setShortcut("Ctrl+P")
-        self.actionPlayVideo.setObjectName(_fromUtf8("actionPlayVideo"))
-        self.actionPlayVideo.setEnabled(False)
-        self.actionPlayVideo.setIcon(playbackIcon)
-
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
 
@@ -127,7 +120,6 @@ class RecordApp(FreeseerApp):
         self.actionClient.setIcon(self.icon)
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionOpenVideoFolder)
-        self.menuFile.insertAction(self.actionExit, self.actionPlayVideo)
         # Hide the controller client configuration screen for Freeseer 3.0.0
         # release. This feature's not ready for public use so lets keep it
         # hidden for now.
@@ -163,6 +155,7 @@ class RecordApp(FreeseerApp):
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.record)
         self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
         self.connect(self.mainWidget.audioFeedbackCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_feedback)
+        self.connect(self.mainWidget.playToolButton, QtCore.SIGNAL('toggled(bool)'), self.play_video)
 
         # Main Window Connections
         self.connect(self.actionConfigTool, QtCore.SIGNAL('triggered()'), self.open_configtool)
@@ -170,7 +163,6 @@ class RecordApp(FreeseerApp):
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
         self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
-        self.connect(self.actionPlayVideo, QtCore.SIGNAL('triggered()'), self.play_video)
 
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
@@ -208,6 +200,7 @@ class RecordApp(FreeseerApp):
         self.stopString = self.app.translate("RecordApp", "Stop")
         self.hideWindowString = self.app.translate("RecordApp", "Hide Main Window")
         self.showWindowString = self.app.translate("RecordApp", "Show Main Window")
+        self.playVideoString = self.app.translate("RecordApp", "Play Video")
 
         # Status Bar messages
         self.idleString = self.app.translate("RecordApp", "Idle.")
@@ -234,7 +227,6 @@ class RecordApp(FreeseerApp):
         self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
         self.actionClient.setText(self.app.translate("RecordApp", "&Connect to server"))
         self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
-        self.actionPlayVideo.setText(self.app.translate("RecordApp", "&Play Video"))
         # --- End Menubar
 
         #
@@ -247,6 +239,7 @@ class RecordApp(FreeseerApp):
         #
         # RecordingWidget
         #
+        self.mainWidget.playToolButton.setText(self.playVideoString)
         self.mainWidget.standbyPushButton.setText(self.standbyString)
         self.mainWidget.standbyPushButton.setToolTip(self.standbyString)
         if self.mainWidget.recordPushButton.isChecked():
@@ -351,6 +344,9 @@ class RecordApp(FreeseerApp):
             toggle_gui(False)
             self.mainWidget.standbyPushButton.setChecked(False)
 
+        self.mainWidget.playToolButton.setVisible(False)
+        self.mainWidget.playToolButton.setEnabled(False)
+
     def record(self, state):
         """The logic for recording and stopping recording."""
 
@@ -383,7 +379,6 @@ class RecordApp(FreeseerApp):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.actionPlayVideo.setEnabled(True)
 
             # Finally set the standby button back to unchecked position.
             self.standby(False)
@@ -391,6 +386,10 @@ class RecordApp(FreeseerApp):
             # Stop and reset timer.
             self.timer.stop()
             self.reset_timer()
+
+            #Show playback button
+            self.mainWidget.playToolButton.setVisible(True)
+            self.mainWidget.playToolButton.setEnabled(True)
 
             # Select next talk if there is one within 15 minutes.
             if self.current_event and self.current_room:
