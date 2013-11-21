@@ -12,6 +12,8 @@ The two style guides mostly overlap but the Google one is more detailed and
 easier to navigate. Freeseer also contains tests that will loosely check the code for PEP
 8 compatibility.
 
+Not all existing code follows these guidelines, but all new code is expected to.
+
 Custom Guidelines
 -----------------
 
@@ -41,3 +43,11 @@ logging level of course).
 
 For everything else, use ``str.format()``. E.g. ``'{} - {}'.format(foo, bar)``
 or ``'{0}, {1}, {0}'.format(foo, bar)``.
+
+.. rubric:: Write Short Methods
+
+Methods and functions should be kept small and focused.
+
+Long methods are sometimes appropriate, so no hard limit is placed on method
+length. However, if a method exceeds 40 lines or so, think about whether it can
+be broken up without harming the structure of the program.
