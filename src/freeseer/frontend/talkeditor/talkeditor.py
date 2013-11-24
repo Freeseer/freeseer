@@ -45,6 +45,9 @@ from PyQt4.QtGui import QFileDialog
 from PyQt4.QtGui import QMessageBox
 from PyQt4.QtGui import QItemSelectionModel
 from PyQt4.QtGui import QCompleter
+from PyQt4.QtGui import QSortFilterProxyModel
+from PyQt4.QtCore import QModelIndex
+
 from PyQt4.QtCore import Qt
 
 # Freeseer modules
@@ -166,6 +169,8 @@ class TalkEditorApp(FreeseerApp):
         # Command Buttons
         self.connect(self.commandButtons.addButton,
                      SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.commandButtons.duplicateButton,
+                     SIGNAL('clicked()'), self.load_proxy_filter_model)
         self.connect(self.commandButtons.removeButton,
                      SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.commandButtons.removeAllButton,
@@ -291,6 +296,23 @@ class TalkEditorApp(FreeseerApp):
         self.categoryList = QStringList(self.db.get_categoryList())
         self.eventList = QStringList(self.db.get_eventList())
         self.roomList = QStringList(self.db.get_roomList())
+
+    def load_proxy_filter_model(self):
+        self.proxy = QSortFilterProxyModel()
+        self.proxy.setSourceModel(self.presentationModel)
+        # The default value is 0. If the value is -1, the keys will be read
+        # from all columns.
+        self.proxy.setFilterKeyColumn(-1)
+        self.proxy.setFilterFixedString("One")
+
+        searchIndex = QModelIndex()
+        searchIndex = self.proxy.mapToSource(self.proxy.index(0, 0))
+        if (searchIndex.isValid()):
+            print("Valid Search")
+            self.tableView.scrollTo(
+                searchIndex)
+            self.tableView.setCurrentIndex(searchIndex)
+            self.talk_selected(searchIndex)
 
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
@@ -479,3 +501,4 @@ class TalkEditorApp(FreeseerApp):
             self.categoryCompleter)
         self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
         self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
+
