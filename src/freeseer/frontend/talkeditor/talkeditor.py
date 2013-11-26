@@ -203,6 +203,10 @@ class TalkEditorApp(FreeseerApp):
         # Setup Autocompletion
         self.update_autocomple_fields()
 
+        # Select first item
+        self.tableView.setCurrentIndex(self.proxy.index(0,0))
+        self.talk_selected(self.proxy.index(0,0))
+
     #
     # Translation
     #
@@ -288,8 +292,11 @@ class TalkEditorApp(FreeseerApp):
         # Load Presentation Model
         self.presentationModel = self.db.get_presentations_model()
         self.proxy = QSortFilterProxyModel()
+
         self.proxy.setSourceModel(self.presentationModel)
         self.tableView.setModel(self.proxy)
+        self.proxy.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+
 
         # Fill table whitespace.
         self.tableView.horizontalHeader().setStretchLastSection(True)
