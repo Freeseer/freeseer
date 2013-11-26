@@ -69,9 +69,7 @@ log = logging.getLogger(__name__)
 
 
 class TalkEditorApp(FreeseerApp):
-
     '''Freeseer talk database editor main gui class'''
-
     def __init__(self, backButton=False):
         FreeseerApp.__init__(self)
 

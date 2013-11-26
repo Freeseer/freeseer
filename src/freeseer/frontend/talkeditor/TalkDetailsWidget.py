@@ -81,8 +81,6 @@ class TalkDetailsWidget(QWidget):
         self.timeLabel = QLabel('Time')
         self.timeEdit = QTimeEdit()
 
-        # self.dateLabel.setBuddy(self.dateEdit)
-        # self.timeLabel.setBuddy(self.dateEdit)
         self.dateLayout.addWidget(self.dateEdit)
         self.timeLayout.addWidget(self.timeEdit)
         self.layout.addWidget(self.dateLabel, 3, 0, 1, 1)
