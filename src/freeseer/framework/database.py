@@ -265,7 +265,9 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT Title FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
+        tempList.removeDuplicates()
         return tempList
+
     def get_speakerList(self):
         """
         Return a stringList of all Speakers
@@ -274,7 +276,9 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT Speaker FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
+        tempList.removeDuplicates()
         return tempList
+
     def get_categoryList(self):
         """
         Return a stringList of all Speakers
@@ -283,7 +287,9 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT category FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
+        tempList.removeDuplicates()
         return tempList
+
     def get_eventList(self):
         """
         Return a stringList of all events
@@ -292,7 +298,9 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT Event FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
+        tempList.removeDuplicates()
         return tempList
+
     def get_roomList(self):
         """
         Return a stringList of all rooms
@@ -301,8 +309,9 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''SELECT Room FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
+        tempList.removeDuplicates()
         return tempList
-
+        
     def presentation_exists(self, presentation):
         """
         Check if there's a presentation with the same Speaker and Title already stored
