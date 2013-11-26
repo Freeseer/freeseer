@@ -70,9 +70,7 @@ log = logging.getLogger(__name__)
 
 class TalkEditorApp(FreeseerApp):
 
-    '''
-    Freeseer talk database editor main gui class
-    '''
+    '''Freeseer talk database editor main gui class'''
 
     def __init__(self, backButton=False):
         FreeseerApp.__init__(self)
@@ -143,51 +141,34 @@ class TalkEditorApp(FreeseerApp):
         #
         # TableView Connections
         #
-        self.connect(self.tableView, SIGNAL(
-            'activated(const QModelIndex)'), self.talk_selected)
-        self.connect(self.tableView, SIGNAL(
-            'selected(const QModelIndex)'), self.talk_selected)
-        self.connect(self.tableView, SIGNAL(
-            'clicked(const QModelIndex)'), self.talk_selected)
+        self.connect(self.tableView, SIGNAL('activated(const QModelIndex)'), self.talk_selected)
+        self.connect(self.tableView, SIGNAL('selected(const QModelIndex)'), self.talk_selected)
+        self.connect(self.tableView, SIGNAL('clicked(const QModelIndex)'), self.talk_selected)
 
         # Import Widget
-        self.connect(self.importTalksWidget.csvRadioButton,
-                     SIGNAL('toggled(bool)'), self.toggle_import)
-        self.connect(self.importTalksWidget.importButton,
-                     SIGNAL('clicked()'), self.import_talks)
-        self.connect(self.importTalksWidget.cancelButton,
-                     SIGNAL('clicked()'), self.hide_import_talks_widget)
+        self.connect(self.importTalksWidget.csvRadioButton, SIGNAL('toggled(bool)'), self.toggle_import)
+        self.connect(self.importTalksWidget.importButton, SIGNAL('clicked()'), self.import_talks)
+        self.connect(self.importTalksWidget.cancelButton, SIGNAL('clicked()'), self.hide_import_talks_widget)
         self.importTalksWidget.setHidden(True)
-        self.connect(self.importTalksWidget.csvFileSelectButton,
-                     QtCore.SIGNAL('clicked()'), self.csv_file_select)
-        self.connect(self.importTalksWidget.csvLineEdit, QtCore.SIGNAL(
-            'returnPressed()'), self.importTalksWidget.importButton.click)
-        self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL(
-            'returnPressed()'), self.importTalksWidget.importButton.click)
-        self.connect(self.actionExportCsv, QtCore.SIGNAL(
-            'triggered()'), self.export_talks_to_csv)
-        self.connect(self.actionRemoveAll, QtCore.SIGNAL(
-            'triggered()'), self.confirm_reset)
+        self.connect(self.importTalksWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
+        self.connect(self.importTalksWidget.csvLineEdit, QtCore.SIGNAL('returnPressed()'), 
+            self.importTalksWidget.importButton.click)
+        self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), 
+            self.importTalksWidget.importButton.click)
+        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
+        self.connect(self.actionRemoveAll, QtCore.SIGNAL('triggered()'), self.confirm_reset)
 
         # Command Buttons
-        self.connect(self.commandButtons.addButton,
-                     SIGNAL('clicked()'), self.add_talk)
-        self.connect(self.commandButtons.removeButton,
-                     SIGNAL('clicked()'), self.remove_talk)
-        self.connect(self.commandButtons.removeAllButton,
-                     SIGNAL('clicked()'), self.confirm_reset)
-        self.connect(self.commandButtons.importButton,
-                     SIGNAL('clicked()'), self.show_import_talks_widget)
-        self.connect(self.commandButtons.exportButton,
-                     SIGNAL('clicked()'), self.export_talks_to_csv)
+        self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.commandButtons.removeButton, SIGNAL('clicked()'), self.remove_talk)
+        self.connect(self.commandButtons.removeAllButton, SIGNAL('clicked()'), self.confirm_reset)
+        self.connect(self.commandButtons.importButton, SIGNAL('clicked()'), self.show_import_talks_widget)
+        self.connect(self.commandButtons.exportButton, SIGNAL('clicked()'), self.export_talks_to_csv)
 
         # Search Widget Connections
-        self.connect(self.searchWidget.searchButton,
-                    SIGNAL('clicked()'),self.search_talks)
-        self.connect(self.searchWidget.searchLineEdit,
-                    SIGNAL('textEdited(QString)'),self.search_talks)
-        self.connect(self.searchWidget.searchLineEdit,
-                    SIGNAL('returnPressed()'),self.search_talks)
+        self.connect(self.searchWidget.searchButton, SIGNAL('clicked()'),self.search_talks)
+        self.connect(self.searchWidget.searchLineEdit, SIGNAL('textEdited(QString)'),self.search_talks)
+        self.connect(self.searchWidget.searchLineEdit, SIGNAL('returnPressed()'),self.search_talks)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -211,80 +192,59 @@ class TalkEditorApp(FreeseerApp):
     # Translation
     #
     def retranslate(self):
-        self.setWindowTitle(
-            self.app.translate("TalkEditorApp", "Freeseer Talk Editor"))
+        self.setWindowTitle(self.app.translate("TalkEditorApp", "Freeseer Talk Editor"))
 
         #
         # Reusable Strings
         #
-        self.confirmDBClearTitleString = self.app.translate(
-            "TalkEditorApp", "Remove All Talks from Database")
-        self.confirmDBClearQuestionString = self.app.translate(
-            "TalkEditorApp", "Are you sure you want to clear the DB?")
+        self.confirmDBClearTitleString = self.app.translate("TalkEditorApp", "Remove All Talks from Database")
+        self.confirmDBClearQuestionString = self.app.translate("TalkEditorApp",
+            "Are you sure you want to clear the DB?")
         # --- End Reusable Strings
 
         #
         # Menubar
         #
-        self.actionExportCsv.setText(
-            self.app.translate("TalkEditorApp", "&Export to CSV"))
-        self.actionRemoveAll.setText(
-            self.app.translate("TalkEditorApp", "&Remove All Talks"))
+        self.actionExportCsv.setText(self.app.translate("TalkEditorApp", "&Export to CSV"))
+        self.actionRemoveAll.setText(self.app.translate("TalkEditorApp", "&Remove All Talks"))
 
         # --- End Menubar
 
         #
         # TalkDetailsWidget
         #
-        self.talkDetailsWidget.titleLabel.setText(
-            self.app.translate("TalkEditorApp", "Title"))
-        self.talkDetailsWidget.presenterLabel.setText(
-            self.app.translate("TalkEditorApp", "Presenter"))
-        self.talkDetailsWidget.categoryLabel.setText(
-            self.app.translate("TalkEditorApp", "Category"))
-        self.talkDetailsWidget.eventLabel.setText(
-            self.app.translate("TalkEditorApp", "Event"))
-        self.talkDetailsWidget.roomLabel.setText(
-            self.app.translate("TalkEditorApp", "Room"))
-        self.talkDetailsWidget.dateLabel.setText(
-            self.app.translate("TalkEditorApp", "Date"))
-        self.talkDetailsWidget.timeLabel.setText(
-            self.app.translate("TalkEditorApp", "Time"))
+        self.talkDetailsWidget.titleLabel.setText(self.app.translate("TalkEditorApp", "Title"))
+        self.talkDetailsWidget.presenterLabel.setText(self.app.translate("TalkEditorApp", "Presenter"))
+        self.talkDetailsWidget.categoryLabel.setText(self.app.translate("TalkEditorApp", "Category"))
+        self.talkDetailsWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
+        self.talkDetailsWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
+        self.talkDetailsWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
+        self.talkDetailsWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
         # --- End TalkDetailsWidget
 
         #
         # Import Talks Widget Translations
         #
-        self.importTalksWidget.rssRadioButton.setText(
-            self.app.translate("TalkEditorApp", "RSS URL"))
-        self.importTalksWidget.csvRadioButton.setText(
-            self.app.translate("TalkEditorApp", "CSV File"))
-        self.importTalksWidget.importButton.setText(
-            self.app.translate("TalkEditorApp", "Import"))
+        self.importTalksWidget.rssRadioButton.setText(self.app.translate("TalkEditorApp", "RSS URL"))
+        self.importTalksWidget.csvRadioButton.setText(self.app.translate("TalkEditorApp", "CSV File"))
+        self.importTalksWidget.importButton.setText(self.app.translate("TalkEditorApp", "Import"))
         # --- End Talks Widget Translations
 
         #
         # Command Button Translations
         #
-        self.commandButtons.addButton.setText(
-            self.app.translate("TalkEditorApp", "Add"))
-        self.commandButtons.duplicateButton.setText(
-            self.app.translate("TalkEditorApp", "Duplicate"))
-        self.commandButtons.importButton.setText(
-            self.app.translate("TalkEditorApp", "Import"))
-        self.commandButtons.exportButton.setText(
-            self.app.translate("TalkEditorApp", "Export"))
-        self.commandButtons.removeButton.setText(
-            self.app.translate("TalkEditorApp", "Remove"))
-        self.commandButtons.removeAllButton.setText(
-            self.app.translate("TalkEditorApp", "Remove All"))
+        self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
+        self.commandButtons.duplicateButton.setText(self.app.translate("TalkEditorApp", "Duplicate"))
+        self.commandButtons.importButton.setText(self.app.translate("TalkEditorApp", "Import"))
+        self.commandButtons.exportButton.setText(self.app.translate("TalkEditorApp", "Export"))
+        self.commandButtons.removeButton.setText(self.app.translate("TalkEditorApp", "Remove"))
+        self.commandButtons.removeAllButton.setText(self.app.translate("TalkEditorApp", "Remove All"))
         # --- End Command Butotn Translations
 
         #
         # Search Widget Translations
         #
-        self.searchWidget.searchButton.setText(
-            self.app.translate("TalkEditorApp", "Search"))
+        self.searchWidget.searchButton.setText(self.app.translate("TalkEditorApp", "Search"))
         # --- End Command Butotn Translations
 
 
@@ -292,11 +252,9 @@ class TalkEditorApp(FreeseerApp):
         # Load Presentation Model
         self.presentationModel = self.db.get_presentations_model()
         self.proxy = QSortFilterProxyModel()
-
         self.proxy.setSourceModel(self.presentationModel)
         self.tableView.setModel(self.proxy)
         self.proxy.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
-
 
         # Fill table whitespace.
         self.tableView.horizontalHeader().setStretchLastSection(True)
@@ -325,18 +283,9 @@ class TalkEditorApp(FreeseerApp):
 
 
     def search_talks(self):
-        # The default value is 0. If the value is -1, the keys will be read
-        # from all columns.
+        # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
         self.proxy.setFilterFixedString(self.searchWidget.searchLineEdit.text())
-        #searchIndex = QModelIndex()
-        #searchIndex = self.proxy.mapToSource(self.proxy.index(0, 0))
-        #if (searchIndex.isValid()):
-        #    print("Valid Search")
-        #    self.tableView.scrollTo(
-        #        searchIndex)
-        #    self.tableView.setCurrentIndex(searchIndex)
-        #    self.talk_selected(searchIndex)
 
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
@@ -371,29 +320,17 @@ class TalkEditorApp(FreeseerApp):
         #datetime = QtCore.QDateTime(date, time)
         presentation = Presentation(
             unicode(self.talkDetailsWidget.titleLineEdit.text()),
-            unicode(
-                self.talkDetailsWidget.presenterLineEdit.text(
-                )),
-            unicode(
-                self.talkDetailsWidget.descriptionTextEdit.toPlainText(
-                )),
-            unicode(
-                self.talkDetailsWidget.categoryLineEdit.text(
-                )),
-            unicode(
-                self.talkDetailsWidget.eventLineEdit.text(
-                )),
-            unicode(
-                self.talkDetailsWidget.roomLineEdit.text(
-                )),
-            unicode(date.toString(QtCore.Qt.ISODate
-                                  )),
+            unicode(self.talkDetailsWidget.presenterLineEdit.text()),
+            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()),
+            unicode(self.talkDetailsWidget.categoryLineEdit.text()),
+            unicode(self.talkDetailsWidget.eventLineEdit.text()),
+            unicode(self.talkDetailsWidget.roomLineEdit.text()),
+            unicode(date.toString(QtCore.Qt.ISODate)),
             unicode(time.toString(QtCore.Qt.ISODate)))
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):
             return
-
         self.db.insert_presentation(presentation)
 
         # cleanup
@@ -429,7 +366,6 @@ class TalkEditorApp(FreeseerApp):
             return
 
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
-
         self.presentationModel.select()
 
     def reset(self):
@@ -437,12 +373,8 @@ class TalkEditorApp(FreeseerApp):
         self.presentationModel.select()
 
     def confirm_reset(self):
-        """
-        Presents a confirmation dialog to ask the user if they are sure they
-        wish to remove the talk database.
-
-        If Yes call the reset() function.
-        """
+        """Presents a confirmation dialog to ask the user if they are sure they wish to remove the talk database.
+        If Yes call the reset() function"""
         confirm = QMessageBox.question(self,
                                        self.confirmDBClearTitleString,
                                        self.confirmDBClearQuestionString,
@@ -503,11 +435,11 @@ class TalkEditorApp(FreeseerApp):
             self.db.export_talks_to_csv(fname)
 
     def update_autocomple_fields(self):
-        self.titleList = QStringList(self.db.get_titleList())
-        self.speakerList = QStringList(self.db.get_speakerList())
-        self.categoryList = QStringList(self.db.get_categoryList())
-        self.eventList = QStringList(self.db.get_eventList())
-        self.roomList = QStringList(self.db.get_roomList())
+        self.titleList = QStringList(self.db.get_title_list())
+        self.speakerList = QStringList(self.db.get_speaker_list())
+        self.categoryList = QStringList(self.db.get_category_list())
+        self.eventList = QStringList(self.db.get_event_list())
+        self.roomList = QStringList(self.db.get_room_list())
 
         self.titleCompleter = QCompleter(self.titleList)
         self.titleCompleter.setCaseSensitivity(Qt.CaseInsensitive)
@@ -521,9 +453,7 @@ class TalkEditorApp(FreeseerApp):
         self.roomCompleter.setCaseSensitivity(Qt.CaseInsensitive)
 
         self.talkDetailsWidget.titleLineEdit.setCompleter(self.titleCompleter)
-        self.talkDetailsWidget.presenterLineEdit.setCompleter(
-            self.speakerCompleter)
-        self.talkDetailsWidget.categoryLineEdit.setCompleter(
-            self.categoryCompleter)
+        self.talkDetailsWidget.presenterLineEdit.setCompleter(self.speakerCompleter)
+        self.talkDetailsWidget.categoryLineEdit.setCompleter(self.categoryCompleter)
         self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
         self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
