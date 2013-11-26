@@ -32,14 +32,9 @@ import sys
 
 class ImportTalksWidget(QtGui.QWidget):
 
-    '''
-    classdocs
-    '''
-
+    '''classdocs'''
     def __init__(self, parent=None):
-        '''
-        Constructor
-        '''
+        '''Constructor'''
         QtGui.QWidget.__init__(self, parent)
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
@@ -72,23 +67,17 @@ class ImportTalksWidget(QtGui.QWidget):
 
         if sys.platform == 'win32':
             if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
-                self.csvLineEdit.setPlaceholderText(
-                    "C:\Example\Freeseer2011.csv")
+                self.csvLineEdit.setPlaceholderText("C:\Example\Freeseer2011.csv")
         else:
             if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
-                self.csvLineEdit.setPlaceholderText(
-                    "/home/freeseer/Example/Freeseer2011.csv")
-        # self.csvLabel.setBuddy(self.csvLineEdit)
+                self.csvLineEdit.setPlaceholderText("/home/freeseer/Example/Freeseer2011.csv")
         self.csvFileSelectButton = QtGui.QToolButton()
         csvFileSelectButton = QtGui.QIcon.fromTheme("folder")
         self.csvFileSelectButton.setIcon(csvFileSelectButton)
-        #self.importCSVButton = QtGui.QPushButton("Load talks from CSV")
 
         self.csvLayout.addWidget(self.csvRadioButton)
-        # self.csvLayout.addWidget(self.csvLabel)
         self.csvLayout.addWidget(self.csvLineEdit)
         self.csvLayout.addWidget(self.csvFileSelectButton)
-        # self.csvLayout.addWidget(self.importCSVButton)
 
         #
         # RSS Layout
@@ -97,21 +86,12 @@ class ImportTalksWidget(QtGui.QWidget):
         self.rssLayout = QtGui.QHBoxLayout()
         self.rssWidget.setLayout(self.rssLayout)
 
-        #self.rssLabel = QtGui.QLabel("RSS URL")
         self.rssLineEdit = QtGui.QLineEdit()
         self.rssLineEdit.setEnabled(False)
         if hasattr(QtGui.QLineEdit(), 'setPlaceholderText'):
             self.rssLineEdit.setPlaceholderText("http://www.example.com/rss")
-        # self.rssLabel.setBuddy(self.rssLineEdit)
-        #self.importRSSButton = QtGui.QPushButton("Load talks from RSS")
-        #rss_icon = QtGui.QIcon()
-        #rss_icon.addPixmap(QtGui.QPixmap(":/multimedia/rss.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        # self.importRSSButton.setIcon(rss_icon)
-
         self.rssLayout.addWidget(self.rssRadioButton)
-        # self.rssLayout.addWidget(self.rssLabel)
         self.rssLayout.addWidget(self.rssLineEdit)
-        # self.rssLayout.addWidget(self.importRSSButton)
 
         # Layout
 
@@ -121,8 +101,7 @@ class ImportTalksWidget(QtGui.QWidget):
 
         self.importCommandButtonsWidget = QtGui.QWidget()
         self.importCommandButtonsLayout = QtGui.QHBoxLayout()
-        self.importCommandButtonsWidget.setLayout(
-            self.importCommandButtonsLayout)
+        self.importCommandButtonsWidget.setLayout(self.importCommandButtonsLayout)
         self.importCommandButtonsLayout.addStretch()
         self.importCommandButtonsLayout.addWidget(self.importButton)
         self.importCommandButtonsLayout.addWidget(self.cancelButton)
