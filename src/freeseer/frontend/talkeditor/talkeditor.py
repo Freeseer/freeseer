@@ -317,11 +317,11 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
 
         # Load StringLists
-        self.titleList = QStringList(self.db.get_titleList())
-        self.speakerList = QStringList(self.db.get_speakerList())
-        self.categoryList = QStringList(self.db.get_categoryList())
-        self.eventList = QStringList(self.db.get_eventList())
-        self.roomList = QStringList(self.db.get_roomList())
+        self.titleList = QStringList(self.db.get_title_list())
+        self.speakerList = QStringList(self.db.get_speaker_list())
+        self.categoryList = QStringList(self.db.get_category_list())
+        self.eventList = QStringList(self.db.get_event_list())
+        self.roomList = QStringList(self.db.get_room_list())
 
 
     def search_talks(self):

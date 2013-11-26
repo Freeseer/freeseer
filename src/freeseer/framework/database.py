@@ -44,12 +44,9 @@ class QtDBConnector():
     recentconnModel = None
 
     def __init__(self, configdir, talkdb_file="presentations.db"):
-        """
-        Initialize the QtDBConnector
-        """
+        """Initialize the QtDBConnector"""
         self.configdir = configdir
-        self.talkdb_file = os.path.abspath(
-            "%s/%s" % (self.configdir, talkdb_file))
+        self.talkdb_file = os.path.abspath("%s/%s" % (self.configdir, talkdb_file))
 
         if not os.path.isfile(self.talkdb_file):
             file = open(self.talkdb_file, 'w')
@@ -59,9 +56,7 @@ class QtDBConnector():
         self.__open_table()
 
     def __open_table(self):
-        """
-        This function options a connection to the database. Used by the init function.
-        """
+        """This function options a connection to the database. Used by the init function."""
         self.talkdb = QtSql.QSqlDatabase.addDatabase("QSQLITE")
         self.talkdb.setDatabaseName(self.talkdb_file)
 
@@ -86,15 +81,11 @@ class QtDBConnector():
             log.error("Unable to create talkdb file.")
 
     def __close_table(self):
-        """
-        This function is used to close the connection the the database.
-        """
+        """This function is used to close the connection the the database."""
         self.talkdb.close()
 
     def get_program_version_int(self):
-        """
-        Get Freeseer's current version as an integer.
-        """
+        """Get Freeseer's current version as an integer."""
         result = []
         for c in __version__:
             if c.isdigit():
@@ -102,20 +93,16 @@ class QtDBConnector():
         return int(''.join(result))
 
     def __get_db_version_int(self):
-        """
-        Get the database's current version. Default is 0 if unset (for 2x and older)
-        """
+        """Get the database's current version. Default is 0 if unset (for 2x and older)"""
         query = QtSql.QSqlQuery('PRAGMA user_version')
         query.first()
         return query.value(0).toInt()[0]
 
     def __update_version(self):
-        """
-        Upgrade database to the latest version.
+        """Upgrade database to the latest version.
         updaterVersion[i] version number of the incremental update function located at updaters[i]
         updaters[] functions are then called in order starting at the old version to the end.
-        Version # of 2.x and older is 0
-        """
+        Version # of 2.x and older is 0"""
 
         db_version = self.__get_db_version_int()
         program_version = self.get_program_version_int()
@@ -123,34 +110,26 @@ class QtDBConnector():
             return
 
         def update_2xto30():
-            """
-            Incremental update of database from 2.x and older to 3.0.
-            """
+            """Incremental update of database from 2.x and older to 3.0."""
             # temporary table
-            QtSql.QSqlQuery(
-                'ALTER TABLE presentations RENAME TO presentations_old')
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
             QtSql.QSqlQuery("""INSERT INTO presentations
-                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time from presentations_old""")
+                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time
+                            from presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
         def update_30to31():
-            """
-            Incremental update of database from 3.0 and older to 3.1.
-
-            """
+            """Incremental update of database from 3.0 and older to 3.1."""
             # temporary table
-            QtSql.QSqlQuery(
-                'ALTER TABLE presentations RENAME TO presentations_old')
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
             QtSql.QSqlQuery("""INSERT INTO presentations
-                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time from presentations_old""")
-            QtSql.QSqlQuery(
-                'ALTER TABLE presentations RENAME COLUMN Category to Category')
-            QtSql.QSqlQuery(
-                'ALTER TABLE presentations RENAME COLUMN Time to Date')
-            QtSql.QSqlQuery(
-                'ALTER TABLE presentations ADD COLUMN Time timestamp')
+                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time
+                            from presentations_old""")
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Category to Category')
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Time to Date')
+            QtSql.QSqlQuery('ALTER TABLE presentations ADD COLUMN Time timestamp')
             QtSql.QSqlQuery('UPDATE table SET Date = Time')
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
@@ -166,11 +145,8 @@ class QtDBConnector():
         log.info('Upgraded presentations database from version %i', db_version)
 
     def __create_presentations_table(self):
-        """
-        Creates the presentations table in the database. Should be used to
-        initialize a new table.
-        """
-        print "table created"
+        """Creates the presentations table in the database. Should be used to initialize a new table."""
+        log.info("table created")
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS presentations
                                        (Id INTEGER PRIMARY KEY,
                                         Title varchar(255),
@@ -184,9 +160,7 @@ class QtDBConnector():
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
 
     def __insert_default_talk(self):
-        """
-        Insert the default talk data into the database.
-        """
+        """Insert the default talk data into the database."""
         presentation = Presentation("Intro to Freeseer",
                                     "Thanh Ha",
                                     "",
@@ -199,54 +173,37 @@ class QtDBConnector():
         self.insert_presentation(presentation)
 
     def get_talks(self):
-        """
-        Gets all the talks from the database including all columns.
-        """
+        """Gets all the talks from the database including all columns"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
         return result
 
     def get_events(self):
-        """
-        Gets all the talk events from the database.
-        """
-        result = QtSql.QSqlQuery(
-            '''SELECT DISTINCT Event FROM presentations''')
+        """Gets all the talk events from the database"""
+        result = QtSql.QSqlQuery('''SELECT DISTINCT Event FROM presentations''')
         return result
 
     def get_talk_ids(self):
-        """
-        Gets all the talk events from the database.
-        """
+        """Gets all the talk events from the database"""
         result = QtSql.QSqlQuery('''SELECT Id FROM presentations''')
         return result
 
     def get_talks_by_event(self, event):
-        """
-        Gets the talks signed in a specific event from the database.
-        """
-        result = QtSql.QSqlQuery(
-            '''SELECT * FROM presentations WHERE Event=%s''' % event)
+        """Gets the talks signed in a specific event from the database"""
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Event=%s''' % event)
         return result
 
     def get_talks_by_room(self, room):
-        """
-        Gets the talks hosted in a specific room from the database.
-        """
-        result = QtSql.QSqlQuery(
-            '''SELECT * FROM presentations WHERE Room=%s''' % room)
+        """Gets the talks hosted in a specific room from the database"""
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Room=%s''' % room)
         return result
 
     def get_presentation(self, talk_id):
-        """
-        Return a Presentation object associated to a talk_id.
-        """
-        result = QtSql.QSqlQuery(
-            '''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
+        """Return a Presentation object associated to a talk_id"""
+        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
         if result.next():
             p = Presentation(unicode(result.value(1).toString()),    # title
                              unicode(result.value(2).toString()),    # speaker
-                             # description
-                             unicode(result.value(3).toString()),
+                             unicode(result.value(3).toString()),    # description
                              unicode(result.value(4).toString()),    # category
                              unicode(result.value(5).toString()),    # event
                              unicode(result.value(6).toString()),    # room
@@ -257,10 +214,8 @@ class QtDBConnector():
 
         return p
 
-    def get_titleList(self):
-        """
-        Return a stringList of all titles
-        """
+    def get_title_list(self):
+        """Return a stringList of all titles"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Title FROM presentations''')
         while(result.next()):
@@ -268,10 +223,8 @@ class QtDBConnector():
         tempList.removeDuplicates()
         return tempList
 
-    def get_speakerList(self):
-        """
-        Return a stringList of all Speakers
-        """
+    def get_speaker_list(self):
+        """Return a stringList of all Speakers"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Speaker FROM presentations''')
         while(result.next()):
@@ -279,10 +232,8 @@ class QtDBConnector():
         tempList.removeDuplicates()
         return tempList
 
-    def get_categoryList(self):
-        """
-        Return a stringList of all Speakers
-        """
+    def get_category_list(self):
+        """Return a stringList of all Speakers"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT category FROM presentations''')
         while(result.next()):
@@ -290,10 +241,8 @@ class QtDBConnector():
         tempList.removeDuplicates()
         return tempList
 
-    def get_eventList(self):
-        """
-        Return a stringList of all events
-        """
+    def get_event_list(self):
+        """Return a stringList of all events"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Event FROM presentations''')
         while(result.next()):
@@ -301,24 +250,21 @@ class QtDBConnector():
         tempList.removeDuplicates()
         return tempList
 
-    def get_roomList(self):
-        """
-        Return a stringList of all rooms
-        """
+    def get_room_list(self):
+        """Return a stringList of all rooms"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Room FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
-        
+
     def presentation_exists(self, presentation):
-        """
-        Check if there's a presentation with the same Speaker and Title already stored
-        """
+        """Check if there's a presentation with the same Speaker and Title already stored"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
         while(result.next()):
-            if(unicode(presentation.title) == unicode(result.value(1).toString()) and unicode(presentation.speaker) == unicode(result.value(2).toString())):
+            if(unicode(presentation.title) == unicode(result.value(1).toString()) 
+                and unicode(presentation.speaker) == unicode(result.value(2).toString())):
                 return True
         return False
 
@@ -363,7 +309,8 @@ class QtDBConnector():
         Update an existing Presentation in the database.
         """
         query = QtSql.QSqlQuery(
-            '''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"  WHERE Id="%s"''' %
+            '''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"
+                WHERE Id="%s"''' %
             (presentation.title,
              presentation.speaker,
              presentation.event,
@@ -371,21 +318,17 @@ class QtDBConnector():
              presentation.date,
              presentation.time,
              talk_id))
-        log.info("Talk %s updated: %s - %s" %
-                 (talk_id, presentation.speaker, presentation.title))
+        log.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
 
     def delete_presentation(self, talk_id):
         """
         Removes a Presentation from the database
         """
-        query = QtSql.QSqlQuery(
-            '''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
+        query = QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
         log.info("Talk %s deleted." % talk_id)
 
     def clear_database(self):
-        """
-        Clears the presentations table
-        """
+        """Clears the presentations table"""
         query = QtSql.QSqlQuery('''DELETE FROM presentations''')
         log.info("Database cleared.")
 
@@ -393,27 +336,19 @@ class QtDBConnector():
     # Data Model Retrieval
     #
     def get_presentations_model(self):
-        """
-        Gets the Presentation Table Model.
-        Useful for Qt GUI based Frontends to load the Model in Table Views.
-        """
+        """Gets the Presentation Table Model. Useful for Qt GUI based Frontends to load the Model in Table Views"""
+
         if self.presentationsModel is None:
             self.presentationsModel = QtSql.QSqlTableModel()
             self.presentationsModel.setTable("presentations")
-            self.presentationsModel.setEditStrategy(
-                QtSql.QSqlTableModel.OnFieldChange)
+            self.presentationsModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
             self.presentationsModel.select()
-
         return self.presentationsModel
 
     def get_events_model(self):
-        """
-        Gets the Events Model.
-        Useful for Qt GUI based Frontends to load the Model into Views.
-        """
+        """Gets the Events Model. Useful for Qt GUI based Frontends to load the Model into Views"""
         self.eventsModel = QtSql.QSqlQueryModel()
-        self.eventsModel.setQuery(
-            "SELECT DISTINCT Event FROM presentations ORDER BY Event ASC")
+        self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations ORDER BY Event ASC")
 
         return self.eventsModel
 
@@ -424,26 +359,19 @@ class QtDBConnector():
         """
         self.datesModel = QtSql.QSqlQueryModel()
         self.datesModel.setQuery(
-            "SELECT DISTINCT date(Time) FROM presentations WHERE Event='%s' and Room='%s' ORDER BY Date ASC" % (event, room))
-
+            "SELECT DISTINCT date(Time) FROM presentations WHERE Event='%s' and Room='%s' ORDER BY Date ASC"
+            % (event, room))
         return self.datesModel
 
     def get_rooms_model(self, event):
-        """
-        Gets the Rooms Model.
-        Useful for Qt GUI based Frontends to load the Model into Views.
-        """
+        """Gets the Rooms Model. Useful for Qt GUI based Frontends to load the Model into Views"""
         self.roomsModel = QtSql.QSqlQueryModel()
-        self.roomsModel.setQuery(
-            "SELECT DISTINCT Room FROM presentations WHERE Event='%s' ORDER BY Room ASC" % event)
-
+        self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations WHERE Event='%s' ORDER BY Room ASC" % event)
         return self.roomsModel
 
     def get_talks_model(self, event, room, date=None):
-        """
-        Gets the Talks Model. A talk is defined as "<presenter> - <talk_title>"
-        Useful for Qt GUI based Frontends to load the Model into Views.
-        """
+        """Gets the Talks Model. A talk is defined as "<presenter> - <talk_title>"
+        Useful for Qt GUI based Frontends to load the Model into Views"""
 
         self.talksModel = QtSql.QSqlQueryModel()
         if date == "":
@@ -451,15 +379,13 @@ class QtDBConnector():
                                    WHERE Event='%s' and Room='%s' ORDER BY Date ASC" % (event, room))
         else:
             self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
-                                   WHERE Event='%s' and Room='%s' and date(Date) LIKE '%s' ORDER BY Date ASC" % (event, room, date))
-
+                                   WHERE Event='%s' and Room='%s' and date(Date) LIKE '%s' ORDER BY Date ASC" 
+                                   % (event, room, date))
         return self.talksModel
 
     def get_talk_between_time(self, event, room, starttime, endtime):
-        """
-        Returns the talkID of the first talk found between a starttime, and endtime for a specified event/room.
-        Else return None
-        """
+        """Returns the talkID of the first talk found between a starttime, and endtime for a specified event/room.
+        Else return None"""
         query = QtSql.QSqlQuery("SELECT Id, Date FROM presentations \
                                  WHERE Event='%s' AND Room='%s' \
                                  AND Date BETWEEN '%s' \
@@ -475,7 +401,7 @@ class QtDBConnector():
     #
     # Needs to be updated for category field, separate date and time fields
     def add_talks_from_rss(self, rss):
-        """Adds talks from an rss feed."""
+        """Adds talks from an rss feed"""
         entry = str(rss)
         feedparser = FeedParser(entry)
 
@@ -570,7 +496,6 @@ class QtDBConnector():
     # time, date)
     def export_talks_to_csv(self, fname):
         #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
-
         fieldNames = ('Title',
                       'Speaker',
                       'Abstract',
@@ -579,7 +504,6 @@ class QtDBConnector():
                       'Room',
                       'Date',
                       'Time')
-
         try:
             file = open(fname, 'w')
             writer = csv.DictWriter(file, fieldnames=fieldNames)
@@ -639,10 +563,7 @@ class QtDBConnector():
     #
 
     def __create_failures_table(self):
-        """
-        Create the failures table in the database
-        Should be used to initialize a new table.
-        """
+        """Create the failures table in the database. Should be used to initialize a new table"""
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
                                         (Id INTERGER PRIMARY KEY,
                                         Comments TEXT,
@@ -651,19 +572,12 @@ class QtDBConnector():
                                         UNIQUE (ID) ON CONFLICT REPLACE)''')
 
     def clear_report_db(self):
-        """
-        Drops the failures (reports) table from the database
-        """
+        """Drops the failures (reports) table from the database"""
         query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS failures''')
 
     def get_report(self, talkid):
-        """
-        Return a failure from a given talkid
-
-        Returned value is a Failure object
-        """
-        result = QtSql.QSqlQuery(
-            '''SELECT * FROM failures WHERE Id = "%s"''' % talkid)
+        """Return a failure from a given talkid. Returned value is a Failure object"""
+        result = QtSql.QSqlQuery('''SELECT * FROM failures WHERE Id = "%s"''' % talkid)
         if result.next():
             failure = Failure(unicode(result.value(0).toString()),  # id
                               unicode(result.value(1).toString()),  # comment
@@ -674,17 +588,14 @@ class QtDBConnector():
         return failure
 
     def get_reports(self):
-        """
-        Return a list of failures in Report format.
-        """
+        """Return a list of failures in Report format"""
         result = QtSql.QSqlQuery('''Select * FROM failures''')
         # return result
         list = []
         while(result.next()):
             failure = Failure(unicode(result.value(0).toString()),    # id
                               unicode(result.value(1).toString()),    # comment
-                              # indicator
-                              unicode(result.value(2).toString()),
+                              unicode(result.value(2).toString()),    # indicator
                               bool(result.value(3)))                  # release
             p = self.get_presentation(failure.talkId)
             r = Report(p, failure)
@@ -692,20 +603,14 @@ class QtDBConnector():
         return list
 
     def insert_failure(self, failure):
-        """
-        Insert a failure into the database.
-        """
-
+        """Insert a failure into the database"""
         query = QtSql.QSqlQuery(
             '''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
             (int(failure.talkId), failure.comment, failure.indicator, failure.release))
         log.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
 
     def update_failure(self, talk_id, failure):
-        """
-        Update an existing Failure in the database.
-        """
-
+        """Update an existing Failure in the database"""
         query = QtSqlQuery(
             '''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
             (failure.comment,
@@ -715,36 +620,24 @@ class QtDBConnector():
         log.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
 
     def delete_failure(self, talk_id):
-        """
-        Removes a Presentation from the database
-        """
-        query = QtSql.QSqlQuery(
-            '''DELETE FROM failures WHERE Id="%s"''' % talk_id)
+        """Removes a Presentation from the database"""
+        query = QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
         log.info("Failure %s deleted." % talk_id)
 
     def get_failures_model(self):
-        """
-        Gets the Failure reports table Model
-        Useful for QT GUI based Frontends to load the Model in Table Views.
-        """
+        """Gets the Failure reports table Model. Useful for QT GUI based Frontends to load the Model in Table Views"""
         if self.failuresModel is None:
             self.failuresModel = QtSql.QSqlTableModel()
             self.failuresModel.setTable("failures")
-            self.failuresModel.setEditStrategy(
-                QtSql.QSqlTableModel.OnFieldChange)
+            self.failuresModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
             self.failuresModel.select()
-
         return self.failuresModel
 
     #
     # Controller Feature
     #
-
     def __create_recentconn_table(self):
-        """
-        Create the recentconn table in the database
-        Should be used to initialize a new table.
-        """
+        """Create the recentconn table in the database. Should be used to initialize a new table"""
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS recentconn
                                         (host varchar(255),
                                          port int,
@@ -752,30 +645,19 @@ class QtDBConnector():
                                          UNIQUE (host, port) ON CONFLICT REPLACE)''')
 
     def clear_recentconn_table(self):
-        """
-        Drops the recentconn (Controller) table from the database
-        """
+        """Drops the recentconn (Controller) table from the database"""
         query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS recentconn''')
 
     def insert_recentconn(self, chost, cport, cpass):
-        """
-        Insert a failure into the database.
-        """
-
-        query = QtSql.QSqlQuery(
-            '''INSERT INTO recentconn VALUES("%s", "%d", "%s")''' %
-            (chost, cport, cpass))
+        """Insert a failure into the database"""
+        query = QtSql.QSqlQuery('''INSERT INTO recentconn VALUES("%s", "%d", "%s")''' % (chost, cport, cpass))
         log.info("Recent connection added: %s:%d" % (chost, cport))
 
     def get_recentconn_model(self):
-        """
-        Gets the Recent Connections table Model
-        Useful for QT GUI based Frontends to load the Model in Table Views.
-        """
+        """Gets the Recent Connections table Model
+        Useful for QT GUI based Frontends to load the Model in Table Views"""
         self.recentconnModel = QtSql.QSqlTableModel()
         self.recentconnModel.setTable("recentconn")
-        self.recentconnModel.setEditStrategy(
-            QtSql.QSqlTableModel.OnFieldChange)
+        self.recentconnModel.setEditStrategy(QtSql.QSqlTableModel.OnFieldChange)
         self.recentconnModel.select()
-
         return self.recentconnModel
