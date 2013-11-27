@@ -71,7 +71,7 @@ class USBSrc(IVideoInput):
 
         videosrc = None
         if sys.platform.startswith("linux"):
-            videosrc = Gst.ElementFactory.make("autovideosrc", "videosrc")
+            videosrc = Gst.ElementFactory.make("v4l2src", "videosrc")
             #videosrc.set_property("device", self.device)
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = Gst.ElementFactory.make("dshowvideosrc", "videosrc")

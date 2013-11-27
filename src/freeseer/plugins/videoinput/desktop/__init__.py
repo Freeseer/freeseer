@@ -105,12 +105,20 @@ class DesktopLinuxSrc(IVideoInput):
 
         bin.add(videosrc)
 
-        colorspace = Gst.ElementFactory.make("videoconvert", "colorspace")
-        bin.add(colorspace)
-        videosrc.link(colorspace)
+        #Adding a queue before the video ends up in the Videorate Gst element in the 
+        #video processing stage should make this work but does not.
+        #gst-launch-1.0 -e ximagesrc ! queue ! videorate ! video/x-raw,framerate=4/1 ! videoconvert !  theoraenc ! oggmux ! /
+        # queue ! filesink location="test-videorate.ogg"
+        #That pipeline works, which this should replicate. 
+        #If you sub in videotestsrc in place of ximagesrc this this works, if you leave it as it
+        #then you end up with an "internal data flow error"
+        q1 = Gst.ElementFactory.make("queue", "q1")
+        bin.add(q1)
+
+        videosrc.link(q1)
 
         # Setup ghost pad
-        pad = colorspace.get_static_pad("src")
+        pad = q1.get_static_pad("src")
         ghostpad = Gst.GhostPad.new("videosrc", pad)
         bin.add_pad(ghostpad)
 
