@@ -46,7 +46,7 @@ class QtDBConnector():
     def __init__(self, configdir, talkdb_file="presentations.db"):
         """Initialize the QtDBConnector"""
         self.configdir = configdir
-        self.talkdb_file = os.path.abspath("%s/%s" % (self.configdir, talkdb_file))
+        self.talkdb_file = os.path.abspath("{}/{}".format(self.configdir, talkdb_file))
 
         if not os.path.isfile(self.talkdb_file):
             file = open(self.talkdb_file, 'w')
