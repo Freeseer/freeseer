@@ -27,6 +27,7 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QIcon
@@ -60,12 +61,19 @@ class CommandButtons(QWidget):
         self.removeButton.setIcon(removeIcon)
         self.removeAllButton = QPushButton('Remove All')
         self.removeAllButton.setIcon(removeAllIcon)
+        self.searchLineEdit = QLineEdit()
+        self.searchIcon = QIcon.fromTheme("edit-find")
+        self.searchButton = QPushButton('Search')
+        self.searchButton.setIcon(self.searchIcon)
         self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.duplicateButton)
         self.layout.addWidget(self.importButton)
         self.layout.addWidget(self.exportButton)
         self.layout.addWidget(self.removeButton)
         self.layout.addWidget(self.removeAllButton)
+        self.layout.addStretch()
+        self.layout.addWidget(self.searchLineEdit)
+        self.layout.addWidget(self.searchButton)
         self.layout.addStretch()
 
 if __name__ == "__main__":

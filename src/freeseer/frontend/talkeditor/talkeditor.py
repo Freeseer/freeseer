@@ -87,10 +87,6 @@ class TalkEditorApp(FreeseerApp):
 
         # Add the Title Row (Use BOLD / Big Font)
         self.titleLayout = QHBoxLayout()
-        self.talkEditorLabel = QLabel('Talk Editor')
-        font = QFont('Helvetica', 24, QFont.Bold)
-        self.talkEditorLabel.setFont(font)
-        self.titleLayout.addWidget(self.talkEditorLabel)
         self.backButton = QPushButton('Back to Recorder')
         if backButton:  # Only show the back button if requested by caller
             self.titleLayout.addWidget(self.backButton)
@@ -98,7 +94,6 @@ class TalkEditorApp(FreeseerApp):
 
         # Add custom widgets
         self.commandButtons = CommandButtons()
-        self.searchWidget = SearchWidget()
         self.tableView = QTableView()
         self.tableView.setSortingEnabled(True)
         self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -108,7 +103,6 @@ class TalkEditorApp(FreeseerApp):
         self.mainLayout.addLayout(self.titleLayout)
         self.mainLayout.addSpacing(10)
         self.mainLayout.addWidget(self.commandButtons)
-        self.mainLayout.addWidget(self.searchWidget)
         self.mainLayout.addWidget(self.tableView)
         self.mainLayout.addWidget(self.talkDetailsWidget)
         self.mainLayout.addWidget(self.importTalksWidget)
@@ -160,11 +154,9 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.removeAllButton, SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.commandButtons.importButton, SIGNAL('clicked()'), self.show_import_talks_widget)
         self.connect(self.commandButtons.exportButton, SIGNAL('clicked()'), self.export_talks_to_csv)
-
-        # Search Widget Connections
-        self.connect(self.searchWidget.searchButton, SIGNAL('clicked()'),self.search_talks)
-        self.connect(self.searchWidget.searchLineEdit, SIGNAL('textEdited(QString)'),self.search_talks)
-        self.connect(self.searchWidget.searchLineEdit, SIGNAL('returnPressed()'),self.search_talks)
+        self.connect(self.commandButtons.searchButton, SIGNAL('clicked()'),self.search_talks)
+        self.connect(self.commandButtons.searchLineEdit, SIGNAL('textEdited(QString)'),self.search_talks)
+        self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'),self.search_talks)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -240,7 +232,7 @@ class TalkEditorApp(FreeseerApp):
         #
         # Search Widget Translations
         #
-        self.searchWidget.searchButton.setText(self.app.translate("TalkEditorApp", "Search"))
+        self.commandButtons.searchButton.setText(self.app.translate("TalkEditorApp", "Search"))
         # --- End Command Butotn Translations
 
     def load_presentations_model(self):
@@ -275,11 +267,11 @@ class TalkEditorApp(FreeseerApp):
         self.categoryList = QStringList(self.db.get_category_list())
         self.eventList = QStringList(self.db.get_event_list())
         self.roomList = QStringList(self.db.get_room_list())
-        
+
     def search_talks(self):
         # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
-        self.proxy.setFilterFixedString(self.searchWidget.searchLineEdit.text())
+        self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
 
     def talk_selected(self, model):
         self.mapper.setCurrentIndex(model.row())
@@ -296,14 +288,12 @@ class TalkEditorApp(FreeseerApp):
 
     def show_import_talks_widget(self):
         self.commandButtons.setHidden(True)
-        self.searchWidget.setHidden(True)
         self.tableView.setHidden(True)
         self.talkDetailsWidget.setHidden(True)
         self.importTalksWidget.setHidden(False)
 
     def hide_import_talks_widget(self):
         self.commandButtons.setHidden(False)
-        self.searchWidget.setHidden(False)
         self.tableView.setHidden(False)
         self.talkDetailsWidget.setHidden(False)
         self.importTalksWidget.setHidden(True)
