@@ -47,7 +47,6 @@ from PyQt4.QtGui import QItemSelectionModel
 from PyQt4.QtGui import QCompleter
 from PyQt4.QtGui import QSortFilterProxyModel
 from PyQt4.QtCore import QModelIndex
-
 from PyQt4.QtCore import Qt
 
 # Freeseer modules
@@ -66,7 +65,6 @@ from AddTalkWidget import AddTalkWidget
 from SearchWidget import SearchWidget
 
 log = logging.getLogger(__name__)
-
 
 class TalkEditorApp(FreeseerApp):
     '''Freeseer talk database editor main gui class'''
@@ -245,7 +243,6 @@ class TalkEditorApp(FreeseerApp):
         self.searchWidget.searchButton.setText(self.app.translate("TalkEditorApp", "Search"))
         # --- End Command Butotn Translations
 
-
     def load_presentations_model(self):
         # Load Presentation Model
         self.presentationModel = self.db.get_presentations_model()
@@ -278,8 +275,7 @@ class TalkEditorApp(FreeseerApp):
         self.categoryList = QStringList(self.db.get_category_list())
         self.eventList = QStringList(self.db.get_event_list())
         self.roomList = QStringList(self.db.get_room_list())
-
-
+        
     def search_talks(self):
         # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
