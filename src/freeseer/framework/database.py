@@ -492,8 +492,6 @@ class QtDBConnector():
         finally:
             file.close()
 
-    # Needs to be updated to accept csv files with updated fields (category,
-    # time, date)
     def export_talks_to_csv(self, fname):
         #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
         fieldNames = ('Title',
@@ -524,8 +522,6 @@ class QtDBConnector():
         finally:
             file.close()
 
-    # Needs to be updated to accept csv files with updated fields (category,
-    # time, date)
     def export_reports_to_csv(self, fname):
         fieldNames = ('Title',
                       'Speaker',
@@ -561,7 +557,6 @@ class QtDBConnector():
     #
     # Reporting Feature
     #
-
     def __create_failures_table(self):
         """Create the failures table in the database. Should be used to initialize a new table"""
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
