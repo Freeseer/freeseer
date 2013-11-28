@@ -46,6 +46,7 @@ from PyQt4.QtGui import QMessageBox
 from PyQt4.QtGui import QItemSelectionModel
 from PyQt4.QtGui import QCompleter
 from PyQt4.QtGui import QSortFilterProxyModel
+from PyQt4.QtGui import QHeaderView
 from PyQt4.QtCore import QModelIndex
 from PyQt4.QtCore import Qt
 
@@ -86,11 +87,11 @@ class TalkEditorApp(FreeseerApp):
         self.mainLayout.setAlignment(QtCore.Qt.AlignTop)
 
         # Add the Title Row (Use BOLD / Big Font)
-        self.titleLayout = QHBoxLayout()
-        self.backButton = QPushButton('Back to Recorder')
-        if backButton:  # Only show the back button if requested by caller
-            self.titleLayout.addWidget(self.backButton)
-        self.titleLayout.addStretch()
+        #self.titleLayout = QHBoxLayout()
+        #self.backButton = QPushButton('Back to Recorder')
+        #if backButton:  # Only show the back button if requested by caller
+        #    self.titleLayout.addWidget(self.backButton)
+        #self.titleLayout.addStretch()
 
         # Add custom widgets
         self.commandButtons = CommandButtons()
@@ -100,8 +101,7 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget = TalkDetailsWidget()
         self.importTalksWidget = ImportTalksWidget()
         self.mainLayout.addWidget(self.importTalksWidget)
-        self.mainLayout.addLayout(self.titleLayout)
-        self.mainLayout.addSpacing(10)
+        #self.mainLayout.addLayout(self.titleLayout)
         self.mainLayout.addWidget(self.commandButtons)
         self.mainLayout.addWidget(self.tableView)
         self.mainLayout.addWidget(self.talkDetailsWidget)
@@ -244,8 +244,9 @@ class TalkEditorApp(FreeseerApp):
         self.proxy.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
 
         # Fill table whitespace.
-        self.tableView.horizontalHeader().setStretchLastSection(True)
-
+        self.tableView.horizontalHeader().setStretchLastSection(False)
+        self.tableView.horizontalHeader().setResizeMode(1, QHeaderView.Stretch)
+        
         # Hide the ID field
         self.tableView.setColumnHidden(0, True)
 
