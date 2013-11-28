@@ -38,6 +38,10 @@ from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QPlainTextEdit
 from PyQt4.QtGui import QTimeEdit
 from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QPushButton
+
+
 
 
 class TalkDetailsWidget(QWidget):
@@ -48,28 +52,49 @@ class TalkDetailsWidget(QWidget):
         self.layout = QGridLayout()
         self.setLayout(self.layout)
 
+        self.buttonLayout = QHBoxLayout()
+
+        addIcon = QIcon.fromTheme("list-add")
+        self.addButton = QPushButton('Add New Talk')
+        self.addButton.setIcon(addIcon)
+        self.buttonLayout.addWidget(self.addButton)
+        saveIcon = QIcon.fromTheme("document-save")
+        self.saveButton = QPushButton('Save New Talk')
+        self.saveButton.setIcon(saveIcon)
+        self.buttonLayout.addWidget(self.saveButton)
+
+        self.layout.addLayout(self.buttonLayout,0,1,1,1)
+
         self.titleLabel = QLabel('Title')
         self.titleLineEdit = QLineEdit()
-        self.layout.addWidget(self.titleLabel, 0, 0, 1, 1)
-        self.layout.addWidget(self.titleLineEdit, 0, 1, 1, 3)
+        self.titleLineEdit.setPlaceholderText("Enter Talk Title")
+        self.layout.addWidget(self.titleLabel, 1, 0, 1, 1)
+        self.layout.addWidget(self.titleLineEdit, 1, 1, 1, 3)
 
         self.presenterLabel = QLabel('Presenter')
         self.presenterLineEdit = QLineEdit()
+        self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
+
         self.categoryLabel = QLabel('Category')
         self.categoryLineEdit = QLineEdit()
-        self.layout.addWidget(self.presenterLabel, 1, 0, 1, 1)
-        self.layout.addWidget(self.presenterLineEdit, 1, 1, 1, 1)
-        self.layout.addWidget(self.categoryLabel, 1, 2, 1, 1)
-        self.layout.addWidget(self.categoryLineEdit, 1, 3, 1, 1)
+        self.categoryLineEdit.setPlaceholderText("Enter Category Type")
+
+        self.layout.addWidget(self.presenterLabel, 2, 0, 1, 1)
+        self.layout.addWidget(self.presenterLineEdit, 2, 1, 1, 1)
+        self.layout.addWidget(self.categoryLabel, 2, 2, 1, 1)
+        self.layout.addWidget(self.categoryLineEdit, 2, 3, 1, 1)
 
         self.eventLabel = QLabel('Event')
         self.eventLineEdit = QLineEdit()
+        self.eventLineEdit.setPlaceholderText("Enter Event Name")
         self.roomLabel = QLabel('Room')
         self.roomLineEdit = QLineEdit()
-        self.layout.addWidget(self.eventLabel, 2, 0, 1, 1)
-        self.layout.addWidget(self.eventLineEdit, 2, 1, 1, 1)
-        self.layout.addWidget(self.roomLabel, 2, 2, 1, 1)
-        self.layout.addWidget(self.roomLineEdit, 2, 3, 1, 1)
+        self.roomLineEdit.setPlaceholderText("Enter Room Location")
+
+        self.layout.addWidget(self.eventLabel, 3, 0, 1, 1)
+        self.layout.addWidget(self.eventLineEdit, 3, 1, 1, 1)
+        self.layout.addWidget(self.roomLabel, 3, 2, 1, 1)
+        self.layout.addWidget(self.roomLineEdit, 3, 3, 1, 1)
 
         self.dateLayout = QHBoxLayout()
         self.timeLayout = QHBoxLayout()
@@ -83,16 +108,16 @@ class TalkDetailsWidget(QWidget):
 
         self.dateLayout.addWidget(self.dateEdit)
         self.timeLayout.addWidget(self.timeEdit)
-        self.layout.addWidget(self.dateLabel, 3, 0, 1, 1)
-        self.layout.addLayout(self.dateLayout, 3, 1, 1, 1)
-        self.layout.addWidget(self.timeLabel, 3, 2, 1, 1)
-        self.layout.addLayout(self.timeLayout, 3, 3, 1, 1)
+        self.layout.addWidget(self.dateLabel, 4, 0, 1, 1)
+        self.layout.addLayout(self.dateLayout, 4, 1, 1, 1)
+        self.layout.addWidget(self.timeLabel, 4, 2, 1, 1)
+        self.layout.addLayout(self.timeLayout, 4, 3, 1, 1)
 
         self.descriptionLabel = QLabel('Description')
         self.descriptionLabel.setAlignment(Qt.AlignTop)
         self.descriptionTextEdit = QPlainTextEdit()
-        self.layout.addWidget(self.descriptionLabel, 4, 0, 1, 1)
-        self.layout.addWidget(self.descriptionTextEdit, 4, 1, 1, 3)
+        self.layout.addWidget(self.descriptionLabel, 5, 0, 1, 1)
+        self.layout.addWidget(self.descriptionTextEdit, 5, 1, 1, 3)
 
 if __name__ == "__main__":
     import sys

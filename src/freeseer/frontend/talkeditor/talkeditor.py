@@ -149,7 +149,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.actionRemoveAll, QtCore.SIGNAL('triggered()'), self.confirm_reset)
 
         # Command Buttons
-        self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.add_talk)
+        #self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.add_talk)
         self.connect(self.commandButtons.removeButton, SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.commandButtons.removeAllButton, SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.commandButtons.importButton, SIGNAL('clicked()'), self.show_import_talks_widget)
@@ -157,6 +157,10 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchButton, SIGNAL('clicked()'),self.search_talks)
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('textEdited(QString)'),self.search_talks)
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'),self.search_talks)
+
+        # Talk Details Buttons
+        self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.clear_talk_details_widget)
+        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'),self.add_talk)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -221,7 +225,7 @@ class TalkEditorApp(FreeseerApp):
         #
         # Command Button Translations
         #
-        self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
+        #self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
         self.commandButtons.duplicateButton.setText(self.app.translate("TalkEditorApp", "Duplicate"))
         self.commandButtons.importButton.setText(self.app.translate("TalkEditorApp", "Import"))
         self.commandButtons.exportButton.setText(self.app.translate("TalkEditorApp", "Export"))
@@ -275,6 +279,7 @@ class TalkEditorApp(FreeseerApp):
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
 
     def talk_selected(self, model):
+        self.talkDetailsWidget.saveButton.setEnabled(False)
         self.mapper.setCurrentIndex(model.row())
 
     def toggle_import(self):
@@ -318,21 +323,26 @@ class TalkEditorApp(FreeseerApp):
             return
         self.db.insert_presentation(presentation)
 
-        # cleanup
-        self.talkDetailsWidget.titleLineEdit.clear()
-        self.talkDetailsWidget.presenterLineEdit.clear()
-        self.talkDetailsWidget.descriptionTextEdit.clear()
-        self.talkDetailsWidget.categoryLineEdit.clear()
-        self.talkDetailsWidget.eventLineEdit.clear()
-        self.talkDetailsWidget.roomLineEdit.clear()
 
         # Update Model, Refreshes TableView
         self.presentationModel.select()
 
         # Select Last Row
         self.tableView.selectRow(self.presentationModel.rowCount() - 1)
+        self.tableView.setCurrentIndex(self.proxy.index(self.proxy.rowCount() - 1,0))
+        self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1,0))
 
         self.update_autocomple_fields()
+
+    def clear_talk_details_widget(self):
+        self.talkDetailsWidget.saveButton.setEnabled(True)
+        self.talkDetailsWidget.titleLineEdit.clear()
+        self.talkDetailsWidget.presenterLineEdit.clear()
+        self.talkDetailsWidget.descriptionTextEdit.clear()
+        self.talkDetailsWidget.categoryLineEdit.clear()
+        self.talkDetailsWidget.eventLineEdit.clear()
+        self.talkDetailsWidget.roomLineEdit.clear()
+        self.presentationModel.select()
 
     def remove_talk(self):
         try:
