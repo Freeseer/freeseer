@@ -58,11 +58,8 @@ class ImportTalksWidget(QtGui.QWidget):
 
         # CSV Layout
         self.csvLayout = QtGui.QHBoxLayout()
-
         self.csvWidget = QtGui.QWidget()
         self.csvWidget.setLayout(self.csvLayout)
-
-        #self.csvLabel = QtGui.QLabel("CSV File")
         self.csvLineEdit = QtGui.QLineEdit()
 
         if sys.platform == 'win32':
@@ -93,8 +90,9 @@ class ImportTalksWidget(QtGui.QWidget):
         self.rssLayout.addWidget(self.rssRadioButton)
         self.rssLayout.addWidget(self.rssLineEdit)
 
+        #
         # Layout
-
+        #
         self.mainLayout.addWidget(self.importTalksGroupBox)
         self.mainLayout.addWidget(self.csvWidget)
         self.mainLayout.addWidget(self.rssWidget)
@@ -106,7 +104,6 @@ class ImportTalksWidget(QtGui.QWidget):
         self.importCommandButtonsLayout.addWidget(self.importButton)
         self.importCommandButtonsLayout.addWidget(self.cancelButton)
         self.mainLayout.addWidget(self.importCommandButtonsWidget)
-
 
 if __name__ == "__main__":
     import sys
