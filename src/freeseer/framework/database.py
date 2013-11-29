@@ -160,16 +160,10 @@ class QtDBConnector():
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
 
     def __insert_default_talk(self):
-        """Insert the default talk data into the database."""
-        presentation = Presentation("Intro to Freeseer",
-                                    "Thanh Ha",
-                                    "",
-                                    "",
-                                    "SC2011",
-                                    "T105",
-                                    "",
-                                    ""
-                                    )
+        """Insert the required empty talk into the database.At least one talk must exist"""
+        presentation = Presentation("", "", "", "", "", "", "", "")
+
+
         self.insert_presentation(presentation)
 
     def get_talks(self):
