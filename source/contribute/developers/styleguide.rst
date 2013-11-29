@@ -38,8 +38,8 @@ end user.
 
 .. rubric:: String Formatting
 
-For logging, use ``logging.info("%s %s", foo, bar)`` (with the appropriate
-logging level of course).
+For logging, use printf style formatting. E.g. ``logging.info("%s %s", foo, bar)``
+using the appropriate logger name and logging level.
 
 For everything else, use ``str.format()``. E.g. ``'{} - {}'.format(foo, bar)``
 or ``'{0}, {1}, {0}'.format(foo, bar)``.
