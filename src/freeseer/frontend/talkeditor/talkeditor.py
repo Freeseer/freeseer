@@ -149,7 +149,6 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.actionRemoveAll, QtCore.SIGNAL('triggered()'), self.confirm_reset)
 
         # Command Buttons
-        #self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.add_talk)
         self.connect(self.commandButtons.removeButton, SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.commandButtons.removeAllButton, SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.commandButtons.importButton, SIGNAL('clicked()'), self.show_import_talks_widget)
@@ -226,7 +225,6 @@ class TalkEditorApp(FreeseerApp):
         # Command Button Translations
         #
         #self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
-        self.commandButtons.duplicateButton.setText(self.app.translate("TalkEditorApp", "Duplicate"))
         self.commandButtons.importButton.setText(self.app.translate("TalkEditorApp", "Import"))
         self.commandButtons.exportButton.setText(self.app.translate("TalkEditorApp", "Export"))
         self.commandButtons.removeButton.setText(self.app.translate("TalkEditorApp", "Remove"))
