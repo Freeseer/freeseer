@@ -176,8 +176,8 @@ class TalkEditorApp(FreeseerApp):
         self.update_autocomple_fields()
 
         # Select first item
-        self.tableView.setCurrentIndex(self.proxy.index(0,0))
-        self.talk_selected(self.proxy.index(0,0))
+        #self.tableView.setCurrentIndex(self.proxy.index(0,0))
+        #self.talk_selected(self.proxy.index(0,0))
 
     #
     # Translation
@@ -271,6 +271,10 @@ class TalkEditorApp(FreeseerApp):
         self.eventList = QStringList(self.db.get_event_list())
         self.roomList = QStringList(self.db.get_room_list())
 
+        #Disble input
+        self.talkDetailsWidget.disable_input_fields()
+
+
     def search_talks(self):
         # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
@@ -279,6 +283,7 @@ class TalkEditorApp(FreeseerApp):
     def talk_selected(self, model):
         self.talkDetailsWidget.saveButton.setEnabled(False)
         self.mapper.setCurrentIndex(model.row())
+        self.talkDetailsWidget.enable_input_fields()
 
     def toggle_import(self):
         if self.importTalksWidget.csvRadioButton.isChecked():
@@ -331,14 +336,14 @@ class TalkEditorApp(FreeseerApp):
         self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1,0))
 
         self.update_autocomple_fields()
-        self.talkDetailsWidget.disable_placeholder_text()
+        self.talkDetailsWidget.disable_input_fields()
 
     def clear_talk_details_widget(self):
         self.talkDetailsWidget.saveButton.setEnabled(True)
-        self.talkDetailsWidget.enable_placeholder_text()
+        self.talkDetailsWidget.enable_input_fields()
         self.talkDetailsWidget.titleLineEdit.clear()
         self.talkDetailsWidget.presenterLineEdit.clear()
-        #self.talkDetailsWidget.descriptionTextEdit.clear()
+        self.talkDetailsWidget.descriptionTextEdit.clear()
         #self.talkDetailsWidget.categoryLineEdit.clear()
         #self.talkDetailsWidget.eventLineEdit.clear()
         #self.talkDetailsWidget.roomLineEdit.clear()

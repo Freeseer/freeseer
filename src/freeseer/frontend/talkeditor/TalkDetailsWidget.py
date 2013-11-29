@@ -114,19 +114,37 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.descriptionLabel, 5, 0, 1, 1)
         self.layout.addWidget(self.descriptionTextEdit, 5, 1, 1, 3)
 
-    def enable_placeholder_text(self):
+    def enable_input_fields(self):
             self.titleLineEdit.setPlaceholderText("Enter Talk Title")
             self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
             self.categoryLineEdit.setPlaceholderText("Enter Category Type")
             self.eventLineEdit.setPlaceholderText("Enter Event Name")
             self.roomLineEdit.setPlaceholderText("Enter Room Location")
+            self.titleLineEdit.setEnabled(True)
+            self.presenterLineEdit.setEnabled(True)
+            self.categoryLineEdit.setEnabled(True)
+            self.eventLineEdit.setEnabled(True)
+            self.roomLineEdit.setEnabled(True)
+            self.dateEdit.setEnabled(True)
+            self.timeEdit.setEnabled(True)
+            self.descriptionTextEdit.setEnabled(True)
 
-    def disable_placeholder_text(self):
+    def disable_input_fields(self):
             self.titleLineEdit.setPlaceholderText("")
             self.presenterLineEdit.setPlaceholderText("")
             self.categoryLineEdit.setPlaceholderText("")
             self.eventLineEdit.setPlaceholderText("")
             self.roomLineEdit.setPlaceholderText("")
+            self.titleLineEdit.setEnabled(False)
+            self.presenterLineEdit.setEnabled(False)
+            self.categoryLineEdit.setEnabled(False)
+            self.eventLineEdit.setEnabled(False)
+            self.roomLineEdit.setEnabled(False)
+            self.dateEdit.setEnabled(False)
+            self.timeEdit.setEnabled(False)
+            self.descriptionTextEdit.setEnabled(False)
+
+
 
 
 
