@@ -46,13 +46,11 @@ class QtDBConnector():
     def __init__(self, configdir, talkdb_file="presentations.db"):
         """Initialize the QtDBConnector"""
         self.configdir = configdir
-        self.talkdb_file = os.path.abspath("{}/{}".format(self.configdir, talkdb_file))
+        self.talkdb_file = os.path.join("{}/{}".format(self.configdir, talkdb_file))
 
         if not os.path.isfile(self.talkdb_file):
-            file = open(self.talkdb_file, 'w')
-            file.write('')
-            file.close()
-
+            with open(self.talkdb_file, 'w') as file:
+                file.write('')
         self.__open_table()
 
     def __open_table(self):
@@ -160,7 +158,7 @@ class QtDBConnector():
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
 
     def __insert_default_talk(self):
-        """Insert the required empty talk into the database.At least one talk must exist"""
+        """Insert the required placeholder talk into the database.At least one talk must exist"""
         presentation = Presentation("", "", "", "", "", "", "", "")
 
 
@@ -195,18 +193,27 @@ class QtDBConnector():
         """Return a Presentation object associated to a talk_id"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
         if result.next():
-            p = Presentation(unicode(result.value(1).toString()),    # title
-                             unicode(result.value(2).toString()),    # speaker
-                             unicode(result.value(3).toString()),    # description
-                             unicode(result.value(4).toString()),    # category
-                             unicode(result.value(5).toString()),    # event
-                             unicode(result.value(6).toString()),    # room
-                             unicode(result.value(7).toString()),    # date
-                             unicode(result.value(8).toString()))    # time
+            p = Presentation(title=unicode(result.value(1).toString()),
+                             speaker=unicode(result.value(2).toString()),
+                             description=unicode(result.value(3).toString()),
+                             category=unicode(result.value(4).toString()),
+                             event=unicode(result.value(5).toString()),
+                             room=unicode(result.value(6).toString()),
+                             date=unicode(result.value(7).toString()),
+                             time=unicode(result.value(8).toString()))
         else:
             p = None
 
         return p
+
+    def get_string_list(self,column):
+        """Return a column as a QStringList"""
+        tempList = QStringList()
+        result = QtSql.QSqlQuery('''SELECT %s FROM presentations''' %column)
+        while(result.next()):
+            tempList.append(result.value(0).toString())
+        tempList.removeDuplicates()
+        return tempList
 
     def get_title_list(self):
         """Return a stringList of all titles"""
@@ -229,7 +236,7 @@ class QtDBConnector():
     def get_category_list(self):
         """Return a stringList of all Speakers"""
         tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT category FROM presentations''')
+        result = QtSql.QSqlQuery('''SELECT Category FROM presentations''')
         while(result.next()):
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()

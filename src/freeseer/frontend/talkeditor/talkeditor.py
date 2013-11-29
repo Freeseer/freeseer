@@ -265,11 +265,11 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
 
         # Load StringLists
-        self.titleList = QStringList(self.db.get_title_list())
-        self.speakerList = QStringList(self.db.get_speaker_list())
-        self.categoryList = QStringList(self.db.get_category_list())
-        self.eventList = QStringList(self.db.get_event_list())
-        self.roomList = QStringList(self.db.get_room_list())
+        self.titleList = QStringList(self.db.get_string_list("Title"))
+        #self.speakerList = QStringList(self.db.get_speaker_list())
+        #self.categoryList = QStringList(self.db.get_category_list())
+        #self.eventList = QStringList(self.db.get_event_list())
+        #self.roomList = QStringList(self.db.get_room_list())
 
         #Disble input
         self.talkDetailsWidget.disable_input_fields()
@@ -435,11 +435,11 @@ class TalkEditorApp(FreeseerApp):
             self.db.export_talks_to_csv(fname)
 
     def update_autocomple_fields(self):
-        self.titleList = QStringList(self.db.get_title_list())
-        self.speakerList = QStringList(self.db.get_speaker_list())
-        self.categoryList = QStringList(self.db.get_category_list())
-        self.eventList = QStringList(self.db.get_event_list())
-        self.roomList = QStringList(self.db.get_room_list())
+        self.titleList = QStringList(self.db.get_string_list("Title"))
+        self.speakerList = QStringList(self.db.get_string_list("Speaker"))
+        self.categoryList = QStringList(self.db.get_string_list("Category"))
+        self.eventList = QStringList(self.db.get_string_list("Event"))
+        self.roomList = QStringList(self.db.get_string_list("Room"))
 
         self.titleCompleter = QCompleter(self.titleList)
         self.titleCompleter.setCaseSensitivity(Qt.CaseInsensitive)
