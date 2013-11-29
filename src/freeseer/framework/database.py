@@ -56,7 +56,7 @@ class QtDBConnector():
         self.__open_table()
 
     def __open_table(self):
-        """This function options a connection to the database. Used by the init function."""
+        """This function opens a connection to the database. Used by the init function."""
         self.talkdb = QtSql.QSqlDatabase.addDatabase("QSQLITE")
         self.talkdb.setDatabaseName(self.talkdb_file)
 
@@ -556,7 +556,6 @@ class QtDBConnector():
 
     #
     # Reporting Feature
-    #
     def __create_failures_table(self):
         """Create the failures table in the database. Should be used to initialize a new table"""
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
