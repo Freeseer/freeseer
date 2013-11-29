@@ -331,15 +331,17 @@ class TalkEditorApp(FreeseerApp):
         self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1,0))
 
         self.update_autocomple_fields()
+        self.talkDetailsWidget.disable_placeholder_text()
 
     def clear_talk_details_widget(self):
         self.talkDetailsWidget.saveButton.setEnabled(True)
+        self.talkDetailsWidget.enable_placeholder_text()
         self.talkDetailsWidget.titleLineEdit.clear()
         self.talkDetailsWidget.presenterLineEdit.clear()
-        self.talkDetailsWidget.descriptionTextEdit.clear()
-        self.talkDetailsWidget.categoryLineEdit.clear()
-        self.talkDetailsWidget.eventLineEdit.clear()
-        self.talkDetailsWidget.roomLineEdit.clear()
+        #self.talkDetailsWidget.descriptionTextEdit.clear()
+        #self.talkDetailsWidget.categoryLineEdit.clear()
+        #self.talkDetailsWidget.eventLineEdit.clear()
+        #self.talkDetailsWidget.roomLineEdit.clear()
         self.presentationModel.select()
 
     def remove_talk(self):

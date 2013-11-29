@@ -67,17 +67,14 @@ class TalkDetailsWidget(QWidget):
 
         self.titleLabel = QLabel('Title')
         self.titleLineEdit = QLineEdit()
-        self.titleLineEdit.setPlaceholderText("Enter Talk Title")
         self.layout.addWidget(self.titleLabel, 1, 0, 1, 1)
         self.layout.addWidget(self.titleLineEdit, 1, 1, 1, 3)
 
         self.presenterLabel = QLabel('Presenter')
         self.presenterLineEdit = QLineEdit()
-        self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
 
         self.categoryLabel = QLabel('Category')
         self.categoryLineEdit = QLineEdit()
-        self.categoryLineEdit.setPlaceholderText("Enter Category Type")
 
         self.layout.addWidget(self.presenterLabel, 2, 0, 1, 1)
         self.layout.addWidget(self.presenterLineEdit, 2, 1, 1, 1)
@@ -86,10 +83,8 @@ class TalkDetailsWidget(QWidget):
 
         self.eventLabel = QLabel('Event')
         self.eventLineEdit = QLineEdit()
-        self.eventLineEdit.setPlaceholderText("Enter Event Name")
         self.roomLabel = QLabel('Room')
         self.roomLineEdit = QLineEdit()
-        self.roomLineEdit.setPlaceholderText("Enter Room Location")
 
         self.layout.addWidget(self.eventLabel, 3, 0, 1, 1)
         self.layout.addWidget(self.eventLineEdit, 3, 1, 1, 1)
@@ -118,6 +113,24 @@ class TalkDetailsWidget(QWidget):
         self.descriptionTextEdit = QPlainTextEdit()
         self.layout.addWidget(self.descriptionLabel, 5, 0, 1, 1)
         self.layout.addWidget(self.descriptionTextEdit, 5, 1, 1, 3)
+
+    def enable_placeholder_text(self):
+            self.titleLineEdit.setPlaceholderText("Enter Talk Title")
+            self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
+            self.categoryLineEdit.setPlaceholderText("Enter Category Type")
+            self.eventLineEdit.setPlaceholderText("Enter Event Name")
+            self.roomLineEdit.setPlaceholderText("Enter Room Location")
+
+    def disable_placeholder_text(self):
+            self.titleLineEdit.setPlaceholderText("")
+            self.presenterLineEdit.setPlaceholderText("")
+            self.categoryLineEdit.setPlaceholderText("")
+            self.eventLineEdit.setPlaceholderText("")
+            self.roomLineEdit.setPlaceholderText("")
+
+
+
+
 
 if __name__ == "__main__":
     import sys
