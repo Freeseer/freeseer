@@ -163,28 +163,23 @@ class QtDBConnector():
 
     def get_talks(self):
         """Gets all the talks from the database including all columns"""
-        result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
-        return result
+        return QtSql.QSqlQuery('''SELECT * FROM presentations''')
 
     def get_events(self):
         """Gets all the talk events from the database"""
-        result = QtSql.QSqlQuery('''SELECT DISTINCT Event FROM presentations''')
-        return result
+        return QtSql.QSqlQuery('''SELECT DISTINCT Event FROM presentations''')
 
     def get_talk_ids(self):
         """Gets all the talk events from the database"""
-        result = QtSql.QSqlQuery('''SELECT Id FROM presentations''')
-        return result
+        return QtSql.QSqlQuery('''SELECT Id FROM presentations''')
 
     def get_talks_by_event(self, event):
         """Gets the talks signed in a specific event from the database"""
-        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Event=%s''' % event)
-        return result
+        return  QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Event=%s''' % event)
 
     def get_talks_by_room(self, room):
         """Gets the talks hosted in a specific room from the database"""
-        result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Room=%s''' % room)
-        return result
+        return QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Room=%s''' % room)
 
     def get_presentation(self, talk_id):
         """Return a Presentation object associated to a talk_id"""
