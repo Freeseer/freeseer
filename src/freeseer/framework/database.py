@@ -221,17 +221,17 @@ class QtDBConnector():
         """Inserts a passed Presentation into the database."""
         # Handle old field names
         # Level to Category
-        if hasattr(presentation, 'level'):
-            if (presentation.level == '' and presentation.category != ''):
+        try:
+            if not presentation.level and presentation.category:
                 presentation.level = presentation.category
+        except AttributeError:
+            log.debug("Did not copy Category field to Level field")
 
         # Duplicate time to date field for older RSS / CSV formats
         # If date is empty, and time has a full DateTime, split the DateTime to
         # both Date and Time
-        if (presentation.date == '' and presentation.time != '' and len(presentation.time) == 16):
-            presentation.date = presentation.time
-            presentation.date = presentation.date[:-6]
-            presentation.time = presentation.time[11:]
+        if not presentation.date and presentation.time and len(presentation.time) == 16:
+            presentation.date, presentation.time = presentation.time[:-6], presentation.time[11:]
 
         query = QtSql.QSqlQuery(
             '''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
@@ -356,61 +356,20 @@ class QtDBConnector():
         try:
             reader = csv.DictReader(file)
             for row in reader:
-                try:
-                    title = row['Title']
-                    speaker = row['Speaker']
-                except KeyError:
-                    log.error("Missing Key in Row: %s", row)
-                    return
-
-                try:
-                    abstract = row['Abstract']  # Description
-                except KeyError:
-                    abstract = ''
-
-                try:
-                    category = row['Category']
-                except KeyError:
-                    category = ''
-
-                try:
-                    level = row['Level']
-                except KeyError:
-                    level = ''
-
+                category = row.get('Category', '')
+                level = row.get('Level', '')
                 # Check for old csv namings
-                if (category == '' and level != ''):
+                if not category and level:
                     category = level
-
-                try:
-                    event = row['Event']
-                except KeyError:
-                    event = ''
-
-                try:
-                    room = row['Room']
-                except KeyError:
-                    room = ''
-
-                try:
-                    date = row['Date']
-                except KeyError:
-                    date = ''
-
-                try:
-                    time = row['Time']
-                except KeyError:
-                    time = ''
-
                 self.insert_presentation(
-                    Presentation(title,
-                                speaker,
-                                abstract,
+                    Presentation(row.get('Title', ''),
+                                row.get('Speaker', ''),
+                                row.get('Abstract', ''),
                                 category,
-                                event,
-                                room,
-                                date,
-                                time))
+                                row.get('Event', ''),
+                                row.get('Room', ''),
+                                row.get('Date', ''),
+                                row.get('Time', '')))
 
         except IOError:
             log.error("CSV: File %s not found", file)
@@ -509,7 +468,6 @@ class QtDBConnector():
     def get_reports(self):
         """Returns a list of failures in Report format"""
         result = QtSql.QSqlQuery('''Select * FROM failures''')
-        # return result
         list = []
         while result.next():
             failure = Failure(unicode(result.value(0).toString()),    # id
@@ -530,8 +488,7 @@ class QtDBConnector():
 
     def update_failure(self, talk_id, failure):
         """Updates an existing Failure in the database"""
-        query = QtSqlQuery(
-            '''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
+        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
             (failure.comment,
              failure.indicator,
              failure.release,
