@@ -159,10 +159,7 @@ class QtDBConnector():
 
     def __insert_default_talk(self):
         """Insert the required placeholder talk into the database.At least one talk must exist"""
-        presentation = Presentation("", "", "", "", "", "", "", "")
-
-
-        self.insert_presentation(presentation)
+        self.insert_presentation(Presentation("", "", "", "", "", "", "", ""))
 
     def get_talks(self):
         """Gets all the talks from the database including all columns"""
