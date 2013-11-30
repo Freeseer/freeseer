@@ -44,7 +44,7 @@ class QtDBConnector():
     recentconnModel = None
 
     def __init__(self, configdir, talkdb_file="presentations.db"):
-        """Initialize the QtDBConnector"""
+        """Initializes the QtDBConnector"""
         self.configdir = configdir
         self.talkdb_file = os.path.join("{}/{}".format(self.configdir, talkdb_file))
 
@@ -54,7 +54,7 @@ class QtDBConnector():
         self.__open_table()
 
     def __open_table(self):
-        """This function opens a connection to the database. Used by the init function."""
+        """Opens a connection to the database. Uses by the init function."""
         self.talkdb = QtSql.QSqlDatabase.addDatabase("QSQLITE")
         self.talkdb.setDatabaseName(self.talkdb_file)
 
@@ -79,11 +79,11 @@ class QtDBConnector():
             log.error("Unable to create talkdb file.")
 
     def __close_table(self):
-        """This function is used to close the connection the the database."""
+        """Closes the connection the the database."""
         self.talkdb.close()
 
     def get_program_version_int(self):
-        """Get Freeseer's current version as an integer."""
+        """Gets Freeseer's current version as an integer."""
         result = []
         for c in __version__:
             if c.isdigit():
@@ -91,13 +91,13 @@ class QtDBConnector():
         return int(''.join(result))
 
     def __get_db_version_int(self):
-        """Get the database's current version. Default is 0 if unset (for 2x and older)"""
+        """Gets the database's current version. Default is 0 if unset (for 2x and older)"""
         query = QtSql.QSqlQuery('PRAGMA user_version')
         query.first()
         return query.value(0).toInt()[0]
 
     def __update_version(self):
-        """Upgrade database to the latest version.
+        """Upgrades database to the latest version.
         updaterVersion[i] version number of the incremental update function located at updaters[i]
         updaters[] functions are then called in order starting at the old version to the end.
         Version # of 2.x and older is 0"""
@@ -108,7 +108,7 @@ class QtDBConnector():
             return
 
         def update_2xto30():
-            """Incremental update of database from 2.x and older to 3.0."""
+            """Perfrorms incremental update of database from 2.x and older to 3.0."""
             # temporary table
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
@@ -118,7 +118,7 @@ class QtDBConnector():
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
         def update_30to31():
-            """Incremental update of database from 3.0 and older to 3.1."""
+            """Performs incremental update of database from 3.0 and older to 3.1."""
             # temporary table
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table()
@@ -158,7 +158,7 @@ class QtDBConnector():
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
 
     def __insert_default_talk(self):
-        """Insert the required placeholder talk into the database.At least one talk must exist"""
+        """Inserts the required placeholder talk into the database.At least one talk must exist"""
         self.insert_presentation(Presentation("", "", "", "", "", "", "", ""))
 
     def get_talks(self):
@@ -182,7 +182,7 @@ class QtDBConnector():
         return QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Room=%s''' % room)
 
     def get_presentation(self, talk_id):
-        """Return a Presentation object associated to a talk_id"""
+        """Returns a Presentation object associated to a talk_id"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
         if result.next():
             return Presentation(title=unicode(result.value(1).toString()),
@@ -197,17 +197,16 @@ class QtDBConnector():
             return None
 
     def get_string_list(self,column):
-        """Return a column as a QStringList"""
+        """Returns a column as a QStringList"""
         tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT %s FROM presentations''' %column)
+        result = QtSql.QSqlQuery('''SELECT DISTINCT %s FROM presentations''' %column)
         while result.next():
             tempList.append(result.value(0).toString())
-        tempList.removeDuplicates()
         return tempList
 
 
     def presentation_exists(self, presentation):
-        """Check if there's a presentation with the same Speaker and Title already stored"""
+        """Checks if there's a presentation with the same Speaker and Title already stored"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
         while result.next():
             if(unicode(presentation.title) == unicode(result.value(1).toString()) 
@@ -219,7 +218,7 @@ class QtDBConnector():
     # Presentation Create, Update, Delete
     #
     def insert_presentation(self, presentation):
-        """Insert a Presentation into the database."""
+        """Inserts a passed Presentation into the database."""
         # Handle old field names
         # Level to Category
         if hasattr(presentation, 'level'):
@@ -247,7 +246,7 @@ class QtDBConnector():
         log.info("Talk added: %s - %s" %(presentation.speaker, presentation.title))
 
     def update_presentation(self, talk_id, presentation):
-        """Update an existing Presentation in the database."""
+        """Updates an existing Presentation in the database."""
         query = QtSql.QSqlQuery(
             '''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"
                 WHERE Id="%s"''' %
@@ -483,7 +482,7 @@ class QtDBConnector():
     #
     # Reporting Feature
     def __create_failures_table(self):
-        """Create the failures table in the database. Should be used to initialize a new table"""
+        """Creates the failures table in the database. Should be used to initialize a new table"""
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
                                         (Id INTERGER PRIMARY KEY,
                                         Comments TEXT,
@@ -496,7 +495,7 @@ class QtDBConnector():
         query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS failures''')
 
     def get_report(self, talkid):
-        """Return a failure from a given talkid. Returned value is a Failure object"""
+        """Returns a failure from a given talkid. Returned value is a Failure object"""
         result = QtSql.QSqlQuery('''SELECT * FROM failures WHERE Id = "%s"''' % talkid)
         if result.next():
             failure = Failure(unicode(result.value(0).toString()),  # id
@@ -508,7 +507,7 @@ class QtDBConnector():
         return failure
 
     def get_reports(self):
-        """Return a list of failures in Report format"""
+        """Returns a list of failures in Report format"""
         result = QtSql.QSqlQuery('''Select * FROM failures''')
         # return result
         list = []
@@ -523,14 +522,14 @@ class QtDBConnector():
         return list
 
     def insert_failure(self, failure):
-        """Insert a failure into the database"""
+        """Inserts a failure into the database"""
         query = QtSql.QSqlQuery(
             '''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
             (int(failure.talkId), failure.comment, failure.indicator, failure.release))
         log.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
 
     def update_failure(self, talk_id, failure):
-        """Update an existing Failure in the database"""
+        """Updates an existing Failure in the database"""
         query = QtSqlQuery(
             '''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
             (failure.comment,
@@ -557,7 +556,7 @@ class QtDBConnector():
     # Controller Feature
     #
     def __create_recentconn_table(self):
-        """Create the recentconn table in the database. Should be used to initialize a new table"""
+        """Creates the recentconn table in the database. Should be used to initialize a new table"""
         query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS recentconn
                                         (host varchar(255),
                                          port int,
