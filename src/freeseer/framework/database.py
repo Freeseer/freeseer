@@ -185,7 +185,7 @@ class QtDBConnector():
         """Return a Presentation object associated to a talk_id"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
         if result.next():
-            p = Presentation(title=unicode(result.value(1).toString()),
+            return Presentation(title=unicode(result.value(1).toString()),
                              speaker=unicode(result.value(2).toString()),
                              description=unicode(result.value(3).toString()),
                              category=unicode(result.value(4).toString()),
@@ -194,15 +194,13 @@ class QtDBConnector():
                              date=unicode(result.value(7).toString()),
                              time=unicode(result.value(8).toString()))
         else:
-            p = None
-
-        return p
+            return None
 
     def get_string_list(self,column):
         """Return a column as a QStringList"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT %s FROM presentations''' %column)
-        while(result.next()):
+        while result.next():
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
@@ -211,7 +209,7 @@ class QtDBConnector():
         """Return a stringList of all titles"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Title FROM presentations''')
-        while(result.next()):
+        while result.next():
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
@@ -220,7 +218,7 @@ class QtDBConnector():
         """Return a stringList of all Speakers"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Speaker FROM presentations''')
-        while(result.next()):
+        while result.next():
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
@@ -229,7 +227,7 @@ class QtDBConnector():
         """Return a stringList of all Speakers"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Category FROM presentations''')
-        while(result.next()):
+        while result.next():
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
@@ -238,7 +236,7 @@ class QtDBConnector():
         """Return a stringList of all events"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Event FROM presentations''')
-        while(result.next()):
+        while result.next():
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
@@ -247,7 +245,7 @@ class QtDBConnector():
         """Return a stringList of all rooms"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT Room FROM presentations''')
-        while(result.next()):
+        while result.next():
             tempList.append(result.value(0).toString())
         tempList.removeDuplicates()
         return tempList
@@ -255,7 +253,7 @@ class QtDBConnector():
     def presentation_exists(self, presentation):
         """Check if there's a presentation with the same Speaker and Title already stored"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
-        while(result.next()):
+        while result.next():
             if(unicode(presentation.title) == unicode(result.value(1).toString()) 
                 and unicode(presentation.speaker) == unicode(result.value(2).toString())):
                 return True
@@ -579,7 +577,7 @@ class QtDBConnector():
         result = QtSql.QSqlQuery('''Select * FROM failures''')
         # return result
         list = []
-        while(result.next()):
+        while result.next():
             failure = Failure(unicode(result.value(0).toString()),    # id
                               unicode(result.value(1).toString()),    # comment
                               unicode(result.value(2).toString()),    # indicator
