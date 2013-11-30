@@ -58,7 +58,7 @@ class QtDBConnector():
         self.talkdb = QtSql.QSqlDatabase.addDatabase("QSQLITE")
         self.talkdb.setDatabaseName(self.talkdb_file)
 
-        if (self.talkdb.open()):
+        if self.talkdb.open():
 
             # check if presentations table exists and if not create it.
             if not self.talkdb.tables().contains("presentations"):
@@ -205,50 +205,6 @@ class QtDBConnector():
         tempList.removeDuplicates()
         return tempList
 
-    def get_title_list(self):
-        """Return a stringList of all titles"""
-        tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT Title FROM presentations''')
-        while result.next():
-            tempList.append(result.value(0).toString())
-        tempList.removeDuplicates()
-        return tempList
-
-    def get_speaker_list(self):
-        """Return a stringList of all Speakers"""
-        tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT Speaker FROM presentations''')
-        while result.next():
-            tempList.append(result.value(0).toString())
-        tempList.removeDuplicates()
-        return tempList
-
-    def get_category_list(self):
-        """Return a stringList of all Speakers"""
-        tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT Category FROM presentations''')
-        while result.next():
-            tempList.append(result.value(0).toString())
-        tempList.removeDuplicates()
-        return tempList
-
-    def get_event_list(self):
-        """Return a stringList of all events"""
-        tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT Event FROM presentations''')
-        while result.next():
-            tempList.append(result.value(0).toString())
-        tempList.removeDuplicates()
-        return tempList
-
-    def get_room_list(self):
-        """Return a stringList of all rooms"""
-        tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT Room FROM presentations''')
-        while result.next():
-            tempList.append(result.value(0).toString())
-        tempList.removeDuplicates()
-        return tempList
 
     def presentation_exists(self, presentation):
         """Check if there's a presentation with the same Speaker and Title already stored"""
@@ -263,14 +219,10 @@ class QtDBConnector():
     # Presentation Create, Update, Delete
     #
     def insert_presentation(self, presentation):
-        """
-        Insert a Presentation into the database.
-        """
+        """Insert a Presentation into the database."""
         # Handle old field names
         # Level to Category
         if hasattr(presentation, 'level'):
-            print "has level"
-            print presentation.level
             if (presentation.level == '' and presentation.category != ''):
                 presentation.level = presentation.category
 
@@ -292,13 +244,10 @@ class QtDBConnector():
              presentation.room,
              presentation.date,
              presentation.time))
-        log.info("Talk added: %s - %s" %
-                 (presentation.speaker, presentation.title))
+        log.info("Talk added: %s - %s" %(presentation.speaker, presentation.title))
 
     def update_presentation(self, talk_id, presentation):
-        """
-        Update an existing Presentation in the database.
-        """
+        """Update an existing Presentation in the database."""
         query = QtSql.QSqlQuery(
             '''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"
                 WHERE Id="%s"''' %
@@ -312,9 +261,7 @@ class QtDBConnector():
         log.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
 
     def delete_presentation(self, talk_id):
-        """
-        Removes a Presentation from the database
-        """
+        """Removes a Presentation from the database"""
         query = QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
         log.info("Talk %s deleted." % talk_id)
 
@@ -328,7 +275,6 @@ class QtDBConnector():
     #
     def get_presentations_model(self):
         """Gets the Presentation Table Model. Useful for Qt GUI based Frontends to load the Model in Table Views"""
-
         if self.presentationsModel is None:
             self.presentationsModel = QtSql.QSqlTableModel()
             self.presentationsModel.setTable("presentations")
@@ -340,14 +286,10 @@ class QtDBConnector():
         """Gets the Events Model. Useful for Qt GUI based Frontends to load the Model into Views"""
         self.eventsModel = QtSql.QSqlQueryModel()
         self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations ORDER BY Event ASC")
-
         return self.eventsModel
 
     def get_dates_from_event_room_model(self, event, room):
-        """
-        Gets the Rooms Model.
-        Useful for Qt GUI based Frontends to load the Model into Views.
-        """
+        """Gets the Rooms Model.Useful for Qt GUI based Frontends to load the Model into Views."""
         self.datesModel = QtSql.QSqlQueryModel()
         self.datesModel.setQuery(
             "SELECT DISTINCT date(Time) FROM presentations WHERE Event='%s' and Room='%s' ORDER BY Date ASC"
@@ -363,7 +305,6 @@ class QtDBConnector():
     def get_talks_model(self, event, room, date=None):
         """Gets the Talks Model. A talk is defined as "<presenter> - <talk_title>"
         Useful for Qt GUI based Frontends to load the Model into Views"""
-
         self.talksModel = QtSql.QSqlQueryModel()
         if date == "":
             self.talksModel.setQuery("SELECT (Speaker || ' - ' || Title), Id FROM presentations \
@@ -395,10 +336,8 @@ class QtDBConnector():
         """Adds talks from an rss feed"""
         entry = str(rss)
         feedparser = FeedParser(entry)
-
         if len(feedparser.build_data_dictionary()) == 0:
             log.info("RSS: No data found.")
-
         else:
             for presentation in feedparser.build_data_dictionary():
                 talk = Presentation(presentation["Title"],
@@ -413,10 +352,7 @@ class QtDBConnector():
                 self.insert_presentation(talk)
 
     def add_talks_from_csv(self, fname):
-        """Adds talks from a csv file.
-
-        Title and speaker must be present.
-        """
+        """Adds talks from a csv file. Title and speaker must be present."""
         file = open(fname, 'r')
         try:
             reader = csv.DictReader(file)
@@ -467,15 +403,15 @@ class QtDBConnector():
                 except KeyError:
                     time = ''
 
-                talk = Presentation(title,
-                                    speaker,
-                                    abstract,
-                                    category,
-                                    event,
-                                    room,
-                                    date,
-                                    time)
-                self.insert_presentation(talk)
+                self.insert_presentation(
+                    Presentation(title,
+                                speaker,
+                                abstract,
+                                category,
+                                event,
+                                room,
+                                date,
+                                time))
 
         except IOError:
             log.error("CSV: File %s not found", file)
@@ -484,7 +420,6 @@ class QtDBConnector():
             file.close()
 
     def export_talks_to_csv(self, fname):
-        #fname = '/home/parallels/Documents/git/freeseer/src/test/export.csv'
         fieldNames = ('Title',
                       'Speaker',
                       'Abstract',
