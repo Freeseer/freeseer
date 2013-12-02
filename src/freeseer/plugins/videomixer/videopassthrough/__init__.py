@@ -55,7 +55,7 @@ class VideoPassthrough(IVideoMixer):
     widget = None
 
     # VideoPassthrough variables
-    input_type = "video/x-raw" 
+    input_type = "Y444" 
     framerate = 30
     resolution = "NOSCALE"
 
@@ -68,7 +68,7 @@ class VideoPassthrough(IVideoMixer):
         videorate_cap = Gst.ElementFactory.make("capsfilter",
                                                  "video_rate_cap")
         videorate_cap.set_property("caps",
-                        Gst.caps_from_string("%s, framerate=%d/1, format=Y444" % (self.input_type, self.framerate)))
+                        Gst.caps_from_string("video/x-raw, framerate=%d/1, format=%s" % (self.framerate, self.input_type)))
         bin.add(videorate_cap)
         # --- End Video Rate
 
