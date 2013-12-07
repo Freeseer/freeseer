@@ -66,20 +66,22 @@ To quickly get started:
 Channel Bot
 ^^^^^^^^^^^
 
-You've probably noticed this guy ``[o__o]`` hanging out in `#freeseer`.
-He's our friendly channel bot from `BotBot.me <https://botbot.me>`_.
+You've probably noticed BotBot ``[o__o]`` hanging out in `#freeseer`.
+BotBot is our friendly channel bot from `BotBot.me <https://botbot.me>`_.
 
-He'll respond to certain queries. Try asking him for help::
+BotBot responds to certain queries. Try asking BotBot for help::
 
-  <You> [o__o]: help
+    You | [o__o]: help
+ [o__o] | Available plugins: logger, ping, help, github (https://botbot.me/freenode/freeseer/help/)
 
-He'll gladly fetch GitHub issues for you, just type ``gh#<issue-number>``::
+BotBot will gladly fetch GitHub issues (and Pull Requests) for you,
+just type ``gh#<issue-number>``::
 
- <You> gh#1
- <[o__o]> Package freeseer for Fedora.: https://github.com/Freeseer/freeseer/issues/1
+    You | gh#401
+ [o__o] | Database upgrade failed when starting freeseer: https://github.com/Freeseer/freeseer/issues/401
 
-He also keeps a **log of our channel**. Read any discussions you missed at
-http://botbot.me/freenode/freeseer.
+BotBot also keeps a searchable **log of our channel**.
+Read any discussions you missed at http://botbot.me/freenode/freeseer.
 
 Twitter, Facebook, and Blog
 ---------------------------
