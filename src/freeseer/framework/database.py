@@ -28,10 +28,11 @@ import os
 
 from PyQt4 import QtSql
 
+from freeseer import settings
 from freeseer import __version__
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
-from freeseer.framework.rss_parser import FeedParser
+from freeseer.framework.plugin import PluginManager
 
 log = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ class QtDBConnector():
         """
         self.configdir = configdir
         self.talkdb_file = os.path.abspath("%s/%s" % (self.configdir, talkdb_file))
+        self.plugman = PluginManager(self.configdir)
 
         if not os.path.isfile(self.talkdb_file):
             file = open(self.talkdb_file, 'w')
@@ -360,13 +362,15 @@ class QtDBConnector():
     def add_talks_from_rss(self, rss):
         """Adds talks from an rss feed."""
         entry = str(rss)
-        feedparser = FeedParser(entry)
+        plugin = self.plugman.get_plugin_by_name("Rss FeedParser", "Importer")
+        feedparser = plugin.plugin_object
+        feedparser.pres_list = feedparser.get_presentations_list(entry)
 
-        if len(feedparser.build_data_dictionary()) == 0:
+        if not feedparser.pres_list:
             log.info("RSS: No data found.")
 
         else:
-            for presentation in feedparser.build_data_dictionary():
+            for presentation in feedparser.pres_list:
                 talk = Presentation(presentation["Title"],
                                     presentation["Speaker"],
                                     presentation["Abstract"],  # Description

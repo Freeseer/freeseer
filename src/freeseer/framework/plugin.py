@@ -77,6 +77,7 @@ class PluginManager(QtCore.QObject):
             "AudioMixer": IAudioMixer,
             "VideoInput": IVideoInput,
             "VideoMixer": IVideoMixer,
+            "Importer":   IImporter,
             "Output":     IOutput})
         self.plugmanc.collectPlugins()
 
@@ -262,6 +263,17 @@ class PluginManager(QtCore.QObject):
             list of supported VideoMixer plugins
         """
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory("VideoMixer")
+        return self._get_supported_plugins(unfiltered_plugins)
+
+    def get_importer_plugins(self):
+        """Returns a list of plugins that are supported by the users OS as detected by python's sys.platform library
+
+        Parameters:
+            none
+        Returns:
+            list of supported Importer plugins
+        """
+        unfiltered_plugins = self.plugmanc.getPluginsOfCategory("Importer")
         return self._get_supported_plugins(unfiltered_plugins)
 
     def get_output_plugins(self):
@@ -508,6 +520,14 @@ class IOutput(IBackendPlugin):
             node.text = metadata[key]
 
         return ET.ElementTree(root)
+
+
+class IImporter(IBackendPlugin):
+    CATEGORY = "Importer"
+
+    def get_presentations_list(self):
+        """Builds a list with all presentations"""
+        raise NotImplementedError
 
 
 class PluginError(Exception):
