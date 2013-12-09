@@ -29,6 +29,7 @@ import os
 from PyQt4 import QtSql
 
 from freeseer import __version__
+from freeseer import SCHEMA_VERSION
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
 from freeseer.framework.rss_parser import FeedParser
@@ -88,16 +89,6 @@ class QtDBConnector():
         """
         self.talkdb.close()
 
-    def get_program_version_int(self):
-        """
-        Get Freeseer's current version as an integer.
-        """
-        result = []
-        for c in __version__:
-            if c.isdigit():
-                result.append(c)
-        return int(''.join(result))
-
     def __get_db_version_int(self):
         """
         Get the database's current version. Default is 0 if unset (for 2x and older)
@@ -107,38 +98,40 @@ class QtDBConnector():
         return query.value(0).toInt()[0]
 
     def __update_version(self):
-        """
-        Upgrade database to the latest version.
-        updaterVersion[i] version number of the incremental update function located at updaters[i]
-        updaters[] functions are then called in order starting at the old version to the end.
-        Version # of 2.x and older is 0
-        """
+        """Upgrade database to the latest SCHEMA_VERSION"""
 
         db_version = self.__get_db_version_int()
-        program_version = self.get_program_version_int()
-        if program_version == db_version:
+        if db_version == SCHEMA_VERSION:
             return
 
+        #
+        # Define functions for upgrading between schema versions
+        #
         def update_2xto30():
+            """Incremental update of database from Freeseer 2.x and older to 3.0
+
+            SCHEMA_VERSION is 300
             """
-            Incremental update of database from 2.x and older to 3.0.
-            """
+            if db_version > 300:
+                log.debug('Database newer than schema version 300.')
+                return  # No update needed
+
+            log.debug('Updating to schema 300.')
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')  # temporary table
             self.__create_presentations_table()
             QtSql.QSqlQuery("""INSERT INTO presentations
                             SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
+        #
+        # Perform the upgrade
+        #
         updaters = [update_2xto30]
-        updaterVersion = [0]  # next entry is 300
-
-        if len(updaters) != len(updaterVersion) or db_version not in updaterVersion:  # not setup properly
-            log.info('Database upgrade failed.')
-            return
-        for updater in updaters[updaterVersion.index(db_version):]:
+        for updater in updaters:
             updater()
-        QtSql.QSqlQuery('PRAGMA user_version = %i' % program_version)
-        log.info('Upgraded presentations database from version %i', db_version)
+
+        QtSql.QSqlQuery('PRAGMA user_version = %i' % SCHEMA_VERSION)
+        log.info('Upgraded presentations database from version {} to {}'.format(db_version, SCHEMA_VERSION))
 
     def __create_presentations_table(self):
         """
