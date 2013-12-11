@@ -43,8 +43,6 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer.frontend.qtcommon import resource
-
 
 class ReportDialog(QDialog):
     """Failure report dialog for Freeseer"""
