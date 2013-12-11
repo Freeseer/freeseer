@@ -78,7 +78,7 @@ class ConfigToolWidget(QtGui.QWidget):
         self.optionsTreeWidget.topLevelItem(2).child(2).setText(0, "VideoInput")
         item_1 = QtGui.QTreeWidgetItem(item_0)
         self.optionsTreeWidget.topLevelItem(2).child(3).setText(0, "VideoMixer")
-        item_1 = QtGui.QTreeWidgetItem(item_0)
+        item_1 = QtGui.QTreeWidgetItem(item_0)  # noqa
         self.optionsTreeWidget.topLevelItem(2).child(4).setText(0, "Output")
 
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
