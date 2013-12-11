@@ -21,18 +21,3 @@
 
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
-
-pep8_options = {'max_line_length': 160,
-                'ignore': ['E127',   # Ignore over indents
-                           'E128',   # Ignore under indents
-                           'E221',   # Multiple whitespace before operator
-                           'E241']}  # Ignore multiple whitespaces after :
-
-
-def pep8_report(test, report):
-    output = ''
-    for line in report.get_statistics(''):
-        output += '\t%s\n' % line
-
-    test.assertEqual(report.total_errors, 0,
-                     "Found %s code style errors (and warnings):\n\n%s" % (report.total_errors, output))
