@@ -720,7 +720,7 @@ class JustinApi:
             connection.request('GET', request.http_url, headers=request.to_header())
             result = connection.getresponse().read()
             self.access_token_str = result
-            access_token = oauth.OAuthToken.from_string(result)
+            # access_token = oauth.OAuthToken.from_string(result)
             self.save_method(self.to_string())
         except KeyError:
             log.error("justin.tv API: failed to obtain an access token")
