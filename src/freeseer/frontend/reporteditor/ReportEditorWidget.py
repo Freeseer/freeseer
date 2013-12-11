@@ -26,9 +26,7 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
-from PyQt4 import QtCore, QtGui
-
-from freeseer.frontend.qtcommon import resource
+from PyQt4 import QtGui
 
 
 class ReportEditorWidget(QtGui.QWidget):
@@ -58,13 +56,10 @@ class ReportEditorWidget(QtGui.QWidget):
         boldFont = QtGui.QFont()
         boldFont.setBold(True)
 
-        addIcon = QtGui.QIcon.fromTheme("list-add")
         removeIcon = QtGui.QIcon.fromTheme("list-remove")
         clearIcon = QtGui.QIcon.fromTheme("edit-clear")
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
 
-        #self.addButton = QtGui.QPushButton("Add")
-        #self.addButton.setIcon(addIcon)
         self.removeButton = QtGui.QPushButton("Remove")
         self.removeButton.setIcon(removeIcon)
         self.clearButton = QtGui.QPushButton("Clear")
