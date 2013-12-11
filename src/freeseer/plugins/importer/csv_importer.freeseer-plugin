@@ -1,0 +1,9 @@
+[Core]
+Name = CSV Importer
+Module = csv_importer
+
+[Documentation]
+Author = Rio Lowry
+Version = 3.0.9999
+Website = http://fosslc.org
+Description = CSV Importer plugin allows user to import from csv files when adding presentations
