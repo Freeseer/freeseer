@@ -26,11 +26,11 @@ install:
   - pip install coveralls
 # command to run tests, e.g. python setup.py test
 script:
-  - flake8 src/
   - pwd && cd src
   - coverage run setup.py test
   - coveralls
   - cd ..
+  - flake8 src
 after_success:
   # Test building deployable packages
   - pwd && cd src
