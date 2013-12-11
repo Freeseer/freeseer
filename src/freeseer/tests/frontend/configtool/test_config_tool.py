@@ -31,9 +31,9 @@ from PyQt4 import QtCore
 from PyQt4 import QtGui
 from PyQt4 import QtTest
 
+from freeseer import settings
 from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.configtool.configtool import ConfigToolApp
-from freeseer import settings
 
 
 class TestConfigToolApp(unittest.TestCase):
