@@ -33,8 +33,6 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer.frontend.qtcommon import resource
-
 
 class ConfigToolWidget(QtGui.QWidget):
     '''
