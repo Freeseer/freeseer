@@ -22,29 +22,27 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import ConfigParser
 import logging
 import os
 import re
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 from PyQt4.QtGui import QInputDialog
 from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QMessageBox
+
+from freeseer.framework.plugin import PluginManager, IOutput
+from freeseer.frontend.configtool.AVWidget import AVWidget
+from freeseer.frontend.configtool.ConfigToolWidget import ConfigToolWidget
+from freeseer.frontend.configtool.GeneralWidget import GeneralWidget
+from freeseer.frontend.configtool.PluginLoaderWidget import PluginLoaderWidget
+from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
-
-from freeseer import settings, __version__
-from freeseer.framework.plugin import PluginManager, IOutput
-from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-
-from AVWidget import AVWidget
-from ConfigToolWidget import ConfigToolWidget
-from GeneralWidget import GeneralWidget
-from PluginLoaderWidget import PluginLoaderWidget
 
 log = logging.getLogger(__name__)
 
