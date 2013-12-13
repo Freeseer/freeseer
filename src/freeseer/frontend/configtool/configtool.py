@@ -59,27 +59,30 @@ class ConfigToolApp(FreeseerApp):
         FreeseerApp.__init__(self)
 
         self.recordapp = recordapp
-        
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
-        
+
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
         self.mainWidget = ConfigToolWidget()
         self.setCentralWidget(self.mainWidget)
-        
+
         self.currentWidget = None
         self.mainWidgetLayout = QtGui.QVBoxLayout()
         self.mainWidget.rightPanelWidget.setLayout(self.mainWidgetLayout)
-        
+
         # Load all ConfigTool Widgets
         self.generalWidget = GeneralWidget()
         self.avWidget = AVWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
-        
-        self.config = Config(settings.configdir)
+
+        if recordapp:
+            self.config = self.recordapp.config
+        else:
+            self.config = Config(settings.configdir)
         self.plugman = PluginManager(settings.configdir)
 
         # Custom Menu Items
@@ -95,7 +98,7 @@ class ConfigToolApp(FreeseerApp):
             translator.load(":/languages/%s" % language)
             language_display_text = translator.translate("Translation", "Language Display Text")
             self.generalWidget.languageComboBox.addItem(language_display_text, language)
-            
+
         # Load default language.
         actions = self.menuLanguage.actions()
         for action in actions:
@@ -104,12 +107,12 @@ class ConfigToolApp(FreeseerApp):
                 self.translate(action)
                 break
         # --- End Language Related
-        
+
         # connections
         self.connect(self.actionSaveProfile, QtCore.SIGNAL('triggered()'), self.show_save_profile_dialog)
         self.connect(self.mainWidget.closePushButton, QtCore.SIGNAL('clicked()'), self.close)
         self.connect(self.mainWidget.optionsTreeWidget, QtCore.SIGNAL('itemSelectionChanged()'), self.change_option)
-        
+
         #
         # general tab connections
         #
@@ -117,7 +120,7 @@ class ConfigToolApp(FreeseerApp):
         self.connect(self.generalWidget.recordDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.generalWidget.recordDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalWidget.autoHideCheckBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
-        
+
         #
         # AV tab connections
         #
@@ -146,12 +149,12 @@ class ConfigToolApp(FreeseerApp):
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamLabel.setEnabled)
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamComboBox.setEnabled)
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL("toggled(bool)"), self.avWidget.streamSetupPushButton.setEnabled)
-        
+
         self.retranslate()
 
         # load active plugin widgets
         self.load_plugin_widgets()
-        
+
         # Start off with displaying the General Settings
         items = self.mainWidget.optionsTreeWidget.findItems(self.generalString, QtCore.Qt.MatchExactly)
         if len(items) > 0:
@@ -161,7 +164,7 @@ class ConfigToolApp(FreeseerApp):
     ###
     ### Translation
     ###
-    
+
     def retranslate(self):
         self.setWindowTitle(self.app.translate("ConfigToolApp", "Freeseer ConfigTool"))
 
@@ -169,7 +172,7 @@ class ConfigToolApp(FreeseerApp):
         # Menu
         #
         self.saveProfileString = self.actionSaveProfile.setText(self.app.translate("ConfigToolApp", "Save Profile"))
-        
+
         #
         # ConfigToolWidget
         #
@@ -181,7 +184,7 @@ class ConfigToolApp(FreeseerApp):
         self.videoInputString = self.app.translate("ConfigToolApp", "VideoInput")
         self.videoMixerString = self.app.translate("ConfigToolApp", "VideoMixer")
         self.outputString = self.app.translate("ConfigToolApp", "Output")
-        
+
         self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
         self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.pluginsString)
@@ -190,10 +193,10 @@ class ConfigToolApp(FreeseerApp):
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(2).setText(0, self.videoInputString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(3).setText(0, self.videoMixerString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).child(4).setText(0, self.outputString)
-        
+
         self.mainWidget.closePushButton.setText(self.app.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
-        
+
         #
         # GeneralWidget
         #
@@ -202,14 +205,14 @@ class ConfigToolApp(FreeseerApp):
         self.generalWidget.recordDirLabel.setText(self.app.translate("ConfigToolApp", "Record Directory"))
         self.generalWidget.autoHideCheckBox.setText(self.app.translate("ConfigToolApp", "Enable Auto-Hide"))
         # --- End GeneralWidget
-        
+
         #
         # AV Widget
         #
         self.avWidget.audioGroupBox.setTitle(self.app.translate("ConfigToolApp", "Audio Input"))
         self.avWidget.audioMixerLabel.setText(self.app.translate("ConfigToolApp", "Audio Mixer"))
         self.avWidget.audioMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
-        
+
         self.avWidget.videoGroupBox.setTitle(self.app.translate("ConfigToolApp", "Video Input"))
         self.avWidget.videoMixerLabel.setText(self.app.translate("ConfigToolApp", "Video Mixer"))
         self.avWidget.videoMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
@@ -221,7 +224,7 @@ class ConfigToolApp(FreeseerApp):
 
     def show_save_profile_dialog(self):
         profile, ok = QInputDialog().getText(self, "Save Profile", "Profile Name", QLineEdit.Normal)
-        
+
         if ok:
             if re.match('^[\w-]+$', profile):
                 self.config.saveProfile(profile)
@@ -231,14 +234,14 @@ class ConfigToolApp(FreeseerApp):
     ###
     ### General
     ###
-        
+
     def change_option(self):
         option = self.mainWidget.optionsTreeWidget.currentItem().text(0)
-        
+
         if self.currentWidget is not None:
             self.mainWidgetLayout.removeWidget(self.currentWidget)
             self.currentWidget.hide()
-          
+
         if option == self.generalString:
             self.load_general_widget()
         elif option == self.avString:
@@ -257,25 +260,25 @@ class ConfigToolApp(FreeseerApp):
             self.load_option_output_plugins()
         else:
             pass
-        
+
     def load_general_widget(self):
         self.mainWidgetLayout.addWidget(self.generalWidget)
         self.currentWidget = self.generalWidget
         self.currentWidget.show()
-        
+
         # Load default language
         i = self.generalWidget.languageComboBox.findData(self.config.default_language)
         self.generalWidget.languageComboBox.setCurrentIndex(i)
-        
+
         # Recording Directory Settings
         self.generalWidget.recordDirLineEdit.setText(self.config.videodir)
-        
+
         # Load Auto Hide Settings
         if self.config.auto_hide == True:
             self.generalWidget.autoHideCheckBox.setChecked(True)
         else:
             self.generalWidget.autoHideCheckBox.setChecked(False)
-            
+
     def set_default_language(self, language):
         language_file = str(self.generalWidget.languageComboBox.itemData(language).toString())
         self.config.default_language = language_file
@@ -283,10 +286,10 @@ class ConfigToolApp(FreeseerApp):
 
     def browse_video_directory(self):
         directory = self.generalWidget.recordDirLineEdit.text()
-        
+
         newDir = QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)
         if newDir == "": newDir = directory
-        
+
         videodir = os.path.abspath(str(newDir))
         self.generalWidget.recordDirLineEdit.setText(videodir)
         self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
@@ -302,16 +305,16 @@ class ConfigToolApp(FreeseerApp):
         # Make recordapp to update it's config
         if self.recordapp:
             self.recordapp.config.readConfig()
-            
+
     ###
     ### AV Related
-    ###        
-    
+    ###
+
     def load_av_widget(self):
         self.mainWidgetLayout.addWidget(self.avWidget)
         self.currentWidget = self.avWidget
         self.currentWidget.show()
-        
+
         #
         # Set up Audio
         #
@@ -321,7 +324,7 @@ class ConfigToolApp(FreeseerApp):
             self.avWidget.audioGroupBox.setChecked(False)
             self.avWidget.audioMixerComboBox.setEnabled(False)
             self.avWidget.audioMixerSetupPushButton.setEnabled(False)
-            
+
         n = 0 # Counter for finding Audio Mixer to set as current.
         self.avWidget.audioMixerComboBox.clear()
         plugins = self.plugman.get_audiomixer_plugins()
@@ -330,7 +333,7 @@ class ConfigToolApp(FreeseerApp):
             if plugin.plugin_object.get_name() == self.config.audiomixer:
                 self.avWidget.audioMixerComboBox.setCurrentIndex(n)
             n += 1
-        
+
         #
         # Set up Video
         #
@@ -340,7 +343,7 @@ class ConfigToolApp(FreeseerApp):
             self.avWidget.videoGroupBox.setChecked(False)
             self.avWidget.videoMixerComboBox.setEnabled(False)
             self.avWidget.videoMixerSetupPushButton.setEnabled(False)
-            
+
         n = 0 # Counter for finding Video Mixer to set as current.
         self.avWidget.videoMixerComboBox.clear()
         plugins = self.plugman.get_videomixer_plugins()
@@ -349,7 +352,7 @@ class ConfigToolApp(FreeseerApp):
             if plugin.plugin_object.get_name() == self.config.videomixer:
                 self.avWidget.videoMixerComboBox.setCurrentIndex(n)
             n += 1
-                
+
         #
         # Set up File Format
         #
@@ -359,7 +362,7 @@ class ConfigToolApp(FreeseerApp):
             self.avWidget.fileGroupBox.setChecked(False)
             self.avWidget.fileComboBox.setEnabled(False)
             self.avWidget.fileSetupPushButton.setEnabled(False)
-            
+
         n = 0 # Counter for finding File Format to set as current
         self.avWidget.fileComboBox.clear()
         plugins = self.plugman.get_output_plugins()
@@ -369,7 +372,7 @@ class ConfigToolApp(FreeseerApp):
                 if plugin.plugin_object.get_name() == self.config.record_to_file_plugin:
                     self.avWidget.fileComboBox.setCurrentIndex(n)
                 n += 1
-        
+
         #
         # Set up Stream Format
         #
@@ -393,7 +396,7 @@ class ConfigToolApp(FreeseerApp):
     def toggle_audiomixer_state(self, state):
         self.config.enable_audio_recording = state
         self.config.writeConfig()
-        
+
     def change_audiomixer(self, audiomixer):
         self.config.audiomixer = audiomixer
         self.config.writeConfig()
@@ -402,15 +405,15 @@ class ConfigToolApp(FreeseerApp):
         mixer = str(self.avWidget.audioMixerComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(mixer, "AudioMixer")
         plugin.plugin_object.get_dialog()
-            
+
     def toggle_videomixer_state(self, state):
         self.config.enable_video_recording = state
         self.config.writeConfig()
-        
+
     def change_videomixer(self, videomixer):
         self.config.videomixer = videomixer
         self.config.writeConfig()
-    
+
     def setup_video_mixer(self):
         mixer = str(self.avWidget.videoMixerComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(mixer, "VideoMixer")
@@ -419,45 +422,45 @@ class ConfigToolApp(FreeseerApp):
     def toggle_record_to_file(self, state):
         self.config.record_to_file = state
         self.config.writeConfig()
-        
+
     def change_file_format(self, format):
         self.config.record_to_file_plugin = format
         self.config.writeConfig()
-    
+
     def setup_file_format(self):
         output = str(self.avWidget.fileComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(output, "Output")
         plugin.plugin_object.get_dialog()
-        
+
     def toggle_record_to_stream(self, state):
         self.config.record_to_stream = state
         self.config.writeConfig()
-        
+
     def change_stream_format(self, format):
         self.config.record_to_stream_plugin = format
         self.config.writeConfig()
-    
+
     def setup_stream_format(self):
         output = str(self.avWidget.streamComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(output, "Output")
-        plugin.plugin_object.get_dialog()    
+        plugin.plugin_object.get_dialog()
 
     ###
     ### Plugin Loader Related
     ###
-    
+
     def get_plugins(self, plugin_type):
         """
         Returns a list of plugins of type
-        
+
         Parameters:
             plugin_type - type of plugins to get
-            
+
         Returns:
             list of plugins of type specified
         """
         plugins = []
-        
+
         if plugin_type == "AudioInput":
             plugins = self.plugman.get_audioinput_plugins()
         elif plugin_type == "AudioMixer":
@@ -468,18 +471,18 @@ class ConfigToolApp(FreeseerApp):
             plugins = self.plugman.get_videomixer_plugins()
         elif plugin_type == "Output":
             plugins = self.plugman.get_output_plugins()
-        
+
         return plugins
-    
+
     def load_plugin_list(self, plugin_type):
         self.pluginloaderWidget.listWidget.clear()
         for plugin in self.get_plugins(plugin_type):
             item = QtGui.QListWidgetItem()
-            
+
             size = QtCore.QSize(64, 64)
             item.setSizeHint(size)
             self.pluginloaderWidget.listWidget.addItem(item)
-            
+
             # The list item will be a fancy widget.
             widget = self.pluginloaderWidget.getListWidgetPlugin(plugin,
                                                                  plugin_type,
@@ -492,53 +495,53 @@ class ConfigToolApp(FreeseerApp):
         self.currentWidget.show()
 
         self.load_plugin_list("AudioInput")
-            
+
     def load_option_audiomixer_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
         self.currentWidget = self.pluginloaderWidget
         self.currentWidget.show()
 
         self.load_plugin_list("AudioMixer")
-        
+
     def load_option_videoinput_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
         self.currentWidget = self.pluginloaderWidget
         self.currentWidget.show()
 
         self.load_plugin_list("VideoInput")
-            
+
     def load_option_videomixer_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
         self.currentWidget = self.pluginloaderWidget
         self.currentWidget.show()
 
         self.load_plugin_list("VideoMixer")
-    
+
     def load_option_output_plugins(self):
         self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
         self.currentWidget = self.pluginloaderWidget
         self.currentWidget.show()
-        
+
         self.load_plugin_list("Output")
-    
+
     def load_plugin_widgets(self):
         for plugin in self.plugman.get_all_plugins():
             plugin.plugin_object.set_gui(self)
 
     def show_plugin_widget_dialog(self, widget):
         self.dialog = QtGui.QDialog(self)
-    
+
         self.dialog_layout = QtGui.QVBoxLayout()
         self.dialog_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.dialog.setLayout(self.dialog_layout)
         self.dialog_layout.addWidget(widget)
-        
+
         self.dialog.closeButton = QtGui.QPushButton("Close")
         self.dialog_layout.addWidget(self.dialog.closeButton)
         self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
         self.dialog.setModal(True)
         self.dialog.show()
-            
+
     def get_plugin_settings_widget(self, plugin):
         widget = plugin.plugin_object.get_widget()
         return widget

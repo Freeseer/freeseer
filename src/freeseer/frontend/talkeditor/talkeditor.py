@@ -43,7 +43,7 @@ from EditorWidget import EditorWidget
 from AddTalkWidget import AddTalkWidget
 
 log = logging.getLogger(__name__)
-        
+
 class TalkEditorApp(FreeseerApp):
     '''
     Freeseer talk database editor main gui class
@@ -52,40 +52,44 @@ class TalkEditorApp(FreeseerApp):
         FreeseerApp.__init__(self)
 
         self.recordapp = recordapp
-        
+
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.setWindowIcon(icon)
         self.resize(960, 400)
-        
+
         self.mainWidget = QtGui.QWidget()
         self.mainLayout = QtGui.QHBoxLayout()
         self.mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.mainWidget)
-        
+
         self.editorWidget = EditorWidget()
         self.editorWidget.editor.setColumnHidden(5, True)
         self.addTalkWidget = AddTalkWidget()
-        
+
         self.mainLayout.addWidget(self.editorWidget)
         self.mainLayout.addWidget(self.addTalkWidget)
-        
+
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
-            
-        self.config = Config(settings.configdir)
-        self.db = QtDBConnector(settings.configdir)
-        
+
+        if recordapp:
+            self.config = self.recordapp.config
+            self.db = self.recordapp.db
+        else:
+            self.config = Config(settings.configdir)
+            self.db = QtDBConnector(settings.configdir)
+
         #
         # Setup Menubar
         #
         self.actionExportCsv = QtGui.QAction(self)
         self.actionExportCsv.setObjectName(_fromUtf8("actionExportCsv"))
-        
+
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionExportCsv)
         # --- End Menubar
-        
+
         #
         # Talk Editor Connections
         #
@@ -93,7 +97,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.addTalkWidget.addButton, QtCore.SIGNAL('clicked()'), self.add_talk)
         self.connect(self.addTalkWidget.cancelButton, QtCore.SIGNAL('clicked()'), self.hide_add_talk_widget)
         self.addTalkWidget.setHidden(True)
-        
+
         # Editor Widget
         self.connect(self.editorWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'), self.editorWidget.rssPushButton.click)
         self.connect(self.editorWidget.rssPushButton, QtCore.SIGNAL('clicked()'), self.add_talks_from_rss)
@@ -101,7 +105,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.editorWidget.removeButton, QtCore.SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.editorWidget.clearButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.editorWidget.closeButton, QtCore.SIGNAL('clicked()'), self.close)
-        
+
         # CSV Widget
         self.connect(self.editorWidget.csvLineEdit, QtCore.SIGNAL('returnPressed()'), self.editorWidget.csvPushButton.click)
         self.connect(self.editorWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
@@ -122,20 +126,20 @@ class TalkEditorApp(FreeseerApp):
     ###
     def retranslate(self):
         self.setWindowTitle(self.app.translate("TalkEditorApp", "Freeseer Talk Editor"))
-        
+
         #
         # Reusable Strings
         #
         self.confirmDBClearTitleString = self.app.translate("TalkEditorApp", "Clear Database")
         self.confirmDBClearQuestionString = self.app.translate("TalkEditorApp", "Are you sure you want to clear the DB?")
         # --- End Reusable Strings
-        
+
         #
         # Menubar
         #
         self.actionExportCsv.setText(self.app.translate("TalkEditorApp", "&Export to CSV"))
         # --- End Menubar
-        
+
         #
         # AddTalkWidget
         #
@@ -149,7 +153,7 @@ class TalkEditorApp(FreeseerApp):
         self.addTalkWidget.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
         self.addTalkWidget.cancelButton.setText(self.app.translate("TalkEditorApp", "Cancel"))
         # --- End AddTalkWidget
-        
+
         #
         # EditorWidget
         #
@@ -162,20 +166,20 @@ class TalkEditorApp(FreeseerApp):
         self.editorWidget.clearButton.setText(self.app.translate("TalkEditorApp", "Clear"))
         self.editorWidget.closeButton.setText(self.app.translate("TalkEditorApp", "Close"))
         # --- End EditorWidget
-    
+
     def load_presentations_model(self):
         # Load Presentation Model
         self.presentationModel = self.db.get_presentations_model()
         self.editorWidget.editor.setModel(self.presentationModel)
-    
+
     def show_add_talk_widget(self):
         self.editorWidget.setHidden(True)
         self.addTalkWidget.setHidden(False)
-        
+
     def hide_add_talk_widget(self):
         self.editorWidget.setHidden(False)
         self.addTalkWidget.setHidden(True)
-    
+
     def add_talk(self):
         date = self.addTalkWidget.dateEdit.date()
         time = self.addTalkWidget.timeEdit.time()
@@ -187,7 +191,7 @@ class TalkEditorApp(FreeseerApp):
                                     unicode(self.addTalkWidget.eventLineEdit.text()),
                                     unicode(self.addTalkWidget.roomLineEdit.text()),
                                     unicode(datetime.toString(QtCore.Qt.ISODate)))
-        
+
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0): return
 
@@ -198,7 +202,7 @@ class TalkEditorApp(FreeseerApp):
         self.addTalkWidget.presenterLineEdit.clear()
 
         self.presentationModel.select()
-        
+
         self.hide_add_talk_widget()
 
         # If this is launched from the recording app
@@ -211,31 +215,31 @@ class TalkEditorApp(FreeseerApp):
             row_clicked = self.editorWidget.editor.currentIndex().row()
         except:
             return
-        
+
         self.presentationModel.removeRow(row_clicked)
         self.presentationModel.select()
-        
+
     def reset(self):
         self.db.clear_database()
         self.presentationModel.select()
-        
+
     def confirm_reset(self):
         """
         Presents a confirmation dialog to ask the user if they are sure they
         wish to remove the talk database.
-        
+
         If Yes call the reset() function.
         """
         confirm = QtGui.QMessageBox.question(self,
                     self.confirmDBClearTitleString,
                     self.confirmDBClearQuestionString,
-                    QtGui.QMessageBox.Yes | 
+                    QtGui.QMessageBox.Yes |
                     QtGui.QMessageBox.No,
                     QtGui.QMessageBox.No)
-        
+
         if confirm == QtGui.QMessageBox.Yes:
             self.reset()
-            
+
     def add_talks_from_rss(self):
         rss_url = unicode(self.editorWidget.rssLineEdit.text())
         self.db.add_talks_from_rss(rss_url)
@@ -245,20 +249,20 @@ class TalkEditorApp(FreeseerApp):
         log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
         event.accept()
-    
+
     def csv_file_select(self):
         dirpath = str(self.editorWidget.csvLineEdit.text())
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Select file', "", "*.csv")
         if fname:
-            self.editorWidget.csvLineEdit.setText(fname)    
-    
+            self.editorWidget.csvLineEdit.setText(fname)
+
     def add_talks_from_csv(self):
         fname = self.editorWidget.csvLineEdit.text()
-        
+
         if fname:
             self.db.add_talks_from_csv(fname)
             self.presentationModel.select()
-    
+
     def export_talks_to_csv(self):
         dirpath = str(self.editorWidget.csvLineEdit.text())
         fname = QtGui.QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
