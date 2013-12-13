@@ -28,7 +28,7 @@ http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 
 class ReportEditorWidget(QtGui.QWidget):
