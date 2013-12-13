@@ -48,7 +48,7 @@ from freeseer.framework.config import Config
 from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 from ReportEditorWidget import ReportEditorWidget
 

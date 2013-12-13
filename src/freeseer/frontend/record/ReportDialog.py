@@ -29,7 +29,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 
 class ReportDialog(QtGui.QDialog):

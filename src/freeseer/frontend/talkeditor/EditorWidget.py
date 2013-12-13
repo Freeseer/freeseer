@@ -41,7 +41,7 @@ from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 
 class EditorWidget(QWidget):

@@ -41,7 +41,7 @@ from freeseer import settings, __version__
 from freeseer.framework.config import Config
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget

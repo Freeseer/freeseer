@@ -43,7 +43,7 @@ from PyQt4.QtGui import QPixmap
 
 from freeseer import __version__
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 try:
     _fromUtf8 = QString.fromUtf8

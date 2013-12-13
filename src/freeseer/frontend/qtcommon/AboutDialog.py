@@ -41,7 +41,7 @@ except AttributeError:
 from freeseer import NAME
 from freeseer import URL
 from freeseer import __version__
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 RECORD_BUTTON_ARTIST = u'Sekkyumu'
 RECORD_BUTTON_LINK = u'http://sekkyumu.deviantart.com/'

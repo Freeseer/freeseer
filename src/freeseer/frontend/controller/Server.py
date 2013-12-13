@@ -30,7 +30,7 @@ from PyQt4.QtNetwork import QTcpServer, QHostAddress, QNetworkInterface
 
 from freeseer.framework.config import Config
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-from freeseer.frontend.qtcommon.Resource import resource_rc
+from freeseer.frontend.qtcommon import resource
 
 from ServerWidget import ControllerServerWidget
 from Client import COMMANDS
