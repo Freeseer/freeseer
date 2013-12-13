@@ -30,7 +30,10 @@ speakers.
 '''
 
 # python-lib
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -78,7 +81,7 @@ class AudioFeedback(IOutput):
         self.plugman = plugman
         try:
             self.feedbacksink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
 
     def get_widget(self):

@@ -30,7 +30,10 @@ source.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import os
 
 # GStreamer modules
@@ -103,7 +106,7 @@ class FirewireSrc(IVideoInput):
 
         try:
             self.device = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", self.device)
 
     def get_widget(self):

@@ -79,7 +79,10 @@ When you're done setting up your Justin.tv preferences in Freeseer, click the
 '''
 
 # Python libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import logging
 import pickle
 import webbrowser
@@ -293,7 +296,7 @@ class RTMPOutput(IOutput):
             self.consumer_secret = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret")
             self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
             self.use_justin_api = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)

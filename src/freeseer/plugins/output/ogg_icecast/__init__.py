@@ -29,7 +29,10 @@ A streaming plugin which records sends an Ogg stream to an icecast server.
 '''
 
 # python-lib
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -158,7 +161,7 @@ class OggIcecast(IOutput):
             self.port = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port"))
             self.password = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Password")
             self.mount = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Mount")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", self.ip)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", self.port)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", self.password)

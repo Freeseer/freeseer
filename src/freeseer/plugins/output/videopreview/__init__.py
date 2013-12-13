@@ -30,7 +30,10 @@ is being recorded in real time.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -90,7 +93,7 @@ class VideoPreview(IOutput):
         try:
             self.previewsink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink")
             self.leakyqueue = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
 

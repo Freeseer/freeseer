@@ -31,7 +31,10 @@ the output.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -86,7 +89,7 @@ class AudioPassthrough(IAudioMixer):
 
         try:
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input")
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
 
     def get_widget(self):

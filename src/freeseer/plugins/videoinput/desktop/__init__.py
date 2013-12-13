@@ -29,7 +29,10 @@ A video input plugin that uses your desktop as the video source.
 '''
 
 # python-lib
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import logging
 import sys
 
@@ -123,7 +126,7 @@ class DesktopLinuxSrc(IVideoInput):
             self.start_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_y"))
             self.end_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_x"))
             self.end_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_y"))
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", self.desktop)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", self.window)

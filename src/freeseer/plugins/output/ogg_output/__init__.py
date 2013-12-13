@@ -30,7 +30,10 @@ video and Vorbis encoding for Audio.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -166,7 +169,7 @@ class OggOutput(IOutput):
             self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
             self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
             self.matterhorn = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn"))
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", self.matterhorn)

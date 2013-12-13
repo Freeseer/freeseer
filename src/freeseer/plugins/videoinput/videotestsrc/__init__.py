@@ -30,7 +30,10 @@ testing and debugging Freeseer.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer modules
 import pygst
@@ -83,7 +86,7 @@ class VideoTestSrc(IVideoInput):
             if live == "True":
                 self.live = True
             self.pattern = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Live", self.live)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
         except TypeError:

@@ -31,7 +31,10 @@ as well.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer modules
 import pygst
@@ -121,7 +124,7 @@ class VideoPassthrough(IVideoMixer):
             self.input_type = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type")
             self.framerate = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate"))
             self.resolution = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Resolution")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", self.input1)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", self.input_type)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", self.framerate)

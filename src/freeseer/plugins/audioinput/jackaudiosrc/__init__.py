@@ -29,7 +29,10 @@ An audio plugin which uses JACK as the audio input.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -77,7 +80,7 @@ class JackAudioSrc(IAudioInput):
             self.connect = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Connect")
             self.server = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Server")
             self.clientname = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName")
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", self.client)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", self.connect)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", self.server)

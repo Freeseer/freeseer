@@ -29,7 +29,10 @@ An audio mixer plugin that combines 2 audio sources into a single output.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 # GStreamer
 import pygst
@@ -93,7 +96,7 @@ class MultiAudio(IAudioMixer):
         try:
             self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1')
             self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2')
-        except ConfigParser.NoSectionError, ConfigParser.NoOptionError:
+        except configparser.NoSectionError, configparser.NoOptionError:
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
 

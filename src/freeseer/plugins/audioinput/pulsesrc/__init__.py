@@ -29,7 +29,10 @@ An audio plugin which uses PulseAudio as the audio input.
 '''
 
 # python-libs
-import ConfigParser
+try:  # Import using Python3 module name
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 import logging
 
 # GStreamer
@@ -89,7 +92,7 @@ class PulseSrc(IAudioInput):
 
         try:
             self.source = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Source')
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
 
     def get_widget(self):

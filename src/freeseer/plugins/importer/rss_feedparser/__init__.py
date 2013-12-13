@@ -31,7 +31,10 @@ An import plugin which provides a RSS parser used when adding presentations
 @author: Rio Lowry
 """
 
-from HTMLParser import HTMLParser
+try:  # Import Python3 module if possible
+    from html.parser import HTMLParser
+except ImportError:
+    from HTMLParser import HTMLParser
 
 from feedparser import parse
 
