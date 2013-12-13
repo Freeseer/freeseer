@@ -40,7 +40,7 @@ is available on GitHub.
 """
 
 NAME = 'freeseer'
-__version__ = '3.0.0'
+__version__ = '3.0.1'
 SCHEMA_VERSION = 301
 __author__ = "Free and Open Source Software Learning Center"
 __email__ = "fosslc@gmail.com"
