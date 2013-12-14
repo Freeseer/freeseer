@@ -39,11 +39,10 @@ setup(name=freeseer.NAME,
           ('share/applications', ['data/freeseer.desktop']),
           ('share/applications', ['data/48x48-freeseer.png'])
           ],
-      scripts=[
-        'freeseer-record',
-        'freeseer-config',
-        'freeseer-talkeditor',
-        'freeseer-reporteditor'
-        ],
+      entry_points={
+        'console_scripts': [
+            'freeseer = freeseer:main',
+          ],
+        },
       test_suite='freeseer.tests'
       )
