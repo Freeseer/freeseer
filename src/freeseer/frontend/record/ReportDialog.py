@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2012  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,57 +22,68 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QString
+from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QCheckBox
+from PyQt4.QtGui import QComboBox
+from PyQt4.QtGui import QDialog
+from PyQt4.QtGui import QFont
+from PyQt4.QtGui import QFormLayout
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QLineEdit
+from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QVBoxLayout
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
+    _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer.frontend.qtcommon import resource
 
 
-class ReportDialog(QtGui.QDialog):
-    """
-    Failure report Dialog for the Freeseer Project.
-
-    """
+class ReportDialog(QDialog):
+    """Failure report dialog for Freeseer"""
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QWidget.__init__(self, parent)
 
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon = QIcon()
+        icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
-        self.mainWidget = QtGui.QWidget()
-        self.mainLayout = QtGui.QVBoxLayout()
+        self.mainWidget = QWidget()
+        self.mainLayout = QVBoxLayout()
         self.setLayout(self.mainLayout)
 
-        boldFont = QtGui.QFont()
+        boldFont = QFont()
         boldFont.setBold(True)
 
-        self.infoLayout = QtGui.QFormLayout()
+        self.infoLayout = QFormLayout()
         self.mainLayout.addLayout(self.infoLayout)
-        self.reportLayout = QtGui.QHBoxLayout()
+        self.reportLayout = QHBoxLayout()
         self.mainLayout.addLayout(self.reportLayout)
-        self.buttonLayout = QtGui.QHBoxLayout()
+        self.buttonLayout = QHBoxLayout()
         self.mainLayout.addLayout(self.buttonLayout)
 
         # Talk infomation
-        self.titleLabel = QtGui.QLabel("Title:")
-        self.titleLabel2 = QtGui.QLabel()
+        self.titleLabel = QLabel("Title:")
+        self.titleLabel2 = QLabel()
         self.titleLabel2.setFont(boldFont)
-        self.speakerLabel = QtGui.QLabel("Speaker:")
-        self.speakerLabel2 = QtGui.QLabel()
+        self.speakerLabel = QLabel("Speaker:")
+        self.speakerLabel2 = QLabel()
         self.speakerLabel2.setFont(boldFont)
-        self.eventLabel = QtGui.QLabel("Event:")
-        self.eventLabel2 = QtGui.QLabel()
+        self.eventLabel = QLabel("Event:")
+        self.eventLabel2 = QLabel()
         self.eventLabel2.setFont(boldFont)
-        self.roomLabel = QtGui.QLabel("Room:")
-        self.roomLabel2 = QtGui.QLabel()
+        self.roomLabel = QLabel("Room:")
+        self.roomLabel2 = QLabel()
         self.roomLabel2.setFont(boldFont)
-        self.timeLabel = QtGui.QLabel("Time:")
-        self.timeLabel2 = QtGui.QLabel()
+        self.timeLabel = QLabel("Time:")
+        self.timeLabel2 = QLabel()
         self.timeLabel2.setFont(boldFont)
         self.infoLayout.addRow(self.titleLabel, self.titleLabel2)
         self.infoLayout.addRow(self.speakerLabel, self.speakerLabel2)
@@ -81,10 +92,10 @@ class ReportDialog(QtGui.QDialog):
         self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
 
         #Report
-        self.commentLabel = QtGui.QLabel("Comment")
-        self.commentEdit = QtGui.QLineEdit()
+        self.commentLabel = QLabel("Comment")
+        self.commentEdit = QLineEdit()
 
-        self.reportCombo = QtGui.QComboBox()
+        self.reportCombo = QComboBox()
         # Prototype for report options. Please define these in the
         # record.py logic file under retranslate() so that translations
         # work.
@@ -92,7 +103,7 @@ class ReportDialog(QtGui.QDialog):
 #        for i in self.options:
 #            self.reportCombo.addItem(i)
 
-        self.releaseCheckBox = QtGui.QCheckBox("Release Received")
+        self.releaseCheckBox = QCheckBox("Release Received")
 
         self.reportLayout.addWidget(self.commentLabel)
         self.reportLayout.addWidget(self.commentEdit)
@@ -100,9 +111,9 @@ class ReportDialog(QtGui.QDialog):
         self.reportLayout.addWidget(self.releaseCheckBox)
 
         #Buttons
-        self.reportButton = QtGui.QPushButton("Report")
-        self.closeButton = QtGui.QPushButton("Close")
+        self.reportButton = QPushButton("Report")
+        self.closeButton = QPushButton("Close")
 
         self.buttonLayout.addWidget(self.closeButton)
         self.buttonLayout.addWidget(self.reportButton)
-        self.connect(self.closeButton, QtCore.SIGNAL("clicked()"), self.close)
+        self.connect(self.closeButton, SIGNAL("clicked()"), self.close)
