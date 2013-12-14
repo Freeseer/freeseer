@@ -61,3 +61,10 @@ logfile = os.path.abspath(os.path.join(settings.configdir, "logs", "freeseer.log
 fileHandler = logging.handlers.RotatingFileHandler(logfile, maxBytes=50000, backupCount=5)
 fileHandler.setFormatter(formatter)
 logging.getLogger("").addHandler(fileHandler)
+
+
+def main():
+    from freeseer.frontend import cli
+
+    parser = cli.setup_parser()
+    cli.parse_args(parser)
