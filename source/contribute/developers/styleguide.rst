@@ -30,19 +30,45 @@ transition easier.
 
 .. rubric:: Printing vs Logging
 
-You should never print to debug, log instead. Chances are the logging will
-come in handy in the future so you may as well leave it in.
+Do not print for debugging purposes, log instead. Make sure to `use the
+appropriate logging level
+<http://docs.python.org/2/howto/logging.html#when-to-use-logging>`_.
+The logging calls may come in handy in the future, so consider leaving them in.
 
-Use print when working on a CLI tool and the output must always be shown to the
-end user.
+Use print when working on a CLI tool and the output must be shown to the end user.
+
+.. rubric:: Log on a Per-Module Basis
+
+Create an instance of a logger inside your module and name it after the module
+that contains it by using ``__name__``.
+
+Good::
+
+  import logging
+  log = logging.getLogger(__name__)
+  log.info("All your base are belong to us")
+
+Bad::
+
+  import logging
+  logging.info("For great justice")
 
 .. rubric:: String Formatting
 
-For logging, use printf style formatting. E.g. ``logging.info("%s %s", foo, bar)``
-using the appropriate logger name and logging level.
+For logging, use printf style formatting.
+For everything else, use ``str.format()``.
 
-For everything else, use ``str.format()``. E.g. ``'{} - {}'.format(foo, bar)``
-or ``'{0}, {1}, {0}'.format(foo, bar)``.
+Good::
+
+  log.info('%s : %d', key, value)
+  greeting = 'Hello {} {}'.format(first_name, last_name)
+  print('{0} - {1} - {0}'.format(foo, bar))
+
+Bad::
+
+  log.info(key + ' : ' + value)
+  greeting = 'Hello %s %s' % (first_name, last_name)
+  print foo, '-', bar, '-', foo
 
 .. rubric:: Write Short Methods
 
@@ -51,3 +77,9 @@ Methods and functions should be kept small and focused.
 Long methods are sometimes appropriate, so no hard limit is placed on method
 length. However, if a method exceeds 40 lines or so, think about whether it can
 be broken up without harming the structure of the program.
+
+.. rubric:: Write Descriptive Docstrings
+
+Comments should be descriptive ("Opens the file") rather than imperative ("Open
+the file"). The comment *describes* the method, function, or class, it does not
+tell it what to do.
