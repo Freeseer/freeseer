@@ -33,7 +33,7 @@ from freeseer.tests import pep8_report
 class TestQtCommon(unittest.TestCase):
     def test_pep8(self):
         '''Ensure qtcommon conforms to pep8'''
-        pep8_options['exclude'] = ['freeseer/frontend/qtcommon/resource_rc.py']  # Exclude auto-generated files
+        pep8_options['exclude'] = ['freeseer/frontend/qtcommon/resource.py']  # Exclude auto-generated files
         checker = pep8.StyleGuide(**pep8_options)
         report = checker.check_files(['freeseer/tests/frontend/qtcommon',
                                       'freeseer/frontend/qtcommon'])
