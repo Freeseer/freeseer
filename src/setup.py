@@ -28,7 +28,7 @@ setup(name=freeseer.NAME,
           'Topic :: Multimedia :: Sound/Audio :: Capture/Recording',
           'Topic :: Multimedia :: Video :: Capture',
           ],
-      package_data={'freeseer': ['plugins/*/*/*']},
+      package_data={'freeseer': ['plugins/*/*/*', 'plugins/*/*.freeseer-plugin']},
       packages=find_packages(exclude=[
           '*.tests',
           '*.tests.*',
