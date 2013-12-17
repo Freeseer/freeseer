@@ -28,10 +28,13 @@ import unittest
 
 import pep8
 
-from PyQt4 import QtGui, QtTest, Qt
+from PyQt4 import Qt
+from PyQt4 import QtGui
+from PyQt4 import QtTest
 
-from freeseer import settings
+from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.record.record import RecordApp
+from freeseer import settings
 
 from freeseer.tests import pep8_options
 from freeseer.tests import pep8_report
@@ -52,17 +55,19 @@ class TestRecordApp(unittest.TestCase):
         Initializes a QtGui.QApplication and RecordApp object.
         RecordApp.show() causes the UI to be rendered.
         '''
-        settings.configdir = tempfile.mkdtemp()
+        self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        profile = self.profile_manager.get('testing')
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig, storage_args=['Global'], read_only=False)
 
         self.app = QtGui.QApplication([])
-        self.record_app = RecordApp()
+        self.record_app = RecordApp(profile, config)
         self.record_app.show()
 
     def tearDown(self):
         '''
         Generic unittest.TestCase.tearDown()
         '''
-        shutil.rmtree(settings.configdir)
+        shutil.rmtree(self.profile_manager._base_folder)
 
         self.record_app.actionExit.trigger()
         del self.app
@@ -71,7 +76,6 @@ class TestRecordApp(unittest.TestCase):
         '''
         Tests the initial state of the RecordApp
         '''
-
         # TODO
         pass
 

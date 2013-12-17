@@ -28,10 +28,13 @@ import unittest
 
 import pep8
 
-from PyQt4 import QtGui, QtTest, Qt
+from PyQt4 import Qt
+from PyQt4 import QtGui
+from PyQt4 import QtTest
 
-from freeseer import settings
+from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
+from freeseer import settings
 
 from freeseer.tests import pep8_options
 from freeseer.tests import pep8_report
@@ -49,14 +52,17 @@ class TestReportEditorApp(unittest.TestCase):
         Initializes a QtGui.QApplication and ReportEditorApp object.
         ReportEditorApp() causes the UI to be rendered.
         '''
-        settings.configdir = tempfile.mkdtemp()
+        self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        profile = self.profile_manager.get('testing')
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig, storage_args=['Global'], read_only=False)
+        db = profile.get_database()
 
         self.app = QtGui.QApplication([])
-        self.report_editor = ReportEditorApp()
+        self.report_editor = ReportEditorApp(config, db)
         self.report_editor.show()
 
     def tearDown(self):
-        shutil.rmtree(settings.configdir)
+        shutil.rmtree(self.profile_manager._base_folder)
         del self.app
         del self.report_editor.app
 

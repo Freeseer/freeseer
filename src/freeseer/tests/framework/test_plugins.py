@@ -31,8 +31,9 @@ import pygst
 pygst.require("0.10")
 import gst
 
-from freeseer import settings
+from freeseer.framework.config.profile import ProfileManager
 from freeseer.framework.plugin import PluginManager
+from freeseer import settings
 
 
 class TestPlugins(unittest.TestCase):
@@ -44,22 +45,22 @@ class TestPlugins(unittest.TestCase):
         Initializes a PluginManager
 
         '''
-        self.configdir = tempfile.mkdtemp()
-        self.manager = PluginManager(self.configdir)
+        self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        profile = self.profile_manager.get('testing')
+        self.plugman = PluginManager(profile)
 
     def tearDown(self):
         '''
         Generic unittest.TestCase.tearDown()
         '''
-        shutil.rmtree(self.configdir)
-        del self.manager
+        shutil.rmtree(self.profile_manager._base_folder)
 
     def test_audio_input_bin(self):
         '''Check that audio input plugins are returning a gst.Bin object
 
         Verifies that get_audioinput_bin() is returning the proper object.
         '''
-        plugins = self.manager.get_plugins_of_category("AudioInput")
+        plugins = self.plugman.get_plugins_of_category("AudioInput")
 
         for plugin in plugins:
             plugin_bin = plugin.plugin_object.get_audioinput_bin()
@@ -71,7 +72,7 @@ class TestPlugins(unittest.TestCase):
 
         Verifies that get_audioinput_bin() is returning the proper object.
         '''
-        plugins = self.manager.get_plugins_of_category("AudioMixer")
+        plugins = self.plugman.get_plugins_of_category("AudioMixer")
 
         for plugin in plugins:
             plugin_bin = plugin.plugin_object.get_audiomixer_bin()
@@ -83,7 +84,7 @@ class TestPlugins(unittest.TestCase):
 
         Verifies that get_videoinput_bin() is returning the proper object.
         '''
-        plugins = self.manager.get_plugins_of_category("VideoInput")
+        plugins = self.plugman.get_plugins_of_category("VideoInput")
 
         for plugin in plugins:
             if plugin.name == "Firewire Source":
@@ -100,7 +101,7 @@ class TestPlugins(unittest.TestCase):
 
         Verifies that get_videomixer_bin() is returning the proper object.
         '''
-        plugins = self.manager.get_plugins_of_category("VideoMixer")
+        plugins = self.plugman.get_plugins_of_category("VideoMixer")
 
         for plugin in plugins:
             plugin_bin = plugin.plugin_object.get_videomixer_bin()
@@ -112,7 +113,7 @@ class TestPlugins(unittest.TestCase):
 
         Verifies that get_output_bin() is returning the proper object.
         '''
-        plugins = self.manager.get_plugins_of_category("Output")
+        plugins = self.plugman.get_plugins_of_category("Output")
 
         for plugin in plugins:
             plugin_bin = plugin.plugin_object.get_output_bin()

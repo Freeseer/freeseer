@@ -26,13 +26,12 @@ import ConfigParser
 import logging
 import os
 import sys
-
 import xml.etree.ElementTree as ET
 
+from PyQt4 import QtCore
 from yapsy.PluginManager import PluginManagerSingleton
 from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
-from PyQt4 import QtCore
 
 log = logging.getLogger(__name__)
 
@@ -44,7 +43,7 @@ class PluginManager(QtCore.QObject):
     Provides the core functionality which enables plugin support in.
     '''
 
-    def __init__(self, configdir, profile=None):
+    def __init__(self, profile):
         QtCore.QObject.__init__(self)
 
         self.firstrun = False
@@ -53,13 +52,9 @@ class PluginManager(QtCore.QObject):
         locator = self.plugmanc.getPluginLocator()
         locator.setPluginInfoExtension("freeseer-plugin")
 
-        self.configdir = configdir
+        self.profile = profile
 
-        if profile:
-            # Use profile if specified
-            self.configfile = os.path.abspath(os.path.join(self.configdir, "profiles", profile, "plugin.conf"))
-        else:
-            self.configfile = os.path.abspath(os.path.join(self.configdir, "plugin.conf"))
+        self.configfile = profile.get_filepath('plugin.conf')
 
         self.config = ConfigParser.ConfigParser()
         self.load()

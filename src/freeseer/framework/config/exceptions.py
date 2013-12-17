@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,23 +22,33 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import signal
-import sys
 
-from PyQt4 import QtGui
+class StorageNotSetError(Exception):
 
-from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
-from freeseer import settings
+    def __init__(self):
+        super(StorageNotSetError, self).__init__('no ConfigStorage was given to this Config')
 
-if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    profile = settings.profile_manager.get()
-    config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
-                                storage_args=['Global'], read_only=True)
-    db = profile.get_database()
+class OptionError(Exception):
 
-    app = QtGui.QApplication(sys.argv)
-    main = ReportEditorApp(config, db)
-    main.show()
-    sys.exit(app.exec_())
+    def __init__(self, name, option):
+        super(OptionError, self).__init__(name)
+
+
+class InvalidOptionValueError(OptionError):
+    pass
+
+
+class InvalidOptionDefaultValueError(OptionError):
+    pass
+
+
+class OptionValueNotSetError(OptionError):
+    pass
+
+
+class InvalidDecodeValueError(Exception):
+
+    def __init__(self, value):
+        message = 'Unable to decode value "{}"'.format(value)
+        super(InvalidDecodeValueError, self).__init__(message)

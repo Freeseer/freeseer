@@ -38,14 +38,12 @@ except AttributeError:
     _fromUtf8 = lambda s: s
 
 from freeseer import settings, __version__
-from freeseer.framework.config import Config
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-from freeseer.frontend.qtcommon import resource
 
+from AVWidget import AVWidget
 from ConfigToolWidget import ConfigToolWidget
 from GeneralWidget import GeneralWidget
-from AVWidget import AVWidget
 from PluginLoaderWidget import PluginLoaderWidget
 
 log = logging.getLogger(__name__)
@@ -56,10 +54,12 @@ class ConfigToolApp(FreeseerApp):
     ConfigTool is used to tune settings used by the Freeseer Application
     '''
 
-    def __init__(self, recordapp=None):
+    def __init__(self, profile, config):
         FreeseerApp.__init__(self)
 
-        self.recordapp = recordapp
+        # Load Config Stuff
+        self.profile = profile
+        self.config = config
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -80,8 +80,7 @@ class ConfigToolApp(FreeseerApp):
         self.avWidget = AVWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
 
-        self.config = Config(settings.configdir)
-        self.plugman = PluginManager(settings.configdir)
+        self.plugman = PluginManager(profile)
 
         # Custom Menu Items
         self.actionSaveProfile = QtGui.QAction(self)
@@ -221,11 +220,13 @@ class ConfigToolApp(FreeseerApp):
     ###
 
     def show_save_profile_dialog(self):
-        profile, ok = QInputDialog().getText(self, "Save Profile", "Profile Name", QLineEdit.Normal)
+        name, ok = QInputDialog().getText(self, "Save Profile", "Profile Name", QLineEdit.Normal)
 
         if ok:
-            if re.match('^[\w-]+$', profile):
-                self.config.saveProfile(profile)
+            if re.match('^[\w-]+$', name):
+                # TODO: This is a hack. Instead, there should be a option to
+                # copy the current profile or something.
+                pass
             else:
                 QMessageBox.information(None, "Invalid name", "Invalid characters used. Only alphanumeric and dashes allowed.")
 
@@ -280,7 +281,7 @@ class ConfigToolApp(FreeseerApp):
     def set_default_language(self, language):
         language_file = str(self.generalWidget.languageComboBox.itemData(language).toString())
         self.config.default_language = language_file
-        self.config.writeConfig()
+        self.config.save()
 
     def browse_video_directory(self):
         directory = self.generalWidget.recordDirLineEdit.text()
@@ -295,15 +296,14 @@ class ConfigToolApp(FreeseerApp):
 
     def update_record_directory(self):
         self.config.videodir = str(self.generalWidget.recordDirLineEdit.text())
-        self.config.writeConfig()
+        self.config.save()
 
     def toggle_autohide(self, state):
         self.config.auto_hide = state
-        self.config.writeConfig()
+        self.config.save()
 
         # Make recordapp to update it's config
-        if self.recordapp:
-            self.recordapp.config.readConfig()
+        # TODO: Surely there is a better way to do this
 
     ###
     ### AV Related
@@ -394,11 +394,11 @@ class ConfigToolApp(FreeseerApp):
 
     def toggle_audiomixer_state(self, state):
         self.config.enable_audio_recording = state
-        self.config.writeConfig()
+        self.config.save()
 
     def change_audiomixer(self, audiomixer):
         self.config.audiomixer = audiomixer
-        self.config.writeConfig()
+        self.config.save()
 
     def setup_audio_mixer(self):
         mixer = str(self.avWidget.audioMixerComboBox.currentText())
@@ -407,11 +407,11 @@ class ConfigToolApp(FreeseerApp):
 
     def toggle_videomixer_state(self, state):
         self.config.enable_video_recording = state
-        self.config.writeConfig()
+        self.config.save()
 
     def change_videomixer(self, videomixer):
         self.config.videomixer = videomixer
-        self.config.writeConfig()
+        self.config.save()
 
     def setup_video_mixer(self):
         mixer = str(self.avWidget.videoMixerComboBox.currentText())
@@ -420,11 +420,11 @@ class ConfigToolApp(FreeseerApp):
 
     def toggle_record_to_file(self, state):
         self.config.record_to_file = state
-        self.config.writeConfig()
+        self.config.save()
 
     def change_file_format(self, format):
         self.config.record_to_file_plugin = format
-        self.config.writeConfig()
+        self.config.save()
 
     def setup_file_format(self):
         output = str(self.avWidget.fileComboBox.currentText())
@@ -433,11 +433,11 @@ class ConfigToolApp(FreeseerApp):
 
     def toggle_record_to_stream(self, state):
         self.config.record_to_stream = state
-        self.config.writeConfig()
+        self.config.save()
 
     def change_stream_format(self, format):
         self.config.record_to_stream_plugin = format
-        self.config.writeConfig()
+        self.config.save()
 
     def setup_stream_format(self):
         output = str(self.avWidget.streamComboBox.currentText())

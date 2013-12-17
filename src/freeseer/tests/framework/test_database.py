@@ -29,7 +29,9 @@ import unittest
 
 from PyQt4 import QtSql
 
+from freeseer.framework.config.profile import Profile
 from freeseer.framework.database import QtDBConnector
+from freeseer.framework.plugin import PluginManager
 from freeseer.framework.presentation import Presentation
 
 
@@ -41,17 +43,20 @@ class TestDatabase(unittest.TestCase):
         Initializes a PluginManager
 
         '''
-        self.configdir = tempfile.mkdtemp()
-        self.db = QtDBConnector(self.configdir)
-        self._dirname = os.path.dirname(__file__)
-        self._csvfile = os.path.join(self._dirname, 'sample_talks.csv')
+        self.profile_path = tempfile.mkdtemp()
+        profile = Profile(self.profile_path, 'testing')
+
+        dirname = os.path.dirname(__file__)
+        self._csvfile = os.path.join(dirname, 'sample_talks.csv')
+
+        db_file = os.path.join(self.profile_path, 'presentations.db')
+        self.db = QtDBConnector(db_file, PluginManager(profile))
 
     def tearDown(self):
         '''
         Generic unittest.TestCase.tearDown()
         '''
-        shutil.rmtree(self.configdir)
-        del self.db
+        shutil.rmtree(self.profile_path)
 
     def test_get_talks(self):
         """Simply test that a query is returned"""

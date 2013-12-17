@@ -22,18 +22,20 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import os
 import shutil
 import tempfile
 import unittest
 
 import pep8
 
-from PyQt4 import QtGui, QtTest, Qt, QtCore
+from PyQt4 import Qt
+from PyQt4 import QtCore
+from PyQt4 import QtGui
+from PyQt4 import QtTest
 
-from freeseer import settings
-from freeseer.framework.config import Config
+from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.configtool.configtool import ConfigToolApp
+from freeseer import settings
 
 from freeseer.tests import pep8_options
 from freeseer.tests import pep8_report
@@ -59,10 +61,12 @@ class TestConfigToolApp(unittest.TestCase):
         Initializes a QtGui.QApplication and ConfigToolApp object.
         ConfigToolApp.show() causes the UI to be rendered.
         '''
-        settings.configdir = tempfile.mkdtemp()
+        self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        profile = self.profile_manager.get('testing')
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig, storage_args=['Global'], read_only=False)
 
         self.app = QtGui.QApplication([])
-        self.config_tool = ConfigToolApp()
+        self.config_tool = ConfigToolApp(profile, config)
         self.config_tool.show()
 
     def tearDown(self):
@@ -73,7 +77,7 @@ class TestConfigToolApp(unittest.TestCase):
         '''
 
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
-        shutil.rmtree(settings.configdir)
+        shutil.rmtree(self.profile_manager._base_folder)
         del self.app
         del self.config_tool.app
 
@@ -101,7 +105,6 @@ class TestConfigToolApp(unittest.TestCase):
             self.assertEquals(
                 self.config_tool.currentWidget.autoHideCheckBox.checkState(), expected_state)
 
-            self.config_tool.config.readConfig()
             self.assertEquals(self.config_tool.config.auto_hide, expected_state == QtCore.Qt.Checked)
 
     def test_recording_settings(self):
@@ -122,7 +125,7 @@ class TestConfigToolApp(unittest.TestCase):
 
         # Checkbox
         for i in range(2):
-            self.config_tool.config.readConfig()
+            #self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.audioGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.enable_audio_recording)
                 self.assertTrue(self.config_tool.config.audiomixer == "Audio Passthrough" or
@@ -138,7 +141,7 @@ class TestConfigToolApp(unittest.TestCase):
         # Video Input
         # Checkbox
         for i in range(2):
-            self.config_tool.config.readConfig()
+            #self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.videoGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.enable_video_recording)
                 # TODO: Write better test case for this
@@ -156,7 +159,7 @@ class TestConfigToolApp(unittest.TestCase):
 
         # Checkbox
         for i in range(2):
-            self.config_tool.config.readConfig()
+            #self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.fileGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.record_to_file)
                 # TODO: Write better test case for this
@@ -174,7 +177,7 @@ class TestConfigToolApp(unittest.TestCase):
 
         # Checkbox
         for i in range(2):
-            self.config_tool.config.readConfig()
+            #self.config_tool.config.readConfig()
             if self.config_tool.currentWidget.streamGroupBox.isChecked():
                 self.assertTrue(self.config_tool.config.record_to_stream)
                 # TODO: Write better test case for this

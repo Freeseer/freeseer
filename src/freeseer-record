@@ -25,46 +25,55 @@
 import signal
 import sys
 
-###
-### Program Start
-###
-signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-if len(sys.argv) > 1:
-    """If arguments are passed, act as a commandline"""
-    import argparse
-    import gobject
-    
-    parser = argparse.ArgumentParser(description='Freeseer Recording Utility')
-    parser.add_argument("-t", "--talk", type=int, help="Talk ID of the talk you would like to record")
-    parser.add_argument("-f", "--filename", type=unicode, help="Record to filename")
-    parser.add_argument("-p", "--profile", type=unicode, help="Use profile")
-    parser.add_argument("-s", "--show-talks", help="Shows all talks", action="store_true")
-    args = parser.parse_args()
+if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    if len(sys.argv) > 1:
+        # If arguments are passed, act as a commandline
+        import argparse
+        import gobject
+        
+        parser = argparse.ArgumentParser(description='Freeseer Recording Utility')
+        parser.add_argument("-t", "--talk", type=int, help="Talk ID of the talk you would like to record")
+        parser.add_argument("-f", "--filename", type=unicode, help="Record to filename")
+        parser.add_argument("-p", "--profile", type=unicode, help="Use profile")
+        parser.add_argument("-s", "--show-talks", help="Shows all talks", action="store_true")
+        args = parser.parse_args()
 
 
-    # Must declare after argparse otherwise GStreamer will take over the cli help
-    from freeseer.frontend.record.RecordingController import RecordingController
+        # Must declare after argparse otherwise GStreamer will take over the cli help
+        from freeseer.frontend.record.RecordingController import RecordingController
+        from freeseer import settings
 
-    if args.profile:
-        app = RecordingController(cli=True, profile=args.profile)
+        # TODO: Abstract the database stuff away from here as it's only
+        #       used in conjunction with talks.
+        profile = settings.profile_manager.get(args.profile)
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
+                                    storage_args=['Global'], read_only=False)
+        # XXX: There should only be 1 database per user. Workaround for this
+        #      is to put it in the 'default' profile.
+        db = settings.profile_manager.get().get_database()
+
+        app = RecordingController(profile, db, config, cli=True)
+
+        if args.talk:
+            if app.record_talk_id(args.talk): sys.exit(gobject.MainLoop().run())
+        elif args.filename:
+            if app.record_filename(args.filename): sys.exit(gobject.MainLoop().run())
+        elif args.show_talks:
+            app.print_talks()
     else:
-        app = RecordingController(cli=True)
+        # Launch the GUI if no arguments are passed
+        from PyQt4.QtGui import QApplication
+        from freeseer.frontend.record.record import RecordApp
+        from freeseer import settings
 
-    if args.talk:
-        if app.record_talk_id(args.talk): sys.exit(gobject.MainLoop().run())
-    elif args.filename:
-        if app.record_filename(args.filename): sys.exit(gobject.MainLoop().run())
-    elif args.show_talks:
-        app.print_talks()
-    
+        profile = settings.profile_manager.get()
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
+                                    storage_args=['Global'], read_only=False)
 
-else:
-    """Launch the GUI if no arguments are passed"""
-    from PyQt4.QtGui import QApplication
-    from freeseer.frontend.record.record import RecordApp
-
-    app = QApplication(sys.argv)
-    main = RecordApp()
-    main.show()
-    sys.exit(app.exec_())
+        app = QApplication(sys.argv)
+        main = RecordApp(profile, config)
+        main.show()
+        sys.exit(app.exec_())

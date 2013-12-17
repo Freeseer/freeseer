@@ -25,49 +25,58 @@
 import signal
 import sys
 
-signal.signal(signal.SIGINT, signal.SIG_DFL)
+from freeseer import settings
 
-if len(sys.argv) > 1:
-    import argparse
-    from freeseer import settings
-    from freeseer.framework.database import QtDBConnector
-    from freeseer.framework.presentation import Presentation
 
-    db = QtDBConnector(settings.configdir)
+if __name__ == '__main__':
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    parser = argparse.ArgumentParser(description='Freeseer TalkEditor Utility')
-    parser.add_argument("action", choices=['add-talk', 'remove-talk', 'clear-database'])
-    parser.add_argument("-t", "--title", type=unicode, help="Title")
-    parser.add_argument("-s", "--speaker", type=unicode, help="Speaker")
-    parser.add_argument("-r", "--room", type=unicode, help="Room")
-    parser.add_argument("-e", "--event", type=unicode, help="Event")
-    parser.add_argument("-i", "--talk-id", type=int, help="Talk ID")
-    args = parser.parse_args()
-    
-    if args.action == "add-talk":
-        presentation = Presentation(args.title,
-                                    speaker=args.speaker,
-                                    room=args.room,
-                                    event=args.event)
-        db.insert_presentation(presentation)
+    if len(sys.argv) > 1:
+        import argparse
+        from freeseer.framework.database import QtDBConnector
+        from freeseer.framework.presentation import Presentation
 
-    elif args.action == "remove-talk":
-        db.delete_presentation(args.talk_id)
+        profile = settings.profile_manager.get()
+        db = profile.get_database()
 
-    elif args.action == "clear-database":
-        db.clear_database()
+        parser = argparse.ArgumentParser(description='Freeseer TalkEditor Utility')
+        parser.add_argument("action", choices=['add-talk', 'remove-talk', 'clear-database'])
+        parser.add_argument("-t", "--title", type=unicode, help="Title")
+        parser.add_argument("-s", "--speaker", type=unicode, help="Speaker")
+        parser.add_argument("-r", "--room", type=unicode, help="Room")
+        parser.add_argument("-e", "--event", type=unicode, help="Event")
+        parser.add_argument("-i", "--talk-id", type=int, help="Talk ID")
+        args = parser.parse_args()
+        
+        if args.action == "add-talk":
+            presentation = Presentation(args.title,
+                                        speaker=args.speaker,
+                                        room=args.room,
+                                        event=args.event)
+            db.insert_presentation(presentation)
+
+        elif args.action == "remove-talk":
+            db.delete_presentation(args.talk_id)
+
+        elif args.action == "clear-database":
+            db.clear_database()
+
+        else:
+            # Invalid
+            print("Invalid option.")
+
 
     else:
-        # Invalid
-        print("Invalid option.")
+        """Launch GUI if no parameters are passed"""
+        from PyQt4.QtGui import QApplication
+        from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
 
+        profile = settings.profile_manager.get()
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
+                                    storage_args=['Global'], read_only=True)
+        db = profile.get_database()
 
-else:
-    """Launch GUI if no parameters are passed"""
-    from PyQt4.QtGui import QApplication
-    from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
-
-    app = QApplication(sys.argv)
-    main = TalkEditorApp()
-    main.show()
-    sys.exit(app.exec_())
+        app = QApplication(sys.argv)
+        main = TalkEditorApp(config, db)
+        main.show()
+        sys.exit(app.exec_())
