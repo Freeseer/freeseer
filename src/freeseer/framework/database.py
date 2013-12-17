@@ -28,32 +28,24 @@ import os
 
 from PyQt4 import QtSql
 
-from freeseer import settings
 from freeseer import __version__
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
-from freeseer.framework.plugin import PluginManager
 
 log = logging.getLogger(__name__)
 
 
-class QtDBConnector():
-    presentationsModel = None
-    failuresModel = None
-    recentconnModel = None
-
-    def __init__(self, configdir, talkdb_file="presentations.db"):
+class QtDBConnector(object):
+    def __init__(self, db_filepath, plugman):
         """
         Initialize the QtDBConnector
         """
-        self.configdir = configdir
-        self.talkdb_file = os.path.abspath("%s/%s" % (self.configdir, talkdb_file))
-        self.plugman = PluginManager(self.configdir)
+        self.talkdb_file = db_filepath
+        self.plugman = plugman
 
-        if not os.path.isfile(self.talkdb_file):
-            file = open(self.talkdb_file, 'w')
-            file.write('')
-            file.close()
+        self.presentationsModel = None
+        self.failuresModel = None
+        self.recentconnModel = None
 
         self.__open_table()
 

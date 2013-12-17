@@ -26,22 +26,23 @@ import shutil
 import tempfile
 import unittest
 
-from freeseer import settings
-from freeseer.framework.config import Config
+from freeseer.framework.config.profile import ProfileManager
 from freeseer.framework.multimedia import Multimedia
 from freeseer.framework.plugin import PluginManager
+from freeseer import settings
 
 
 class TestMultimedia(unittest.TestCase):
 
     def setUp(self):
-        settings.configdir = tempfile.mkdtemp()
-        self.config = Config(settings.configdir)
-        self.manager = PluginManager(settings.configdir)
-        self.multimedia = Multimedia(self.config, self.manager)
+        self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        profile = self.profile_manager.get('testing')
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig, ['Global'], read_only=True)
+        plugin_manager = PluginManager(profile)
+        self.multimedia = Multimedia(config, plugin_manager)
 
     def tearDown(self):
-        shutil.rmtree(settings.configdir)
+        shutil.rmtree(self.profile_manager._base_folder)
 
     def test_load_backend(self):
         self.multimedia.load_backend(filename=u"test.ogg")

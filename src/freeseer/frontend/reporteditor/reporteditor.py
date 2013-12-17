@@ -23,7 +23,6 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import logging
-import sys
 
 from PyQt4.QtCore import QDateTime
 from PyQt4.QtCore import QString
@@ -42,13 +41,8 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import settings
-from freeseer import __version__
-from freeseer.framework.config import Config
-from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-from freeseer.frontend.qtcommon import resource
 
 from ReportEditorWidget import ReportEditorWidget
 
@@ -59,8 +53,12 @@ class ReportEditorApp(FreeseerApp):
     '''
     Freeseer report editor main gui class
     '''
-    def __init__(self, core=None):
+
+    def __init__(self, config, db):
         FreeseerApp.__init__(self)
+
+        self.config = config
+        self.db = db
 
         icon = QIcon()
         icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
@@ -79,9 +77,6 @@ class ReportEditorApp(FreeseerApp):
 
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
-
-        self.config = Config(settings.configdir)
-        self.db = QtDBConnector(settings.configdir)
 
         #
         # Setup Menubar

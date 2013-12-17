@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -22,23 +22,28 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import signal
-import sys
+import unittest
 
-from PyQt4 import QtGui
+from freeseer.framework.config.persist import ConfigParserStorage
+from freeseer.tests.framework.config.persist import TestConfigStorage
 
-from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
-from freeseer import settings
+initial_config = '''\
+[this_section]
+option1 = othello
+option2 = 0
 
-if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
+'''
+after_config = '''\
+[this_section]
+option1 = something_new
+option2 = 10
 
-    profile = settings.profile_manager.get()
-    config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
-                                storage_args=['Global'], read_only=True)
-    db = profile.get_database()
+'''
 
-    app = QtGui.QApplication(sys.argv)
-    main = ReportEditorApp(config, db)
-    main.show()
-    sys.exit(app.exec_())
+
+class TestConfigParserStorage(TestConfigStorage, unittest.TestCase):
+    """Tests that ConfigParserStorage works with a generic Config subclass."""
+
+    CONFIG_STORAGE_CLASS = ConfigParserStorage
+    INITIAL_LOAD_CONFIG = initial_config
+    AFTER_STORE_CONFIG = after_config

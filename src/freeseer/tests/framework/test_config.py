@@ -27,7 +27,8 @@ import shutil
 import tempfile
 import unittest
 
-from freeseer.framework.config import Config
+from freeseer.framework.config.profile import ProfileManager
+from freeseer import settings
 
 
 class TestConfig(unittest.TestCase):
@@ -39,16 +40,23 @@ class TestConfig(unittest.TestCase):
         Initializes a PluginManager
 
         '''
-        self.configdir = tempfile.mkdtemp()
-        self.config = Config(self.configdir)
+        self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        self.profile = self.profile_manager.get('testing')
+        self.config = self.profile.get_config('freeseer.conf',
+                                              settings.FreeseerConfig,
+                                              ['Global'],
+                                              read_only=False)
 
     def tearDown(self):
         '''
         Generic unittest.TestCase.tearDown()
         '''
-        shutil.rmtree(self.configdir)
-        del self.config
+        shutil.rmtree(self.profile_manager._base_folder)
 
-    def test_writeConfig(self):
-        """Simply test that the config file was created"""
-        self.assertTrue(os.path.exists(self.config.configfile))
+    def test_save(self):
+        '''
+        Tests that the config file was created after being saved.
+        '''
+        filepath = self.profile.get_filepath('freeseer.conf')
+        self.config.save()
+        self.assertTrue(os.path.exists(filepath))
