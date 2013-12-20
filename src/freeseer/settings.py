@@ -52,7 +52,7 @@ class FreeseerConfig(Config):
     }
 
     videodir = options.FolderOption('~/Videos', auto_create=True)
-    auto_hide = options.BooleanOption(True)
+    auto_hide = options.BooleanOption(False)
     resolution = options.ChoiceOption(resmap.keys(), 'default')
     enable_audio_recording = options.BooleanOption(True)
     enable_video_recording = options.BooleanOption(True)
