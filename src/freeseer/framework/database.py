@@ -24,11 +24,9 @@
 
 import csv
 import logging
-import os
 
 from PyQt4 import QtSql
 
-from freeseer import __version__
 from freeseer import SCHEMA_VERSION
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
