@@ -22,7 +22,10 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/fosslc/freeseer/
 
-from freeseer.tools.youtube_uploader.youtube_upload import upload
+import sys
+
+from freeseer.frontend.upload.youtube import YoutubeFrontend
 
 if __name__ == "__main__":
-    upload()
+    youtube = YoutubeFrontend()
+    youtube.cmd_line(sys.argv)
