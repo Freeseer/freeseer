@@ -26,9 +26,12 @@
 @author: Thanh Ha
 """
 
+import sys
+
 from PyQt4.QtCore import QSize
 from PyQt4.QtCore import Qt
 from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QApplication
 from PyQt4.QtGui import QCheckBox
 from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QFont
@@ -40,10 +43,8 @@ from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtGui import QSlider
 from PyQt4.QtGui import QToolButton
-from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QVBoxLayout
-
-from freeseer.frontend.qtcommon import resource
+from PyQt4.QtGui import QWidget
 
 
 class RecordingWidget(QWidget):
@@ -192,7 +193,6 @@ class RecordingWidget(QWidget):
             self.pauseToolButton.setIcon(self.pauseIcon)
 
 if __name__ == "__main__":
-    import sys
     app = QApplication(sys.argv)
     main = RecordingWidget()
     main.show()

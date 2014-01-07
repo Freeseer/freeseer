@@ -41,8 +41,6 @@ from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 
-from freeseer.frontend.qtcommon import resource
-
 
 class EditorWidget(QWidget):
     '''
@@ -168,7 +166,6 @@ class EditorWidget(QWidget):
             self.csvWidget.show()
 
 if __name__ == "__main__":
-    import sys
     from PyQt4.QtGui import QApplication
     app = QApplication(sys.argv)
     main = EditorWidget()

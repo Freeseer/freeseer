@@ -24,11 +24,9 @@
 
 import csv
 import logging
-import os
 
 from PyQt4 import QtSql
 
-from freeseer import __version__
 from freeseer import SCHEMA_VERSION
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure, Report
@@ -132,16 +130,16 @@ class QtDBConnector(object):
         Creates the presentations table in the database. Should be used to
         initialize a new table.
         """
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS presentations
-                                       (Id INTEGER PRIMARY KEY,
-                                        Title varchar(255),
-                                        Speaker varchar(100),
-                                        Description text,
-                                        Level varchar(25),
-                                        Event varchar(100),
-                                        Room varchar(25),
-                                        Time timestamp,
-                                        UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
+        QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS presentations
+                        (Id INTEGER PRIMARY KEY,
+                         Title varchar(255),
+                         Speaker varchar(100),
+                         Description text,
+                         Level varchar(25),
+                         Event varchar(100),
+                         Room varchar(25),
+                         Time timestamp,
+                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
 
     def __insert_default_talk(self):
         """
@@ -226,41 +224,41 @@ class QtDBConnector(object):
         """
         Insert a Presentation into the database.
         """
-        query = QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
-                                (presentation.title,
-                                 presentation.speaker,
-                                 presentation.description,
-                                 presentation.level,
-                                 presentation.event,
-                                 presentation.room,
-                                 presentation.time))
+        QtSql.QSqlQuery('''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
+                        (presentation.title,
+                         presentation.speaker,
+                         presentation.description,
+                         presentation.level,
+                         presentation.event,
+                         presentation.room,
+                         presentation.time))
         log.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
 
     def update_presentation(self, talk_id, presentation):
         """
         Update an existing Presentation in the database.
         """
-        query = QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
-                            (presentation.title,
-                             presentation.speaker,
-                             presentation.event,
-                             presentation.room,
-                             presentation.time,
-                             talk_id))
+        QtSql.QSqlQuery('''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Time="%s"  WHERE Id="%s"''' %
+                        (presentation.title,
+                         presentation.speaker,
+                         presentation.event,
+                         presentation.room,
+                         presentation.time,
+                         talk_id))
         log.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
 
     def delete_presentation(self, talk_id):
         """
         Removes a Presentation from the database
         """
-        query = QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
+        QtSql.QSqlQuery('''DELETE FROM presentations WHERE Id="%s"''' % talk_id)
         log.info("Talk %s deleted." % talk_id)
 
     def clear_database(self):
         """
         Clears the presentations table
         """
-        query = QtSql.QSqlQuery('''DELETE FROM presentations''')
+        QtSql.QSqlQuery('''DELETE FROM presentations''')
         log.info("Database cleared.")
 
     #
@@ -454,18 +452,18 @@ class QtDBConnector(object):
         Create the failures table in the database
         Should be used to initialize a new table.
         """
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
-                                        (Id INTERGER PRIMARY KEY,
-                                        Comments TEXT,
-                                        Indicator TEXT,
-                                        Release INTEGER,
-                                        UNIQUE (ID) ON CONFLICT REPLACE)''')
+        QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
+                        (Id INTERGER PRIMARY KEY,
+                        Comments TEXT,
+                        Indicator TEXT,
+                        Release INTEGER,
+                        UNIQUE (ID) ON CONFLICT REPLACE)''')
 
     def clear_report_db(self):
         """
         Drops the failures (reports) table from the database
         """
-        query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS failures''')
+        QtSql.QSqlQuery('''DROP TABLE IF EXISTS failures''')
 
     def get_report(self, talkid):
         """
@@ -505,8 +503,11 @@ class QtDBConnector(object):
         Insert a failure into the database.
         """
 
-        query = QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
-                           (int(failure.talkId), failure.comment, failure.indicator, failure.release))
+        QtSql.QSqlQuery('''INSERT INTO failures VALUES ("%d", "%s", "%s", %d)''' %
+                        (int(failure.talkId),
+                         failure.comment,
+                         failure.indicator,
+                         failure.release))
         log.info("Failure added: %s - %s" % (failure.talkId, failure.comment))
 
     def update_failure(self, talk_id, failure):
@@ -514,18 +515,18 @@ class QtDBConnector(object):
         Update an existing Failure in the database.
         """
 
-        query = QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
-                           (failure.comment,
-                            failure.indicator,
-                            failure.release,
-                            failure.talkId))
+        QtSql.QtSqlQuery('''UPDATE failures SET Comments="%s", Indicator="%s", Release="%d" WHERE Id="%s"''' %
+                         (failure.comment,
+                          failure.indicator,
+                          failure.release,
+                          failure.talkId))
         log.info("Failure updated: %s %s" % (failure.talkId, failure.comment))
 
     def delete_failure(self, talk_id):
         """
         Removes a Presentation from the database
         """
-        query = QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
+        QtSql.QSqlQuery('''DELETE FROM failures WHERE Id="%s"''' % talk_id)
         log.info("Failure %s deleted." % talk_id)
 
     def get_failures_model(self):
@@ -550,25 +551,25 @@ class QtDBConnector(object):
         Create the recentconn table in the database
         Should be used to initialize a new table.
         """
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS recentconn
-                                        (host varchar(255),
-                                         port int,
-                                         passphrase varchar(255),
-                                         UNIQUE (host, port) ON CONFLICT REPLACE)''')
+        QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS recentconn
+                        (host varchar(255),
+                         port int,
+                         passphrase varchar(255),
+                         UNIQUE (host, port) ON CONFLICT REPLACE)''')
 
     def clear_recentconn_table(self):
         """
         Drops the recentconn (Controller) table from the database
         """
-        query = QtSql.QSqlQuery('''DROP TABLE IF EXISTS recentconn''')
+        QtSql.QSqlQuery('''DROP TABLE IF EXISTS recentconn''')
 
     def insert_recentconn(self, chost, cport, cpass):
         """
         Insert a failure into the database.
         """
 
-        query = QtSql.QSqlQuery('''INSERT INTO recentconn VALUES("%s", "%d", "%s")''' %
-                               (chost, cport, cpass))
+        QtSql.QSqlQuery('''INSERT INTO recentconn VALUES("%s", "%d", "%s")''' %
+                        (chost, cport, cpass))
         log.info("Recent connection added: %s:%d" % (chost, cport))
 
     def get_recentconn_model(self):

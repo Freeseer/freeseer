@@ -26,8 +26,6 @@ import shutil
 import tempfile
 import unittest
 
-import pep8
-
 from PyQt4 import Qt
 from PyQt4 import QtGui
 from PyQt4 import QtTest
@@ -35,9 +33,6 @@ from PyQt4 import QtTest
 from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
 from freeseer import settings
-
-from freeseer.tests import pep8_options
-from freeseer.tests import pep8_report
 
 
 class TestReportEditorApp(unittest.TestCase):
@@ -100,9 +95,3 @@ class TestReportEditorApp(unittest.TestCase):
         # Click "Close"
         QtTest.QTest.mouseClick(self.report_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.report_editor.aboutDialog.isVisible())
-
-    def test_pep8(self):
-        checker = pep8.StyleGuide(**pep8_options)
-        report = checker.check_files(['freeseer/tests/frontend/reporteditor',
-                                      'freeseer/frontend/reporteditor'])
-        pep8_report(self, report)

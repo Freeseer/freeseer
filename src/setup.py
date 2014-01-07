@@ -13,7 +13,7 @@ setup(name=freeseer.NAME,
       description=freeseer.DESCRIPTION,
       long_description=freeseer.LONG_DESCRIPTION,
       license='GPLv3',
-      classifiers = [
+      classifiers=[
           'Programming Language :: Python',
           'Programming Language :: Python :: 2.7',
           'Development Status :: 4 - Beta',
@@ -27,23 +27,22 @@ setup(name=freeseer.NAME,
           'Operating System :: Microsoft :: Windows :: Windows 7',
           'Topic :: Multimedia :: Sound/Audio :: Capture/Recording',
           'Topic :: Multimedia :: Video :: Capture',
-          ],
+      ],
       package_data={'freeseer': ['plugins/*/*/*', 'plugins/*/*.freeseer-plugin']},
       packages=find_packages(exclude=[
           '*.tests',
           '*.tests.*',
           'tests.*',
           'tests'
-          ]),
+      ]),
       data_files=[
           ('share/applications', ['data/freeseer.desktop']),
           ('share/applications', ['data/48x48-freeseer.png'])
-          ],
+      ],
       scripts=[
-        'freeseer-record',
-        'freeseer-config',
-        'freeseer-talkeditor',
-        'freeseer-reporteditor'
-        ],
-      test_suite='freeseer.tests'
-      )
+          'freeseer-record',
+          'freeseer-config',
+          'freeseer-talkeditor',
+          'freeseer-reporteditor'
+      ],
+      test_suite='freeseer.tests')
