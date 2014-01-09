@@ -38,6 +38,37 @@ from freeseer.framework.failure import Failure, Report
 log = logging.getLogger(__name__)
 
 
+# Database Schema Versions
+PRESENTATIONS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS presentations
+                                       (Id INTEGER PRIMARY KEY,
+                                        Title varchar(255),
+                                        Speaker varchar(100),
+                                        Description text,
+                                        Level varchar(25),
+                                        Event varchar(100),
+                                        Room varchar(25),
+                                        Time timestamp,
+                                        UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
+
+PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
+                                       (Id INTEGER PRIMARY KEY,
+                                        Title varchar(255),
+                                        Speaker varchar(100),
+                                        Description text,
+                                        Category varchar(25),
+                                        Event varchar(100),
+                                        Room varchar(25),
+                                        Date timestamp,
+                                        Time timestamp,
+                                        UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
+
+REPORTS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS failures
+                                        (Id INTERGER PRIMARY KEY,
+                                        Comments TEXT,
+                                        Indicator TEXT,
+                                        Release INTEGER,
+                                        UNIQUE (ID) ON CONFLICT REPLACE)'''
+
 class QtDBConnector(object):
     def __init__(self, db_filepath, plugman):
         """
@@ -63,9 +94,13 @@ class QtDBConnector(object):
                 self.__create_presentations_table()
                 self.__insert_default_talk()
 
-            # check if failures table exists and if not create it.
-            if not self.talkdb.tables().contains("failures"):
+                # If presentations table did not exist, it is safe to say that the reports table needs to be reset
+                # or initialized.
+                self.clear_report_db()
                 self.__create_failures_table()
+
+                # Set the database version (so the updater does not update)
+                QtSql.QSqlQuery('PRAGMA user_version = %i' % SCHEMA_VERSION)
 
             # check if recentConnections table exists and if not create it.
             if not self.talkdb.tables().contains("recentconn"):
@@ -107,23 +142,18 @@ class QtDBConnector(object):
 
             log.debug('Updating to schema 300.')
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')  # temporary table
-            self.__create_presentations_table()
+            self.__create_presentations_table(PRESENTATIONS_SCHEMA_300)
             QtSql.QSqlQuery("""INSERT INTO presentations
-                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time from presentations_old""")
+                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time FROM presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
         def update_30to31():
             """Performs incremental update of database from 3.0 and older to 3.1."""
-            # temporary table
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
-            self.__create_presentations_table()
+            self.__create_presentations_table(PRESENTATIONS_SCHEMA_310)
             QtSql.QSqlQuery("""INSERT INTO presentations
-                            SELECT Id, Title, Speaker, Description, Category, Event, Room, Time
-                            from presentations_old""")
-            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Category to Category')
-            QtSql.QSqlQuery('ALTER TABLE presentations RENAME COLUMN Time to Date')
-            QtSql.QSqlQuery('ALTER TABLE presentations ADD COLUMN Time timestamp')
-            QtSql.QSqlQuery('UPDATE table SET Date = Time')
+                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time, Time
+                            FROM presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
         #
@@ -136,20 +166,10 @@ class QtDBConnector(object):
         QtSql.QSqlQuery('PRAGMA user_version = %i' % SCHEMA_VERSION)
         log.info('Upgraded presentations database from version {} to {}'.format(db_version, SCHEMA_VERSION))
 
-    def __create_presentations_table(self):
+    def __create_presentations_table(self, schema=PRESENTATIONS_SCHEMA_310):
         """Creates the presentations table in the database. Should be used to initialize a new table."""
         log.info("table created")
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS presentations
-                                       (Id INTEGER PRIMARY KEY,
-                                        Title varchar(255),
-                                        Speaker varchar(100),
-                                        Description text,
-                                        Category varchar(25),
-                                        Event varchar(100),
-                                        Room varchar(25),
-                                        Date timestamp,
-                                        Time timestamp,
-                                        UNIQUE (Speaker, Title) ON CONFLICT IGNORE)''')
+        query = QtSql.QSqlQuery(schema)
 
     def __insert_default_talk(self):
         """Inserts the required placeholder talk into the database.At least one talk must exist"""
@@ -212,14 +232,6 @@ class QtDBConnector(object):
     #
     def insert_presentation(self, presentation):
         """Inserts a passed Presentation into the database."""
-        # Handle old field names
-        # Level to Category
-        try:
-            if not presentation.level and presentation.category:
-                presentation.level = presentation.category
-        except AttributeError:
-            log.debug("Did not copy Category field to Level field")
-
         # Duplicate time to date field for older RSS / CSV formats
         # If date is empty, and time has a full DateTime, split the DateTime to
         # both Date and Time
@@ -432,14 +444,9 @@ class QtDBConnector(object):
     #
     # Reporting Feature
     #
-    def __create_failures_table(self):
+    def __create_failures_table(self, schema=REPORTS_SCHEMA_300):
         """Creates the failures table in the database. Should be used to initialize a new table"""
-        query = QtSql.QSqlQuery('''CREATE TABLE IF NOT EXISTS failures
-                                        (Id INTERGER PRIMARY KEY,
-                                        Comments TEXT,
-                                        Indicator TEXT,
-                                        Release INTEGER,
-                                        UNIQUE (ID) ON CONFLICT REPLACE)''')
+        query = QtSql.QSqlQuery(schema)
 
     def clear_report_db(self):
         """Drops the failures (reports) table from the database"""
