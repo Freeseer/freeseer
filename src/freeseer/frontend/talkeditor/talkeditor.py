@@ -64,6 +64,7 @@ from AddTalkWidget import AddTalkWidget
 
 log = logging.getLogger(__name__)
 
+
 class TalkEditorApp(FreeseerApp):
     '''Freeseer talk database editor main gui class'''
     def __init__(self, config, db):
@@ -149,13 +150,13 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.removeAllButton, SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.commandButtons.importButton, SIGNAL('clicked()'), self.show_import_talks_widget)
         self.connect(self.commandButtons.exportButton, SIGNAL('clicked()'), self.export_talks_to_csv)
-        self.connect(self.commandButtons.searchButton, SIGNAL('clicked()'),self.search_talks)
-        self.connect(self.commandButtons.searchLineEdit, SIGNAL('textEdited(QString)'),self.search_talks)
-        self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'),self.search_talks)
+        self.connect(self.commandButtons.searchButton, SIGNAL('clicked()'), self.search_talks)
+        self.connect(self.commandButtons.searchLineEdit, SIGNAL('textEdited(QString)'), self.search_talks)
+        self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
 
         # Talk Details Buttons
         self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.clear_talk_details_widget)
-        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'),self.add_talk)
+        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_talk)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -270,7 +271,6 @@ class TalkEditorApp(FreeseerApp):
         #Disble input
         self.talkDetailsWidget.disable_input_fields()
 
-
     def search_talks(self):
         # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
@@ -322,14 +322,13 @@ class TalkEditorApp(FreeseerApp):
             return
         self.db.insert_presentation(presentation)
 
-
         # Update Model, Refreshes TableView
         self.presentationModel.select()
 
         # Select Last Row
         self.tableView.selectRow(self.presentationModel.rowCount() - 1)
-        self.tableView.setCurrentIndex(self.proxy.index(self.proxy.rowCount() - 1,0))
-        self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1,0))
+        self.tableView.setCurrentIndex(self.proxy.index(self.proxy.rowCount() - 1, 0))
+        self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1, 0))
 
         self.update_autocomple_fields()
         self.talkDetailsWidget.disable_input_fields()

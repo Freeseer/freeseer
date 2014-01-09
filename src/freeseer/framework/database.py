@@ -69,6 +69,7 @@ REPORTS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS failures
                                         Release INTEGER,
                                         UNIQUE (ID) ON CONFLICT REPLACE)'''
 
+
 class QtDBConnector(object):
     def __init__(self, db_filepath, plugman):
         """
@@ -189,7 +190,7 @@ class QtDBConnector(object):
 
     def get_talks_by_event(self, event):
         """Gets the talks signed in a specific event from the database"""
-        return  QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Event=%s''' % event)
+        return QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Event=%s''' % event)
 
     def get_talks_by_room(self, room):
         """Gets the talks hosted in a specific room from the database"""
@@ -210,10 +211,10 @@ class QtDBConnector(object):
         else:
             return None
 
-    def get_string_list(self,column):
+    def get_string_list(self, column):
         """Returns a column as a QStringList"""
         tempList = QStringList()
-        result = QtSql.QSqlQuery('''SELECT DISTINCT %s FROM presentations''' %column)
+        result = QtSql.QSqlQuery('''SELECT DISTINCT %s FROM presentations''' % column)
         while result.next():
             tempList.append(result.value(0).toString())
         return tempList
@@ -222,8 +223,8 @@ class QtDBConnector(object):
         """Checks if there's a presentation with the same Speaker and Title already stored"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
         while result.next():
-            if(unicode(presentation.title) == unicode(result.value(1).toString())
-                and unicode(presentation.speaker) == unicode(result.value(2).toString())):
+            if (unicode(presentation.title) == unicode(result.value(1).toString())
+            and unicode(presentation.speaker) == unicode(result.value(2).toString())):
                 return True
         return False
 
@@ -248,7 +249,7 @@ class QtDBConnector(object):
              presentation.room,
              presentation.date,
              presentation.time))
-        log.info("Talk added: %s - %s" %(presentation.speaker, presentation.title))
+        log.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
 
     def update_presentation(self, talk_id, presentation):
         """Updates an existing Presentation in the database."""

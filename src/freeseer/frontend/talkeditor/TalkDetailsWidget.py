@@ -42,8 +42,6 @@ from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QPushButton
 
 
-
-
 class TalkDetailsWidget(QWidget):
 
     def __init__(self, parent=None):
@@ -63,7 +61,7 @@ class TalkDetailsWidget(QWidget):
         self.saveButton.setIcon(saveIcon)
         self.buttonLayout.addWidget(self.saveButton)
 
-        self.layout.addLayout(self.buttonLayout,0,1,1,1)
+        self.layout.addLayout(self.buttonLayout, 0, 1, 1, 1)
 
         self.titleLabel = QLabel('Title')
         self.titleLineEdit = QLineEdit()
@@ -143,12 +141,6 @@ class TalkDetailsWidget(QWidget):
             self.dateEdit.setEnabled(False)
             self.timeEdit.setEnabled(False)
             self.descriptionTextEdit.setEnabled(False)
-
-
-
-
-
-
 
 if __name__ == "__main__":
     import sys
