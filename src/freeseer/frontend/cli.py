@@ -180,7 +180,7 @@ def launch_configtool():
 
     profile = settings.profile_manager.get()
     config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
-                                storage_args=['Global'], read_only=True)
+                                storage_args=['Global'], read_only=False)
 
     signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QtGui.QApplication(sys.argv)
