@@ -37,31 +37,21 @@ Instant message with the Freeseer community on IRC.
 IRC Clients
 ^^^^^^^^^^^
 
-You can `join using your browser <http://webchat.freenode.net/?channels=#freeseer>`_
-or your favourite IRC client.
-
-If you enjoy working from the terminal, you can try `irssi <http://irssi.org/>`_.
-To quickly get started:
-
-::
-
-    $ sudo apt-get install irssi
-    $ irssi
-    # Then, from irssi's prompt:
-    /connect irc.freenode.net
-    /nick your-nickname
-    /join #freeseer
+You'll need some way to join the IRC channel, that's typically done through an IRC client.
+There are way too many IRC clients to list them all. The easiest is to
+`use your browser <http://webchat.freenode.net/?channels=#freeseer>`_,
+but it's not a recommended long-term solution.
 
 .. tip::
 
   - To get someone's attention on IRC, mention their username
 
-    - Some IRC clients (like irssi) support autocompletion via the tab key
-  - Some clients support shortcuts, such as ``/j`` for ``/join`` and ``/w`` for ``/who``
+    - Some IRC clients support username autocompletion via the tab key
   - To block activity messages in a channel:
     ``/ignore -channels #freeseer * JOINS PARTS QUITS NICKS``
 
     - You can specificy more channels by comma separating them
+    - Some clients (e.g. weechat) support "smart filters" to automatically hide noisy activity messages
 
 Channel Bot
 ^^^^^^^^^^^
