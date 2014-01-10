@@ -101,8 +101,9 @@ We occasionally use `Google+ Hangouts
 
 Here's some tips for joining our next video chat:
 
-* Add `Andrew Ross <http://gplus.to/aross>`_ to your G+ circles,
-  he leads the discussion and starts the hangout
+* Provide us with an email address that's associated with a Google+ account, and we'll send you an invitation
+
+  * A Google+ account is required for Google Hangouts
 * Have a webcam ready (not recommended for slow connections)
 * Have a headset ready (optional but recommended)
 
