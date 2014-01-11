@@ -29,6 +29,7 @@ import textwrap
 
 import pygst
 import yapsy
+from PyQt4 import QtCore
 
 from freeseer import __version__
 from freeseer import settings
@@ -40,16 +41,20 @@ def setup_parser():
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("-v", "--version", action='version',
                                            version=textwrap.dedent('''\
-                                           Freeseer version {version} ({platform})
-                                           Python version {pymajor}.{pyminor}.{pymicro}
-                                           PyGst version {pygst_version}
-                                           Yapsy version {yapsy_version}
+                                           Freeseer {version} ({platform})
+                                           Python {pymajor}.{pyminor}.{pymicro}
+                                           PyGst {pygst_version}
+                                           PyQt {pyqt_version}
+                                           Qt {qt_version}
+                                           Yapsy {yapsy_version}
                                            '''.format(version=__version__,
                                                       platform=sys.platform,
                                                       pymajor=sys.version_info.major,
                                                       pyminor=sys.version_info.minor,
                                                       pymicro=sys.version_info.micro,
                                                       pygst_version=pygst._pygst_version,
+                                                      pyqt_version=QtCore.PYQT_VERSION_STR,
+                                                      qt_version=QtCore.QT_VERSION_STR,
                                                       yapsy_version=yapsy.__version__)))
 
     # Configure Subparsers
