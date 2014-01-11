@@ -25,13 +25,34 @@
 
 import argparse
 import sys
+import textwrap
 
+import pygst
+import yapsy
+
+from freeseer import __version__
 from freeseer import settings
 
 
 def setup_parser():
     """Initialize the Argument Parser"""
-    parser = argparse.ArgumentParser(description='Freeseer Recording Utility')
+    parser = argparse.ArgumentParser(description='Freeseer Recording Utility',
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("-v", "--version", action='version',
+                                           version=textwrap.dedent('''\
+                                           Freeseer version {version} ({platform})
+                                           Python version {pymajor}.{pyminor}.{pymicro}
+                                           PyGst version {pygst_version}
+                                           Yapsy version {yapsy_version}
+                                           '''.format(version=__version__,
+                                                      platform=sys.platform,
+                                                      pymajor=sys.version_info.major,
+                                                      pyminor=sys.version_info.minor,
+                                                      pymicro=sys.version_info.micro,
+                                                      pygst_version=pygst._pygst_version,
+                                                      yapsy_version=yapsy.__version__)))
+
+    # Configure Subparsers
     subparsers = parser.add_subparsers(dest='app', help='Command List')
     setup_parser_record(subparsers)
     setup_parser_config(subparsers)
