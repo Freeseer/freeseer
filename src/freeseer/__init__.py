@@ -68,7 +68,7 @@ COPYRIGHT = 'Copyright (c) 2011-2013 Free and Open Source Software Learning Cent
 import logging
 import logging.handlers
 import os
-import freeseer.settings
+from freeseer import settings
 logging.getLogger("").setLevel(logging.NOTSET)
 logging.getLogger("yapsy").setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s (%(levelname)8s) %(name)-40s: %(message)s')

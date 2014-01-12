@@ -26,7 +26,7 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Michael Brawn, Thanh Ha
 '''
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 import sys
 
 
@@ -106,7 +106,6 @@ class ImportTalksWidget(QtGui.QWidget):
         self.mainLayout.addWidget(self.importCommandButtonsWidget)
 
 if __name__ == "__main__":
-    import sys
     app = QtGui.QApplication(sys.argv)
     main = ImportTalksWidget()
     main.show()

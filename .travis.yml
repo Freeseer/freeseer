@@ -21,8 +21,7 @@ before_install:
   - sudo apt-get -qq install gstreamer0.10-alsa
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
-  - pip install -r requirements.txt --use-mirrors
-  - pip install pep8
+  - pip install -r dev_requirements.txt --use-mirrors
   - pip install coveralls
 # command to run tests, e.g. python setup.py test
 script:
@@ -30,6 +29,7 @@ script:
   - coverage run setup.py test
   - coveralls
   - cd ..
+  - flake8 src
 after_success:
   # Test building deployable packages
   - pwd && cd src

@@ -32,9 +32,11 @@ An import plugin for CSV files used when adding presentations
 """
 
 import csv
+import logging
 
-from freeseer.framework.presentation import Presentation
 from freeseer.framework.plugin import IImporter
+
+log = logging.getLogger(__name__)
 
 
 class CsvImporter(IImporter):

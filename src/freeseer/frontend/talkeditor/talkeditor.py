@@ -31,28 +31,19 @@ from PyQt4 import QtCore
 from PyQt4.QtGui import QAbstractItemView
 from PyQt4.QtGui import QAction
 from PyQt4.QtGui import QDataWidgetMapper
-from PyQt4.QtGui import QFont
-from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QIcon
-from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPixmap
-from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QTableView
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QFileDialog
 from PyQt4.QtGui import QMessageBox
-from PyQt4.QtGui import QItemSelectionModel
 from PyQt4.QtGui import QCompleter
 from PyQt4.QtGui import QSortFilterProxyModel
 from PyQt4.QtGui import QHeaderView
-from PyQt4.QtCore import QModelIndex
 from PyQt4.QtCore import Qt
 
 # Freeseer modules
-from freeseer import settings, __version__
-from freeseer.framework.config import Config
-from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
@@ -60,7 +51,6 @@ from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from CommandButtons import CommandButtons
 from TalkDetailsWidget import TalkDetailsWidget
 from ImportTalksWidget import ImportTalksWidget
-from AddTalkWidget import AddTalkWidget
 
 log = logging.getLogger(__name__)
 
@@ -356,7 +346,7 @@ class TalkEditorApp(FreeseerApp):
 
     def load_talk(self):
         try:
-            row_clicked = self.tableView.currentIndex().row()
+            self.tableView.currentIndex().row()
         except:
             return
 
@@ -397,7 +387,6 @@ class TalkEditorApp(FreeseerApp):
         event.accept()
 
     def csv_file_select(self):
-        dirpath = str(self.importTalksWidget.csvLineEdit.text())
         fname = QFileDialog.getOpenFileName(
             self, 'Select file', "", "*.csv")
         if fname:
@@ -424,7 +413,6 @@ class TalkEditorApp(FreeseerApp):
         self.update_autocomple_fields()
 
     def export_talks_to_csv(self):
-        dirpath = str(self.importTalksWidget.csvLineEdit.text())
         fname = QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.db.export_talks_to_csv(fname)

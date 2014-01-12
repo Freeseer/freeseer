@@ -27,7 +27,6 @@ http://wiki.github.com/Freeseer/freeseer/
 '''
 
 from PyQt4.QtCore import Qt
-from PyQt4.QtCore import QTime
 from PyQt4.QtCore import QDate
 
 from PyQt4.QtGui import QDateEdit

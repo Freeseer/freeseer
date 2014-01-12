@@ -316,7 +316,7 @@ class RTMPOutput(IOutput):
             if self.justin_api_persistent:
                 self.justin_api = JustinApi.from_string(self.justin_api_persistent)
                 self.justin_api.set_save_method(self.set_justin_api_persistent)
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
 
     def get_stream_settings_widget(self):
@@ -720,7 +720,7 @@ class JustinApi:
             connection.request('GET', request.http_url, headers=request.to_header())
             result = connection.getresponse().read()
             self.access_token_str = result
-            access_token = oauth.OAuthToken.from_string(result)
+            oauth.OAuthToken.from_string(result)
             self.save_method(self.to_string())
         except KeyError:
             log.error("justin.tv API: failed to obtain an access token")

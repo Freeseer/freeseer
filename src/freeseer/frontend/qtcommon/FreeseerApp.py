@@ -41,9 +41,8 @@ from PyQt4.QtGui import QMainWindow
 from PyQt4.QtGui import QMenu
 from PyQt4.QtGui import QPixmap
 
-from freeseer import __version__
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
-from freeseer.frontend.qtcommon import resource
+from freeseer.frontend.qtcommon import resource  # noqa
 
 try:
     _fromUtf8 = QString.fromUtf8
