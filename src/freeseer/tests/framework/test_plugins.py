@@ -22,7 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import os
 import shutil
 import tempfile
 import unittest
@@ -33,7 +32,6 @@ import gst
 
 from freeseer.framework.config.profile import ProfileManager
 from freeseer.framework.plugin import PluginManager
-from freeseer import settings
 
 
 class TestPlugins(unittest.TestCase):

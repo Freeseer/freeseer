@@ -134,7 +134,7 @@ class YoutubeFrontend(object):
         elif response_code is Response.UNEXPECTED_FAILURE:
             print "The file failed to upload with unexpected response: {}".format(response)
         elif response_code is Response.UNRETRIABLE_ERROR:
-            print "An unretriable HTTP error {} occurred:\n{}".format(respnse['status'], response['content'])
+            print "An unretriable HTTP error {} occurred:\n{}".format(response['status'], response['content'])
         elif response_code is Response.MAX_RETRIES_REACHED:
             print "The maximum number of retries has been reached"
         elif response_code is Response.ACCESS_TOKEN_ERROR:

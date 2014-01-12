@@ -97,7 +97,7 @@ def setup_parser_talk(subparsers):
 
 def setup_parser_report(subparsers):
     """Setup the report command parser"""
-    parser = subparsers.add_parser('report', help='Freeseer reporting functions')
+    subparsers.add_parser('report', help='Freeseer reporting functions')
 
 
 def parse_args(parser, parse_args=None):
@@ -128,9 +128,11 @@ def parse_args(parser, parse_args=None):
         app = RecordingController(profile, db, config, cli=True)
 
         if args.talk:
-            if app.record_talk_id(args.talk): sys.exit(gobject.MainLoop().run())
+            if app.record_talk_id(args.talk):
+                sys.exit(gobject.MainLoop().run())
         elif args.filename:
-            if app.record_filename(args.filename): sys.exit(gobject.MainLoop().run())
+            if app.record_filename(args.filename):
+                sys.exit(gobject.MainLoop().run())
         elif args.show_talks:
             app.print_talks()
 
@@ -154,8 +156,6 @@ def parse_args(parser, parse_args=None):
         if len(sys.argv) == 2:  # No 'talk' arguments passed
             launch_talkeditor()
 
-        from freeseer.settings import configdir
-        from freeseer.framework.database import QtDBConnector
         from freeseer.framework.presentation import Presentation
 
         profile = settings.profile_manager.get()
@@ -190,7 +190,6 @@ def launch_recordapp():
     profile = settings.profile_manager.get()
     config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
                                 storage_args=['Global'], read_only=False)
-
 
     app = QApplication(sys.argv)
     main = RecordApp(profile, config)

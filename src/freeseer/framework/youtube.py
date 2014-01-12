@@ -27,6 +27,7 @@ import httplib
 import httplib2
 import logging
 import os
+import time
 
 from apiclient import discovery
 from apiclient.errors import HttpError
@@ -138,18 +139,18 @@ class YoutubeService(object):
                 else:
                     return (Response.UNEXPECTED_FAILURE, response)
             except HttpError as e:
-                if e.resp.status in RETRIABLE_STATUS_CODES:
+                if e.resp.status in self.RETRIABLE_STATUS_CODES:
                     error = "A retriable HTTP error {} occurred:\n{}".format(e.resp.status, e.content)
                 else:
                     return (Response.UNRETRIABLE_ERROR, {"status": e.resp.status, "content": e.content})
-            except RETRIABLE_EXCEPTIONS as e:
+            except self.RETRIABLE_EXCEPTIONS as e:
                 error = "A retriable error occurred: {}".format(e)
             except client.AccessTokenRefreshError:
                 return (Response.ACCESS_TOKEN_ERROR, None)
             if error is not None:
                 log.error(error)
                 retry += 1
-                if retry > MAX_RETRIES:
+                if retry > self.MAX_RETRIES:
                     return (Response.MAX_RETRIES_REACHED, None)
                 log.info("Sleeping %s seconds and then retrying..." % sleep_seconds)
                 time.sleep(sleep_seconds)

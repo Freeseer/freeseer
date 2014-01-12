@@ -22,7 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import ConfigParser
 import logging
 import os
 import re
@@ -37,7 +36,6 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import settings, __version__
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 

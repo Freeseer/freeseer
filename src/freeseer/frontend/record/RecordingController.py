@@ -22,7 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-from freeseer import settings
 from freeseer.framework.multimedia import Multimedia
 from freeseer.framework.plugin import PluginManager
 

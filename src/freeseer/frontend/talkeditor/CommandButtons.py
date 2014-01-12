@@ -43,7 +43,6 @@ class CommandButtons(QWidget):
         self.setLayout(self.layout)
 
         #addIcon = QIcon.fromTheme("list-add")
-        duplicateIcon = QIcon.fromTheme("go-jump")
         importIcon = QIcon.fromTheme("document-open")
         exportIcon = QIcon.fromTheme("document-save")
         removeIcon = QIcon.fromTheme("list-remove")

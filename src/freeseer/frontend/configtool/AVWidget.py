@@ -26,7 +26,7 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 
 
 class AVWidget(QtGui.QWidget):

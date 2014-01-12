@@ -43,7 +43,7 @@ from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QVBoxLayout
 
-from freeseer.frontend.qtcommon import resource
+from freeseer.frontend.qtcommon import resource  # noqa
 
 
 class RecordingWidget(QWidget):
@@ -193,6 +193,7 @@ class RecordingWidget(QWidget):
 
 if __name__ == "__main__":
     import sys
+    from QtGui import QApplication
     app = QApplication(sys.argv)
     main = RecordingWidget()
     main.show()
