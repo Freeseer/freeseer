@@ -117,13 +117,28 @@ project <fork-freeseer>`.
 Running Freeseer
 ----------------
 
-Once you've installed the dependencies, you can run the various Freeseer tools::
+Once you've installed Freeseer, you can run the various tools::
 
-    $ freeseer-record  # Recording tool
-    $ freeseer-config  # Configuration tool
-    $ freeseer-talkeditor  # Talk-list editor
+    $ freeseer         # Recording UI (default when no arguments supplied)
+    $ freeseer record  # Recording UI
+    $ freeseer talk    # Talk Editor UI
+    $ freeseer config  # Configuration UI
 
-.. note:: For development purposes, these scripts are in the ``src/`` directory of the repo.
+You can view usage with the ``-h`` or ``--help`` option::
+
+    $ freeseer -h         # General usage
+    $ freeseer record -h  # Recording usage
+    $ freeseer talk -h    # Talk Editor usage
+    $ freeseer config -h  # Config usage
+
+.. note::
+  If you're going to hack on Freeseer, you'll need to run it from source.
+  Go into the ``src/`` directory and run it like::
+
+    $ python -m freeseer
+    $ python -m freeseer record
+    $ python -m freeseer talk
+    $ python -m freeseer config
 
 
 Issue tracker
