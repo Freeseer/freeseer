@@ -83,50 +83,20 @@ def get_record_name(extension, presentation=None, filename=None, path="."):
 
 
 def make_record_name(presentation):
-    """Create an 'EVENT-ROOM-SPEAKER-TITLE' record name.
-
-    If any information is missing, we blank it out intelligently
-    And if we have nothing for some reason, we use "default"
-    """
-    event = make_shortname(presentation.event)
-    title = make_shortname(presentation.title)
-    room = make_shortname(presentation.room)
-    speaker = make_shortname(presentation.speaker)
-
-    recordname = ""  # TODO: add substrings to a list then ''.join(list) -- better practice
-
-    if event != "":  # TODO: empty strings are falsy, use 'if not string:'
-        if recordname != "":
-            recordname = recordname + "-" + event
-        else:
-            recordname = event
-
-    if room != "":
-        if recordname != "":
-            recordname = recordname + "-" + room
-        else:
-            recordname = room
-
-    if speaker != "":
-        if recordname != "":
-            recordname = recordname + "-" + speaker
-        else:
-            recordname = speaker
-
-    if title != "":
-        if recordname != "":
-            recordname = recordname + "-" + title
-        else:
-            recordname = title
+    """Create an 'EVENT-ROOM-SPEAKER-TITLE' record name using presentation metadata."""
+    tags = [
+        make_shortname(presentation.event),
+        make_shortname(presentation.room),
+        make_shortname(presentation.speaker),
+        make_shortname(presentation.title),
+    ]
+    record_name = unicode('-'.join(tag for tag in tags if tag))
 
     # Convert unicode filenames to their equivalent ascii so that
     # we don't run into issues with gstreamer or filesystems.
-    recordname = unicodedata.normalize('NFKD', recordname).encode('ascii', 'ignore')
+    safe_record_name = unicodedata.normalize('NFKD', record_name).encode('ascii', 'ignore')
 
-    if recordname != "":
-        return recordname
-
-    return "default"
+    return safe_record_name or 'default'
 
 
 def make_shortname(string):
