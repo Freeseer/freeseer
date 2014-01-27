@@ -100,11 +100,9 @@ Windows
     * Windows 32-bit packages are recommended because pygtk-all-in-one package does not have a 64-bit installer.
     * Add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
 
-Install the following packages with pip::
+Install the additional packages with pip::
 
-    pip install feedparser
-    pip install pygtk
-    pip install yapsy
+    pip install -Ur windows_requirements.txt
 
 
 Get the source code
