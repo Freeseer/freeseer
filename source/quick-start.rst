@@ -100,7 +100,20 @@ Windows
     * Windows 32-bit packages are recommended because pygtk-all-in-one package does not have a 64-bit installer.
     * Add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
 
-Install the additional packages with pip::
+PyPI Packages
+^^^^^^^^^^^^^
+
+You'll need to get some packages from the `Python Package Index <https://pypi.python.org/pypi>`_ (PyPI).
+
+Upgrade to the latest version of pip::
+
+    pip install --upgrade pip
+
+Next, install the remaining packages. On Linux::
+
+    pip install -Ur dev_requirements.txt
+
+On Windows::
 
     pip install -Ur windows_requirements.txt
 
