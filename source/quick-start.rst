@@ -82,7 +82,7 @@ Fedora Linux
 
 ::
 
-    $ sudo yum install git PyQt4-devel python-setuptools
+    $ sudo yum install git PyQt4-devel python-pip
 
 Windows
 ^^^^^^^
