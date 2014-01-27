@@ -1,0 +1,2 @@
+-r dev_requirements.txt
+pygtk
