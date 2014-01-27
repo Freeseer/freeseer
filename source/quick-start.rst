@@ -67,8 +67,8 @@ Dependencies
 + PyQT development tools
 + python-xlib (Required for video preview plugin)
 
-Ubuntu Linux
-^^^^^^^^^^^^
+Debian and Ubuntu Linux
+^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
