@@ -24,7 +24,6 @@
 
 
 import argparse
-import ConfigParser
 import os
 
 from oauth2client import tools
@@ -58,9 +57,8 @@ class YoutubeFrontend(object):
         config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
                                     storage_args=['Global'], read_only=True)
         self.video_directory = config.videodir
-        configdir = os.path.join(os.path.expanduser("~"), ".freeseer")
-        self.client_secrets = os.path.join(configdir, "client_secrets.json")
-        self.oauth2_token = os.path.join(configdir, "oauth2_token.json")
+        self.client_secrets = os.path.join(settings.configdir, "client_secrets.json")
+        self.oauth2_token = os.path.join(settings.configdir, "oauth2_token.json")
 
     def cmd_line(self, argv):
         """Initializes command line interface
