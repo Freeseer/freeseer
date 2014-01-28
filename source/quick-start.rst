@@ -72,10 +72,10 @@ Debian and Ubuntu Linux
 
 ::
 
-    $ sudo apt-get install -y build-essential git python-gst0.10 \
-      python-gst0.10-dev gstreamer0.10-plugins-good qt4-qmake pyqt4-dev-tools \
-      libqt4-dev libqt4-sql libqt4-sql-sqlite python-qt4 python-qt4-dev \
-      python-qt4-sql python2.7-dev python-pip python-xlib
+    $ sudo apt-get install -y build-essential git \
+      qt4-qmake python-qt4 python-qt4-dev python-qt4-sql pyqt4-dev-tools python2.7-dev python-pip python-xlib \
+      gstreamer0.10-plugins-good gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly gstreamer0.10-pulseaudio gstreamer0.10-alsa \
+      python-gst0.10 python-gst0.10-dev libqt4-dev libqt4-sql libqt4-sql-sqlite
 
 Fedora Linux
 ^^^^^^^^^^^^
