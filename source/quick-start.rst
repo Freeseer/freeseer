@@ -105,7 +105,13 @@ PyPI Packages
 
 You'll need to get some packages from the `Python Package Index <https://pypi.python.org/pypi>`_ (PyPI).
 
-Upgrade to the latest version of pip::
+You can `install pip <http://www.pip-installer.org/en/latest/installing.html>`_
+by securely downloading `get-pip.py <https://raw.github.com/pypa/pip/master/contrib/get-pip.py>`_
+and executing it (which may require administrator access)::
+
+    python get-pip.py
+
+If you already have pip, first upgrade it to the latest version::
 
     pip install --upgrade pip
 
