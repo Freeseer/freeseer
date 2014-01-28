@@ -24,14 +24,13 @@
 
 
 import argparse
-import ConfigParser
 import os
 
 from oauth2client import tools
 
+from freeseer import settings
 from freeseer.framework.youtube import Response
 from freeseer.framework.youtube import YoutubeService
-from freeseer.settings import configdir
 
 
 class YoutubeFrontend(object):
@@ -54,12 +53,12 @@ class YoutubeFrontend(object):
 
     def set_defaults(self):
         """Set the path for the default video folder, client_secrets, and oauth2_token"""
-        config = ConfigParser.ConfigParser()
-        configfile = os.path.join(configdir, "freeseer.conf")
-        config.readfp(open(configfile))
-        self.video_directory = config.get('Global', 'video_directory')
-        self.client_secrets = os.path.join(configdir, "client_secrets.json")
-        self.oauth2_token = os.path.join(configdir, "oauth2_token.json")
+        profile = settings.profile_manager.get("default")
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
+                                    storage_args=['Global'], read_only=True)
+        self.video_directory = config.videodir
+        self.client_secrets = os.path.join(settings.configdir, "client_secrets.json")
+        self.oauth2_token = os.path.join(settings.configdir, "oauth2_token.json")
 
     def cmd_line(self, argv):
         """Initializes command line interface
