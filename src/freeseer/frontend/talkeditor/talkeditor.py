@@ -145,7 +145,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
 
         # Talk Details Buttons
-        self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.clear_talk_details_widget)
+        self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.confirm_add)
         self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_talk)
 
         # Load default language
@@ -177,7 +177,10 @@ class TalkEditorApp(FreeseerApp):
         #
         self.confirmDBClearTitleString = self.app.translate("TalkEditorApp", "Remove All Talks from Database")
         self.confirmDBClearQuestionString = self.app.translate("TalkEditorApp",
-            "Are you sure you want to clear the DB?")
+                                                               "Are you sure you want to clear the DB?")
+        self.confirmTalkDetailsClearTitleString = self.app.translate("TalkEditorApp", "Unsaved Data")
+        self.confirmTalkDetailsClearQuestionString = self.app.translate("TalkEditorApp",
+                                                                        "Unsaved talk details will be lost. Continue?")
         # --- End Reusable Strings
 
         #
@@ -323,13 +326,27 @@ class TalkEditorApp(FreeseerApp):
         self.update_autocomple_fields()
         self.talkDetailsWidget.disable_input_fields()
 
+    def confirm_add(self):
+        """Requests confirmation before clearing fields for a new talk."""
+        if self.are_fields_enabled() and self.unsaved_details_exist():
+            confirm = QMessageBox.question(self,
+                                           self.confirmTalkDetailsClearTitleString,
+                                           self.confirmTalkDetailsClearQuestionString,
+                                           QMessageBox.Yes,
+                                           QMessageBox.No)
+
+            if confirm == QMessageBox.Yes:
+                self.clear_talk_details_widget()
+        else:
+            self.clear_talk_details_widget()
+
     def clear_talk_details_widget(self):
         self.talkDetailsWidget.saveButton.setEnabled(True)
         self.talkDetailsWidget.enable_input_fields()
         self.talkDetailsWidget.titleLineEdit.clear()
         self.talkDetailsWidget.presenterLineEdit.clear()
         self.talkDetailsWidget.descriptionTextEdit.clear()
-        #self.talkDetailsWidget.categoryLineEdit.clear()
+        self.talkDetailsWidget.categoryLineEdit.clear()
         #self.talkDetailsWidget.eventLineEdit.clear()
         #self.talkDetailsWidget.roomLineEdit.clear()
         self.presentationModel.select()
@@ -440,3 +457,25 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.categoryLineEdit.setCompleter(self.categoryCompleter)
         self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
         self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
+
+    def are_fields_enabled(self):
+        return (self.talkDetailsWidget.titleLineEdit.isEnabled() and
+                self.talkDetailsWidget.presenterLineEdit.isEnabled() and
+                self.talkDetailsWidget.categoryLineEdit.isEnabled() and
+                self.talkDetailsWidget.eventLineEdit.isEnabled() and
+                self.talkDetailsWidget.roomLineEdit.isEnabled() and
+                self.talkDetailsWidget.dateEdit.isEnabled() and
+                self.talkDetailsWidget.timeEdit.isEnabled())
+
+    def unsaved_details_exist(self):
+        """Checks if details exist for a new talk
+
+        Looks for text in the input fields and check the enabled state of the Save Talk button
+        If the Save Talk button is enabled, the input fields contain values for a new talk
+        Otherwise, the input fields contain values for an existing selected talk
+        """
+        return (self.talkDetailsWidget.saveButton.isEnabled() and
+                (self.talkDetailsWidget.titleLineEdit.text() or
+                self.talkDetailsWidget.presenterLineEdit.text() or
+                self.talkDetailsWidget.categoryLineEdit.text() or
+                self.talkDetailsWidget.descriptionTextEdit.toPlainText()))
