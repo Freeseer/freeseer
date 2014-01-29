@@ -111,6 +111,11 @@ class TestTalkEditorApp(unittest.TestCase):
     #     # now delete the talk we just created
     #     QtTest.QTest.mouseClick(self.talk_editor.editorWidget.removeButton, Qt.Qt.LeftButton)
 
+    def confirm_close(self):
+        active_widget = QtGui.QApplication.activeModalWidget()
+        if active_widget.inherits('QMessageBox'):
+            QtTest.QTest.keyClick(active_widget, Qt.Qt.Key_Y)  # Select 'Yes' to continue closing
+
     def test_file_menu_quit(self):
         '''
         Tests TalkEditorApp's File->Quit
@@ -119,6 +124,7 @@ class TestTalkEditorApp(unittest.TestCase):
         self.assertTrue(self.talk_editor.isVisible())
 
         # File->Quit
+        Qt.QTimer.singleShot(10, self.confirm_close)  # Set timer to continue close if message box appears
         self.talk_editor.actionExit.trigger()
         self.assertFalse(self.talk_editor.isVisible())
 

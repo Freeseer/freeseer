@@ -37,8 +37,6 @@ from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QPlainTextEdit
 from PyQt4.QtGui import QTimeEdit
 from PyQt4.QtGui import QWidget
-from PyQt4.QtGui import QIcon
-from PyQt4.QtGui import QPushButton
 
 
 class TalkDetailsWidget(QWidget):
@@ -50,15 +48,6 @@ class TalkDetailsWidget(QWidget):
         self.setLayout(self.layout)
 
         self.buttonLayout = QHBoxLayout()
-
-        addIcon = QIcon.fromTheme("list-add")
-        self.addButton = QPushButton('Add New Talk')
-        self.addButton.setIcon(addIcon)
-        self.buttonLayout.addWidget(self.addButton)
-        saveIcon = QIcon.fromTheme("document-save")
-        self.saveButton = QPushButton('Save New Talk')
-        self.saveButton.setIcon(saveIcon)
-        self.buttonLayout.addWidget(self.saveButton)
 
         self.layout.addLayout(self.buttonLayout, 0, 1, 1, 1)
 
@@ -112,34 +101,34 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.descriptionTextEdit, 5, 1, 1, 3)
 
     def enable_input_fields(self):
-            self.titleLineEdit.setPlaceholderText("Enter Talk Title")
-            self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
-            self.categoryLineEdit.setPlaceholderText("Enter Category Type")
-            self.eventLineEdit.setPlaceholderText("Enter Event Name")
-            self.roomLineEdit.setPlaceholderText("Enter Room Location")
-            self.titleLineEdit.setEnabled(True)
-            self.presenterLineEdit.setEnabled(True)
-            self.categoryLineEdit.setEnabled(True)
-            self.eventLineEdit.setEnabled(True)
-            self.roomLineEdit.setEnabled(True)
-            self.dateEdit.setEnabled(True)
-            self.timeEdit.setEnabled(True)
-            self.descriptionTextEdit.setEnabled(True)
+        self.titleLineEdit.setPlaceholderText("Enter Talk Title")
+        self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
+        self.categoryLineEdit.setPlaceholderText("Enter Category Type")
+        self.eventLineEdit.setPlaceholderText("Enter Event Name")
+        self.roomLineEdit.setPlaceholderText("Enter Room Location")
+        self.titleLineEdit.setEnabled(True)
+        self.presenterLineEdit.setEnabled(True)
+        self.categoryLineEdit.setEnabled(True)
+        self.eventLineEdit.setEnabled(True)
+        self.roomLineEdit.setEnabled(True)
+        self.dateEdit.setEnabled(True)
+        self.timeEdit.setEnabled(True)
+        self.descriptionTextEdit.setEnabled(True)
 
     def disable_input_fields(self):
-            self.titleLineEdit.setPlaceholderText("")
-            self.presenterLineEdit.setPlaceholderText("")
-            self.categoryLineEdit.setPlaceholderText("")
-            self.eventLineEdit.setPlaceholderText("")
-            self.roomLineEdit.setPlaceholderText("")
-            self.titleLineEdit.setEnabled(False)
-            self.presenterLineEdit.setEnabled(False)
-            self.categoryLineEdit.setEnabled(False)
-            self.eventLineEdit.setEnabled(False)
-            self.roomLineEdit.setEnabled(False)
-            self.dateEdit.setEnabled(False)
-            self.timeEdit.setEnabled(False)
-            self.descriptionTextEdit.setEnabled(False)
+        self.titleLineEdit.setPlaceholderText("")
+        self.presenterLineEdit.setPlaceholderText("")
+        self.categoryLineEdit.setPlaceholderText("")
+        self.eventLineEdit.setPlaceholderText("")
+        self.roomLineEdit.setPlaceholderText("")
+        self.titleLineEdit.setEnabled(False)
+        self.presenterLineEdit.setEnabled(False)
+        self.categoryLineEdit.setEnabled(False)
+        self.eventLineEdit.setEnabled(False)
+        self.roomLineEdit.setEnabled(False)
+        self.dateEdit.setEnabled(False)
+        self.timeEdit.setEnabled(False)
+        self.descriptionTextEdit.setEnabled(False)
 
 if __name__ == "__main__":
     import sys

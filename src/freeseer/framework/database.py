@@ -225,6 +225,14 @@ class QtDBConnector(object):
                 return True
         return False
 
+    def get_untitled_talks(self):
+        """Returns a list of the ids of all untitled talks"""
+        temp = []
+        result = QtSql.QSqlQuery('SELECT Id FROM presentations WHERE Title is NULL OR Title=""')
+        while result.next():
+            temp.append(result.value(0))
+        return temp
+
     #
     # Presentation Create, Update, Delete
     #
@@ -251,10 +259,12 @@ class QtDBConnector(object):
     def update_presentation(self, talk_id, presentation):
         """Updates an existing Presentation in the database."""
         QtSql.QSqlQuery(
-            '''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"
+            '''UPDATE presentations SET Title="%s", Speaker="%s", Description="%s", Category="%s", Event="%s", Room="%s", Date="%s", Time="%s"
                 WHERE Id="%s"''' %
             (presentation.title,
              presentation.speaker,
+             presentation.description,
+             presentation.category,
              presentation.event,
              presentation.room,
              presentation.date,
