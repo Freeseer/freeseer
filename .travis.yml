@@ -23,6 +23,7 @@ before_install:
 install:
   - pip install -r dev_requirements.txt --use-mirrors
   - pip install coveralls
+  - pip install -r documentation/requirements.txt --use-mirrors
 # command to run tests, e.g. python setup.py test
 script:
   - pwd && cd src
@@ -30,6 +31,10 @@ script:
   - coveralls || true
   - cd ..
   - flake8 src
+  # Build doucmentation
+  - pwd && cd documentation
+  - make html
+  - cd ..
 after_success:
   # Test building deployable packages
   - pwd && cd src
@@ -43,3 +48,4 @@ after_success:
   - easy_install freeseer-*.egg
   - echo "y" | pip uninstall freeseer
   - cd ../..
+
