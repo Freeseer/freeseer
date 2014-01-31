@@ -88,6 +88,10 @@ class RecordApp(FreeseerApp):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
 
+        # Set variables for Warning message
+        self.warning_message_off = True
+        self.disk_space = None
+
         #
         # Setup Menubar
         #
@@ -270,6 +274,12 @@ class RecordApp(FreeseerApp):
             self.reportWidget.reportCombo.addItem(i)
         # --- End ReportWidget
 
+        # Warning message when space is low
+        self.message = QtGui.QMessageBox()
+        self.message.setWindowTitle("WARNING")
+        self.message.setText("Disk space running low.")
+        # --- End warning message
+
     ###
     ### UI Logic
     ###
@@ -439,6 +449,13 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
+        # checks current disk space and shows a warning message if disk space is below 10 GB
+        self.disk_space = get_free_space(self.config.videodir).split(" ")
+        if not self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) > 10.0:
+            self.warning_message_off = True
+        if self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) < 10.0:
+            self.warning_message_off = False
+            self.message.exec_()
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
