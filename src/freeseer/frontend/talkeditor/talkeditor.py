@@ -298,12 +298,12 @@ class TalkEditorApp(FreeseerApp):
         time = self.talkDetailsWidget.timeEdit.time()
         #datetime = QtCore.QDateTime(date, time)
         presentation = Presentation(
-            unicode(self.talkDetailsWidget.titleLineEdit.text()),
-            unicode(self.talkDetailsWidget.presenterLineEdit.text()),
-            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()),
-            unicode(self.talkDetailsWidget.categoryLineEdit.text()),
-            unicode(self.talkDetailsWidget.eventLineEdit.text()),
-            unicode(self.talkDetailsWidget.roomLineEdit.text()),
+            unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
+            unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
             unicode(date.toString(QtCore.Qt.ISODate)),
             unicode(time.toString(QtCore.Qt.ISODate)))
 
