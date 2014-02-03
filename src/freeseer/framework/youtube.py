@@ -82,7 +82,7 @@ class YoutubeService(object):
             oauth2_token: path to oauth2_token to use, if none present token will be saved here
             flags: flags to pass to Google Python Client's argparser
         """
-        scope = ['https://www.googleapis.com/auth/youtube.upload']
+        scope = ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube']
         message = ("Please specify a valid client_secrets.json file.\n"
                     "To obtain one, please visit:\n"
                     "https://docs.google.com/document/d/1ro9I8jnOCgQlWRRVCPbrNnQ5-bMvQxDVg6o45zxud4c/edit")
@@ -93,6 +93,22 @@ class YoutubeService(object):
             credentials = tools.run_flow(flow, storage, flags)
         http = credentials.authorize(httplib2.Http())
         self.service = discovery.build('youtube', 'v3', http=http)
+
+    def insert_broadcast(self):
+        """Function to create a broadcast for livestreaming"""
+        part = "snippet,status"
+        body = {
+            "kind" : "youtube#liveBroadcast",
+            "snippet" : {
+                "title" : "",
+                "scheduledStartTime" : "",
+                "scheduledEndTime" : ""
+            } 
+        }
+        status = {
+            "privacyStatus" : ""
+        }
+        response = self.service.liveBroadcast().insert(part=part,body=body,status=status).execute()
 
     def upload_video(self, video_file):
         """Function to upload file to Youtube
