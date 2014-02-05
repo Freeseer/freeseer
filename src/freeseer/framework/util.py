@@ -117,11 +117,11 @@ def make_shortname(string):
 def reset(configdir):
     """Deletes the Freeseer configuration directory"""
     if validate_configdir(configdir):
-        print 'This will wipe out your freeseer configuration directory.'
+        print('This will wipe out your freeseer configuration directory.')
         if confirm_yes() is True:
             shutil.rmtree(configdir)
     else:
-        print "%s is not a invalid configuration directory." % configdir
+        print("%s is not a invalid configuration directory." % configdir)
 
 
 def reset_configuration(configdir):
@@ -133,7 +133,7 @@ def reset_configuration(configdir):
         os.remove(freeseer_conf)
         os.remove(plugin_conf)
     else:
-        print "%s is not a invalid configuration directory." % configdir
+        print("%s is not a invalid configuration directory." % configdir)
 
 
 def reset_database(configdir):
@@ -142,7 +142,7 @@ def reset_database(configdir):
         dbfile = os.path.join(configdir, 'presentations.db')
         os.remove(dbfile)
     else:
-        print "%s is not a invalid configuration directory." % configdir
+        print("%s is not a invalid configuration directory." % configdir)
 
 
 def validate_configdir(configdir):
