@@ -80,7 +80,7 @@ class YoutubeFrontend(object):
         youtube_service.authenticate(flags.client_secrets, flags.token, flags)
         # path doesn't exist, print an error message
         if not os.path.exists(flags.files):
-            print "{} does not exit".format(flags.files)
+            print("{} does not exit".format(flags.files))
         # path is a folder, upload all videos in the folder
         elif os.path.isdir(flags.files):
             self.upload_folder_cmd_line(youtube_service, flags.files, flags.yes)
@@ -95,7 +95,7 @@ class YoutubeFrontend(object):
                     self.handle_response(youtube_service.upload_video(flags.files))
         # if this case is reached it means there is nothing to upload
         else:
-            print "Nothing to upload"
+            print("Nothing to upload")
 
     def upload_folder_cmd_line(self, youtube_service, folder, assume_yes):
         """For uploading an entire folder of videos to Youtube"""
@@ -111,7 +111,7 @@ class YoutubeFrontend(object):
                 if youtube_service.valid_video_file(filepath):
                     # if --yes was passed, do not prompt just upload
                     if assume_yes:
-                        print youtube_service.upload_video(filepath)
+                        print(youtube_service.upload_video(filepath))
                         # otherwise build a message and add the file to the to_upload list
                     else:
                         files_to_upload.append(filepath)
@@ -129,12 +129,12 @@ class YoutubeFrontend(object):
     def handle_response(self, (response_code, response)):
         """Process the response from the Youtube API"""
         if response_code is Response.SUCCESS:
-            print "The file was successfully uploaded with video id: {}".format(response['id'])
+            print("The file was successfully uploaded with video id: {}".format(response['id']))
         elif response_code is Response.UNEXPECTED_FAILURE:
-            print "The file failed to upload with unexpected response: {}".format(response)
+            print("The file failed to upload with unexpected response: {}".format(response))
         elif response_code is Response.UNRETRIABLE_ERROR:
-            print "An unretriable HTTP error {} occurred:\n{}".format(response['status'], response['content'])
+            print("An unretriable HTTP error {} occurred:\n{}".format(response['status'], response['content']))
         elif response_code is Response.MAX_RETRIES_REACHED:
-            print "The maximum number of retries has been reached"
+            print("The maximum number of retries has been reached")
         elif response_code is Response.ACCESS_TOKEN_ERROR:
-            print "The access token has expired or been revoked, please run .authenticate()"
+            print("The access token has expired or been revoked, please run .authenticate()")
