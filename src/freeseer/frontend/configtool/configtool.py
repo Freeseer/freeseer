@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2014  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -39,10 +39,10 @@ except AttributeError:
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
-from AVWidget import AVWidget
-from ConfigToolWidget import ConfigToolWidget
-from GeneralWidget import GeneralWidget
-from PluginLoaderWidget import PluginLoaderWidget
+from freeseer.frontend.configtool.AVWidget import AVWidget
+from freeseer.frontend.configtool.ConfigToolWidget import ConfigToolWidget
+from freeseer.frontend.configtool.GeneralWidget import GeneralWidget
+from freeseer.frontend.configtool.PluginLoaderWidget import PluginLoaderWidget
 
 log = logging.getLogger(__name__)
 
