@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011-2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2014  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,6 @@ from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.configtool.configtool import ConfigToolApp
-from freeseer.frontend.controller.Client import ClientDialog
 from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
 from freeseer.frontend.record.ReportDialog import ReportDialog
@@ -69,7 +68,6 @@ class RecordApp(FreeseerApp):
         self.setCentralWidget(self.mainWidget)
         self.reportWidget = ReportDialog()
         self.reportWidget.setModal(True)
-        self.clientWidget = ClientDialog(settings.configdir, self.db)
         self.configToolApp = ConfigToolApp(profile, config)
         self.configToolApp.setWindowModality(QtCore.Qt.ApplicationModal)
         self.configToolApp.setWindowFlags(QtCore.Qt.Dialog)
@@ -117,14 +115,8 @@ class RecordApp(FreeseerApp):
         self.actionReport = QtGui.QAction(self)
         self.actionReport.setObjectName(_fromUtf8("actionReport"))
 
-        self.actionClient = QtGui.QAction(self)
-        self.actionClient.setIcon(self.icon)
         # Actions
         self.menuFile.insertAction(self.actionExit, self.actionOpenVideoFolder)
-        # Hide the controller client configuration screen for Freeseer 3.0.0
-        # release. This feature's not ready for public use so lets keep it
-        # hidden for now.
-        #self.menuFile.insertAction(self.actionExit, self.actionClient)
         self.menuHelp.addAction(self.actionReport)
         # --- End Menubar
 
@@ -163,13 +155,9 @@ class RecordApp(FreeseerApp):
         self.connect(self.actionTalkEditor, QtCore.SIGNAL('triggered()'), self.open_talkeditor)
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
-        self.connect(self.actionClient, QtCore.SIGNAL('triggered()'), self.show_client_widget)
 
         # GUI Disabling/Enabling Connections
         self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
-
-        #Client Connections
-        self.connect(self.clientWidget.socket, QtCore.SIGNAL('readyRead()'), self.getAction)
 
         #
         # ReportWidget Connections
@@ -188,8 +176,6 @@ class RecordApp(FreeseerApp):
     ### Translation Related
     ###
     def retranslate(self):
-        self.clientWidget.retranslate(self.current_language)
-
         self.setWindowTitle(self.app.translate("RecordApp", "Freeseer - portable presentation recording station"))
         #
         # Reusable Strings
@@ -230,7 +216,6 @@ class RecordApp(FreeseerApp):
         self.actionConfigTool.setText(self.app.translate("RecordApp", "&Configuration"))
         self.actionTalkEditor.setText(self.app.translate("RecordApp", "&Edit Talks"))
         self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
-        self.actionClient.setText(self.app.translate("RecordApp", "&Connect to server"))
         self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
         # --- End Menubar
 
