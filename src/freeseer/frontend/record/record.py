@@ -44,7 +44,6 @@ from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
-from freeseer import settings
 
 log = logging.getLogger(__name__)
 
