@@ -1,0 +1,11 @@
+[Core]
+Name = Raw Output
+Module = raw_output
+
+[Documentation]
+Author = Thanh Ha
+Version = 3.0.9999
+Website = http://fosslc.org
+Description = Records RAW audio and video in an AVI container format to a file.
+              Note: This recording RAW audio / video requires a significant
+                    amount of disk space.
