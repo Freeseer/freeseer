@@ -70,8 +70,8 @@ Debian and Ubuntu Linux
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
-
-    $ sudo apt-get install -y build-essential git python2.7-dev python-gst0.10 python-gst0.10-dev \
+    $ sudo apt-get update
+    $ sudo apt-get install -y build-essential git wget python2.7-dev python-gst0.10 python-gst0.10-dev \
       qt4-qmake python-qt4 python-qt4-dev python-qt4-sql pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite \
       gstreamer0.10-plugins-good gstreamer0.10-plugins-base gstreamer0.10-pulseaudio gstreamer0.10-alsa
 
