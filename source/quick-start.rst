@@ -70,6 +70,7 @@ Debian and Ubuntu Linux
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
+
     $ sudo apt-get update
     $ sudo apt-get install -y build-essential git wget python2.7-dev python-gst0.10 python-gst0.10-dev \
       qt4-qmake python-qt4 python-qt4-dev python-qt4-sql pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite \
@@ -107,7 +108,7 @@ You can `install pip <http://www.pip-installer.org/en/latest/installing.html>`_
 by securely downloading `get-pip.py <https://raw.github.com/pypa/pip/master/contrib/get-pip.py>`_
 and executing it (which may require administrator access)::
 
-    python get-pip.py
+    wget -O- https://raw.github.com/pypa/pip/master/contrib/get-pip.py | sudo python
 
 If you already have pip, first upgrade it to the latest version::
 
