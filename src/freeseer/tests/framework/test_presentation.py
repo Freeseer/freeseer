@@ -54,3 +54,6 @@ class TestPresentation(unittest.TestCase):
 
     def test_event_is_default(self):
         self.assertTrue(self.pres.event == "haha")
+
+    def test_room_is_default(self):
+        self.assertTrue(self.pres.room == "Default")

@@ -26,6 +26,10 @@ import shutil
 import tempfile
 import unittest
 
+import pygst
+pygst.require("0.10")
+import gst
+
 from freeseer.framework.config.profile import ProfileManager
 from freeseer.framework.multimedia import Multimedia
 from freeseer.framework.plugin import PluginManager
@@ -55,3 +59,19 @@ class TestMultimedia(unittest.TestCase):
         self.multimedia.record()
         self.multimedia.pause()
         self.multimedia.stop()
+
+    def test_current_state_is_record(self):
+        self.multimedia.record()
+        self.assertEqual(self.multimedia.current_state, self.multimedia.RECORD)
+        self.assertEqual(self.multimedia.player.get_state()[1], gst.STATE_PLAYING)
+
+    def test_current_state_is_pause(self):
+        self.multimedia.pause()
+        self.assertEqual(self.multimedia.current_state, self.multimedia.PAUSE)
+        self.assertEqual(self.multimedia.player.get_state()[1], gst.STATE_PAUSED)
+
+    def test_current_state_is_not_stop(self):
+        self.multimedia.player.set_state(self.multimedia.NULL)  # set to NULL
+        self.multimedia.stop()
+        self.assertNotEqual(self.multimedia.current_state, self.multimedia.STOP)
+        self.assertEqual(self.multimedia.player.get_state()[1], gst.STATE_NULL)
