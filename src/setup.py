@@ -37,7 +37,7 @@ setup(name=freeseer.NAME,
       ]),
       data_files=[
           ('share/applications', ['data/freeseer.desktop']),
-          ('share/applications', ['data/48x48-freeseer.png'])
+          ('share/pixmaps', ['data/freeseer_48x48.png'])
       ],
       entry_points={
           'console_scripts': [

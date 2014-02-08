@@ -4,7 +4,7 @@ Name=freeseer
 Comment=Video capture utility
 GenericName=
 Type=Application
-Exec=/usr/bin/freeseer-record
+Exec=/usr/bin/freeseer
 Icon=48x48-freeseer.png
 Categories=AudioVideo;Recorder;
 

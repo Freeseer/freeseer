@@ -22,7 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-from freeseer.frontend import cli
+from freeseer import main
 
-parser = cli.setup_parser()
-cli.parse_args(parser)
+main()
