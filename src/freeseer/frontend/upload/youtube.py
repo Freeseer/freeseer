@@ -23,10 +23,7 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 
-import argparse
 import os
-
-from oauth2client import tools
 
 from freeseer import settings
 from freeseer.framework.youtube import Response
@@ -39,92 +36,66 @@ class YoutubeFrontend(object):
     Class currently only features command line support
     """
 
-    def __init__(self):
-        """Constructor for YoutubeFrontend
+    @staticmethod
+    def get_defaults():
+        """Retrieve the defaults value for client_secrets, video folder, etc.
 
-        Initializes parser inherited from Google Python Client
-        Also sets default folders and filepaths
+        Returns:
+            dictionary of default values which are:
+            client_secrets: ~/<configdir>/client_secrets.json
+            oauth2_token: ~/<configdir>/oauth2_token.json
+            video_directory: ~/Videos
         """
-        self.parser = argparse.ArgumentParser(
-            description="Youtube Framework",
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            parents=[tools.argparser])
-        self.set_defaults()
-
-    def set_defaults(self):
-        """Set the path for the default video folder, client_secrets, and oauth2_token"""
         profile = settings.profile_manager.get("default")
-        config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
-                                    storage_args=['Global'], read_only=True)
-        self.video_directory = config.videodir
-        self.client_secrets = os.path.join(settings.configdir, "client_secrets.json")
-        self.oauth2_token = os.path.join(settings.configdir, "oauth2_token.json")
+        config = profile.get_config('freeseer.conf', settings.FreeseerConfig, storage_args=['Global'], read_only=True)
+        return {
+            "video_directory": config.videodir,
+            "oauth2_token": os.path.join(settings.configdir, "oauth2_token.json"),
+            "client_secrets": os.path.join(settings.configdir, "client_secrets.json")
+        }
 
-    def cmd_line(self, argv):
-        """Initializes command line interface
+    def upload(self, files, token, yes):
+        """Uploads a file(s) to YouTube using the YouTube service API
+
+        This function uploads a list of videos and/or directories of videos to YouTube.
 
         Args:
-            argv: command line arguments to parse
+            token            - location of an oauth2 token
+            files            - list of files and directories to upload
+            yes              - if True, assume yes to all interaction (default: False)
         """
-        self.parser.add_argument("-c", "--client_secrets",
-                                 help="Path to client secrets file", default=self.client_secrets)
-        self.parser.add_argument("-t", "--token",
-                                 help="Path to OAuth2 token", default=self.oauth2_token)
-        self.parser.add_argument("-f", "--files",
-                                 help="Path to file or filefolder for upload", default=self.video_directory)
-        self.parser.add_argument("-y", "--yes",
-                                 help="Assume yes", action="store_true")
-        flags = self.parser.parse_args(argv[1:])
-        youtube_service = YoutubeService()
-        # command line arguments neede for Google Python Client need to always be passed in for authentication
-        youtube_service.authenticate(flags.client_secrets, flags.token, flags)
-        # path doesn't exist, print an error message
-        if not os.path.exists(flags.files):
-            print("{} does not exit".format(flags.files))
-        # path is a folder, upload all videos in the folder
-        elif os.path.isdir(flags.files):
-            self.upload_folder_cmd_line(youtube_service, flags.files, flags.yes)
-        # single file check if it is an uploadable video file
-        elif youtube_service.valid_video_file(flags.files):
-            if flags.yes:
-                self.handle_response(youtube_service.upload_video(flags.files))
-            else:
-                response = raw_input(
-                    "Are you sure you would like to upload the following file? [Y/n]\n" + flags.files + "\n")
-                if response.lower() in ('', 'y', 'yes'):
-                    self.handle_response(youtube_service.upload_video(flags.files))
-        # if this case is reached it means there is nothing to upload
-        else:
+        # check if token exists
+        if not os.path.exists(token):
+            print("{} does not exist, please specify a valid token file".format(token))
+            return
+        # gather videos specified and vids from folders specified into list
+        videos = []
+        for item in files:
+            # crawl subfolders
+            if os.path.isdir(item):
+                for root, dirs, files_ in os.walk(item):
+                    for f in files_:
+                        filepath = os.path.join(root, f)
+                        # check if its a video and make sure its not a duplicate
+                        if YoutubeService.valid_video_file(filepath) and filepath not in videos:
+                            videos.append(filepath)
+            # if it exists it is a single file, check if its a video, and make sure its not a duplicate
+            elif os.path.exists(item) and YoutubeService.valid_video_file(item) and item not in videos:
+                videos.append(item)
+        # now begin upload process
+        if not videos:
             print("Nothing to upload")
-
-    def upload_folder_cmd_line(self, youtube_service, folder, assume_yes):
-        """For uploading an entire folder of videos to Youtube"""
-        # these vars are for confirmation purposes
-        files_to_upload = []
-        list_files_msg = ""
-        # walk through the folder
-        for root, dirs, files in os.walk(folder):
-            # foreach file (we aren't crawling through subfolders)
-            for file in files:
-                filepath = os.path.join(root, file)
-                # if the file is a video file mark it for upload
-                if youtube_service.valid_video_file(filepath):
-                    # if --yes was passed, do not prompt just upload
-                    if assume_yes:
-                        print(youtube_service.upload_video(filepath))
-                        # otherwise build a message and add the file to the to_upload list
-                    else:
-                        files_to_upload.append(filepath)
-                        list_files_msg += "{}\n".format(filepath)
-        # this var will only be populated if --yes was NOT passed as an argument
-        # by the user, therefore the list of files to be uploaded will be printed
-        # and confirmation is asked
-        if files_to_upload:
-            response = raw_input(
-                "Are you sure you would like to upload the following files? [Y/n]\n%s" % list_files_msg)
-            if response.lower() in ('', 'y', 'yes'):
-                for file in files_to_upload:
-                    self.handle_response(youtube_service.upload_video(file))
+        else:
+            youtube_service = YoutubeService()
+            # authorize with OAuth2 token
+            youtube_service.authorize(token)
+            if not yes:
+                print("Found videos:")
+                print("\n".join(videos))
+            question = "Are you sure you would like to upload these videos? [Y/n] "
+            if yes or raw_input(question).lower() in ('', 'y', 'yes'):
+                for video in videos:
+                    self.handle_response(youtube_service.upload_video(video))
 
     def handle_response(self, (response_code, response)):
         """Process the response from the Youtube API"""
@@ -137,4 +108,4 @@ class YoutubeFrontend(object):
         elif response_code is Response.MAX_RETRIES_REACHED:
             print("The maximum number of retries has been reached")
         elif response_code is Response.ACCESS_TOKEN_ERROR:
-            print("The access token has expired or been revoked, please run .authenticate()")
+            print("The access token has expired or been revoked, please run python -m freeseer config youtube")

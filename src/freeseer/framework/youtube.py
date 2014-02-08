@@ -68,29 +68,93 @@ class YoutubeService(object):
     )
     RETRIABLE_STATUS_CODES = (500, 502, 503, 504)
 
+    @staticmethod
+    def acquire_token(client_secrets, oauth2_token, flags):
+        """Handles the user consent process and saves the retrieved OAuth2 token
+
+        Args:
+            client_secrets              - path to client_secrets file
+            oauth2_token                - path to save oauth2_token
+
+            (YouTube Service Parameters)
+            https://google-api-python-client.googlecode.com/hg/docs/epy/oauth2client.tools-module.html
+
+            flags.auth_host_name         - Host name to use when running a local web server to handle redirects during
+                                          OAuth authorization.
+                                          (default: 'localhost')
+
+            flags..auth_host_port         - Port to use when running a local web server to handle redirects during OAuth
+                                          authorization.; repeat this option to specify a list of values
+                                          (default: '[8080, 8090]')
+                                          (an integer)
+
+            flags.auth_local_webserver   - True/False Run a local web server to handle redirects during OAuth
+                                          authorization.
+                                          (default: True)
+        """
+        scope = ['https://www.googleapis.com/auth/youtube.upload']
+        message = ("Please specify a valid client_secrets.json file.\n"
+                    "For instructions to obtain one, please visit:\n"
+                    "https://docs.google.com/document/d/1ro9I8jnOCgQlWRRVCPbrNnQ5-bMvQxDVg6o45zxud4c/edit")
+        flow = client.flow_from_clientsecrets(client_secrets, scope=scope, message=message)
+        storage = file.Storage(oauth2_token)
+        tools.run_flow(flow, storage, flags)
+
+    @staticmethod
+    def valid_video_file(file):
+        """Verify file is supported by Youtube
+
+        Freeseer currently encodes to .ogg and .webm
+        TODO: expand list to all types supported by Youtube
+
+        Args:
+            file: path to file to verify
+
+        Returns:
+            True if file is supported
+        """
+        return file.lower().endswith(('.ogg', '.webm'))
+
+    @staticmethod
+    def get_metadata(video_file):
+        """Parses file metadata
+
+        Parsing is delegated to appropriate library based on filetype
+        If filetype is unsupported default metadata is used instead
+
+        Args:
+            video_file: path to file
+
+        Returns:
+            Metadata formatted to Youtube APIs status parameter
+        """
+        metadata = {
+            "title": os.path.basename(video_file).split(".")[0],
+            "description": "A video recorded with Freeseer",
+            "tags": ['Freeseer', 'FOSSLC', 'Open Source'],
+            "categoryId": 27    # temporary, see gh#415
+        }
+        if video_file.lower().endswith('.ogg'):
+            tags = oggvorbis.Open(video_file)
+            if "title" in tags:
+                metadata['title'] = tags['title'][0]
+            if "album" in tags and "artist" in tags and "date" in tags:
+                metadata['description'] = "At {} by {} recorded on {}".format(tags['album'][0], tags['artist'][0], tags['date'][0])
+        return metadata
+
     def __init__(self):
         """Initialize YoutubeService setting up http related values"""
         # Tell the underlying HTTP transport library not to retry, we want explicit control over the retry logic
         # and to only retry on errors/exceptions specified by Google
         httplib2.RETRIES = 1
 
-    def authenticate(self, client_secrets, oauth2_token, flags):
-        """Handles the authentication process using OAuth2 protocol
+    def authorize(self, oauth2_token):
+        """Function that authorizes upcoming HTTP transactions
 
-        Args:
-            client_secrets: path to client_secrets file
-            oauth2_token: path to oauth2_token to use, if none present token will be saved here
-            flags: flags to pass to Google Python Client's argparser
+        If the token has expired, a new one is retrieved automatically via the refresh token (located inside the same file)
         """
-        scope = ['https://www.googleapis.com/auth/youtube.upload']
-        message = ("Please specify a valid client_secrets.json file.\n"
-                    "To obtain one, please visit:\n"
-                    "https://docs.google.com/document/d/1ro9I8jnOCgQlWRRVCPbrNnQ5-bMvQxDVg6o45zxud4c/edit")
         storage = file.Storage(oauth2_token)
-        flow = client.flow_from_clientsecrets(client_secrets, scope=scope, message=message)
         credentials = storage.get()
-        if credentials is None or credentials.invalid:
-            credentials = tools.run_flow(flow, storage, flags)
         http = credentials.authorize(httplib2.Http())
         self.service = discovery.build('youtube', 'v3', http=http)
 
@@ -154,43 +218,3 @@ class YoutubeService(object):
                     return (Response.MAX_RETRIES_REACHED, None)
                 log.info("Sleeping %s seconds and then retrying..." % sleep_seconds)
                 time.sleep(sleep_seconds)
-
-    def valid_video_file(self, file):
-        """Verify file is supported by Youtube
-
-        Freeseer currently encodes to .ogg and .webm
-        TODO: expand list to all types supported by Youtube
-
-        Args:
-            file: path to file to verify
-
-        Returns:
-            True if file is supported
-        """
-        return file.lower().endswith(('.ogg', '.webm'))
-
-    def get_metadata(self, video_file):
-        """Parses file metadata
-
-        Parsing is delegated to appropriate library based on filetype
-        If filetype is unsupported default metadata is used instead
-
-        Args:
-            video_file: path to file
-
-        Returns:
-            Metadata formatted to Youtube APIs status parameter
-        """
-        metadata = {
-            "title": os.path.basename(video_file).split(".")[0],
-            "description": "A video recorded with Freeseer",
-            "tags": ['Freeseer', 'FOSSLC', 'Open Source'],
-            "categoryId": 27    # temporary, see gh#415
-        }
-        if video_file.lower().endswith('.ogg'):
-            tags = oggvorbis.Open(video_file)
-            if "title" in tags:
-                metadata['title'] = tags['title'][0]
-            if "album" in tags and "artist" in tags and "date" in tags:
-                metadata['description'] = "At {} by {} recorded on {}".format(tags['album'][0], tags['artist'][0], tags['date'][0])
-        return metadata
