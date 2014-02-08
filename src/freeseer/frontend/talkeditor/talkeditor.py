@@ -148,7 +148,8 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.talkDetailsWidget.roomLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
         self.connect(self.talkDetailsWidget.descriptionTextEdit, SIGNAL('modificationChanged(bool)'), self.enable_save)
         self.connect(self.talkDetailsWidget.dateEdit, SIGNAL('dateChanged(const QDate)'), self.enable_save)
-        self.connect(self.talkDetailsWidget.timeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.startTimeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.endTimeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -204,7 +205,8 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
         self.talkDetailsWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
         self.talkDetailsWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
-        self.talkDetailsWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
+        self.talkDetailsWidget.startTimeLabel.setText(self.app.translate("TalkEditorApp", "Start Time"))
+        self.talkDetailsWidget.endTimeLabel.setText(self.app.translate("TalkEditorApp", "End Time"))
         # --- End TalkDetailsWidget
 
         #
@@ -257,7 +259,8 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
         self.mapper.addMapping(self.talkDetailsWidget.descriptionTextEdit, 3)
         self.mapper.addMapping(self.talkDetailsWidget.dateEdit, 7)
-        self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
+        self.mapper.addMapping(self.talkDetailsWidget.startTimeEdit, 8)
+        self.mapper.addMapping(self.talkDetailsWidget.endTimeEdit, 9)
 
         # Load StringLists
         self.titleList = QStringList(self.db.get_string_list("Title"))
@@ -341,7 +344,6 @@ class TalkEditorApp(FreeseerApp):
 
         # Update Model, Refreshes TableView
         self.presentationModel.select()
-
         # Select Last Row
         self.tableView.selectRow(self.presentationModel.rowCount() - 1)
         self.tableView.setCurrentIndex(self.proxy.index(self.proxy.rowCount() - 1, 0))
@@ -353,7 +355,8 @@ class TalkEditorApp(FreeseerApp):
     def create_presentation(self):
         """Creates and returns an instance of Presentation using data from the input fields"""
         date = self.talkDetailsWidget.dateEdit.date()
-        time = self.talkDetailsWidget.timeEdit.time()
+        startTime = self.talkDetailsWidget.startTimeEdit.time()
+        endTime = self.talkDetailsWidget.endTimeEdit.time()
         return Presentation(
             unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
             unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
@@ -362,7 +365,8 @@ class TalkEditorApp(FreeseerApp):
             unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
             unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
             unicode(date.toString(Qt.ISODate)),
-            unicode(time.toString(Qt.ISODate)))
+            unicode(startTime.toString(Qt.ISODate)),
+            unicode(endTime.toString(Qt.ISODate)))
 
     def confirm_add(self):
         """Requests confirmation before clearing fields for a new talk."""
@@ -506,7 +510,8 @@ class TalkEditorApp(FreeseerApp):
                 self.talkDetailsWidget.eventLineEdit.isEnabled() and
                 self.talkDetailsWidget.roomLineEdit.isEnabled() and
                 self.talkDetailsWidget.dateEdit.isEnabled() and
-                self.talkDetailsWidget.timeEdit.isEnabled())
+                self.talkDetailsWidget.startTimeEdit.isEnabled() and
+                self.talkDetailsWidget.endTimeEdit.isEnabled())
 
     def unsaved_details_exist(self):
         """Checks if changes have been made to new/existing talk details

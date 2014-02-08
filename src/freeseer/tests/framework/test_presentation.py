@@ -44,10 +44,11 @@ class TestPresentation(unittest.TestCase):
         Generic unittest.TestCase.setUp()
         '''
 
-        self.pres = Presentation("John Doe", event="haha", time="NOW")
+        self.pres = Presentation("John Doe", event="haha", startTime="NOW", endTime="Later")
 
     def test_correct_time_set(self):
-        self.assertTrue(self.pres.time == "NOW")
+        self.assertTrue(self.pres.startTime == "NOW")
+        self.assertTrue(self.pres.endTime == "Later")
 
     def test_speaker_not_first_param(self):
         self.assertNotEquals(self.pres.speaker, "John Doe")

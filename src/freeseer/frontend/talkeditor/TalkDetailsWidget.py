@@ -60,46 +60,51 @@ class TalkDetailsWidget(QWidget):
 
         self.titleLabel = QLabel('Title')
         self.titleLineEdit = QLineEdit()
-        self.layout.addWidget(self.titleLabel, 1, 0, 1, 1)
-        self.layout.addWidget(self.titleLineEdit, 1, 1, 1, 3)
-
         self.presenterLabel = QLabel('Presenter')
         self.presenterLineEdit = QLineEdit()
-
-        self.categoryLabel = QLabel('Category')
-        self.categoryLineEdit = QLineEdit()
-
-        self.layout.addWidget(self.presenterLabel, 2, 0, 1, 1)
-        self.layout.addWidget(self.presenterLineEdit, 2, 1, 1, 1)
-        self.layout.addWidget(self.categoryLabel, 2, 2, 1, 1)
-        self.layout.addWidget(self.categoryLineEdit, 2, 3, 1, 1)
+        self.layout.addWidget(self.titleLabel, 1, 0, 1, 1)
+        self.layout.addWidget(self.titleLineEdit, 1, 1, 1, 1)
+        self.layout.addWidget(self.presenterLabel, 1, 2, 1, 1)
+        self.layout.addWidget(self.presenterLineEdit, 1, 3, 1, 1)
 
         self.eventLabel = QLabel('Event')
         self.eventLineEdit = QLineEdit()
+        self.categoryLabel = QLabel('Category')
+        self.categoryLineEdit = QLineEdit()
+
+        self.layout.addWidget(self.eventLabel, 2, 0, 1, 1)
+        self.layout.addWidget(self.eventLineEdit, 2, 1, 1, 1)
+        self.layout.addWidget(self.categoryLabel, 2, 2, 1, 1)
+        self.layout.addWidget(self.categoryLineEdit, 2, 3, 1, 1)
+
         self.roomLabel = QLabel('Room')
         self.roomLineEdit = QLineEdit()
-
-        self.layout.addWidget(self.eventLabel, 3, 0, 1, 1)
-        self.layout.addWidget(self.eventLineEdit, 3, 1, 1, 1)
-        self.layout.addWidget(self.roomLabel, 3, 2, 1, 1)
-        self.layout.addWidget(self.roomLineEdit, 3, 3, 1, 1)
-
         self.dateLayout = QHBoxLayout()
-        self.timeLayout = QHBoxLayout()
         self.dateLabel = QLabel('Date')
         self.dateEdit = QDateEdit()
         currentDate = QDate()
         self.dateEdit.setDate(currentDate.currentDate())
         self.dateEdit.setCalendarPopup(True)
-        self.timeLabel = QLabel('Time')
-        self.timeEdit = QTimeEdit()
 
+        self.layout.addWidget(self.roomLabel, 3, 0, 1, 1)
+        self.layout.addWidget(self.roomLineEdit, 3, 1, 1, 1)
         self.dateLayout.addWidget(self.dateEdit)
-        self.timeLayout.addWidget(self.timeEdit)
-        self.layout.addWidget(self.dateLabel, 4, 0, 1, 1)
-        self.layout.addLayout(self.dateLayout, 4, 1, 1, 1)
-        self.layout.addWidget(self.timeLabel, 4, 2, 1, 1)
-        self.layout.addLayout(self.timeLayout, 4, 3, 1, 1)
+        self.layout.addWidget(self.dateLabel, 3, 2, 1, 1)
+        self.layout.addLayout(self.dateLayout, 3, 3, 1, 1)
+
+        self.startTimeLayout = QHBoxLayout()
+        self.startTimeLabel = QLabel('Start Time')
+        self.startTimeEdit = QTimeEdit()
+        self.startTimeLayout.addWidget(self.startTimeEdit)
+        self.endTimeLayout = QHBoxLayout()
+        self.endTimeLabel = QLabel('End Time')
+        self.endTimeEdit = QTimeEdit()
+        self.endTimeLayout.addWidget(self.endTimeEdit)
+
+        self.layout.addWidget(self.startTimeLabel, 4, 0, 1, 1)
+        self.layout.addLayout(self.startTimeLayout, 4, 1, 1, 1)
+        self.layout.addWidget(self.endTimeLabel, 4, 2, 1, 1)
+        self.layout.addLayout(self.endTimeLayout, 4, 3, 1, 1)
 
         self.descriptionLabel = QLabel('Description')
         self.descriptionLabel.setAlignment(Qt.AlignTop)
@@ -119,7 +124,8 @@ class TalkDetailsWidget(QWidget):
             self.eventLineEdit.setEnabled(True)
             self.roomLineEdit.setEnabled(True)
             self.dateEdit.setEnabled(True)
-            self.timeEdit.setEnabled(True)
+            self.startTimeEdit.setEnabled(True)
+            self.endTimeEdit.setEnabled(True)
             self.descriptionTextEdit.setEnabled(True)
 
     def disable_input_fields(self):
@@ -134,7 +140,8 @@ class TalkDetailsWidget(QWidget):
             self.eventLineEdit.setEnabled(False)
             self.roomLineEdit.setEnabled(False)
             self.dateEdit.setEnabled(False)
-            self.timeEdit.setEnabled(False)
+            self.startTimeEdit.setEnabled(False)
+            self.endTimeEdit.setEnabled(False)
             self.descriptionTextEdit.setEnabled(False)
 
 if __name__ == "__main__":
