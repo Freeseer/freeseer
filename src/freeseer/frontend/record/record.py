@@ -88,9 +88,9 @@ class RecordApp(FreeseerApp):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
 
-	# Set variables for Warning message
-	self.space_low_warning = True
-	self.current_ds = None
+        # Set variables for Warning message
+        self.warning_message_off = True
+        self.disk_space = None
 
         #
         # Setup Menubar
@@ -274,12 +274,11 @@ class RecordApp(FreeseerApp):
             self.reportWidget.reportCombo.addItem(i)
         # --- End ReportWidget
 
-	# Warning message when space is low
-	self.message = QtGui.QMessageBox()
-	self.message.setWindowTitle("WARNING")
-	self.message.setText("WARNING: Running low on disk space")
-	self.message.addButton(QtGui.QPushButton('OK'), QtGui.QMessageBox.AcceptRole)
-	# --- End warning message
+        # Warning message when space is low
+        self.message = QtGui.QMessageBox()
+        self.message.setWindowTitle("WARNING")
+        self.message.setText("Disk space running low.")
+        # --- End warning message
 
     ###
     ### UI Logic
@@ -450,14 +449,13 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
-	"""
-	checks current disk space and shows a warning message if disk space is lower than 15MB
-	"""
-	if self.space_low_warning:
-		self.current_ds = get_free_space(self.config.videodir).split(" ")
-		if self.current_ds[1] == "KB" or (self.current_ds[1] == 'MB' and float(self.current_ds[0]) < 15.0):
-			self.message.exec_()
-			self.space_low_warning = False
+        # checks current disk space and shows a warning message if disk space is running low
+        self.disk_space = get_free_space(self.config.videodir).split(" ")
+        if self.disk_space[1] == 'GB' or (self.disk_space[1] == 'MB' and float(self.disk_space[0]) > 10.0):
+            self.warning_message_off = True
+        if self.warning_message_off and self.disk_space[1] == 'MB' and float(self.disk_space[0]) < 10.0:
+            self.warning_message_off = False
+            self.message.exec_()
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
