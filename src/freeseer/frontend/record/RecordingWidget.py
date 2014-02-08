@@ -169,6 +169,9 @@ class RecordingWidget(QWidget):
         self.previewLayout.addWidget(self.previewWidget)
         self.previewLayout.addWidget(self.audioSlider)
 
+        self.notificationLabel = QLabel()
+        self.mainLayout.addWidget(self.notificationLabel)
+
         self.statusLabel = QLabel()
         self.mainLayout.addWidget(self.statusLabel)
 

@@ -452,8 +452,13 @@ class RecordApp(FreeseerApp):
         # checks current disk space and shows a warning message if disk space is below 10 GB
         self.disk_space = get_free_space(self.config.videodir).split(" ")
         if not self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) > 10.0:
+            self.mainWidget.notificationLabel.setText("")
+            self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : white; color : black; }")
             self.warning_message_off = True
-        if self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) < 10.0:
+        if self.warning_message_off and ((self.disk_space[1] == 'GB' and float(self.disk_space[0]) < 10.0) or 
+                                        (self.disk_space[1] == 'MB' or self.disk_space[1] == 'KB')):
+            self.mainWidget.notificationLabel.setText("WARNING: Running low on disk space")
+            self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : yellow; color : black; }")
             self.warning_message_off = False
             self.message.exec_()
 
