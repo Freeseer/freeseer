@@ -34,7 +34,7 @@ from PyQt4 import QtCore
 
 from freeseer import __version__
 from freeseer import settings
-
+from freeseer.frontend.upload.youtube import YoutubeFrontend
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -67,6 +67,7 @@ def setup_parser():
     setup_parser_config(subparsers)
     setup_parser_talk(subparsers)
     setup_parser_report(subparsers)
+    setup_parser_upload(subparsers)
     return parser
 
 
@@ -86,6 +87,18 @@ def setup_parser_config(subparsers):
         action="store_true")
     parser.add_argument("--reset-configuration", help="Reset's Freeseer configuration (removes freeseer.conf and plugins.conf)", action="store_true")
     parser.add_argument("--reset-database", help="Reset's Freeseer database (removes presentations.db)", action="store_true")
+    subparsers = parser.add_subparsers(dest="config_service")
+    setup_parser_config_youtube(subparsers)
+
+
+def setup_parser_config_youtube(subparsers):
+    """Setup Youtube config parser"""
+    from oauth2client import tools
+    # Inherent Google API argparser
+    parser = subparsers.add_parser("youtube", help="Obtain OAuth2 token for Youtube access", parents=[tools.argparser])
+    defaults = YoutubeFrontend.get_defaults()
+    parser.add_argument("-c", "--client-secrets", help="Path to client secrets file", default=defaults["client_secrets"])
+    parser.add_argument("-t", "--token", help="Location to save token file", default=defaults["oauth2_token"])
 
 
 def setup_parser_talk(subparsers):
@@ -102,6 +115,22 @@ def setup_parser_talk(subparsers):
 def setup_parser_report(subparsers):
     """Setup the report command parser"""
     subparsers.add_parser('report', help='Freeseer reporting functions')
+
+
+def setup_parser_upload(subparsers):
+    """Setup upload tool command parser"""
+    parser = subparsers.add_parser("upload", help="Upload file tool")
+    subparsers = parser.add_subparsers(dest="upload_service", help="Service to upload with")
+    setup_parser_upload_youtube(subparsers)
+
+
+def setup_parser_upload_youtube(subparsers):
+    """Setup youtube upload command parser"""
+    defaults = YoutubeFrontend.get_defaults()
+    parser = subparsers.add_parser("youtube", help="Youtube upload command line tool")
+    parser.add_argument("files", help="Path to videos or video directories to upload", nargs="*", default=[defaults["video_directory"]])
+    parser.add_argument("-t", "--token", help="Path to OAuth2 token", default=defaults["oauth2_token"])
+    parser.add_argument("-y", "--yes", help="Automatic yes to prompts", action="store_true")
 
 
 def parse_args(parser, parse_args=None):
@@ -148,6 +177,7 @@ def parse_args(parser, parse_args=None):
         from freeseer.framework.util import reset
         from freeseer.framework.util import reset_configuration
         from freeseer.framework.util import reset_database
+        from freeseer.framework.youtube import YoutubeService
 
         if args.reset:
             reset(configdir)
@@ -155,6 +185,8 @@ def parse_args(parser, parse_args=None):
             reset_configuration(configdir)
         elif args.reset_database:
             reset_database(configdir)
+        elif args.config_service == "youtube":
+            YoutubeService.acquire_token(args.client_secrets, args.token, args)
 
     elif args.app == 'talk':
         if len(sys.argv) == 2:  # No 'talk' arguments passed
@@ -184,6 +216,11 @@ def parse_args(parser, parse_args=None):
     elif args.app == 'report':
         if len(sys.argv) == 2:  # No 'report' arguments passed
             launch_reporteditor()
+
+    elif args.app == 'upload':
+        if args.upload_service == 'youtube':
+            youtube = YoutubeFrontend()
+            youtube.upload(args.files, args.token, args.yes)
 
 
 def launch_recordapp():
