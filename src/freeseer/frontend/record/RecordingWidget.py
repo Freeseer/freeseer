@@ -86,6 +86,14 @@ class RecordingWidget(QWidget):
         self.standbyPushButton.setObjectName("standbyButton")
         self.controlRow.addWidget(self.standbyPushButton)
 
+        self.autoRecordPushButton = QPushButton("Auto Record")
+        self.autoRecordPushButton.setToolTip("Automated Recording")
+        self.autoRecordPushButton.setMinimumSize(QSize(40, 40))
+        self.autoRecordPushButton.setMaximumSize(QSize(120, 40))
+        self.autoRecordPushButton.setCheckable(True)
+        self.autoRecordPushButton.setObjectName("autoRecordButton")
+        self.controlRow.addWidget(self.autoRecordPushButton)
+
         self.recordPushButton = QPushButton("Record")
         self.recordPushButton.setToolTip("Record")
         self.recordPushButton.setMinimumSize(QSize(0, 40))

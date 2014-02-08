@@ -150,7 +150,8 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.talkDetailsWidget.roomLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
         self.connect(self.talkDetailsWidget.descriptionTextEdit, SIGNAL('modificationChanged(bool)'), self.enable_save)
         self.connect(self.talkDetailsWidget.dateEdit, SIGNAL('dateChanged(const QDate)'), self.enable_save)
-        self.connect(self.talkDetailsWidget.timeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.startTimeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.endTimeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
 
         # New Talk Widget
         self.newTalkWidget.connect(self.newTalkWidget.addButton, SIGNAL('clicked()'), self.add_talk)
@@ -210,7 +211,8 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.eventLabel.setText(self.app.translate("TalkEditorApp", "Event"))
         self.talkDetailsWidget.roomLabel.setText(self.app.translate("TalkEditorApp", "Room"))
         self.talkDetailsWidget.dateLabel.setText(self.app.translate("TalkEditorApp", "Date"))
-        self.talkDetailsWidget.timeLabel.setText(self.app.translate("TalkEditorApp", "Time"))
+        self.talkDetailsWidget.startTimeLabel.setText(self.app.translate("TalkEditorApp", "Start Time"))
+        self.talkDetailsWidget.endTimeLabel.setText(self.app.translate("TalkEditorApp", "End Time"))
         # --- End TalkDetailsWidget
 
         #
@@ -263,7 +265,8 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.addMapping(self.talkDetailsWidget.roomLineEdit, 6)
         self.mapper.addMapping(self.talkDetailsWidget.descriptionTextEdit, 3)
         self.mapper.addMapping(self.talkDetailsWidget.dateEdit, 7)
-        self.mapper.addMapping(self.talkDetailsWidget.timeEdit, 8)
+        self.mapper.addMapping(self.talkDetailsWidget.startTimeEdit, 8)
+        self.mapper.addMapping(self.talkDetailsWidget.endTimeEdit, 9)
 
         # Load StringLists
         self.titleList = QStringList(self.db.get_string_list("Title"))
@@ -328,7 +331,11 @@ class TalkEditorApp(FreeseerApp):
                 self.talkDetailsWidget.saveButton.setEnabled(False)
 
     def create_presentation(self, talkDetailsWidget):
-        """Creates and returns an instance of Presentation using data from TalkDetailsWidget input fields"""
+        """Creates and returns an instance of Presentation using data from the input fields"""
+        date = talkDetailsWidget.dateEdit.date()
+        startTime = talkDetailsWidget.startTimeEdit.time()
+        endTime = talkDetailsWidget.endTimeEdit.time()
+
         title = unicode(talkDetailsWidget.titleLineEdit.text()).strip()
         if title:
             return Presentation(
@@ -338,8 +345,9 @@ class TalkEditorApp(FreeseerApp):
                 unicode(talkDetailsWidget.categoryLineEdit.text()).strip(),
                 unicode(talkDetailsWidget.eventLineEdit.text()).strip(),
                 unicode(talkDetailsWidget.roomLineEdit.text()).strip(),
-                unicode(talkDetailsWidget.dateEdit.date().toString(Qt.ISODate)),
-                unicode(talkDetailsWidget.timeEdit.time().toString(Qt.ISODate)))
+                unicode(date.toString(Qt.ISODate)),
+                unicode(startTime.toString(Qt.ISODate)),
+                unicode(endTime.toString(Qt.ISODate)))
 
     def show_new_talk_popup(self):
         """Displays a modal dialog with a talk details view
@@ -497,7 +505,8 @@ class TalkEditorApp(FreeseerApp):
                 self.talkDetailsWidget.eventLineEdit.isEnabled() and
                 self.talkDetailsWidget.roomLineEdit.isEnabled() and
                 self.talkDetailsWidget.dateEdit.isEnabled() and
-                self.talkDetailsWidget.timeEdit.isEnabled())
+                self.talkDetailsWidget.startTimeEdit.isEnabled() and
+                self.talkDetailsWidget.endTimeEdit.isEnabled())
 
     def unsaved_details_exist(self):
         """Checks if changes have been made to new/existing talk details
