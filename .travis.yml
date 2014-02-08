@@ -27,7 +27,7 @@ install:
 script:
   - pwd && cd src
   - coverage run setup.py test
-  - coveralls
+  - coveralls || true
   - cd ..
   - flake8 src
 after_success:
