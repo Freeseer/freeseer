@@ -181,25 +181,16 @@ class YoutubeService(object):
         Returns:
             Metadata formatted to Youtube APIs status parameter
         """
-        default_metadata = {
+        metadata = {
             "title": os.path.basename(video_file).split(".")[0],
             "description": "A video recorded with Freeseer",
             "tags": ['Freeseer', 'FOSSLC', 'Open Source'],
             "categoryId": 27    # temporary, see gh#415
         }
         if video_file.lower().endswith('.ogg'):
-            metadata = get_metadata_mutagen(video_file)
-            metadata['tags'] = default_metadata['tags']
-            metadata['categoryId'] = default_metadata['categoryId']
-            return metadata
-        else:
-            return default_metadata
-
-
-def get_metadata_mutagen(video_file):
-    """Parses metadata using mutagen"""
-    tags = oggvorbis.Open(video_file)
-    return {
-        "title": tags['title'][0],
-        "description": "At {} by {} recorded on {}".format(tags['album'][0], tags['artist'][0], tags['date'][0])
-    }
+            tags = oggvorbis.Open(video_file)
+            if "title" in tags:
+                metadata['title'] = tags['title'][0]
+            if "album" in tags and "artist" in tags and "date" in tags:
+                metadata['description'] = "At {} by {} recorded on {}".format(tags['album'][0], tags['artist'][0], tags['date'][0])
+        return metadata
