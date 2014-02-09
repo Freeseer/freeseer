@@ -81,7 +81,7 @@ Fedora Linux
 
 ::
 
-    $ sudo yum install git PyQt4-devel python-pip
+    $ sudo yum install git PyQt4-devel
 
 .. warning:: This list may be incomplete. Please :doc:`let us know </contact>` if you notice any missing packages.
 
