@@ -32,6 +32,13 @@ from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QIcon
 
+# imports for Talk Editor Filtering
+from PyQt4.QtGui import QVBoxLayout
+from PyQt4.QtGui import QHBoxLayout
+from PyQt4.QtGui import QVBoxLayout
+from PyQt4.QtGui import QComboBox
+from PyQt4.QtGui import QLabel
+
 
 class CommandButtons(QWidget):
 

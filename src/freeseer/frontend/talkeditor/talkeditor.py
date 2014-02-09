@@ -30,6 +30,7 @@ from PyQt4.QtCore import QStringList
 from PyQt4 import QtCore
 from PyQt4.QtGui import QAbstractItemView
 from PyQt4.QtGui import QAction
+from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QDataWidgetMapper
 from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QPixmap
@@ -49,6 +50,7 @@ from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
 # TalkEditor modules
 from CommandButtons import CommandButtons
+from FilterTalksWidget import FilterTalksWidget
 from TalkDetailsWidget import TalkDetailsWidget
 from ImportTalksWidget import ImportTalksWidget
 
@@ -86,6 +88,7 @@ class TalkEditorApp(FreeseerApp):
 
         # Add custom widgets
         self.commandButtons = CommandButtons()
+        self.filterTalksWidget = FilterTalksWidget()
         self.tableView = QTableView()
         self.tableView.setSortingEnabled(True)
         self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -94,6 +97,7 @@ class TalkEditorApp(FreeseerApp):
         self.mainLayout.addWidget(self.importTalksWidget)
         #self.mainLayout.addLayout(self.titleLayout)
         self.mainLayout.addWidget(self.commandButtons)
+        self.mainLayout.addWidget(self.filterTalksWidget)
         self.mainLayout.addWidget(self.tableView)
         self.mainLayout.addWidget(self.talkDetailsWidget)
         self.mainLayout.addWidget(self.importTalksWidget)
@@ -144,6 +148,10 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('textEdited(QString)'), self.search_talks)
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
 
+        # Filter Talks Menu
+        self.connect(self.filterTalksWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.search_talks_by_event)
+        self.connect(self.filterTalksWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.search_rooms_by_event)
+        
         # Talk Details Buttons
         self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.clear_talk_details_widget)
         self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_talk)
@@ -161,6 +169,9 @@ class TalkEditorApp(FreeseerApp):
 
         # Setup Autocompletion
         self.update_autocomple_fields()
+
+        # Load Field Lists
+        self.load_event_list()
 
         # Select first item
         #self.tableView.setCurrentIndex(self.proxy.index(0,0))
@@ -216,7 +227,7 @@ class TalkEditorApp(FreeseerApp):
         self.commandButtons.exportButton.setText(self.app.translate("TalkEditorApp", "Export"))
         self.commandButtons.removeButton.setText(self.app.translate("TalkEditorApp", "Remove"))
         self.commandButtons.removeAllButton.setText(self.app.translate("TalkEditorApp", "Remove All"))
-        # --- End Command Butotn Translations
+        # --- End Command Button Translations
 
         #
         # Search Widget Translations
@@ -258,13 +269,30 @@ class TalkEditorApp(FreeseerApp):
         #self.eventList = QStringList(self.db.get_event_list())
         #self.roomList = QStringList(self.db.get_room_list())
 
-        #Disble input
+        #Disable input
         self.talkDetailsWidget.disable_input_fields()
 
     def search_talks(self):
         # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
+
+    def search_talks_by_event(self):
+        self.proxy.setFilterKeyColumn(5)
+        self.proxy.setFilterFixedString(self.filterTalksWidget.eventComboBox.currentText())
+
+    def search_rooms_by_event(self):
+        self.proxy.setFilterKeyColumn(6)
+        self.proxy.setFilterFixedString(self.filterTalksWidget.roomComboBox.currentText())
+
+    def load_event_list(self):
+        model = self.db.get_events_model()
+        room = self.db.editor_rooms_model()
+        self.filterTalksWidget.eventComboBox.setModel(model)
+        self.filterTalksWidget.roomComboBox.setModel(room)
+    
+    def filter_by_event(self):
+        self.proxy.setFilterKeyColumn(0)
 
     def talk_selected(self, model):
         self.talkDetailsWidget.saveButton.setEnabled(False)

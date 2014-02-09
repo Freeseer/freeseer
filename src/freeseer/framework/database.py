@@ -290,6 +290,12 @@ class QtDBConnector(object):
         self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations ORDER BY Event ASC")
         return self.eventsModel
 
+    def editor_rooms_model(self):
+        """Gets the Events Model. Useful for Qt GUI based Frontends to load the Model into Views"""
+        self.roomsModel = QtSql.QSqlQueryModel()
+        self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations ORDER BY Room ASC")
+        return self.roomsModel
+
     def get_dates_from_event_room_model(self, event, room):
         """Gets the Rooms Model.Useful for Qt GUI based Frontends to load the Model into Views."""
         self.datesModel = QtSql.QSqlQueryModel()
