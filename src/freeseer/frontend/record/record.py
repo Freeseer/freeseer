@@ -452,13 +452,11 @@ class RecordApp(FreeseerApp):
         # checks current disk space and shows a warning message if disk space is below 10 GB
         self.disk_space = get_free_space(self.config.videodir).split(" ")
         if not self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) > 10.0:
-            self.mainWidget.notificationLabel.setText("")
-            self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : white; color : black; }")
+            self.set_default_notification()
             self.warning_message_off = True
         if self.warning_message_off and ((self.disk_space[1] == 'GB' and float(self.disk_space[0]) < 10.0) or 
                                         (self.disk_space[1] == 'MB' or self.disk_space[1] == 'KB')):
-            self.mainWidget.notificationLabel.setText("WARNING: Running low on disk space")
-            self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : yellow; color : black; }")
+            self.set_warning_notification("Running low on disk space")
             self.warning_message_off = False
             self.message.exec_()
 
@@ -470,6 +468,21 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
+
+    def set_default_notification(self, notification="Welcome"):
+        """Shows default notification on the notification bar"""
+        self.mainWidget.notificationLabel.setText(notification)
+        self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : white; color : black; }")
+
+    def set_warning_notification(self, notification):
+        """Shows warning notification on the notification bar"""
+        self.mainWidget.notificationLabel.setText("WARNING: {}".format(notification))
+        self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : yellow; color : black; }")
+
+    def set_error_notification(self, notification):
+        """Shows error notification on the notification bar"""
+        self.mainWidget.notificationLabel.setText("ERROR: {}".format(notification))
+        self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : red; color : black; }")
 
     ###
     ### Talk Related
