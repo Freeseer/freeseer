@@ -29,6 +29,7 @@ import logging
 import os
 import time
 
+from datetime import datetime
 from apiclient import discovery
 from apiclient.errors import HttpError
 from apiclient.http import MediaFileUpload
@@ -100,15 +101,39 @@ class YoutubeService(object):
         body = {
             "kind" : "youtube#liveBroadcast",
             "snippet" : {
-                "title" : "",
-                "scheduledStartTime" : "",
-                "scheduledEndTime" : ""
+                "title" : "test",
+                "scheduledStartTime" : datetime.now().isoformat()
             } 
         }
         status = {
-            "privacyStatus" : ""
+            "privacyStatus" : "private"
         }
-        response = self.service.liveBroadcast().insert(part=part,body=body,status=status).execute()
+        response = self.service.liveBroadcasts().insert(part=part,body=body,status=status).execute()
+        log.info("Broadcast '%s' with title '%s' was published at '%s'." %
+            (response["id"], response["snippet"]["title"], response["snippet"]["publishedAt"]))
+        return response["id"]
+
+    def insert_stream(self):
+        """Function for creating stream to be tied to a broadcast"""
+        part="snippet,cdn"
+        body = {
+            "snippet" : {
+                "title" : "test"
+            },
+            "cdn" : {
+                "format" : "720p",
+                "ingestionType" : "rtmp"
+            }
+        }
+        response = self.service.liveStreams().insert(part=part,body=body).execute()
+        log.info("Stream '%s' with title '%s' was inserted." % (response["id"], response["snippet"]["title"]))
+        return insert_stream_response["id"]
+
+    def bind_broadcast(self, broadcast_id, stream_id):
+        part = "id,contentDetails",
+        response = self.service.liveBroadcasts.bind(part=part, id=broadcast_id,streamId=stream_id).execute()
+        log.info("Broadcast '%s' was bound to stream '%s'." %
+            (response["id"],response["contentDetails"]["boundStreamId"]))
 
     def upload_video(self, video_file):
         """Function to upload file to Youtube
