@@ -89,8 +89,9 @@ class RecordApp(FreeseerApp):
         self.timer.timeout.connect(self.update_timer)
 
         # Set variables for Warning message
-        self.warning_message_off = True
-        self.disk_space = None
+        self.display_warning_message = False
+        self.remaining_disk_space = None
+        self.low_space_threshold = 10.0
 
         #
         # Setup Menubar
@@ -277,7 +278,7 @@ class RecordApp(FreeseerApp):
         # Warning message when space is low
         self.message = QtGui.QMessageBox()
         self.message.setWindowTitle("WARNING")
-        self.message.setText("Disk space running low.")
+        self.message.setText("Disk space running low. Less than 10 GB remaining.")
         # --- End warning message
 
     ###
@@ -449,16 +450,7 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
-        # checks current disk space and shows a warning message if disk space is below 10 GB
-        self.disk_space = get_free_space(self.config.videodir).split(" ")
-        if not self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) > 10.0:
-            self.set_default_notification()
-            self.warning_message_off = True
-        if self.warning_message_off and ((self.disk_space[1] == 'GB' and float(self.disk_space[0]) < 10.0) or 
-                                        (self.disk_space[1] == 'MB' or self.disk_space[1] == 'KB')):
-            self.set_warning_notification("Running low on disk space")
-            self.warning_message_off = False
-            self.message.exec_()
+        self.check_current_disk_space()
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -468,6 +460,20 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
+
+    def check_current_disk_space(self):
+        """checks current disk space and shows a warning notification if disk space is below the threshold"""
+        self.remaining_disk_space = get_free_space(self.config.videodir).split(" ")
+        if self.display_warning_message and self.remaining_disk_space[1] == 'GB' and \
+                                            float(self.remaining_disk_space[0]) > self.low_space_threshold:
+            self.set_default_notification()
+            self.display_warning_message = False
+        if not self.display_warning_message and ((self.remaining_disk_space[1] == 'GB' and \
+                                             float(self.remaining_disk_space[0]) < self.low_space_threshold) or \
+                                            (self.remaining_disk_space[1] == 'MB' or self.remaining_disk_space[1] == 'KB')):
+            self.set_warning_notification("Running low on disk space")
+            self.display_warning_message = True
+            self.message.exec_()
 
     def set_default_notification(self, notification="Welcome"):
         """Shows default notification on the notification bar"""
