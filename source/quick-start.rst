@@ -92,7 +92,7 @@ Windows
 .. note::  x86 version recommended whenever there is a choice.
 
 - `python 2.7.* x86 <http://www.python.org/getit/>`_
-- `setuptools-0.6c11.win32-py2.7 <https://pypi.python.org/pypi/setuptools#files>`_
+- `setuptools-0.6c11.win32-py2.7 <https://pypi.python.org/pypi/setuptools#windows>`_
 - `GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7 <https://code.google.com/p/ossbuild/downloads/list>`_
 - `GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 <https://code.google.com/p/ossbuild/downloads/list>`_
 - `PyQt-Py2.7-x86-gpl-4.8.5-1 <http://www.riverbankcomputing.com/software/pyqt/download>`_
