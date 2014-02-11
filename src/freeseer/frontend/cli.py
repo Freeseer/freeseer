@@ -24,6 +24,7 @@
 
 
 import argparse
+import signal
 import sys
 import textwrap
 
@@ -33,6 +34,9 @@ from PyQt4 import QtCore
 
 from freeseer import __version__
 from freeseer import settings
+
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 
 def setup_parser():
@@ -199,7 +203,6 @@ def launch_recordapp():
 
 def launch_configtool():
     """Launch Freeseer Configuration GUI if no arguments are passed"""
-    import signal
     from PyQt4 import QtGui
     from freeseer.frontend.configtool.configtool import ConfigToolApp
 
@@ -207,7 +210,6 @@ def launch_configtool():
     config = profile.get_config('freeseer.conf', settings.FreeseerConfig,
                                 storage_args=['Global'], read_only=False)
 
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QtGui.QApplication(sys.argv)
     main = ConfigToolApp(profile, config)
     main.show()
@@ -232,7 +234,6 @@ def launch_talkeditor():
 
 def launch_reporteditor():
     """Launch the Report Editor GUI"""
-    import signal
     import sys
     from PyQt4 import QtGui
     from freeseer.frontend.reporteditor.reporteditor import ReportEditorApp
@@ -242,7 +243,6 @@ def launch_reporteditor():
                                 storage_args=['Global'], read_only=True)
     db = profile.get_database()
 
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
     app = QtGui.QApplication(sys.argv)
     main = ReportEditorApp(config, db)
     main.show()
