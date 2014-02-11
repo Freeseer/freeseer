@@ -154,7 +154,6 @@ class QtDBConnector(object):
                             FROM presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
-
         #
         # Perform the upgrade
         #
@@ -235,9 +234,8 @@ class QtDBConnector(object):
         # If date is empty, and time has a full DateTime, split the DateTime to
         # both Date and Time
 
-
-        if not presentation.date and presentation.starttime and len(presentation.starttime) == 16:
-            presentation.date, presentation.starttime = presentation.starttime[:-6], presentation.starttime[11:]
+        if not presentation.date and presentation.time and len(presentation.time) == 16:
+            presentation.date, presentation.time = presentation.time[:-6], presentation.time[11:]
         QtSql.QSqlQuery(
             '''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
             (presentation.title,
@@ -397,6 +395,7 @@ class QtDBConnector(object):
 
             result = self.get_talks()
             while result.next():
+                log.debug(unicode(result.value(1).toString()))
                 writer.writerow({'Title': unicode(result.value(1).toString()),
                                  'Speaker': unicode(result.value(2).toString()),
                                  'Abstract': unicode(result.value(3).toString()),
