@@ -69,6 +69,7 @@ def setup_parser():
     setup_parser_talk(subparsers)
     setup_parser_report(subparsers)
     setup_parser_upload(subparsers)
+    setup_parser_server(subparsers)
     return parser
 
 
@@ -149,6 +150,12 @@ def setup_parser_upload_youtube(subparsers):
     parser.add_argument("files", help="Path to videos or video directories to upload", nargs="*", default=[defaults["video_directory"]])
     parser.add_argument("-t", "--token", help="Path to OAuth2 token", default=defaults["oauth2_token"])
     parser.add_argument("-y", "--yes", help="Automatic yes to prompts", action="store_true")
+
+
+def setup_parser_server(subparsers):
+    """Setup server command parser"""
+    parser = subparsers.add_parser("server", help="Setup a freeseer restful server")
+    parser.add_argument("-f", "--filename", type=unicode, help="file to load recordings")
 
 
 def parse_args(parser, parse_args=None):
@@ -259,6 +266,12 @@ def parse_args(parser, parse_args=None):
         if args.upload_service == 'youtube':
             youtube.upload(args.files, args.token, args.yes)
 
+    elif args.app == 'server':
+        if args.filename:
+            launch_server(args.filename)
+        else:
+            launch_server()
+
 
 def launch_recordapp():
     """Launch the Recording GUI if no arguments are passed"""
@@ -321,3 +334,10 @@ def launch_reporteditor():
     main = ReportEditorApp(config, db)
     main.show()
     sys.exit(app.exec_())
+
+
+def launch_server(storage_file="recording_storage"):
+    """Launch the Server"""
+    import freeseer.frontend.controller.server as server
+
+    server.start_server(storage_file)
