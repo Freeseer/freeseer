@@ -4,3 +4,5 @@ google-api-python-client==1.2
 mutagen==1.22
 simplejson<3.4
 oauth<1.1
+Flask==0.10.1
+jsonschema==2.3
