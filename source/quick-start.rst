@@ -106,15 +106,17 @@ You'll need to get some packages from the `Python Package Index <https://pypi.py
 
 You can `install pip <http://www.pip-installer.org/en/latest/installing.html>`_
 by securely downloading `get-pip.py <https://raw.github.com/pypa/pip/master/contrib/get-pip.py>`_
-and executing it (which may require administrator access)::
+and executing it with administrator access::
 
-    wget -O- https://raw.github.com/pypa/pip/master/contrib/get-pip.py | sudo python
+    wget -q https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O- | sudo python
 
 If you already have pip, first upgrade it to the latest version::
 
     pip install --upgrade pip
 
-Next, install the remaining packages. On Linux::
+Install the remaining packages. You may need administrator access.
+
+On Linux::
 
     pip install -Ur dev_requirements.txt
 
