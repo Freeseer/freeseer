@@ -170,6 +170,8 @@ class RecordingWidget(QWidget):
         self.previewLayout.addWidget(self.audioSlider)
 
         self.notificationLabel = QLabel()
+        self.notificationLabel.setText("Welcome")
+        self.notificationLabel.setStyleSheet("QLabel { background-color : white; color : black; }")
         self.mainLayout.addWidget(self.notificationLabel)
 
         self.statusLabel = QLabel()
