@@ -26,7 +26,8 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore
+from PyQt4 import QtGui
 
 
 class PluginLoaderWidget(QtGui.QWidget):
@@ -110,8 +111,8 @@ class PluginLoaderWidget(QtGui.QWidget):
         if plugin.plugin_object.get_widget() is not None:
             pluginConfigToolButton = QtGui.QToolButton()
             pluginConfigToolButton.setText("Settings")
-            configIcon = QtGui.QIcon.fromTheme("preferences-other")
-            pluginConfigToolButton.setIcon(configIcon)
+            config_icon = QtGui.QIcon.fromTheme("preferences-system")
+            pluginConfigToolButton.setIcon(config_icon)
             pluginConfigToolButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
             pluginConfigToolButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
 

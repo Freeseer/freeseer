@@ -26,7 +26,8 @@ import logging
 import os
 import re
 
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui
+from PyQt4 import QtCore
 from PyQt4.QtGui import QInputDialog
 from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QMessageBox
@@ -206,11 +207,19 @@ class ConfigToolApp(FreeseerApp):
         #
         self.avWidget.audioGroupBox.setTitle(self.app.translate("ConfigToolApp", "Audio Input"))
         self.avWidget.audioMixerLabel.setText(self.app.translate("ConfigToolApp", "Audio Mixer"))
-        self.avWidget.audioMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
+        self.avWidget.audioMixerSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
 
         self.avWidget.videoGroupBox.setTitle(self.app.translate("ConfigToolApp", "Video Input"))
         self.avWidget.videoMixerLabel.setText(self.app.translate("ConfigToolApp", "Video Mixer"))
-        self.avWidget.videoMixerSetupPushButton.setText(self.app.translate("ConfigToolApp", "Setup"))
+        self.avWidget.videoMixerSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
+
+        self.avWidget.fileGroupBox.setTitle(self.app.translate("ConfigToolApp", "Record to File"))
+        self.avWidget.fileLabel.setText(self.app.translate("ConfigToolApp", "File Format"))
+        self.avWidget.fileSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
+
+        self.avWidget.streamGroupBox.setTitle(self.app.translate("ConfigToolApp", "Record to Stream"))
+        self.avWidget.streamLabel.setText(self.app.translate("ConfigToolApp", "Stream Format"))
+        self.avWidget.streamSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
         # --- End AV Widget
 
     ###
