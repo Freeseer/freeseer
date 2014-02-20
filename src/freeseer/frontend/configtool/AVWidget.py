@@ -26,6 +26,7 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+from PyQt4 import QtCore
 from PyQt4 import QtGui
 
 
@@ -43,6 +44,8 @@ class AVWidget(QtGui.QWidget):
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
 
+        config_icon = QtGui.QIcon.fromTheme("preferences-system")
+
         #
         # Audio Input
         #
@@ -59,8 +62,11 @@ class AVWidget(QtGui.QWidget):
         self.audioMixerLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         self.audioMixerComboBox = QtGui.QComboBox()
         self.audioMixerLabel.setBuddy(self.audioMixerComboBox)
-        self.audioMixerSetupPushButton = QtGui.QPushButton("Setup")
+        self.audioMixerSetupPushButton = QtGui.QToolButton()
+        self.audioMixerSetupPushButton.setText("Setup")
+        self.audioMixerSetupPushButton.setIcon(config_icon)
         self.audioMixerSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.audioMixerSetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.audioLayout.addWidget(self.audioMixerLabel, 0, 0)
         self.audioLayout.addWidget(self.audioMixerComboBox, 0, 1)
         self.audioLayout.addWidget(self.audioMixerSetupPushButton, 0, 2)
@@ -81,8 +87,11 @@ class AVWidget(QtGui.QWidget):
         self.videoMixerLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         self.videoMixerComboBox = QtGui.QComboBox()
         self.videoMixerLabel.setBuddy(self.videoMixerComboBox)
-        self.videoMixerSetupPushButton = QtGui.QPushButton("Setup")
+        self.videoMixerSetupPushButton = QtGui.QToolButton()
+        self.videoMixerSetupPushButton.setText("Setup")
+        self.videoMixerSetupPushButton.setIcon(config_icon)
         self.videoMixerSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.videoMixerSetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.videoLayout.addWidget(self.videoMixerLabel, 0, 0)
         self.videoLayout.addWidget(self.videoMixerComboBox, 0, 1)
         self.videoLayout.addWidget(self.videoMixerSetupPushButton, 0, 2)
@@ -103,8 +112,11 @@ class AVWidget(QtGui.QWidget):
         self.fileLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         self.fileComboBox = QtGui.QComboBox()
         self.fileLabel.setBuddy(self.fileComboBox)
-        self.fileSetupPushButton = QtGui.QPushButton("Setup")
+        self.fileSetupPushButton = QtGui.QToolButton()
+        self.fileSetupPushButton.setText("Setup")
+        self.fileSetupPushButton.setIcon(config_icon)
         self.fileSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.fileSetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.fileLayout.addWidget(self.fileLabel, 0, 0)
         self.fileLayout.addWidget(self.fileComboBox, 0, 1)
         self.fileLayout.addWidget(self.fileSetupPushButton, 0, 2)
@@ -125,8 +137,11 @@ class AVWidget(QtGui.QWidget):
         self.streamLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
         self.streamComboBox = QtGui.QComboBox()
         self.streamLabel.setBuddy(self.streamComboBox)
-        self.streamSetupPushButton = QtGui.QPushButton("Setup")
+        self.streamSetupPushButton = QtGui.QToolButton()
+        self.streamSetupPushButton.setText("Setup")
+        self.streamSetupPushButton.setIcon(config_icon)
         self.streamSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.streamSetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
         self.streamLayout.addWidget(self.streamLabel, 0, 0)
         self.streamLayout.addWidget(self.streamComboBox, 0, 1)
         self.streamLayout.addWidget(self.streamSetupPushButton, 0, 2)
