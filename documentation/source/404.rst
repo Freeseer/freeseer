@@ -1,0 +1,13 @@
+:orphan:
+
+.. |br| raw:: html
+
+   <br />
+
+.. title:: Page not found · 404
+
+.. figure:: /images/sad-seer.png
+   :align: center
+
+   **Oops, the page you're looking for doesn't exist.** |br|
+   Try searching our :doc:`sitemap`.
