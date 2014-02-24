@@ -25,7 +25,7 @@ before_install:
 install:
   - pip install -r dev_requirements.txt --use-mirrors
   - pip install coveralls
-  - pip install -r documentation/requirements.txt --use-mirrors
+  - pip install -r docs/requirements.txt --use-mirrors
 # command to run tests, e.g. python setup.py test
 script: ./run_tests.sh
 after_success:
