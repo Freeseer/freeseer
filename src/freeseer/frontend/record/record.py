@@ -44,10 +44,10 @@ from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
-from freeseer.frontend.record.NotificationList import NotificationList
-from freeseer.frontend.record.NotificationList import Notification
+from freeseer.framework.notificationList import *
 
 log = logging.getLogger(__name__)
+notification = NotificationList()
 
 
 class RecordApp(FreeseerApp):
@@ -93,8 +93,8 @@ class RecordApp(FreeseerApp):
         # Set variables for notification panel
         self.display_error_message = False
         self.low_on_space = False
-        self.notifications = NotificationList()
-        self.error = Notification()
+        #self.notifications = NotificationList()
+        #self.error = Notification()
 
         #
         # Setup Menubar
@@ -449,9 +449,10 @@ class RecordApp(FreeseerApp):
                                                                             self.recordingString))
         self.check_current_disk_space()
         if not self.display_error_message:
-            if self.notifications.get_length():
-                head = self.notifications.get_head()
-                self.set_warning_notification(head.get_message())
+            #if self.notifications.get_length():
+            if notification.get_length():
+                head = notification.get_head()
+                self.set_warning_notification(head.message)
             else:
                 self.reset_notification_panel()
         else:
@@ -470,11 +471,13 @@ class RecordApp(FreeseerApp):
         """checks current disk space and shows a warning notification if disk space is below the threshold"""
         self.remaining_disk_space = get_free_space(self.config.videodir).split(" ")
         if self.low_on_space and self.remaining_disk_space[1] == 'GB' and float(self.remaining_disk_space[0]) > 10.0:
-            self.notifications.delete_notification("low_space")
+            #self.notifications.delete_notification("low_space")
+            notification.delete_notification("low_space")
             self.low_on_space = False
         if not self.low_on_space and ((self.remaining_disk_space[1] == 'GB' and float(self.remaining_disk_space[0]) < 10.0) or \
                                             (self.remaining_disk_space[1] == 'MB' or self.remaining_disk_space[1] == 'KB')):
-            self.notifications.add_notification(Notification(message="Running low on space, less than 10", keyword="low_space"))
+            #self.notifications.add_notification(Notification(message="Running low on space, less than 10", keyword="low_space"))
+            notification.add_notification(Notification(message="Running low on space, less than 10", keyword="low_space"))
             self.low_on_space = True
 
     def reset_notification_panel(self):
