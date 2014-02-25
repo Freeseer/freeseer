@@ -7,11 +7,11 @@ Freeseer ![][freeseer-logo]
 
 Downloads: https://github.com/Freeseer/freeseer/releases
 
-Quick-Start: http://freeseer.github.io/quick-start.html
+Quick-Start: http://freeseer.readthedocs.org/en/latest/quick-start.html
 
-Documentation: http://freeseer.github.io
+Documentation: http://freeseer.readthedocs.org
 
-Contribute to the documentation project: https://github.com/Freeseer/freeseer-docs#readme
+[Contribute to the documentation project](docs/README.md)
 
 
 [freeseer-logo]: http://i.imgur.com/tqivk.png
