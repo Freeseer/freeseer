@@ -1,6 +1,4 @@
-[![freeseer](https://github.com/Freeseer/freeseer.github.io/raw/master/img/banner.png
-"Freeseer by FOSSLC")](http://freeseer.github.io)
-[![Build Status](https://travis-ci.org/Freeseer/freeseer.png)](https://travis-ci.org/Freeseer/freeseer-docs)
+[![Freeseer][freeseer-banner]][freeseer-docs]
 
 Freeseer Documentation
 ----------------------
@@ -76,3 +74,6 @@ Or for a more manual approach, you can place the output directly in your local f
 [freeseer.github.io repo](http://github.com/freeseer/freeseer.github.io). It
 builds the Sphinx output, copies the newly produced HTML files to your local
 freeseer.github.io repo, then pushes them to GitHub.
+
+[freeseer-banner]: https://github.com/Freeseer/freeseer.github.io/raw/master/img/banner.png "Freeseer by FOSSLC"
+[freeseer-docs]: http://freeseer.rtfd.org
