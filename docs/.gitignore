@@ -1,11 +1,2 @@
-# NOTE! Don't add files that are generated in specific subdirectories here.
-# Add them in the ".gitignore" file in that subdirectory instead.
-
-# Ignore Sphinx's built files, they're added to freeseer.github.io instead.
+# Ignore Sphinx's build output. Can be used for local viewing, but should not be tracked.
 build/
-
-# OS Auto-Generated
-*~
-
-# Virtual environment
-env/
