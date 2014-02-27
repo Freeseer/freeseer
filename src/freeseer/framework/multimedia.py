@@ -22,7 +22,6 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import datetime
 import logging
 import os
 
@@ -32,7 +31,6 @@ import pygst
 pygst.require("0.10")
 import gst
 
-from freeseer.framework.presentation import Presentation
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.util import get_record_name
 
@@ -152,24 +150,11 @@ class Multimedia:
             self.current_state = Multimedia.STOP
             log.debug("Gstreamer stopped.")
 
-    def prepare_metadata(self, presentation):
-        """Returns a dictionary of tags and tag values.
-
-        To be used for populating the current recording's file metadata.
-        """
-        return {"title":     presentation.title,
-                "artist":    presentation.speaker,
-                "performer": presentation.speaker,
-                "album":     presentation.event,
-                "location":  presentation.room,
-                "date":      str(datetime.date.today()),
-                "comment":   presentation.description}
-
     ##
     ## Plugin Loading
     ##
 
-    def load_backend(self, presentation=None, filename=None):
+    def load_backend(self, filename, metadata=None):
         log.debug("Loading Output plugins...")
 
         filename_for_frontend = None
@@ -198,25 +183,12 @@ class Multimedia:
 
             extension = plugin.plugin_object.get_extension()
 
-            # Create a filename to record to.
-            if presentation is None and filename is not None:
-                record_name = get_record_name(extension, filename=filename, path=self.config.videodir)
-                presentation = Presentation(filename)
-            elif presentation is not None:
-                record_name = get_record_name(extension, presentation=presentation, path=self.config.videodir)
-            else:
-                # Invalid combination you must pass in a presentation or a filename
-                logging.error("Failed to configure recording name. No presentation or filename provided.")
-                return False
+            record_name = get_record_name(extension, filename=filename, path=self.config.videodir)
 
             # This is to ensure that we don't log a message when extension is None
             if extension is not None:
                 log.info('Set record name to %s', record_name)
                 filename_for_frontend = record_name
-
-            # Prepare metadata.
-            metadata = self.prepare_metadata(presentation)
-            #self.populate_metadata(data)
 
             record_location = os.path.abspath(self.config.videodir + '/' + record_name)
             plugin.plugin_object.set_recording_location(record_location)

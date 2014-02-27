@@ -22,8 +22,14 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+import datetime
+import logging
+
 from freeseer.framework.multimedia import Multimedia
 from freeseer.framework.plugin import PluginManager
+from freeseer.framework.util import make_record_name
+
+log = logging.getLogger(__name__)
 
 
 class RecordingController:
@@ -53,13 +59,31 @@ class RecordingController:
         """Pause Recording"""
         self.media.pause()
 
-    def load_backend(self, presentation=None):
-        """Prepares the backend for recording"""
-        initialized, filename_for_frontend = self.media.load_backend(presentation)
+    def load_backend_with_filename(self, filename):
+        """Prepares the backend for recording using a filename"""
+        initialized, filename_for_frontend = self.media.load_backend(filename)
+
         if initialized:
-            return True, filename_for_frontend
+            return filename_for_frontend
         else:
-            return False  # Error something failed while loading the backend
+            log.error('Failed to load backend using filename "{filename}".'.format(filename=filename))
+            return None
+
+    def load_backend_with_presentation(self, presentation):
+        """Prepares the backend for recording using a presentation"""
+        if presentation is not None:
+            record_name = make_record_name(presentation)
+            metadata = self.prepare_metadata(presentation)
+            initialized, filename_for_frontend = self.media.load_backend(record_name, metadata)
+
+            if initialized:
+                return filename_for_frontend
+            else:
+                log.error('Failed to load backend using the given presentation.')
+                return None
+        else:
+            log.error("Failed to configure recording name. No presentation provided.")
+            return None
 
     def print_talks(self):
         query = self.db.get_talks()
@@ -76,6 +100,21 @@ class RecordingController:
 
             print("{talkid}: {speaker} - {title}".format(talkid=talkid, speaker=speaker, title=title))
 
+    def prepare_metadata(self, presentation):
+        """Returns a dictionary of tags and tag values.
+
+        To be used for populating the current recording's file metadata.
+        """
+        return {
+            'title':     presentation.title,
+            'artist':    presentation.speaker,
+            'performer': presentation.speaker,
+            'album':     presentation.event,
+            'location':  presentation.room,
+            'date':      str(datetime.date.today()),
+            'comment':   presentation.description
+        }
+
     ###
     ### Convenience commands
     ###
@@ -86,7 +125,7 @@ class RecordingController:
         Returns False if any issues arise
         """
         presentation = self.db.get_presentation(talk_id)
-        if self.media.load_backend(presentation):
+        if self.load_backend_with_presentation(presentation):
             # Only record if the backend successfully loaded
             # No need to print error on failure since load_backend already
             # prints an error message
@@ -102,7 +141,7 @@ class RecordingController:
         Returns True if recording is successfully started
         Returns False if any issues arise
         """
-        if self.media.load_backend(filename=filename):
+        if self.load_backend_with_filename(filename):
             self.record()
             return True
 
