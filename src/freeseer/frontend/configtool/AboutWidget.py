@@ -55,19 +55,29 @@ class AboutWidget(QtGui.QWidget):
 
         # freeser info
         self.FreeseerInfo = QtGui.QHBoxLayout()
-        self.AboutLayout.insertLayout(0,self.FreeseerInfo)
+        self.AboutLayout.insertWidget(0,QtGui.QLabel("<b>Freeseer</b>"))
+        self.AboutLayout.insertLayout(1,self.FreeseerInfo)
+          
+        # freeseer logo
         self.FreeseerLogo = QtGui.QLabel()
-        self.FreeseerInfo.insertWidget(0,self.FreeseerLogo)
-        self.LeftBox = QtGui.QVBoxLayout()
-        self.FreeseerInfo.insertLayout(1,self.LeftBox)
-
-        #  freeseer logo
         self.FreeseerLogo.setGeometry(0,0,48,48)
         self.FreeseerLogo.setPixmap(QtGui.QPixmap(os.getcwd() + "/data/freeseer_48x48.png"))
+        self.FreeseerInfo.insertWidget(0,self.FreeseerLogo)
 
-        #  freeseer description
+        # freeseer description
+        self.LeftBox = QtGui.QVBoxLayout()
+        self.FreeseerInfo.insertLayout(1,self.LeftBox)
         self.FreeseerDescription = QtGui.QLabel("A screencaster built for conferences")
         self.LeftBox.insertWidget(0, self.FreeseerDescription)
+
+
+        # Buttons
+        self.ButtonLayout = QtGui.QHBoxLayout()
+        self.HelpButton = QtGui.QPushButton("Get help with Freeser")
+        self.ButtonLayout.insertWidget(0,self.HelpButton)
+        self.IssueButton = QtGui.QPushButton("Report an issue")
+        self.ButtonLayout.insertWidget(1,self.IssueButton)
+        self.LeftBox.insertLayout(1,self.ButtonLayout)
 
 if __name__ == "__main__":
     import sys
