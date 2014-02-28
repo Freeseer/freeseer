@@ -29,6 +29,7 @@ import logging
 import os
 import time
 
+from datetime import datetime
 from apiclient import discovery
 from apiclient.errors import HttpError
 from apiclient.http import MediaFileUpload
@@ -82,7 +83,7 @@ class YoutubeService(object):
             oauth2_token: path to oauth2_token to use, if none present token will be saved here
             flags: flags to pass to Google Python Client's argparser
         """
-        scope = ['https://www.googleapis.com/auth/youtube.upload']
+        scope = ['https://www.googleapis.com/auth/youtube.upload', 'https://www.googleapis.com/auth/youtube']
         message = ("Please specify a valid client_secrets.json file.\n"
                     "To obtain one, please visit:\n"
                     "https://docs.google.com/document/d/1ro9I8jnOCgQlWRRVCPbrNnQ5-bMvQxDVg6o45zxud4c/edit")
@@ -93,6 +94,46 @@ class YoutubeService(object):
             credentials = tools.run_flow(flow, storage, flags)
         http = credentials.authorize(httplib2.Http())
         self.service = discovery.build('youtube', 'v3', http=http)
+
+    def insert_broadcast(self):
+        """Function to create a broadcast for livestreaming"""
+        part = "snippet,status"
+        body = {
+            "kind" : "youtube#liveBroadcast",
+            "snippet" : {
+                "title" : "test",
+                "scheduledStartTime" : datetime.now().isoformat()
+            } 
+        }
+        status = {
+            "privacyStatus" : "private"
+        }
+        response = self.service.liveBroadcasts().insert(part=part,body=body,status=status).execute()
+        log.info("Broadcast '%s' with title '%s' was published at '%s'." %
+            (response["id"], response["snippet"]["title"], response["snippet"]["publishedAt"]))
+        return response["id"]
+
+    def insert_stream(self):
+        """Function for creating stream to be tied to a broadcast"""
+        part="snippet,cdn"
+        body = {
+            "snippet" : {
+                "title" : "test"
+            },
+            "cdn" : {
+                "format" : "720p",
+                "ingestionType" : "rtmp"
+            }
+        }
+        response = self.service.liveStreams().insert(part=part,body=body).execute()
+        log.info("Stream '%s' with title '%s' was inserted." % (response["id"], response["snippet"]["title"]))
+        return insert_stream_response["id"]
+
+    def bind_broadcast(self, broadcast_id, stream_id):
+        part = "id,contentDetails",
+        response = self.service.liveBroadcasts.bind(part=part, id=broadcast_id,streamId=stream_id).execute()
+        log.info("Broadcast '%s' was bound to stream '%s'." %
+            (response["id"],response["contentDetails"]["boundStreamId"]))
 
     def upload_video(self, video_file):
         """Function to upload file to Youtube

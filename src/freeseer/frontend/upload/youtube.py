@@ -76,7 +76,7 @@ class YoutubeFrontend(object):
                                  help="Assume yes", action="store_true")
         flags = self.parser.parse_args(argv[1:])
         youtube_service = YoutubeService()
-        # command line arguments neede for Google Python Client need to always be passed in for authentication
+        # command line arguments for Google Python Client need to always be passed in for authentication
         youtube_service.authenticate(flags.client_secrets, flags.token, flags)
         # path doesn't exist, print an error message
         if not os.path.exists(flags.files):
