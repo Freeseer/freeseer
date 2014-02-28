@@ -57,31 +57,35 @@ class ConfigToolWidget(QtGui.QWidget):
         self.leftPanelLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.leftPanelLayout)
 
-        # General
+        # About
         self.optionsTreeWidget = QtGui.QTreeWidget()
         self.optionsTreeWidget.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Minimum)
         self.optionsTreeWidget.setHeaderHidden(True)
         self.optionsTreeWidget.headerItem().setText(0, "1")
         QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(0).setText(0, "General")
-
+        self.optionsTreeWidget.topLevelItem(0).setText(0, "About")
+        
+        # General
+        QtGui.QTreeWidgetItem(self.optionsTreeWidget)
+        self.optionsTreeWidget.topLevelItem(1).setText(0, "General")
+        
         # AV
         QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(1).setText(0, "AV Config")
+        self.optionsTreeWidget.topLevelItem(2).setText(0, "AV Config")
 
         # Plugins
         item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(2).setText(0, "Plugins")
+        self.optionsTreeWidget.topLevelItem(3).setText(0, "Plugins")
         QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(2).child(0).setText(0, "AudioInput")
+        self.optionsTreeWidget.topLevelItem(3).child(0).setText(0, "AudioInput")
         QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(2).child(1).setText(0, "AudioMixer")
+        self.optionsTreeWidget.topLevelItem(3).child(1).setText(0, "AudioMixer")
         QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(2).child(2).setText(0, "VideoInput")
+        self.optionsTreeWidget.topLevelItem(3).child(2).setText(0, "VideoInput")
         QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(2).child(3).setText(0, "VideoMixer")
+        self.optionsTreeWidget.topLevelItem(3).child(3).setText(0, "VideoMixer")
         QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(2).child(4).setText(0, "Output")
+        self.optionsTreeWidget.topLevelItem(3).child(4).setText(0, "Output")
 
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         self.closePushButton = QtGui.QPushButton("Close")
