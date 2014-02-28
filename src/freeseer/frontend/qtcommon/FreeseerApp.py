@@ -122,7 +122,7 @@ class FreeseerApp(QMainWindow):
         self.connect(self.actionOnlineHelp, SIGNAL('triggered()'), self.openOnlineHelp)
 
         self.retranslateFreeseerApp()
-        self.aboutDialog.retranslate("en_US")
+        self.aboutDialog.aboutWidget.retranslate("en_US")
 
     def openOnlineHelp(self):
         """Opens a link to the Freeseer Online Help"""
@@ -142,7 +142,7 @@ class FreeseerApp(QMainWindow):
         self.app.installTranslator(self.uiTranslator)
 
         self.retranslateFreeseerApp()
-        self.aboutDialog.retranslate(self.current_language)
+        self.aboutDialog.aboutWidget.retranslate(self.current_language)
         self.retranslate()
 
     def retranslate(self):
