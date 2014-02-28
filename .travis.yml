@@ -1,3 +1,5 @@
+git:
+  depth: 1
 language: python
 python:
   - "2.7"
@@ -48,4 +50,3 @@ after_success:
   - easy_install freeseer-*.egg
   - echo "y" | pip uninstall freeseer
   - cd ../..
-
