@@ -26,6 +26,7 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+import os
 from PyQt4 import QtCore, QtGui
 
 
@@ -42,39 +43,31 @@ class AboutWidget(QtGui.QWidget):
 
         self.mainLayout = QtGui.QVBoxLayout()
         self.setLayout(self.mainLayout)
+        self.mainLayout.addStretch(0)
 
         #
         # About
         #
+        self.AboutLayout = QtGui.QVBoxLayout()
+        self.AboutGroupBox = QtGui.QGroupBox("About")
+        self.AboutGroupBox.setLayout(self.AboutLayout)
+        self.mainLayout.insertWidget(0,self.AboutGroupBox)
 
-        self.MiscLayout = QtGui.QVBoxLayout()
-        self.MiscGroupBox = QtGui.QGroupBox("About")
-        self.MiscGroupBox.setLayout(self.MiscLayout)
-        self.mainLayout.addWidget(self.MiscGroupBox)
+        # freeser info
+        self.FreeseerInfo = QtGui.QHBoxLayout()
+        self.AboutLayout.insertLayout(0,self.FreeseerInfo)
+        self.FreeseerLogo = QtGui.QLabel()
+        self.FreeseerInfo.insertWidget(0,self.FreeseerLogo)
+        self.LeftBox = QtGui.QVBoxLayout()
+        self.FreeseerInfo.insertLayout(1,self.LeftBox)
 
-        self.languageLayout = QtGui.QHBoxLayout()
-        self.MiscLayout.addLayout(self.languageLayout)
-        self.languageLabel = QtGui.QLabel("Default Language")
-        self.languageComboBox = QtGui.QComboBox()
-        self.languageComboBox.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
-        self.languageLabel.setBuddy(self.languageComboBox)
-        self.languageLayout.addWidget(self.languageLabel)
-        self.languageLayout.addWidget(self.languageComboBox)
+        #  freeseer logo
+        self.FreeseerLogo.setGeometry(0,0,48,48)
+        self.FreeseerLogo.setPixmap(QtGui.QPixmap(os.getcwd() + "/data/freeseer_48x48.png"))
 
-        self.recordDirLayout = QtGui.QHBoxLayout()
-        self.MiscLayout.addLayout(self.recordDirLayout)
-
-        self.recordDirLabel = QtGui.QLabel("Record Directory")
-        self.recordDirLineEdit = QtGui.QLineEdit()
-        self.recordDirLabel.setBuddy(self.recordDirLineEdit)
-        self.recordDirPushButton = QtGui.QPushButton("...")
-        self.recordDirLayout.addWidget(self.recordDirLabel)
-        self.recordDirLayout.addWidget(self.recordDirLineEdit)
-        self.recordDirLayout.addWidget(self.recordDirPushButton)
-
-        self.autoHideCheckBox = QtGui.QCheckBox("Enable Auto-Hide")
-        self.MiscLayout.addWidget(self.autoHideCheckBox)
-
+        #  freeseer description
+        self.FreeseerDescription = QtGui.QLabel("A screencaster built for conferences")
+        self.LeftBox.insertWidget(0, self.FreeseerDescription)
 
 if __name__ == "__main__":
     import sys

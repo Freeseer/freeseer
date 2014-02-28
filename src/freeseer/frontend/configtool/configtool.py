@@ -274,22 +274,9 @@ class ConfigToolApp(FreeseerApp):
             pass
 
     def load_about_widget(self):
-        self.mainWidgetLayout.addWidget(self.generalWidget)
-        self.currentWidget = self.generalWidget
+        self.mainWidgetLayout.addWidget(self.aboutWidget)
+        self.currentWidget = self.aboutWidget
         self.currentWidget.show()
-
-        # Load default language
-        i = self.generalWidget.languageComboBox.findData(self.config.default_language)
-        self.generalWidget.languageComboBox.setCurrentIndex(i)
-
-        # Recording Directory Settings
-        self.generalWidget.recordDirLineEdit.setText(self.config.videodir)
-
-        # Load Auto Hide Settings
-        if self.config.auto_hide:
-            self.generalWidget.autoHideCheckBox.setChecked(True)
-        else:
-            self.generalWidget.autoHideCheckBox.setChecked(False)
 
     def load_general_widget(self):
         self.mainWidgetLayout.addWidget(self.generalWidget)
