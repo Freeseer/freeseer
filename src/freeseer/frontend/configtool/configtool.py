@@ -40,6 +40,7 @@ except AttributeError:
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
+from freeseer.frontend.configtool.AboutWidget import AboutWidget
 from freeseer.frontend.configtool.AVWidget import AVWidget
 from freeseer.frontend.configtool.ConfigToolWidget import ConfigToolWidget
 from freeseer.frontend.configtool.GeneralWidget import GeneralWidget
@@ -75,6 +76,7 @@ class ConfigToolApp(FreeseerApp):
         self.mainWidget.rightPanelWidget.setLayout(self.mainWidgetLayout)
 
         # Load all ConfigTool Widgets
+        self.aboutWidget = AboutWidget()
         self.generalWidget = GeneralWidget()
         self.avWidget = AVWidget()
         self.pluginloaderWidget = PluginLoaderWidget()
@@ -152,7 +154,7 @@ class ConfigToolApp(FreeseerApp):
         self.load_plugin_widgets()
 
         # Start off with displaying the General Settings
-        items = self.mainWidget.optionsTreeWidget.findItems(self.generalString, QtCore.Qt.MatchExactly)
+        items = self.mainWidget.optionsTreeWidget.findItems(self.aboutString, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
             self.mainWidget.optionsTreeWidget.setCurrentItem(item)
@@ -172,6 +174,7 @@ class ConfigToolApp(FreeseerApp):
         #
         # ConfigToolWidget
         #
+        self.aboutString = self.app.translate("ConfigToolApp", "About")
         self.generalString = self.app.translate("ConfigToolApp", "General")
         self.avString = self.app.translate("ConfigToolApp", "Recording")
         self.pluginsString = self.app.translate("ConfigToolApp", "Plugins")
@@ -181,14 +184,15 @@ class ConfigToolApp(FreeseerApp):
         self.videoMixerString = self.app.translate("ConfigToolApp", "VideoMixer")
         self.outputString = self.app.translate("ConfigToolApp", "Output")
 
-        self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.pluginsString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(0).setText(0, self.audioInputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(1).setText(0, self.audioMixerString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(2).setText(0, self.videoInputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(3).setText(0, self.videoMixerString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).child(4).setText(0, self.outputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.aboutString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.generalString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.avString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).setText(0, self.pluginsString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(0).setText(0, self.audioInputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(1).setText(0, self.audioMixerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(2).setText(0, self.videoInputString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(3).setText(0, self.videoMixerString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(4).setText(0, self.outputString)
 
         self.mainWidget.closePushButton.setText(self.app.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
@@ -248,7 +252,9 @@ class ConfigToolApp(FreeseerApp):
             self.mainWidgetLayout.removeWidget(self.currentWidget)
             self.currentWidget.hide()
 
-        if option == self.generalString:
+        if option == self.aboutString:
+            self.load_about_widget()
+        elif option == self.generalString:
             self.load_general_widget()
         elif option == self.avString:
             self.load_av_widget()
@@ -266,6 +272,11 @@ class ConfigToolApp(FreeseerApp):
             self.load_option_output_plugins()
         else:
             pass
+
+    def load_about_widget(self):
+        self.mainWidgetLayout.addWidget(self.aboutWidget)
+        self.currentWidget = self.aboutWidget
+        self.currentWidget.show()
 
     def load_general_widget(self):
         self.mainWidgetLayout.addWidget(self.generalWidget)
