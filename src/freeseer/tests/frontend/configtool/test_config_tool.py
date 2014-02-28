@@ -76,13 +76,19 @@ class TestConfigToolApp(unittest.TestCase):
         del self.config_tool.app
         self.app.deleteLater()
 
+    def test_about_widget(self):
+        self.assertTrue(self.config_tool.currentWidget == self.config_tool.aboutWidget)
+
     def test_general_settings(self):
         '''
         Tests for the config tool's General Tab
         '''
 
-        # General tab
-        self.assertTrue(self.config_tool.currentWidget == self.config_tool.generalWidget)
+        # Select "General" tab
+        item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.generalString, QtCore.Qt.MatchExactly)
+        self.assertFalse(not item or item[0] is None)
+        self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
+        QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
 
         # Language drop-down
         # TODO
@@ -109,7 +115,7 @@ class TestConfigToolApp(unittest.TestCase):
 
         # Select "Recording" tab
         item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.avString, QtCore.Qt.MatchExactly)
-        self.assertFalse(len(item) == 0 or item[0] is None)
+        self.assertFalse(not item or item[0] is None)
         self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
 

@@ -23,25 +23,21 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4.QtCore import QString
-from PyQt4.QtCore import QTranslator
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QDialog
 from PyQt4.QtGui import QDialogButtonBox
-from PyQt4.QtGui import QGridLayout
 from PyQt4.QtGui import QIcon
-from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPixmap
 from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QGridLayout
 
 try:
     _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer import NAME
-from freeseer import URL
-from freeseer import __version__
 from freeseer.frontend.qtcommon import resource  # noqa
+from freeseer.frontend.qtcommon.AboutWidget import AboutWidget
 
 RECORD_BUTTON_ARTIST = u'Sekkyumu'
 RECORD_BUTTON_LINK = u'http://sekkyumu.deviantart.com/'
@@ -63,10 +59,7 @@ class AboutDialog(QDialog):
     """
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
-
-        self.current_language = "en_US"
-        self.uiTranslator = QTranslator()
-        self.uiTranslator.load(":/languages/tr_en_US.qm")
+        self.aboutWidget = AboutWidget()
 
         icon = QIcon()
         icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
@@ -75,15 +68,7 @@ class AboutDialog(QDialog):
         self.layout = QGridLayout()
         self.setLayout(self.layout)
 
-        # Left Top corner of grid, Logo
-        self.logo = QLabel("Logo")
-        self.logo.setPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")))
-        self.layout.addWidget(self.logo, 0, 0)
-
-        # Right Top corner of grid, Infos
-        self.aboutInfo = QLabel("About Info", openExternalLinks=True)
-        self.aboutInfo.setWordWrap(True)
-        self.layout.addWidget(self.aboutInfo, 0, 1)
+        self.layout.addWidget(self.aboutWidget)
 
         # Right Bottom corner of grid, Close Button
         self.buttonBox = QDialogButtonBox()
@@ -91,39 +76,4 @@ class AboutDialog(QDialog):
         self.layout.addWidget(self.buttonBox, 1, 1)
         self.connect(self.closeButton, SIGNAL("clicked()"), self.close)
 
-        self.retranslate()
-
-    def retranslate(self, language=None):
-        if language is not None:
-            self.current_language = language
-
-        self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
-
-        self.setWindowTitle(self.uiTranslator.translate("AboutDialog", "Freeseer About"))
-        self.closeButton.setText(self.uiTranslator.translate("AboutDialog", "Close"))
-
-        #
-        # Main Text
-        #
-        self.descriptionString = self.uiTranslator.translate("AboutDialog",
-                    "Freeseer is a video capture utility capable of capturing presentations. It captures video "
-                    "sources such as usb, firewire, or local desktop along with audio and mixes them together to "
-                    "produce a video.")
-        self.copyrightString = self.uiTranslator.translate("AboutDialog", 'Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre')
-        self.licenseTextString = self.uiTranslator.translate("AboutDialog", "Freeseer is licensed under the GPL version 3. This software is provided 'as-is',"
-                    "without any express or implied warranty. In no event will the authors be held liable for any "
-                    "damages arising from the use of this software.")
-
-        self.aboutInfoString = u'<h1>' + NAME + u'</h1>' + \
-            u'<br><b>' + self.uiTranslator.translate("AboutDialog", "Version") + ":" + __version__ + u'</b>' + \
-            u'<p>' + self.descriptionString + u'</p>' + \
-            u'<p>' + self.copyrightString + u'</p>' + \
-            u'<p><a href="' + URL + u'">' + URL + u'</a></p>' \
-            u'<p>' + self.licenseTextString + u'</p>' \
-            u'<p>' + self.uiTranslator.translate("AboutDialog", "Record button graphics by") + \
-            u': <a href="' + RECORD_BUTTON_LINK + u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-            u'<p>' + self.uiTranslator.translate("AboutDialog", "Headphones graphics by") + \
-            u': <a href="' + HEADPHONES_LINK + u'">' + HEADPHONES_ARTIST + u'</a></p>'
-
-        self.aboutInfo.setText(self.aboutInfoString)
-        # --- End Main Text
+        self.setWindowTitle("About Freeseer")
