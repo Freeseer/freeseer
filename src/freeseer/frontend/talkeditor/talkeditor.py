@@ -27,6 +27,7 @@ import logging
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtCore import QStringList
+from PyQt4.QtCore import QTimer
 from PyQt4 import QtCore
 from PyQt4.QtGui import QAbstractItemView
 from PyQt4.QtGui import QAction
@@ -102,6 +103,11 @@ class TalkEditorApp(FreeseerApp):
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
+        # Initialize update timer, to be used for saving talk changes
+        self.updateTimer = QTimer(self)
+        self.updateTimer.setSingleShot(True)
+        self.updateInterval = 3000  # Set the timer for 3 seconds (3000 milliseconds)
+
         #
         # Setup Menubar
         #
@@ -143,10 +149,20 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchButton, SIGNAL('clicked()'), self.search_talks)
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('textEdited(QString)'), self.search_talks)
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
+        self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.add_talk)
 
-        # Talk Details Buttons
-        self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.clear_talk_details_widget)
-        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_talk)
+        # Talk Details Widget
+        self.connect(self.talkDetailsWidget.titleLineEdit, SIGNAL('textChanged(const QString)'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.presenterLineEdit, SIGNAL('textChanged(const QString)'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.categoryLineEdit, SIGNAL('textChanged(const QString)'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.eventLineEdit, SIGNAL('textChanged(const QString)'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.roomLineEdit, SIGNAL('textChanged(const QString)'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.descriptionTextEdit, SIGNAL('textChanged()'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.dateEdit, SIGNAL('dateChanged(const QDate)'), self.start_update_timer)
+        self.connect(self.talkDetailsWidget.timeEdit, SIGNAL('timeChanged(const QTime)'), self.start_update_timer)
+
+        # Update Timer
+        self.connect(self.updateTimer, SIGNAL('timeout()'), self.update_talk)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -178,6 +194,9 @@ class TalkEditorApp(FreeseerApp):
         self.confirmDBClearTitleString = self.app.translate("TalkEditorApp", "Remove All Talks from Database")
         self.confirmDBClearQuestionString = self.app.translate("TalkEditorApp",
             "Are you sure you want to clear the DB?")
+        self.confirmCloseTitleString = self.app.translate("TalkEditorApp", "Warning: Untitled Talks")
+        self.confirmCloseQuestionString = self.app.translate("TalkEditorApp",
+            "Untitled talks will be lost. Continue?")
         # --- End Reusable Strings
 
         #
@@ -209,14 +228,14 @@ class TalkEditorApp(FreeseerApp):
         # --- End Talks Widget Translations
 
         #
-        # Command Button Translations\
+        # Command Button Translations
         #
-        #self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
         self.commandButtons.importButton.setText(self.app.translate("TalkEditorApp", "Import"))
         self.commandButtons.exportButton.setText(self.app.translate("TalkEditorApp", "Export"))
+        self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add New Talk"))
         self.commandButtons.removeButton.setText(self.app.translate("TalkEditorApp", "Remove"))
         self.commandButtons.removeAllButton.setText(self.app.translate("TalkEditorApp", "Remove All"))
-        # --- End Command Butotn Translations
+        # --- End Command Button Translations
 
         #
         # Search Widget Translations
@@ -242,6 +261,7 @@ class TalkEditorApp(FreeseerApp):
         # Map data to widgets
         self.mapper = QDataWidgetMapper()
         self.mapper.setModel(self.proxy)
+        self.mapper.setSubmitPolicy(QDataWidgetMapper.ManualSubmit)
         self.mapper.addMapping(self.talkDetailsWidget.titleLineEdit, 1)
         self.mapper.addMapping(self.talkDetailsWidget.presenterLineEdit, 2)
         self.mapper.addMapping(self.talkDetailsWidget.categoryLineEdit, 4)
@@ -267,9 +287,14 @@ class TalkEditorApp(FreeseerApp):
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
 
     def talk_selected(self, model):
-        self.talkDetailsWidget.saveButton.setEnabled(False)
+        # Block signals so the update timer doesn't start when the input fields are filled
+        self.block_field_signals(True)
+
         self.mapper.setCurrentIndex(model.row())
         self.talkDetailsWidget.enable_input_fields()
+        self.talkDetailsWidget.titleLineEdit.setFocus()
+
+        self.block_field_signals(False)
 
     def toggle_import(self):
         if self.importTalksWidget.csvRadioButton.isChecked():
@@ -294,22 +319,11 @@ class TalkEditorApp(FreeseerApp):
         self.importTalksWidget.setHidden(True)
 
     def add_talk(self):
-        date = self.talkDetailsWidget.dateEdit.date()
-        time = self.talkDetailsWidget.timeEdit.time()
-        #datetime = QtCore.QDateTime(date, time)
-        presentation = Presentation(
-            unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
-            unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
-            unicode(date.toString(QtCore.Qt.ISODate)),
-            unicode(time.toString(QtCore.Qt.ISODate)))
+        self.clear_talk_details_widget()
 
-        # Do not add talks if they are empty strings
-        if (len(presentation.title) == 0):
-            return
+        presentation = self.create_presentation()
+
+        # Allow for adding talks with empty Titles
         self.db.insert_presentation(presentation)
 
         # Update Model, Refreshes TableView
@@ -321,10 +335,45 @@ class TalkEditorApp(FreeseerApp):
         self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1, 0))
 
         self.update_autocomple_fields()
-        self.talkDetailsWidget.disable_input_fields()
+
+    def update_talk(self):
+        selected_talk = self.tableView.currentIndex()
+        if selected_talk.row() >= 0:  # The tableView index begins at 0 and is -1 by default
+            # Block signals - particularly textChanged for descriptionTextEdit
+            self.block_field_signals(True)
+
+            presentation = self.create_presentation()
+
+            talk_id = selected_talk.sibling(selected_talk.row(), 0).data().toString()
+
+            self.db.update_presentation(talk_id, presentation)
+
+            self.presentationModel.select()
+
+            self.tableView.selectRow(selected_talk.row())
+            self.tableView.setCurrentIndex(self.proxy.index(selected_talk.row(), selected_talk.column()))
+            self.mapper.setCurrentIndex(selected_talk.row())
+
+            self.block_field_signals(False)
+
+    def create_presentation(self):
+        date = self.talkDetailsWidget.dateEdit.date()
+        time = self.talkDetailsWidget.timeEdit.time()
+        #datetime = QtCore.QDateTime(date, time)
+        return Presentation(
+            unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
+            unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
+            unicode(date.toString(QtCore.Qt.ISODate)),
+            unicode(time.toString(QtCore.Qt.ISODate)))
 
     def clear_talk_details_widget(self):
-        self.talkDetailsWidget.saveButton.setEnabled(True)
+        # Block signals so the update timer doesn't start when the input fields are cleared
+        self.block_field_signals(True)
+
         self.talkDetailsWidget.enable_input_fields()
         self.talkDetailsWidget.titleLineEdit.clear()
         self.talkDetailsWidget.presenterLineEdit.clear()
@@ -332,6 +381,9 @@ class TalkEditorApp(FreeseerApp):
         #self.talkDetailsWidget.categoryLineEdit.clear()
         #self.talkDetailsWidget.eventLineEdit.clear()
         #self.talkDetailsWidget.roomLineEdit.clear()
+
+        self.block_field_signals(False)
+
         self.presentationModel.select()
 
     def remove_talk(self):
@@ -343,6 +395,9 @@ class TalkEditorApp(FreeseerApp):
         # Reversed because rows in list change position once row is removed
         for row in reversed(rows_selected):
             self.presentationModel.removeRow(row.row())
+
+        # Disable fields because no talk is selected
+        self.talkDetailsWidget.disable_input_fields()
 
     def load_talk(self):
         try:
@@ -382,6 +437,27 @@ class TalkEditorApp(FreeseerApp):
             error.exec_()
 
     def closeEvent(self, event):
+        # Stop the timer and register any final updates
+        self.updateTimer.stop()
+        self.update_talk()
+
+        untitled_talks = self.db.get_untitled_talks()
+        if len(untitled_talks) > 0:
+            confirm = QMessageBox.question(self,
+                                           self.confirmCloseTitleString,
+                                           self.confirmCloseQuestionString,
+                                           QMessageBox.Yes |
+                                           QMessageBox.No,
+                                           QMessageBox.No)
+
+            if confirm == QMessageBox.Yes:
+                # Remove untitled talks and close
+                for i in range(len(untitled_talks)):
+                    self.db.delete_presentation(untitled_talks[i].toString())
+            else:
+                event.ignore()
+                return
+
         log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
         event.accept()
@@ -440,3 +516,16 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.categoryLineEdit.setCompleter(self.categoryCompleter)
         self.talkDetailsWidget.eventLineEdit.setCompleter(self.eventCompleter)
         self.talkDetailsWidget.roomLineEdit.setCompleter(self.roomCompleter)
+
+    def start_update_timer(self):
+        self.updateTimer.start(self.updateInterval)
+
+    def block_field_signals(self, block):
+        self.talkDetailsWidget.titleLineEdit.blockSignals(block)
+        self.talkDetailsWidget.presenterLineEdit.blockSignals(block)
+        self.talkDetailsWidget.categoryLineEdit.blockSignals(block)
+        self.talkDetailsWidget.eventLineEdit.blockSignals(block)
+        self.talkDetailsWidget.roomLineEdit.blockSignals(block)
+        self.talkDetailsWidget.dateEdit.blockSignals(block)
+        self.talkDetailsWidget.timeEdit.blockSignals(block)
+        self.talkDetailsWidget.descriptionTextEdit.blockSignals(block)
