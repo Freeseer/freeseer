@@ -1,0 +1,204 @@
+{
+    "presentations" : [
+        {
+            "Title" : "Managing map data in a database",
+            "Speaker" : "Andrew Ross",
+            "Abstract" : "This talk will provide a brief introduction to geospatial technologies. It will focus on managing map data with a relational database. Managing map data with a database provides the atomicity, security, access that is difficult to achieve otherwise. It also provides powerful techniques for querying spatial aware data which can enable new insights.",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : "2010-05-14T10:45",
+            "Event" : "Summercamp2010",
+            "Room" : "Rom AB113"  
+        },
+        {
+            "Title" : "The KDE 4 Show: An Overview of Where the Free Software Desktop Is Going",
+            "Speaker" : "Aaron Seigo",
+            "Abstract" : ".",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : "2010-05-23T08:54",
+            "Event" : "Summercamp2010",
+            "Room" : null 
+        },
+        {
+            "Title" : "Managing a Meta-Project: A KDE Case Study",
+            "Speaker" : "Aaron Seigo",
+            "Abstract" : "KDE has evolved from one small team nearly 15 years ago to dozens of small to medium sized teams with well over a thousand people working in concert on over 5 million lines of code. This presentation looks at the processes and practices that go into keeping both the larger KDE community vibrant as well as individual teams, such as the Plasma project, moving. From legal (e.g. copyright attribution) concerns to logistics (e.g. release scheduling) to community health (e.g. events, developer sprints, codes of conduct) and of course technical excellence (e.g. peer review and design): how does a F/OSS behemoth remain agile and connected?",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : "2010-05-15T22:21",
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Getting Started in an Open Source Community",
+            "Speaker" : "Dru Lavigne",
+            "Abstract" : "This presentation will be of interest to those who have never been active within an open source project or have been lurking instead of contributing. It will discuss the following:\n- why would I want to contribute?\n- how do I narrow down which community to contribute to?\n- what type of contributions can I make (e.g. what if I can't or don't want to code?)\n- how do I introduce myself and get started?",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : "2010-08-14T11:25",
+            "Event" : "Summercamp2010",
+            "Room" : "AB114"
+        },
+        {
+            "Title" : "Software speaks - are you listening?",
+            "Speaker" : "David Maxwell",
+            "Abstract" : "The origins of BSD and Open Source predate the modern Linux renaissance by a decade and a half, and BSD derived codebases are still going strong. What makes a BSD community different from a Linux community? What technological decisions are given more priority in the BSD world? Why should you care, and why should you use BSD? Come and hear a new perspective. The first BSD Unix-derivative operating system was developed in 1977. Shared as Open Source from the beginning, it provided many people's first exposure to the Open Source concept - especially through its use as the basis for the original SunOS, or the reuse of its TCP/IP stack on widely varied systems (including MS Wi ndows). More recently, whole generations of Open Source developers have grown familiar with Linux as an operating system and community structure, and they've had limited, or no, exposure to BSD. The two cultures have similarities, but also many differences in their approach to community building, code maintenance, design and development, and project man agement. Many OSCON conference attendees may only have exposure to The Linux Way. Come and hear about The BSD Way, and you'll find out why BSD is still going strong, the benefits it can offer you as a user or as a developer, and why us BSD folks don't just drop it all and contribute to Linux instead.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : "2010-05-31T17:12",
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "The NetBSD Way",
+            "Speaker" : "David Maxwell",
+            "Abstract" : "The origins of BSD and Open Source predate the modern Linux renaissance by a decade and a half, and BSD derived codebases are still going strong. What makes a BSD community different from a Linux community? What technological decisions are given more priority in the BSD world? Why should you care, and why should you use BSD? Come and hear a new perspective. The first BSD Unix-derivative operating system was developed in 1977. Shared as Open Source from the beginning, it provided many people's first exposure to the Open Source concept - especially through its use as the basis for the original SunOS, or the reuse of its TCP/IP stack on widely varied systems (including MS Wi ndows). More recently, whole generations of Open Source developers have grown familiar with Linux as an operating system and community structure, and they've had limited, or no, exposure to BSD. The two cultures have similarities, but also many differences in their approach to community building, code maintenance, design and development, and project man agement. Many OSCON conference attendees may only have exposure to The Linux Way. Come and hear about The BSD Way, and you'll find out why BSD is still going strong, the benefits it can offer you as a user or as a developer, and why us BSD folks don't just drop it all and contribute to Linux instead.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : "2010-05-31T16:36",
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Ingres VectorWise - Database on Steroids",
+            "Speaker" : "Doug Inkster",
+            "Abstract" : "Ingres Corp. has entered into a relationship with the Dutch database research company VectorWise to develop a very high performance database organization enabled through the Ingres open source dbms. This session discusses the innovations incorporated in the VectorWise technology, as well as the relationship between VectorWise, Ingres Corp. and the Ingres dbms.",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Basic Design for Drupal",
+            "Speaker" : "Emma Jane Hogbin",
+            "Abstract" : "\"Design to Theme in Five\"\nYou've designed this super amazing Web site in Photoshop (or Illustrator or GIMP or Inkscape or...) and then you hand it over to some programmer and now the Web site doesn't look anything like your design. BOO! HISS!\nIn this session you'll learn how to convert your own designs into your own awesome Drupal themes in five easy steps.\nWe'll cover the basics of how to:\n    * Optimize your design files to make theming easier.\n* Evaluate common base themes and know when to choose between several popular base themes (e.g. 960.gs, Zen).\n* Create a new Drupal theme by extending a base theme.\n* Develop common template files (tpl.php) necessary to theme pages and nodes using a text editor.\n* Share your designs with others (licensing, uploading to drupal.org and selling your themes).\nWhether you want to build and sell your own designs, or you're a newly hired designer at a Drupal Web development shop, this session will give you the confidence to transform your imagination into a working Web site.\nPrerequisite: This is for Intermediate Drupal Users. For beginners or those evaluating Drupal for the first time, we highly recommend attending the Drupal KickStart Program on Monday, May 3rd.",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : "2010-08-14T13:33",
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Open Web-searchable GeoData",
+            "Speaker" : "Geoff Zeiss",
+            "Abstract" : "Government 2.0 is about transforming government by making it more transparent, participatory, and collaborative. We believe that that simplest way to make government geodata publicly available is to publish it as HTML web pages because HTML pages are searchable using standard web search engines such as Google. HTML pages means users can search for and find raw geospatial data in the same familiar way they find anything else on the web.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Linaro: what is it, and why should it matter to you",
+            "Speaker" : "James Westby",
+            "Abstract" : "Linaro is a collaboration between several large companies working to improve the state of Linux on the ARM platform. While this combination has much promise, we are yet to see large numbers of products available to buy. There are many complex reasons for this, but a group of companies involved in Linux and ARM identified some of them, and formed a new organisation to work together to tackle them.\nThis talk will give you an idea of some of the problems that led to the formation of Linaro, and some of the plans for solving them. Further though it will look at why ARM matters for Linux, why Linaro is vital to its success, and what role you may be able to play in that.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Every Eyeball Has Value!: The User as a Passive Participant in Open Source Ecosystems",
+            "Speaker" : "Mekki MacAulay",
+            "Abstract" : "Traditionally, the \"user\" role in open source ecosystems is ignored, or relegated to the status of \"leech\" or otherwise undesirable, non-contributor, outsider, other.  The user is marginalized in open source development discussions.  The value of the user is not well understood, and difficult to quantify.\nThis talk examines the role of the user in open source ecosystems and takes a closer look at how the user contributes to the health and growth of the ecosystem.  It suggests that the user is in fact an integral component of open source ecosystems, and that its contribution, while passive, is key to long term success.\nIn the presentation, the evolving role of the user is examined, and an attempt is made to describe the means of quantifying the value of user participation to the ecosystem.  The target audience of this presentation is open source community organizers, ecosystem participants, and open source proponents in general, especially those with entrepreneurial inclinations.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Wiki Based Collaborative Platform-Driven Applications By End-Users and Business Analysts",
+            "Speaker" : "Pascal St-Jean",
+            "Abstract" : "400 Character Summary:\nHundreds of thousands of TikiWiki installations are used for a myriad of online collaboration and social applications, including the high-profile Firefox Support site. Not just developers, but end-users and business analysts can enhance or combine modular application configurations defined in easy-to-learn YAML, leading to new and innovative applications for the platform that are easily deployed.\nAbstract:\nWith over 1,000 features and configuration options, the open source TikiWiki platform has been used for applications ranging from web content management, online collaboration, file sharing, documentation, intranet/extranet, project/event management, knowledge sharing/management, wiki, blogging, social media, and online community. Consistently ranked in the top 100 applications on Sourceforge, TikiWiki is downloaded over 7,000 times a month and there are hundreds of thousands of installations worldwide, including the Firefox Support site that is directly linked from in-browser help.\nWith so many possibilities for different uses, the TikiWiki Community was looking for a way to rapidly deploy applications on the platform, avoiding tedious configuration of the many individual features. These deployment configurations are defined in YAML, a popular machine-parsable data serialization format that is designed for human readability. Called Tiki Profiles, these configurations are extremely modular, and can be combined to form larger applications. For example, it is possible to combine the configurations for a Time Sheet, a Task List and a Consultant List, to create a basic consultant time-management system. When executed, the Tiki Profiles engine will automatically configure necessary features, create content pages, data structures, user groups, permissions, and input forms that make up the application.\nThese modular configurations in easy-to-learn YAML are shared just like open source code, but within a wiki, profiles.tikiwiki.org. Not just developers, but end-users and business analysts can enhance or combine these configurations, leading to new and innovative applications for the platform. For example, the basic consultant time-management system as mentioned above can easily be augmented with a Budget Tracking application to enhance billing management. Repeated application configuration becomes easy, and application variants can be managed more effectively as incremental add-ons to the same base Tiki Profile.",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Data Literacy (or, how to save the world and get crazy rich at the same time)",
+            "Speaker" : "Pete Forde",
+            "Abstract" : "The Open Data movement is picking up steam in a big way. Some government or NGO seems to announce plans for full transparency every week. Then you've got a guy like Rob McEwen creating billions of dollars of wealth when he decided to open source his gold mining company's geological data. Still, data today is like the web was in 1995... all over the place.\nWe need a data commons: a place for people to discover, consume, contribute, discuss and purchase data. This talk discusses how such an infrastructure could work, and how we must bring tools for working with data to non-technical individuals.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : "2010-06-26T09:53",
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Why legal protection for technical measures is controversial",
+            "Speaker" : "Russell McOrmond",
+            "Abstract" : "Some time before the SummerCamp a new Canadian Copyright bill will be tabled.  Since Canada intends to ratify the 1996 WIPO treaties it will contain some form of legal protection for technical measures, also known as anti-circumvention legislation.\nI will provide some aids to understanding different types of technical measures, and well as reasons why some are highly controversial while others are not.  (Hint: It matters who owns the thing that is locked, and who holds the keys)\nWe will go through a little history discussing the origins of this policy, as well as a few treaties, trade agreements, and laws in other countries which contain this policy.\nIn the discussion it is expected we will encourage participants to become politically involved in helping clarify this issue for politicians and other policy makers, so we can avoid (or amend) very bad laws.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "SOA Wizardry with JBoss and Open Source Software",
+            "Speaker" : "Rohit V Kapoor",
+            "Abstract" : "This session will cover development of JEE-compliant and SOA applications using JBoss Enterprise Platforms and the JBoss Developer Studio.\nAn overview of JEE technology is provided, followed a discussion of JBoss Enterprise Application Platform, JBoss Developer Studio and JBoss SOA Platform.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Git 101",
+            "Speaker" : "Scott Chacon",
+            "Abstract" : "In this tutorial you will learn how to use Git from the ground up. We will start at the beginning, what Git is and why it’s different than Subversion or Perforce or any tool you’re using now.\nWe will teach basic Git workflows, how to use branches and why they will change your development life, how to setup and work with remote repositories, how to use Git to collaborate with others non-linearly, how to maintain a project by picking commits and merging branches, and how to contribute to a project by creating patches, squashing and splitting commits and creating and pushing topic branches.\nBy the end of the tutorial, you should be able to use Git effectively as a developer, and have a solid understanding of why and how it works.",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : "2010-08-14T13:50",
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Open Source Industrial Grade Search Engine Technologies",
+            "Speaker" : "Shahzad Khan",
+            "Abstract" : "This talk discusses techniques for supercharging your Web 2.0 startup via open-source search technologies. \nThe more data you have available today, the more you can confuse, befuddle and disturb your user.... unless you have a mature information search strategy.\nIn this talk, we discuss enterprise-ready Open-Source technologies available. These can help you to\n* Enhance your user's experience on your web site.\n* Easily find information in your enterprise repositories\n* Strengthen partnerships by making it easy for external partners to work with your information resources\n* Drive more traffic to your site via SEO-friendly search strategies\nContent Covered:\n    * The Search Stack\n- Getting Data: Web Crawlers + RSS/ATOM\n- Getting Data: Document Adapters\n- Information Extraction\n- Indexing\n- Querying\n* Different Search Scenarios\n- Web Search\n- Enterprise Search\n- Extranet Search\n* Crash Course: Deploying Search using SOLR\n* Advanced: SEO-friendly Search Strategies",
+            "Level" : "Intermediate",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {
+            "Title" : "Introduction to OpenStreetMap",
+            "Speaker" : "Steve Singer",
+            "Abstract" : "OpenStreetMap is a free (as in speech) wiki-editable map of the world.  The OpenStreetMap project is working on mapping roads, rivers, schools, pubs and most and many other things by sending people out into the world with GPS units, notepads and cameras.\nThis talk will cover an introduction to OpenStreetMap and show attendees how they can start adding to the map.",
+            "Level" : "Beginner",
+            "Status" : "Approved",
+            "Time" : null,
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },
+        {   
+            "Title" : "Commons Knowledge™ - bringing clarity to the legal complexity of open source software licenses", 
+            "Speaker" : "Thomas Prowse", 
+            "Abstract" : "Thomas Prowse will describe the evolution of his company's alternative delivery model for open source software legal information services. This service is built on the foundation of \"commons sourcing” a term which Thomas coined some time ago to describe the pooling of shared information based resources under OSS methodologies for use by companies for commercial purposes. Thomas will demonstrate how n2one inc.'s Commons Knowledge™ service harnesses the power of commons sourcing to offer affordable subscription based access to developers, lawyers, and business leaders to world class practical OSS related legal information resources.\nThomas, who was peer selected for the 2010 edition of The Best Lawyers in Canada in the Technology Law speciality, was formerly the Global Law Department leader on the Nortel Open Source Advisory Team and is currently a partner at a major Canadian law firm. Thomas will put forward his company's concrete business offering and model as a proof point for his deeply held conviction that commons sourcing represents both the future of legal and other professional services and a third wave of global commercial transformation!", 
+            "Level" : "Beginner", 
+            "Status" : "Approved",
+            "Time" : "2010-05-31T16:32", 
+            "Event" : "Summercamp2010",
+            "Room" : null
+        },  
+        {   
+            "Title" : "Helios: The Eclipse Simultaneous Release", 
+            "Speaker" : "Wayne Beaton", 
+            "Abstract" : "Each year in June, the Eclipse Release Train is delivered. This year's release train, Helios, brings together more Eclipse projects than ever before. Attend this presentation to learn about the technology produced by the many Helios projects, and how you can leverage them. Additionally, we will talk about how individuals and organizations can leverage and participate in the Eclipse community and eco-system.", 
+            "Level" : "Intermediate", 
+            "Status" : "Approved",
+            "Time" : null, 
+            "Event" : "Summercamp2010",
+            "Room" : null
+        }   
+    ]
+}
