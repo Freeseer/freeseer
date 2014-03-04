@@ -75,6 +75,9 @@ class GeneralWidget(QtGui.QWidget):
         self.autoHideCheckBox = QtGui.QCheckBox("Enable Auto-Hide")
         self.MiscLayout.addWidget(self.autoHideCheckBox)
 
+        self.silenceCheckBox = QtGui.QCheckBox("Enable Silence-Notifications")
+        self.MiscLayout.addWidget(self.silenceCheckBox)
+
 
 if __name__ == "__main__":
     import sys
