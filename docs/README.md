@@ -5,7 +5,11 @@ Freeseer Documentation
 
 We use [Sphinx](http://sphinx.pocoo.org) to generate the project's documentation.
 Documentation is written in [reStructuredText](http://docutils.sf.net/rst.html)
-and stored in .rst files.
+and stored in `.rst` files.
+
+We use [Read the Docs](https://readthedocs.org/projects/freeseer/) for hosting.
+RTD uses a [web hook](http://read-the-docs.readthedocs.org/en/latest/webhooks.html)
+to build the documentation whenever we push to this repository.
 
 Getting Started
 ---------------
@@ -15,8 +19,8 @@ gist of what you need:
 1. [Install Sphinx](http://sphinx-doc.org/latest/install.html): `pip install -U sphinx`
 2. Use the [reStructuredText Primer](http://sphinx.pocoo.org/rest.html) as a reference when writing
 
-Build & Preview your Changes
-----------------------------
+Build & Preview your Changes Locally
+------------------------------------
 
 **Note:** You need to have the [freeseer repository](https://github.com/freeseer/freeseer)
           checked out at the same top level directory as the freeseer-docs repository.
