@@ -1,5 +1,6 @@
 -r requirements.txt
 flake8==2.1.0
+httpretty
 mock
 pep8==1.4.6
 pytest-cov==1.6
