@@ -149,8 +149,11 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
 
         # Filter Talks Menu
-        self.connect(self.filterTalksWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.search_talks_by_event)
-        self.connect(self.filterTalksWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.search_rooms_by_event)
+        self.connect(self.filterTalksWidget.speakerComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.filter_by_speaker)
+        self.connect(self.filterTalksWidget.eventComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.filter_by_event)
+        self.connect(self.filterTalksWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.filter_by_room)
+        self.connect(self.filterTalksWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.filter_by_date)
+        
         
         # Talk Details Buttons
         self.connect(self.talkDetailsWidget.addButton, SIGNAL('clicked()'), self.clear_talk_details_widget)
@@ -276,23 +279,37 @@ class TalkEditorApp(FreeseerApp):
         # The default value is 0. If the value is -1, the keys will be read from all columns.
         self.proxy.setFilterKeyColumn(-1)
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
-
-    def search_talks_by_event(self):
-        self.proxy.setFilterKeyColumn(5)
-        self.proxy.setFilterFixedString(self.filterTalksWidget.eventComboBox.currentText())
-
-    def search_rooms_by_event(self):
-        self.proxy.setFilterKeyColumn(6)
-        self.proxy.setFilterFixedString(self.filterTalksWidget.roomComboBox.currentText())
-
+         
     def load_event_list(self):
-        model = self.db.get_events_model()
-        room = self.db.editor_rooms_model()
-        self.filterTalksWidget.eventComboBox.setModel(model)
+        speaker = self.db.get_list_speakers_model()
+        date = self.db.get_list_dates_model()
+        event = self.db.get_events_model()
+        room = self.db.get_list_rooms_model()
+        self.filterTalksWidget.speakerComboBox.setModel(speaker)
+        self.filterTalksWidget.eventComboBox.setModel(event)
         self.filterTalksWidget.roomComboBox.setModel(room)
-    
+        self.filterTalksWidget.dateComboBox.setModel(date)
+
+    def filter_speakers(self):
+        speaker = self.filterTalksWidget.speakerComboBox.currentText()
+        self.db.get_filter_speakers_model(speaker)
+
+    def filter_by_speaker(self):
+        self.proxy.setFilterFixedString(self.filterTalksWidget.speakerComboBox.currentText())
+        self.proxy.setFilterKeyColumn(2)
+
     def filter_by_event(self):
-        self.proxy.setFilterKeyColumn(0)
+        self.proxy.setFilterFixedString(self.filterTalksWidget.eventComboBox.currentText())
+        self.proxy.setFilterKeyColumn(5)
+
+    def filter_by_room(self):
+        self.proxy.setFilterFixedString(self.filterTalksWidget.roomComboBox.currentText())
+        self.proxy.setFilterKeyColumn(6)
+
+    def filter_by_date(self):
+        self.proxy.setFilterFixedString(self.filterTalksWidget.dateComboBox.currentText())
+        self.proxy.setFilterKeyColumn(7)
+
 
     def talk_selected(self, model):
         self.talkDetailsWidget.saveButton.setEnabled(False)

@@ -290,11 +290,29 @@ class QtDBConnector(object):
         self.eventsModel.setQuery("SELECT DISTINCT Event FROM presentations ORDER BY Event ASC")
         return self.eventsModel
 
-    def editor_rooms_model(self):
-        """Gets the Events Model. Useful for Qt GUI based Frontends to load the Model into Views"""
+    def get_list_rooms_model(self):
+        """Gets the Rooms Model. Useful for Qt GUI based Frontends to load the Model into Views"""
         self.roomsModel = QtSql.QSqlQueryModel()
         self.roomsModel.setQuery("SELECT DISTINCT Room FROM presentations ORDER BY Room ASC")
         return self.roomsModel
+
+    def get_list_speakers_model(self):
+        """Gets the Rooms Model. Useful for Qt GUI based Frontends to load the Model into Views"""
+        self.speakersModel = QtSql.QSqlQueryModel()
+        
+        self.speakersModel.setQuery("SELECT DISTINCT Speaker FROM presentations ORDER BY Speaker ASC")
+        return self.speakersModel
+
+    def get_filter_speakers_model(self, speaker):
+        self.speakersModel = QtSql.QSqlQueryModel()
+        self.speakersModel.setQuery("SELECT Speaker FROM presentations WHERE Speaker='%s' ORDER BY Speaker ASC" % (speaker))
+        return self.speakersModel
+
+    def get_list_dates_model(self):
+        """Gets the Rooms Model. Useful for Qt GUI based Frontends to load the Model into Views"""
+        self.datesModel = QtSql.QSqlQueryModel()
+        self.datesModel.setQuery("SELECT DISTINCT Date FROM presentations ORDER BY Date ASC")
+        return self.datesModel
 
     def get_dates_from_event_room_model(self, event, room):
         """Gets the Rooms Model.Useful for Qt GUI based Frontends to load the Model into Views."""
