@@ -44,6 +44,8 @@ class Multimedia:
     RECORD = 1
     PAUSE = 2
     STOP = 3
+    SILENT_THRESHOLD = -50
+    num_silent = 0
 
     def __init__(self, config, plugman, window_id=None, audio_feedback=None, cli=False):
         self.config = config
@@ -90,6 +92,16 @@ class Multimedia:
             s = message.structure.get_name()
 
             if s == 'level' and self.audio_feedback_event is not None:
+                peak = message.structure ['peak'][0]
+                log.info('message structure: %s', peak)
+
+                if self.is_silent(peak):
+                    Multimedia.num_silent += 1
+                    log.info('num_silent: %d', Multimedia.num_silent)
+                    if Multimedia.num_silent == 5:
+                        log.info('SILENCE DETECTED')
+                        Multimedia.num_silent = 0
+
                 msg = message.structure.to_string()
                 rms_dB = float(msg.split(',')[6].split('{')[1].rstrip('}'))
 
@@ -100,6 +112,10 @@ class Multimedia:
                 except OverflowError:
                     percent = 0
                 self.audio_feedback_event(percent)
+
+    def is_silent(self,data):
+    #returns if audio level is below silence threshold
+        return data < Multimedia.SILENT_THRESHOLD
 
     def on_sync_message(self, bus, message):
         if message.structure is None:
