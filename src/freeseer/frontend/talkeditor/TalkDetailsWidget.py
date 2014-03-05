@@ -51,10 +51,6 @@ class TalkDetailsWidget(QWidget):
 
         self.buttonLayout = QHBoxLayout()
 
-        addIcon = QIcon.fromTheme("list-add")
-        self.addButton = QPushButton('Add New Talk')
-        self.addButton.setIcon(addIcon)
-        self.buttonLayout.addWidget(self.addButton)
         saveIcon = QIcon.fromTheme("document-save")
         self.saveButton = QPushButton('Save New Talk')
         self.saveButton.setIcon(saveIcon)

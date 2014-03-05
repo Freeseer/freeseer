@@ -42,9 +42,9 @@ class CommandButtons(QWidget):
         self.layout = QHBoxLayout()
         self.setLayout(self.layout)
 
-        #addIcon = QIcon.fromTheme("list-add")
         importIcon = QIcon.fromTheme("document-open")
         exportIcon = QIcon.fromTheme("document-save")
+        addIcon = QIcon.fromTheme("list-add")
         removeIcon = QIcon.fromTheme("list-remove")
         removeAllIcon = QIcon.fromTheme("window-close")
 
@@ -52,6 +52,8 @@ class CommandButtons(QWidget):
         self.importButton.setIcon(importIcon)
         self.exportButton = QPushButton('Export')
         self.exportButton.setIcon(exportIcon)
+        self.addButton = QPushButton('Add New Talk')
+        self.addButton.setIcon(addIcon)
         self.removeButton = QPushButton('Remove')
         self.removeButton.setIcon(removeIcon)
         self.removeAllButton = QPushButton('Remove All')
@@ -63,6 +65,7 @@ class CommandButtons(QWidget):
         self.searchButton.setIcon(self.searchIcon)
         self.layout.addWidget(self.importButton)
         self.layout.addWidget(self.exportButton)
+        self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.removeButton)
         self.layout.addWidget(self.removeAllButton)
         self.layout.addStretch()
