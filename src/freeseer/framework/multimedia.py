@@ -92,7 +92,7 @@ class Multimedia:
             s = message.structure.get_name()
 
             if s == 'level' and self.audio_feedback_event is not None:
-                peak = message.structure ['peak'][0]
+                peak = message.structure['peak'][0]
                 log.info('message structure: %s', peak)
 
                 if self.is_silent(peak):
@@ -113,7 +113,7 @@ class Multimedia:
                     percent = 0
                 self.audio_feedback_event(percent)
 
-    def is_silent(self,data):
+    def is_silent(self, data):
     #returns if audio level is below silence threshold
         return data < Multimedia.SILENT_THRESHOLD
 
