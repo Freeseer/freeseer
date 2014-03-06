@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2013, 2014  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -80,15 +80,32 @@ def setup_parser_record(subparsers):
     parser.add_argument("-s", "--show-talks", help="Shows all talks", action="store_true")
 
 
+###
+### Config Parser and Subparsers
+###
+
 def setup_parser_config(subparsers):
     """Setup the config command parser"""
     parser = subparsers.add_parser('config', help='Freeseer configuration functions')
-    parser.add_argument("--reset", help="Reset's Freeseer (removes the Freeseer configuration directory)",
-        action="store_true")
-    parser.add_argument("--reset-configuration", help="Reset's Freeseer configuration (removes freeseer.conf and plugins.conf)", action="store_true")
-    parser.add_argument("--reset-database", help="Reset's Freeseer database (removes presentations.db)", action="store_true")
     subparsers = parser.add_subparsers(dest="config_service")
+    setup_parser_config_reset(subparsers)
     setup_parser_config_youtube(subparsers)
+
+
+def setup_parser_config_reset(subparsers):
+    """Setup reset command parser"""
+    parser = subparsers.add_parser("reset", help="Reset Freeseer configuration and database",
+        formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument("reset",
+        choices=['all', 'configuration', 'database'],
+        help="""Reset's Freeseer (default: all)
+
+        Options:
+            all           - Reset's Freeseer (removes the Freeseer configuration directory)
+            configuration - Reset's Freeseer configuration (removes freeseer.conf and plugins.conf)
+            database      - Reset's Freeseer database (removes presentations.db)
+        """)
+    parser.add_argument("-p", "--profile", type=unicode, help="Profile to reset (Default: default)")
 
 
 def setup_parser_config_youtube(subparsers):
@@ -179,12 +196,16 @@ def parse_args(parser, parse_args=None):
         from freeseer.framework.util import reset_database
         from freeseer.framework.youtube import YoutubeService
 
-        if args.reset:
-            reset(configdir)
-        elif args.reset_configuration:
-            reset_configuration(configdir)
-        elif args.reset_database:
-            reset_database(configdir)
+        if args.config_service == "reset":
+            if args.reset == "all":
+                reset(configdir)
+            elif args.reset == "configuration":
+                reset_configuration(configdir, args.profile)
+            elif args.reset == "database":
+                reset_database(configdir, args.profile)
+            else:
+                print("Invalid reset option.")
+
         elif args.config_service == "youtube":
             YoutubeService.acquire_token(args.client_secrets, args.token, args)
 

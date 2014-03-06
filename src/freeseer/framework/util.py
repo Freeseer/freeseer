@@ -124,11 +124,14 @@ def reset(configdir):
         print("%s is not a invalid configuration directory." % configdir)
 
 
-def reset_configuration(configdir):
+def reset_configuration(configdir, profile='default'):
     """Deletes the Freeseer configuration files freeseer.conf and plugin.conf"""
+    if profile is None:
+        profile = 'default'
+
     if validate_configdir(configdir):
-        freeseer_conf = os.path.join(configdir, 'freeseer.conf')
-        plugin_conf = os.path.join(configdir, 'plugin.conf')
+        freeseer_conf = os.path.join(configdir, 'profiles', profile, 'freeseer.conf')
+        plugin_conf = os.path.join(configdir, 'profiles', profile, 'plugin.conf')
 
         os.remove(freeseer_conf)
         os.remove(plugin_conf)
@@ -136,10 +139,13 @@ def reset_configuration(configdir):
         print("%s is not a invalid configuration directory." % configdir)
 
 
-def reset_database(configdir):
+def reset_database(configdir, profile='default'):
     """Deletes the Freeseer database file"""
+    if profile is None:
+        profile = 'default'
+
     if validate_configdir(configdir):
-        dbfile = os.path.join(configdir, 'presentations.db')
+        dbfile = os.path.join(configdir, 'profiles', profile, 'presentations.db')
         os.remove(dbfile)
     else:
         print("%s is not a invalid configuration directory." % configdir)
