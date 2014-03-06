@@ -44,10 +44,8 @@ from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
 from freeseer.frontend.record.ReportDialog import ReportDialog
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
-from freeseer.framework.notificationList import *
 
 log = logging.getLogger(__name__)
-notification = NotificationList()
 
 
 class RecordApp(FreeseerApp):
@@ -89,12 +87,6 @@ class RecordApp(FreeseerApp):
         self.reset_timer()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
-
-        # Set variables for notification panel
-        self.display_error_message = False
-        self.low_on_space = False
-        #self.notifications = NotificationList()
-        #self.error = Notification()
 
         #
         # Setup Menubar
@@ -447,16 +439,13 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
-        self.check_current_disk_space()
-        if not self.display_error_message:
-            #if self.notifications.get_length():
-            if notification.get_length():
-                head = notification.get_head()
-                self.set_warning_notification(head.message)
+        if not self.manager.error_in_queue():
+            if self.manager.get_length():
+                self.set_warning_notification(self.manager.get_notification())
             else:
                 self.reset_notification_panel()
         else:
-            self.set_error_notification(self.error.get_message())
+            self.set_error_notification(self.manager.get_notification())
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -466,19 +455,6 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
-
-    def check_current_disk_space(self):
-        """checks current disk space and shows a warning notification if disk space is below the threshold"""
-        self.remaining_disk_space = get_free_space(self.config.videodir).split(" ")
-        if self.low_on_space and self.remaining_disk_space[1] == 'GB' and float(self.remaining_disk_space[0]) > 10.0:
-            #self.notifications.delete_notification("low_space")
-            notification.delete_notification("low_space")
-            self.low_on_space = False
-        if not self.low_on_space and ((self.remaining_disk_space[1] == 'GB' and float(self.remaining_disk_space[0]) < 10.0) or \
-                                            (self.remaining_disk_space[1] == 'MB' or self.remaining_disk_space[1] == 'KB')):
-            #self.notifications.add_notification(Notification(message="Running low on space, less than 10", keyword="low_space"))
-            notification.add_notification(Notification(message="Running low on space, less than 10", keyword="low_space"))
-            self.low_on_space = True
 
     def reset_notification_panel(self):
         self.mainWidget.notificationLabel.setText("")

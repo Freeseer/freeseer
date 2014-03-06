@@ -43,6 +43,7 @@ from PyQt4.QtGui import QPixmap
 
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
 from freeseer.frontend.qtcommon import resource  # noqa
+from freeseer.frontend.qtcommon.NotificationManager import NotificationManager
 
 try:
     _fromUtf8 = QString.fromUtf8
@@ -123,6 +124,9 @@ class FreeseerApp(QMainWindow):
 
         self.retranslateFreeseerApp()
         self.aboutDialog.retranslate("en_US")
+
+        # Initializing notification manager
+        self.manager = NotificationManager();
 
     def openOnlineHelp(self):
         """Opens a link to the Freeseer Online Help"""
