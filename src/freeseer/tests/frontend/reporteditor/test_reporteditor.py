@@ -58,8 +58,8 @@ class TestReportEditorApp(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.profile_manager._base_folder)
-        del self.app
         del self.report_editor.app
+        self.app.deleteLater()
 
     def test_close_report_editor(self):
         '''

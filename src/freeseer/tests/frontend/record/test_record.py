@@ -65,7 +65,7 @@ class TestRecordApp(unittest.TestCase):
         shutil.rmtree(self.profile_manager._base_folder)
 
         self.record_app.actionExit.trigger()
-        del self.app
+        self.app.deleteLater()
 
     def test_init_conditions(self):
         '''

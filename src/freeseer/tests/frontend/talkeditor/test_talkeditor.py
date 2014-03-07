@@ -69,7 +69,7 @@ class TestTalkEditorApp(unittest.TestCase):
         shutil.rmtree(self.profile_manager._base_folder)
 
         del self.app
-        del self.talk_editor.app
+        self.talk_editor.app.deleteLater()
 
     # def test_add_talk(self):
     #     '''
