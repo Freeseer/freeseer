@@ -39,6 +39,7 @@ from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
+from freeseer.frontend.qtcommon.NotificationManager import NotificationManager
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
@@ -87,6 +88,9 @@ class RecordApp(FreeseerApp):
         self.reset_timer()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
+
+        # Initializing notification manager
+        self.notification_manager = NotificationManager()
 
         #
         # Setup Menubar
@@ -439,13 +443,13 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
-        if not self.manager.error_in_queue():
-            if self.manager.get_length():
-                self.set_warning_notification(self.manager.get_notification())
+        if not self.notification_manager.error_in_queue():
+            if self.notification_manager.get_length():
+                self.set_warning_notification(self.notification_manager.get_notification())
             else:
                 self.reset_notification_panel()
         else:
-            self.set_error_notification(self.manager.get_notification())
+            self.set_error_notification(self.notification_manager.get_notification())
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
