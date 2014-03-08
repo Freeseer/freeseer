@@ -214,7 +214,6 @@ class TalkEditorApp(FreeseerApp):
         #
         # Command Button Translations\
         #
-        #self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add"))
         self.commandButtons.importButton.setText(self.app.translate("TalkEditorApp", "Import"))
         self.commandButtons.exportButton.setText(self.app.translate("TalkEditorApp", "Export"))
         self.commandButtons.addButton.setText(self.app.translate("TalkEditorApp", "Add New Talk"))
