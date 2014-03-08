@@ -251,10 +251,13 @@ class QtDBConnector(object):
     def update_presentation(self, talk_id, presentation):
         """Updates an existing Presentation in the database."""
         QtSql.QSqlQuery(
-            '''UPDATE presentations SET Title="%s", Speaker="%s", Event="%s", Room="%s", Date="%s", Time="%s"
+            '''UPDATE presentations SET Title="%s", Speaker="%s", Description="%s", Category="%s",
+                Event="%s", Room="%s", Date="%s", Time="%s"
                 WHERE Id="%s"''' %
             (presentation.title,
              presentation.speaker,
+             presentation.description,
+             presentation.category,
              presentation.event,
              presentation.room,
              presentation.date,
