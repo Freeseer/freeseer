@@ -126,7 +126,7 @@ class FreeseerApp(QMainWindow):
 
     def openOnlineHelp(self):
         """Opens a link to the Freeseer Online Help"""
-        url = QUrl("http://freeseer.github.io")
+        url = QUrl("http://freeseer.readthedocs.org")
         QDesktopServices.openUrl(url)
 
     def translate(self, action):
