@@ -42,6 +42,7 @@ class AVWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
 
         self.mainLayout = QtGui.QVBoxLayout()
+        self.mainLayout.addStretch(0)
         self.setLayout(self.mainLayout)
 
         config_icon = QtGui.QIcon.fromTheme("preferences-system")
@@ -53,7 +54,7 @@ class AVWidget(QtGui.QWidget):
         self.audioLayout = QtGui.QGridLayout()
         self.audioGroupBox = QtGui.QGroupBox("Audio Input")
         self.audioGroupBox.setLayout(self.audioLayout)
-        self.mainLayout.addWidget(self.audioGroupBox)
+        self.mainLayout.insertWidget(0, self.audioGroupBox)
 
         self.audioGroupBox.setCheckable(True)
         self.audioGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
@@ -78,7 +79,7 @@ class AVWidget(QtGui.QWidget):
         self.videoLayout = QtGui.QGridLayout()
         self.videoGroupBox = QtGui.QGroupBox("Video Input")
         self.videoGroupBox.setLayout(self.videoLayout)
-        self.mainLayout.addWidget(self.videoGroupBox)
+        self.mainLayout.insertWidget(0, self.videoGroupBox)
 
         self.videoGroupBox.setCheckable(True)
         self.videoGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
@@ -103,7 +104,7 @@ class AVWidget(QtGui.QWidget):
         self.fileLayout = QtGui.QGridLayout()
         self.fileGroupBox = QtGui.QGroupBox("Record to File")
         self.fileGroupBox.setLayout(self.fileLayout)
-        self.mainLayout.addWidget(self.fileGroupBox)
+        self.mainLayout.insertWidget(0, self.fileGroupBox)
 
         self.fileGroupBox.setCheckable(True)
         self.fileGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
@@ -128,7 +129,7 @@ class AVWidget(QtGui.QWidget):
         self.streamLayout = QtGui.QGridLayout()
         self.streamGroupBox = QtGui.QGroupBox("Record to Stream")
         self.streamGroupBox.setLayout(self.streamLayout)
-        self.mainLayout.addWidget(self.streamGroupBox)
+        self.mainLayout.insertWidget(0, self.streamGroupBox)
 
         self.streamGroupBox.setCheckable(True)
         self.streamGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
