@@ -41,6 +41,7 @@ class GeneralWidget(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
 
         self.mainLayout = QtGui.QVBoxLayout()
+        self.mainLayout.addStretch(0)
         self.setLayout(self.mainLayout)
 
         #
@@ -50,7 +51,7 @@ class GeneralWidget(QtGui.QWidget):
         self.MiscLayout = QtGui.QVBoxLayout()
         self.MiscGroupBox = QtGui.QGroupBox("General")
         self.MiscGroupBox.setLayout(self.MiscLayout)
-        self.mainLayout.addWidget(self.MiscGroupBox)
+        self.mainLayout.insertWidget(0, self.MiscGroupBox)
 
         self.languageLayout = QtGui.QHBoxLayout()
         self.MiscLayout.addLayout(self.languageLayout)
