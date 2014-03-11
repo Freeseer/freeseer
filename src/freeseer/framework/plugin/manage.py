@@ -26,17 +26,18 @@ import imp
 import inspect
 import fnmatch
 import os
-from freeseer.framework.plugin import IPlugin
+#from freeseer.framework.plugin.plugin import Plugin
+from freeseer.framework.plugin import IBackendPlugin as Plugin
 
 
-class Manager(object):
+class PluginManager(object):
 
     def __init__(self, dir_path):
         self.plugins = {}
 
         for module_path in self.find_module_files(dir_path):
-            self.find_plugin(module_path)
-            self.find_module_files(dir_path)
+            for (category_name, plugin_obj) in self.find_plugin(module_path):
+                self.add_plugin(category_name, plugin_obj)
 
     def find_module_files(self, dir_path):
         for (dirpath, dirnames, filenames) in os.walk(dir_path):
@@ -48,29 +49,38 @@ class Manager(object):
 
     def find_plugin(self, module_path):
         module = None
-        if (os.path.isdir(module_path)):
+        if os.path.isdir(module_path):
             module = imp.load_module("name", None, module_path, ("py", "r", imp.PKG_DIRECTORY))
         else:
             module = imp.load_source(module_path, module_path)
 
         for attr_name in dir(module):
-            module_obj = getattr(module, attr_name)
-            self.check_plugin(module_obj)
+            name_in_module = getattr(module, attr_name)
+            is_plugin, category_name, plugin_obj = self.check_plugin(name_in_module)
 
-    def check_plugin(self, module_obj):
-        if inspect.isclass(module_obj) and issubclass(module_obj, IPlugin):
-            obj = module_obj()
+            if (is_plugin):
+                yield (category_name, plugin_obj)
+
+    def check_plugin(self, name_in_module):
+        flag = False
+        category_name = None
+        obj = None
+        if inspect.isclass(name_in_module) and issubclass(name_in_module, Plugin):
+            obj = name_in_module()
             if hasattr(obj, "NAME") and hasattr(obj, "CATEGORY"):
                 category_name = getattr(obj, "CATEGORY")
+                flag = True
+        return (flag, category_name, obj)
 
-                if category_name not in self.plugins:
-                    self.plugins[category_name] = []
+    def add_plugin(self, category_name, plugin_obj):
+        if category_name not in self.plugins:
+            self.plugins[category_name] = []
 
-                self.plugins[category_name].append(obj)
+        self.plugins[category_name].append(plugin_obj)
 
 
 def main():
-    test = Manager("/home/sephallia/git/freeseer/src/freeseer/plugins/")
+    test = PluginManager("/home/sephallia/git/freeseer/src/freeseer/plugins/")
     print (test.plugins)
 
 if __name__ == '__main__':

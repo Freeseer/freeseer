@@ -38,18 +38,96 @@ class Plugin(object):
 
     __metaclass__ = abc.ABCMeta
 
-    # I know we want to ensure that they have NAME and CATEGORY attributes.
-    # I was looking for how to ensure that and this is what I saw.
-    # Is this how one would do it?
-    @abc.abstractproperty
-    def NAME(self):
-        pass    # What should I do here?
 
-    @NAME.setter
-    def NAME(self, name):
-        pass    # Echo
+class AudioInputPlugin(Plugin):
+
+    @abc.abstractmethod
+    def get_audioinput_bin(self):
+        pass
 
 
-class AudioInput(Plugin):
+class AudioMixerPlugin(Plugin):
 
-    __metaclass__ = abc.ABCMeta
+    @abc.abstractmethod
+    def get_audiomixer_bin(self):
+        pass
+
+    @abc.abstractmethod
+    def get_inputs(self):
+        # Returns a list of tuples containing the input name and instance number that the audio mixer needs
+        # in order to initalize it's pipelines.
+        #
+        # This should be used so that the code that calls it can
+        # gather the required inputs before calling load_inputs().
+        pass
+
+    @abc.abstractmethod
+    def load_inputs(self, player, mixer, inputs):
+        # Returns the Gstreamer Bin for the video input plugin.
+        pass
+
+
+class VideoMixerPlugin(Plugin):
+
+    @abc.abstractmethod
+    def get_videomixer_bin(self):
+        # Returns the Gstreamer Bin for the video mixer plugin.
+        pass
+
+    @abc.abstractmethod
+    def get_inputs(self):
+        # Returns a list of tuples containing the input name and instance number that the video mixer needs
+        # in order to initialize it's pipelines.
+        pass
+
+    @abc.abstractmethod
+    def load_inputs(self, player, mixer, inputs):
+        # This method is responsible for loading the inputs needed.
+        pass
+
+
+class OuputPlugin(Plugin):
+
+        # This class has a lot of (not sure if this is the correct terminology)
+        # attributes defined at the beginning of that. Is that something that
+        # will be defined later? Or should I carry those over?
+        # Examples are... FILE = 0      STREAM = 1      OTHER = 2       etc...
+
+        @abc.abstractmethod
+        def get_recordto(self):
+            pass
+
+        @abc.abstractmethod
+        def get_type(self):
+            pass
+
+        @abc.abstractmethod
+        def get_output_bin(self, audio=True, video=True, metadata=None):
+            pass
+
+        @abc.abstractmethod
+        def get_extension(self):
+            pass
+
+        @abc.abstractmethod
+        def set_recording_location(self, location):
+            pass
+
+        @abc.abstractmethod
+        def set_metadata(self, data):
+            # Set the metadata if supported by Output plugin
+            pass
+
+        @abc.abstractmethod
+        def generate_xml_metadata(self, metadata):
+            # There is code in this method in the other file. What do I do?
+            pass
+
+
+class Importer(Plugin):
+
+    @abc.abstractmethod
+    def get_presentations(self):
+        #Builds a list with all presentations
+        pass
+
