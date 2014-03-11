@@ -39,7 +39,7 @@ from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
-from freeseer.frontend.qtcommon.NotificationManager import NotificationManager
+from freeseer.frontend.qtcommon.NotificationPanel import NotificationPanel
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
@@ -90,7 +90,7 @@ class RecordApp(FreeseerApp):
         self.timer.timeout.connect(self.update_timer)
 
         # Initializing notification manager
-        self.notification_manager = NotificationManager()
+        self.notificationList = NotificationPanel()
 
         #
         # Setup Menubar
@@ -443,13 +443,6 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
-        if not self.notification_manager.error_in_queue():
-            if self.notification_manager.get_length():
-                self.set_warning_notification(self.notification_manager.get_notification())
-            else:
-                self.reset_notification_panel()
-        else:
-            self.set_error_notification(self.notification_manager.get_notification())
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -459,20 +452,6 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
-
-    def reset_notification_panel(self):
-        self.mainWidget.notificationLabel.setText("")
-        self.mainWidget.notificationLabel.setStyleSheet("")
-
-    def set_warning_notification(self, notification):
-        """Shows warning notification on the notification bar"""
-        self.mainWidget.notificationLabel.setText("WARNING: {}".format(notification))
-        self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : yellow; color : black; }")
-
-    def set_error_notification(self, notification):
-        """Shows error notification on the notification bar"""
-        self.mainWidget.notificationLabel.setText("ERROR: {}".format(notification))
-        self.mainWidget.notificationLabel.setStyleSheet("QLabel { background-color : red; color : black; }")
 
     ###
     ### Talk Related
