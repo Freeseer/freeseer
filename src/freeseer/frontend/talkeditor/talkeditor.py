@@ -27,21 +27,20 @@ import logging
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtCore import QStringList
-from PyQt4 import QtCore
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QAbstractItemView
 from PyQt4.QtGui import QAction
+from PyQt4.QtGui import QCompleter
 from PyQt4.QtGui import QDataWidgetMapper
+from PyQt4.QtGui import QFileDialog
+from PyQt4.QtGui import QHeaderView
 from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QMessageBox
 from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QSortFilterProxyModel
 from PyQt4.QtGui import QTableView
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QWidget
-from PyQt4.QtGui import QFileDialog
-from PyQt4.QtGui import QMessageBox
-from PyQt4.QtGui import QCompleter
-from PyQt4.QtGui import QSortFilterProxyModel
-from PyQt4.QtGui import QHeaderView
-from PyQt4.QtCore import Qt
 
 # Freeseer modules
 from freeseer.framework.presentation import Presentation
@@ -75,14 +74,7 @@ class TalkEditorApp(FreeseerApp):
         self.mainLayout = QVBoxLayout()
         self.mainWidget.setLayout(self.mainLayout)
         self.setCentralWidget(self.mainWidget)
-        self.mainLayout.setAlignment(QtCore.Qt.AlignTop)
-
-        # Add the Title Row (Use BOLD / Big Font)
-        #self.titleLayout = QHBoxLayout()
-        #self.backButton = QPushButton('Back to Recorder')
-        #if backButton:  # Only show the back button if requested by caller
-        #    self.titleLayout.addWidget(self.backButton)
-        #self.titleLayout.addStretch()
+        self.mainLayout.setAlignment(Qt.AlignTop)
 
         # Add custom widgets
         self.commandButtons = CommandButtons()
@@ -127,13 +119,13 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.importTalksWidget.importButton, SIGNAL('clicked()'), self.import_talks)
         self.connect(self.importTalksWidget.cancelButton, SIGNAL('clicked()'), self.hide_import_talks_widget)
         self.importTalksWidget.setHidden(True)
-        self.connect(self.importTalksWidget.csvFileSelectButton, QtCore.SIGNAL('clicked()'), self.csv_file_select)
-        self.connect(self.importTalksWidget.csvLineEdit, QtCore.SIGNAL('returnPressed()'),
+        self.connect(self.importTalksWidget.csvFileSelectButton, SIGNAL('clicked()'), self.csv_file_select)
+        self.connect(self.importTalksWidget.csvLineEdit, SIGNAL('returnPressed()'),
             self.importTalksWidget.importButton.click)
-        self.connect(self.importTalksWidget.rssLineEdit, QtCore.SIGNAL('returnPressed()'),
+        self.connect(self.importTalksWidget.rssLineEdit, SIGNAL('returnPressed()'),
             self.importTalksWidget.importButton.click)
-        self.connect(self.actionExportCsv, QtCore.SIGNAL('triggered()'), self.export_talks_to_csv)
-        self.connect(self.actionRemoveAll, QtCore.SIGNAL('triggered()'), self.confirm_reset)
+        self.connect(self.actionExportCsv, SIGNAL('triggered()'), self.export_talks_to_csv)
+        self.connect(self.actionRemoveAll, SIGNAL('triggered()'), self.confirm_reset)
 
         # Command Buttons
         self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.confirm_add)
@@ -233,7 +225,7 @@ class TalkEditorApp(FreeseerApp):
         self.proxy = QSortFilterProxyModel()
         self.proxy.setSourceModel(self.presentationModel)
         self.tableView.setModel(self.proxy)
-        self.proxy.setFilterCaseSensitivity(QtCore.Qt.CaseInsensitive)
+        self.proxy.setFilterCaseSensitivity(Qt.CaseInsensitive)
 
         # Fill table whitespace.
         self.tableView.horizontalHeader().setStretchLastSection(False)
@@ -299,7 +291,6 @@ class TalkEditorApp(FreeseerApp):
     def add_talk(self):
         date = self.talkDetailsWidget.dateEdit.date()
         time = self.talkDetailsWidget.timeEdit.time()
-        #datetime = QtCore.QDateTime(date, time)
         presentation = Presentation(
             unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
             unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
@@ -307,8 +298,8 @@ class TalkEditorApp(FreeseerApp):
             unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
             unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
             unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
-            unicode(date.toString(QtCore.Qt.ISODate)),
-            unicode(time.toString(QtCore.Qt.ISODate)))
+            unicode(date.toString(Qt.ISODate)),
+            unicode(time.toString(Qt.ISODate)))
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):
