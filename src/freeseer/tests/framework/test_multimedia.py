@@ -36,12 +36,15 @@ class TestMultimedia(unittest.TestCase):
 
     def setUp(self):
         self.profile_manager = ProfileManager(tempfile.mkdtemp())
+        self.temp_video_dir = tempfile.mkdtemp()
         profile = self.profile_manager.get('testing')
         config = profile.get_config('freeseer.conf', settings.FreeseerConfig, ['Global'], read_only=True)
+        config.videodir = self.temp_video_dir
         plugin_manager = PluginManager(profile)
         self.multimedia = Multimedia(config, plugin_manager)
 
     def tearDown(self):
+        shutil.rmtree(self.temp_video_dir)
         shutil.rmtree(self.profile_manager._base_folder)
 
     def test_load_backend(self):
