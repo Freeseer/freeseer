@@ -49,6 +49,7 @@ from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 # TalkEditor modules
 from freeseer.frontend.talkeditor.CommandButtons import CommandButtons
 from freeseer.frontend.talkeditor.TalkDetailsWidget import TalkDetailsWidget
+from freeseer.frontend.talkeditor.NewTalkWidget import NewTalkWidget
 from freeseer.frontend.talkeditor.ImportTalksWidget import ImportTalksWidget
 
 log = logging.getLogger(__name__)
@@ -83,6 +84,7 @@ class TalkEditorApp(FreeseerApp):
         self.tableView.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.talkDetailsWidget = TalkDetailsWidget()
         self.importTalksWidget = ImportTalksWidget()
+        self.newTalkWidget = NewTalkWidget()
         self.mainLayout.addWidget(self.importTalksWidget)
         #self.mainLayout.addLayout(self.titleLayout)
         self.mainLayout.addWidget(self.commandButtons)
@@ -128,7 +130,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.actionRemoveAll, SIGNAL('triggered()'), self.confirm_reset)
 
         # Command Buttons
-        self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.confirm_add)
+        self.connect(self.commandButtons.addButton, SIGNAL('clicked()'), self.show_new_talk_popup)
         self.connect(self.commandButtons.removeButton, SIGNAL('clicked()'), self.remove_talk)
         self.connect(self.commandButtons.removeAllButton, SIGNAL('clicked()'), self.confirm_reset)
         self.connect(self.commandButtons.importButton, SIGNAL('clicked()'), self.show_import_talks_widget)
@@ -138,7 +140,7 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
 
         # Talk Details Buttons
-        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_or_update_talk)
+        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.update_talk)
 
         # Talk Details Widget
         self.connect(self.talkDetailsWidget.titleLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
@@ -149,6 +151,10 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.talkDetailsWidget.descriptionTextEdit, SIGNAL('modificationChanged(bool)'), self.enable_save)
         self.connect(self.talkDetailsWidget.dateEdit, SIGNAL('dateChanged(const QDate)'), self.enable_save)
         self.connect(self.talkDetailsWidget.timeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
+
+        # New Talk Widget
+        self.newTalkWidget.connect(self.newTalkWidget.addButton, SIGNAL('clicked()'), self.add_talk)
+        self.newTalkWidget.connect(self.newTalkWidget.cancelButton, SIGNAL('clicked()'), self.newTalkWidget.reject)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -162,7 +168,7 @@ class TalkEditorApp(FreeseerApp):
         self.load_presentations_model()
 
         # Setup Autocompletion
-        self.update_autocomple_fields()
+        self.update_autocomplete_fields()
 
         self.talkDetailsWidget.saveButton.setEnabled(False)
 
@@ -301,96 +307,81 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.setHidden(False)
         self.importTalksWidget.setHidden(True)
 
-    def add_or_update_talk(self):
-        """Adds or updates a talk using data from the input fields
+    def add_talk(self):
+        """Adds a new talk to the database using data from the NewTalkWidget input fields"""
+        presentation = self.create_presentation(self.newTalkWidget.talkDetailsWidget)
 
-        If there is a talk selected, it updates that talk by calling update_talk
-        Otherwise, it adds a new talk to the database by calling add_talk
-        """
+        if presentation:
+            self.db.insert_presentation(presentation)
+            self.newTalkWidget.accept()  # Close the dialog
+
+    def update_talk(self):
+        """Updates the currently selected talk using data from the TalkEditorApp input fields"""
         selected_talk = self.tableView.currentIndex()
         if selected_talk.row() >= 0:  # The tableView index begins at 0 and is -1 by default
-            self.update_talk(selected_talk)
+            talk_id = selected_talk.sibling(selected_talk.row(), 0).data().toString()
+            presentation = self.create_presentation(self.talkDetailsWidget)
+
+            if presentation:
+                self.db.update_presentation(talk_id, presentation)
+                self.apply_changes(selected_talk)
+                self.talkDetailsWidget.saveButton.setEnabled(False)
+
+    def create_presentation(self, talkDetailsWidget):
+        """Creates and returns an instance of Presentation using data from TalkDetailsWidget input fields"""
+        title = unicode(talkDetailsWidget.titleLineEdit.text()).strip()
+        if title:
+            return Presentation(
+                unicode(talkDetailsWidget.titleLineEdit.text()).strip(),
+                unicode(talkDetailsWidget.presenterLineEdit.text()).strip(),
+                unicode(talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
+                unicode(talkDetailsWidget.categoryLineEdit.text()).strip(),
+                unicode(talkDetailsWidget.eventLineEdit.text()).strip(),
+                unicode(talkDetailsWidget.roomLineEdit.text()).strip(),
+                unicode(talkDetailsWidget.dateEdit.date().toString(Qt.ISODate)),
+                unicode(talkDetailsWidget.timeEdit.time().toString(Qt.ISODate)))
+
+    def show_new_talk_popup(self):
+        """Displays a modal dialog with a talk details view
+
+        When Add is selected, a new talk is added to the database using the input field data.
+        When Cancel is selected, no talk is added.
+        """
+        log.info('Opening Add Talk window...')
+        self.clear_new_talk_fields()
+        self.remove_new_talk_placeholder_text()
+        self.newTalkWidget.talkDetailsWidget.titleLineEdit.setFocus()
+        if self.newTalkWidget.exec_() == 1:
+            self.apply_changes()
+            self.talkDetailsWidget.disable_input_fields()
         else:
-            self.add_talk()
+            log.info('No talk added...')
 
-    def update_talk(self, selected_talk):
-        """Updates the currently selected talk using data from the input fields"""
-        presentation = self.create_presentation()
+    def apply_changes(self, updated_talk=None):
+        """Repopulates the model to display the effective changes
 
-        selected_row = selected_talk.row()
-        selected_column = selected_talk.column()
-        talk_id = selected_talk.sibling(selected_row, 0).data().toString()
-
-        self.db.update_presentation(talk_id, presentation)
-
+        Updates the autocomplete fields.
+        Displays the updated model in the table view, and selects the newly updated/added talk.
+        """
         self.presentationModel.select()
+        self.select_talk(updated_talk)
+        self.update_autocomplete_fields()
 
-        self.tableView.selectRow(selected_row)
-        self.tableView.setCurrentIndex(self.proxy.index(selected_row, selected_column))
-        self.mapper.setCurrentIndex(selected_row)
+    def select_talk(self, talk=None):
+        """Selects the given talk in the table view
 
-        self.talkDetailsWidget.saveButton.setEnabled(False)
-
-    def add_talk(self):
-        presentation = self.create_presentation()
-
-        # Do not add talks if they are empty strings
-        if (len(presentation.title) == 0):
-            return
-        self.db.insert_presentation(presentation)
-
-        # Update Model, Refreshes TableView
-        self.presentationModel.select()
-
-        # Select Last Row
-        self.tableView.selectRow(self.presentationModel.rowCount() - 1)
-        self.tableView.setCurrentIndex(self.proxy.index(self.proxy.rowCount() - 1, 0))
-        self.talk_selected(self.proxy.index(self.proxy.rowCount() - 1, 0))
-
-        self.update_autocomple_fields()
-        self.talkDetailsWidget.disable_input_fields()
-
-    def create_presentation(self):
-        """Creates and returns an instance of Presentation using data from the input fields"""
-        date = self.talkDetailsWidget.dateEdit.date()
-        time = self.talkDetailsWidget.timeEdit.time()
-        return Presentation(
-            unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
-            unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
-            unicode(date.toString(Qt.ISODate)),
-            unicode(time.toString(Qt.ISODate)))
-
-    def confirm_add(self):
-        """Requests confirmation before clearing fields for a new talk."""
-        if self.are_fields_enabled() and self.unsaved_details_exist():
-            confirm = QMessageBox.question(self,
-                                           self.confirmTalkDetailsClearTitleString,
-                                           self.confirmTalkDetailsClearQuestionString,
-                                           QMessageBox.Yes,
-                                           QMessageBox.No)
-
-            if confirm == QMessageBox.Yes:
-                self.clear_talk_details_widget()
+        If no talk is given, the last row in the table view is selected.
+        """
+        if talk:
+            row = talk.row()
+            column = talk.column()
         else:
-            self.clear_talk_details_widget()
+            row = self.presentationModel.rowCount() - 1  # Select last row
+            column = 0
 
-    def clear_talk_details_widget(self):
-        self.talkDetailsWidget.saveButton.setEnabled(True)
-        self.talkDetailsWidget.enable_input_fields()
-        self.talkDetailsWidget.titleLineEdit.clear()
-        self.talkDetailsWidget.presenterLineEdit.clear()
-        self.talkDetailsWidget.descriptionTextEdit.clear()
-        self.talkDetailsWidget.categoryLineEdit.clear()
-        #self.talkDetailsWidget.eventLineEdit.clear()
-        #self.talkDetailsWidget.roomLineEdit.clear()
-
-        self.presentationModel.select()
-
-        self.talkDetailsWidget.saveButton.setEnabled(False)
+        self.tableView.selectRow(row)
+        self.tableView.setCurrentIndex(self.proxy.index(row, column))
+        self.talk_selected(self.proxy.index(row, column))
 
     def remove_talk(self):
         try:
@@ -468,14 +459,14 @@ class TalkEditorApp(FreeseerApp):
         else:
             self.add_talks_from_rss()
 
-        self.update_autocomple_fields()
+        self.update_autocomplete_fields()
 
     def export_talks_to_csv(self):
         fname = QFileDialog.getSaveFileName(self, 'Select file', "", "*.csv")
         if fname:
             self.db.export_talks_to_csv(fname)
 
-    def update_autocomple_fields(self):
+    def update_autocomplete_fields(self):
         self.titleList = QStringList(self.db.get_string_list("Title"))
         self.speakerList = QStringList(self.db.get_string_list("Speaker"))
         self.categoryList = QStringList(self.db.get_string_list("Category"))
@@ -522,3 +513,18 @@ class TalkEditorApp(FreeseerApp):
 
     def enable_save(self):
         self.talkDetailsWidget.saveButton.setEnabled(True)
+
+    def clear_new_talk_fields(self):
+        """Removes existing data from all NewTalkWidget fields except event, room, date and time"""
+        self.newTalkWidget.talkDetailsWidget.titleLineEdit.clear()
+        self.newTalkWidget.talkDetailsWidget.presenterLineEdit.clear()
+        self.newTalkWidget.talkDetailsWidget.descriptionTextEdit.clear()
+        self.newTalkWidget.talkDetailsWidget.categoryLineEdit.clear()
+
+    def remove_new_talk_placeholder_text(self):
+        """Removes placeholder text in NewTalkWidget originally set by TalkDetailsWidget"""
+        self.newTalkWidget.talkDetailsWidget.titleLineEdit.setPlaceholderText("")
+        self.newTalkWidget.talkDetailsWidget.presenterLineEdit.setPlaceholderText("")
+        self.newTalkWidget.talkDetailsWidget.categoryLineEdit.setPlaceholderText("")
+        self.newTalkWidget.talkDetailsWidget.eventLineEdit.setPlaceholderText("")
+        self.newTalkWidget.talkDetailsWidget.roomLineEdit.setPlaceholderText("")
