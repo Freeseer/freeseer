@@ -25,7 +25,7 @@
 import unittest
 
 from freeseer.framework.config.persist import ConfigParserStorage
-from freeseer.tests.framework.config.persist import TestConfigStorage
+from freeseer.tests.framework.config.persist import ConfigStorageTest
 
 initial_config = '''\
 [this_section]
@@ -41,7 +41,7 @@ option2 = 10
 '''
 
 
-class TestConfigParserStorage(TestConfigStorage, unittest.TestCase):
+class TestConfigParserStorage(ConfigStorageTest, unittest.TestCase):
     """Tests that ConfigParserStorage works with a generic Config subclass."""
 
     CONFIG_STORAGE_CLASS = ConfigParserStorage

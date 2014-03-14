@@ -25,10 +25,10 @@
 import unittest
 
 from freeseer.framework.config.options import IntegerOption
-from freeseer.tests.framework.config.options import TestOption
+from freeseer.tests.framework.config.options import OptionTest
 
 
-class TestIntegerOptionNoDefault(unittest.TestCase, TestOption):
+class TestIntegerOptionNoDefault(unittest.TestCase, OptionTest):
     """Tests IntegerOption without a default value."""
 
     valid_success = range(-1000, 1000)

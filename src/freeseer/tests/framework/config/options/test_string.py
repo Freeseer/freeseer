@@ -25,10 +25,10 @@
 import unittest
 
 from freeseer.framework.config.options import StringOption
-from freeseer.tests.framework.config.options import TestOption
+from freeseer.tests.framework.config.options import OptionTest
 
 
-class TestStringOptionNoDefault(unittest.TestCase, TestOption):
+class TestStringOptionNoDefault(unittest.TestCase, OptionTest):
     """Tests StringOption without a default value."""
 
     valid_success = [

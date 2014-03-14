@@ -28,10 +28,10 @@ import tempfile
 import unittest
 
 from freeseer.framework.config.options import FolderOption
-from freeseer.tests.framework.config.options import TestOption
+from freeseer.tests.framework.config.options import OptionTest
 
 
-class TestFolderOptionNoDefault(unittest.TestCase, TestOption):
+class TestFolderOptionNoDefault(unittest.TestCase, OptionTest):
     """Tests FolderOption without a default value."""
 
     valid_success = [

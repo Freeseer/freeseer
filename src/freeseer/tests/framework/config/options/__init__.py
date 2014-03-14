@@ -26,7 +26,7 @@ from freeseer.framework.config.core import Option
 from freeseer.framework.config.exceptions import InvalidDecodeValueError
 
 
-class TestOption(object):
+class OptionTest(object):
     '''
     "Exhaustively" test many success and failure scenarios for:
         option.is_valid(...)

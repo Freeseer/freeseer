@@ -34,7 +34,7 @@ class TestConfig(Config):
     option2 = options.IntegerOption(1337)
 
 
-class TestConfigStorage(object):
+class ConfigStorageTest(object):
     """Base class for testing filesystem-based ConfigStorage classes."""
 
     CONFIG_STORAGE_CLASS = None
