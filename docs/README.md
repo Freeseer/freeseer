@@ -39,11 +39,17 @@ Build & Preview your Changes Locally
 
 Once you've made your changes to the documentation, rebuild the HTML output.
 
-    $ cd freeseer-docs/
+    $ cd docs/
+    $ make clean # Optional. Removes the build/ directory. Use if experiencing issues due to Sphinx's cache.
     $ make html
 
-Your updated HTML files should be in`freeseer-docs/build/html/`,
-and you can view them with your web browser.
+Your updated HTML files should be in `docs/build/html/`.
+
+There are two ways to view the built documentation locally:
+1. Open any of the HTML files in `docs/build/html/` with your web browser.
+2. Serve the contents of `docs/build/html/` from a local server.  
+   You can easily do this by running `python -m SimpleHTTPServer` from
+   `docs/build/html` and navigating your browser to `localhost:8000`.
 
 **Tip:** GitHub can render reStructredText (but doesn't support Sphinx markup).
          View any .rst file to see how it looks.
