@@ -168,7 +168,7 @@ class YoutubeService(object):
             video_file: path to video file for upload
 
         Returns:
-            a tuple containing a response code and a dictionary with the appropriate information
+            A tuple containing a response code and a dictionary with the appropriate information
         """
         part = "snippet,status"
         metadata = self.get_metadata(video_file)
@@ -186,7 +186,7 @@ class YoutubeService(object):
                 "publicStatsViewable": True
             }
         }
-        # this is to fix a bug, the API thinks our .ogg files are audio/ogg
+        # This is to fix a bug, the API thinks our .ogg files are audio/ogg
         mimetype = "video/{}".format(video_file.split(".")[-1])
         media_body = MediaFileUpload(video_file, chunksize=-1, resumable=True, mimetype=mimetype)
         insert_request = self.service.videos().insert(part=part, body=body, media_body=media_body)

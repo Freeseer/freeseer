@@ -34,7 +34,7 @@ from PyQt4 import QtCore
 
 from freeseer import __version__
 from freeseer import settings
-from freeseer.frontend.upload.youtube import YoutubeFrontend
+from freeseer.frontend.upload import youtube
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -113,7 +113,7 @@ def setup_parser_config_youtube(subparsers):
     from oauth2client import tools
     # Inherent Google API argparser
     parser = subparsers.add_parser("youtube", help="Obtain OAuth2 token for Youtube access", parents=[tools.argparser])
-    defaults = YoutubeFrontend.get_defaults()
+    defaults = youtube.get_defaults()
     parser.add_argument("-c", "--client-secrets", help="Path to client secrets file", default=defaults["client_secrets"])
     parser.add_argument("-t", "--token", help="Location to save token file", default=defaults["oauth2_token"])
 
@@ -143,7 +143,7 @@ def setup_parser_upload(subparsers):
 
 def setup_parser_upload_youtube(subparsers):
     """Setup youtube upload command parser"""
-    defaults = YoutubeFrontend.get_defaults()
+    defaults = youtube.get_defaults()
     parser = subparsers.add_parser("youtube", help="Youtube upload command line tool")
     parser.add_argument("files", help="Path to videos or video directories to upload", nargs="*", default=[defaults["video_directory"]])
     parser.add_argument("-t", "--token", help="Path to OAuth2 token", default=defaults["oauth2_token"])
@@ -240,7 +240,6 @@ def parse_args(parser, parse_args=None):
 
     elif args.app == 'upload':
         if args.upload_service == 'youtube':
-            youtube = YoutubeFrontend()
             youtube.upload(args.files, args.token, args.yes)
 
 
