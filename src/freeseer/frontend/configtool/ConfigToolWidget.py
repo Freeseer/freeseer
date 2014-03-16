@@ -74,18 +74,8 @@ class ConfigToolWidget(QtGui.QWidget):
         self.optionsTreeWidget.topLevelItem(2).setText(0, "AV Config")
 
         # Plugins
-        item_0 = QtGui.QTreeWidgetItem(self.optionsTreeWidget)
+        QtGui.QTreeWidgetItem(self.optionsTreeWidget)
         self.optionsTreeWidget.topLevelItem(3).setText(0, "Plugins")
-        QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(3).child(0).setText(0, "AudioInput")
-        QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(3).child(1).setText(0, "AudioMixer")
-        QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(3).child(2).setText(0, "VideoInput")
-        QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(3).child(3).setText(0, "VideoMixer")
-        QtGui.QTreeWidgetItem(item_0)
-        self.optionsTreeWidget.topLevelItem(3).child(4).setText(0, "Output")
 
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         self.closePushButton = QtGui.QPushButton("Close")

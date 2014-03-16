@@ -44,7 +44,7 @@ from freeseer.frontend.qtcommon.AboutWidget import AboutWidget
 from freeseer.frontend.configtool.AVWidget import AVWidget
 from freeseer.frontend.configtool.ConfigToolWidget import ConfigToolWidget
 from freeseer.frontend.configtool.GeneralWidget import GeneralWidget
-from freeseer.frontend.configtool.PluginLoaderWidget import PluginLoaderWidget
+from freeseer.frontend.configtool.PluginWidget import PluginWidget
 
 log = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ class ConfigToolApp(FreeseerApp):
         self.aboutWidget = AboutWidget()
         self.generalWidget = GeneralWidget()
         self.avWidget = AVWidget()
-        self.pluginloaderWidget = PluginLoaderWidget()
+        self.pluginWidget = PluginWidget()
 
         self.plugman = PluginManager(profile)
 
@@ -150,9 +150,6 @@ class ConfigToolApp(FreeseerApp):
 
         self.retranslate()
 
-        # load active plugin widgets
-        self.load_plugin_widgets()
-
         # Start off with displaying the General Settings
         items = self.mainWidget.optionsTreeWidget.findItems(self.aboutString, QtCore.Qt.MatchExactly)
         if len(items) > 0:
@@ -188,12 +185,6 @@ class ConfigToolApp(FreeseerApp):
         self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.generalString)
         self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.avString)
         self.mainWidget.optionsTreeWidget.topLevelItem(3).setText(0, self.pluginsString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(0).setText(0, self.audioInputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(1).setText(0, self.audioMixerString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(2).setText(0, self.videoInputString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(3).setText(0, self.videoMixerString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).child(4).setText(0, self.outputString)
-
         self.mainWidget.closePushButton.setText(self.app.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
 
@@ -259,17 +250,7 @@ class ConfigToolApp(FreeseerApp):
         elif option == self.avString:
             self.load_av_widget()
         elif option == self.pluginsString:
-            pass
-        elif option == self.audioInputString:
-            self.load_option_audioinput_plugins()
-        elif option == self.audioMixerString:
-            self.load_option_audiomixer_plugins()
-        elif option == self.videoInputString:
-            self.load_option_videoinput_plugins()
-        elif option == self.videoMixerString:
-            self.load_option_videomixer_plugins()
-        elif option == self.outputString:
-            self.load_option_output_plugins()
+            self.load_plugins_widget()
         else:
             pass
 
@@ -468,6 +449,53 @@ class ConfigToolApp(FreeseerApp):
     ### Plugin Loader Related
     ###
 
+    def load_plugins_widget(self):
+        self.mainWidgetLayout.addWidget(self.pluginWidget)
+        self.currentWidget = self.pluginWidget
+        self.currentWidget.show()
+
+        if (self.currentWidget.list.topLevelItem(0) is None):
+            # Fill List
+
+            # Audio Input Label
+            QtGui.QTreeWidgetItem(self.currentWidget.list)
+            self.currentWidget.list.topLevelItem(0).setText(0, "Audio Input")
+            self.add_plugins_to_list("AudioInput", self.currentWidget.list.topLevelItem(0))
+
+            # Audio Mixer Label
+            QtGui.QTreeWidgetItem(self.currentWidget.list)
+            self.currentWidget.list.topLevelItem(1).setText(0, "Audio Mixer")
+            self.add_plugins_to_list("AudioMixer", self.currentWidget.list.topLevelItem(1))
+
+            # Video Input Label
+            QtGui.QTreeWidgetItem(self.currentWidget.list)
+            self.currentWidget.list.topLevelItem(2).setText(0, "Video Input")
+            self.add_plugins_to_list("VideoInput", self.currentWidget.list.topLevelItem(2))
+
+            # Video Mixer Label
+            QtGui.QTreeWidgetItem(self.currentWidget.list)
+            self.currentWidget.list.topLevelItem(3).setText(0, "Video Mixer")
+            self.add_plugins_to_list("VideoMixer", self.currentWidget.list.topLevelItem(3))
+
+            # Output Label
+            QtGui.QTreeWidgetItem(self.currentWidget.list)
+            self.currentWidget.list.topLevelItem(4).setText(0, "Output")
+            self.add_plugins_to_list("Output", self.currentWidget.list.topLevelItem(4))
+
+            # Importer Label
+            QtGui.QTreeWidgetItem(self.currentWidget.list)
+            self.currentWidget.list.topLevelItem(5).setText(0, "Input")
+            self.add_plugins_to_list("Importer", self.currentWidget.list.topLevelItem(5))
+
+            self.currentWidget.list.expandAll()
+
+    def add_plugins_to_list(self, plugin_type, parent):
+        plugins = self.get_plugins(plugin_type)
+
+        for i, plugin in enumerate(plugins):
+            newItem = self.pluginWidget.getWidgetPlugin(plugin, plugin_type, self.plugman)
+            parent.addChild(newItem)
+
     def get_plugins(self, plugin_type):
         """
         Returns a list of plugins of type
@@ -490,80 +518,10 @@ class ConfigToolApp(FreeseerApp):
             plugins = self.plugman.get_videomixer_plugins()
         elif plugin_type == "Output":
             plugins = self.plugman.get_output_plugins()
+        elif plugin_type == "Importer":
+            plugins = self.plugman.get_importer_plugins()
 
         return plugins
-
-    def load_plugin_list(self, plugin_type):
-        self.pluginloaderWidget.listWidget.clear()
-        for plugin in self.get_plugins(plugin_type):
-            item = QtGui.QListWidgetItem()
-
-            size = QtCore.QSize(64, 64)
-            item.setSizeHint(size)
-            self.pluginloaderWidget.listWidget.addItem(item)
-
-            # The list item will be a fancy widget.
-            widget = self.pluginloaderWidget.getListWidgetPlugin(plugin,
-                                                                 plugin_type,
-                                                                 self.plugman)
-            self.pluginloaderWidget.listWidget.setItemWidget(item, widget)
-
-    def load_option_audioinput_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-
-        self.load_plugin_list("AudioInput")
-
-    def load_option_audiomixer_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-
-        self.load_plugin_list("AudioMixer")
-
-    def load_option_videoinput_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-
-        self.load_plugin_list("VideoInput")
-
-    def load_option_videomixer_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-
-        self.load_plugin_list("VideoMixer")
-
-    def load_option_output_plugins(self):
-        self.mainWidgetLayout.addWidget(self.pluginloaderWidget)
-        self.currentWidget = self.pluginloaderWidget
-        self.currentWidget.show()
-
-        self.load_plugin_list("Output")
-
-    def load_plugin_widgets(self):
-        for plugin in self.plugman.get_all_plugins():
-            plugin.plugin_object.set_gui(self)
-
-    def show_plugin_widget_dialog(self, widget):
-        self.dialog = QtGui.QDialog(self)
-
-        self.dialog_layout = QtGui.QVBoxLayout()
-        self.dialog_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
-        self.dialog.setLayout(self.dialog_layout)
-        self.dialog_layout.addWidget(widget)
-
-        self.dialog.closeButton = QtGui.QPushButton("Close")
-        self.dialog_layout.addWidget(self.dialog.closeButton)
-        self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
-        self.dialog.setModal(True)
-        self.dialog.show()
-
-    def get_plugin_settings_widget(self, plugin):
-        widget = plugin.plugin_object.get_widget()
-        return widget
 
     def closeEvent(self, event):
         log.info('Exiting configtool...')
