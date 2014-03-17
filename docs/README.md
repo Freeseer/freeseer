@@ -1,7 +1,5 @@
-[![Freeseer][freeseer-banner]][freeseer-docs]
-
-Documentation
--------------
+[Documentation][freeseer-docs]
+------------------------------
 
 We use [Sphinx][] to generate the project's documentation.
 Documentation is written in [reStructuredText][] and stored in `.rst` files.
@@ -51,8 +49,7 @@ There are two ways to view the built documentation locally:
 You can view the underlying reStructuredText of any page built with Sphinx by
 clicking the "Show Source" link on such a page.
 
-[freeseer-banner]: https://github.com/Freeseer/freeseer.github.io/raw/master/img/banner.png "Freeseer by FOSSLC"
-[freeseer-docs]: http://freeseer.rtfd.org
+[freeseer-docs]: http://freeseer.readthedocs.org
 [sphinx]: http://sphinx.pocoo.org
 [restructuredtext]: http://docutils.sf.net/rst.html
 [autodoc]: http://sphinx-doc.org/ext/autodoc.html
