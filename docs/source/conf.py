@@ -15,9 +15,8 @@ import os
 import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath('../../freeseer/src'))  # Freeseer should exist in the same root as freeseer-docs
+# add these directories to sys.path here.
+sys.path.append('../src')  # Temporarily add freeseer/src to $PATH.
 
 # -- General configuration -----------------------------------------------------
 

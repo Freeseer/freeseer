@@ -42,4 +42,4 @@ run_or_fail "src" "coverage run setup.py test"
 run_and_continue "src" "coveralls"
 
 # Build documentation
-run_or_fail "documentation" "make html"
+run_or_fail "docs" "make html"

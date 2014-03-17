@@ -28,10 +28,10 @@ Freeseer.
 
    * Set up Git and your GitHub account
      → `help.github.com <http://help.github.com>`_
-   
+
    * Learn by doing
      → `Try Git <http://try.github.com/>`_
-   
+
    * Learn by watching
      → `Git Videos <http://git-scm.com/videos>`_
 
@@ -68,7 +68,7 @@ Forking and Cloning Freeseer
 
     $ git clone https://github.com/your_username/freeseer.git
 
-3. Your cloned repository has a default remote named ``origin`` that points to 
+3. Your cloned repository has a default remote named ``origin`` that points to
    your fork on GitHub, which can be used for pushing and pulling updates.
    But there is no remote that points to the original repository that you forked
    from. Add a remote named ``upstream`` to keep track of the original Freeseer
@@ -79,7 +79,7 @@ Forking and Cloning Freeseer
     $ git remote -v # Lists your remotes, you should see origin and upstream
 
    .. tip:: The name ``upstream`` is by convention. You can use whatever name
-     you prefer (e.g. ``mainstream`` or ``mothership``). 
+     you prefer (e.g. ``mainstream`` or ``mothership``).
 
 
 Basic Workflow
@@ -97,7 +97,7 @@ your local master branch to pull in changes from upstream.
 
     $ git checkout master
     $ git pull upstream master
-   
+
 2. Create and checkout a new branch.
    Please follow our :ref:`naming guidelines <branch-names>`. ::
 
@@ -218,7 +218,7 @@ cross-repo if you use the long form. [#close-issues-cross-repo]_
 
 .. tip::
   GitHub is case-insensitive to commit messages.
-      
+
 .. seealso::
   `Closing issues via commit messages
   <https://help.github.com/articles/closing-issues-via-commit-messages>`_
@@ -374,4 +374,4 @@ Of course you can also argue feature removal.
 
 .. [#close-issues-cross-repo]
    This is useful when closing an issue in Freeseer/freeseer from a commit
-   message that belongs to another repo such as Freeseer/freeseer-docs.
+   that belongs to another repository under the Freeseer organization.

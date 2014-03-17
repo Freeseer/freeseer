@@ -1,0 +1,2 @@
+# Ignore Sphinx's build output. Can be used for local viewing, but should not be tracked.
+build/
