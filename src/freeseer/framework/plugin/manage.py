@@ -26,8 +26,7 @@ import imp
 import inspect
 import fnmatch
 import os
-#from freeseer.framework.plugin.plugin import Plugin
-from freeseer.framework.plugin import IBackendPlugin as Plugin
+from freeseer.framework.plugin.plugin import Plugin
 
 
 class PluginManager(object):
@@ -36,41 +35,38 @@ class PluginManager(object):
         self.plugins = {}
 
         for module_path in self.find_module_files(dir_path):
-            for (category_name, plugin_obj) in self.find_plugin(module_path):
-                self.add_plugin(category_name, plugin_obj)
+            for obj_in_module in self.find_object(module_path):
+                if self.check_plugin(obj_in_module):
+                    obj = obj_in_module
+                    category_name = obj.CATEGORY
+                    self.add_plugin(category_name, obj)
 
     def find_module_files(self, dir_path):
-        for (dirpath, dirnames, filenames) in os.walk(dir_path):
+        for dirpath, _dirnames, filenames in os.walk(dir_path):
             for filename in fnmatch.filter(filenames, '*.py'):
                 if filename == "__init__.py":
                     yield dirpath
                 else:
                     yield os.path.join(dirpath, filename)
 
-    def find_plugin(self, module_path):
-        module = None
+    def find_object(self, module_path):
         if os.path.isdir(module_path):
             module = imp.load_module("name", None, module_path, ("py", "r", imp.PKG_DIRECTORY))
         else:
             module = imp.load_source(module_path, module_path)
 
         for attr_name in dir(module):
-            name_in_module = getattr(module, attr_name)
-            is_plugin, category_name, plugin_obj = self.check_plugin(name_in_module)
+            obj_in_module = getattr(module, attr_name)
+            if inspect.isclass(obj_in_module):
+                yield obj_in_module
 
-            if (is_plugin):
-                yield (category_name, plugin_obj)
-
-    def check_plugin(self, name_in_module):
+    def check_plugin(self, obj_in_module):
         flag = False
-        category_name = None
-        obj = None
-        if inspect.isclass(name_in_module) and issubclass(name_in_module, Plugin):
-            obj = name_in_module()
+        obj = obj_in_module()
+        if issubclass(obj_in_module, Plugin):
             if hasattr(obj, "NAME") and hasattr(obj, "CATEGORY"):
-                category_name = getattr(obj, "CATEGORY")
                 flag = True
-        return (flag, category_name, obj)
+        return flag
 
     def add_plugin(self, category_name, plugin_obj):
         if category_name not in self.plugins:
