@@ -38,6 +38,7 @@ except AttributeError:
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
+from freeseer.framework.notification_manager import NotificationManager
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
@@ -87,6 +88,12 @@ class RecordApp(FreeseerApp):
         self.reset_timer()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
+
+        # setup notification system
+        self.notificationManager = NotificationManager()
+        self.notificationManager.register_callback("warning", add_warning_label)
+        self.notificationManager.register_callback("error", add_error_label)
+        self.notificationManager.register_callback("remove", delete_label)
 
         #
         # Setup Menubar
@@ -448,6 +455,20 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
+
+    ###
+    ### Notification system
+    ###
+
+    # parameters passed to these functions are temp
+    def add_warning_label(notification_keyword):
+        pass
+
+    def add_error_label(self, notification_keyword):
+        pass
+
+    def delete_label(self, notification_keyword):
+        pass
 
     ###
     ### Talk Related
