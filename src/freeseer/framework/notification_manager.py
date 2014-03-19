@@ -25,6 +25,7 @@
 
 import collections
 
+
 class NotificationManager:
     """stores and manages notifications"""
 
@@ -32,34 +33,40 @@ class NotificationManager:
         self.n_manager = collections.OrderedDict()
         self.callback_list = []
 
-        #self.event_warning = "WARNING"
-        #self.event_error = "ERROR"
-        #self.event_remove = "REMOVE"
+        self.event_warning = "warning"
+        self.event_error = "error"
+        self.event_remove = "remove"
 
         # temp way of assigning unique keywords to notifications
         self.keyword_counter = 0
 
-    def add_warning(self, notification):
-        self.n_manager[self.keyword_counter] = message
+    def add_notification(self, notification):
+        self.n_manager[self.keyword_counter] = notification
         self.keyword_counter = self.keyword_counter + 1
         return self.keyword_counter - 1
-
-    def add_error(self, notification):
-        # if only one error allowed in queue -- "error" temp keyword
-        self.n_manager["error"] = message
-        return "error"
 
     def delete_notification(self, keyword):
         del self.n_manager[keyword]
 
-    def register_callback(self, func):
-        self.callback_list.append(func)
+    def register_callback(self, event, func):
+        if not event in self.callback_list:
+            self.callback_list[event] = []
+        if not func in self.callback_list[event]:
+            self.callback_list[event].append(func)
 
-    def deregister_callback(self, func):
-        # while loop might be a better way to do this
-        for i in range(len(self.callback_list)):
-            if callback_list[i] == func:
-                del callback_list[i]
+    def deregister_callback(self, event, func):
+        if event in self.callback_list:
+            if func in self.callback_list[event]:
+                self.callback_list[event].remove(func)
 
-    def emit(self, event, func):
-        pass
+    def notify(self, event, argv):
+        if event == self.event_warning or event == self.event_error:
+            key = self.add_notification(argv)
+            for func in self.callback_list[event]:
+                func(argv)
+            return key
+        elif event == self.event_remove:
+            self.delete_notification(argv)
+            for func in self.callback_list[event]:
+                func(argv)
+            return argv

@@ -91,9 +91,9 @@ class RecordApp(FreeseerApp):
 
         # setup notification system
         self.notificationManager = NotificationManager()
-        self.notificationManager.register_callback("warning", add_warning_label)
-        self.notificationManager.register_callback("error", add_error_label)
-        self.notificationManager.register_callback("remove", delete_label)
+        self.notificationManager.register_callback(add_warning_label)
+        self.notificationManager.register_callback(add_error_label)
+        self.notificationManager.register_callback(delete_label)
 
         #
         # Setup Menubar
@@ -455,20 +455,6 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
-
-    ###
-    ### Notification system
-    ###
-
-    # parameters passed to these functions are temp
-    def add_warning_label(notification_keyword):
-        pass
-
-    def add_error_label(self, notification_keyword):
-        pass
-
-    def delete_label(self, notification_keyword):
-        pass
 
     ###
     ### Talk Related
