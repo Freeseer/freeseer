@@ -138,7 +138,17 @@ class TalkEditorApp(FreeseerApp):
         self.connect(self.commandButtons.searchLineEdit, SIGNAL('returnPressed()'), self.search_talks)
 
         # Talk Details Buttons
-        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_talk)
+        self.connect(self.talkDetailsWidget.saveButton, SIGNAL('clicked()'), self.add_or_update_talk)
+
+        # Talk Details Widget
+        self.connect(self.talkDetailsWidget.titleLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.presenterLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.categoryLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.eventLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.roomLineEdit, SIGNAL('textEdited(const QString)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.descriptionTextEdit, SIGNAL('modificationChanged(bool)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.dateEdit, SIGNAL('dateChanged(const QDate)'), self.enable_save)
+        self.connect(self.talkDetailsWidget.timeEdit, SIGNAL('timeChanged(const QTime)'), self.enable_save)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -153,6 +163,8 @@ class TalkEditorApp(FreeseerApp):
 
         # Setup Autocompletion
         self.update_autocomple_fields()
+
+        self.talkDetailsWidget.saveButton.setEnabled(False)
 
         # Select first item
         #self.tableView.setCurrentIndex(self.proxy.index(0,0))
@@ -237,6 +249,7 @@ class TalkEditorApp(FreeseerApp):
         # Map data to widgets
         self.mapper = QDataWidgetMapper()
         self.mapper.setModel(self.proxy)
+        self.mapper.setSubmitPolicy(QDataWidgetMapper.ManualSubmit)
         self.mapper.addMapping(self.talkDetailsWidget.titleLineEdit, 1)
         self.mapper.addMapping(self.talkDetailsWidget.presenterLineEdit, 2)
         self.mapper.addMapping(self.talkDetailsWidget.categoryLineEdit, 4)
@@ -262,9 +275,9 @@ class TalkEditorApp(FreeseerApp):
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
 
     def talk_selected(self, model):
-        self.talkDetailsWidget.saveButton.setEnabled(False)
         self.mapper.setCurrentIndex(model.row())
         self.talkDetailsWidget.enable_input_fields()
+        self.talkDetailsWidget.saveButton.setEnabled(False)
 
     def toggle_import(self):
         if self.importTalksWidget.csvRadioButton.isChecked():
@@ -288,18 +301,38 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.setHidden(False)
         self.importTalksWidget.setHidden(True)
 
+    def add_or_update_talk(self):
+        """Adds or updates a talk using data from the input fields
+
+        If there is a talk selected, it updates that talk by calling update_talk
+        Otherwise, it adds a new talk to the database by calling add_talk
+        """
+        selected_talk = self.tableView.currentIndex()
+        if selected_talk.row() >= 0:  # The tableView index begins at 0 and is -1 by default
+            self.update_talk(selected_talk)
+        else:
+            self.add_talk()
+
+    def update_talk(self, selected_talk):
+        """Updates the currently selected talk using data from the input fields"""
+        presentation = self.create_presentation()
+
+        selected_row = selected_talk.row()
+        selected_column = selected_talk.column()
+        talk_id = selected_talk.sibling(selected_row, 0).data().toString()
+
+        self.db.update_presentation(talk_id, presentation)
+
+        self.presentationModel.select()
+
+        self.tableView.selectRow(selected_row)
+        self.tableView.setCurrentIndex(self.proxy.index(selected_row, selected_column))
+        self.mapper.setCurrentIndex(selected_row)
+
+        self.talkDetailsWidget.saveButton.setEnabled(False)
+
     def add_talk(self):
-        date = self.talkDetailsWidget.dateEdit.date()
-        time = self.talkDetailsWidget.timeEdit.time()
-        presentation = Presentation(
-            unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
-            unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
-            unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
-            unicode(date.toString(Qt.ISODate)),
-            unicode(time.toString(Qt.ISODate)))
+        presentation = self.create_presentation()
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):
@@ -316,6 +349,20 @@ class TalkEditorApp(FreeseerApp):
 
         self.update_autocomple_fields()
         self.talkDetailsWidget.disable_input_fields()
+
+    def create_presentation(self):
+        """Creates and returns an instance of Presentation using data from the input fields"""
+        date = self.talkDetailsWidget.dateEdit.date()
+        time = self.talkDetailsWidget.timeEdit.time()
+        return Presentation(
+            unicode(self.talkDetailsWidget.titleLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.presenterLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
+            unicode(self.talkDetailsWidget.categoryLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.eventLineEdit.text()).strip(),
+            unicode(self.talkDetailsWidget.roomLineEdit.text()).strip(),
+            unicode(date.toString(Qt.ISODate)),
+            unicode(time.toString(Qt.ISODate)))
 
     def confirm_add(self):
         """Requests confirmation before clearing fields for a new talk."""
@@ -340,7 +387,10 @@ class TalkEditorApp(FreeseerApp):
         self.talkDetailsWidget.categoryLineEdit.clear()
         #self.talkDetailsWidget.eventLineEdit.clear()
         #self.talkDetailsWidget.roomLineEdit.clear()
+
         self.presentationModel.select()
+
+        self.talkDetailsWidget.saveButton.setEnabled(False)
 
     def remove_talk(self):
         try:
@@ -459,14 +509,16 @@ class TalkEditorApp(FreeseerApp):
                 self.talkDetailsWidget.timeEdit.isEnabled())
 
     def unsaved_details_exist(self):
-        """Checks if details exist for a new talk
+        """Checks if changes have been made to new/existing talk details
 
         Looks for text in the input fields and check the enabled state of the Save Talk button
-        If the Save Talk button is enabled, the input fields contain values for a new talk
-        Otherwise, the input fields contain values for an existing selected talk
+        If the Save Talk button is enabled, the input fields contain modified values
         """
         return (self.talkDetailsWidget.saveButton.isEnabled() and
                 (self.talkDetailsWidget.titleLineEdit.text() or
                 self.talkDetailsWidget.presenterLineEdit.text() or
                 self.talkDetailsWidget.categoryLineEdit.text() or
                 self.talkDetailsWidget.descriptionTextEdit.toPlainText()))
+
+    def enable_save(self):
+        self.talkDetailsWidget.saveButton.setEnabled(True)
