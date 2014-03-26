@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="en_US" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="en_US">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -148,22 +149,22 @@
     <message>
         <location filename="../../configtool/configtool.py" line="216"/>
         <source>Record to File</source>
-        <translation type="unfinished"></translation>
+        <translation>Record to File</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="217"/>
         <source>File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>File Format</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="220"/>
         <source>Record to Stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Record to Stream</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>Stream Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Stream Format</translation>
     </message>
 </context>
 <context>
@@ -364,32 +365,32 @@
     <message>
         <location filename="../../record/record.py" line="189"/>
         <source>Play Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Play Video</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="194"/>
         <source>Recording</source>
-        <translation type="unfinished">Recording</translation>
+        <translation>Recording</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="196"/>
         <source>Free Space:</source>
-        <translation type="unfinished"></translation>
+        <translation>Free Space:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="197"/>
         <source>Elapsed Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>Elapsed Time:</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="215"/>
         <source>&amp;Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Configuration</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="216"/>
         <source>&amp;Edit Talks</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Edit Talks</translation>
     </message>
 </context>
 <context>
@@ -525,62 +526,62 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="182"/>
         <source>Remove All Talks from Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Remove All Talks from Database</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="194"/>
         <source>&amp;Remove All Talks</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Remove All Talks</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Category</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="213"/>
         <source>RSS URL</source>
-        <translation type="unfinished"></translation>
+        <translation>RSS URL</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
         <source>CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV File</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="221"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>Import</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="222"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>Export</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="225"/>
         <source>Remove All</source>
-        <translation type="unfinished"></translation>
+        <translation>Remove All</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="231"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>Search</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="185"/>
         <source>Unsaved Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Unsaved Data</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="186"/>
         <source>Unsaved talk details will be lost. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Unsaved talk details will be lost. Continue?</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="223"/>
         <source>Add New Talk</source>
-        <translation type="unfinished"></translation>
+        <translation>Add New Talk</translation>
     </message>
 </context>
 <context>
