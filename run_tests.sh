@@ -36,7 +36,7 @@ cd "$(git rev-parse --show-toplevel)"
 run_or_fail "." "flake8 src";
 
 # Run unit tests
-run_or_fail "src" "coverage run setup.py test"
+run_or_fail "src" "python setup.py test"
 
 # Upload unit test results to coveralls
 run_and_continue "src" "coveralls"

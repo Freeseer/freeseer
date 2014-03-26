@@ -25,10 +25,10 @@
 import unittest
 
 from freeseer.framework.config.options import BooleanOption
-from freeseer.tests.framework.config.options import TestOption
+from freeseer.tests.framework.config.options import OptionTest
 
 
-class TestBooleanOptionNoDefault(unittest.TestCase, TestOption):
+class TestBooleanOptionNoDefault(unittest.TestCase, OptionTest):
     """Tests BooleanOption without a default value."""
 
     valid_success = [

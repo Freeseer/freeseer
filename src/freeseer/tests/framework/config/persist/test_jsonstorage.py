@@ -25,7 +25,7 @@
 import unittest
 
 from freeseer.framework.config.persist import JSONConfigStorage
-from freeseer.tests.framework.config.persist import TestConfigStorage
+from freeseer.tests.framework.config.persist import ConfigStorageTest
 
 initial_config = '''\
 {
@@ -45,7 +45,7 @@ after_config = '''\
 '''
 
 
-class TestJSONConfigStorage(TestConfigStorage, unittest.TestCase):
+class TestJSONConfigStorage(ConfigStorageTest, unittest.TestCase):
     """Tests that JSONConfigStorage works with a generic Config subclass."""
 
     CONFIG_STORAGE_CLASS = JSONConfigStorage

@@ -1,8 +1,25 @@
 #!/usr/bin/env python
+import multiprocessing  # flake8: noqa
+import sys
+
 from setuptools import find_packages
 from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 import freeseer
+
+
+class PyTest(TestCommand):
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = 'freeseer/tests --cov freeseer --cov-config ../.coveragerc'
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
 
 
 setup(name=freeseer.NAME,
@@ -44,4 +61,5 @@ setup(name=freeseer.NAME,
               'freeseer = freeseer:main',
           ],
       },
-      test_suite='freeseer.tests')
+      tests_require=['pytest-cov', 'pytest'],
+      cmdclass={'test': PyTest})
