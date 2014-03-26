@@ -139,6 +139,7 @@ class FreeseerApp(QMainWindow):
 
         log.info("Switching language to: %s" % action.text())
         self.uiTranslator.load(":/languages/tr_%s.qm" % self.current_language)
+        self.app.installTranslator(self.uiTranslator)
 
         self.retranslateFreeseerApp()
         self.aboutDialog.retranslate(self.current_language)
