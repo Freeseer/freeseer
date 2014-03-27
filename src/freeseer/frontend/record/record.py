@@ -29,6 +29,7 @@ import sys
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QCursor
+from PyQt4.QtGui import QLabel
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -90,10 +91,14 @@ class RecordApp(FreeseerApp):
         self.timer.timeout.connect(self.update_timer)
 
         # setup notification system
+        self.add1 = True
+        self.add2 = True
+        self.add3 = True
         self.notificationManager = NotificationManager()
-        self.notificationManager.register_callback(add_warning_label)
-        self.notificationManager.register_callback(add_error_label)
-        self.notificationManager.register_callback(delete_label)
+        self.notificationManager.register('warning', self.add_warning_label)
+        self.notificationManager.register('error', self.add_error_label)
+        self.notificationManager.register('remove-warning', self.remove_warning_label)
+        self.notificationManager.register('remove-error', self.remove_error_label)
 
         #
         # Setup Menubar
@@ -446,6 +451,15 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
+        if self.add1:
+            self.notificationManager.add_warning("testing ...")
+            self.add1 = False
+        elif self.add2:
+            self.notificationManager.add_warning("testing ...  again")
+            self.add2 = False
+        elif self.add3:
+            self.notificationManager.add_warning("testing ...  again .. yet again")
+            self.add3 = False
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -455,6 +469,25 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
+
+    ###
+    ### notificaton system
+    ###
+
+    def add_warning_label(self, notification):
+        self.new_label = QLabel()
+        self.new_label.setText("WARNING: {}".format(notification))
+        self.new_label.setStyleSheet("QLabel { background-color : yellow; color : black; }")
+        self.mainWidget.notificationLayout.addWidget(self.new_label)
+
+    def add_error_label(self, notification):
+        pass
+
+    def remove_error_label(self, notification):
+        pass
+
+    def remove_warning_label(self, notification):
+        pass
 
     ###
     ### Talk Related

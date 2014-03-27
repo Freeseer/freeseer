@@ -39,6 +39,7 @@ from PyQt4.QtGui import QPixmap
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtGui import QSlider
+from PyQt4.QtGui import QScrollArea
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QVBoxLayout
@@ -171,6 +172,20 @@ class RecordingWidget(QWidget):
 
         self.statusLabel = QLabel()
         self.mainLayout.addWidget(self.statusLabel)
+
+        # notification widget
+        self.notificationWidget = QWidget()
+        self.notificationWidget.setMaximumHeight(200)
+
+        self.notificationLayout = QVBoxLayout()
+        self.notificationWidget.setLayout(self.notificationLayout)
+
+        self.notificationSP = QScrollArea()
+        self.notificationSP.setMaximumHeight(50)
+        self.notificationSP.setWidgetResizable(True)
+        self.notificationSP.setWidget(self.notificationWidget)
+
+        self.mainLayout.addWidget(self.notificationSP)
 
         # Audio Feedback Checkbox
         self.audioFeedbackCheckbox = QCheckBox()
