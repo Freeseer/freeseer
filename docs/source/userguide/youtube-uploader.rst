@@ -18,7 +18,8 @@ How to Use
 ----------
 
 The Youtube Uploader has been built entirely from scratch, and uses the lastest Google Data API v3.
-The latest API has fundamentally different security and authentication procedures than previous versions.
+The latest API has fundamentally different security and authentication procedures than previous versions, for more
+information on the backing technology, please see <http://oauth.net/2/>.
 As such, the upload process can seem a little daunting at first glance, but in the end its actually quite easy to use,
 and future features like livestreaming, could build upon this.
 ::
