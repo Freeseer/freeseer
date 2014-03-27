@@ -28,6 +28,8 @@ An audio plugin which uses PulseAudio as the audio input.
 @author: Thanh Ha
 '''
 
+import freeseer.framework.config.options as options
+
 # python-libs
 try:  # Import using Python3 module name
     import configparser
@@ -44,7 +46,9 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
-from freeseer.framework.plugin import IAudioInput
+from freeseer.framework.plugin.plugin import AudioInputPlugin
+from freeseer.framework.config.core import Config
+
 
 # .freeseer-plugin custom
 import widget
@@ -52,12 +56,15 @@ import widget
 log = logging.getLogger(__name__)
 
 
-class PulseSrc(IAudioInput):
+class PulseSrcConfig(Config):
+    source = options.StringOption()
+
+
+class PulseSrc(AudioInputPlugin):
     name = "Pulse Audio Source"
     os = ["linux", "linux2"]
 
-    #config variables
-    source = ''
+    CONFIG_CLASS = PulseSrcConfig
 
     def get_audioinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
@@ -87,14 +94,6 @@ class PulseSrc(IAudioInput):
         result = [(name, name) for name in names]
         return result
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.source = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Source')
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -105,7 +104,6 @@ class PulseSrc(IAudioInput):
         self.widget.connect(self.widget.source_combobox, SIGNAL('currentIndexChanged(int)'), self.set_source)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
 
         sources = self.__get_sources()
 

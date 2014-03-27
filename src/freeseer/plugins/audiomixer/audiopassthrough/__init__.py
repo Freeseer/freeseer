@@ -30,6 +30,8 @@ the output.
 @author: Thanh Ha
 '''
 
+import freeseer.framework.config.options as options
+
 # python-libs
 try:  # Import using Python3 module name
     import configparser
@@ -45,17 +47,23 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
-from freeseer.framework.plugin import IAudioMixer
+from freeseer.framework.plugin.plugin import AudioMixerPlugin
+from freeseer.framework.config.core import Config
 
 # .freeseer-plugin custom
 import widget
 
 
-class AudioPassthrough(IAudioMixer):
+class AudioPassthroughConfig(Config):
+    input1 = options.StringOption()
+
+
+class AudioPassthrough(AudioMixerPlugin):
     name = "Audio Passthrough"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
-    input1 = None
     widget = None
+
+    CONFIG_CLASS = AudioPassthroughConfig
 
     def get_audiomixer_bin(self):
         bin = gst.Bin()
@@ -84,14 +92,6 @@ class AudioPassthrough(IAudioMixer):
         player.add(input)
         input.link(mixer)
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input")
-        except configparser.NoSectionError:
-            self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -103,7 +103,6 @@ class AudioPassthrough(IAudioMixer):
         self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
 
         sources = []
         plugins = self.plugman.get_audioinput_plugins()

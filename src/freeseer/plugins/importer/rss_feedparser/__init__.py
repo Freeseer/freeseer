@@ -38,7 +38,7 @@ except ImportError:
 
 from feedparser import parse
 
-from freeseer.framework.plugin import IImporter
+from freeseer.framework.plugin.plugin import ImporterPlugin
 
 
 class MLStripper(HTMLParser):
@@ -64,7 +64,7 @@ def strip_tags(html):
     return s.get_data()
 
 
-class FeedParser(IImporter):
+class FeedParser(ImporterPlugin):
     """FeedParser plugin for Freeseer
 
     Provides functionality to allow a RSS feed to be fetched and parsed
@@ -72,6 +72,8 @@ class FeedParser(IImporter):
 
     name = "Rss FeedParser"
     os = ["linux", "linux2"]
+
+    CONFIG_CLASS = None
 
     def get_presentations(self, feed_url):
         """Takes feed_url, fetches, parses feed_url

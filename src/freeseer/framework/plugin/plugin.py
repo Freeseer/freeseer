@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2014  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -23,13 +23,7 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import abc
-#import ConfigParser
 import logging
-#import os
-#import sys
-#import xml.etree.ElementTree as ET
-
-#from PyQt4 import QtCore
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +31,14 @@ log = logging.getLogger(__name__)
 class Plugin(object):
 
     __metaclass__ = abc.ABCMeta
+
+    # Is it OK to define an __init__ method?
+    # It seems like all plugins will make use of the __init__ with parameters (manager and) config.
+    # The current plugins do need to know about the manager, but will future plugins need to do so?
+    # Keeping manager here for now.
+    def __init__(self, manager, config):
+        self.manager = manager
+        self.config = config
 
 
 class AudioInputPlugin(Plugin):
@@ -124,7 +126,7 @@ class OuputPlugin(Plugin):
             pass
 
 
-class Importer(Plugin):
+class ImporterPlugin(Plugin):
 
     @abc.abstractmethod
     def get_presentations(self):

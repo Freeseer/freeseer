@@ -28,6 +28,8 @@ An audio mixer plugin that combines 2 audio sources into a single output.
 @author: Aaron Brubacher
 '''
 
+import freeseer.framework.config.options as options
+
 # python-libs
 try:  # Import using Python3 module name
     import configparser
@@ -43,17 +45,21 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
-from freeseer.framework.plugin import IAudioMixer
+from freeseer.framework.plugin.plugin import AudioMixerPlugin
+from freeseer.framework.config.core import Config
 
 # .freeseer-plugin custom
 import widget
 
 
-class MultiAudio(IAudioMixer):
+class MultiAudioConfig(Config):
+    input1 = options.StringOption()
+    input2 = options.StringOption()
+
+
+class MultiAudio(AudioMixerPlugin):
     name = 'Multiple Audio Inputs'
     os = ['linux', 'linux2', 'win32', 'cygwin', 'darwin']
-    input1 = None
-    input2 = None
     widget = None
 
     def get_audiomixer_bin(self):
@@ -89,16 +95,6 @@ class MultiAudio(IAudioMixer):
         input2 = inputs[1]
         player.add(input2)
         input2.link(mixer)
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1')
-            self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2')
-        except configparser.NoSectionError, configparser.NoOptionError:
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 1', self.input1)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Audio Input 2', self.input2)
 
     def get_widget(self):
         if self.widget is None:

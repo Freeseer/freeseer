@@ -26,12 +26,14 @@ import imp
 import inspect
 import fnmatch
 import os
+
 from freeseer.framework.plugin.plugin import Plugin
 
 
 class PluginManager(object):
 
-    def __init__(self, dir_path):
+    def __init__(self, dir_path, profile):
+        self.profile = profile
         self.plugins = {}
 
         for module_path in self.find_module_files(dir_path):
@@ -74,10 +76,13 @@ class PluginManager(object):
 
         self.plugins[category_name].append(plugin_obj)
 
+    def create_plugin(self, plugin_class):
+        plugin_config = self.profile.get_config('plugins.conf', plugin_class.CONFIG_CLASS)
+        return plugin_class(self, plugin_config)
+
 
 def main():
-    test = PluginManager("/home/sephallia/git/freeseer/src/freeseer/plugins/")
-    print (test.plugins)
+    pass
 
 if __name__ == '__main__':
     main()
