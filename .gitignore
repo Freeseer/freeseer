@@ -19,3 +19,4 @@ MANIFEST
 
 # Coveralls Generated
 .coverage
+*.egg/
