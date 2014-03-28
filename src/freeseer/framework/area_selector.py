@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2014  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -100,7 +100,7 @@ class AreaSelector(QWidget):
 
     def _acceptSelection(self):
         '''Accept the selection and close the area selector app'''
-        if not self.parent is None:
+        if self.parent is not None:
             self.parent.areaSelectEvent(self.start_x, self.start_y, self.end_x, self.end_y)
         self.close()
 
