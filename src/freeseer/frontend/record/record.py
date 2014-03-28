@@ -39,6 +39,7 @@ from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
+from freeseer.frontend.qtcommon.NotificationPanel import NotificationPanel
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
@@ -87,6 +88,9 @@ class RecordApp(FreeseerApp):
         self.reset_timer()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
+
+        # Initializing notification manager
+        self.notificationList = NotificationPanel()
 
         #
         # Setup Menubar
