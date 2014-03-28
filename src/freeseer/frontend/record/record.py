@@ -452,13 +452,13 @@ class RecordApp(FreeseerApp):
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
         if self.add1:
-            self.notificationManager.add_warning("testing ...")
+            self.notificationManager.add_notification('warning', "testing ...")
             self.add1 = False
         elif self.add2:
-            self.notificationManager.add_warning("testing ...  again")
+            self.notificationManager.add_notification('warning', "testing ...  again")
             self.add2 = False
         elif self.add3:
-            self.notificationManager.add_warning("testing ...  again .. yet again")
+            self.notificationManager.add_notification('warning', "testing ...  again .. yet again")
             self.add3 = False
 
     def reset_timer(self):

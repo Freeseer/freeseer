@@ -22,8 +22,10 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-
+import logging
 import collections
+
+log = logging.getLogger(__name__)
 
 
 class NotificationManager:
@@ -41,53 +43,29 @@ class NotificationManager:
         # temp way of assigning unique keywords to notifications
         self.keyword_counter = 0
 
-    def add_warning(self, notification):
-        if not len(self.callbacks['warning']) == 0:
+    def add_notification(self, event, notification):
+        if len(self.callbacks[event]) > 0:
             self.notifications[self.keyword_counter] = notification
             self.keyword_counter = self.keyword_counter + 1
-            for func in self.callbacks['warning']:
+            for func in self.callbacks[event]:
                 func(notification)
             return self.keyword_counter - 1
         else:
-            pass  # error
+            log.error("There are no callback functions registered in {}".format(event))
 
-    def add_error(self, notification):
-        if not len(self.callbacks['error']) == 0:
-            self.notifications[self.keyword_counter] = notification
-            self.keyword_counter = self.keyword_counter + 1
-            for func in self.callbacks['error']:
-                func(notification)
-            return self.keyword_counter - 1
-        else:
-            pass  # error
-
-    def delete_warning(self, keyword):
-        if not len(self.callbacks['remove-warning']) == 0:
+    def delete_notification(self, event, keyword):
+        if len(self.callbacks[event]) > 0:
             del self.notifications[keyword]
-            for func in self.callbacks['remove-warning']:
+            for func in self.callbacks[event]:
                 func()
         else:
-            pass  #
-
-    def delete_error(self, keyword):
-        if not len(self.callbacks['remove-error']) == 0:
-            del self.notifications[keyword]
-            for func in self.callbacks['remove-error']:
-                func()
-        else:
-            pass  #
+            log.error("There are no callback functions registered in {}".format(event))
 
     def register(self, event, func):
-        if event in self.callbacks:
-            self.callbacks[event].append(func)
-        else:
-            pass  # error
+        self.callbacks[event].append(func)
 
     def deregister(self, event, func):
-        if event in self.callbacks:
-            if func in self.callbacks[event]:
-                self.callbacks[event].remove(func)
-            else:
-                pass  # error
+        if func in self.callbacks[event]:
+            self.callbacks[event].remove(func)
         else:
-            pass  # error
+            log.error("Callback function {} is not registered in {}".format(func, event))
