@@ -39,9 +39,9 @@
         <translation>Freeseer is a video capture utility capable of captureing presentations. It captures video sources such as usb, firewire, or local desktop along with audio and mixes them together to produce a video.</translation>
     </message>
     <message>
-        <location filename="../AboutDialog.py" line="112"/>
-        <source>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</source>
-        <translation>Copyright (C) 2011-2013 The Free and Open Source Software Learning Centre</translation>
+        <location filename="../AboutWidget.py" line="122"/>
+        <source>Copyright (C) 2014 The Free and Open Source Software Learning Centre</source>
+        <translation>Copyright (C) 2014 The Free and Open Source Software Learning Centre</translation>
     </message>
 </context>
 <context>
