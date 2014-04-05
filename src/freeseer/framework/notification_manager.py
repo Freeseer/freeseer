@@ -45,19 +45,21 @@ class NotificationManager:
 
     def add_notification(self, event, notification):
         if len(self.callbacks[event]) > 0:
-            self.notifications[self.keyword_counter] = notification
+            self.keyword = "{}-{}".format(self.keyword_counter, event)
+            self.notifications[self.keyword] = notification
             self.keyword_counter = self.keyword_counter + 1
             for func in self.callbacks[event]:
                 func(notification)
-            return self.keyword_counter - 1
+            return self.keyword
         else:
             log.error("There are no callback functions registered in {}".format(event))
 
     def delete_notification(self, event, keyword):
         if len(self.callbacks[event]) > 0:
+            self.message = self.notifications[keyword]
             del self.notifications[keyword]
             for func in self.callbacks[event]:
-                func()
+                func(self.message)
         else:
             log.error("There are no callback functions registered in {}".format(event))
 

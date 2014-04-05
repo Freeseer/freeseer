@@ -180,12 +180,12 @@ class RecordingWidget(QWidget):
         self.notificationLayout = QVBoxLayout()
         self.notificationWidget.setLayout(self.notificationLayout)
 
-        self.notificationSP = QScrollArea()
-        self.notificationSP.setMaximumHeight(50)
-        self.notificationSP.setWidgetResizable(True)
-        self.notificationSP.setWidget(self.notificationWidget)
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setMaximumHeight(50)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setWidget(self.notificationWidget)
 
-        self.mainLayout.addWidget(self.notificationSP)
+        self.mainLayout.addWidget(self.scrollArea)
 
         # Audio Feedback Checkbox
         self.audioFeedbackCheckbox = QCheckBox()

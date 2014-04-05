@@ -93,7 +93,10 @@ class RecordApp(FreeseerApp):
         # setup notification system
         self.add1 = True
         self.add2 = True
-        self.add3 = True
+        self.remove1 = True
+        self.remove2 = True
+        self.notification1 = None
+        self.notification2 = None
         self.notificationManager = NotificationManager()
         self.notificationManager.register('warning', self.add_warning_label)
         self.notificationManager.register('error', self.add_error_label)
@@ -452,14 +455,17 @@ class RecordApp(FreeseerApp):
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
         if self.add1:
-            self.notificationManager.add_notification('warning', "testing ...")
+            self.notification1 = self.notificationManager.add_notification('warning', "testing ...")
             self.add1 = False
         elif self.add2:
-            self.notificationManager.add_notification('warning', "testing ...  again")
+            self.notification2 = self.notificationManager.add_notification('error', "testing ...  again")
             self.add2 = False
-        elif self.add3:
-            self.notificationManager.add_notification('warning', "testing ...  again .. yet again")
-            self.add3 = False
+        elif self.remove1:
+            self.notificationManager.delete_notification('remove-warning', self.notification1)
+            self.remove1 = False
+        elif self.remove2:
+            self.notificationManager.delete_notification('remove-error', self.notification2)
+            self.remove2 = False
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -481,13 +487,34 @@ class RecordApp(FreeseerApp):
         self.mainWidget.notificationLayout.addWidget(self.new_label)
 
     def add_error_label(self, notification):
-        pass
+        self.new_label = QLabel()
+        self.new_label.setText("ERROR: {}".format(notification))
+        self.new_label.setStyleSheet("QLabel { background-color : red; color : black; }")
+        self.mainWidget.notificationLayout.addWidget(self.new_label)
 
     def remove_error_label(self, notification):
-        pass
+        self.count = 0
+        while (self.count < self.mainWidget.notificationLayout.count()):
+            self.currentLabel = self.mainWidget.notificationLayout.itemAt(self.count).widget()
+            if self.currentLabel.text() == "ERROR: {}".format(notification):
+                self.delete_label = self.mainWidget.notificationLayout.takeAt(self.count).widget()
+                self.delete_label.hide()
+                del self.delete_label
+                self.count = self.mainWidget.notificationLayout.count()
+            else:
+                self.count = self.count + 1
 
     def remove_warning_label(self, notification):
-        pass
+        self.count = 0
+        while (self.count < self.mainWidget.notificationLayout.count()):
+            self.currentLabel = self.mainWidget.notificationLayout.itemAt(self.count).widget()
+            if self.currentLabel.text() == "WARNING: {}".format(notification):
+                self.delete_label = self.mainWidget.notificationLayout.takeAt(self.count).widget()
+                self.delete_label.hide()
+                del self.delete_label
+                self.count = self.mainWidget.notificationLayout.count()
+            else:
+                self.count = self.count + 1
 
     ###
     ### Talk Related
