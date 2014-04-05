@@ -22,10 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import logging
 import collections
-
-log = logging.getLogger(__name__)
 
 
 class NotificationManager:
@@ -44,30 +41,20 @@ class NotificationManager:
         self.keyword_counter = 0
 
     def add_notification(self, event, notification):
-        if len(self.callbacks[event]) > 0:
-            self.keyword = "{}-{}".format(self.keyword_counter, event)
-            self.notifications[self.keyword] = notification
-            self.keyword_counter = self.keyword_counter + 1
-            for func in self.callbacks[event]:
-                func(notification)
-            return self.keyword
-        else:
-            log.error("There are no callback functions registered in {}".format(event))
+        keyword = "{}-{}".format(self.keyword_counter, event)
+        self.notifications[keyword] = notification
+        self.keyword_counter = self.keyword_counter + 1
+        for func in self.callbacks[event]:
+            func(keyword, notification)
+        return keyword
 
     def delete_notification(self, event, keyword):
-        if len(self.callbacks[event]) > 0:
-            self.message = self.notifications[keyword]
-            del self.notifications[keyword]
-            for func in self.callbacks[event]:
-                func(self.message)
-        else:
-            log.error("There are no callback functions registered in {}".format(event))
+        for func in self.callbacks[event]:
+            func(keyword)
+        del self.notifications[keyword]
 
     def register(self, event, func):
         self.callbacks[event].append(func)
 
     def deregister(self, event, func):
-        if func in self.callbacks[event]:
-            self.callbacks[event].remove(func)
-        else:
-            log.error("Callback function {} is not registered in {}".format(func, event))
+        self.callbacks[event].remove(func)

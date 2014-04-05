@@ -97,6 +97,7 @@ class RecordApp(FreeseerApp):
         self.remove2 = True
         self.notification1 = None
         self.notification2 = None
+        self.notificationList = {}
         self.notificationManager = NotificationManager()
         self.notificationManager.register('warning', self.add_warning_label)
         self.notificationManager.register('error', self.add_error_label)
@@ -480,41 +481,27 @@ class RecordApp(FreeseerApp):
     ### notificaton system
     ###
 
-    def add_warning_label(self, notification):
-        self.new_label = QLabel()
-        self.new_label.setText("WARNING: {}".format(notification))
-        self.new_label.setStyleSheet("QLabel { background-color : yellow; color : black; }")
-        self.mainWidget.notificationLayout.addWidget(self.new_label)
+    def add_warning_label(self, keyword, notification):
+        new_warning_label = QLabel()
+        new_warning_label.setText("WARNING: {}".format(notification))
+        new_warning_label.setStyleSheet("QLabel { background-color : yellow; color : black; }")
+        self.mainWidget.notificationLayout.addWidget(new_warning_label)
+        self.notificationList[keyword] = new_warning_label
 
-    def add_error_label(self, notification):
-        self.new_label = QLabel()
-        self.new_label.setText("ERROR: {}".format(notification))
-        self.new_label.setStyleSheet("QLabel { background-color : red; color : black; }")
-        self.mainWidget.notificationLayout.addWidget(self.new_label)
+    def add_error_label(self, keyword, notification):
+        new_error_label = QLabel()
+        new_error_label.setText("ERROR: {}".format(notification))
+        new_error_label.setStyleSheet("QLabel { background-color : red; color : black; }")
+        self.mainWidget.notificationLayout.addWidget(new_error_label)
+        self.notificationList[keyword] = new_error_label
 
-    def remove_error_label(self, notification):
-        self.count = 0
-        while (self.count < self.mainWidget.notificationLayout.count()):
-            self.currentLabel = self.mainWidget.notificationLayout.itemAt(self.count).widget()
-            if self.currentLabel.text() == "ERROR: {}".format(notification):
-                self.delete_label = self.mainWidget.notificationLayout.takeAt(self.count).widget()
-                self.delete_label.hide()
-                del self.delete_label
-                self.count = self.mainWidget.notificationLayout.count()
-            else:
-                self.count = self.count + 1
+    def remove_error_label(self, keyword):
+        self.notificationList[keyword].hide()
+        del self.notificationList[keyword]
 
-    def remove_warning_label(self, notification):
-        self.count = 0
-        while (self.count < self.mainWidget.notificationLayout.count()):
-            self.currentLabel = self.mainWidget.notificationLayout.itemAt(self.count).widget()
-            if self.currentLabel.text() == "WARNING: {}".format(notification):
-                self.delete_label = self.mainWidget.notificationLayout.takeAt(self.count).widget()
-                self.delete_label.hide()
-                del self.delete_label
-                self.count = self.mainWidget.notificationLayout.count()
-            else:
-                self.count = self.count + 1
+    def remove_warning_label(self, keyword):
+        self.notificationList[keyword].hide()
+        del self.notificationList[keyword]
 
     ###
     ### Talk Related
