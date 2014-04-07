@@ -88,9 +88,8 @@ class RecordApp(FreeseerApp):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
 
-        # Set variables for Warning message
-        self.warning_message_off = True
-        self.disk_space = None
+        # Set flag for current disk space
+        self.low_on_space = False
 
         #
         # Setup Menubar
@@ -449,13 +448,7 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
-        # checks current disk space and shows a warning message if disk space is below 10 GB
-        self.disk_space = get_free_space(self.config.videodir).split(" ")
-        if not self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) > 10.0:
-            self.warning_message_off = True
-        if self.warning_message_off and self.disk_space[1] == 'GB' and float(self.disk_space[0]) < 10.0:
-            self.warning_message_off = False
-            self.message.exec_()
+        self.check_current_disk_space()
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -465,6 +458,17 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
+
+    def check_current_disk_space(self):
+        """checks current disk space, log message will be sent if disk space is below the threshold"""
+        remaining_disk_space = get_free_space(self.config.videodir).split(" ")
+        if self.low_on_space and remaining_disk_space[1] == 'GB' and float(remaining_disk_space[0]) > 10.0:
+            log.info("Current disk space greater than 10 GB")
+            self.low_on_space = False
+        elif not self.low_on_space and ((remaining_disk_space[1] == 'GB' and float(remaining_disk_space[0]) < 10.0) or
+                               (remaining_disk_space[1] == 'MB' or remaining_disk_space[1] == 'KB')):
+            log.info("Running low on space, less than 10 GB")
+            self.low_on_space = True
 
     ###
     ### Talk Related
