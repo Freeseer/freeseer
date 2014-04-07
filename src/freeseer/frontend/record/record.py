@@ -38,6 +38,7 @@ except AttributeError:
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
+from freeseer.framework.util import get_free_space_bytes
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
@@ -88,7 +89,8 @@ class RecordApp(FreeseerApp):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
 
-        # Set flag for current disk space
+        # Set variables to check for current disk space
+        self.threshold_in_bytes = 10 * (1024 ** 3)  # 10 Gigabytes
         self.low_on_space = False
 
         #
@@ -460,14 +462,13 @@ class RecordApp(FreeseerApp):
         self.config.audio_feedback = enabled
 
     def check_current_disk_space(self):
-        """checks current disk space, log message will be sent if disk space is below the threshold"""
-        remaining_disk_space = get_free_space(self.config.videodir).split(" ")
-        if self.low_on_space and remaining_disk_space[1] == 'GB' and float(remaining_disk_space[0]) > 10.0:
-            log.info("Current disk space greater than 10 GB")
+        """checks current disk space, log message will be sent if disk space is below the threshold (10 GB)"""
+        remaining_disk_space = get_free_space_bytes(self.config.videodir)
+        if self.low_on_space and remaining_disk_space > self.threshold_in_bytes:
+            log.warning("Current disk space greater than 10 GB")
             self.low_on_space = False
-        elif not self.low_on_space and ((remaining_disk_space[1] == 'GB' and float(remaining_disk_space[0]) < 10.0) or
-                               (remaining_disk_space[1] == 'MB' or remaining_disk_space[1] == 'KB')):
-            log.info("Running low on space, less than 10 GB")
+        elif not self.low_on_space and remaining_disk_space < self.threshold_in_bytes:
+            log.warning("Running low on space, less than 10 GB")
             self.low_on_space = True
 
     ###

@@ -38,6 +38,12 @@ def format_size(num):
 
 def get_free_space(directory):
         """ Return directory free space (in human readable form) """
+        space = get_free_space_bytes(directory)
+        return format_size(space)
+
+
+def get_free_space_bytes(directory):
+        """ Return directory free space in bytes """
         if sys.platform in ["win32", "cygwin"]:
             free_bytes = ctypes.c_ulonglong(0)
             ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(directory),
@@ -46,7 +52,7 @@ def get_free_space(directory):
         else:
             space = os.statvfs(directory).f_bfree * os.statvfs(directory).f_frsize
 
-        return format_size(space)
+        return space
 
 ###
 ### Filename related functions
