@@ -30,12 +30,6 @@ An audio mixer plugin that combines 2 audio sources into a single output.
 
 import freeseer.framework.config.options as options
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require('0.10')

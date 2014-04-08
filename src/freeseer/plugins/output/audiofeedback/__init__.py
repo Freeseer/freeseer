@@ -29,11 +29,7 @@ speakers.
 @author: Thanh Ha
 '''
 
-# python-lib
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import freeseer.framework.config.options as options
 
 # GStreamer
 import pygst
@@ -44,20 +40,25 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
-from freeseer.framework.plugin import IOutput
+from freeseer.framework.plugin.plugin import OutputPlugin
+from freeseer.framework.config.core import Config
 
 # .freeseer-plugin
 import widget
 
 
-class AudioFeedback(IOutput):
+class AudioFeedbackConfig(Config):
+    feedbacksink = options.StringOption()
+
+
+class AudioFeedback(OutputPlugin):
     name = "Audio Feedback"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
-    type = IOutput.AUDIO
-    recordto = IOutput.OTHER
+    # The used to be defined using IOutput. Currently, OutputPlugin does not define these
+    # type = OutputPlugin.AUDIO
+    # recordto = OutputPlugin.OTHER
 
-    # variables
-    feedbacksink = "autoaudiosink"
+    CONFIG_CLASS = AudioFeedbackConfig
 
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin()
@@ -76,13 +77,6 @@ class AudioFeedback(IOutput):
         audioqueue.link(audiosink)
 
         return bin
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-        try:
-            self.feedbacksink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
 
     def get_widget(self):
         if self.widget is None:

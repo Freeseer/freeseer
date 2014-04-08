@@ -28,11 +28,7 @@ A streaming plugin which records sends an Ogg stream to an icecast server.
 @author: Thanh Ha
 '''
 
-# python-lib
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import freeseer.framework.config.options as options
 
 # GStreamer
 import pygst
@@ -43,26 +39,29 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
-from freeseer.framework.plugin import IOutput
+from freeseer.framework.plugin.plugin import OutputPlugin
+from freeseer.framework.config.core import Config
 
 # .freeseer-plugin custom
 import widget
 
 
-class OggIcecast(IOutput):
+class OggIcecastConfig(Config):
+    ip = options.StringOption()
+    port = options.IntegerOption()
+    password = options.StringOption()
+    mount = options.StringOption()
+
+
+class OggIcecast(OutputPlugin):
     name = "Ogg Icecast"
     os = ["linux", "linux2"]
-    type = IOutput.BOTH
-    recordto = IOutput.STREAM
+    type = OutputPlugin.BOTH
+    recordto = OutputPlugin.STREAM
     extension = "ogg"
     tags = None
 
     # Icecast server variables
-    ip = "127.0.0.1"
-    port = 8000
-    password = "hackme"
-    mount = "stream.ogg"
-
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
 
@@ -152,23 +151,6 @@ class OggIcecast(IOutput):
             else:
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.ip = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "IP")
-            self.port = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port"))
-            self.password = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Password")
-            self.mount = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Mount")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", self.ip)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", self.port)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", self.password)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", self.mount)
-        except TypeError:
-            # Temp fix for issue when reading framerate the 2nd time causes TypeError
-            pass
 
     def get_widget(self):
         if self.widget is None:

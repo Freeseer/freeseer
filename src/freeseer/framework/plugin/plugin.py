@@ -132,4 +132,3 @@ class ImporterPlugin(Plugin):
     def get_presentations(self):
         #Builds a list with all presentations
         pass
-

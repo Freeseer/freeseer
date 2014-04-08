@@ -27,7 +27,7 @@ import os
 from freeseer.framework.config.persist import ConfigParserStorage
 from freeseer.framework.config.persist import JSONConfigStorage
 from freeseer.framework.database import QtDBConnector
-from freeseer.framework.plugin import PluginManager
+from freeseer.framework.plugin.manage import PluginManager
 
 
 class ProfileManager(object):

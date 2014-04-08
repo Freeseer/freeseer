@@ -30,11 +30,6 @@ An audio plugin which uses PulseAudio as the audio input.
 
 import freeseer.framework.config.options as options
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
 import logging
 
 # GStreamer
