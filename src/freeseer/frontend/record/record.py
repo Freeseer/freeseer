@@ -37,6 +37,7 @@ except AttributeError:
 
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
+from freeseer.framework.util import format_size
 from freeseer.framework.util import get_free_space
 from freeseer.framework.util import get_free_space_bytes
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
@@ -465,10 +466,10 @@ class RecordApp(FreeseerApp):
         """checks current disk space, log message will be sent if disk space is below the threshold (10 GB)"""
         remaining_disk_space = get_free_space_bytes(self.config.videodir)
         if self.low_on_space and remaining_disk_space > self.threshold_in_bytes:
-            log.warning("Current disk space greater than 10 GB")
+            log.info("Current disk space greater than %s", format_size(self.threshold_in_bytes))
             self.low_on_space = False
         elif not self.low_on_space and remaining_disk_space < self.threshold_in_bytes:
-            log.warning("Running low on space, less than 10 GB")
+            log.warning("Running low on space, less than %s", format_size(self.threshold_in_bytes))
             self.low_on_space = True
 
     ###
