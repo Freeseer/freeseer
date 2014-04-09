@@ -29,7 +29,7 @@ import sys
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QCursor
-from PyQt4.QtGui import QLabel
+from PyQt4.QtGui import QListWidgetItem
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -482,25 +482,25 @@ class RecordApp(FreeseerApp):
     ###
 
     def add_warning_label(self, keyword, notification):
-        new_warning_label = QLabel()
+        new_warning_label = QListWidgetItem()
         new_warning_label.setText("WARNING: {}".format(notification))
-        new_warning_label.setStyleSheet("QLabel { background-color : yellow; color : black; }")
-        self.mainWidget.notificationLayout.addWidget(new_warning_label)
+        new_warning_label.setBackground(QtGui.QColor('yellow'))
+        self.mainWidget.notificationList.addItem(new_warning_label)
         self.notificationList[keyword] = new_warning_label
 
     def add_error_label(self, keyword, notification):
-        new_error_label = QLabel()
+        new_error_label = QListWidgetItem()
         new_error_label.setText("ERROR: {}".format(notification))
-        new_error_label.setStyleSheet("QLabel { background-color : red; color : black; }")
-        self.mainWidget.notificationLayout.addWidget(new_error_label)
+        new_error_label.setBackground(QtGui.QColor('red'))
+        self.mainWidget.notificationList.addItem(new_error_label)
         self.notificationList[keyword] = new_error_label
 
     def remove_error_label(self, keyword):
-        self.notificationList[keyword].hide()
+        self.notificationList[keyword].setHidden(True)
         del self.notificationList[keyword]
 
     def remove_warning_label(self, keyword):
-        self.notificationList[keyword].hide()
+        self.notificationList[keyword].setHidden(True)
         del self.notificationList[keyword]
 
     ###
