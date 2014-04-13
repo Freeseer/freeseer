@@ -61,5 +61,4 @@ setup(name=freeseer.NAME,
               'freeseer = freeseer:main',
           ],
       },
-      tests_require=['pytest-cov', 'pytest'],
       cmdclass={'test': PyTest})
