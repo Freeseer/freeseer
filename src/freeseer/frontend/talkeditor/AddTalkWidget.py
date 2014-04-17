@@ -102,13 +102,20 @@ class AddTalkWidget(QWidget):
 
         self.dateEdit.setCalendarPopup(True)
 
-        # Time
+        # Start Time
         current_time = QTime()
-        self.timeLabel = QLabel("Time")
-        self.timeEdit = QTimeEdit()
-        self.timeEdit.setTime(current_time.currentTime())
-        self.timeLabel.setBuddy(self.dateEdit)
-        self.addTalkLayout.addRow(self.timeLabel, self.timeEdit)
+        self.startTimeLabel = QLabel("Start Time")
+        self.startTimeEdit = QTimeEdit()
+        self.startTimeEdit.setTime(current_time.currentTime())
+        self.startTimeLabel.setBuddy(self.dateEdit)
+        self.addTalkLayout.addRow(self.startTimeLabel, self.startTimeEdit)
+
+        # End Time
+        self.endTimeLabel = QLabel("End Time")
+        self.endTimeEdit = QTimeEdit()
+        self.endTimeEdit.setTime(current_time.currentTime())
+        self.endTimeLabel.setBuddy(self.dateEdit)
+        self.addTalkLayout.addRow(self.endTimeLabel, self.endTimeEdit)
 
         # Buttons
         addIcon = QIcon.fromTheme("list-add")

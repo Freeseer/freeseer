@@ -105,9 +105,12 @@ class ReportEditorWidget(QtGui.QWidget):
         self.roomLabel = QtGui.QLabel("Room :")
         self.roomLabel2 = QtGui.QLabel()
         self.roomLabel2.setFont(boldFont)
-        self.timeLabel = QtGui.QLabel("Time :")
-        self.timeLabel2 = QtGui.QLabel()
-        self.timeLabel2.setFont(boldFont)
+        self.startTimeLabel = QtGui.QLabel("Start Time :")
+        self.startTimeLabel2 = QtGui.QLabel()
+        self.startTimeLabel2.setFont(boldFont)
+        self.endTimeLabel = QtGui.QLabel("End Time :")
+        self.endTimeLabel2 = QtGui.QLabel()
+        self.endTimeLabel2.setFont(boldFont)
 
         self.infoLayout.addRow(self.titleLabel, self.titleLabel2)
         self.infoLayout.addRow(self.speakerLabel, self.speakerLabel2)
@@ -115,7 +118,8 @@ class ReportEditorWidget(QtGui.QWidget):
         self.infoLayout.addRow(self.levelLabel, self.levelLabel2)
         self.infoLayout.addRow(self.eventLabel, self.eventLabel2)
         self.infoLayout.addRow(self.roomLabel, self.roomLabel2)
-        self.infoLayout.addRow(self.timeLabel, self.timeLabel2)
+        self.infoLayout.addRow(self.startTimeLabel, self.startTimeLabel2)
+        self.infoLayout.addRow(self.endTimeLabel, self.endTimeLabel2)
 
 if __name__ == "__main__":
     import sys

@@ -30,7 +30,7 @@ class Presentation(object):
     This class is responsible for encapsulate data about presentations
     and its database related operations
     '''
-    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", time=""):
+    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", startTime="", endTime=""):
         '''
         Initialize a presentation instance
         '''
@@ -41,7 +41,8 @@ class Presentation(object):
         self.event = event
         self.room = room
         self.date = date
-        self.time = time
+        self.startTime = startTime
+        self.endTime = endTime
 
 
 class PresentationFile(Presentation):
@@ -51,9 +52,9 @@ class PresentationFile(Presentation):
     to a file and the metadata that has been loaded from it
     '''
 
-    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", time=""):
+    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", startTime="", endTime=""):
         Presentation.__init__(
-            self, title, speaker, description, category, event, room, date, time)
+            self, title, speaker, description, category, event, room, date, startTime, endTime)
 
         self.filename = ""
         self.album = ""

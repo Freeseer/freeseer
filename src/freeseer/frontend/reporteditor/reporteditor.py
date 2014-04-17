@@ -146,7 +146,8 @@ class ReportEditorApp(FreeseerApp):
         self.editorWidget.levelLabel.setText(self.app.translate("ReportEditorApp", "Level:"))
         self.editorWidget.eventLabel.setText(self.app.translate("ReportEditorApp", "Event:"))
         self.editorWidget.roomLabel.setText(self.app.translate("ReportEditorApp", "Room:"))
-        self.editorWidget.timeLabel.setText(self.app.translate("ReportEditorApp", "Time:"))
+        self.editorWidget.startTimeLabel.setText(self.app.translate("ReportEditorApp", "Start Time:"))
+        self.editorWidget.endTimeLabel.setText(self.app.translate("ReportEditorApp", "End Time:"))
         # --- End EditorWidget
 
     def load_failures_model(self):
@@ -162,15 +163,16 @@ class ReportEditorApp(FreeseerApp):
 
     def add_talk(self):
         date = self.addTalkWidget.dateEdit.date()
-        time = self.addTalkWidget.timeEdit.time()
-        datetime = QDateTime(date, time)
+        startTime = self.addTalkWidget.startTimeEdit.time()
+        datetime = QDateTime(date, startTime)  # original "time" is now "startTime"
         presentation = Presentation(unicode(self.addTalkWidget.titleLineEdit.text()),
                                     unicode(self.addTalkWidget.presenterLineEdit.text()),
                                     "",  # description
                                     "",  # level
                                     unicode(self.addTalkWidget.eventLineEdit.text()),
                                     unicode(self.addTalkWidget.roomLineEdit.text()),
-                                    unicode(datetime.toString()))
+                                    unicode(datetime.toString()),
+                                    unicode(self.addTalkWidget.endTimeEdit.text()))
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):
@@ -234,7 +236,8 @@ class ReportEditorApp(FreeseerApp):
             self.editorWidget.levelLabel2.setText(p.level)
             self.editorWidget.eventLabel2.setText(p.event)
             self.editorWidget.roomLabel2.setText(p.room)
-            self.editorWidget.timeLabel2.setText(p.time)
+            self.editorWidget.startTimeLabel2.setText(p.startTime)
+            self.editorWidget.endTimeLabel2.setText(p.endTime)
         else:
             self.editorWidget.titleLabel2.setText("Talk not found")
             self.editorWidget.speakerLabel2.setText("Talk not found")
@@ -242,7 +245,8 @@ class ReportEditorApp(FreeseerApp):
             self.editorWidget.levelLabel2.setText("Talk not found")
             self.editorWidget.eventLabel2.setText("Talk not found")
             self.editorWidget.roomLabel2.setText("Talk not found")
-            self.editorWidget.timeLabel2.setText("Talk not found")
+            self.editorWidget.startTimeLabel2.setText("Talk not found")
+            self.editorWidget.endTimeLabel2.setText("Talk not found")
 
     def export_reports_to_csv(self):
         fname = QFileDialog.getSaveFileName(self, self.selectFileString, "", "*.csv")

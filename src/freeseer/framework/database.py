@@ -26,6 +26,8 @@ import csv
 import logging
 
 from PyQt4 import QtSql
+from PyQt4.QtCore import QDate
+from PyQt4.QtCore import QTime
 from PyQt4.QtCore import QStringList
 
 from freeseer import SCHEMA_VERSION
@@ -56,7 +58,8 @@ PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
                                         Event varchar(100),
                                         Room varchar(25),
                                         Date timestamp,
-                                        Time timestamp,
+                                        StartTime timestamp,
+                                        EndTime timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
 
 REPORTS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS failures
@@ -150,7 +153,7 @@ class QtDBConnector(object):
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
             self.__create_presentations_table(PRESENTATIONS_SCHEMA_310)
             QtSql.QSqlQuery("""INSERT INTO presentations
-                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time, Time
+                            SELECT Id, Title, Speaker, Description, Level, Event, Room, Time, Time, Time
                             FROM presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
@@ -171,7 +174,7 @@ class QtDBConnector(object):
 
     def __insert_default_talk(self):
         """Inserts the required placeholder talk into the database.At least one talk must exist"""
-        self.insert_presentation(Presentation("", "", "", "", "", "", "", ""))
+        self.insert_presentation(Presentation("", "", "", "", "", "", "", "", ""))
 
     def get_talks(self):
         """Gets all the talks from the database including all columns"""
@@ -193,6 +196,14 @@ class QtDBConnector(object):
         """Gets the talks hosted in a specific room from the database"""
         return QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Room=%s''' % room)
 
+    def get_talks_by_room_and_time(self, room):
+        """Returns the talks hosted in a specified room, starting from the current date and time"""
+        current_date = QDate.currentDate().toString(1)  # yyyy-mm-dd
+        current_time = QTime.currentTime().toString()  # hh:mm:ss
+        return QtSql.QSqlQuery('''SELECT * FROM presentations
+                                  WHERE Room='{}' AND Date='{}'
+                                  AND StartTime >= '{}' ORDER BY StartTime ASC'''.format(room, current_date, current_time))
+
     def get_presentation(self, talk_id):
         """Returns a Presentation object associated to a talk_id"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
@@ -204,7 +215,8 @@ class QtDBConnector(object):
                              event=unicode(result.value(5).toString()),
                              room=unicode(result.value(6).toString()),
                              date=unicode(result.value(7).toString()),
-                             time=unicode(result.value(8).toString()))
+                             startTime=unicode(result.value(8).toString()),
+                             endTime=unicode(result.value(9).toString()))
         else:
             return None
 
@@ -234,10 +246,11 @@ class QtDBConnector(object):
         # If date is empty, and time has a full DateTime, split the DateTime to
         # both Date and Time
 
-        if not presentation.date and presentation.time and len(presentation.time) == 16:
-            presentation.date, presentation.time = presentation.time[:-6], presentation.time[11:]
+        if not presentation.date and presentation.startTime and len(presentation.startTime) == 16:
+            presentation.date, presentation.startTime = presentation.startTime[:-6], presentation.startTime[11:]
+
         QtSql.QSqlQuery(
-            '''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
+            '''INSERT INTO presentations VALUES (NULL, "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s", "%s")''' %
             (presentation.title,
              presentation.speaker,
              presentation.description,
@@ -245,14 +258,15 @@ class QtDBConnector(object):
              presentation.event,
              presentation.room,
              presentation.date,
-             presentation.time))
-        log.info("Talk added: %s - %s" % (presentation.speaker, presentation.title))
+             presentation.startTime,
+             presentation.endTime))
+        log.info("Talk added: %s - %s, Time: %s - %s" % (presentation.speaker, presentation.title, presentation.startTime, presentation.endTime))
 
     def update_presentation(self, talk_id, presentation):
         """Updates an existing Presentation in the database."""
         QtSql.QSqlQuery(
             '''UPDATE presentations SET Title="%s", Speaker="%s", Description="%s", Category="%s",
-                Event="%s", Room="%s", Date="%s", Time="%s"
+                Event="%s", Room="%s", Date="%s", StartTime="%s", EndTime="%s"
                 WHERE Id="%s"''' %
             (presentation.title,
              presentation.speaker,
@@ -261,7 +275,8 @@ class QtDBConnector(object):
              presentation.event,
              presentation.room,
              presentation.date,
-             presentation.time,
+             presentation.startTime,
+             presentation.endTime,
              talk_id))
         log.info("Talk %s updated: %s - %s" % (talk_id, presentation.speaker, presentation.title))
 
@@ -294,7 +309,7 @@ class QtDBConnector(object):
         return self.eventsModel
 
     def get_dates_from_event_room_model(self, event, room):
-        """Gets the Rooms Model.Useful for Qt GUI based Frontends to load the Model into Views."""
+        """Gets the Dates Model. Useful for Qt GUI based Frontends to load the Model into Views."""
         self.datesModel = QtSql.QSqlQueryModel()
         self.datesModel.setQuery(
             "SELECT DISTINCT date FROM presentations WHERE Event='%s' and Room='%s' ORDER BY Date ASC"
@@ -320,13 +335,13 @@ class QtDBConnector(object):
                                    % (event, room, date))
         return self.talksModel
 
-    def get_talk_between_time(self, event, room, starttime, endtime):
-        """Returns the talkID of the first talk found between a starttime, and endtime for a specified event/room.
+    def get_talk_between_time(self, event, room, startTime, endTime):
+        """Returns the talkID of the first talk found between a startTime, and endTime for a specified event/room.
         Else return None"""
         query = QtSql.QSqlQuery("SELECT Id, Date FROM presentations \
                                  WHERE Event='%s' AND Room='%s' \
                                  AND Date BETWEEN '%s' \
-                                              AND '%s' ORDER BY Date ASC" % (event, room, starttime, endtime))
+                                              AND '%s' ORDER BY Date ASC" % (event, room, startTime, endTime))
         query.next()
         if query.isValid():
             return query.value(0)
@@ -351,6 +366,7 @@ class QtDBConnector(object):
                                     presentation["Level"],
                                     presentation["Event"],
                                     presentation["Room"],
+                                    presentation["Time"],
                                     presentation["Time"])
                 self.insert_presentation(talk)
 
@@ -374,6 +390,7 @@ class QtDBConnector(object):
                                     presentation["Level"],
                                     presentation["Event"],
                                     presentation["Room"],
+                                    presentation["Time"],
                                     presentation["Time"])
                 self.insert_presentation(talk)
 
@@ -388,7 +405,8 @@ class QtDBConnector(object):
                       'Event',
                       'Room',
                       'Date',
-                      'Time')
+                      'StartTime',
+                      'EndTime')
 
         try:
             file = open(fname, 'w')
@@ -406,7 +424,8 @@ class QtDBConnector(object):
                                  'Event': unicode(result.value(5).toString()),
                                  'Room': unicode(result.value(6).toString()),
                                  'Date': unicode(result.value(7).toString()),
-                                 'Time': unicode(result.value(8).toString())})
+                                 'StartTime': unicode(result.value(8).toString()),
+                                 'EndTime': unicode(result.value(9).toString())})
         finally:
             file.close()
 
@@ -418,7 +437,8 @@ class QtDBConnector(object):
                       'Event',
                       'Room',
                       'Date',
-                      'Time',
+                      'StartTime',
+                      'EndTime',
                       'Problem',
                       'Error')
         try:
@@ -436,7 +456,8 @@ class QtDBConnector(object):
                                  'Event': report.presentation.event,
                                  'Room': report.presentation.room,
                                  'Date': report.presentation.date,
-                                 'Time': report.presentation.time,
+                                 'StartTime': report.presentation.startTime,
+                                 'EndTime': report.presentation.endTime,
                                  'Problem': report.failure.indicator,
                                  'Error': report.failure.comment})
         finally:
