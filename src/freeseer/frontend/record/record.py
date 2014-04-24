@@ -29,6 +29,7 @@ import sys
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QCursor
+from PyQt4.QtGui import QListWidgetItem
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -38,6 +39,7 @@ except AttributeError:
 from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
+from freeseer.framework.notification_manager import NotificationManager
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
@@ -87,6 +89,20 @@ class RecordApp(FreeseerApp):
         self.reset_timer()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_timer)
+
+        # setup notification system
+        self.add1 = True
+        self.add2 = True
+        self.remove1 = True
+        self.remove2 = True
+        self.notification1 = None
+        self.notification2 = None
+        self.notificationList = {}
+        self.notificationManager = NotificationManager()
+        self.notificationManager.register('warning', self.add_warning_label)
+        self.notificationManager.register('error', self.add_error_label)
+        self.notificationManager.register('remove-warning', self.remove_warning_label)
+        self.notificationManager.register('remove-error', self.remove_error_label)
 
         #
         # Setup Menubar
@@ -439,6 +455,18 @@ class RecordApp(FreeseerApp):
                                                                             self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.recordingString))
+        if self.add1:
+            self.notification1 = self.notificationManager.add_notification('warning', "testing ...")
+            self.add1 = False
+        elif self.add2:
+            self.notification2 = self.notificationManager.add_notification('error', "testing ...  again")
+            self.add2 = False
+        elif self.remove1:
+            self.notificationManager.delete_notification('remove-warning', self.notification1)
+            self.remove1 = False
+        elif self.remove2:
+            self.notificationManager.delete_notification('remove-error', self.notification2)
+            self.remove2 = False
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
@@ -448,6 +476,32 @@ class RecordApp(FreeseerApp):
     def toggle_audio_feedback(self, enabled):
         """Enables or disables audio feedback according to checkbox state"""
         self.config.audio_feedback = enabled
+
+    ###
+    ### notificaton system
+    ###
+
+    def add_warning_label(self, keyword, notification):
+        new_warning_label = QListWidgetItem()
+        new_warning_label.setText("WARNING: {}".format(notification))
+        new_warning_label.setBackground(QtGui.QColor('yellow'))
+        self.mainWidget.notificationList.addItem(new_warning_label)
+        self.notificationList[keyword] = new_warning_label
+
+    def add_error_label(self, keyword, notification):
+        new_error_label = QListWidgetItem()
+        new_error_label.setText("ERROR: {}".format(notification))
+        new_error_label.setBackground(QtGui.QColor('red'))
+        self.mainWidget.notificationList.addItem(new_error_label)
+        self.notificationList[keyword] = new_error_label
+
+    def remove_error_label(self, keyword):
+        self.notificationList[keyword].setHidden(True)
+        del self.notificationList[keyword]
+
+    def remove_warning_label(self, keyword):
+        self.notificationList[keyword].setHidden(True)
+        del self.notificationList[keyword]
 
     ###
     ### Talk Related
