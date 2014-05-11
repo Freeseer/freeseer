@@ -31,6 +31,7 @@ import textwrap
 import pygst
 import yapsy
 from PyQt4 import QtCore
+from tabulate import tabulate
 
 from freeseer import __version__
 from freeseer import settings
@@ -121,7 +122,7 @@ def setup_parser_config_youtube(subparsers):
 def setup_parser_talk(subparsers):
     """Setup the talk command parser"""
     parser = subparsers.add_parser('talk', help='Freeseer talk database functions')
-    parser.add_argument("action", choices=['add', 'remove', 'clear'], nargs='?')
+    parser.add_argument("action", choices=['add', 'remove', 'clear', 'list'], nargs='?')
     parser.add_argument("-t", "--title", type=unicode, help="Title")
     parser.add_argument("-s", "--speaker", type=unicode, help="Speaker")
     parser.add_argument("-r", "--room", type=unicode, help="Room")
@@ -230,6 +231,22 @@ def parse_args(parser, parse_args=None):
 
         elif args.action == "clear":
             db.clear_database()
+
+        elif args.action == "list":
+            talks_query = db.get_talks()
+            talks_table = []
+            while talks_query.next():
+                record = talks_query.record()
+                talks_table.append([
+                    talks_query.value(record.indexOf('id')).toString(),
+                    talks_query.value(record.indexOf('title')).toString(),
+                    talks_query.value(record.indexOf('speaker')).toString(),
+                    talks_query.value(record.indexOf('event')).toString(),
+                ])
+            if talks_table:
+                print(tabulate(talks_table, headers=["ID", "Title", "Speaker", "Event"]))
+            else:
+                print("No talks present.")
 
         else:
             print("Invalid option.")
