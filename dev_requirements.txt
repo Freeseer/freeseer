@@ -4,3 +4,4 @@ flake8==2.1.0
 mock
 pytest==2.5.2
 pytest-cov==1.6
+httpretty

@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="utf-8" ?><rss version="2.0" xml:base="http://fosslc.org/drupal/presentations/summercamp2010" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Approved presentations for summercamp2010</title>
+    <link>http://fosslc.org/drupal/presentations/summercamp2010</link>
+    <description></description>
+    <language>en</language>
+          <item>
+    <title>Managing map data in a database</title>
+    <link>http://fosslc.org/drupal/content/managing-map-data-database</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Andrew Ross        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;This talk will provide a brief introduction to geospatial technologies. It will focus on managing map data with a relational database. Managing map data with a database provides the atomicity, security, access that is difficult to achieve otherwise. It also provides powerful techniques for querying spatial aware data which can enable new insights.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-text field-field-room&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Room:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Rom AB113        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-05-14T10:45&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/managing-map-data-database#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases/ingres">Ingres</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo">OSGeo</category>
+ <pubDate>Mon, 03 May 2010 00:16:41 +0000</pubDate>
+ <dc:creator>aross</dc:creator>
+ <guid isPermaLink="false">700 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>The KDE 4 Show: An Overview of Where the Free Software Desktop Is Going</title>
+    <link>http://fosslc.org/drupal/content/kde-4-show-overview-where-free-software-desktop-going</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Aaron Seigo        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt; .&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-05-23T08:54&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/kde-4-show-overview-where-free-software-desktop-going#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/16">Entrepreneurship</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/kde">KDE</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming">Programming</category>
+ <pubDate>Sun, 23 May 2010 12:56:10 +0000</pubDate>
+ <dc:creator>aseigo</dc:creator>
+ <guid isPermaLink="false">733 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Managing a Meta-Project: A KDE Case Study</title>
+    <link>http://fosslc.org/drupal/content/managing-meta-project-kde-case-study</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Aaron Seigo        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;KDE has evolved from one small team nearly 15 years ago to dozens of small to medium sized teams with well over a thousand people working in concert on over 5 million lines of code. This presentation looks at the processes and practices that go into keeping both the larger KDE community vibrant as well as individual teams, such as the Plasma project, moving. From legal (e.g. copyright attribution) concerns to logistics (e.g. release scheduling) to community health (e.g. events, developer sprints, codes of conduct) and of course technical excellence (e.g. peer review and design): how does a F/OSS behemoth remain agile and connected?&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-05-15T22:21&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/managing-meta-project-kde-case-study#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/16">Entrepreneurship</category>
+ <category domain="http://fosslc.org/drupal/category/category/legal">Legal</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/code-repositories">Code repositories</category>
+ <category domain="http://fosslc.org/drupal/category/community/licenses">Licenses</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming">Programming</category>
+ <pubDate>Sun, 16 May 2010 02:22:29 +0000</pubDate>
+ <dc:creator>aseigo</dc:creator>
+ <guid isPermaLink="false">713 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Getting Started in an Open Source Community</title>
+    <link>http://fosslc.org/drupal/content/getting-started-open-source-community</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Dru Lavigne        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;This presentation will be of interest to those who have never been active within an open source project or have been lurking instead of contributing. It will discuss the following:&lt;/p&gt;
+&lt;p&gt;- why would I want to contribute?&lt;br /&gt;
+- how do I narrow down which community to contribute to?&lt;br /&gt;
+- what type of contributions can I make (e.g. what if I can&#039;t or don&#039;t want to code?)&lt;br /&gt;
+- how do I introduce myself and get started?&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-text field-field-room&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Room:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    AB114        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-08-14T11:25&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/getting-started-open-source-community#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/misc">Misc</category>
+ <pubDate>Mon, 05 Apr 2010 16:26:36 +0000</pubDate>
+ <dc:creator>dlavigne</dc:creator>
+ <guid isPermaLink="false">687 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Software speaks - are you listening?</title>
+    <link>http://fosslc.org/drupal/content/software-speaks-are-you-listening</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    David Maxwell        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;The origins of BSD and Open Source predate the modern Linux renaissance by a decade and a half, and BSD derived codebases are still going strong. What makes a BSD community different from a Linux community? What technological decisions are given more priority in the BSD world? Why should you care, and why should you use BSD? Come and hear a new perspective. The first BSD Unix-derivative operating system was developed in 1977. Shared as Open Source from the beginning, it provided many people&amp;#39;s first exposure to the Open Source concept - especially through its use as the basis for the original SunOS, or the reuse of its TCP/IP stack on widely varied systems (including MS Wi ndows). More recently, whole generations of Open Source developers have grown familiar with Linux as an operating system and community structure, and they&amp;#39;ve had limited, or no, exposure to BSD. The two cultures have similarities, but also many differences in their approach to community building, code maintenance, design and development, and project man agement. Many OSCON conference attendees may only have exposure to The Linux Way. Come and hear about The BSD Way, and you&amp;#39;ll find out why BSD is still going strong, the benefits it can offer you as a user or as a developer, and why us BSD folks don&amp;#39;t just drop it all and contribute to Linux instead.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-05-31T17:12&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/software-speaks-are-you-listening#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/education">Education</category>
+ <category domain="http://fosslc.org/drupal/category/category/legal">Legal</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/category/security">Security</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming">Programming</category>
+ <pubDate>Mon, 31 May 2010 21:13:56 +0000</pubDate>
+ <dc:creator>dmaxwell</dc:creator>
+ <guid isPermaLink="false">761 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>The NetBSD Way</title>
+    <link>http://fosslc.org/drupal/content/netbsd-way</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    David Maxwell        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;The origins of BSD and Open Source predate the modern Linux renaissance by a decade and a half, and BSD derived codebases are still going strong. What makes a BSD community different from a Linux community? What technological decisions are given more priority in the BSD world? Why should you care, and why should you use BSD? Come and hear a new perspective. The first BSD Unix-derivative operating system was developed in 1977. Shared as Open Source from the beginning, it provided many people&amp;#39;s first exposure to the Open Source concept - especially through its use as the basis for the original SunOS, or the reuse of its TCP/IP stack on widely varied systems (including MS Wi ndows). More recently, whole generations of Open Source developers have grown familiar with Linux as an operating system and community structure, and they&amp;#39;ve had limited, or no, exposure to BSD. The two cultures have similarities, but also many differences in their approach to community building, code maintenance, design and development, and project man agement. Many OSCON conference attendees may only have exposure to The Linux Way. Come and hear about The BSD Way, and you&amp;#39;ll find out why BSD is still going strong, the benefits it can offer you as a user or as a developer, and why us BSD folks don&amp;#39;t just drop it all and contribute to Linux instead.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-05-31T16:36&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/netbsd-way#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/community/licenses/bsd">BSD</category>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/category/security">Security</category>
+ <category domain="http://fosslc.org/drupal/category/category/sysadmin">Sysadmin</category>
+ <category domain="http://fosslc.org/drupal/category/community/bsd/netbsd">NetBSD</category>
+ <category domain="http://fosslc.org/drupal/category/community/bsd">BSD</category>
+ <category domain="http://fosslc.org/drupal/category/community/misc">Misc</category>
+ <pubDate>Mon, 31 May 2010 20:41:59 +0000</pubDate>
+ <dc:creator>dmaxwell</dc:creator>
+ <guid isPermaLink="false">758 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Ingres VectorWise - Database on Steroids</title>
+    <link>http://fosslc.org/drupal/content/ingres-vectorwise-database-steroids</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Doug Inkster        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Ingres Corp. has entered into a relationship with the Dutch database research company VectorWise to develop a very high performance database organization enabled through the Ingres open source dbms. This session discusses the innovations incorporated in the VectorWise technology, as well as the relationship between VectorWise, Ingres Corp. and the Ingres dbms.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/ingres-vectorwise-database-steroids#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/18">Database</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases">Databases</category>
+ <pubDate>Tue, 25 May 2010 18:48:45 +0000</pubDate>
+ <dc:creator>dougink</dc:creator>
+ <guid isPermaLink="false">750 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Basic Design for Drupal</title>
+    <link>http://fosslc.org/drupal/content/basic-design-drupal</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Emma Jane Hogbin        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;&quot;Design to Theme in Five&quot;&lt;br /&gt;
+You&#039;ve designed this super amazing Web site in Photoshop (or Illustrator or GIMP or Inkscape or...) and then you hand it over to some programmer and now the Web site doesn&#039;t look anything like your design. BOO! HISS!&lt;/p&gt;
+&lt;p&gt;In this session you&#039;ll learn how to convert your own designs into your own awesome Drupal themes &lt;u&gt;in five easy steps&lt;/u&gt;.&lt;/p&gt;
+&lt;p&gt;We&#039;ll cover the basics of how to:&lt;/p&gt;
+&lt;p&gt;    * Optimize your design files to make theming easier.&lt;br /&gt;
+    * Evaluate common base themes and know when to choose between several popular base themes (e.g. 960.gs, Zen).&lt;br /&gt;
+    * Create a new Drupal theme by extending a base theme.&lt;br /&gt;
+    * Develop common template files (tpl.php) necessary to theme pages and nodes using a text editor.&lt;br /&gt;
+    * Share your designs with others (licensing, uploading to drupal.org and selling your themes).&lt;/p&gt;
+&lt;p&gt;Whether you want to build and sell your own designs, or you&#039;re a newly hired designer at a Drupal Web development shop, this session will give you the confidence to transform your imagination into a working Web site.&lt;/p&gt;
+&lt;p&gt;Prerequisite: This is for Intermediate Drupal Users. For beginners or those evaluating Drupal for the first time, we highly recommend attending the &lt;a href=&quot;http://www.cmsexpo.net/schedule/75-kickstart-programs&quot; target=&quot;_blank&quot;&gt;Drupal KickStart Program&lt;/a&gt; on Monday, May 3rd.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-08-14T13:33&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/basic-design-drupal#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/community/web-programming/drupal">Drupal</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <pubDate>Mon, 10 May 2010 17:34:44 +0000</pubDate>
+ <dc:creator>emmajane</dc:creator>
+ <guid isPermaLink="false">706 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Open Web-searchable GeoData</title>
+    <link>http://fosslc.org/drupal/content/open-web-searchable-geodata</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Geoff Zeiss        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    Jason Birch        &lt;/div&gt;
+              &lt;div class=&quot;field-item odd&quot;&gt;
+                    Haris Kurtagic        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Government 2.0 is about transforming government by making it more transparent, participatory, and collaborative. We believe that that simplest way to make government geodata publicly available is to publish it as HTML web pages because HTML pages are searchable using standard web search engines such as Google. HTML pages means users can search for and find raw geospatial data in the same familiar way they find anything else on the web.  &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/open-web-searchable-geodata#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/government">Government</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo">OSGeo</category>
+ <pubDate>Mon, 31 May 2010 20:48:48 +0000</pubDate>
+ <dc:creator>gzeiss</dc:creator>
+ <guid isPermaLink="false">759 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Linaro: what is it, and why should it matter to you</title>
+    <link>http://fosslc.org/drupal/content/linaro-what-it-and-why-should-it-matter-you</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    James Westby        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Linaro is a collaboration between several large companies working to improve the state of Linux on the ARM platform. While this combination has much promise, we are yet to see large numbers of products available to buy. There are many complex reasons for this, but a group of companies involved in Linux and ARM identified some of them, and formed a new organisation to work together to tackle them.&lt;/p&gt;
+&lt;p&gt;This talk will give you an idea of some of the problems that led to the formation of Linaro, and some of the plans for solving them. Further though it will look at why ARM matters for Linux, why Linaro is vital to its success, and what role you may be able to play in that.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/linaro-what-it-and-why-should-it-matter-you#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/category/packaging">Packaging</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/linux/ubuntu">Ubuntu</category>
+ <category domain="http://fosslc.org/drupal/category/community/linux/canonical">Canonical</category>
+ <pubDate>Sun, 23 May 2010 18:27:06 +0000</pubDate>
+ <dc:creator>jamesw</dc:creator>
+ <guid isPermaLink="false">753 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Every Eyeball Has Value!: The User as a Passive Participant in Open Source Ecosystems</title>
+    <link>http://fosslc.org/drupal/content/every-eyeball-has-value-user-passive-participant-open-source-ecosystems</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Mekki MacAulay        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Traditionally, the &quot;user&quot; role in open source ecosystems is ignored, or relegated to the status of &quot;leech&quot; or otherwise undesirable, non-contributor, outsider, other.  The user is marginalized in open source development discussions.  The value of the user is not well understood, and difficult to quantify.&lt;/p&gt;
+&lt;p&gt;This talk examines the role of the user in open source ecosystems and takes a closer look at how the user contributes to the health and growth of the ecosystem.  It suggests that the user is in fact an integral component of open source ecosystems, and that its contribution, while passive, is key to long term success.&lt;/p&gt;
+&lt;p&gt;In the presentation, the evolving role of the user is examined, and an attempt is made to describe the means of quantifying the value of user participation to the ecosystem.  The target audience of this presentation is open source community organizers, ecosystem participants, and open source proponents in general, especially those with entrepreneurial inclinations.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/every-eyeball-has-value-user-passive-participant-open-source-ecosystems#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/16">Entrepreneurship</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/fosslc">FOSSLC</category>
+ <pubDate>Mon, 31 May 2010 15:30:49 +0000</pubDate>
+ <dc:creator>mekki</dc:creator>
+ <guid isPermaLink="false">756 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Wiki Based Collaborative Platform-Driven Applications By End-Users and Business Analysts</title>
+    <link>http://fosslc.org/drupal/content/wiki-based-collaborative-platform-driven-applications-end-users-and-business-analysts</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Pascal St-Jean        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    Nelson Ko        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;400 Character Summary:&lt;br /&gt;
+Hundreds of thousands of TikiWiki installations are used for a myriad of online collaboration and social applications, including the high-profile Firefox Support site. Not just developers, but end-users and business analysts can enhance or combine modular application configurations defined in easy-to-learn YAML, leading to new and innovative applications for the platform that are easily deployed.&lt;/p&gt;
+&lt;p&gt;Abstract:&lt;br /&gt;
+With over 1,000 features and configuration options, the open source TikiWiki platform has been used for applications ranging from web content management, online collaboration, file sharing, documentation, intranet/extranet, project/event management, knowledge sharing/management, wiki, blogging, social media, and online community. Consistently ranked in the top 100 applications on Sourceforge, TikiWiki is downloaded over 7,000 times a month and there are hundreds of thousands of installations worldwide, including the Firefox Support site that is directly linked from in-browser help.&lt;/p&gt;
+&lt;p&gt;With so many possibilities for different uses, the TikiWiki Community was looking for a way to rapidly deploy applications on the platform, avoiding tedious configuration of the many individual features. These deployment configurations are defined in YAML, a popular machine-parsable data serialization format that is designed for human readability. Called Tiki Profiles, these configurations are extremely modular, and can be combined to form larger applications. For example, it is possible to combine the configurations for a Time Sheet, a Task List and a Consultant List, to create a basic consultant time-management system. When executed, the Tiki Profiles engine will automatically configure necessary features, create content pages, data structures, user groups, permissions, and input forms that make up the application.&lt;/p&gt;
+&lt;p&gt;These modular configurations in easy-to-learn YAML are shared just like open source code, but within a wiki, profiles.tikiwiki.org. Not just developers, but end-users and business analysts can enhance or combine these configurations, leading to new and innovative applications for the platform. For example, the basic consultant time-management system as mentioned above can easily be augmented with a Budget Tracking application to enhance billing management. Repeated application configuration becomes easy, and application variants can be managed more effectively as incremental add-ons to the same base Tiki Profile.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/wiki-based-collaborative-platform-driven-applications-end-users-and-business-analysts#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/15">How To</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/misc">Misc</category>
+ <pubDate>Fri, 04 Jun 2010 16:18:08 +0000</pubDate>
+ <dc:creator>pascalstjean</dc:creator>
+ <guid isPermaLink="false">763 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Data Literacy (or, how to save the world and get crazy rich at the same time)</title>
+    <link>http://fosslc.org/drupal/content/data-literacy-or-how-save-world-and-get-crazy-rich-same-time</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Pete Forde        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;The Open Data movement is picking up steam in a big way. Some government or NGO seems to announce plans for full transparency every week. Then you&#039;ve got a guy like Rob McEwen creating billions of dollars of wealth when he decided to open source his gold mining company&#039;s geological data. Still, data today is like the web was in 1995... all over the place.&lt;/p&gt;
+&lt;p&gt;We need a data commons: a place for people to discover, consume, contribute, discuss and purchase data. This talk discusses how such an infrastructure could work, and how we must bring tools for working with data to non-technical individuals.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-06-26T09:53&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/data-literacy-or-how-save-world-and-get-crazy-rich-same-time#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/16">Entrepreneurship</category>
+ <category domain="http://fosslc.org/drupal/category/category/government">Government</category>
+ <category domain="http://fosslc.org/drupal/category/category/open-data">Open Data</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/licenses">Licenses</category>
+ <pubDate>Sat, 26 Jun 2010 13:55:23 +0000</pubDate>
+ <dc:creator>peteforde</dc:creator>
+ <guid isPermaLink="false">783 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Why legal protection for technical measures is controversial</title>
+    <link>http://fosslc.org/drupal/content/why-legal-protection-technical-measures-controversial</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Russell McOrmond        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Some time before the SummerCamp a new Canadian Copyright bill will be tabled.  Since Canada intends to ratify the 1996 WIPO treaties it will contain some form of legal protection for technical measures, also known as anti-circumvention legislation.&lt;/p&gt;
+&lt;p&gt;I will provide some aids to understanding different types of technical measures, and well as reasons why some are highly controversial while others are not.  (Hint: It matters who owns the thing that is locked, and who holds the keys)&lt;/p&gt;
+&lt;p&gt;We will go through a little history discussing the origins of this policy, as well as a few treaties, trade agreements, and laws in other countries which contain this policy.&lt;/p&gt;
+&lt;p&gt;In the discussion it is expected we will encourage participants to become politically involved in helping clarify this issue for politicians and other policy makers, so we can avoid (or amend) very bad laws.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/why-legal-protection-technical-measures-controversial#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/legal">Legal</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/misc">Misc</category>
+ <pubDate>Wed, 12 May 2010 12:40:20 +0000</pubDate>
+ <dc:creator>Russell McOrmond</dc:creator>
+ <guid isPermaLink="false">708 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>SOA Wizardry with JBoss and Open Source Software</title>
+    <link>http://fosslc.org/drupal/content/soa-wizardry-jboss-and-open-source-software</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Rohit V Kapoor        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;This session will cover development of JEE-compliant and SOA applications using JBoss Enterprise Platforms and the JBoss Developer Studio.&lt;/p&gt;
+&lt;p&gt;An overview of JEE technology is provided, followed a discussion of JBoss Enterprise Application Platform, JBoss Developer Studio and JBoss SOA Platform.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/soa-wizardry-jboss-and-open-source-software#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/company">Company</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming/java">Java</category>
+ <category domain="http://fosslc.org/drupal/category/community/linux/red-hat">Red Hat</category>
+ <pubDate>Mon, 31 May 2010 15:15:47 +0000</pubDate>
+ <dc:creator>rvkapoor</dc:creator>
+ <guid isPermaLink="false">755 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Git 101</title>
+    <link>http://fosslc.org/drupal/content/git-101</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Scott Chacon        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;In this tutorial you will learn how to use Git from the ground up. We will start at the beginning, what Git is and why it’s different than Subversion or Perforce or any tool you’re using now.&lt;/p&gt;
+&lt;p&gt;We will teach basic Git workflows, how to use branches and why they will change your development life, how to setup and work with remote repositories, how to use Git to collaborate with others non-linearly, how to maintain a project by picking commits and merging branches, and how to contribute to a project by creating patches, squashing and splitting commits and creating and pushing topic branches.&lt;/p&gt;
+&lt;p&gt;By the end of the tutorial, you should be able to use Git effectively as a developer, and have a solid understanding of why and how it works.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-08-14T13:50&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/git-101#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/community/code-repositories/git">Git</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <pubDate>Mon, 10 May 2010 17:51:38 +0000</pubDate>
+ <dc:creator>schacon</dc:creator>
+ <guid isPermaLink="false">707 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Open Source Industrial Grade Search Engine Technologies</title>
+    <link>http://fosslc.org/drupal/content/open-source-industrial-grade-search-engine-technologies</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Shahzad Khan        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;This talk discusses techniques for supercharging your Web 2.0 startup via open-source search technologies. &lt;/p&gt;
+&lt;p&gt;The more data you have available today, the more you can confuse, befuddle and disturb your user.... unless you have a mature information search strategy.&lt;/p&gt;
+&lt;p&gt;In this talk, we discuss enterprise-ready Open-Source technologies available. These can help you to&lt;br /&gt;
+    * Enhance your user&#039;s experience on your web site.&lt;br /&gt;
+    * Easily find information in your enterprise repositories&lt;br /&gt;
+    * Strengthen partnerships by making it easy for external partners to work with your information resources&lt;br /&gt;
+    * Drive more traffic to your site via SEO-friendly search strategies&lt;/p&gt;
+&lt;p&gt;Content Covered:&lt;/p&gt;
+&lt;p&gt;    * The Search Stack&lt;br /&gt;
+          - Getting Data: Web Crawlers + RSS/ATOM&lt;br /&gt;
+          - Getting Data: Document Adapters&lt;br /&gt;
+          - Information Extraction&lt;br /&gt;
+          - Indexing&lt;br /&gt;
+          - Querying&lt;br /&gt;
+    * Different Search Scenarios&lt;br /&gt;
+          - Web Search&lt;br /&gt;
+          - Enterprise Search&lt;br /&gt;
+          - Extranet Search&lt;br /&gt;
+    * Crash Course: Deploying Search using SOLR&lt;br /&gt;
+    * Advanced: SEO-friendly Search Strategies&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/open-source-industrial-grade-search-engine-technologies#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/15">How To</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/fosslc">FOSSLC</category>
+ <category domain="http://fosslc.org/drupal/category/community/misc">Misc</category>
+ <pubDate>Mon, 05 Apr 2010 01:06:21 +0000</pubDate>
+ <dc:creator>skhansj</dc:creator>
+ <guid isPermaLink="false">685 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Introduction to OpenStreetMap</title>
+    <link>http://fosslc.org/drupal/content/introduction-openstreetmap</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Steve Singer        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;OpenStreetMap is a free (as in speech) wiki-editable map of the world.  The OpenStreetMap project is working on mapping roads, rivers, schools, pubs and most and many other things by sending people out into the world with GPS units, notepads and cameras.&lt;/p&gt;
+&lt;p&gt;This talk will cover an introduction to OpenStreetMap and show attendees how they can start adding to the map.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/introduction-openstreetmap#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo">OSGeo</category>
+ <pubDate>Sun, 30 May 2010 17:08:24 +0000</pubDate>
+ <dc:creator>ssinger</dc:creator>
+ <guid isPermaLink="false">754 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Commons Knowledge™ - bringing clarity to the legal complexity of open source software licenses</title>
+    <link>http://fosslc.org/drupal/content/commons-knowledge%E2%84%A2-bringing-clarity-legal-complexity-open-source-software-licenses</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Thomas Prowse        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Thomas Prowse will describe the evolution of his company&#039;s alternative delivery model for open source software legal information services. This service is built on the foundation of &quot;commons sourcing” a term which Thomas coined some time ago to describe the pooling of shared information based resources under OSS methodologies for use by companies for commercial purposes. Thomas will demonstrate how n2one inc.&#039;s Commons Knowledge™ service harnesses the power of commons sourcing to offer affordable subscription based access to developers, lawyers, and business leaders to world class practical OSS related legal information resources.&lt;/p&gt;
+&lt;p&gt;Thomas, who was peer selected for the 2010 edition of The Best Lawyers in Canada in the Technology Law speciality, was formerly the Global Law Department leader on the Nortel Open Source Advisory Team and is currently a partner at a major Canadian law firm. Thomas will put forward his company&#039;s concrete business offering and model as a proof point for his deeply held conviction that commons sourcing represents both the future of legal and other professional services and a third wave of global commercial transformation!&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2010-05-31T16:32&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/commons-knowledge%E2%84%A2-bringing-clarity-legal-complexity-open-source-software-licenses#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/legal">Legal</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2010">SC2010</category>
+ <category domain="http://fosslc.org/drupal/category/community/licenses">Licenses</category>
+ <pubDate>Mon, 31 May 2010 21:12:06 +0000</pubDate>
+ <dc:creator>thomas.prowse</dc:creator>
+ <guid isPermaLink="false">760 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Helios: The Eclipse Simultaneous Release</title>
+    <link>http://fosslc.org/drupal/content/helios-eclipse-simultaneous-release</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Wayne Beaton        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Summercamp2010        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;Each year in June, the Eclipse Release Train is delivered. This year&#039;s release train, Helios, brings together more Eclipse projects than ever before. Attend this presentation to learn about the technology produced by the many Helios projects, and how you can leverage them. Additionally, we will talk about how individuals and organizations can leverage and participate in the Eclipse community and eco-system.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/helios-eclipse-simultaneous-release#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/community/eclipse">Eclipse</category>
+ <pubDate>Mon, 31 May 2010 17:30:12 +0000</pubDate>
+ <dc:creator>waynebeaton</dc:creator>
+ <guid isPermaLink="false">757 at http://fosslc.org/drupal</guid>
+  </item>
+  </channel>
+</rss>
