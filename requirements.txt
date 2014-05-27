@@ -1,7 +1,7 @@
-yapsy<1.11
 feedparser<5.2
 google-api-python-client==1.2
 mutagen==1.22
-simplejson<3.4
 oauth<1.1
+simplejson<3.4
 tabulate==0.7.2
+yapsy<1.11
