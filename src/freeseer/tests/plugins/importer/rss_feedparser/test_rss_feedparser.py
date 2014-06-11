@@ -49,6 +49,7 @@ def presentation_feed():
     yield feed_data
     httpretty.disable()
 
+
 @pytest.mark.xfail(reason="Expected to fail until issue GH-555 is fixed")
 def test_get_presentations(presentation_feed):
     NUMBER_OF_PRESENTATIONS = 20
