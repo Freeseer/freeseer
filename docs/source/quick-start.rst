@@ -81,7 +81,7 @@ Fedora Linux
 
 ::
 
-    $ sudo yum install git PyQt4-devel
+    $ sudo yum install git PyQt4-devel gstreamer-python sphinx python-sphinx
 
 .. warning:: This list may be incomplete. Please :doc:`let us know </contact>` if you notice any missing packages.
 
