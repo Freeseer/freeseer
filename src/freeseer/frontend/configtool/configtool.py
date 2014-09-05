@@ -83,6 +83,11 @@ class ConfigToolApp(FreeseerApp):
 
         self.plugman = PluginManager(profile)
 
+        # XXX: Nasty hack to let our singleton plugins access the parent window
+        #      for retranslate.
+        for plugin in self.plugman.get_all_plugins():
+            plugin.plugin_object.set_gui(self)
+
         # Custom Menu Items
         self.actionSaveProfile = QtGui.QAction(self)
         self.menuFile.insertAction(self.actionExit, self.actionSaveProfile)
@@ -522,6 +527,21 @@ class ConfigToolApp(FreeseerApp):
             plugins = self.plugman.get_importer_plugins()
 
         return plugins
+
+    def show_plugin_widget_dialog(self, widget):
+        """Shows the configuration dialog for a plugin."""
+        self.dialog = QtGui.QDialog(self)
+
+        self.dialog_layout = QtGui.QVBoxLayout()
+        self.dialog_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+        self.dialog.setLayout(self.dialog_layout)
+        self.dialog_layout.addWidget(widget)
+
+        self.dialog.closeButton = QtGui.QPushButton("Close")
+        self.dialog_layout.addWidget(self.dialog.closeButton)
+        self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
+        self.dialog.setModal(True)
+        self.dialog.show()
 
     def closeEvent(self, event):
         log.info('Exiting configtool...')
