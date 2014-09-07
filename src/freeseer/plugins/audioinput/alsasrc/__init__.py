@@ -32,12 +32,14 @@ import pygst
 pygst.require("0.10")
 import gst
 
-from freeseer.framework.plugin import IAudioInput
+from freeseer.framework.plugin.plugin import AudioInputPlugin
 
 
-class ALSASrc(IAudioInput):
+class ALSASrc(AudioInputPlugin):
     name = "ALSA Source"
     os = ["linux", "linux2"]
+
+    CONFIG_CLASS = None
 
     def get_audioinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.

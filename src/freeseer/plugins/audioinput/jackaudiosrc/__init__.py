@@ -28,11 +28,7 @@ An audio plugin which uses JACK as the audio input.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import freeseer.framework.config.options as options
 
 # GStreamer
 import pygst
@@ -43,21 +39,27 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
-from freeseer.framework.plugin import IAudioInput
+from freeseer.framework.plugin.plugin import AudioInputPlugin
+from freeseer.framework.config.core import Config
 
 # .freeseer-plugin custom
 import widget
 
 
-class JackAudioSrc(IAudioInput):
+class JackAudioSrcConfig(Config):
+    # I'm not sure if they're supposed to be string options, but the default value previously was
+    # "" so I think that's appropriate.
+    client = options.StringOption()
+    connect = options.StringOption()
+    server = options.StringOption()
+    clientname = options.StringOption()
+
+
+class JackAudioSrc(AudioInputPlugin):
     name = "Jack Audio Source"
     os = ["linux", "linux2"]
 
-    # jackaudio variables
-    client = ""
-    connect = ""
-    server = ""
-    clientname = ""
+    CONFIG_CLASS = JackAudioSrcConfig
 
     def get_audioinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
@@ -71,20 +73,6 @@ class JackAudioSrc(IAudioInput):
         bin.add_pad(ghostpad)
 
         return bin
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.client = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Client")
-            self.connect = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Connect")
-            self.server = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Server")
-            self.clientname = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", self.client)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", self.connect)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", self.server)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", self.clientname)
 
     def get_widget(self):
         if self.widget is None:

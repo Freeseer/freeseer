@@ -34,12 +34,12 @@ An import plugin for CSV files used when adding presentations
 import csv
 import logging
 
-from freeseer.framework.plugin import IImporter
+from freeseer.framework.plugin.plugin import ImporterPlugin
 
 log = logging.getLogger(__name__)
 
 
-class CsvImporter(IImporter):
+class CsvImporter(ImporterPlugin):
     """CSV Importer plugin for Freeseer
 
     Provides functionality to import presentations from a CSV file
@@ -47,6 +47,8 @@ class CsvImporter(IImporter):
 
     name = "CSV Importer"
     os = ["linux", "linux2"]
+
+    CONFIG_CLASS = None
 
     def get_presentations(self, fname):
         """Returns list of dictionaries of all presentations in the csv file."""

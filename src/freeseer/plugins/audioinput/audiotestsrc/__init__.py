@@ -33,12 +33,14 @@ import pygst
 pygst.require("0.10")
 import gst
 
-from freeseer.framework.plugin import IAudioInput
+from freeseer.framework.plugin.plugin import AudioInputPlugin
 
 
-class AudioTestSrc(IAudioInput):
+class AudioTestSrc(AudioInputPlugin):
     name = "Audio Test Source"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
+
+    CONFIG_CLASS = None
 
     def get_audioinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
