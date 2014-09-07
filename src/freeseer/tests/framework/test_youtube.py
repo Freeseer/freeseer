@@ -67,4 +67,3 @@ class TestYoutubeService(unittest.TestCase):
         response_code, response = youtube.upload_video(self.SAMPLE_VIDEO)
         youtube.upload_video.assert_called_with(self.SAMPLE_VIDEO)
         self.assertEqual(Response.SUCCESS, response_code)
-        
