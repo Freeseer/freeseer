@@ -25,40 +25,31 @@
 import os
 import unittest
 from mock import Mock
+import pytest
 
 from freeseer.framework.youtube import Response
 from freeseer.framework.youtube import YoutubeService
 
 
 class TestYoutubeService(unittest.TestCase):
-
     SAMPLE_VIDEO = os.path.join(os.path.dirname(__file__), 'sample_video.ogg')
-
-    def test_valid_video_file_ogg(self):
-        """Test valid_video_file function
-
-        Case: file ending in .ogg
-        """
-        self.assertTrue(YoutubeService.valid_video_file("/path/to/test.ogg"))
-
-    def test_valid_video_file_webm(self):
-        """Test valid_video_file function
-
-        Case: file ending in .webm
-        """
-        self.assertTrue(YoutubeService.valid_video_file("test.webm"))
-
-    def test_valid_video_file_invalid(self):
-        """Test valid_video_file function
-
-        Case: string not complying to valid file types
-        """
-        self.assertTrue(not YoutubeService.valid_video_file("asdfg.qwergb"))
+    SAMPLE_VIDEO_METADATA = {
+        'tags': [
+            'Freeseer',
+            'FOSSLC',
+            'Open Source',
+        ],
+        'categoryId': 27,
+        'description': 'At Test by Alex recorded on 2014-03-09',
+        'title': u'Test',
+    }
 
     def test_get_metadata(self):
-        """Test retrieval of metadata from video file"""
-        # a dictionary should always be returned
-        self.assertTrue(YoutubeService.get_metadata(self.SAMPLE_VIDEO))
+        """Test retrieval of metadata from video file.
+
+        Case: Returned metadata should be equal to sample video's metadata."""
+        metadata = YoutubeService.get_metadata(self.SAMPLE_VIDEO)
+        self.assertDictEqual(self.SAMPLE_VIDEO_METADATA, metadata)
 
     def test_upload_video(self):
         """Test uploading a video file using mocks"""
@@ -67,3 +58,13 @@ class TestYoutubeService(unittest.TestCase):
         response_code, response = youtube.upload_video(self.SAMPLE_VIDEO)
         youtube.upload_video.assert_called_with(self.SAMPLE_VIDEO)
         self.assertEqual(Response.SUCCESS, response_code)
+
+
+@pytest.mark.parametrize("video, expected", [
+    ("/path/to/test.ogg", True),
+    ("test.webm", True),
+    ("asdfg.qwergb", False),
+])
+def test_valid_video_file(video, expected):
+    """Tests valid_video_file function for all test cases."""
+    assert YoutubeService.valid_video_file(video) == expected
