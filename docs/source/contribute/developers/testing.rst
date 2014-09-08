@@ -32,7 +32,7 @@ Structure of Test Directory
 ---------------------------
 
 As of Python 2.7, `unittest` supports (recursive) test module discovery.
-All test modules should exist somewhere inside ``src/freeseer/test/`` so that the
+All test modules should exist somewhere inside ``src/freeseer/tests/`` so that the
 test suite can find them.
 
 Since Freeseer is well organized into modules, we'd like to mirror this setup in the test folder. This means that if your code is located in src/freeseer/framework/core.py then your test code should be found in src/test/framework/test_core.py (more about file naming conventions later). We do this for logical ordering: it tells us that test modules in src/freeseer/test/folder_name are for testing modules in src/freeseer/folder_name.
@@ -227,88 +227,25 @@ Command line options
 
 **Note: to avoid package import errors, we need to run the following commands from the src folder.**
 
+Example: Run all tests with pytest
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Example #1: Discovery, Run all tests
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This first method is the most basic and least verbose version. We are running unittest as a module and telling it to "discover"; recursively find tests starting from freeseer/test.
-
-In the output, we see a **FAIL** in test_event_is_default, which we expected to fail.
-Along with the **FAIL** message, we get the module information framework.test_presentation.TestPresentation, line number where the failure occured, the code of the failed assertion and the AssertionError with a generic message (this is where your custom message would be printed instead).
-Finally, we get the number of tests executed, total time and number of **FAILED**.
-
-Something to note here is that even if a test fails, we mark it as **FAIL** and move on. This can be configured (see -f ).
-
+To run all of the tests in ``src/freeseer/tests/``, issue the following command from
+the ``src/`` directory:
 
 .. code-block:: none
 
-  $ python -m unittest discover freeseer/test/
-  .F.
-  ======================================================================
-  FAIL: test_event_is_default (framework.test_presentation.TestPresentation)
-  ----------------------------------------------------------------------
-  Traceback (most recent call last):
-    File (path to test_presentation.py), line 20, in test_event_is_default
-      self.assertFalse(self.pres.event != "Default")
-  AssertionError: True is not false
-  ----------------------------------------------------------------------
-  Ran 3 tests in 0.001s
+   $ python setup.py test
 
-  FAILED (failures=1)
-
-Example #2: Discovery, Verbose, Run all tests
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This next method is the same as before, but with the added -v.
-We are telling unittest to be more verbose (output more information).
-The output will be as above but will also contain a listing of each test method, module and result information.
-
-
-.. code-block:: none
-
-  $ python -m unittest discover freeseer/test/ -v
-  test_correct_time_set (framework.test_presentation.TestPresentation) ... ok
-  test_event_is_default (framework.test_presentation.TestPresentation) ... FAIL
-  test_speaker_not_first_param (framework.test_presentation.TestPresentation) ... ok
-  ======================================================================
-  FAIL: test_event_is_default (framework.test_presentation.TestPresentation)
-  ----------------------------------------------------------------------
-  Traceback (most recent call last):
-    File (path to test_presentation.py), line 20, in test_event_is_default
-      self.assertFalse(self.pres.event != "Default")
-  AssertionError: True is not false
-  ----------------------------------------------------------------------
-  Ran 3 tests in 0.001s
-
-  FAILED (failures=1)
-
-Example #3: Discovery, Verbose, Run until fail
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-As in the previous method, we are telling unittest to be more verbose but now we are also instructing -f.
-This option means "fail fast" and will cancel the entire test execution on a failure.
-Looking at the output, only 2 tests were executed because the second failed.
-
-**Note: If the intent is to see whether or not your new code breaks any functionality, you will likely use this method.**
-
-.. code-block:: none
-
-  $ python -m unittest discover freeseer/test/ -v -f
-  test_correct_time_set (framework.test_presentation.TestPresentation) ... ok
-  test_event_is_default (framework.test_presentation.TestPresentation) ... FAIL
-
-  ======================================================================
-  FAIL: test_event_is_default (framework.test_presentation.TestPresentation)
-  ----------------------------------------------------------------------
-  Traceback (most recent call last):
-    File (path to test_presentation.py), line 20, in test_event_is_default
-      self.assertFalse(self.pres.event != "Default")
-  AssertionError: True is not false
-  ----------------------------------------------------------------------
-  Ran 2 tests in 0.006s
-
-  FAILED (failures=1)
-
+The output will contain information about the test session. If there are any
+failures during the session then failure messages will be logged and testing
+will continue.
+If there is a failure, the developer may read through the output to see
+what went wrong. Information related to which line the failure occured is
+printed in the output's **FAILURES** section, as well as **DEBUG** or **INFO**
+output that was printed to stderr in the erroneous code.
+At the bottom of the output from the script statistics on code coverage are
+displayed.
 
 Gotchas! a.k.a Q&A
 ******************
@@ -316,15 +253,6 @@ Gotchas! a.k.a Q&A
 **Q: Why didn't test_speaker_not_first_param() fail if it is being set to "John Doe" in test_correct_time_set() ?**
 
 A: Because before test_speaker_not_first_param() is invoked, setUp() is executed which resets self.pres to a new instance. Thus self.pres is as it would be and self.pres.speaker = "".
-
-**Q: When I run (example #1, #2 and/or #3), I get the unittest help menu, why could this be happening OR I am getting weird import errors from unittest, what's going on ?**
-
-A: From experience this was ultimately the result of an import error or invocation from the wrong place...
-
-#. Ensure you are in the src folder
-#. Check that you are in fact using -v and/or -v after unittest (easiest to remember if it's at the end of the command).
-#. Ensure that you are using __init__.py files (they can be empty files as they only tell Python to treat the folder as a package) in all the directories inside src/freeseer/test. If that's correct, maybe
-#. Make sure you that in your test module, you are importing from freeseer.folder.module_name
 
 
 What should testers focus on?
