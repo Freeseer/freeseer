@@ -25,9 +25,9 @@ Getting Started
 #. Read over the `assessment document
    <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_
 #. Copy the `project proposal document
-   <https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
+   <https://docs.google.com/document/d/1vc98PZqwG0XuKjV5Eswh_9C8m6ca223KYtRown9TRio>`_
    to your Google Drive
-   
+
    - ``File`` → ``Make a copy``
    - Change the sharing settings so **anyone with the link can view and
      comment**, then share the link with us
