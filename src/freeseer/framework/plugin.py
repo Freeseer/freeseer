@@ -335,7 +335,7 @@ class IBackendPlugin(IPlugin):
             self.widget_load_config(self.plugman)
 
         if widget is not None:
-            self.gui.show_plugin_widget_dialog(widget)
+            self.gui.show_plugin_widget_dialog(widget, self.name)
 
     def get_widget(self):
         """

@@ -528,7 +528,7 @@ class ConfigToolApp(FreeseerApp):
 
         return plugins
 
-    def show_plugin_widget_dialog(self, widget):
+    def show_plugin_widget_dialog(self, widget, name):
         """Shows the configuration dialog for a plugin."""
         self.dialog = QtGui.QDialog(self)
 
@@ -540,6 +540,7 @@ class ConfigToolApp(FreeseerApp):
         self.dialog.closeButton = QtGui.QPushButton("Close")
         self.dialog_layout.addWidget(self.dialog.closeButton)
         self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
+        self.dialog.setWindowTitle('{} Setup'.format(name))
         self.dialog.setModal(True)
         self.dialog.show()
 
