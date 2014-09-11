@@ -62,24 +62,29 @@ class TestServerApp(unittest.TestCase):
         Stardard init method: runs before each test_* method
         '''
         server.app.config['TESTING'] = True
+        server.app.storage_file_path = "test_storage_file"
         self.app = server.app.test_client()
-        server.configure("test_storage_file")
+        self.recording = server.app.blueprints['recording']
+
+        # token call to fire configuration logic
+        self.app.get('/recordings')
+        print self.recording.record_config.videodir
 
         self.profile_manager = ProfileManager(tempfile.mkdtemp())
         self.temp_video_dir = tempfile.mkdtemp()
-        server.app.record_config.videodir = self.temp_video_dir
-        server.app.record_profile = self.profile_manager.get('testing')
-        server.app.record_config = server.app.record_profile.get_config('freeseer.conf', settings.FreeseerConfig, ['Global'], read_only=True)
-        server.app.record_plugin_manager = PluginManager(server.app.record_profile)
-        server.app.media_dict = {}
+        self.recording.record_config.videodir = self.temp_video_dir
+        self.recording.record_profile = self.profile_manager.get('testing')
+        self.recording.record_config = self.recording.record_profile.get_config('freeseer.conf', settings.FreeseerConfig, ['Global'], read_only=True)
+        self.recording.record_plugin_manager = PluginManager(self.recording.record_profile)
+        self.recording.media_dict = {}
 
         # mock media
         self.mock_media_1 = MockMedia()
         self.mock_media_2 = MockMedia()
 
         self.test_media_dict_1 = {}
-        filepath1 = os.path.join(server.app.record_config.videodir, 'mock_media_1')
-        filepath2 = os.path.join(server.app.record_config.videodir, 'mock_media_1')
+        filepath1 = os.path.join(self.recording.record_config.videodir, 'mock_media_1')
+        filepath2 = os.path.join(self.recording.record_config.videodir, 'mock_media_1')
         self.test_media_dict_1[1] = {'media': self.mock_media_1, 'filename': 'mock_media_1', 'filepath': filepath1}
         self.test_media_dict_1[2] = {'media': self.mock_media_2, 'filename': 'mock_media_2', 'filepath': filepath2}
 
@@ -105,14 +110,16 @@ class TestServerApp(unittest.TestCase):
         Tests GET request retrieving non-existent recording
         '''
         response = self.app.get('/recordings/1')
-        self.assertEqual(response.data, "recording id could not be found")
+        response_data = json.loads(response.data)
+        self.assertEqual(response_data['error_message'], "recording id could not be found")
+        self.assertEqual(response_data['error_code'], 404)
         self.assertEqual(response.status_code, 404)
 
     def test_get_all_recordings(self):
         '''
         Tests GET request all recordings with 2 entries in media dict
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         response = self.app.get('/recordings')
         response_data = json.loads(response.data)
         self.assertTrue('recordings' in response_data)
@@ -122,7 +129,7 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests GET request specific valid recording
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         response = self.app.get('/recordings/1')
         response_data = json.loads(response.data)
         self.assertTrue('recordings' not in response_data)
@@ -139,7 +146,7 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests GET request with an invalid id (a non integer id)
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         response = self.app.get('/recordings/abc')
         self.assertEqual(response.status_code, 404)
 
@@ -157,7 +164,7 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests a PATCH request with non-existant recording id
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         response = self.app.patch('/recordings/100')
         self.assertEqual(response.status_code, 404)
 
@@ -165,7 +172,7 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests a PATCH request without a command
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         response = self.app.patch('/recordings/1')
         self.assertEqual(response.status_code, 400)
 
@@ -173,7 +180,7 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests a Patch request with an invalid command
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'invalid command'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
@@ -183,7 +190,7 @@ class TestServerApp(unittest.TestCase):
         Tests a Patch request to start a recording
         '''
         self.mock_media_1.current_state = Multimedia.NULL
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'start'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 200)
@@ -191,7 +198,7 @@ class TestServerApp(unittest.TestCase):
 
         self.mock_media_1.num_times_record_called = 0
         self.mock_media_1.current_state = Multimedia.PAUSE
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'start'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 200)
@@ -202,7 +209,7 @@ class TestServerApp(unittest.TestCase):
         Tests a Patch request to start a recording with an invalid media state
         '''
         self.mock_media_1.current_state = Multimedia.STOP
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'start'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
@@ -210,7 +217,7 @@ class TestServerApp(unittest.TestCase):
 
         self.mock_media_1.num_times_record_called = 0
         self.mock_media_1.current_state = Multimedia.RECORD
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'start'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
@@ -221,7 +228,7 @@ class TestServerApp(unittest.TestCase):
         Tests a Patch request to pause a recording
         '''
         self.mock_media_1.current_state = Multimedia.RECORD
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'pause'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 200)
@@ -232,21 +239,21 @@ class TestServerApp(unittest.TestCase):
         Tests a Patch request to pause a recording with an invalid media state
         '''
         self.mock_media_1.current_state = Multimedia.NULL
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'pause'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(self.mock_media_1.num_times_pause_called, 0)
 
         self.mock_media_1.current_state = Multimedia.PAUSE
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'pause'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(self.mock_media_1.num_times_pause_called, 0)
 
         self.mock_media_1.current_state = Multimedia.STOP
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'pause'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
@@ -257,7 +264,7 @@ class TestServerApp(unittest.TestCase):
         Tests a Patch request to stop a recording
         '''
         self.mock_media_1.current_state = Multimedia.RECORD
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'stop'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 200)
@@ -265,7 +272,7 @@ class TestServerApp(unittest.TestCase):
 
         self.mock_media_1.num_times_stop_called = 0
         self.mock_media_1.current_state = Multimedia.PAUSE
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'stop'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 200)
@@ -276,7 +283,7 @@ class TestServerApp(unittest.TestCase):
         Tests a Patch request to stop a recording with an invalid media state
         '''
         self.mock_media_1.current_state = Multimedia.STOP
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'stop'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
@@ -284,7 +291,7 @@ class TestServerApp(unittest.TestCase):
 
         self.mock_media_1.num_times_stop_called = 0
         self.mock_media_1.current_state = Multimedia.NULL
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
         data_to_send = {'command': 'stop'}
         response = self.app.patch('/recordings/1', data=data_to_send)
         self.assertEqual(response.status_code, 400)
@@ -317,13 +324,13 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests a regular POST request
         '''
-        self.assertTrue(len(server.app.media_dict.keys()) == 0)
+        self.assertTrue(len(self.recording.media_dict.keys()) == 0)
         data_to_send = {'filename': 'test'}
         response = self.app.post('/recordings', data=data_to_send)
-        self.assertTrue(len(server.app.media_dict.keys()) == 1)
+        self.assertTrue(len(self.recording.media_dict.keys()) == 1)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(server.app.media_dict.keys(), [1])
-        self.assertEqual(server.app.media_dict[1]['filename'], 'test.ogg')
+        self.assertEqual(self.recording.media_dict.keys(), [1])
+        self.assertEqual(self.recording.media_dict[1]['filename'], 'test.ogg')
 
     def test_delete_no_recording_id(self):
         '''
@@ -352,21 +359,21 @@ class TestServerApp(unittest.TestCase):
         '''
         Tests a DELETE request for a recording that is paused or in progress
         '''
-        server.app.media_dict = self.test_media_dict_1
+        self.recording.media_dict = self.test_media_dict_1
 
         # delete a recording that is in the middle of recording
         self.mock_media_1.current_state = Multimedia.RECORD
         response = self.app.delete('/recordings/1')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
         self.assertEqual(self.mock_media_1.num_times_stop_called, 1)
-        self.assertEqual(server.app.media_dict.keys(), [2])
+        self.assertEqual(self.recording.media_dict.keys(), [2])
 
         # delete a recording that is paused
         self.mock_media_2.current_state = Multimedia.PAUSE
         response = self.app.delete('/recordings/2')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 204)
         self.assertEqual(self.mock_media_2.num_times_stop_called, 1)
-        self.assertEqual(server.app.media_dict.keys(), [])
+        self.assertEqual(self.recording.media_dict.keys(), [])
 
     def test_delete_recording_id_and_file(self):
         '''
@@ -376,11 +383,11 @@ class TestServerApp(unittest.TestCase):
         # setup - create the file to be deleted
         file_base_name = 'testDeleteFile'
         file_to_delete = file_base_name
-        file_to_delete_path = os.path.join(server.app.record_config.videodir, file_to_delete)
+        file_to_delete_path = os.path.join(self.recording.record_config.videodir, file_to_delete)
         counter = 1
         while os.path.isfile(file_to_delete_path):
             file_to_delete = file_base_name + str(counter)
-            file_to_delete_path = os.path.join(server.app.record_config.videodir, file_to_delete)
+            file_to_delete_path = os.path.join(self.recording.record_config.videodir, file_to_delete)
             counter += 1
         test_file = open(file_to_delete_path, 'a')
         test_file.close()
@@ -389,11 +396,11 @@ class TestServerApp(unittest.TestCase):
         self.assertTrue(os.path.isfile(file_to_delete_path))
 
         # setup - set the file as the file for the Media instance
-        server.app.media_dict[1] = {'media': self.mock_media_1, 'filename': file_to_delete, 'filepath': file_to_delete_path}
+        self.recording.media_dict[1] = {'media': self.mock_media_1, 'filename': file_to_delete, 'filepath': file_to_delete_path}
 
         response = self.app.delete('/recordings/1')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(server.app.media_dict.keys(), [])
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(self.recording.media_dict.keys(), [])
 
         # assert the file no longer exists
         self.assertFalse(os.path.isfile(file_to_delete_path))
