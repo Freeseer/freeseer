@@ -94,6 +94,11 @@ Windows
 - `setuptools-0.6c11.win32-py2.7 <https://pypi.python.org/pypi/setuptools#windows>`_
 - `GStreamer-WinBuilds-GPL-x86-Beta04-0.10.7 <https://code.google.com/p/ossbuild/downloads/list>`_
 - `GStreamer-WinBuilds-SDK-GPL-x86-Beta04-0.10.7 <https://code.google.com/p/ossbuild/downloads/list>`_
+    * If you encounter the error ``"ImportError: DLL load failed"`` when
+      attempting to run freeseer, copy the contents of
+      ``<GStreamer_dir>\<version>\sdk\bindings\python\v2.7\lib`` to
+      ``<GStreamer_dir>\<version>\lib``, and delete
+      ``<GStreamer_dir>\<version>\lib\gstreamer-0.10\libgstpython-v2.6.dll``
 - `PyQt-Py2.7-x86-gpl-4.8.5-1 <http://www.riverbankcomputing.com/software/pyqt/download>`_
 - `PyGTK py2.7 all-in-one <http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/>`_
     * Windows 32-bit packages are recommended because pygtk-all-in-one package does not have a 64-bit installer.
