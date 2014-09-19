@@ -76,18 +76,18 @@ class AboutWidget(QWidget):
         icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
-        self.mainlayout = QGridLayout()
-        self.setLayout(self.mainlayout)
+        self.mainLayout = QGridLayout()
+        self.setLayout(self.mainLayout)
 
         # Left top side of grid, Logo
         self.logo = QLabel("Logo")
         self.logo.setPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")))
-        self.mainlayout.addWidget(self.logo, 0, 0)
+        self.mainLayout.addWidget(self.logo, 0, 0)
 
         # Right top side of grid, Infos
         self.aboutInfo = QLabel("About Info", openExternalLinks=True)
         self.aboutInfo.setWordWrap(True)
-        self.mainlayout.addWidget(self.aboutInfo, 0, 1)
+        self.mainLayout.addWidget(self.aboutInfo, 0, 1)
 
         # Right bottom side of grid, Buttons
         self.buttonsLayout = QHBoxLayout()
@@ -98,7 +98,7 @@ class AboutWidget(QWidget):
         self.buttonsLayout.insertWidget(1, self.issueButton)
         self.buttonsLayout.insertWidget(2, self.contactButton)
 
-        self.mainlayout.addLayout(self.buttonsLayout, 2, 1)
+        self.mainLayout.addLayout(self.buttonsLayout, 2, 1)
 
         self.connect(self.docsButton, SIGNAL('clicked()'), self.openDocsUrl)
         self.connect(self.issueButton, SIGNAL('clicked()'), self.openNewIssueUrl)
@@ -125,7 +125,7 @@ class AboutWidget(QWidget):
                     "version 3. This software is provided 'as-is',without any express or implied warranty. In "
                     "no event will the authors be held liable for any damages arising from the use of this software.")
 
-        self.aboutInfoString = u'<h1>' + NAME + u'</h1>' + \
+        self.aboutInfoString = u'<h1>' + NAME.capitalize() + u'</h1>' + \
             u'<br><b>' + self.uiTranslator.translate("AboutDialog", "Version") + ": " + __version__ + u'</b>' + \
             u'<p>' + self.descriptionString + u'</p>' + \
             u'<p>' + self.copyrightString + u'</p>' + \

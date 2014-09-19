@@ -44,17 +44,24 @@ class GeneralWidget(QtGui.QWidget):
         self.mainLayout.addStretch(0)
         self.setLayout(self.mainLayout)
 
+        self.fontSize = self.font().pixelSize()
+        self.fontUnit = "px"
+        if self.fontSize == -1:  # Font is set as points, not pixels.
+            self.fontUnit = "pt"
+            self.fontSize = self.font().pointSize()
         #
         # General
         #
 
-        self.MiscLayout = QtGui.QVBoxLayout()
-        self.MiscGroupBox = QtGui.QGroupBox("General")
-        self.MiscGroupBox.setLayout(self.MiscLayout)
-        self.mainLayout.insertWidget(0, self.MiscGroupBox)
+        self.boxStyle = "QGroupBox {{ font-weight: bold; font-size: {}{} }}".format(self.fontSize + 1, self.fontUnit)
+        self.miscLayout = QtGui.QVBoxLayout()
+        self.miscGroupBox = QtGui.QGroupBox("General")
+        self.miscGroupBox.setLayout(self.miscLayout)
+        self.miscGroupBox.setStyleSheet(self.boxStyle)
+        self.mainLayout.insertWidget(0, self.miscGroupBox)
 
         self.languageLayout = QtGui.QHBoxLayout()
-        self.MiscLayout.addLayout(self.languageLayout)
+        self.miscLayout.addLayout(self.languageLayout)
         self.languageLabel = QtGui.QLabel("Default Language")
         self.languageComboBox = QtGui.QComboBox()
         self.languageComboBox.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
@@ -62,19 +69,8 @@ class GeneralWidget(QtGui.QWidget):
         self.languageLayout.addWidget(self.languageLabel)
         self.languageLayout.addWidget(self.languageComboBox)
 
-        self.recordDirLayout = QtGui.QHBoxLayout()
-        self.MiscLayout.addLayout(self.recordDirLayout)
-
-        self.recordDirLabel = QtGui.QLabel("Record Directory")
-        self.recordDirLineEdit = QtGui.QLineEdit()
-        self.recordDirLabel.setBuddy(self.recordDirLineEdit)
-        self.recordDirPushButton = QtGui.QPushButton("...")
-        self.recordDirLayout.addWidget(self.recordDirLabel)
-        self.recordDirLayout.addWidget(self.recordDirLineEdit)
-        self.recordDirLayout.addWidget(self.recordDirPushButton)
-
         self.autoHideCheckBox = QtGui.QCheckBox("Enable Auto-Hide")
-        self.MiscLayout.addWidget(self.autoHideCheckBox)
+        self.miscLayout.addWidget(self.autoHideCheckBox)
 
 
 if __name__ == "__main__":

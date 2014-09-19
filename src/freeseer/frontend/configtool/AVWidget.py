@@ -47,6 +47,16 @@ class AVWidget(QtGui.QWidget):
 
         config_icon = QtGui.QIcon.fromTheme("preferences-system")
 
+        self.fontSize = self.font().pixelSize()
+        self.fontUnit = "px"
+        if self.fontSize == -1:  # Font is set as points, not pixels.
+            self.fontUnit = "pt"
+            self.fontSize = self.font().pointSize()
+
+        self.boxStyle = "QGroupBox {{ font-weight: bold; font-size: {}{} }}".format(self.fontSize + 1, self.fontUnit)
+        self.BOX_WIDTH = 400
+        self.BOX_HEIGHT = 60
+
         #
         # Audio Input
         #
@@ -57,7 +67,9 @@ class AVWidget(QtGui.QWidget):
         self.mainLayout.insertWidget(0, self.audioGroupBox)
 
         self.audioGroupBox.setCheckable(True)
-        self.audioGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
+        self.audioGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.audioGroupBox.setFixedSize(self.BOX_WIDTH, self.BOX_HEIGHT)
+        self.audioGroupBox.setStyleSheet(self.boxStyle)
 
         self.audioMixerLabel = QtGui.QLabel("Audio Mixer")
         self.audioMixerLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
@@ -82,7 +94,9 @@ class AVWidget(QtGui.QWidget):
         self.mainLayout.insertWidget(0, self.videoGroupBox)
 
         self.videoGroupBox.setCheckable(True)
-        self.videoGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
+        self.videoGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.videoGroupBox.setFixedSize(self.BOX_WIDTH, self.BOX_HEIGHT)
+        self.videoGroupBox.setStyleSheet(self.boxStyle)
 
         self.videoMixerLabel = QtGui.QLabel("Video Mixer")
         self.videoMixerLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
@@ -98,31 +112,6 @@ class AVWidget(QtGui.QWidget):
         self.videoLayout.addWidget(self.videoMixerSetupPushButton, 0, 2)
 
         #
-        # Record to File
-        #
-
-        self.fileLayout = QtGui.QGridLayout()
-        self.fileGroupBox = QtGui.QGroupBox("Record to File")
-        self.fileGroupBox.setLayout(self.fileLayout)
-        self.mainLayout.insertWidget(0, self.fileGroupBox)
-
-        self.fileGroupBox.setCheckable(True)
-        self.fileGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
-
-        self.fileLabel = QtGui.QLabel("File Format")
-        self.fileLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        self.fileComboBox = QtGui.QComboBox()
-        self.fileLabel.setBuddy(self.fileComboBox)
-        self.fileSetupPushButton = QtGui.QToolButton()
-        self.fileSetupPushButton.setText("Setup")
-        self.fileSetupPushButton.setIcon(config_icon)
-        self.fileSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
-        self.fileSetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
-        self.fileLayout.addWidget(self.fileLabel, 0, 0)
-        self.fileLayout.addWidget(self.fileComboBox, 0, 1)
-        self.fileLayout.addWidget(self.fileSetupPushButton, 0, 2)
-
-        #
         # Record to Stream
         #
 
@@ -132,7 +121,9 @@ class AVWidget(QtGui.QWidget):
         self.mainLayout.insertWidget(0, self.streamGroupBox)
 
         self.streamGroupBox.setCheckable(True)
-        self.streamGroupBox.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
+        self.streamGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.streamGroupBox.setFixedSize(self.BOX_WIDTH, self.BOX_HEIGHT)
+        self.streamGroupBox.setStyleSheet(self.boxStyle)
 
         self.streamLabel = QtGui.QLabel("Stream Format")
         self.streamLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
@@ -146,6 +137,48 @@ class AVWidget(QtGui.QWidget):
         self.streamLayout.addWidget(self.streamLabel, 0, 0)
         self.streamLayout.addWidget(self.streamComboBox, 0, 1)
         self.streamLayout.addWidget(self.streamSetupPushButton, 0, 2)
+
+        #
+        # Record to File
+        #
+
+        self.fileLayout = QtGui.QGridLayout()
+        self.fileGroupBox = QtGui.QGroupBox("Record to File")
+        self.fileGroupBox.setLayout(self.fileLayout)
+        self.mainLayout.insertWidget(0, self.fileGroupBox)
+
+        self.fileGroupBox.setCheckable(True)
+        self.fileGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.fileGroupBox.setFixedSize(self.BOX_WIDTH, self.BOX_HEIGHT + 40)
+        self.fileGroupBox.setStyleSheet(self.boxStyle)
+
+        self.fileDirLabel = QtGui.QLabel("Record Directory")
+        self.fileDirLineEdit = QtGui.QLineEdit()
+        self.fileDirLabel.setBuddy(self.fileDirLineEdit)
+        self.fileDirPushButton = QtGui.QPushButton("Browse...")
+        self.fileLayout.addWidget(self.fileDirLabel, 0, 0)
+        self.fileLayout.addWidget(self.fileDirLineEdit, 0, 1)
+        self.fileLayout.addWidget(self.fileDirPushButton, 0, 2)
+
+        self.fileLabel = QtGui.QLabel("File Format")
+        self.fileLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.fileComboBox = QtGui.QComboBox()
+        self.fileLabel.setBuddy(self.fileComboBox)
+        self.fileSetupPushButton = QtGui.QToolButton()
+        self.fileSetupPushButton.setText("Setup")
+        self.fileSetupPushButton.setIcon(config_icon)
+        self.fileSetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.fileSetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        self.fileLayout.addWidget(self.fileLabel, 1, 0)
+        self.fileLayout.addWidget(self.fileComboBox, 1, 1)
+        self.fileLayout.addWidget(self.fileSetupPushButton, 1, 2)
+
+        # Blank line
+        self.mainLayout.insertSpacerItem(0, QtGui.QSpacerItem(0, self.fontSize * 2))
+        # Heading
+        self.title = QtGui.QLabel(u"{0} Recording {1}".format(u'<h1>', u'</h1>'))
+        self.mainLayout.insertWidget(0, self.title)
+
 
 if __name__ == "__main__":
     import sys
