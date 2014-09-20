@@ -6,20 +6,22 @@ Testing
 .. TODO: finish reviewing this page
 .. TODO: reference Qt class docs (see Lance's last blog post) in See Also box
 
+
 Configure your Test Environment
 *******************************
 
-If you can run Freeseer, you should have nothing to configure. This is because
-Python's `unittest` module and PyQt's `QtTest` module are used for
-Freeseer's test suite. The `unittest` module is Python's standard unit testing
-framework, and thus part of the standard library. The `QtTest` module is
+Freeseer should not need additional configuration after installing the
+:ref:`development requirements<pypi-packages>`. This is because Python's ``pytest`` and PyQt's ``QtTest``
+module are used for Freeseer's test suite. The ``pytest`` module is a feature
+rich testing framework that makes writing tests simple. The ``QtTest`` module is
 included with the PyQt4 package, which you should have installed as it's
 a dependency for Freeseer.
 
-If you want to make sure, you can start the Python interpreter and
-import ``unittest`` and ``QtTest``::
+If you want to make sure you have the packages, you can start the Python
+interpreter and
+import ``pytest`` and ``QtTest``::
 
-  >>> import unittest
+  >>> import pytest
   >>> from PyQt4 import QtTest
 
 If there are any errors, you won't be able to proceed with testing.
@@ -31,13 +33,17 @@ Extending the Test Suite
 Structure of Test Directory
 ---------------------------
 
-As of Python 2.7, `unittest` supports (recursive) test module discovery.
-All test modules should exist somewhere inside ``src/freeseer/tests/`` so that the
-test suite can find them.
+All of Freeseer's tests exist in ``src/freeseer/tests/``.
+Since Freeseer is well organized into modules, we'd like to mirror this setup
+in the test folder. This means that if your code is located in
+``src/freeseer/framework/core.py`` then your test code should be found in
+``src/freeseer/tests/framework/test_core.py`` (more about file naming
+conventions later). We do this for logical ordering: it tells us that test
+modules in ``src/freeseer/tests/folder_name`` are for testing modules in
+``src/freeseer/folder_name``.
 
-Since Freeseer is well organized into modules, we'd like to mirror this setup in the test folder. This means that if your code is located in src/freeseer/framework/core.py then your test code should be found in src/test/framework/test_core.py (more about file naming conventions later). We do this for logical ordering: it tells us that test modules in src/freeseer/test/folder_name are for testing modules in src/freeseer/folder_name.
-
-If you are creating a new folder in src/freeseer/test/\*, ensure that your folder contains a __init__.py such that your test module can be imported by unittest during discovery.
+If you are creating a new folder in ``src/freeseer/tests/``, ensure that your
+folder contains a ``__init__.py`` such that your test module can be imported.
 
 
 Adding/Editing a test module
@@ -46,134 +52,149 @@ Adding/Editing a test module
 An example
 ^^^^^^^^^^
 
-We now know where the test suite is located: src/freeseer/test.
-We also know that the directory hierarchy below test matches the one below src/freeseer.
-Next, as developers we'd like to add a new test module or modify an existing one.
+We show a set of test methods for the database class found in
+``src/freeseer/framework/database.py``.
+This class contains a database connector that lets the framework fetch stored
+data efficiently.
+The purpose of this unit test is to demonstrate some of the functionality
+that is provided by ``pytest``.
 
-Let's write a simple test case for the Presentation class found in src/freeseer/framework/presentation.py.
-This class is simple, it is a model which holds data.
-We pass a bunch of parameters and all the class attributes are public.
-We'll create an instance, ensure the values we pass are correctly set and learn about the unittest module in the process.
+To create a test module make an empty file with the name
+``test_database.py``.
+The convention used by Freeseer is ``test_module_name.py`` where the module
+counterpart is name ``module_name.py``.
+Thus, your module name should start with **test_** and finish with **.py** at
+the very least.
 
-We'll need to go to src/freeseer/test and check if there is a folder named framework.
-If there isn't let's create it and immediately add an empty __init__.py inside it (see Note from part 2).
+Let's add fake functionality to the test module ``test_database.py``!
 
-Next, we'll create our test module.
-It would be nice to keep convention and name it test_presentation.py (i.e. the convention is test_my_module_name.py where the module counterpart is name my_module_name.py) but there is no way to enforce it.
-As such this is going to be a "best practice".
-Fortunately, unittest does enforce something: the name of the test module must have the form test_*.py or it will not be discovered.
-Thus, your module name must start with **test_** and finish with **.py**.
-This little bit can be configured (we'll see how in part 4), but the default pattern for unittest discovery is 'test_*.py'.
-
-We now have our test module which can be found at: **src/freeseer/test/framework/test_presentation.py**.
-
-Let's add some functionality!
-
-**Note: The example used in the rest of this entry is to experiment with unittest and may not implement logical test cases!**
 
 .. code-block:: python
 
-  import unittest
+  import os
 
+  from PyQt4 import QtSql
+  import pytest
+
+  from freeseer.framework.config.profile import Profile
+  from freeseer.framework.plugin import PluginManager
   from freeseer.framework.presentation import Presentation
 
-  class TestPresentation(unittest.TestCase):
+  @pytest.fixture
+  def db(tmpdir):
+      """Construct a database connector fixture"""
+      profile_path = str(tmpdir)
+      profile = Profile(profile_path, 'testing')
+      return profile.get_database()
 
-    def setUp(self):
-        self.pres = Presentation("John Doe", event="haha", time="NOW")
+  def test_query_result_type_is_query(db):
+      assert isinstance(db.get_talks(), QtSql.QSqlQuery)
+      assert isinstance(db.get_events(), QtSql.QSqlQuery)
+      assert isinstance(db.get_talk_ids(), QtSql.QSqlQuery)
+      assert isinstance(db.get_talks_by_event('SC2011'), QtSql.QSqlQuery)
+      assert isinstance(db.get_talks_by_room('T105'), QtSql.QSqlQuery)
 
-    def test_correct_time_set(self):
-        self.assertTrue(self.pres.time == "NOW")
-        self.pres.speaker = "John Doe"
+  def test_query_result_type_is_presentation(db):
+      assert isinstance(db.get_presentation(1), Presentation)
 
-    def test_speaker_not_first_param(self):
-        self.assertNotEquals(self.pres.speaker, "John Doe")
+  def test_query_result_type_is_model(db):
+      assert isinstance(db.get_presentations_model(), QtSql.QSqlTableModel)
+      assert isinstance(db.get_events_model(), QtSql.QSqlQueryModel)
+      assert isinstance(db.get_rooms_model('SC2011'), QtSql.QSqlQueryModel)
+      assert isinstance(db.get_talks_model('SC2011', 'T105'), QtSql.QSqlQueryModel)
 
-    def test_event_is_default(self):
-        self.assertFalse(self.pres.event != "Default")
+  def test_add_talks_from_csv(db):
+      """Test that talks are retrieved from the CSV file"""
+
+      dirname = os.path.dirname(__file__)
+      fname = os.path.join(dirname, 'sample_talks.csv')
+
+      presentation = Presentation('Building NetBSD', 'David Maxwell')
+
+      db.add_talks_from_csv(fname)
+      assert(db.presentation_exists(presentation))
 
 
+Break down of the unit test:
 
-There we have it, our first unit test to test Freeseer functionality!
-Since there are no comments, let's go through it quick and take some time to understand the important parts:
+import pytest
+^^^^^^^^^^^^^
 
-import unittest
+This lets us use all of the testing features provided by ``pytest`` like
+fixtures and function tests. It should be noted, unit tests written using the
+old framework will import the ``unittest`` module instead.
+
+
+@pytest.fixture
 ^^^^^^^^^^^^^^^
 
-This will be in **every** test module. As we will see, each test class we write will subclass unittest.TestCase and this class is also where we get the assert* family of calls.
+pytest provides fixture objects which allows a developer to put frequently
+created function call results into an object.
+Fixtures can be used in
+place of conventional setup functions as in ``unittest``. In the
+example, the fixture contains a QtDBConnector object which all of the test
+methods can access. ``unittest`` teardown functions can be written with
+yield fixtures. Documentation on
+`fixtures <http://pytest.org/latest/fixture.html>`_ is available from pytest.
 
 
-from freeseer.framework.presentation import Presentation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pytest test_* functions
+^^^^^^^^^^^^^^^^^^^^^^^
 
-This will also be in **every** module but slightly modified.
-Our target class to test this time is the Presentation class found in src/freeseer/framework/presentation.py.
-When python loads the packages, it will convert src/freeseer/framework/presentation.py into freeseer.framework.presentation (this is an oversimplification of course).
-Therefore, ensure your import path is correct for the target module. From the import path, simply import the class you wish to test against -- in our case this is Presentation.
+``pytest`` will recurse into directories (that are not marked as
+*norecursedirs*), will look for ``test_*.py`` or ``*_test.py`` files, ``Test``
+prefixed test classes, and ``test_`` prefixed functions.
+``pytest`` will also discover traditional ``unittest.TestCase`` tests.
+Further documentation
+can be found on the `pytest <http://pytest.org/latest/goodpractises.html#conventions-for-python-test-discovery>`_ site.
 
+It should be noted that testing the return type of function calls in unit
+tests is not very useful, as in the example ``test_query_result_type_*()``.
 
-class TestPresentation(unittest.TestCase):
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The assert methods
+^^^^^^^^^^^^^^^^^^
 
-**First: unittest.TestCase is required as the parent class or this will not be treated as a test class.**
-This is the class we're creating which will encapsulate all the testing functionality for the Presentation class.
-How do we know we're using this class to test the Presentation class? -- **we don't**.
-It's up to the developer to name it appropriately and naming the class TestPresentation is another unenforceable best practice.
-
-
-setUp, runTest, test_*, tearDown
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-I invite you to read the `documentation <http://docs.python.org/2/library/unittest.html>`_.
-
-The unittest.TestCase offers a "life cycle" a.k.a an ordered method call framework allowing a developer to setup, run and takedown tests respectively.
-
-If the unittest.TestCase has implemented the setUp() method, then this method runs first. It is used to set-up any code required for the tests.
-
-The next method which will run depends on whether the developer implemented runTest() or test_* methods.
-The choice here is a matter of opinion, but if runTest() is implemented, then all tests are in this method.
-If no assertion fails, runTest() will return OK, otherwise it will return **FAIL**.
-If a collection of test_* methods are implemented, then we can still have several assertions in each test_* method, but now every individual test_* has an **OK/FAIL**.
-
-If the unittest.TestCase has implemented the tearDown() method, then this method runs last. It is used to unset or destroy code required for the tests.
-
-
-Python's unittest module "lifecycle"
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-There is a predefined order of execution for the above methods:
-
-+ Case 1: User implements runTest()
-
-  First, setUp() will be executed.
-
-  If there is an exception, then then runTest() will not be executed. If setUp() succeeds, then runTest() is executed.
-
-  Regardless of the result of runTest(), tearDown() will be executed.
-
-+ Case 2: User implements test_* methods
-
-  As above, if setUp() fails, then test_* will not be executed and regardless of the result of the test_* method, tearDown() will be executed.
-
-  However, now for each test_* method, we will execute setUp(), a test_* method, then tearDown().
-
-  *Note: The order in which test_\* methods are run is determined by their alphanumeric ordering. For a given unittest.TestCase class, the test_\* methods will sorted alphanumerically in increasing order, then run in this order. **
-
-The assert* family of methods
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Each of these has the power to **FAIL** a test_* or runTest method.
+Each ``assert`` has the power to **FAIL** a ``test_*`` method.
 A test could contain several assert methods and will continue to run until an assertion fails.
 If no assertion fails, then the test will be marked as OK.
+It is important not to write too many assert statements in a test method. If
+this occurs than the test is probably trying to cover too many test scenarios
+and therefore the test should be broken up into smaller parts.
 
-A useful addition to the assert methods provided are the option to pass a message when the assertion fails. For example:
+If an assertion fails ``pytest`` will give very generous failure information. For example, with the use of a fake test file:
 
 .. code-block:: python
 
-  def runTest(self):
-      self.assertEquals(3, 4, "Silly you, 3 is not 4!")
+   import pytest
 
-If the optional message ( "Silly you, 3 is not 4!" in this case) is given, then if the assertion fails the user will be given this optional message instead of the generic message.
+   def test_crustacean():
+       assert 'lobster' == 'crab'
+
+
+The fake script will fail because the two strings are not equivalent, it will
+output the following when ``$ py.test test_crustacean.py`` is run from the
+command line:
+
+.. code-block:: none
+
+  ============================= test session starts ==============================
+  platform linux2 -- Python 2.7.6 -- py-1.4.23 -- pytest-2.5.2
+  plugins: cov
+  collected 1 items 
+
+  test_crustacean.py F
+
+  =================================== FAILURES ===================================
+  _______________________________ test_crustacean ________________________________
+
+      def test_crustacean():
+  >       assert 'lobster' == 'crab'
+  E       assert 'lobster' == 'crab'
+  E         - lobster
+  E         + crab
+
+  test_crustacean.py:6: AssertionError
+  =========================== 1 failed in 0.01 seconds ===========================
 
 
 Running the Test Suite
@@ -184,42 +205,63 @@ Introduction
 
 We've written our test case(s) and now we want to see the results. First, let's go over the expected results:
 
-Recall: we are using the test_* methods, thus setUp() will execute before each test_* and the test_* methods will be executed in alphanumeric order. A test_* will FAIL if any of its assertions are false.
+.. code-block:: python
+
+  @pytest.fixture
+  def db(tmpdir):
+      """Construct a database connector fixture"""
+      profile_path = str(tmpdir)
+      profile = Profile(profile_path, 'testing')
+      return profile.get_database()
+
+The ``pytest`` fixture creates an instance of the QtDBConnector object and
+allows each method matching the ``test_*`` pattern to have access to it.
+The fixture is created each time a ``test_*`` function receives it as an
+argument. The argument ``tmpdir`` is a ``pytest`` built in test function
+argument that provides a unique temporary directory to each test function
+that calls it.
+The example recreates the ``QtDBConnector`` each time a
+test function uses the ``db`` fixture. If you need to finer control over
+how the fixture is created then refer to the pytest documentation.
 
 .. code-block:: python
 
-  def setUp(self):
-      self.pres = Presentation("John Doe", event="haha", time="NOW")
+  def test_query_result_type_is_query(db):
+      assert isinstance(db.get_talks(), QtSql.QSqlQuery)
+      assert isinstance(db.get_events(), QtSql.QSqlQuery)
+      assert isinstance(db.get_talk_ids(), QtSql.QSqlQuery)
+      assert isinstance(db.get_talks_by_event('SC2011'), QtSql.QSqlQuery)
+      assert isinstance(db.get_talks_by_room('T105'), QtSql.QSqlQuery)
 
-In setUp(), we are creating a Presentation instance and storing it in self.pres. Now, each test_* will access this instance using self.pres.
+  def test_query_result_type_is_presentation(db):
+      assert isinstance(db.get_presentation(1), Presentation)
+
+  def test_query_result_type_is_model(db):
+      assert isinstance(db.get_presentations_model(), QtSql.QSqlTableModel)
+      assert isinstance(db.get_events_model(), QtSql.QSqlQueryModel)
+      assert isinstance(db.get_rooms_model('SC2011'), QtSql.QSqlQueryModel)
+      assert isinstance(db.get_talks_model('SC2011', 'T105'), QtSql.QSqlQueryModel)
+
+
+In the ``test_query_result_type_is_*()`` test functions, we are checking that
+the database queries return expected types.
+
 
 .. code-block:: python
 
-  def test_correct_time_set(self):
-      self.assertTrue(self.pres.time == "NOW")
-      self.pres.speaker = "John Doe"
+  def test_add_talks_from_csv(db):
+      """Test that talks are retrieved from the CSV file"""
 
-In test_correct_time_set(), we are checking that the time parameter in the constructor was correctly set to "NOW", then we are setting self.pres.speaker to "John Doe".
+      dirname = os.path.dirname(__file__)
+      fname = os.path.join(dirname, 'sample_talks.csv')
 
-.. code-block:: python
+      presentation = Presentation('Building NetBSD', 'David Maxwell')
 
-  def test_speaker_not_first_param(self):
-      self.assertNotEquals(self.pres.speaker, "John Doe")
+      db.add_talks_from_csv(fname)
+      assert(db.presentation_exists(presentation))
 
-In test_speaker_not_first_param(), we are checking that "John Doe" was in fact not set as the Presentation.speaker (it will be set as Presentation.title).
-
-.. code-block:: python
-
-  def test_event_is_default(self):
-      self.assertFalse(self.pres.event != "Default")
-
-Finally, in test_event_is_default(), we are checking that self.pres.event was set as "Default". Note that this case should fail.
-
-Before we begin, a note about the alphanumeric order. The test_* methods will run in the following order:
-
-  #. setUp(), test_correct_time()
-  #. setUp(), test_event_is_default()
-  #. setUp(), test_speaker_not_first_param()
+Finally, in ``test_add_talks_from_csv()``, we are checking that we can also
+add talks from comma separated value format files.
 
 
 Command line options
@@ -241,19 +283,32 @@ The output will contain information about the test session. If there are any
 failures during the session then failure messages will be logged and testing
 will continue.
 If there is a failure, the developer may read through the output to see
-what went wrong. Information related to which line the failure occured is
+what went wrong. Information related to which line the failure occurred is
 printed in the output's **FAILURES** section, as well as **DEBUG** or **INFO**
 output that was printed to stderr in the erroneous code.
 At the bottom of the output from the script statistics on code coverage are
 displayed.
 
 Gotchas! a.k.a Q&A
-******************
+*******************
 
-**Q: Why didn't test_speaker_not_first_param() fail if it is being set to "John Doe" in test_correct_time_set() ?**
+**Q: I set a variable in one of my unit tests, but my other unit tests cannot
+see the values I set!**
 
-A: Because before test_speaker_not_first_param() is invoked, setUp() is executed which resets self.pres to a new instance. Thus self.pres is as it would be and self.pres.speaker = "".
+A: There is no guarantee for the order in which unit tests run. It is also not
+a good practice to have dependencies between unit tests. Each of the unit tests
+should be stand alone and should not alter the test environment for tests
+running after said unit test. If you want to test that a unit test produces
+a given value, then the result of the unit test could be compared to a fixture
+to assert the condition has been met. The same fixture could then be used in
+the following unit test that you were using the result of the prior unit test
+in. This would separate the two unit tests from depending on the order in which
+they are ran by the test suite.
 
+**Q: Can pytest run UnitTest files?**
+
+A: Yes, ``pytest`` can run ``unittest.TestCase`` based unit tests if they follow the
+test discovery naming conventions.
 
 What should testers focus on?
 -----------------------------
