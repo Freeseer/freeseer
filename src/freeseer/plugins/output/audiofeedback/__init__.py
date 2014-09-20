@@ -29,12 +29,6 @@ speakers.
 @author: Thanh Ha
 '''
 
-# python-lib
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require("0.10")
@@ -45,9 +39,15 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer
 from freeseer.framework.plugin import IOutput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin
 import widget
+
+
+class AudioFeedbackConfig(Config):
+    """Configuration class for AudioFeedback plugin."""
+    feedbacksink = options.StringOption("autoaudiosink")
 
 
 class AudioFeedback(IOutput):
@@ -55,9 +55,7 @@ class AudioFeedback(IOutput):
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     type = IOutput.AUDIO
     recordto = IOutput.OTHER
-
-    # variables
-    feedbacksink = "autoaudiosink"
+    CONFIG_CLASS = AudioFeedbackConfig
 
     def get_output_bin(self, audio=True, video=False, metadata=None):
         bin = gst.Bin()
@@ -65,7 +63,7 @@ class AudioFeedback(IOutput):
         audioqueue = gst.element_factory_make("queue", "audioqueue")
         bin.add(audioqueue)
 
-        audiosink = gst.element_factory_make(self.feedbacksink, "audiosink")
+        audiosink = gst.element_factory_make(self.config.feedbacksink, "audiosink")
         bin.add(audiosink)
 
         # Setup ghost pad
@@ -76,13 +74,6 @@ class AudioFeedback(IOutput):
         audioqueue.link(audiosink)
 
         return bin
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-        try:
-            self.feedbacksink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", self.feedbacksink)
 
     def get_widget(self):
         if self.widget is None:
@@ -96,14 +87,15 @@ class AudioFeedback(IOutput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        feedbackIndex = self.widget.feedbackComboBox.findText(self.feedbacksink)
+        feedbackIndex = self.widget.feedbackComboBox.findText(self.config.feedbacksink)
         self.widget.feedbackComboBox.setCurrentIndex(feedbackIndex)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_feedbacksink(self, feedbacksink):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Feedback Sink", feedbacksink)
+        self.config.feedbacksink = feedbacksink
+        self.config.save()
 
     ###
     ### Translations

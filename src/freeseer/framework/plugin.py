@@ -21,8 +21,6 @@
 
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
-
-import ConfigParser
 import logging
 import os
 import sys
@@ -30,7 +28,6 @@ import xml.etree.ElementTree as ET
 
 from PyQt4 import QtCore
 from yapsy.PluginManager import PluginManagerSingleton
-from yapsy.ConfigurablePluginManager import ConfigurablePluginManager
 from yapsy.IPlugin import IPlugin
 
 log = logging.getLogger(__name__)
@@ -46,23 +43,16 @@ class PluginManager(QtCore.QObject):
     def __init__(self, profile):
         QtCore.QObject.__init__(self)
 
+        self.profile = profile
         self.firstrun = False
-        PluginManagerSingleton.setBehaviour([ConfigurablePluginManager])
         self.plugmanc = PluginManagerSingleton.get()
+
         locator = self.plugmanc.getPluginLocator()
         locator.setPluginInfoExtension("freeseer-plugin")
 
-        self.profile = profile
-
-        self.configfile = profile.get_filepath('plugin.conf')
-
-        self.config = ConfigParser.ConfigParser()
-        self.load()
-        self.plugmanc.setConfigParser(self.config, self.save)
-
         # Get the path where the installed plugins are located on systems where
         # freeseer is installed.
-        pluginpath = "%s/../plugins" % os.path.dirname(os.path.abspath(__file__))
+        pluginpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, "plugins")
 
         self.plugmanc.setPluginPlaces([pluginpath,
                                        os.path.expanduser("~/.freeseer/plugins"),
@@ -76,10 +66,6 @@ class PluginManager(QtCore.QObject):
             "Output":     IOutput})
         self.plugmanc.collectPlugins()
 
-        # If config was corrupt or did not exist, reset default plugins.
-        if self.firstrun:
-            self.set_default_plugins()
-
         for plugin in self.plugmanc.getAllPlugins():
             plugin.plugin_object.set_plugman(self)
 
@@ -87,56 +73,6 @@ class PluginManager(QtCore.QObject):
 
     def __call__(self):
         pass
-
-    def load(self):
-        try:
-            self.config.readfp(open(self.configfile))
-        # Config file does not exist, create a default
-        except IOError:
-            log.debug("First run scenario detected. Creating new configuration files.")
-            self.firstrun = True  # If config was corrupt or did not exist, reset defaults.
-            self.save()
-            return
-
-    def save(self):
-        with open(self.configfile, 'w') as configfile:
-            self.config.write(configfile)
-
-    def set_default_plugins(self):
-        """
-        Default the passthrough mixers and ogg output plugins.
-        """
-        self.set_plugin_option("AudioMixer", "Audio Passthrough-0", "Audio Input", "Audio Test Source")
-        self.set_plugin_option("VideoMixer", "Video Passthrough-0", "Video Input", "Video Test Source")
-        self.save()
-        log.info("Default plugins enabled.")
-
-    def get_plugin_option(self, category, name, option):
-        """
-        Returns the value stored in the config for a plugin option
-
-        Parameters:
-            category    - category to check
-            name        - name of the plugin
-            option      - plugin option to retrieve
-        Returns:
-            value of plugin option
-        """
-        return self.plugmanc.readOptionFromPlugin(category, name, option)
-
-    def set_plugin_option(self, category, name, option, value):
-        """
-        Stores a value to the config for a plugin option
-
-        Parameters:
-            category    - category to check
-            name        - name of the plugin
-            option      - plugin option to retrieve
-            value       - value to store
-        Returns:
-            none
-        """
-        self.plugmanc.registerOptionFromPlugin(category, name, option, value)
 
     ##
     ## Functions related to getting plugins supported by user's OS
@@ -284,13 +220,30 @@ class PluginManager(QtCore.QObject):
         unfiltered_plugins = self.plugmanc.getPluginsOfCategory("Output")
         return self._get_supported_plugins(unfiltered_plugins)
 
+    def load_plugin_config(self, config_class, section_name):
+        """
+        Return an instance of the config class for a plugin.
+
+        Parameters:
+            config_class: The CONFIG_CLASS of the plugin.
+            section_name: The section_name string for the plugin.
+
+        Returns:
+            An instance of the plugin's config class, or None
+            if no config class exists for this plugin.
+        """
+        if config_class:
+            return self.profile.get_config('plugin.conf', config_class, storage_args=[section_name])
+        else:
+            return None
+
 
 class IBackendPlugin(IPlugin):
     instance = 0
     name = None
     widget = None
     CATEGORY = "Undefined"
-
+    CONFIG_CLASS = None
     # list of supported OSes per:
     #    http://docs.python.org/2/library/sys.html#sys.platform
     os = []
@@ -310,16 +263,23 @@ class IBackendPlugin(IPlugin):
         return self.os
 
     def get_config_name(self):
-        return "%s-%s" % (self.name, self.instance)
+        return "{}-{}".format(self.name, self.instance)
 
-    def load_config(self, plugman):
-        pass
+    def get_section_name(self):
+        return "{} Plugin: {}".format(self.CATEGORY, self.get_config_name())
+
+    def load_config(self, plugman, config=None):
+        if not config:
+            self.config = plugman.load_plugin_config(self.CONFIG_CLASS, self.get_section_name())
+        else:
+            self.config = config
 
     def set_plugman(self, plugman):
         self.plugman = plugman
 
     def set_instance(self, instance=0):
         self.instance = instance
+        self.load_config(self.plugman)
 
     def set_gui(self, gui):
         self.gui = gui
@@ -330,12 +290,15 @@ class IBackendPlugin(IPlugin):
 
         # Only load configuration the first time the user opens widget
         if not self.config_loaded:
-            log.debug(self.name + " loading configuration into widget.")
+            log.debug("%s loading configuration into widget.", self.name)
             self.config_loaded = True
             self.widget_load_config(self.plugman)
 
         if widget is not None:
             self.gui.show_plugin_widget_dialog(widget, self.name)
+
+        if self.config is not None:
+            self.config.save()
 
     def get_widget(self):
         """

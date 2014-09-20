@@ -27,12 +27,6 @@ A video input plugin that uses your desktop as the video source.
 
 @author: Thanh Ha
 '''
-
-# python-lib
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
 import logging
 import sys
 
@@ -48,6 +42,7 @@ from PyQt4.QtGui import QDesktopWidget
 # Freeseer modules
 from freeseer.framework.plugin import IVideoInput
 from freeseer.framework.area_selector import AreaSelector
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
 import widget
@@ -55,20 +50,25 @@ import widget
 log = logging.getLogger(__name__)
 
 
+class DesktopLinuxSrcConfig(Config):
+    """Configuration settings for linux desktop video plugin."""
+
+    # ximagesrc
+    desktop = options.StringOption("Full")
+    screen = options.IntegerOption(0)
+    window = options.StringOption("")
+
+    # Area Select
+    start_x = options.IntegerOption(0)
+    start_y = options.IntegerOption(0)
+    end_x = options.IntegerOption(0)
+    end_y = options.IntegerOption(0)
+
+
 class DesktopLinuxSrc(IVideoInput):
     name = "Desktop Source"
     os = ["linux", "linux2", "win32", "cygwin"]
-
-    # ximagesrc
-    desktop = "Full"
-    screen = 0
-    window = ""
-
-    # Area Select
-    start_x = 0
-    start_y = 0
-    end_x = 0
-    end_y = 0
+    CONFIG_CLASS = DesktopLinuxSrcConfig
 
     def get_videoinput_bin(self):
         """
@@ -77,30 +77,39 @@ class DesktopLinuxSrc(IVideoInput):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = None
+
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("ximagesrc", "videosrc")
 
             # Configure coordinates if we're not recording full desktop
-            if self.desktop == "Area":
-                videosrc.set_property("startx", self.start_x)
-                videosrc.set_property("starty", self.start_y)
-                videosrc.set_property("endx", self.end_x)
-                videosrc.set_property("endy", self.end_y)
-                log.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+            if self.config.desktop == "Area":
+                videosrc.set_property("startx", self.config.start_x)
+                videosrc.set_property("starty", self.config.start_y)
+                videosrc.set_property("endx", self.config.end_x)
+                videosrc.set_property("endy", self.config.end_y)
+                log.debug('Recording Area start: %sx%s end: %sx%s',
+                          self.config.start_x,
+                          self.config.start_y,
+                          self.config.end_x,
+                          self.config.end_y)
 
-            if self.desktop == "Window":
-                videosrc.set_property("xname", self.window)
+            if self.config.desktop == "Window":
+                videosrc.set_property("xname", self.config.window)
 
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dx9screencapsrc", "videosrc")
 
             # Configure coordinates if we're not recording full desktop
-            if self.desktop == "Area":
-                videosrc.set_property("x", self.start_x)
-                videosrc.set_property("y", self.start_y)
-                videosrc.set_property("width", self.start_x + self.end_x)
-                videosrc.set_property("height", self.start_y + self.end_y)
-                log.debug('Recording Area start: %sx%s end: %sx%s' % (self.start_x, self.start_y, self.end_x, self.end_y))
+            if self.config.desktop == "Area":
+                videosrc.set_property("x", self.config.start_x)
+                videosrc.set_property("y", self.config.start_y)
+                videosrc.set_property("width", self.config.start_x + self.config.end_x)
+                videosrc.set_property("height", self.config.start_y + self.config.end_y)
+                log.debug('Recording Area start: %sx%s end: %sx%s',
+                          self.config.start_x,
+                          self.config.start_y,
+                          self.config.end_x,
+                          self.config.end_y)
 
         bin.add(videosrc)
 
@@ -115,29 +124,6 @@ class DesktopLinuxSrc(IVideoInput):
 
         return bin
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.desktop = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop")
-            self.screen = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Screen")
-            self.window = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Window")
-            self.start_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_x"))
-            self.start_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "start_y"))
-            self.end_x = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_x"))
-            self.end_y = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "end_y"))
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", self.desktop)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", self.screen)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Window", self.window)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", self.start_x)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", self.start_y)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", self.end_x)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", self.end_y)
-        except TypeError:
-            # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
-            pass
-
     def area_select(self):
         self.area_selector = AreaSelector(self)
         self.area_selector.show()
@@ -145,11 +131,12 @@ class DesktopLinuxSrc(IVideoInput):
         self.widget.window().hide()
 
     def areaSelectEvent(self, start_x, start_y, end_x, end_y):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_x", start_x)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "start_y", start_y)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_x", end_x)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "end_y", end_y)
-        log.debug('Area selector start: %sx%s end: %sx%s' % (start_x, start_y, end_x, end_y))
+        self.config.start_x = start_x
+        self.config.start_y = start_y
+        self.config.end_x = end_x
+        self.config.end_y = end_y
+        self.config.save()
+        log.debug('Area selector start: %sx%s end: %sx%s', start_x, start_y, end_x, end_y)
         self.gui.show()
         self.widget.window().show()
 
@@ -168,9 +155,9 @@ class DesktopLinuxSrc(IVideoInput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        if self.desktop == "Full":
+        if self.config.desktop == "Full":
             self.widget.desktopButton.setChecked(True)
-        elif self.desktop == "Area":
+        elif self.config.desktop == "Area":
             self.widget.areaButton.setChecked(True)
 
         # Try to detect how many screens the user has
@@ -182,13 +169,16 @@ class DesktopLinuxSrc(IVideoInput):
         self.__enable_connections()
 
     def set_screen(self, screen):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Screen", screen)
+        self.config.screen = screen
+        self.config.save()
 
     def set_desktop_full(self):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Full")
+        self.config.desktop = "Full"
+        self.config.save()
 
     def set_desktop_area(self):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Desktop", "Area")
+        self.config.desktop = "Area"
+        self.config.save()
 
     ###
     ### Translations

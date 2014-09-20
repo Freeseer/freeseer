@@ -27,13 +27,6 @@ An audio plugin which uses JACK as the audio input.
 
 @author: Thanh Ha
 '''
-
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require("0.10")
@@ -44,20 +37,26 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer
 from freeseer.framework.plugin import IAudioInput
+from freeseer.framework.config import Config
+import freeseer.framework.config.options as options
 
 # .freeseer-plugin custom
 import widget
 
 
+class JackAudioConfig(Config):
+    """Default Jackaudio Config settings"""
+
+    client = options.StringOption('')
+    connect = options.StringOption('')
+    server = options.StringOption('')
+    clientname = options.StringOption('')
+
+
 class JackAudioSrc(IAudioInput):
     name = "Jack Audio Source"
     os = ["linux", "linux2"]
-
-    # jackaudio variables
-    client = ""
-    connect = ""
-    server = ""
-    clientname = ""
+    CONFIG_CLASS = JackAudioConfig
 
     def get_audioinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
@@ -71,20 +70,6 @@ class JackAudioSrc(IAudioInput):
         bin.add_pad(ghostpad)
 
         return bin
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.client = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Client")
-            self.connect = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Connect")
-            self.server = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Server")
-            self.clientname = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", self.client)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", self.connect)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", self.server)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", self.clientname)
 
     def get_widget(self):
         if self.widget is None:
@@ -101,29 +86,29 @@ class JackAudioSrc(IAudioInput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        self.widget.lineedit_client.setText(self.client)
-        self.widget.lineedit_connect.setText(self.connect)
-        self.widget.lineedit_server.setText(self.server)
-        self.widget.lineedit_clientname.setText(self.clientname)
+        self.widget.lineedit_client.setText(self.config.client)
+        self.widget.lineedit_connect.setText(self.config.connect)
+        self.widget.lineedit_server.setText(self.config.server)
+        self.widget.lineedit_clientname.setText(self.config.clientname)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_client(self):
-        client = str(self.widget.lineedit_client.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Client", client)
+        self.config.client = str(self.widget.lineedit_client.text())
+        self.config.save()
 
     def set_connect(self):
-        connect = str(self.widget.lineedit_connect.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Connect", connect)
+        self.config.connect = str(self.widget.lineedit_connect.text())
+        self.config.save()
 
     def set_server(self):
-        server = str(self.widget.lineedit_server.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Server", server)
+        self.config.server = str(self.widget.lineedit_server.text())
+        self.config.save()
 
     def set_clientname(self):
-        clientname = str(self.widget.lineedit_clientname.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "ClientName", clientname)
+        self.config.clientname = str(self.widget.lineedit_clientname.text())
+        self.config.save()
 
     ###
     ### Translations

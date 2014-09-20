@@ -79,10 +79,6 @@ When you're done setting up your Justin.tv preferences in Freeseer, click the
 '''
 
 # Python libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
 import logging
 import pickle
 import webbrowser
@@ -98,6 +94,7 @@ from PyQt4 import QtGui, QtCore
 # Freeseer libs
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.plugin import PluginError
+from freeseer.framework.config import Config, options
 
 log = logging.getLogger(__name__)
 
@@ -121,47 +118,47 @@ except:
         """)
     raise PluginError("Plugin missing required dependencies.")
 
+TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
+AUDIO_CODEC_VALUES = ['lame', 'faac']
+STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
+JUSTIN_URL = 'rtmp://live-3c.justin.tv/app/'
+STATUS_KEYS = ['artist', 'title']
+DESCRIPTION_KEY = 'comment'
+
+
+class RTMPOutputConfig(Config):
+    """Configuration class for RTMPOut plugin."""
+    url = options.StringOption('')
+    audio_quality = options.IntegerOption(3)
+    video_bitrate = options.IntegerOption(2400)
+    video_tune = options.ChoiceOption(TUNE_VALUES, 'none')
+    audio_codec = options.ChoiceOption(AUDIO_CODEC_VALUES, 'lame')
+    streaming_destination = options.ChoiceOption(STREAMING_DESTINATION_VALUES, 'custom')
+    streaming_key = options.StringOption('')
+    consumer_key = options.StringOption('')
+    consumer_secret = options.StringOption('')
+    authorization_url = options.StringOption('')
+    use_justin_api = options.StringOption('no')
+    justin_api_persistent = options.StringOption('')
+
 
 class RTMPOutput(IOutput):
-
     name = "RTMP Streaming"
     os = ["linux", "linux2", "win32", "cygwin"]
     type = IOutput.BOTH
     recordto = IOutput.STREAM
     tags = None
-
-    # RTMP Streaming variables
-    url = ""
-    audio_quality = 0.3
-    video_bitrate = 2400
-    video_tune = 'none'
-    audio_codec = 'lame'
-    streaming_dest = 'custom'
-    streaming_key = ''
-    consumer_key = ''
-    consumer_secret = ''
-    authorization_url = ''
-    use_justin_api = 'no'
-
-    TUNE_VALUES = ['none', 'film', 'animation', 'grain', 'stillimage', 'psnr', 'ssim', 'fastdecode', 'zerolatency']
-    AUDIO_CODEC_VALUES = ['lame', 'faac']
-    STREAMING_DESTINATION_VALUES = ['custom', 'justin.tv']
-    JUSTIN_URL = 'rtmp://live-3c.justin.tv/app/'
-    STATUS_KEYS = ['artist', 'title']
-    DESCRIPTION_KEY = 'comment'
-
     justin_api = None
-    justin_api_persistent = ''
-
     streaming_destination_widget = None
     load_config_delegate = None
+    CONFIG_CLASS = RTMPOutputConfig
 
     #@brief - RTMP Streaming plugin.
     # Structure for function was based primarily off the ogg function
-    # Creates a bin to stream flv content to [self.url]
+    # Creates a bin to stream flv content to [self.config.url]
     # Bin has audio and video ghost sink pads
     # Converts audio and video to flv with [flvmux] element
-    # Streams flv content to [self.url]
+    # Streams flv content to [self.config.url]
     # TODO - Error handling - verify pad setup
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
@@ -183,12 +180,9 @@ class RTMPOutput(IOutput):
 
         bin.add(muxer)
 
-        url = self.url
-        audio_codec = self.audio_codec
-
         # RTMP sink
         rtmpsink = gst.element_factory_make('rtmpsink', 'rtmpsink')
-        rtmpsink.set_property('location', url)
+        rtmpsink.set_property('location', self.config.url)
         bin.add(rtmpsink)
 
         #
@@ -205,10 +199,10 @@ class RTMPOutput(IOutput):
             audiolevel.set_property('interval', 20000000)
             bin.add(audiolevel)
 
-            audiocodec = gst.element_factory_make(audio_codec, "audiocodec")
+            audiocodec = gst.element_factory_make(self.config.audio_codec, "audiocodec")
 
             if 'quality' in audiocodec.get_property_names():
-                audiocodec.set_property("quality", int(self.audio_quality))
+                audiocodec.set_property("quality", self.config.audio_quality)
             else:
                 log.debug("WARNING: Missing property: 'quality' on audiocodec; available: " +
                     ','.join(audiocodec.get_property_names()))
@@ -233,9 +227,9 @@ class RTMPOutput(IOutput):
             bin.add(videoqueue)
 
             videocodec = gst.element_factory_make("x264enc", "videocodec")
-            videocodec.set_property("bitrate", int(self.video_bitrate))
-            if self.video_tune != 'none':
-                videocodec.set_property('tune', self.video_tune)
+            videocodec.set_property("bitrate", self.config.video_bitrate)
+            if self.config.video_tune != 'none':
+                videocodec.set_property('tune', self.config.video_tune)
             bin.add(videocodec)
 
             # Setup ghost pads
@@ -252,7 +246,7 @@ class RTMPOutput(IOutput):
         #
         muxer.link(rtmpsink)
 
-        if self.streaming_dest == self.STREAMING_DESTINATION_VALUES[1] and self.use_justin_api == 'yes':
+        if self.config.streaming_destination == STREAMING_DESTINATION_VALUES[1] and self.config.use_justin_api == 'yes':
             self.justin_api.set_channel_status(self.get_talk_status(metadata),
                                                self.get_description(metadata))
 
@@ -282,42 +276,11 @@ class RTMPOutput(IOutput):
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.url = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL")
-            self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
-            self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
-            self.video_tune = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune")
-            self.audio_codec = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec")
-            self.streaming_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key")
-            self.consumer_key = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key")
-            self.consumer_secret = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret")
-            self.streaming_dest = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination")
-            self.use_justin_api = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", self.video_tune)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", self.audio_codec)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", self.streaming_dest)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API", self.use_justin_api)
-        except TypeError:
-            # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
-            pass
-
-        try:
-            self.justin_api_persistent = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object")
-            if self.justin_api_persistent:
-                self.justin_api = JustinApi.from_string(self.justin_api_persistent)
-                self.justin_api.set_save_method(self.set_justin_api_persistent)
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
+    def load_config(self, plugman, config=None):
+        super(RTMPOutput, self).load_config(plugman)
+        if self.config.justin_api_persistent:
+            self.justin_api = JustinApi.from_string(self.config.justin_api_persistent)
+            self.justin_api.set_save_method(self.set_justin_api_persistent)
 
     def get_stream_settings_widget(self):
         self.stream_settings_widget = QtGui.QWidget()
@@ -355,7 +318,7 @@ class RTMPOutput(IOutput):
 
         self.label_audio_codec = QtGui.QLabel("Audio Codec")
         self.combobox_audio_codec = QtGui.QComboBox()
-        self.combobox_audio_codec.addItems(self.AUDIO_CODEC_VALUES)
+        self.combobox_audio_codec.addItems(AUDIO_CODEC_VALUES)
         self.stream_settings_widget_layout.addRow(self.label_audio_codec, self.combobox_audio_codec)
 
         self.stream_settings_widget.connect(self.combobox_audio_codec,
@@ -381,7 +344,7 @@ class RTMPOutput(IOutput):
 
         self.label_video_tune = QtGui.QLabel("Video Tune")
         self.combobox_video_tune = QtGui.QComboBox()
-        self.combobox_video_tune.addItems(self.TUNE_VALUES)
+        self.combobox_video_tune.addItems(TUNE_VALUES)
         self.stream_settings_widget_layout.addRow(self.label_video_tune, self.combobox_video_tune)
 
         self.stream_settings_widget.connect(self.combobox_video_tune,
@@ -398,11 +361,11 @@ class RTMPOutput(IOutput):
         return self.stream_settings_widget
 
     def setup_streaming_destination_widget(self, streaming_dest):
-        if streaming_dest == self.STREAMING_DESTINATION_VALUES[0]:
+        if streaming_dest == STREAMING_DESTINATION_VALUES[0]:
             self.load_config_delegate = None
             self.unlock_stream_settings()
             return None
-        if streaming_dest == self.STREAMING_DESTINATION_VALUES[1]:
+        if streaming_dest == STREAMING_DESTINATION_VALUES[1]:
             self.load_config_delegate = self.justin_widget_load_config
             self.lineedit_stream_url.setEnabled(False)
             self.combobox_audio_codec.setEnabled(False)
@@ -493,7 +456,7 @@ class RTMPOutput(IOutput):
 
             self.label_streaming_dest = QtGui.QLabel("Streaming Destination")
             self.combobox_streaming_dest = QtGui.QComboBox()
-            self.combobox_streaming_dest.addItems(self.STREAMING_DESTINATION_VALUES)
+            self.combobox_streaming_dest.addItems(STREAMING_DESTINATION_VALUES)
 
             self.widget_layout.addRow(self.label_streaming_dest, self.combobox_streaming_dest)
 
@@ -504,7 +467,7 @@ class RTMPOutput(IOutput):
         return self.widget
 
     def load_streaming_destination_widget(self):
-        streaming_destination_widget = self.setup_streaming_destination_widget(self.streaming_dest)
+        streaming_destination_widget = self.setup_streaming_destination_widget(self.config.streaming_destination)
 
         if self.streaming_destination_widget is not None:
             self.streaming_destination_widget.deleteLater()
@@ -518,19 +481,19 @@ class RTMPOutput(IOutput):
         self.load_config(plugman)
         self.stream_settings_load_config()
 
-        self.combobox_streaming_dest.setCurrentIndex(self.STREAMING_DESTINATION_VALUES.index(self.streaming_dest))
+        self.combobox_streaming_dest.setCurrentIndex(STREAMING_DESTINATION_VALUES.index(self.config.streaming_destination))
 
         self.load_streaming_destination_widget()
         if self.load_config_delegate:
             self.load_config_delegate()
 
     def justin_widget_load_config(self):
-        self.lineedit_streaming_key.setText(self.streaming_key)
-        self.lineedit_consumer_key.setText(self.consumer_key)
-        self.lineedit_consumer_secret.setText(self.consumer_secret)
+        self.lineedit_streaming_key.setText(self.config.streaming_key)
+        self.lineedit_consumer_key.setText(self.config.consumer_key)
+        self.lineedit_consumer_secret.setText(self.config.consumer_secret)
 
         check_state = 0
-        if self.use_justin_api == 'yes':
+        if self.config.use_justin_api == 'yes':
             check_state = 2
         self.api_checkbox.setCheckState(check_state)
         self.toggle_consumer_key_secret_fields()
@@ -543,64 +506,64 @@ class RTMPOutput(IOutput):
         self.combobox_audio_codec.setEnabled(True)
 
     def stream_settings_load_config(self):
-        self.lineedit_stream_url.setText(self.url)
+        self.lineedit_stream_url.setText(self.config.url)
 
-        self.spinbox_audio_quality.setValue(float(self.audio_quality))
-        self.spinbox_video_quality.setValue(int(self.video_bitrate))
+        self.spinbox_audio_quality.setValue(self.config.audio_quality)
+        self.spinbox_video_quality.setValue(self.config.video_bitrate)
 
-        tuneIndex = self.combobox_video_tune.findText(self.video_tune)
+        tuneIndex = self.combobox_video_tune.findText(self.config.video_tune)
         self.combobox_video_tune.setCurrentIndex(tuneIndex)
 
-        acIndex = self.combobox_audio_codec.findText(self.audio_codec)
+        acIndex = self.combobox_audio_codec.findText(self.config.audio_codec)
         self.combobox_audio_codec.setCurrentIndex(acIndex)
 
     def set_stream_url(self, text):
-        self.url = text
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Stream URL", self.url)
+        self.config.url = text
+        self.config.save()
 
     def set_audio_quality(self):
-        self.audio_quality = self.spinbox_audio_quality.value()
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
+        self.config.audio_quality = self.spinbox_audio_quality.value()
+        self.config.save()
 
     def set_video_bitrate(self):
-        self.video_bitrate = self.spinbox_video_quality.value()
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
+        self.config.video_bitrate = self.spinbox_video_quality.value()
+        self.config.save()
 
     def set_video_tune(self, tune):
-        self.video_tune = tune
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Tune", str(self.video_tune))
+        self.config.video_tune = tune
+        self.config.save()
 
     def set_audio_codec(self, codec):
-        self.audio_codec = codec
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Codec", str(self.audio_codec))
+        self.config.audio_codec = codec
+        self.config.save()
 
     def set_streaming_dest(self, dest):
-        self.streaming_dest = dest
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Streaming Destination", str(self.streaming_dest))
+        self.config.streaming_destination = dest
 
-        if str(self.streaming_dest) in self.STREAMING_DESTINATION_VALUES:
-            index = min([i for i in range(len(self.STREAMING_DESTINATION_VALUES))
-                if self.STREAMING_DESTINATION_VALUES[i] == self.streaming_dest])
+        if self.config.streaming_destination in STREAMING_DESTINATION_VALUES:
+            index = min([i for i in range(len(STREAMING_DESTINATION_VALUES))
+                if STREAMING_DESTINATION_VALUES[i] == self.config.streaming_destination])
             self.combobox_streaming_dest.setCurrentIndex(index)
 
         self.load_streaming_destination_widget()
         if self.load_config_delegate:
             self.load_config_delegate()
+        self.config.save()
 
     def set_streaming_key(self, text):
-        self.streaming_key = str(text)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Streaming Key", self.streaming_key)
+        self.config.streaming_key = str(text)
+        self.config.save()
 
     def set_use_justin_api(self, state):
         if state != 0:
-            self.use_justin_api = 'yes'
+            self.config.use_justin_api = 'yes'
         else:
-            self.use_justin_api = 'no'
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Use API", self.use_justin_api)
+            self.config.use_justin_api = 'no'
+        self.config.save()
         self.toggle_consumer_key_secret_fields()
 
     def toggle_consumer_key_secret_fields(self):
-        if self.use_justin_api == 'yes':
+        if self.config.use_justin_api == 'yes':
             self.lineedit_consumer_key.setEnabled(True)
             self.lineedit_consumer_secret.setEnabled(True)
         else:
@@ -608,27 +571,27 @@ class RTMPOutput(IOutput):
             self.lineedit_consumer_secret.setEnabled(False)
 
     def set_consumer_key(self, text):
-        self.consumer_key = str(text)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Key", self.consumer_key)
+        self.config.consumer_key = str(text)
+        self.config.save()
 
     def set_consumer_secret(self, text):
-        self.consumer_secret = str(text)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv Consumer Secret", self.consumer_secret)
+        self.config.consumer_secret = str(text)
+        self.config.save()
 
     def set_justin_api_persistent(self, text):
         self.justin_api_persistent = str(text)
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "justin.tv API Persistent Object", self.justin_api_persistent)
+        self.config.save()
 
     def apply_justin_settings(self):
         # here is where all the justin.tv streaming presets will be applied
-        self.set_stream_url(self.JUSTIN_URL + self.streaming_key)
+        self.set_stream_url(self.JUSTIN_URL + self.config.streaming_key)
         self.set_audio_codec('lame')
 
         self.stream_settings_load_config()
 
         try:
-            if self.consumer_key and self.consumer_secret:
-                url, self.justin_api = JustinApi.open_request(self.consumer_key, self.consumer_secret)
+            if self.config.consumer_key and self.config.consumer_secret:
+                url, self.justin_api = JustinApi.open_request(self.config.consumer_key, self.config.consumer_secret)
                 self.justin_api.set_save_method(self.set_justin_api_persistent)
                 webbrowser.open(url)
                 QtGui.QMessageBox.information(self.widget,
@@ -689,8 +652,8 @@ class JustinApi:
         return JustinApi(consumer_key, consumer_secret, request_token_str, access_token_str)
 
     def __init__(self, consumer_key="", consumer_secret="", request_token_str="", access_token_str=""):
-        self.consumer_key = consumer_key
-        self.consumer_secret = consumer_secret
+        self.config.consumer_key = consumer_key
+        self.config.consumer_secret = consumer_secret
         self.request_token_str = request_token_str
         self.access_token_str = access_token_str
 
@@ -707,7 +670,7 @@ class JustinApi:
 
     def obtain_access_token(self):
         try:
-            consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+            consumer = oauth.OAuthConsumer(self.config.consumer_key, self.config.consumer_secret)
             token = oauth.OAuthToken.from_string(self.request_token_str)
             url = "http://%s/oauth/access_token" % JustinApi.addr
             request = oauth.OAuthRequest.from_consumer_and_token(
@@ -728,7 +691,7 @@ class JustinApi:
     def get_data(self, endpoint):
         try:
             token = oauth.OAuthToken.from_string(self.access_token_str)
-            consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+            consumer = oauth.OAuthConsumer(self.config.consumer_key, self.config.consumer_secret)
             request = oauth.OAuthRequest.from_consumer_and_token(
                 consumer,
                 token,
@@ -747,7 +710,7 @@ class JustinApi:
     def set_data(self, endpoint, payload):
         try:
             token = oauth.OAuthToken.from_string(self.access_token_str)
-            consumer = oauth.OAuthConsumer(self.consumer_key, self.consumer_secret)
+            consumer = oauth.OAuthConsumer(self.config.consumer_key, self.config.consumer_secret)
             request = oauth.OAuthRequest.from_consumer_and_token(
                 consumer,
                 token,
@@ -779,4 +742,4 @@ class JustinApi:
         self.set_data('channel/update.json', update_contents)
 
     def to_string(self):
-        return pickle.dumps([self.consumer_key, self.consumer_secret, str(self.request_token_str), str(self.access_token_str)])
+        return pickle.dumps([self.config.consumer_key, self.config.consumer_secret, str(self.request_token_str), str(self.access_token_str)])

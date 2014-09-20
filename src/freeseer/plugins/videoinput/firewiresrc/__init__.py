@@ -30,10 +30,6 @@ source.
 '''
 
 # python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
 import os
 
 # GStreamer modules
@@ -46,31 +42,41 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer modules
 from freeseer.framework.plugin import IVideoInput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
 import widget
 
 
+def detect_devices():
+    """
+    Return a list of available firewire devices.
+    """
+    device_list = []
+    i = 1
+    path = "/dev/fw"
+    devpath = path + str(i)
+
+    while os.path.exists(devpath):
+        device_list.append(devpath)
+        i = i + 1
+        devpath = path + str(i)
+
+    return device_list
+
+
+class FirewireSrcConfig(Config):
+    """Config settings for Firewire video source."""
+    device = options.StringOption('')
+
+
 class FirewireSrc(IVideoInput):
     name = "Firewire Source"
     os = ["linux", "linux2"]
-    device = "/dev/fw1"
-    device_list = []
+    CONFIG_CLASS = FirewireSrcConfig
 
     def __init__(self):
         IVideoInput.__init__(self)
-
-        #
-        # Detect available devices
-        #
-        i = 1
-        path = "/dev/fw"
-        devpath = path + str(i)
-
-        while os.path.exists(devpath):
-            self.device_list.append(devpath)
-            i = i + 1
-            devpath = path + str(i)
 
     def get_videoinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
@@ -101,14 +107,6 @@ class FirewireSrc(IVideoInput):
 
         return bin
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.device = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", self.device)
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -123,18 +121,17 @@ class FirewireSrc(IVideoInput):
 
         # Load the combobox with inputs
         self.widget.devicesCombobox.clear()
-        n = 0
-        for i in self.device_list:
-            self.widget.devicesCombobox.addItem(i)
-            if i == self.device:
-                self.widget.devicesCombobox.setCurrentIndex(n)
-            n = n + 1
+        for i, device in enumerate(detect_devices()):
+            self.widget.devicesCombobox.addItem(device)
+            if device == self.config.device:
+                self.widget.devicesCombobox.setCurrentIndex(i)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_device(self, device):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", device)
+        self.config.device = device
+        self.config.save()
 
     ###
     ### Translations
