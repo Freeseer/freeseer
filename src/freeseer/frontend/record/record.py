@@ -222,9 +222,9 @@ class RecordApp(FreeseerApp):
         elif self.mainWidget.autoRecordPushButton.isChecked():
             self.mainWidget.statusLabel.setText(self.autoRecordString)
         else:
-            self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
-                                                                       get_free_space(self.config.videodir),
-                                                                       self.idleString))
+            self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
+                                                                        get_free_space(self.config.videodir),
+                                                                        self.idleString))
 
         #
         # Menubar
@@ -351,9 +351,9 @@ class RecordApp(FreeseerApp):
             if self.load_backend():
                 toggle_gui(True)
                 self.controller.pause()
-                self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
-                                                                       get_free_space(self.config.videodir),
-                                                                       self.readyString))
+                self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
+                                                                            get_free_space(self.config.videodir),
+                                                                            self.readyString))
             else:
                 toggle_gui(False)
                 self.mainWidget.standbyPushButton.setChecked(False)
@@ -393,9 +393,9 @@ class RecordApp(FreeseerApp):
             self.mainWidget.recordPushButton.setText(self.recordString)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
-                                                                       get_free_space(self.config.videodir),
-                                                                       self.idleString))
+            self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
+                                                                        get_free_space(self.config.videodir),
+                                                                        self.idleString))
 
             # Finally set the standby button back to unchecked position.
             self.standby(False)
@@ -567,11 +567,11 @@ class RecordApp(FreeseerApp):
             self.time_seconds = 0
             self.time_minutes += 1
 
-        self.mainWidget.statusLabel.setText("{} {} --- {} {} --- {}".format(self.elapsedTimeString,
-                                                                            frmt_time,
-                                                                            self.freeSpaceString,
-                                                                            get_free_space(self.config.videodir),
-                                                                            self.recordingString))
+        self.mainWidget.statusLabel.setText(u"{} {} --- {} {} --- {}".format(self.elapsedTimeString,
+                                                                             frmt_time,
+                                                                             self.freeSpaceString,
+                                                                             get_free_space(self.config.videodir),
+                                                                             self.recordingString))
 
     def reset_timer(self):
         """Resets the Elapsed Time."""
