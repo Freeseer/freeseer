@@ -28,12 +28,6 @@ A streaming plugin which records sends an Ogg stream to an icecast server.
 @author: Thanh Ha
 '''
 
-# python-lib
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require("0.10")
@@ -44,9 +38,18 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer
 from freeseer.framework.plugin import IOutput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
 import widget
+
+
+class OggIcecastConfig(Config):
+    """Configuration class for OggIcecast Plugin."""
+    ip = options.StringOption("127.0.0.1")
+    port = options.IntegerOption(8000)
+    password = options.StringOption("hackme")
+    mount = options.StringOption("stream.ogg")
 
 
 class OggIcecast(IOutput):
@@ -56,12 +59,7 @@ class OggIcecast(IOutput):
     recordto = IOutput.STREAM
     extension = "ogg"
     tags = None
-
-    # Icecast server variables
-    ip = "127.0.0.1"
-    port = 8000
-    password = "hackme"
-    mount = "stream.ogg"
+    CONFIG_CLASS = OggIcecastConfig
 
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
@@ -74,10 +72,10 @@ class OggIcecast(IOutput):
         bin.add(muxer)
 
         icecast = gst.element_factory_make("shout2send", "icecast")
-        icecast.set_property("ip", self.ip)
-        icecast.set_property("port", self.port)
-        icecast.set_property("password", self.password)
-        icecast.set_property("mount", self.mount)
+        icecast.set_property("ip", self.config.ip)
+        icecast.set_property("port", self.config.port)
+        icecast.set_property("password", self.config.password)
+        icecast.set_property("mount", self.config.mount)
         bin.add(icecast)
 
         #
@@ -153,23 +151,6 @@ class OggIcecast(IOutput):
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.ip = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "IP")
-            self.port = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Port"))
-            self.password = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Password")
-            self.mount = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Mount")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", self.ip)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", self.port)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", self.password)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", self.mount)
-        except TypeError:
-            # Temp fix for issue when reading framerate the 2nd time causes TypeError
-            pass
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -185,28 +166,29 @@ class OggIcecast(IOutput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        self.widget.lineedit_ip.setText(self.ip)
-        self.widget.spinbox_port.setValue(self.port)
-        self.widget.lineedit_password.setText(self.password)
-        self.widget.lineedit_mount.setText(self.mount)
+        self.widget.lineedit_ip.setText(self.config.ip)
+        self.widget.spinbox_port.setValue(self.config.port)
+        self.widget.lineedit_password.setText(self.config.password)
+        self.widget.lineedit_mount.setText(self.config.mount)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_ip(self):
-        ip = str(self.widget.lineedit_ip.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "IP", ip)
+        self.config.ip = str(self.widget.lineedit_ip.text())
+        self.config.save()
 
     def set_port(self, port):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Port", port)
+        self.config.port = port
+        self.config.save()
 
     def set_password(self):
-        password = str(self.widget.lineedit_password.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Password", password)
+        self.config.password = str(self.widget.lineedit_password.text())
+        self.config.save()
 
     def set_mount(self):
-        mount = str(self.widget.lineedit_mount.text())
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Mount", mount)
+        self.config.mount = str(self.widget.lineedit_mount.text())
+        self.config.save()
 
     ###
     ### Translations

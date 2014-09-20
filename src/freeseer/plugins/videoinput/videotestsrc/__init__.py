@@ -29,12 +29,6 @@ testing and debugging Freeseer.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer modules
 import pygst
 pygst.require("0.10")
@@ -45,30 +39,34 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer modules
 from freeseer.framework.plugin import IVideoInput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
 import widget
+
+# Patterns
+PATTERNS = ["smpte", "snow", "black", "white", "red", "green", "blue",
+            "circular", "blink", "smpte75", "zone-plate", "gamut",
+            "chroma-zone-plate", "ball", "smpte100", "bar"]
+
+
+class VideoTestSrcConfig(Config):
+    """Config settings for VideoTestSrc plugin."""
+    live = options.BooleanOption(False)
+    pattern = options.ChoiceOption(PATTERNS, default="smpte")
 
 
 class VideoTestSrc(IVideoInput):
     name = "Video Test Source"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
-
-    # variables
-    live = False
-    pattern = "smpte"
-
-    # Patterns
-    PATTERNS = ["smpte", "snow", "black", "white", "red", "green", "blue",
-                "circular", "blink", "smpte75", "zone-plate", "gamut",
-                "chroma-zone-plate", "ball", "smpte100", "bar"]
+    CONFIG_CLASS = VideoTestSrcConfig
 
     def get_videoinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = gst.element_factory_make("videotestsrc", "videosrc")
-        videosrc.set_property("pattern", self.pattern)
-        videosrc.set_property("is-live", self.live)
+        videosrc.set_property("pattern", self.config.pattern)
+        videosrc.set_property("is-live", self.config.live)
         bin.add(videosrc)
 
         # Setup ghost pad
@@ -78,26 +76,11 @@ class VideoTestSrc(IVideoInput):
 
         return bin
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            live = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Live")
-            if live == "True":
-                self.live = True
-            self.pattern = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Live", self.live)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
-        except TypeError:
-            # Temp fix for issue where reading checkbox the 2nd time causes TypeError.
-            pass
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
 
-            for i in self.PATTERNS:
+            for i in PATTERNS:
                 self.widget.patternComboBox.addItem(i)
 
         return self.widget
@@ -109,20 +92,20 @@ class VideoTestSrc(IVideoInput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        self.widget.liveCheckBox.setChecked(bool(self.live))
-        patternIndex = self.widget.patternComboBox.findText(self.pattern)
+        self.widget.liveCheckBox.setChecked(bool(self.config.live))
+        patternIndex = self.widget.patternComboBox.findText(self.config.pattern)
         self.widget.patternComboBox.setCurrentIndex(patternIndex)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_live(self, checked):
-        self.live = checked
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Live", self.live)
+        self.config.live = checked
+        self.config.save()
 
     def set_pattern(self, pattern):
-        self.pattern = pattern
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Pattern", self.pattern)
+        self.config.pattern = pattern
+        self.config.save()
 
     ###
     ### Translations

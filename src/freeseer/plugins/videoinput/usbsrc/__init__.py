@@ -29,12 +29,6 @@ Devices such as Webcams and vga2usb frame grabbers.
 
 @author: Thanh Ha
 '''
-
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
 import sys
 
 # GStreamer modules
@@ -47,23 +41,62 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer modules
 from freeseer.framework.plugin import IVideoInput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
 import widget
 
 
+def get_devices():
+    """
+    Returns a list of possible devices detected as a dictionary
+
+    On Linux the dictionary is a key, value pair of:
+        Device Name : Device Path
+
+    On Windows the dictionary is a key, value pair of:
+        Device Name : Device Name
+
+    NOTE: GstPropertyProbe has been removed in later versions of Gstreamer
+          When a new method is available this function will need to be
+          redesigned:
+              https://bugzilla.gnome.org/show_bug.cgi?id=678402
+    """
+
+    devicemap = {}
+
+    if sys.platform.startswith("linux"):
+        videosrc = gst.element_factory_make("v4l2src", "videosrc")
+        videosrc.probe_property_name('device')
+        devices = videosrc.probe_get_values_name('device')
+
+        for device in devices:
+            videosrc.set_property('device', device)
+            devicemap[videosrc.get_property('device-name')] = device
+
+    elif sys.platform in ["win32", "cygwin"]:
+        videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
+        videosrc.probe_property_name('device-name')
+        devices = videosrc.probe_get_values_name('device-name')
+
+        for device in devices:
+            devicemap[device] = device
+
+    return devicemap
+
+
+class USBSrcConfig(Config):
+    """USBSrc Configuration settings."""
+    device = options.StringOption('')
+
+
 class USBSrc(IVideoInput):
     name = "USB Source"
     os = ["linux", "linux2", "win32", "cygwin"]
-    device = None
+    CONFIG_CLASS = USBSrcConfig
 
     def __init__(self):
         super(USBSrc, self).__init__()
-
-        # Initialize a default device if there is None
-        devices = self.get_devices()
-        if devices and self.device is None:
-            self.device = devices.itervalues().next()
 
     def get_videoinput_bin(self):
         """
@@ -72,12 +105,13 @@ class USBSrc(IVideoInput):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = None
+
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.set_property("device", self.device)
+            videosrc.set_property("device", self.config.device)
         elif sys.platform in ["win32", "cygwin"]:
             videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
-            videosrc.set_property("device-name", self.device)
+            videosrc.set_property("device-name", self.config.device)
         bin.add(videosrc)
 
         colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
@@ -90,14 +124,6 @@ class USBSrc(IVideoInput):
         bin.add_pad(ghostpad)
 
         return bin
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.device = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", self.device)
 
     def get_widget(self):
         if self.widget is None:
@@ -114,55 +140,18 @@ class USBSrc(IVideoInput):
         # Load the combobox with inputs
         self.widget.devicesCombobox.clear()
         n = 0
-        for device, devurl in self.get_devices().items():
+        for device, devurl in get_devices().items():
             self.widget.devicesCombobox.addItem(device, devurl)
-            if device == self.device:
+            if devurl == self.config.device:
                 self.widget.devicesCombobox.setCurrentIndex(n)
-            n = n + 1
+            n += 1
 
         # Finally enable connections
         self.__enable_connections()
 
-    def get_devices(self):
-        """
-        Returns a list of possible devices detected as a dictionary
-
-        On Linux the dictionary is a key, value pair of:
-            Device Name : Device Path
-
-        On Windows the dictionary is a key, value pair of:
-            Device Name : Device Name
-
-        NOTE: GstPropertyProbe has been removed in later versions of Gstreamer
-              When a new method is available this function will need to be
-              redesigned:
-                  https://bugzilla.gnome.org/show_bug.cgi?id=678402
-        """
-
-        devicemap = {}
-
-        if sys.platform.startswith("linux"):
-            videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.probe_property_name('device')
-            devices = videosrc.probe_get_values_name('device')
-
-            for device in devices:
-                videosrc.set_property('device', device)
-                devicemap[videosrc.get_property('device-name')] = device
-
-        elif sys.platform in ["win32", "cygwin"]:
-            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
-            videosrc.probe_property_name('device-name')
-            devices = videosrc.probe_get_values_name('device-name')
-
-            for device in devices:
-                devicemap[device] = device
-
-        return devicemap
-
     def set_device(self, device):
-        devname = self.widget.devicesCombobox.itemData(device).toString()
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Device", devname)
+        self.config.device = self.widget.devicesCombobox.itemData(device).toString()
+        self.config.save()
 
     ###
     ### Translations

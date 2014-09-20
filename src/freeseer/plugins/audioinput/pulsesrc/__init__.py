@@ -29,10 +29,6 @@ An audio plugin which uses PulseAudio as the audio input.
 '''
 
 # python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
 import logging
 
 # GStreamer
@@ -45,6 +41,7 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer
 from freeseer.framework.plugin import IAudioInput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
 import widget
@@ -52,20 +49,36 @@ import widget
 log = logging.getLogger(__name__)
 
 
+def get_sources():
+    """
+    Get a list of pairs in the form (name, description) for each pulseaudio source.
+    """
+    audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
+    audiosrc.probe_property_name('device')
+    names = audiosrc.probe_get_values_name('device')
+    # TODO: should be getting actual device description, but .get_property('device-name') does not work
+    return zip(names, names)
+
+
+class PulseSrcConfig(Config):
+    """Default PulseSrc config settings."""
+    source = options.StringOption('')
+
+
 class PulseSrc(IAudioInput):
     name = "Pulse Audio Source"
     os = ["linux", "linux2"]
-
-    #config variables
-    source = ''
+    CONFIG_CLASS = PulseSrcConfig
 
     def get_audioinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
-        if self.source != '':
-            audiosrc.set_property('device', self.source)
-            log.debug('Pulseaudio source is set to %s' % str(audiosrc.get_property('device')))
+
+        if self.config.source:
+            audiosrc.set_property('device', self.config.source)
+            log.debug('Pulseaudio source is set to %s', audiosrc.get_property('device'))
+
         bin.add(audiosrc)
 
         # Setup ghost pad
@@ -74,26 +87,6 @@ class PulseSrc(IAudioInput):
         bin.add_pad(ghostpad)
 
         return bin
-
-    def __get_sources(self):
-        """
-        Get a list of pairs in the form (name, description) for each pulseaudio source.
-        """
-        result = []
-        audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
-        audiosrc.probe_property_name('device')
-        names = audiosrc.probe_get_values_name('device')
-        #should be getting actual device description, but .get_property('device-name') does not work
-        result = [(name, name) for name in names]
-        return result
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.source = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), 'Source')
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
 
     def get_widget(self):
         if self.widget is None:
@@ -107,22 +100,21 @@ class PulseSrc(IAudioInput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        sources = self.__get_sources()
+        sources = get_sources()
 
         self.widget.source_combobox.clear()
         for i, source in enumerate(sources):
             self.widget.source_combobox.addItem(source[1], userData=source[0])
-            if self.source == source[0]:
+            if self.config.source == source[0]:
                 self.widget.source_combobox.setCurrentIndex(i)
 
         # Finally connect the signals
         self.__enable_connections()
 
     def set_source(self, index):
-        self.source = self.widget.source_combobox.itemData(index).toString()
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), 'Source', self.source)
-        self.plugman.save()
-        log.debug('Set pulseaudio source to %s' % self.source)
+        self.config.source = self.widget.source_combobox.itemData(index).toString()
+        log.debug('Set pulseaudio source to %s', self.config.source)
+        self.config.save()
 
     ###
     ### Translations

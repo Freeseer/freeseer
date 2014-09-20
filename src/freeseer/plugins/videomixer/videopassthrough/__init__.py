@@ -30,12 +30,6 @@ as well.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer modules
 import pygst
 pygst.require("0.10")
@@ -46,21 +40,25 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer modules
 from freeseer.framework.plugin import IVideoMixer
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
 import widget
 
 
+class VideoPassthroughConfig(Config):
+    """Configuration class for VideoPassthrough plugin."""
+    input = options.StringOption("Video Test Source")
+    input_type = options.StringOption("video/x-raw-rgb")
+    framerate = options.IntegerOption(30)
+    resolution = options.StringOption("NOSCALE")
+
+
 class VideoPassthrough(IVideoMixer):
     name = "Video Passthrough"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
-    input1 = None
     widget = None
-
-    # VideoPassthrough variables
-    input_type = "video/x-raw-rgb"
-    framerate = 30
-    resolution = "NOSCALE"
+    CONFIG_CLASS = VideoPassthroughConfig
 
     def get_videomixer_bin(self):
         bin = gst.Bin()
@@ -71,7 +69,7 @@ class VideoPassthrough(IVideoMixer):
         videorate_cap = gst.element_factory_make("capsfilter",
                                                  "video_rate_cap")
         videorate_cap.set_property("caps",
-                        gst.caps_from_string("%s, framerate=%d/1" % (self.input_type, self.framerate)))
+                        gst.caps_from_string("%s, framerate=%d/1" % (self.config.input_type, self.config.framerate)))
         bin.add(videorate_cap)
         # --- End Video Rate
 
@@ -80,9 +78,9 @@ class VideoPassthrough(IVideoMixer):
         bin.add(videoscale)
         videoscale_cap = gst.element_factory_make("capsfilter",
                                                   "videoscale_cap")
-        if self.resolution != "NOSCALE":
+        if self.config.resolution != "NOSCALE":
             videoscale_cap.set_property('caps',
-                                        gst.caps_from_string('%s, width=640, height=480' % (self.input_type)))
+                                        gst.caps_from_string('%s, width=640, height=480' % (self.config.input_type)))
         bin.add(videoscale_cap)
         # --- End Video Scaler
 
@@ -107,7 +105,7 @@ class VideoPassthrough(IVideoMixer):
         return bin
 
     def get_inputs(self):
-        inputs = [(self.input1, 0)]
+        inputs = [(self.config.input, 0)]
         return inputs
 
     def load_inputs(self, player, mixer, inputs):
@@ -116,34 +114,16 @@ class VideoPassthrough(IVideoMixer):
         player.add(input)
         input.link(mixer)
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input")
-            self.input_type = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type")
-            self.framerate = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate"))
-            self.resolution = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Resolution")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", self.input1)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", self.input_type)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", self.framerate)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Resolution", self.resolution)
-        except TypeError:
-            # Temp fix for issue when reading framerate the 2nd time causes TypeError
-            pass
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-
         return self.widget
 
     def __enable_connections(self):
         self.widget.connect(self.widget.inputCombobox, SIGNAL('currentIndexChanged(const QString&)'), self.set_input)
         self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.widget.framerateSpinBox.setValue)
         self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.widget.framerateSlider.setValue)
-        self.widget.connect(self.widget.videocolourComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videocolour)
+        self.widget.connect(self.widget.videocolourComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_input_type)
         self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.set_framerate)
         self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.set_framerate)
         self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
@@ -161,30 +141,30 @@ class VideoPassthrough(IVideoMixer):
         n = 0
         for i in sources:
             self.widget.inputCombobox.addItem(i)
-            if i == self.input1:
+            if i == self.config.input:
                 self.widget.inputCombobox.setCurrentIndex(n)
-                self.__enable_source_setup(self.input1)
+                self.__enable_source_setup(self.config.input)
             n = n + 1
 
-        vcolour_index = self.widget.videocolourComboBox.findText(self.input_type)
+        vcolour_index = self.widget.videocolourComboBox.findText(self.config.input_type)
         self.widget.videocolourComboBox.setCurrentIndex(vcolour_index)
 
         # Need to set both the Slider and Spingbox since connections
         # are not yet loaded at this point
-        self.widget.framerateSlider.setValue(self.framerate)
-        self.widget.framerateSpinBox.setValue(self.framerate)
+        self.widget.framerateSlider.setValue(self.config.framerate)
+        self.widget.framerateSpinBox.setValue(self.config.framerate)
 
         # Finally enable connections
         self.__enable_connections()
 
     def source1_setup(self):
-        plugin = self.plugman.get_plugin_by_name(self.input1, "VideoInput")
+        plugin = self.plugman.get_plugin_by_name(self.config.input, "VideoInput")
         plugin.plugin_object.get_dialog()
 
     def set_input(self, input):
-        self.input1 = input
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Input", input)
-        self.__enable_source_setup(self.input1)
+        self.config.input = input
+        self.config.save()
+        self.__enable_source_setup(self.config.input)
 
     def __enable_source_setup(self, source):
         '''Activates the source setup button if it has configurable settings'''
@@ -194,11 +174,13 @@ class VideoPassthrough(IVideoMixer):
         else:
             self.widget.inputSettingsStack.setCurrentIndex(0)
 
-    def set_videocolour(self, input_type):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Input Type", input_type)
+    def set_input_type(self, input_type):
+        self.config.input_type = input_type
+        self.config.save()
 
     def set_framerate(self, framerate):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Framerate", str(framerate))
+        self.config.framerate = framerate
+        self.config.save()
 
     ###
     ### Translations

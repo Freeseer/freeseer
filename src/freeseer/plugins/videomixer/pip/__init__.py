@@ -29,12 +29,6 @@ Picture-In-Picture mode.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer modules
 import pygst
 pygst.require("0.10")
@@ -45,17 +39,23 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer modules
 from freeseer.framework.plugin import IVideoMixer
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
 import widget
 
 
+class PictureInPictureConfig(Config):
+    """Configuration class for PIP plugin."""
+    main = options.StringOption("Video Test Source")
+    pip = options.StringOption("Video Test Source")
+
+
 class PictureInPicture(IVideoMixer):
     name = "Picture-In-Picture"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
-    input1 = None  # Main Source
-    input2 = None  # PIP Source
     widget = None
+    CONFIG_CLASS = PictureInPictureConfig
 
     def get_videomixer_bin(self):
         bin = gst.Bin()
@@ -99,7 +99,7 @@ class PictureInPicture(IVideoMixer):
         return bin
 
     def get_inputs(self):
-        inputs = [(self.input1, 0), (self.input2, 1)]
+        inputs = [(self.config.main, 0), (self.config.pip, 1)]
         return inputs
 
     def load_inputs(self, player, mixer, inputs):
@@ -157,15 +157,6 @@ class PictureInPicture(IVideoMixer):
         sinkpad = mixer.get_pad("sink_pip")
         srcpad.link(sinkpad)
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-        try:
-            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source")
-            self.input2 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", self.input1)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", self.input2)
-
     def get_widget(self):
 
         if self.widget is None:
@@ -187,25 +178,19 @@ class PictureInPicture(IVideoMixer):
         for plugin in plugins:
             sources.append(plugin.plugin_object.get_name())
 
-        # Load the main combobox with inputs
-        self.widget.mainInputComboBox.clear()
-        n = 0
-        for i in sources:
-            self.widget.mainInputComboBox.addItem(i)
-            if i == self.input1:  # Find the current main input source and set it
-                self.widget.mainInputComboBox.setCurrentIndex(n)
-                self.__enable_maininput_setup(self.input1)
-            n = n + 1
+        box_config_pairs = [
+            (self.widget.mainInputComboBox, self.config.main, self.__enable_maininput_setup),
+            (self.widget.pipInputComboBox, self.config.pip, self.__enable_pipinput_setup),
+        ]
 
-        # Load the pip combobox with inputs
-        self.widget.pipInputComboBox.clear()
-        n = 0
-        for i in sources:
-            self.widget.pipInputComboBox.addItem(i)
-            if i == self.input2:  # Find the current pip input source and set it
-                self.widget.pipInputComboBox.setCurrentIndex(n)
-                self.__enable_pipinput_setup(self.input2)
-            n = n + 1
+        # Load combo boxes with inputs:
+        for combo_box, config, setup in box_config_pairs:
+            combo_box.clear()
+            for i, source in enumerate(sources):
+                combo_box.addItem(source)
+                if source == config:  # Find the current input source and set it
+                    combo_box.setCurrentIndex(i)
+                    setup(config)
 
         # Finally enable connections
         self.__enable_connections()
@@ -215,9 +200,9 @@ class PictureInPicture(IVideoMixer):
     ###
 
     def set_maininput(self, input):
-        self.input1 = input
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Main Source", input)
-        self.__enable_maininput_setup(self.input1)
+        self.config.main = input
+        self.config.save()
+        self.__enable_maininput_setup(self.config.main)
 
     def open_mainInputSetup(self):
         plugin_name = str(self.widget.mainInputComboBox.currentText())
@@ -238,9 +223,9 @@ class PictureInPicture(IVideoMixer):
     ###
 
     def set_pipinput(self, input):
-        self.input2 = input
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "PIP Source", input)
-        self.__enable_pipinput_setup(self.input2)
+        self.config.pip = input
+        self.config.save()
+        self.__enable_pipinput_setup(self.config.pip)
 
     def open_pipInputSetup(self):
         plugin_name = str(self.widget.pipInputComboBox.currentText())

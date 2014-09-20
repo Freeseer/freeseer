@@ -61,6 +61,7 @@ class TestPlugins(unittest.TestCase):
         plugins = self.plugman.get_plugins_of_category("AudioInput")
 
         for plugin in plugins:
+            plugin.plugin_object.load_config(self.plugman)
             plugin_bin = plugin.plugin_object.get_audioinput_bin()
             self.assertIsInstance(plugin_bin, gst.Bin,
                 "%s did not return a gst.Bin object" % plugin.name)
@@ -73,6 +74,7 @@ class TestPlugins(unittest.TestCase):
         plugins = self.plugman.get_plugins_of_category("AudioMixer")
 
         for plugin in plugins:
+            plugin.plugin_object.load_config(self.plugman)
             plugin_bin = plugin.plugin_object.get_audiomixer_bin()
             self.assertIsInstance(plugin_bin, gst.Bin,
                 "%s did not return a gst.Bin object" % plugin.name)
@@ -85,6 +87,7 @@ class TestPlugins(unittest.TestCase):
         plugins = self.plugman.get_plugins_of_category("VideoInput")
 
         for plugin in plugins:
+            plugin.plugin_object.load_config(self.plugman)
             if plugin.name == "Firewire Source":
                 # There is an issue with Firewire Source in testing
                 # Skip until this is resolved
@@ -102,6 +105,7 @@ class TestPlugins(unittest.TestCase):
         plugins = self.plugman.get_plugins_of_category("VideoMixer")
 
         for plugin in plugins:
+            plugin.plugin_object.load_config(self.plugman)
             plugin_bin = plugin.plugin_object.get_videomixer_bin()
             self.assertIsInstance(plugin_bin, gst.Bin,
                 "%s did not return a gst.Bin object" % plugin.name)
@@ -114,6 +118,7 @@ class TestPlugins(unittest.TestCase):
         plugins = self.plugman.get_plugins_of_category("Output")
 
         for plugin in plugins:
+            plugin.plugin_object.load_config(self.plugman)
             plugin_bin = plugin.plugin_object.get_output_bin()
             self.assertIsInstance(plugin_bin, gst.Bin,
                 "%s did not return a gst.Bin object" % plugin.name)

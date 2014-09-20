@@ -29,12 +29,6 @@ video and Vorbis encoding for Audio.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require("0.10")
@@ -45,9 +39,17 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeeseer
 from freeseer.framework.plugin import IOutput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
 import widget
+
+
+class OggOutputConfig(Config):
+    """Configuration class for OggOutput plugin."""
+    matterhorn = options.IntegerOption(0)
+    audio_quality = options.FloatOption(0.3)
+    video_bitrate = options.IntegerOption(2400)
 
 
 class OggOutput(IOutput):
@@ -57,18 +59,14 @@ class OggOutput(IOutput):
     recordto = IOutput.FILE
     extension = "ogg"
     tags = None
-    matterhorn = 0
-
-    # Ogg Output variables
-    audio_quality = 0.3
-    video_bitrate = 2400
+    CONFIG_CLASS = OggOutputConfig
 
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
 
         if metadata is not None:
             self.set_metadata(metadata)
-            if self.matterhorn == 2:  # checked
+            if self.config.matterhorn == 2:  # checked
                 self.generate_xml_metadata(metadata).write(self.location + ".xml")
 
         # Muxer
@@ -95,7 +93,7 @@ class OggOutput(IOutput):
             bin.add(audiolevel)
 
             audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
-            audiocodec.set_property("quality", float(self.audio_quality))
+            audiocodec.set_property("quality", self.config.audio_quality)
             bin.add(audiocodec)
 
             # Setup metadata
@@ -129,7 +127,7 @@ class OggOutput(IOutput):
             bin.add(videoqueue)
 
             videocodec = gst.element_factory_make("theoraenc", "videocodec")
-            videocodec.set_property("bitrate", int(self.video_bitrate))
+            videocodec.set_property("bitrate", self.config.video_bitrate)
             bin.add(videocodec)
 
             # Setup ghost pads
@@ -162,21 +160,6 @@ class OggOutput(IOutput):
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.audio_quality = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality")
-            self.video_bitrate = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate")
-            self.matterhorn = int(self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn"))
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", self.audio_quality)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", self.video_bitrate)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", self.matterhorn)
-        except TypeError:
-            # Temp fix for issue where reading audio_quality the 2nd time causes TypeError.
-            pass
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
@@ -191,20 +174,20 @@ class OggOutput(IOutput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        self.widget.spinbox_audio_quality.setValue(float(self.audio_quality))
-        self.widget.spinbox_video_quality.setValue(int(self.video_bitrate))
-        self.widget.checkbox_matterhorn.setCheckState(int(self.matterhorn))
+        self.widget.spinbox_audio_quality.setValue(self.config.audio_quality)
+        self.widget.spinbox_video_quality.setValue(self.config.video_bitrate)
+        self.widget.checkbox_matterhorn.setCheckState(self.config.matterhorn)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_audio_quality(self):
-        self.audio_quality = self.widget.spinbox_audio_quality.value()
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Quality", str(self.audio_quality))
+        self.config.audio_quality = self.widget.spinbox_audio_quality.value()
+        self.config.save()
 
     def set_video_bitrate(self):
-        self.video_bitrate = self.widget.spinbox_video_quality.value()
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Video Bitrate", str(self.video_bitrate))
+        self.config.video_bitrate = self.widget.spinbox_video_quality.value()
+        self.config.save()
 
     def set_matterhorn(self, state):
         """
@@ -213,8 +196,8 @@ class OggOutput(IOutput):
         If enabled filename.xml will be created along side the video file
         containing matterhorn metadata in xml format.
         """
-        self.matterhorn = state
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Matterhorn", str(self.matterhorn))
+        self.config.matterhorn = state
+        self.config.save()
 
     ###
     ### Translations

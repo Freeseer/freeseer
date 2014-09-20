@@ -29,12 +29,6 @@ is being recorded in real time.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require("0.10")
@@ -45,9 +39,20 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer
 from freeseer.framework.plugin import IOutput
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
 import widget
+
+# Leaky Queue
+LEAKY_VALUES = ["no", "upstream", "downstream"]
+
+
+class VideoPreviewConfig(Config):
+    """Configuration class for VideoPreview plugin."""
+    # Video Preview variables
+    previewsink = options.StringOption("autovideosink")
+    leakyqueue = options.ChoiceOption(LEAKY_VALUES, "no")
 
 
 class VideoPreview(IOutput):
@@ -55,26 +60,20 @@ class VideoPreview(IOutput):
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     type = IOutput.VIDEO
     recordto = IOutput.OTHER
-
-    # Video Preview variables
-    previewsink = "autovideosink"
-    leakyqueue = "no"
-
-    # Leaky Queue
-    LEAKY_VALUES = ["no", "upstream", "downstream"]
+    CONFIG_CLASS = VideoPreviewConfig
 
     def get_output_bin(self, audio=False, video=True, metadata=None):
         bin = gst.Bin()
 
         # Leaky queue necessary to work with rtmp streaming
         videoqueue = gst.element_factory_make("queue", "videoqueue")
-        videoqueue.set_property("leaky", self.leakyqueue)
+        videoqueue.set_property("leaky", self.config.leakyqueue)
         bin.add(videoqueue)
 
         cspace = gst.element_factory_make("ffmpegcolorspace", "cspace")
         bin.add(cspace)
 
-        videosink = gst.element_factory_make(self.previewsink, "videosink")
+        videosink = gst.element_factory_make(self.config.previewsink, "videosink")
         bin.add(videosink)
 
         # Setup ghost pad
@@ -88,20 +87,10 @@ class VideoPreview(IOutput):
 
         return bin
 
-    def load_config(self, plugman):
-        self.plugman = plugman
-        try:
-            self.previewsink = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink")
-            self.leakyqueue = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue")
-        except (configparser.NoSectionError, configparser.NoOptionError):
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", self.previewsink)
-            self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", self.leakyqueue)
-
     def get_widget(self):
         if self.widget is None:
             self.widget = widget.ConfigWidget()
-            self.widget.leakyQueueComboBox.addItems(self.LEAKY_VALUES)
-
+            self.widget.leakyQueueComboBox.addItems(LEAKY_VALUES)
         return self.widget
 
     def __enable_connections(self):
@@ -111,20 +100,22 @@ class VideoPreview(IOutput):
     def widget_load_config(self, plugman):
         self.load_config(plugman)
 
-        previewIndex = self.widget.previewComboBox.findText(self.previewsink)
+        previewIndex = self.widget.previewComboBox.findText(self.config.previewsink)
         self.widget.previewComboBox.setCurrentIndex(previewIndex)
 
-        leakyQueueIndex = self.widget.leakyQueueComboBox.findText(self.leakyqueue)
+        leakyQueueIndex = self.widget.leakyQueueComboBox.findText(self.config.leakyqueue)
         self.widget.leakyQueueComboBox.setCurrentIndex(leakyQueueIndex)
 
         # Finally enable connections
         self.__enable_connections()
 
     def set_previewsink(self, previewsink):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Preview Sink", previewsink)
+        self.config.previewsink = previewsink
+        self.config.save()
 
     def set_leakyqueue(self, value):
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Leaky Queue", value)
+        self.config.leakyqueue = value
+        self.config.save()
 
     ###
     ### Translations

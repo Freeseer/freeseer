@@ -30,12 +30,6 @@ the output.
 @author: Thanh Ha
 '''
 
-# python-libs
-try:  # Import using Python3 module name
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 # GStreamer
 import pygst
 pygst.require("0.10")
@@ -46,16 +40,22 @@ from PyQt4.QtCore import SIGNAL
 
 # Freeseer
 from freeseer.framework.plugin import IAudioMixer
+from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
 import widget
 
 
+class AudioPassThroughConfig(Config):
+    """Configuration settings for AudioPassThrough plugin."""
+    input = options.StringOption("Audio Test Source")
+
+
 class AudioPassthrough(IAudioMixer):
     name = "Audio Passthrough"
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
-    input1 = None
     widget = None
+    CONFIG_CLASS = AudioPassThroughConfig
 
     def get_audiomixer_bin(self):
         bin = gst.Bin()
@@ -75,22 +75,13 @@ class AudioPassthrough(IAudioMixer):
         return bin
 
     def get_inputs(self):
-        inputs = [(self.input1, 0)]
-        return inputs
+        return [(self.config.input, 0)]
 
     def load_inputs(self, player, mixer, inputs):
         # Load inputs
         input = inputs[0]
         player.add(input)
         input.link(mixer)
-
-    def load_config(self, plugman):
-        self.plugman = plugman
-
-        try:
-            self.input1 = self.plugman.get_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input")
-        except configparser.NoSectionError:
-            self.input1 = self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", self.input1)
 
     def get_widget(self):
         if self.widget is None:
@@ -115,22 +106,22 @@ class AudioPassthrough(IAudioMixer):
         n = 0
         for i in sources:
             self.widget.combobox.addItem(i)
-            if i == self.input1:
+            if i == self.config.input:
                 self.widget.combobox.setCurrentIndex(n)
-                self.__enable_source_setup(self.input1)
+                self.__enable_source_setup(self.config.input)
             n = n + 1
 
         # Finally enable connections
         self.__enable_connections()
 
     def source1_setup(self):
-        plugin = self.plugman.get_plugin_by_name(self.input1, "AudioInput")
+        plugin = self.plugman.get_plugin_by_name(self.config.input, "AudioInput")
         plugin.plugin_object.get_dialog()
 
     def set_input(self, input):
-        self.input1 = input
-        self.plugman.set_plugin_option(self.CATEGORY, self.get_config_name(), "Audio Input", input)
-        self.__enable_source_setup(self.input1)
+        self.config.input = input
+        self.__enable_source_setup(self.config.input)
+        self.config.save()
 
     def __enable_source_setup(self, source):
         '''Activates the source setup button if it has configurable settings'''
