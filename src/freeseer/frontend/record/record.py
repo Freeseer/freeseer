@@ -625,7 +625,7 @@ class RecordApp(FreeseerApp):
         self.reportWidget.speakerLabel2.setText(p.speaker)
         self.reportWidget.eventLabel2.setText(p.event)
         self.reportWidget.roomLabel2.setText(p.room)
-        self.reportWidget.startTimeLabel2.setText(p.starTime)
+        self.reportWidget.startTimeLabel2.setText(p.startTime)
         self.reportWidget.endTimeLabel2.setText(p.endTime)
 
         # Get existing report if there is one.
