@@ -81,6 +81,13 @@ Forking and Cloning Freeseer
    .. tip:: The name ``upstream`` is by convention. You can use whatever name
      you prefer (e.g. ``mainstream`` or ``mothership``).
 
+4. You now have a cloned repository with two remotes, one named ``origin`` and
+   one named ``upstream`` (or whichever name you chose). To ensure that you have
+   all the necessary requirements to run and test Freeseer, use Pip to install
+   the requirements listed in ``requirements.txt`` and ``dev_requirements.txt``. ::
+   
+    $ pip install -r requirements.txt
+    $ pip install -r dev_requirements.txt
 
 Basic Workflow
 --------------
