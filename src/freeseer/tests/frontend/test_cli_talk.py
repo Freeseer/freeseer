@@ -64,7 +64,6 @@ class TestCli(unittest.TestCase):
         cli.parse_args(self.parser, args)
         talks = self.db.get_talks()
         talks.next()  # Point to talk data
-        talks.next()  # Skip default blank entry
         talks.next()  # Skip first test entry
         talks.next()  # Skip second test entry
         record = talks.record()

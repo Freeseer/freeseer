@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="utf-8" ?><rss version="2.0" xml:base="http://fosslc.org/drupal/presentations/sc2011" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Approved presentations for sc2011</title>
+    <link>http://fosslc.org/drupal/presentations/sc2011</link>
+    <description></description>
+    <language>en</language>
+          <item>
+    <title>Git at Eclipse.org: EGit, JGit and Gerrit</title>
+    <link>http://fosslc.org/drupal/content/git-eclipseorg-egit-jgit-and-gerrit</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Chris Aniszczyk        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	Over the past few years, many open source projects have left the shackles of traditional centralized version control systems like CVS/SVN and adopted a distributed version control system like Git. This talk will given an introduction to the Eclipse Foundation&amp;#39;s move to Git, including discussion about the EGit and JGit projects at the Eclipse Foundation. Furthermore, there will be discussion about the Gerrit, the Git code review tool. Finally, we&amp;#39;ll discuss some of the lessons learned moving to Git in a large organization such as Eclipse.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2011-08-22T15:52&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/git-eclipseorg-egit-jgit-and-gerrit#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/community/code-repositories/git">Git</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/eclipse">Eclipse</category>
+ <pubDate>Mon, 22 Aug 2011 19:54:25 +0000</pubDate>
+ <dc:creator>caniszczyk</dc:creator>
+ <guid isPermaLink="false">940 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Building NetBSD</title>
+    <link>http://fosslc.org/drupal/content/building-netbsd</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    David Maxwell        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	People who are interested in learning about operating systems have a lot of topics to absorb, but the very first barrier that gets in people&amp;#39;s way is that you need to be able to build the software. If you can&amp;#39;t build it, you can&amp;#39;t make changes. If building it is painful, you&amp;#39;ll find other things to do with your time.&lt;/p&gt;
+&lt;p&gt;	The NetBSD Project has a build system that goes far beyond what many other projects implement. Come to this talk about learn about&lt;br /&gt;
+	build.sh and the features available that make multi-architecture and embedded development environments a breeze with NetBSD.&lt;/p&gt;
+&lt;p&gt;	NetBSD website: &lt;a href=&quot;http://www.netbsd.org/&quot; target=&quot;_blank&quot;&gt;http://www.NetBSD.org/&lt;/a&gt;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2011-08-17T20:29&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/building-netbsd#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/build">Build</category>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/bsd/netbsd">NetBSD</category>
+ <pubDate>Thu, 18 Aug 2011 00:31:00 +0000</pubDate>
+ <dc:creator>dmaxwell</dc:creator>
+ <guid isPermaLink="false">936 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Explosions, fast cars, and hot, naked data: &lt;3 from Open Data Ottawa</title>
+    <link>http://fosslc.org/drupal/content/explosions-fast-cars-and-hot-naked-data-3-open-data-ottawa</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Edward Ocampo-Gooding [@edwardog]        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    Daniel Beauchamp [@pushmatrix]        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;h1&gt;
+	Explosions, fast cars, and hot, naked data.&lt;/h1&gt;
+&lt;p class=&quot;p1&quot;&gt;
+	[Cue screenshot of stuff blowing up around Megan Fox in Transformers, but with her head replaced with Edward&amp;rsquo;s, Daniel&amp;rsquo;s, and RMS&amp;rsquo;s]&lt;/p&gt;
+&lt;p class=&quot;p1&quot;&gt;
+	&lt;span class=&quot;s1&quot;&gt;&lt;a href=&quot;http://opendataottawa.ca/&quot;&gt;Open Data Ottawa&lt;/a&gt;&lt;/span&gt;&amp;nbsp;co-conspirators &lt;a href=&quot;http://twitter.com/pushmatrix&quot;&gt;&lt;span class=&quot;s1&quot;&gt;Daniel Beauchamp&lt;/span&gt;&lt;/a&gt; and &lt;a href=&quot;http://twitter.com/edwardog&quot;&gt;&lt;span class=&quot;s1&quot;&gt;Edward Ocampo-Gooding&lt;/span&gt;&lt;/a&gt;&amp;nbsp;will lead you down the path of eXtreme radical awesomeness as the blow your mind, pointing out the coolest new open data apps, data repositories,&amp;nbsp;ideas&amp;nbsp;and their impacts on the human species.&lt;/p&gt;
+&lt;p class=&quot;p1&quot;&gt;
+	Better yet: we&amp;rsquo;ll tell you about what&amp;rsquo;s desperately needed that you, desperado hacker extraordinaire could implement, and proceed to bask in everlasting fame and appreciation by your fellow citizens, pets, and politicians alike.&lt;/p&gt;
+&lt;p class=&quot;p1&quot;&gt;
+	Seriously though, this is going to be a pretty epic talk. If you&amp;rsquo;re looking to be filled in on what&amp;rsquo;s going on in the open data space and are curious about what you could do to make a real difference (and end up working with skilled designers, statisticians, librarians, and bartenders), you want to come to this talk.&lt;/p&gt;
+&lt;p class=&quot;p1&quot;&gt;
+	Follow &lt;a href=&quot;http://twitter.com/opendataottawa&quot;&gt;&lt;span class=&quot;s1&quot;&gt;@opendataottawa&lt;/span&gt;&lt;/a&gt; on Twitter and check us out on &lt;a href=&quot;http://buzzdata.com/opendataottawa&quot;&gt;&lt;span class=&quot;s1&quot;&gt;BuzzData&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/explosions-fast-cars-and-hot-naked-data-3-open-data-ottawa#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/open-data">Open Data</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming">Programming</category>
+ <pubDate>Tue, 16 Aug 2011 03:46:24 +0000</pubDate>
+ <dc:creator>edward</dc:creator>
+ <guid isPermaLink="false">934 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Lecture Broadcast and Capture using BigBlueButton</title>
+    <link>http://fosslc.org/drupal/content/lecture-broadcast-and-capture-using-bigbluebutton</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Fred Dixon        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    Richard Alam        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	BigBlueButton is an open source web conferencing system for distance education. It&amp;#39;s goal is to enable remote students to have a high-quality learning experience.&amp;nbsp; The #1 requested feature we&amp;#39;ve had over the last year is to integrate record and playback of a session.&lt;/p&gt;
+&lt;p&gt;
+	&lt;br /&gt;
+	Fred Dixon and Richard Alam, two of the BigBlueButton committers, will describe the architecture and implementation of record and playback as well as demonstrate the integration with Moodle to show how an educational institution can use BigBlueButton to setup virtual classrooms, record lectures, and provide students access to the recorded content from within the Moodle interface.&lt;/p&gt;
+&lt;p&gt;
+	We will also demonstrate an prototype integration with popcorn.js (Mozilla project) using it as a playback client for the recorded content.&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/lecture-broadcast-and-capture-using-bigbluebutton#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/education">Education</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/fosslc">FOSSLC</category>
+ <pubDate>Fri, 12 Aug 2011 20:52:09 +0000</pubDate>
+ <dc:creator>ffdixon</dc:creator>
+ <guid isPermaLink="false">933 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Put the 5 in HTML</title>
+    <link>http://fosslc.org/drupal/content/put-5-html</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Frédéric Harper        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	As the Web is evolving, the standards must keep the pace. The new version of HTML gives you the power to get the most out of the Web. It&amp;#39;s now easier to make awesome websites and inspiring applications.Let&amp;#39;s see together some of the last features of HTML5 and how you can unleash a more beautiful Web!&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2011-08-19T10:21&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/put-5-html#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/web-programming">Web Programming</category>
+ <pubDate>Fri, 19 Aug 2011 14:23:30 +0000</pubDate>
+ <dc:creator>fharper</dc:creator>
+ <guid isPermaLink="false">937 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>The Architecture of IRCan&#039;s High Resiliency Environment</title>
+    <link>http://fosslc.org/drupal/content/architecture-ircans-high-resiliency-environment</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Patrick Naubert        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    Simon Déziel        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	In this session, we will go through the architecture used to provide a &amp;quot;cloud computing&amp;quot; environment to be used in Intellectual Resources Canada&amp;#39;s High Resiliency Environment. &amp;nbsp;This will be a technical presentation with emphasis on the Open Source components selected and their interaction. &amp;nbsp;A parallel will be drawn between the service levels promised to the HRE participants, and the features of each selected FLOSS component.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/architecture-ircans-high-resiliency-environment#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/government">Government</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/cloud-computing">Cloud Computing</category>
+ <category domain="http://fosslc.org/drupal/category/community/virtualization">Virtualization</category>
+ <pubDate>Sat, 30 Jul 2011 00:50:56 +0000</pubDate>
+ <dc:creator>Jehreg</dc:creator>
+ <guid isPermaLink="false">924 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>What does the financial crisis have to do with software?</title>
+    <link>http://fosslc.org/drupal/content/what-does-financial-crisis-have-do-software</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Joseph Potvin, Coordinator, ERA-ART        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    The Earth-Reserve Archetype (ERA) Developers Group / Le Groupe de développeurs de l&amp;#039;Archétype d&amp;#039;une réserve de la Terre (ART)        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	All present-day monetary systems and their supporting analytical systems are implemented in the form of computer programs, and all but the tiniest fraction of money is purely digital. In &amp;quot;Code is Law&amp;quot;, Lawrence Lessig has observed that these computer programs and databases are the de facto official operational translations of legislation, regulations, policies, standards and agreements. A computer program is defined in copyright legislation and trade agreements as a type of &amp;ldquo;literary work&amp;rdquo; that exists as &amp;ldquo;a set of instructions or statements, expressed, fixed, embodied or stored in any manner, that is to be used directly or indirectly in a computer in order to bring about a specific result&amp;rdquo;. Rather than being neutral algorithms, they are literary works with a social purpose.&lt;/p&gt;
+&lt;p&gt;	The financial crisis is, in its substance, the protracted crash of a complex network of database-driven computer programs. Many of the steps now taken by monetary authorities (such as &amp;quot;quantitative easing&amp;quot; and &amp;quot;bailouts&amp;quot;) actually involve teams of programmers writing new software directly to production systems, to arbitrarily populate database fields with what is effectively dummy data, in order to prevent certain of the fields which are supposed to be constrained to amounts greater than zero, from reaching zero, or going negative, or in some cases ending up null, because nobody knows what the number is.&lt;/p&gt;
+&lt;p&gt;	People of a free and democratic society can rightly demand free/libre access, transparency and accountability for the computer programs and databases used in monetary systems operations, analysis and reporting.&lt;/p&gt;
+&lt;p&gt;	The foreign exchange (forex) market establishes relative value of currencies. This session will outline a potential component part of such a system. ERA-ART (The Earth-Reserve Archetype (ERA) Developers Group / Le Groupe de d&amp;eacute;veloppeurs de l&amp;#39;Arch&amp;eacute;type d&amp;#39;une r&amp;eacute;serve de la Terre (ART)&amp;nbsp; &lt;a href=&quot;http://www.era-art.org/&quot; target=&quot;_blank&quot;&gt;www.era-art.org&lt;/a&gt; is an initiative to design, develop and operate a system for currency exchange rate determination based upon:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+		&amp;quot;Good Transparency Practices for Monetary Policy by Central Banks&amp;quot; in the International Monetary Fund&amp;#39;s &amp;quot;Code of Good Practices on Transparency in Monetary and Financial Policies&amp;quot; &lt;a href=&quot;http://www.imf.org/external/np/mae/mft/code/index.htm#goodtrans2;&quot; title=&quot;http://www.imf.org/external/np/mae/mft/code/index.htm#goodtrans2;&quot;&gt;http://www.imf.org/external/np/mae/mft/code/index.htm#goodtrans2;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+		&amp;quot;World Data System Policy&amp;quot; of the International Council for Science (ICSU) &lt;a href=&quot;http://www.icsu-wds.org/organization/data-policy&quot; title=&quot;http://www.icsu-wds.org/organization/data-policy&quot;&gt;http://www.icsu-wds.org/organization/data-policy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+		&amp;quot;Free Software Definition&amp;quot; of the Free Software Foundation (FSF) &lt;a href=&quot;http://www.gnu.org/philosophy/free-sw.html&quot; title=&quot;http://www.gnu.org/philosophy/free-sw.html&quot;&gt;http://www.gnu.org/philosophy/free-sw.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+		Independently verifiable indicators of change in ecosystem integrity and resource availability, mapped to geographic data on the currency of invoicing, and tracked from base year to present.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+	Earth Reserve indices will be available for voluntary use by any two parties engaged in a foreign exchange transaction. If the Earth-Reserve exchange system manages to incrementally gain a portion of forex market share, then to that extent, information feedback fostering macroeconomic resilience would become one of the core functions of money.&lt;/p&gt;
+&lt;p&gt;	When the Earth Reserve indices are used to gauge currency exchange rates in a multi-jurisdictional multi-currency setting, relative resource and ecosystem degradation in a given currency&amp;#39;s region of use, compared with the base year, will cause that currency to become more expensive to buy against other currencies, so that goods and services exchanged for that currency will become more expensive. In general, jobs and incomes will be attracted towards currency zones where ecosystem integrity and resource availability are relatively improved from a base year.&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/what-does-financial-crisis-have-do-software#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/16">Entrepreneurship</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011-software-developers-haven">SC2011 - Software Developers&#039; Haven</category>
+ <category domain="http://fosslc.org/drupal/category/community/licenses/gpl">GPL</category>
+ <pubDate>Thu, 11 Aug 2011 22:05:39 +0000</pubDate>
+ <dc:creator>jpotvin</dc:creator>
+ <guid isPermaLink="false">931 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>The power of code generation: Dependency Injection in the Browser</title>
+    <link>http://fosslc.org/drupal/content/power-code-generation-dependency-injection-browser</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Mike Brock        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;The new JSR-299 (Context Dependency Injection) specification brings with it the potential to build better applications faster, safer and in a more maintainable way. This talk will focus on JBoss Errai framework, which brings the CDI programming model to client code in the browser, by leveraging the GWT compiler and showing how the advantages can be leveraged to make truly powerful next generation web applications using CDI&amp;#39;s powerful, yet simple, type-safe and decoupled eventing as a means of communicating between the client and the server.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;&lt;div class=&quot;field field-type-date field-field-time&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Time:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;span class=&quot;date-display-single&quot;&gt;2011-08-27T11:00&lt;/span&gt;        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+</description>
+     <comments>http://fosslc.org/drupal/content/power-code-generation-dependency-injection-browser#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming/java">Java</category>
+ <category domain="http://fosslc.org/drupal/category/community/linux/red-hat">Red Hat</category>
+ <category domain="http://fosslc.org/drupal/category/community/web-programming">Web Programming</category>
+ <pubDate>Sun, 31 Jul 2011 15:22:21 +0000</pubDate>
+ <dc:creator>mbrock</dc:creator>
+ <guid isPermaLink="false">925 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Test Driven Development web development with postgres or mysql.</title>
+    <link>http://fosslc.org/drupal/content/test-driven-development-web-development-postgres-or-mysql</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Michael Richardson        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	Test Driven Development is about writing the test cases first, and then writing the code. &amp;nbsp;To use this method, a programmer needs to actually be able to quickly write test cases.&lt;/p&gt;
+&lt;p&gt;
+	Web site development falls into two flavours: legacy development is where your only tool for testing is a browser, and modern development using some kind of systematic unit testing such as occurs with Django or Ruby on Rails. &amp;nbsp; Rewriting an application into a modern framework is not always an option, and one can be stuck with an older language with poor support, or an older application with no framework.&lt;/p&gt;
+&lt;p&gt;
+	Even with frameworks, it is often difficult to test web services applications where there are multiple web servers necessary.&lt;/p&gt;
+&lt;p&gt;
+	This talk presents some fast ways to get testing up and running, and to separate oneself from endlessly reconfiguring the database servers on your development platform.&lt;/p&gt;
+&lt;p&gt;
+	&amp;nbsp;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/test-driven-development-web-development-postgres-or-mysql#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/15">How To</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases/mysql">MySQL</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases/postgresql">PostgreSQL</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming/python">Python</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming/ruby">Ruby</category>
+ <pubDate>Fri, 05 Aug 2011 14:08:37 +0000</pubDate>
+ <dc:creator>mcr</dc:creator>
+ <guid isPermaLink="false">928 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Imploding vs. drifting apart: the shifting density of free/libre/open source communities</title>
+    <link>http://fosslc.org/drupal/content/imploding-vs-drifting-apart-shifting-density-freelibreopen-source-communities</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Mekki MacAulay        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p class=&quot;western&quot; lang=&quot;en-CA&quot;&gt;
+	The practices of peer production communities impact the ability of their participants to contribute effectively. This presentation reflects on a draft paper that examines the role of recursive and adaptive practices in enabling participation in free/libre/open source communities. Using data gathered through in-depth interviews with participants and analyzed from a strategy as practice perspective the talk will paint a picture of the constant tension between recursive and adaptive practices that focus on the core or the periphery of communities. This perspective complements and extends the traditional notion that participation in free/libre/open source communities is primarily governed by incentive mechanisms by providing rich accounts of how successful communities thrive, while unsuccessful communities implode or drift apart based on the careful management of their practices at the different stages in their life cycle. The practical implications for peer production communities and avenues for future research will also be discussed.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/imploding-vs-drifting-apart-shifting-density-freelibreopen-source-communities#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/education">Education</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/fosslc">FOSSLC</category>
+ <pubDate>Fri, 29 Jul 2011 18:14:22 +0000</pubDate>
+ <dc:creator>mekki</dc:creator>
+ <guid isPermaLink="false">919 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Tiki Wiki CMS Groupware - Software the Wiki Way</title>
+    <link>http://fosslc.org/drupal/content/tiki-wiki-cms-groupware-software-wiki-way</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Pascal St-Jean        &lt;/div&gt;
+              &lt;div class=&quot;field-item even&quot;&gt;
+                    Nelson Ko        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	&amp;nbsp;&lt;/p&gt;
+&lt;div style=&quot;background-color: transparent; color: rgb(0, 0, 0); font-family: &#039;Times New Roman&#039;; line-height: normal; font-size: medium; &quot;&gt;
+	&lt;span id=&quot;internal-source-marker_0.09230025694705546&quot; style=&quot;font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; &quot;&gt;With over 1000 features and preferences, Tiki is the Open Source Collaboration &amp;amp; Content Management System with the most features. It is also one of the largest open source communities with over 250 code contributors and a new commit every hour. How can such a large code base with so many contributors function cohesively and work together to create a great piece of software?&lt;/span&gt;
+&lt;p&gt;	&lt;span style=&quot;font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-weight: normal; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap; &quot;&gt;Nelson Ko and Pascal St-Jean, both active Tiki developers and consultants, will dive into the ins and outs of the Tiki Community and present the pros and cons of the Wiki Way of Software Development. Along the way comparing Tiki&amp;rsquo;s evolution to that of Wikipedia&amp;rsquo;s, highlighting the bumps in the road, the growing pains and benefits of such an open and collaborative development model. &lt;/span&gt;&lt;/p&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/tiki-wiki-cms-groupware-software-wiki-way#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/web-programming">Web Programming</category>
+ <pubDate>Tue, 02 Aug 2011 01:48:02 +0000</pubDate>
+ <dc:creator>pascalstjean</dc:creator>
+ <guid isPermaLink="false">926 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>OpenStreetMap - Location, Location, Location</title>
+    <link>http://fosslc.org/drupal/content/openstreetmap-location-location-location</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Richard Weait        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	OpenStreetMap is geographic data that you can use and improve.&amp;nbsp; This presentation will:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+		cover a brief history of OpenStreetMap&lt;/li&gt;
+&lt;li&gt;
+		show you why you want to be involved in OpenStreetMap&lt;/li&gt;
+&lt;li&gt;
+		familiarize you with common solutions using OpenStreetMap&lt;/li&gt;
+&lt;li&gt;
+		familiarize you with the OpenStreetMap tool set&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+	Plan to join us at the Mapping Party on Sunday for peer-coaching on OpenStreetMap data surveys and editing tools.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/openstreetmap-location-location-location#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/18">Database</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/15">How To</category>
+ <category domain="http://fosslc.org/drupal/category/category/open-data">Open Data</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011-software-developers-haven">SC2011 - Software Developers&#039; Haven</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo/openlayers">OpenLayers</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo/postgis">PostGIS</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases/postgresql">PostgreSQL</category>
+ <category domain="http://fosslc.org/drupal/category/community/openstreetmap">OpenStreetMap</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases">Databases</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo">OSGeo</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/community/web-programming">Web Programming</category>
+ <pubDate>Sun, 21 Aug 2011 16:32:07 +0000</pubDate>
+ <dc:creator>Richard Weait</dc:creator>
+ <guid isPermaLink="false">938 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Open Data - Successes, Pitfalls and Advocacy </title>
+    <link>http://fosslc.org/drupal/content/open-data-successes-pitfalls-and-advocacy</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Richard Weait        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	Open Data is booming.&amp;nbsp; Like the Wild West, with too few Sheriffs, exciting things can happen in the blink of an eye.&amp;nbsp; This presentation will:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+		demonstrate successful and important applications of Open Data&lt;/li&gt;
+&lt;li&gt;
+		discuss threats to Open Data&lt;/li&gt;
+&lt;li&gt;
+		discuss best pracitces for Open Data communities&lt;/li&gt;
+&lt;/ul&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/open-data-successes-pitfalls-and-advocacy#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/18">Database</category>
+ <category domain="http://fosslc.org/drupal/category/category/open-data">Open Data</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011-software-developers-haven">SC2011 - Software Developers&#039; Haven</category>
+ <category domain="http://fosslc.org/drupal/category/community/openstreetmap">OpenStreetMap</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases">Databases</category>
+ <category domain="http://fosslc.org/drupal/category/community/licenses">Licenses</category>
+ <category domain="http://fosslc.org/drupal/category/community/osgeo">OSGeo</category>
+ <pubDate>Sun, 21 Aug 2011 16:42:59 +0000</pubDate>
+ <dc:creator>Richard Weait</dc:creator>
+ <guid isPermaLink="false">939 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>PostgreSQL replication</title>
+    <link>http://fosslc.org/drupal/content/postgresql-replication</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Steve Singer        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	PostgreSQL is an open source relational database system that features a high level of standards complience and support for most programming languages.&amp;nbsp;&amp;nbsp; PostgreSQL offers a number of different options for data replication.&amp;nbsp;&amp;nbsp; This talk will provide an introduction to database replication in PostgreSQL and explain the different types of problems that replication can solve.&amp;nbsp; The talk will explain how the built in WAL shipping replication works, how to set it up and discuss the limitations.&amp;nbsp; The Slony replication system will be explained including the basic steps involved in setting up a Slony cluster and how Slony can be used to solve common problems&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/postgresql-replication#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/18">Database</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/databases/postgresql">PostgreSQL</category>
+ <pubDate>Fri, 05 Aug 2011 03:41:23 +0000</pubDate>
+ <dc:creator>ssinger</dc:creator>
+ <guid isPermaLink="false">927 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Why We Need to Open-Source The Monetary System</title>
+    <link>http://fosslc.org/drupal/content/why-we-need-open-source-monetary-system</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Tim Inkpen        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	The on-going financial crisis have led a growing number of people to raise questions about our monetary system. This talk will cover, at a high level, some of the major flaws that are inherent in the current sytem&amp;#39;s design, along with looking at specific examples of projects that are attempting to create &amp;quot;open-source&amp;quot; monetary systems&amp;quot;.&lt;/p&gt;
+&lt;p&gt;	Specific topics include:&lt;/p&gt;
+&lt;p&gt;	Problems with the Current Monetary System&lt;br /&gt;
+	Close source vs. Open Source Monetary Systems&lt;br /&gt;
+	Monoculture vs. Polyculture monetary System&lt;br /&gt;
+	Debt-based vs. Obligation based monetary system&lt;br /&gt;
+	Monetary System Design Issues&lt;br /&gt;
+	BitCoin&lt;br /&gt;
+	Examples of &amp;quot;Open-Source&amp;quot; Monetary System&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Beginner        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/why-we-need-open-source-monetary-system#comments</comments>
+ <category domain="http://fosslc.org/drupal/category/category/community">Community</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011-software-developers-haven">SC2011 - Software Developers&#039; Haven</category>
+ <category domain="http://fosslc.org/drupal/category/community/misc">Misc</category>
+ <pubDate>Fri, 12 Aug 2011 17:52:47 +0000</pubDate>
+ <dc:creator>tinkpen</dc:creator>
+ <guid isPermaLink="false">932 at http://fosslc.org/drupal</guid>
+  </item>
+  <item>
+    <title>Dancer: a Perl Micro Web Application Framework</title>
+    <link>http://fosslc.org/drupal/content/dancer-perl-micro-web-application-framework</link>
+    <description>&lt;div class=&quot;field field-type-text field-field-speaker&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Speaker:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Yanick Champoux        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-event&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Event:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    SC2011        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-abstract&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Abstract:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    &lt;p&gt;
+	Dancer is a micro web application framework written in Perl.&amp;nbsp; It aims to be intuitive, minimalist and to have a very expressive syntax.&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;
+	This talk will showcase its best dance moves through the creation of a web application.&amp;nbsp; By the end of the routine, you&amp;#39;ll know enough to create an application, leverage the many plugins available to ease development, and get it ready for the dance floor.&lt;/p&gt;
+&lt;p&gt;
+	Dancer website: &lt;a href=&quot;http://perldancer.org/&quot; title=&quot;http://perldancer.org/&quot;&gt;http://perldancer.org/&lt;/a&gt;&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_start --&gt;&lt;div class=&quot;field field-type-text field-field-level&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Level:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Intermediate        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;field field-type-text field-field-status&quot;&gt;
+      &lt;div class=&quot;field-label&quot;&gt;Status:&amp;nbsp;&lt;/div&gt;
+    &lt;div class=&quot;field-items&quot;&gt;
+            &lt;div class=&quot;field-item odd&quot;&gt;
+                    Approved        &lt;/div&gt;
+        &lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- google_ad_section_end --&gt;</description>
+     <comments>http://fosslc.org/drupal/content/dancer-perl-micro-web-application-framework#comments</comments>
+ <category domain="http://fosslc.org/drupal/taxonomy/term/14">Programming</category>
+ <category domain="http://fosslc.org/drupal/category/event/sc2011">SC2011</category>
+ <category domain="http://fosslc.org/drupal/category/community/programming/perl">Perl</category>
+ <pubDate>Thu, 21 Jul 2011 14:47:23 +0000</pubDate>
+ <dc:creator>yanick</dc:creator>
+ <guid isPermaLink="false">918 at http://fosslc.org/drupal</guid>
+  </item>
+  </channel>
+</rss>

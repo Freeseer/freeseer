@@ -34,12 +34,12 @@ from freeseer.plugins.importer.rss_feedparser import FeedParser
 @pytest.yield_fixture
 def presentation_feed():
     httpretty.enable()
-
-    rss_file = os.path.join(os.path.dirname(__file__), 'presentation_feed.rss')
+    rss_data_relative_path = '../../../resources/sample_rss_data/'
+    rss_file = os.path.join(os.path.dirname(__file__), rss_data_relative_path, 'summercamp2010.rss')
     with open(rss_file, 'r') as presentation_rss_file:
         rss_feed = presentation_rss_file.read()
 
-    json_file = os.path.join(os.path.dirname(__file__), 'presentation_feed.json')
+    json_file = os.path.join(os.path.dirname(__file__), rss_data_relative_path, 'summercamp2010.json')
     with open(json_file, 'r') as presentation_json_file:
         json_data = json.load(presentation_json_file)
 
