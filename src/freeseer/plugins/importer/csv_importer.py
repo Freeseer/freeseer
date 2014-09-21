@@ -66,12 +66,13 @@ class CsvImporter(IImporter):
                         'Time': unicode(row.get('Time', ''), 'utf-8'),  # Legacy csv time field
                         'Date': unicode(row.get('Date', ''), 'utf-8'),
                         'StartTime': unicode(row.get('StartTime', ''), 'utf-8'),
-                        'EndTime': unicode(row.get('EndTime', ''), 'utf-8')
+                        'EndTime': unicode(row.get('EndTime', ''), 'utf-8'),
+                        'Problem': unicode(row.get('Problem', ''), 'utf-8'),  # optional value from report csv
+                        'Error': unicode(row.get('Error', ''), 'utf-8')  # optional value from report csv
                     }
-
                     presentations.append(talk)
 
         except IOError:
-            log.exception("CSV: File %s not found", csv_file)
+            log.exception("CSV: File %s not found", fname)
 
         return presentations

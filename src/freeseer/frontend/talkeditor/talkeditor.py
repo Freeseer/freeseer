@@ -254,6 +254,9 @@ class TalkEditorApp(FreeseerApp):
 
     def load_presentations_model(self):
         # Load Presentation Model
+        # FIXME: The raw databse values are being loaded into the view. This means the date, startTime, and
+        # endTime are showing the raw QDate(Time) values. There should be a layer that converts between the
+        # frontend values and the backend.
         self.presentationModel = self.db.get_presentations_model()
         self.proxy = QSortFilterProxyModel()
         self.proxy.setSourceModel(self.presentationModel)
@@ -395,9 +398,6 @@ class TalkEditorApp(FreeseerApp):
 
     def create_presentation(self, talkDetailsWidget):
         """Creates and returns an instance of Presentation using data from the input fields"""
-        date = talkDetailsWidget.dateEdit.date()
-        startTime = talkDetailsWidget.startTimeEdit.time()
-        endTime = talkDetailsWidget.endTimeEdit.time()
 
         title = unicode(talkDetailsWidget.titleLineEdit.text()).strip()
         if title:
@@ -408,9 +408,9 @@ class TalkEditorApp(FreeseerApp):
                 unicode(talkDetailsWidget.categoryLineEdit.text()).strip(),
                 unicode(talkDetailsWidget.eventLineEdit.text()).strip(),
                 unicode(talkDetailsWidget.roomLineEdit.text()).strip(),
-                unicode(date.toString(Qt.ISODate)),
-                unicode(startTime.toString(Qt.ISODate)),
-                unicode(endTime.toString(Qt.ISODate)))
+                talkDetailsWidget.dateEdit.date(),
+                talkDetailsWidget.startTimeEdit.time().toString('hh:mm ap'),
+                talkDetailsWidget.endTimeEdit.time().toString('hh:mm ap'))
 
     def show_new_talk_popup(self):
         """Displays a modal dialog with a talk details view

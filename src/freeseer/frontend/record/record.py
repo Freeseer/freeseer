@@ -428,8 +428,8 @@ class RecordApp(FreeseerApp):
             if self.current_event and self.current_room:
                 starttime = QtCore.QDateTime().currentDateTime()
                 stoptime = starttime.addSecs(900)
-                talkid = self.db.get_talk_between_time(self.current_event, self.current_room,
-                                                       starttime.toString(), stoptime.toString())
+                talkid = self.db.get_talk_between_dates(self.current_event, self.current_room,
+                                                        starttime.toString(), stoptime.toString())
 
                 if talkid is not None:
                     for i in range(self.mainWidget.talkComboBox.count()):
@@ -638,8 +638,8 @@ class RecordApp(FreeseerApp):
         self.reportWidget.speakerLabel2.setText(p.speaker)
         self.reportWidget.eventLabel2.setText(p.event)
         self.reportWidget.roomLabel2.setText(p.room)
-        self.reportWidget.startTimeLabel2.setText(p.startTime)
-        self.reportWidget.endTimeLabel2.setText(p.endTime)
+        self.reportWidget.startTimeLabel2.setText(p.startTime.time().toString())
+        self.reportWidget.endTimeLabel2.setText(p.endTime.time().toString())
 
         # Get existing report if there is one.
         talk_id = self.current_presentation_id()

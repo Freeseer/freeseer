@@ -24,13 +24,28 @@
 
 from os import path
 
+from PyQt4.QtCore import QDate
+from PyQt4.QtCore import QDateTime
 
+
+# TODO: Add a print presentation method? print self.__dict__
+# TODO: Write a database record to Presentation method
 class Presentation(object):
     '''
     This class is responsible for encapsulate data about presentations
     and its database related operations
     '''
-    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", startTime="", endTime=""):
+
+    # TODO: Are Default variable necessary if they are all empty-string values?
+    DEFAULT_ROOM = ''
+    DEFAULT_DATE = ''
+    DEFAULT_TIME = ''
+
+    # TODO: Confirm Presentation.date is or is not a QDate object.
+    # TODO: Confirm Presentation.startTime should store a QDateTime object or a QTime object.
+    # TODO: Confirm Presentation.endTime should store a QDateTime object or a QTime object.
+    def __init__(self, title, speaker='', description='', category='', event='', room='',
+                 date='', startTime='', endTime=''):
         '''
         Initialize a presentation instance
         '''
@@ -43,6 +58,23 @@ class Presentation(object):
         self.date = date
         self.startTime = startTime
         self.endTime = endTime
+
+        if not self.room:
+            self.room = self.DEFAULT_ROOM
+
+        # Set the date, startTime, or endTime if they are null timestamp values
+        if self.date == QDate():
+            self.date = self.DEFAULT_DATE
+        if self.startTime == QDateTime():
+            self.startTime = self.DEFAULT_TIME
+        if self.endTime == QDateTime():
+            self.endTime = self.DEFAULT_TIME
+
+    def __eq__(self, obj):
+        return self.__dict__ == obj.__dict__
+
+    def __ne__(self, obj):
+        return not self == obj
 
 
 class PresentationFile(Presentation):
