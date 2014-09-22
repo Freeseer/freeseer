@@ -141,7 +141,7 @@ your local master branch to pull in changes from upstream.
 
 10. Let others know you consider your work ready to be merged by leaving a
     comment in your pull request. :doc:`You may be asked to make some changes.
-    <developers/pull-requests-and-code-review>`
+    </contribute/developers/review>`
 
 11. When your pull request has been merged, celebrate, then clean up by deleting
     your local and remote topic branch. ::
