@@ -17,11 +17,16 @@ And it's based on open standards so it supports royalty free audio and video cod
 `Read our history <http://fosslc.org/drupal/node/596>`_ to find out why Freeseer
 was created.
 
+.. _install_freeseer_package:
 
 Installing Freeseer from a package
------------------------------------
-Use this option if you just want to run Freeseer. If you plan on developing
-Freeseer, skip to the next section: :ref:`install-for-dev`.
+----------------------------------
+.. warning::
+  You should only install Freeseer from a package if you plan to use it as an
+  end-user. If you want to contribute to the project, **do not**
+  :ref:`install Freeseer from a package<install_freeseer_package>`
+  (if you already have, you'll need to uninstall it). Instead, follow the
+  instructions for :ref:`installing Freeseer for development<install-for-dev>`.
 
 Arch Linux
 **********
