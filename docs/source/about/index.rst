@@ -29,7 +29,7 @@ We're an open source community of developers, writers, designers, bloggers, stud
 whose goal is to make meaningful software with world-class documentation (inspired by ThinkUp and GitHub).
 
 You're reading the very beginning of that effort. This documentation is an incomplete, work-in-progress. Please
-join us and help :doc:`fill in the gaps </contribute/documentation>`.
+join us and help :doc:`fill in the gaps </contribute/index>`.
 
 
 Why We Exist
