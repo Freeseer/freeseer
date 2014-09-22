@@ -1,6 +1,8 @@
 Quick-Start Guide
 =================
 
+.. warning:: **If you want to develop source code for the project do not install** :ref:`Freeseer from a package.<install_freeseer_package>` **Instead follow the instructions for installing** :ref:`Freeseer for development.<install-for-dev>`
+
 Freeseer is a free and open source screencasting application, primarily
 developed for capturing and streaming computer-aided presentations at conferences.
 
@@ -17,9 +19,10 @@ And it's based on open standards so it supports royalty free audio and video cod
 `Read our history <http://fosslc.org/drupal/node/596>`_ to find out why Freeseer
 was created.
 
+.. _install_freeseer_package:
 
 Installing Freeseer from a package
------------------------------------
+----------------------------------
 Use this option if you just want to run Freeseer. If you plan on developing
 Freeseer, skip to the next section: :ref:`install-for-dev`.
 
