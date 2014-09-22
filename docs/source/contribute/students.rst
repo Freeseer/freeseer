@@ -6,6 +6,8 @@ For many, it's their first time contributing to an open source project.
 We've had students from Google Summer of Code (GSoC), Undergraduate Capstone
 Open Source Projects (UCOSP), and Fedora Summer Coding.
 
+.. _project proposal document: https://docs.google.com/document/d/1vc98PZqwG0XuKjV5Eswh_9C8m6ca223KYtRown9TRio
+
 Getting Started
 ---------------
 
@@ -24,8 +26,7 @@ Getting Started
 #. Get Freeseer up and running, play around with it, look at the source code
 #. Read over the `assessment document
    <https://docs.google.com/document/d/1p9DtTujpSMj_i5mXVfUGtzvJS02rwpf9RvSK65ayklo/edit>`_
-#. Copy the `project proposal document
-   <https://docs.google.com/document/d/1vc98PZqwG0XuKjV5Eswh_9C8m6ca223KYtRown9TRio>`_
+#. Copy the `project proposal document`_
    to your Google Drive
 
    - ``File`` → ``Make a copy``
@@ -63,7 +64,6 @@ Each team member will briefly update the others with what they've accomplished
 since the last meeting, what they will be working on next, and any stumbling
 blocks they ran into. Any detailed discussion should happen outside the meeting.
 
-
 Deciding What To Work On
 ------------------------
 
@@ -72,8 +72,7 @@ You can also look through our `open issues
 <https://github.com/Freeseer/freeseer/issues?labels=&page=1&state=open>`_ or
 come up with your own idea and open an issue for it.
 
-You should have a copy of the `project proposal document
-<https://docs.google.com/document/d/1it9UJo91tDGB1Cf2Qyn3rAzXX8icxoBZI183eqjASUc/edit>`_
+You should have a copy of the `project proposal document`_
 on your Google Drive. Feel free to add or remove sections that you think are
 relevant or irrelevant to your project. It also includes a timeline to help
 schedule your work. There are no set work hours -- meet your deadlines and
