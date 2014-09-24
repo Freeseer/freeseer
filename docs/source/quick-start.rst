@@ -63,6 +63,18 @@ Freeseer can also be installed with pip::
 Installing Freeseer for Development
 -----------------------------------
 
+There are two essential tasks you have to complete in order to run Freeseer as a
+contributor: obtaining the source code, and installing the necessary dependencies.
+
+Instead of installing Freeseer from a package, you will need to run it from the
+source code. Obtain the source code by :ref:`forking and cloning the project 
+<fork-freeseer>`.
+
+The necessary dependencies are listed in the section below. We have included
+instructions on how to install the dependencies for individual operating systems,
+as well as :ref:`instructions on how to use pip to install the 
+dependencies<pypi-packages>`.
+
 Dependencies
 ************
 + Git
@@ -76,8 +88,8 @@ Debian and Ubuntu Linux
 
 ::
 
-    $ sudo apt-get update
-    $ sudo apt-get install -y build-essential git wget python2.7-dev python-gst0.10 python-gst0.10-dev \
+    sudo apt-get update
+    sudo apt-get install -y build-essential git wget python2.7-dev python-gst0.10 python-gst0.10-dev \
       qt4-qmake python-qt4 python-qt4-dev python-qt4-sql pyqt4-dev-tools libqt4-dev libqt4-sql libqt4-sql-sqlite \
       gstreamer0.10-plugins-good gstreamer0.10-plugins-base gstreamer0.10-pulseaudio gstreamer0.10-alsa
 
@@ -86,7 +98,7 @@ Fedora Linux
 
 ::
 
-    $ sudo yum install git PyQt4-devel gstreamer-python sphinx python-sphinx
+    sudo yum install git PyQt4-devel gstreamer-python sphinx python-sphinx
 
 .. warning:: This list may be incomplete. Please :doc:`let us know </contact>` if you notice any missing packages.
 
@@ -108,6 +120,8 @@ Windows
 - `PyGTK py2.7 all-in-one <http://ftp.gnome.org/pub/GNOME/binaries/win32/pygtk/2.24/>`_
     * Windows 32-bit packages are recommended because pygtk-all-in-one package does not have a 64-bit installer.
     * Add the following paths to your PATH variable : ```C:\Python27;C:\Python27\Lib\site-packages\PyQt4\bin```
+
+.. _pypi-packages:
 
 PyPI Packages
 ^^^^^^^^^^^^^
@@ -135,38 +149,31 @@ On Windows::
     pip install -Ur windows_requirements.txt
 
 
-Get the source code
-********************
-
-If you plan on contributing to Freeseer, you'll need to :ref:`fork and clone the
-project <fork-freeseer>`.
-
-
 Running Freeseer
 ----------------
 
 Once you've installed Freeseer, you can run the various tools::
 
-    $ freeseer         # Recording UI (default when no arguments supplied)
-    $ freeseer record  # Recording UI
-    $ freeseer talk    # Talk Editor UI
-    $ freeseer config  # Configuration UI
+    freeseer         # Recording UI (default when no arguments supplied)
+    freeseer record  # Recording UI
+    freeseer talk    # Talk Editor UI
+    freeseer config  # Configuration UI
 
 You can view usage with the ``-h`` or ``--help`` option::
 
-    $ freeseer -h         # General usage
-    $ freeseer record -h  # Recording usage
-    $ freeseer talk -h    # Talk Editor usage
-    $ freeseer config -h  # Config usage
+    freeseer -h         # General usage
+    freeseer record -h  # Recording usage
+    freeseer talk -h    # Talk Editor usage
+    freeseer config -h  # Config usage
 
 .. note::
   If you're going to hack on Freeseer, you'll need to run it from source.
   Go into the ``src/`` directory and run it like::
 
-    $ python -m freeseer
-    $ python -m freeseer record
-    $ python -m freeseer talk
-    $ python -m freeseer config
+    python -m freeseer
+    python -m freeseer record
+    python -m freeseer talk
+    python -m freeseer config
 
 
 Issue tracker
