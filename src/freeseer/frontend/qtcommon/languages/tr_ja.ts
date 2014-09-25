@@ -131,6 +131,11 @@
         <translation>レコーディング</translation>
     </message>
     <message>
+        <location filename="../../configtool/configtool.py" line="204"/>
+        <source>Recording</source>
+        <translation>レコーディング</translation>
+    </message>
+    <message>
         <location filename="../../configtool/configtool.py" line="208"/>
         <source>Audio Input</source>
         <translation>オーディオ入力</translation>
@@ -153,6 +158,11 @@
     <message>
         <location filename="../../configtool/configtool.py" line="217"/>
         <source>File Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../configtool/configtool.py" line="218"/>
+        <source>Browse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

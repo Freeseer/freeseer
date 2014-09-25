@@ -89,6 +89,7 @@ class ConfigToolWidget(QtGui.QWidget):
         # Right panel
         #
         self.rightPanelWidget = QtGui.QWidget()
+        self.rightPanelWidget.setSizePolicy(QtGui.QSizePolicy.MinimumExpanding, QtGui.QSizePolicy.MinimumExpanding)
         self.mainLayout.addWidget(self.rightPanelWidget)
 
 if __name__ == "__main__":

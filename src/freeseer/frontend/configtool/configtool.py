@@ -120,8 +120,8 @@ class ConfigToolApp(FreeseerApp):
         # general tab connections
         #
         self.connect(self.generalWidget.languageComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_default_language)
-        self.connect(self.generalWidget.recordDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
-        self.connect(self.generalWidget.recordDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
+        self.connect(self.avWidget.fileDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
+        self.connect(self.avWidget.fileDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalWidget.autoHideCheckBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
 
         #
@@ -196,15 +196,16 @@ class ConfigToolApp(FreeseerApp):
         #
         # GeneralWidget
         #
-        self.generalWidget.MiscGroupBox.setTitle(self.app.translate("ConfigToolApp", "Miscellaneous"))
+        self.generalWidget.miscGroupBox.setTitle(self.app.translate("ConfigToolApp", "Miscellaneous"))
         self.generalWidget.languageLabel.setText(self.app.translate("ConfigToolApp", "Default Language"))
-        self.generalWidget.recordDirLabel.setText(self.app.translate("ConfigToolApp", "Record Directory"))
         self.generalWidget.autoHideCheckBox.setText(self.app.translate("ConfigToolApp", "Enable Auto-Hide"))
         # --- End GeneralWidget
 
         #
         # AV Widget
         #
+        self.avWidget.title.setText(u"{0} {1} {2}".format(u'<h1>', self.app.translate("ConfigToolApp", "Recording"), u'</h1>'))
+
         self.avWidget.audioGroupBox.setTitle(self.app.translate("ConfigToolApp", "Audio Input"))
         self.avWidget.audioMixerLabel.setText(self.app.translate("ConfigToolApp", "Audio Mixer"))
         self.avWidget.audioMixerSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
@@ -214,6 +215,8 @@ class ConfigToolApp(FreeseerApp):
         self.avWidget.videoMixerSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
 
         self.avWidget.fileGroupBox.setTitle(self.app.translate("ConfigToolApp", "Record to File"))
+        self.avWidget.fileDirLabel.setText(self.app.translate("ConfigToolApp", "Record Directory"))
+        self.avWidget.fileDirPushButton.setText("{}...".format(self.app.translate("ConfigToolApp", "Browse")))
         self.avWidget.fileLabel.setText(self.app.translate("ConfigToolApp", "File Format"))
         self.avWidget.fileSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
 
@@ -275,9 +278,6 @@ class ConfigToolApp(FreeseerApp):
         i = self.generalWidget.languageComboBox.findData(self.config.default_language)
         self.generalWidget.languageComboBox.setCurrentIndex(i)
 
-        # Recording Directory Settings
-        self.generalWidget.recordDirLineEdit.setText(self.config.videodir)
-
         # Load Auto Hide Settings
         if self.config.auto_hide:
             self.generalWidget.autoHideCheckBox.setChecked(True)
@@ -290,18 +290,18 @@ class ConfigToolApp(FreeseerApp):
         self.config.save()
 
     def browse_video_directory(self):
-        directory = self.generalWidget.recordDirLineEdit.text()
+        directory = self.avWidget.fileDirLineEdit.text()
 
         newDir = QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)
         if newDir == "":
             newDir = directory
 
         videodir = os.path.abspath(str(newDir))
-        self.generalWidget.recordDirLineEdit.setText(videodir)
-        self.generalWidget.recordDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
+        self.avWidget.fileDirLineEdit.setText(videodir)
+        self.avWidget.fileDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
 
     def update_record_directory(self):
-        self.config.videodir = str(self.generalWidget.recordDirLineEdit.text())
+        self.config.videodir = str(self.avWidget.fileDirLineEdit.text())
         self.config.save()
 
     def toggle_autohide(self, state):
@@ -357,6 +357,9 @@ class ConfigToolApp(FreeseerApp):
             if plugin.plugin_object.get_name() == self.config.videomixer:
                 self.avWidget.videoMixerComboBox.setCurrentIndex(n)
             n += 1
+
+        # Recording Directory Settings
+        self.avWidget.fileDirLineEdit.setText(self.config.videodir)
 
         #
         # Set up File Format
