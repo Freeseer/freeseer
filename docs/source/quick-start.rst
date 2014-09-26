@@ -73,6 +73,23 @@ Freeseer from source.
    - Follow the below instructions for your operating system and
      :ref:`use pip to install additional dependencies<pypi-packages>`
 
+Now you're ready to run Freeseer from the command line.
+There are two ways to do this.
+
+a) Run the Freeseer module as a script::
+
+    cd freeseer/src/
+    python -m freeseer
+
+   You'll have to repeat these steps whenever you want to run Freeseer.
+
+b) Install Freeseer in editable mode::
+
+    cd freeseer/src/
+    pip install -e .
+
+   After this one-time install, you can now run ``freeseer`` from anywhere.
+
 Dependencies
 ************
 + Git
