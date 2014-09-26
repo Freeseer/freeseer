@@ -63,17 +63,15 @@ Freeseer can also be installed with pip::
 Installing Freeseer for Development
 -----------------------------------
 
-There are two essential tasks you have to complete in order to run Freeseer as a
-contributor: obtaining the source code, and installing the necessary dependencies.
+If you plan on contributing to Freeseer's development, you'll have to run
+Freeseer from source.
 
-Instead of installing Freeseer from a package, you will need to run it from the
-source code. Obtain the source code by :ref:`forking and cloning the project 
-<fork-freeseer>`.
+#. Uninstall any previously installed instances of Freeseer
+#. Obtain the source code by :ref:`forking and cloning the project <fork-freeseer>`
+#. Install the required dependencies
 
-The necessary dependencies are listed in the section below. We have included
-instructions on how to install the dependencies for individual operating systems,
-as well as :ref:`instructions on how to use pip to install the 
-dependencies<pypi-packages>`.
+   - Follow the below instructions for your operating system and
+     :ref:`use pip to install additional dependencies<pypi-packages>`
 
 Dependencies
 ************
