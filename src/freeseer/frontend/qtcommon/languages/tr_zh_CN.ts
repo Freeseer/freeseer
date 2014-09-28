@@ -153,27 +153,27 @@
     <message>
         <location filename="../../configtool/configtool.py" line="216"/>
         <source>Record to File</source>
-        <translation type="unfinished"></translation>
+        <translation>输出到文件</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="217"/>
         <source>File Format</source>
-        <translation type="unfinished"></translation>
+        <translation>文件格式</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="218"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>浏览</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="220"/>
         <source>Record to Stream</source>
-        <translation type="unfinished"></translation>
+        <translation>输出到流媒体</translation>
     </message>
     <message>
         <location filename="../../configtool/configtool.py" line="221"/>
         <source>Stream Format</source>
-        <translation type="unfinished"></translation>
+        <translation>流媒体格式</translation>
     </message>
 </context>
 <context>
@@ -374,32 +374,32 @@
     <message>
         <location filename="../../record/record.py" line="189"/>
         <source>Play Video</source>
-        <translation type="unfinished"></translation>
+        <translation>播放视频</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="194"/>
         <source>Recording</source>
-        <translation type="unfinished">记录</translation>
+        <translation>记录</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="196"/>
         <source>Free Space:</source>
-        <translation type="unfinished"></translation>
+        <translation>剩余空间：</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="197"/>
         <source>Elapsed Time:</source>
-        <translation type="unfinished"></translation>
+        <translation>运行时间：</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="215"/>
         <source>&amp;Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>设置(&amp;C)</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="216"/>
         <source>&amp;Edit Talks</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑事项(&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -535,62 +535,62 @@
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="182"/>
         <source>Remove All Talks from Database</source>
-        <translation type="unfinished"></translation>
+        <translation>删除数据库中所有事项</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="194"/>
         <source>&amp;Remove All Talks</source>
-        <translation type="unfinished"></translation>
+        <translation>删除所有事项(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="203"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>类别</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="213"/>
         <source>RSS URL</source>
-        <translation type="unfinished"></translation>
+        <translation>RSS地址</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="214"/>
         <source>CSV File</source>
-        <translation type="unfinished"></translation>
+        <translation>CSV文件</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="221"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>导入</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="222"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>导出</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="225"/>
         <source>Remove All</source>
-        <translation type="unfinished"></translation>
+        <translation>删除所有</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="231"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="185"/>
         <source>Unsaved Data</source>
-        <translation type="unfinished"></translation>
+        <translation>未保存数据</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="186"/>
         <source>Unsaved talk details will be lost. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>将失去未保存的事项内容。是否继续？</translation>
     </message>
     <message>
         <location filename="../../talkeditor/talkeditor.py" line="223"/>
         <source>Add New Talk</source>
-        <translation type="unfinished"></translation>
+        <translation>添加新事项</translation>
     </message>
 </context>
 <context>
