@@ -76,8 +76,8 @@ class TestConfigToolApp(unittest.TestCase):
         del self.config_tool.app
         self.app.deleteLater()
 
-    def test_about_widget(self):
-        self.assertTrue(self.config_tool.currentWidget == self.config_tool.aboutWidget)
+    def test_default_widget(self):
+        self.assertTrue(self.config_tool.currentWidget == self.config_tool.generalWidget)
 
     def test_general_settings(self):
         '''

@@ -47,6 +47,7 @@ class ConfigToolWidget(QtGui.QWidget):
         '''
         QtGui.QWidget.__init__(self, parent)
 
+        self.setMinimumSize(800, 400)
         self.mainLayout = QtGui.QHBoxLayout()
         self.setLayout(self.mainLayout)
 
@@ -57,25 +58,26 @@ class ConfigToolWidget(QtGui.QWidget):
         self.leftPanelLayout = QtGui.QVBoxLayout()
         self.mainLayout.addLayout(self.leftPanelLayout)
 
-        # About
         self.optionsTreeWidget = QtGui.QTreeWidget()
         self.optionsTreeWidget.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Minimum)
         self.optionsTreeWidget.setHeaderHidden(True)
         self.optionsTreeWidget.headerItem().setText(0, "1")
-        QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(0).setText(0, "About")
 
         # General
         QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(1).setText(0, "General")
+        self.optionsTreeWidget.topLevelItem(0).setText(0, "General")
 
         # AV
         QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(2).setText(0, "AV Config")
+        self.optionsTreeWidget.topLevelItem(1).setText(0, "AV Config")
 
         # Plugins
         QtGui.QTreeWidgetItem(self.optionsTreeWidget)
-        self.optionsTreeWidget.topLevelItem(3).setText(0, "Plugins")
+        self.optionsTreeWidget.topLevelItem(2).setText(0, "Plugins")
+
+        # About
+        QtGui.QTreeWidgetItem(self.optionsTreeWidget)
+        self.optionsTreeWidget.topLevelItem(3).setText(0, "About")
 
         closeIcon = QtGui.QIcon.fromTheme("application-exit")
         self.closePushButton = QtGui.QPushButton("Close")

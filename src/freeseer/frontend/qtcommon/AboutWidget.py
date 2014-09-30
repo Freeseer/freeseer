@@ -29,6 +29,7 @@ from PyQt4.QtCore import QString
 from PyQt4.QtCore import QTranslator
 from PyQt4.QtCore import QUrl
 from PyQt4.QtCore import SIGNAL
+from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QDesktopServices
 from PyQt4.QtGui import QGridLayout
 from PyQt4.QtGui import QHBoxLayout
@@ -37,6 +38,7 @@ from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPixmap
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QWidget
+from PyQt4.QtGui import QSizePolicy
 
 try:
     _fromUtf8 = QString.fromUtf8
@@ -66,30 +68,39 @@ class AboutWidget(QWidget):
     def __init__(self, parent=None):
         QWidget.__init__(self, parent)
 
-        self.setMinimumSize(100, 400)
-
         self.current_language = "en_US"
         self.uiTranslator = QTranslator()
         self.uiTranslator.load(":/languages/tr_en_US.qm")
 
+        self.fontSize = self.font().pixelSize()
+        self.fontUnit = "px"
+        if self.fontSize == -1:  # Font is set as points, not pixels.
+            self.fontUnit = "pt"
+            self.fontSize = self.font().pointSize()
+
         icon = QIcon()
-        icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
+        self.logoPixmap = QPixmap(_fromUtf8(":/freeseer/logo.png"))
+        icon.addPixmap(self.logoPixmap, QIcon.Normal, QIcon.Off)
         self.setWindowIcon(icon)
 
         self.mainLayout = QGridLayout()
         self.setLayout(self.mainLayout)
 
-        # Left top side of grid, Logo
+        # Logo
         self.logo = QLabel("Logo")
-        self.logo.setPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")))
-        self.mainLayout.addWidget(self.logo, 0, 0)
+        # To offset the logo so that it's to the right of the title
+        self.logo.setStyleSheet("QLabel {{ margin-left: {} {} }}"
+            .format(90 + (self.fontSize * 2.5), self.fontUnit))
+        self.logo.setPixmap(self.logoPixmap.scaledToHeight(80))
+        self.mainLayout.addWidget(self.logo, 0, 0, Qt.AlignTop)
 
-        # Right top side of grid, Infos
+        # Info
         self.aboutInfo = QLabel("About Info", openExternalLinks=True)
+        self.aboutInfo.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.aboutInfo.setWordWrap(True)
-        self.mainLayout.addWidget(self.aboutInfo, 0, 1)
+        self.mainLayout.addWidget(self.aboutInfo, 0, 0)
 
-        # Right bottom side of grid, Buttons
+        # Buttons
         self.buttonsLayout = QHBoxLayout()
         self.issueButton = QPushButton("Report an issue")
         self.docsButton = QPushButton("Freeseer documentation")
@@ -98,7 +109,7 @@ class AboutWidget(QWidget):
         self.buttonsLayout.insertWidget(1, self.issueButton)
         self.buttonsLayout.insertWidget(2, self.contactButton)
 
-        self.mainLayout.addLayout(self.buttonsLayout, 2, 1)
+        self.mainLayout.addLayout(self.buttonsLayout, 2, 0)
 
         self.connect(self.docsButton, SIGNAL('clicked()'), self.openDocsUrl)
         self.connect(self.issueButton, SIGNAL('clicked()'), self.openNewIssueUrl)
@@ -126,7 +137,8 @@ class AboutWidget(QWidget):
                     "no event will the authors be held liable for any damages arising from the use of this software.")
 
         self.aboutInfoString = u'<h1>' + NAME.capitalize() + u'</h1>' + \
-            u'<br><b>' + self.uiTranslator.translate("AboutDialog", "Version") + ": " + __version__ + u'</b>' + \
+            u'<br><b>' + self.uiTranslator.translate("AboutDialog", "Version") + \
+            ": " + __version__ + u'</b>' + \
             u'<p>' + self.descriptionString + u'</p>' + \
             u'<p>' + self.copyrightString + u'</p>' + \
             u'<p><a href="' + URL + u'">' + URL + u'</a></p>' \

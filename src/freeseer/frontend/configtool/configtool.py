@@ -156,7 +156,7 @@ class ConfigToolApp(FreeseerApp):
         self.retranslate()
 
         # Start off with displaying the General Settings
-        items = self.mainWidget.optionsTreeWidget.findItems(self.aboutString, QtCore.Qt.MatchExactly)
+        items = self.mainWidget.optionsTreeWidget.findItems(self.generalString, QtCore.Qt.MatchExactly)
         if len(items) > 0:
             item = items[0]
             self.mainWidget.optionsTreeWidget.setCurrentItem(item)
@@ -186,10 +186,10 @@ class ConfigToolApp(FreeseerApp):
         self.videoMixerString = self.app.translate("ConfigToolApp", "VideoMixer")
         self.outputString = self.app.translate("ConfigToolApp", "Output")
 
-        self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.aboutString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.generalString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.avString)
-        self.mainWidget.optionsTreeWidget.topLevelItem(3).setText(0, self.pluginsString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(0).setText(0, self.generalString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(1).setText(0, self.avString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(2).setText(0, self.pluginsString)
+        self.mainWidget.optionsTreeWidget.topLevelItem(3).setText(0, self.aboutString)
         self.mainWidget.closePushButton.setText(self.app.translate("ConfigToolApp", "Close"))
         # --- End ConfigToolWidget
 
