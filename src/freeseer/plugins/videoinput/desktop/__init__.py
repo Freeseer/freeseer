@@ -37,9 +37,9 @@ import logging
 import sys
 
 # GStreamer modules
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt4 modules
 from PyQt4.QtCore import SIGNAL
@@ -74,11 +74,11 @@ class DesktopLinuxSrc(IVideoInput):
         """
         Return the video input object in gstreamer bin format.
         """
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = None
         if sys.platform.startswith("linux"):
-            videosrc = gst.element_factory_make("ximagesrc", "videosrc")
+            videosrc = Gst.ElementFactory.make("ximagesrc", "videosrc")
 
             # Configure coordinates if we're not recording full desktop
             if self.desktop == "Area":
@@ -92,7 +92,11 @@ class DesktopLinuxSrc(IVideoInput):
                 videosrc.set_property("xname", self.window)
 
         elif sys.platform in ["win32", "cygwin"]:
-            videosrc = gst.element_factory_make("dx9screencapsrc", "videosrc")
+            #videosrc = Gst.ElementFactory.make("dx9screencapsrc", "videosrc")
+            #This is being replaced with the test source as dx9screencaosrc has not been
+            #ported to GStreamer 1.0.5
+            videosrc = Gst.ElementFactory.make("videotestsrc", "videosrc")
+            print "test source in place of desktop"
 
             # Configure coordinates if we're not recording full desktop
             if self.desktop == "Area":
@@ -104,13 +108,21 @@ class DesktopLinuxSrc(IVideoInput):
 
         bin.add(videosrc)
 
-        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
-        bin.add(colorspace)
-        videosrc.link(colorspace)
+        #Adding a queue before the video ends up in the Videorate Gst element in the 
+        #video processing stage should make this work but does not.
+        #gst-launch-1.0 -e ximagesrc ! queue ! videorate ! video/x-raw,framerate=4/1 ! videoconvert !  theoraenc ! oggmux ! /
+        # queue ! filesink location="test-videorate.ogg"
+        #That pipeline works, which this should replicate. 
+        #If you sub in videotestsrc in place of ximagesrc this this works, if you leave it as it
+        #then you end up with an "internal data flow error"
+        q1 = Gst.ElementFactory.make("queue", "q1")
+        bin.add(q1)
+
+        videosrc.link(q1)
 
         # Setup ghost pad
-        pad = colorspace.get_pad("src")
-        ghostpad = gst.GhostPad("videosrc", pad)
+        pad = q1.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("videosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin

@@ -37,9 +37,9 @@ except ImportError:
     import ConfigParser as configparser
 
 # GStreamer
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -58,18 +58,18 @@ class AudioPassthrough(IAudioMixer):
     widget = None
 
     def get_audiomixer_bin(self):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
-        audiomixer = gst.element_factory_make("adder", "audiomixer")
+        audiomixer = Gst.ElementFactory.make("adder", "audiomixer")
         bin.add(audiomixer)
 
         # Setup ghost pad
-        sinkpad = audiomixer.get_pad("sink%d")
-        sink_ghostpad = gst.GhostPad("sink", sinkpad)
+        sinkpad = audiomixer.get_request_pad("sink_%u")
+        sink_ghostpad = Gst.GhostPad.new("sink", sinkpad)
         bin.add_pad(sink_ghostpad)
 
-        srcpad = audiomixer.get_pad("src")
-        src_ghostpad = gst.GhostPad("src", srcpad)
+        srcpad = audiomixer.get_static_pad("src")
+        src_ghostpad = Gst.GhostPad.new("src", srcpad)
         bin.add_pad(src_ghostpad)
 
         return bin

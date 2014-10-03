@@ -35,9 +35,9 @@ except ImportError:
     import ConfigParser as configparser
 
 # GStreamer
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -64,16 +64,16 @@ class OggIcecast(IOutput):
     mount = "stream.ogg"
 
     def get_output_bin(self, audio=True, video=True, metadata=None):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
         if metadata is not None:
             self.set_metadata(metadata)
 
         # Muxer
-        muxer = gst.element_factory_make("oggmux", "muxer")
+        muxer = Gst.ElementFactory.make("oggmux", "muxer")
         bin.add(muxer)
 
-        icecast = gst.element_factory_make("shout2send", "icecast")
+        icecast = Gst.ElementFactory.make("shout2send", "icecast")
         icecast.set_property("ip", self.ip)
         icecast.set_property("port", self.port)
         icecast.set_property("password", self.password)
@@ -84,19 +84,19 @@ class OggIcecast(IOutput):
         # Setup Audio Pipeline
         #
         if audio:
-            audioqueue = gst.element_factory_make("queue", "audioqueue")
+            audioqueue = Gst.ElementFactory.make("queue", "audioqueue")
             bin.add(audioqueue)
 
-            audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
+            audioconvert = Gst.ElementFactory.make("audioconvert", "audioconvert")
             bin.add(audioconvert)
 
-            audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
+            audiocodec = Gst.ElementFactory.make("vorbisenc", "audiocodec")
             bin.add(audiocodec)
 
             # Setup metadata
-            vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
+            vorbistag = Gst.ElementFactory.make("vorbistag", "vorbistag")
             # set tag merge mode to GST_TAG_MERGE_REPLACE
-            merge_mode = gst.TagMergeMode.__enum_values__[2]
+            merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
             if metadata is not None:
                 # Only set tag if metadata is set
@@ -105,8 +105,8 @@ class OggIcecast(IOutput):
             bin.add(vorbistag)
 
             # Setup ghost pads
-            audiopad = audioqueue.get_pad("sink")
-            audio_ghostpad = gst.GhostPad("audiosink", audiopad)
+            audiopad = audioqueue.get_static_pad("sink")
+            audio_ghostpad = Gst.GhostPad.new("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
 
             # Link elements
@@ -119,14 +119,14 @@ class OggIcecast(IOutput):
         # Setup Video Pipeline
         #
         if video:
-            videoqueue = gst.element_factory_make("queue", "videoqueue")
+            videoqueue = Gst.ElementFactory.make("queue", "videoqueue")
             bin.add(videoqueue)
 
-            videocodec = gst.element_factory_make("theoraenc", "videocodec")
+            videocodec = Gst.ElementFactory.make("theoraenc", "videocodec")
             bin.add(videocodec)
 
-            videopad = videoqueue.get_pad("sink")
-            video_ghostpad = gst.GhostPad("videosink", videopad)
+            videopad = videoqueue.get_static_pad("sink")
+            video_ghostpad = Gst.GhostPad.new("videosink", videopad)
             bin.add_pad(video_ghostpad)
 
             videoqueue.link(videocodec)
@@ -144,10 +144,10 @@ class OggIcecast(IOutput):
         Populate global tag list variable with file metadata for
         vorbistag audio element
         '''
-        self.tags = gst.TagList()
+        self.tags = Gst.TagList()
 
         for tag in data.keys():
-            if(gst.tag_exists(tag)):
+            if(Gst.tag_exists(tag)):
                 self.tags[tag] = data[tag]
             else:
                 #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")

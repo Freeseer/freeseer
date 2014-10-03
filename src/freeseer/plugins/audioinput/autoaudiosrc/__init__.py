@@ -28,10 +28,11 @@ which audio source to use. Not configurable.
 
 @author: Thanh Ha
 '''
+import sys
 
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 from freeseer.framework.plugin import IAudioInput
 
@@ -41,14 +42,20 @@ class AutoAudioSrc(IAudioInput):
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
 
     def get_audioinput_bin(self):
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        if sys.platform.startswith("linux"):
+            audiosrc = Gst.ElementFactory.make("autoaudiosrc", None)
 
-        audiosrc = gst.element_factory_make("autoaudiosrc", "audiosrc")
+        elif sys.platform in ["win32", "cygwin"]:
+            # autoaudiosrc causes python to lock up in Windows
+            audiosrc = Gst.ElementFactory.make("audiotestsrc", None)
+
+            
         bin.add(audiosrc)
 
         # Setup ghost pad
-        pad = audiosrc.get_pad("src")
-        ghostpad = gst.GhostPad("audiosrc", pad)
+        pad = audiosrc.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("audiosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin

@@ -37,9 +37,9 @@ except ImportError:
 import os
 
 # GStreamer modules
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt4 modules
 from PyQt4.QtCore import SIGNAL
@@ -73,13 +73,13 @@ class FirewireSrc(IVideoInput):
             devpath = path + str(i)
 
     def get_videoinput_bin(self):
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
-        videosrc = gst.element_factory_make("dv1394src", "videosrc")
-        dv1394q1 = gst.element_factory_make('queue', 'dv1394q1')
-        dv1394dvdemux = gst.element_factory_make('dvdemux', 'dv1394dvdemux')
-        dv1394q2 = gst.element_factory_make('queue', 'dv1394q2')
-        dv1394dvdec = gst.element_factory_make('dvdec', 'dv1394dvdec')
+        videosrc = Gst.ElementFactory.make("dv1394src", "videosrc")
+        dv1394q1 = Gst.ElementFactory.make('queue', 'dv1394q1')
+        dv1394dvdemux = Gst.ElementFactory.make('dvdemux', 'dv1394dvdemux')
+        dv1394q2 = Gst.ElementFactory.make('queue', 'dv1394q2')
+        dv1394dvdec = Gst.ElementFactory.make('dvdec', 'dv1394dvdec')
 
         # Add Elements
         bin.add(videosrc)
@@ -95,8 +95,8 @@ class FirewireSrc(IVideoInput):
         dv1394q2.link(dv1394dvdec)
 
         # Setup ghost pad
-        pad = dv1394dvdec.get_pad("src")
-        ghostpad = gst.GhostPad("videosrc", pad)
+        pad = dv1394dvdec.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("videosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin

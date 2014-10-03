@@ -36,9 +36,9 @@ except ImportError:
     import ConfigParser as configparser
 
 # GStreamer
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQT
 from PyQt4.QtCore import SIGNAL
@@ -64,22 +64,22 @@ class VideoPreview(IOutput):
     LEAKY_VALUES = ["no", "upstream", "downstream"]
 
     def get_output_bin(self, audio=False, video=True, metadata=None):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
         # Leaky queue necessary to work with rtmp streaming
-        videoqueue = gst.element_factory_make("queue", "videoqueue")
+        videoqueue = Gst.ElementFactory.make("queue", "videoqueue")
         videoqueue.set_property("leaky", self.leakyqueue)
         bin.add(videoqueue)
 
-        cspace = gst.element_factory_make("ffmpegcolorspace", "cspace")
+        cspace = Gst.ElementFactory.make("videoconvert", "cspace")
         bin.add(cspace)
 
-        videosink = gst.element_factory_make(self.previewsink, "videosink")
+        videosink = Gst.ElementFactory.make(self.previewsink, "videosink")
         bin.add(videosink)
 
         # Setup ghost pad
-        pad = videoqueue.get_pad("sink")
-        ghostpad = gst.GhostPad("sink", pad)
+        pad = videoqueue.get_static_pad("sink")
+        ghostpad = Gst.GhostPad.new("sink", pad)
         bin.add_pad(ghostpad)
 
         # Link Elements

@@ -28,9 +28,9 @@ An audio plugin which uses ALSA as the audio input.
 @author: Thanh Ha
 '''
 
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 from freeseer.framework.plugin import IAudioInput
 
@@ -40,14 +40,14 @@ class ALSASrc(IAudioInput):
     os = ["linux", "linux2"]
 
     def get_audioinput_bin(self):
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
-        audiosrc = gst.element_factory_make("alsasrc", "audiosrc")
+        audiosrc = Gst.ElementFactory.make("alsasrc", "audiosrc")
         bin.add(audiosrc)
 
         # Setup ghost pad
-        pad = audiosrc.get_pad("src")
-        ghostpad = gst.GhostPad("audiosrc", pad)
+        pad = audiosrc.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("audiosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin

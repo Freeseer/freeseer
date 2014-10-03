@@ -38,9 +38,9 @@ except ImportError:
 import sys
 
 # GStreamer modules
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst
 
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
@@ -69,24 +69,24 @@ class USBSrc(IVideoInput):
         """
         Return the video input object in gstreamer bin format.
         """
-        bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+        bin = Gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = None
         if sys.platform.startswith("linux"):
-            videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.set_property("device", self.device)
+            videosrc = Gst.ElementFactory.make("v4l2src", "videosrc")
+            #videosrc.set_property("device", self.device)
         elif sys.platform in ["win32", "cygwin"]:
-            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
-            videosrc.set_property("device-name", self.device)
+            videosrc = Gst.ElementFactory.make("dshowvideosrc", "videosrc")
+            #videosrc.set_property("device-name", self.device)
         bin.add(videosrc)
 
-        colorspace = gst.element_factory_make("ffmpegcolorspace", "colorspace")
+        colorspace = Gst.ElementFactory.make("videoconvert", "colorspace")
         bin.add(colorspace)
         videosrc.link(colorspace)
 
         # Setup ghost pad
-        pad = colorspace.get_pad("src")
-        ghostpad = gst.GhostPad("videosrc", pad)
+        pad = colorspace.get_static_pad("src")
+        ghostpad = Gst.GhostPad.new("videosrc", pad)
         bin.add_pad(ghostpad)
 
         return bin
@@ -142,21 +142,23 @@ class USBSrc(IVideoInput):
         devicemap = {}
 
         if sys.platform.startswith("linux"):
-            videosrc = gst.element_factory_make("v4l2src", "videosrc")
-            videosrc.probe_property_name('device')
-            devices = videosrc.probe_get_values_name('device')
+            videosrc = Gst.ElementFactory.make("v4l2src", "videosrc")
+            #videosrc.probe_property_name('device')
+            #devices = videosrc.probe_get_values_name('device')
 
-            for device in devices:
-                videosrc.set_property('device', device)
-                devicemap[videosrc.get_property('device-name')] = device
+            # for device in devices:
+            #     videosrc.set_property('device', device)
+            #     devicemap[videosrc.get_property('device-name')] = device
 
         elif sys.platform in ["win32", "cygwin"]:
-            videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
-            videosrc.probe_property_name('device-name')
-            devices = videosrc.probe_get_values_name('device-name')
+            #videosrc = gst.element_factory_make("dshowvideosrc", "videosrc")
+            #Video source has to be test source as dshowvideosrc is not implemented
+            videosrc = Gst.ElementFactory.make('videotestsrc', "videosrc")
+            #videosrc.probe_property_name('device-name')
+            #devices = videosrc.probe_get_values_name('device-name')
 
-            for device in devices:
-                devicemap[device] = device
+            #for device in devices:
+            #    devicemap[device] = device
 
         return devicemap
 

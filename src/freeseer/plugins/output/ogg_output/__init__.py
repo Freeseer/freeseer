@@ -35,10 +35,12 @@ try:  # Import using Python3 module name
 except ImportError:
     import ConfigParser as configparser
 
+
 # GStreamer
-import pygst
-pygst.require("0.10")
-import gst
+import gi
+gi.require_version('Gst', '1.0')
+from gi.repository import GObject, Gst, GstTag
+from gi.repository import GLib
 
 # PyQt
 from PyQt4.QtCore import SIGNAL
@@ -64,7 +66,7 @@ class OggOutput(IOutput):
     video_bitrate = 2400
 
     def get_output_bin(self, audio=True, video=True, metadata=None):
-        bin = gst.Bin()
+        bin = Gst.Bin()
 
         if metadata is not None:
             self.set_metadata(metadata)
@@ -72,11 +74,11 @@ class OggOutput(IOutput):
                 self.generate_xml_metadata(metadata).write(self.location + ".xml")
 
         # Muxer
-        muxer = gst.element_factory_make("oggmux", "muxer")
+        muxer = Gst.ElementFactory.make("oggmux", None)
         bin.add(muxer)
 
         # File sink
-        filesink = gst.element_factory_make('filesink', 'filesink')
+        filesink = Gst.ElementFactory.make('filesink', None)
         filesink.set_property('location', self.location)
         bin.add(filesink)
 
@@ -84,57 +86,61 @@ class OggOutput(IOutput):
         # Setup Audio Pipeline if Audio Recording is Enabled
         #
         if audio:
-            audioqueue = gst.element_factory_make("queue", "audioqueue")
-            bin.add(audioqueue)
-
-            audioconvert = gst.element_factory_make("audioconvert", "audioconvert")
-            bin.add(audioconvert)
-
-            audiolevel = gst.element_factory_make('level', 'audiolevel')
+            
+            #Create audio elements
+            q1 = Gst.ElementFactory.make('queue', None)
+            enc = Gst.ElementFactory.make('vorbisenc', None)
+            enc.set_property("quality", float(self.audio_quality))
+            q2 = Gst.ElementFactory.make('queue', None)
+            audioconvert = Gst.ElementFactory.make("audioconvert", None)
+            audiolevel = Gst.ElementFactory.make('level', None)
             audiolevel.set_property('interval', 20000000)
-            bin.add(audiolevel)
 
-            audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
-            audiocodec.set_property("quality", float(self.audio_quality))
-            bin.add(audiocodec)
-
-            # Setup metadata
-            vorbistag = gst.element_factory_make("vorbistag", "vorbistag")
-            # set tag merge mode to GST_TAG_MERGE_REPLACE
-            merge_mode = gst.TagMergeMode.__enum_values__[2]
+            # # Setup metadata
+            vorbistag = Gst.ElementFactory.make("vorbistag", None)
+            #set tag merge mode to GST_TAG_MERGE_REPLACE
+            merge_mode = Gst.TagMergeMode.__enum_values__[2]            
 
             if metadata is not None:
                 # Only set tag if metadata is set
                 vorbistag.merge_tags(self.tags, merge_mode)
             vorbistag.set_tag_merge_mode(merge_mode)
+            
+            #Add the audio elements to the bin
+            bin.add(q1)
+            bin.add(audiolevel)
+            bin.add(audioconvert)
+            bin.add(enc)
             bin.add(vorbistag)
+            bin.add(q2)
+
+            #link the audio elements
+            q1.link(audiolevel)
+            audiolevel.link(audioconvert)
+            audioconvert.link(enc)
+            enc.link(vorbistag)
+            vorbistag.link(q2)
+            q2.link(muxer)
 
             # Setup ghost pads
-            audiopad = audioqueue.get_pad("sink")
-            audio_ghostpad = gst.GhostPad("audiosink", audiopad)
+            audiopad = q1.get_static_pad("sink")
+            audio_ghostpad = Gst.GhostPad.new("audiosink", audiopad)
             bin.add_pad(audio_ghostpad)
-
-            # Link Elements
-            audioqueue.link(audioconvert)
-            audioconvert.link(audiolevel)
-            audiolevel.link(audiocodec)
-            audiocodec.link(vorbistag)
-            vorbistag.link(muxer)
 
         #
         # Setup Video Pipeline
         #
         if video:
-            videoqueue = gst.element_factory_make("queue", "videoqueue")
+            videoqueue = Gst.ElementFactory.make("queue", None)
             bin.add(videoqueue)
 
-            videocodec = gst.element_factory_make("theoraenc", "videocodec")
+            videocodec = Gst.ElementFactory.make("theoraenc", None)
             videocodec.set_property("bitrate", int(self.video_bitrate))
             bin.add(videocodec)
 
             # Setup ghost pads
-            videopad = videoqueue.get_pad("sink")
-            video_ghostpad = gst.GhostPad("videosink", videopad)
+            videopad = videoqueue.get_static_pad("sink")
+            video_ghostpad = Gst.GhostPad.new("videosink", videopad)
             bin.add_pad(video_ghostpad)
 
             # Link Elements
@@ -145,7 +151,6 @@ class OggOutput(IOutput):
         # Link muxer to filesink
         #
         muxer.link(filesink)
-
         return bin
 
     def set_metadata(self, data):
@@ -153,13 +158,22 @@ class OggOutput(IOutput):
         Populate global tag list variable with file metadata for
         vorbistag audio element
         '''
-        self.tags = gst.TagList()
+        self.tags = Gst.TagList.new_empty()
+        merge_mode = Gst.TagMergeMode.__enum_values__[2]
 
         for tag in data.keys():
-            if(gst.tag_exists(tag)):
-                self.tags[tag] = data[tag]
+            if(Gst.tag_exists(tag)):
+                if tag == "date":
+                    s_date = data[tag].split("-")
+                    Tag_date = GLib.Date() 
+                    Tag_date.set_day(int(s_date[2]))
+                    Tag_date.set_month(s_date[1])
+                    Tag_date.set_year(int(s_date[0]))
+                    self.tags.add_value(merge_mode, tag, Tag_date)
+                else:
+                    self.tags.add_value(merge_mode, tag, str(data[tag]))
             else:
-                #self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
+                self.core.logger.log.debug("WARNING: Tag \"" + str(tag) + "\" is not registered with gstreamer.")
                 pass
 
     def load_config(self, plugman):
