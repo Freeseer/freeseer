@@ -216,7 +216,7 @@ class ConfigToolApp(FreeseerApp):
 
         self.avWidget.fileGroupBox.setTitle(self.app.translate("ConfigToolApp", "Record to File"))
         self.avWidget.fileDirLabel.setText(self.app.translate("ConfigToolApp", "Record Directory"))
-        self.avWidget.fileDirPushButton.setText("{}...".format(self.app.translate("ConfigToolApp", "Browse")))
+        self.avWidget.fileDirPushButton.setText(u"{}...".format(self.app.translate("ConfigToolApp", "Browse")))
         self.avWidget.fileLabel.setText(self.app.translate("ConfigToolApp", "File Format"))
         self.avWidget.fileSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
 
@@ -543,7 +543,7 @@ class ConfigToolApp(FreeseerApp):
         self.dialog.closeButton = QtGui.QPushButton("Close")
         self.dialog_layout.addWidget(self.dialog.closeButton)
         self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
-        self.dialog.setWindowTitle('{} Setup'.format(name))
+        self.dialog.setWindowTitle(u'{} Setup'.format(name))
         self.dialog.setModal(True)
         self.dialog.show()
 
