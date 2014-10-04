@@ -22,9 +22,9 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import json
+import functools
 import os
-import signal
+import shelve
 
 from flask import Blueprint
 from flask import request
@@ -41,28 +41,13 @@ from freeseer.frontend.controller.server import http_response
 recording = Blueprint('recording', __name__)
 
 
-def teardown_recording(signum, frame):
-    """Teardown method for recording api.
-
-    Stops any active recordings and saves to disk. Called on server shutdown for graceful exit.
-    """
-    persistent = {}
-    recording = app.blueprints['recording']
-
-    for key in recording.media_dict:
-        entry = recording.media_dict[key]
-        entry_media = entry['media']
-
-        if entry_media.current_state == Multimedia.RECORD or entry_media.current_state == Multimedia.PAUSE:
-            entry_media.stop()
-
-        persistent[key] = {
-            'filename': entry['filename'],
-            'filepath': entry['filepath'],
-            'status': entry_media.current_state
-        }
-    with open(recording.storage_file, 'w') as fd:
-        fd.write(json.dumps(persistent))
+def sync(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        response_dict = func(*args, **kwargs)
+        recording.media_info.sync()
+        return response_dict
+    return wrapper
 
 
 @recording.before_app_first_request
@@ -72,52 +57,43 @@ def configure_recording():
     Gets recording profiles and configuration and instantiates recording plugins. Then it restores any stored talks.
     Runs upon first call to REST server.
     """
-    # setup the application so it exits gracefully
-    signal.signal(signal.SIGINT, teardown_recording)
-    recording.record_profile = settings.profile_manager.get()
-    recording.record_config = recording.record_profile.get_config('freeseer.conf', settings.FreeseerConfig,
-                                                                  storage_args=['Global'], read_only=True)
-    recording.record_plugin_manager = PluginManager(recording.record_profile)
+    recording.profile = settings.profile_manager.get()
+    recording.config = recording.profile.get_config('freeseer.conf', settings.FreeseerConfig,
+                                                    storage_args=['Global'], read_only=True)
+    recording.plugin_manager = PluginManager(recording.profile)
     recording.storage_file = os.path.join(settings.configdir, app.storage_file_path)
+
+    media_info = shelve.open(recording.storage_file, writeback=True)
+
     recording.next_id = 1
+    recording.media_dict = {}
+    for key, value in media_info.iteritems():
+        new_media = Multimedia(recording.config, recording.plugin_manager)
+        if value['null_multimeda']:
+            new_media.current_state = Multimedia.NULL
+        else:
+            # if null_multimeda is False, a video exists, set current_state to Multimedia.STOP
+            new_media.current_state = Multimedia.STOP
 
-    # restore talks from storage
-    if os.path.isfile(recording.storage_file):
-        with open(recording.storage_file) as fd:
-            persistent = json.loads(fd.read())
+        media_id = int(key)
+        if media_id >= recording.next_id:
+            recording.next_id = media_id + 1
 
-        recording.media_dict = {}
-        for key in persistent:
-            new_media = Multimedia(recording.record_config, recording.record_plugin_manager)
-            new_media.current_state = persistent[key]['status']
-            media_id = int(key)
+        if new_media.current_state == Multimedia.NULL:
+            filename = value['filename'].split('.ogg')[0]
+            success, filename = new_media.load_backend(None, filename)
 
-            if new_media.current_state == Multimedia.NULL:
-                filename = persistent[key]['filename'].split(".ogg")[0]
-                success, filename = new_media.load_backend(None, filename)
+            if not success:
+                raise ServerError('Could not load multimedia backend')
 
-                if success:
-                    filepath = new_media.plugman.get_plugin_by_name(new_media.config.record_to_file_plugin, "Output").plugin_object.location
-                    recording.media_dict[media_id] = {
-                        'media': new_media,
-                        'filename': filename,
-                        'filepath': filepath
-                    }
-                else:
-                    raise ServerError('Could not load multimedia backend')
-            else:
-                recording.media_dict[media_id] = {
-                    'media': new_media,
-                    'filename': persistent[key]['filename'],
-                    'filepath': persistent[key]['filepath']
-                }
+            value['filename'] = filename
 
-        # sets next_id to last index of persistent + 1
-        recording.next_id = len(persistent)
-    else:
-        # if no talks to restore, make empty media_dict, set next_id to 1
-        recording.media_dict = {}
-        recording.next_id = 1
+            value['filepath'] = new_media.plugman.get_plugin_by_name(new_media.config.record_to_file_plugin, "Output").plugin_object.location
+
+        recording.media_dict[media_id] = new_media
+
+    recording.media_info = media_info
+    recording.media_info.sync()
 
 
 @recording.route('/recordings', methods=['GET'])
@@ -131,117 +107,118 @@ def get_all_recordings():
 @http_response(200)
 def get_specific_recording(recording_id):
     """Returns specific recording by id."""
-    recording_id = int(recording_id)
-    if recording_id in recording.media_dict:
-        retrieved_media_entry = recording.media_dict[recording_id]
-        retrieved_media = retrieved_media_entry['media']
-        retrieved_filename = retrieved_media_entry['filename']
 
-        state_indicator = retrieved_media.current_state
-        if state_indicator == Multimedia.NULL:
-            state = 'NULL'
-        elif state_indicator == Multimedia.RECORD:
-            state = 'RECORD'
-        elif state_indicator == Multimedia.PAUSE:
-            state = 'PAUSE'
-        elif state_indicator == Multimedia.STOP:
-            state = 'STOP'
-        else:
-            raise HTTPError('recording state could not be determined', 500)
+    key = str(recording_id)
+    try:
+        retrieved_media_entry = recording.media_info[key]
+    except KeyError:
+        raise HTTPError('media with given recording id could not be found', 404)
 
-        if os.path.isfile(retrieved_media_entry['filepath']):
-            filesize = os.path.getsize(retrieved_media_entry['filepath'])
-        else:
-            filesize = 'NA'
+    current_state = recording.media_dict[recording_id].current_state
+    filename = retrieved_media_entry['filename']
 
-        return {
-            'id': recording_id,
-            'filename': retrieved_filename,
-            'filesize': filesize,
-            'status': state
-        }
+    try:
+        filesize = os.path.getsize(retrieved_media_entry['filepath'])
+    except OSError:
+        filesize = 'NA'
 
-    else:
-        raise HTTPError('recording id could not be found', 404)
+    return {
+        'id': recording_id,
+        'filename': filename,
+        'filesize': filesize,
+        'status': current_state,
+    }
 
 
 @recording.route('/recordings/<int:recording_id>', methods=['PATCH'])
 @http_response(200)
+@sync
 def control_recording(recording_id):
     """Change the state of a recording."""
-    recording_id = int(recording_id)
-    if recording_id in recording.media_dict:
-        retrieved_media_entry = recording.media_dict[recording_id]
-        retrieved_media = retrieved_media_entry['media']
-        if validate.validate_control_recording_request_form(request.form):
-            command = request.form['command']
-            media_state = retrieved_media.current_state
 
-            if command == 'start' and media_state in [Multimedia.NULL, Multimedia.PAUSE]:
-                retrieved_media.record()
-            elif command == 'pause' and media_state == Multimedia.RECORD:
-                retrieved_media.pause()
-            elif command == 'stop' and media_state in [Multimedia.RECORD, Multimedia.PAUSE]:
-                retrieved_media.stop()
-            else:
-                raise HTTPError('command could not be performed', 400)
-        else:
-            raise HTTPError('Form data was invalid', 400)
+    if not validate.validate_control_recording_request_form(request.form):
+        raise HTTPError('Form data was invalid', 400)
 
-    else:
+    try:
+        retrieved_media = recording.media_dict[recording_id]
+    except KeyError:
         raise HTTPError('recording id could not be found', 404)
+
+    command = request.form['command']
+    media_state = retrieved_media.current_state
+
+    if command == 'start' and media_state in [Multimedia.NULL, Multimedia.PAUSE]:
+        retrieved_media.record()
+    elif command == 'pause' and media_state == Multimedia.RECORD:
+        retrieved_media.pause()
+    elif command == 'stop' and media_state in [Multimedia.RECORD, Multimedia.PAUSE]:
+        retrieved_media.stop()
+    else:
+        raise HTTPError('command could not be performed', 400)
+
+    if media_state is not Multimedia.NULL:
+        key = str(recording_id)
+        recording.media_info[key]['null_multimeda'] = False
 
     return ''
 
 
 @recording.route('/recordings', methods=['POST'])
 @http_response(201)
+@sync
 def create_recording():
     """Initializes a recording and returns its id."""
-    if validate.validate_create_recording_request_form(request.form):
-        new_filename = request.form['filename']
-        new_media = Multimedia(recording.record_config, recording.record_plugin_manager)
-        success, filename = new_media.load_backend(None, new_filename)
 
-        if success:
-            filepath = new_media.plugman.get_plugin_by_name(new_media.config.record_to_file_plugin, "Output").plugin_object.location
-            new_recording_id = recording.next_id
-            recording.next_id = recording.next_id + 1
-
-            if new_recording_id not in recording.media_dict:
-                recording.media_dict[new_recording_id] = {
-                    'media': new_media,
-                    'filename': filename,
-                    'filepath': filepath
-                }
-
-                return {'id': new_recording_id}
-            else:
-                raise HTTPError('Provided id already in use', 500)
-        else:
-            raise HTTPError('Could not load multimedia backend', 500)
-    else:
+    if not validate.validate_create_recording_request_form(request.form):
         raise HTTPError('Form data was invalid', 400)
+
+    new_filename = request.form['filename']
+    new_media = Multimedia(recording.config, recording.plugin_manager)
+    success, filename = new_media.load_backend(None, new_filename)
+
+    if not success:
+        raise HTTPError('Could not load multimedia backend', 500)
+
+    filepath = new_media.plugman.get_plugin_by_name(new_media.config.record_to_file_plugin, "Output").plugin_object.location
+    new_recording_id = recording.next_id
+    key = str(new_recording_id)
+
+    recording.media_dict[new_recording_id] = new_media
+    recording.media_info[key] = {
+        'filename': filename,
+        'filepath': filepath,
+        'null_multimeda': True,
+    }
+    recording.next_id = recording.next_id + 1
+    recording.media_info.sync()
+
+    return {'id': new_recording_id}
 
 
 @recording.route('/recordings/<int:recording_id>', methods=['DELETE'])
 @http_response(204)
+@sync
 def delete_recording(recording_id):
     """Deletes a recording given an id."""
-    recording_id = int(recording_id)
-    if recording_id in recording.media_dict:
-        retrieved_media_entry = recording.media_dict[recording_id]
-        retrieved_media = retrieved_media_entry['media']
-
-        if retrieved_media.current_state == Multimedia.RECORD or retrieved_media.current_state == Multimedia.PAUSE:
-            retrieved_media.stop()
-
-        # Delete the file if it exists
-        if os.path.isfile(retrieved_media_entry['filepath']):
-            os.remove(retrieved_media_entry['filepath'])
-
-        del recording.media_dict[recording_id]
-    else:
+    try:
+        retrieved_media = recording.media_dict[recording_id]
+    except KeyError:
         raise HTTPError('recording id could not be found', 404)
+
+    key = str(recording_id)
+    retrieved_media_entry = recording.media_info[key]
+
+    if retrieved_media.current_state in [Multimedia.RECORD, Multimedia.PAUSE]:
+        retrieved_media.stop()
+
+    # Delete the file if it exists
+    try:
+        os.remove(retrieved_media_entry['filepath'])
+    except OSError:
+        pass
+
+    del recording.media_dict[recording_id]
+    del recording.media_info[key]
+    recording.media_info.sync()
 
     return ''

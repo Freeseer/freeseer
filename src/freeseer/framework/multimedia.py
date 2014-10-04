@@ -40,10 +40,10 @@ log = logging.getLogger(__name__)
 
 
 class Multimedia:
-    NULL = 0
-    RECORD = 1
-    PAUSE = 2
-    STOP = 3
+    NULL = 'NULL'
+    RECORD = 'RECORD'
+    PAUSE = 'PAUSE'
+    STOP = 'STOP'
 
     def __init__(self, config, plugman, window_id=None, audio_feedback=None, cli=False):
         self.config = config

@@ -35,6 +35,7 @@ def start_server(storage_file):
     Args:
         storage_file - name of storage file to which you are saving recordings
     """
+
     app.storage_file_path = storage_file
     app.run()
 

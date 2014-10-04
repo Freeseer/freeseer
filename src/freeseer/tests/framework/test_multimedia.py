@@ -71,7 +71,7 @@ class TestMultimedia(unittest.TestCase):
         self.assertEqual(self.multimedia.player.get_state()[1], gst.STATE_PAUSED)
 
     def test_current_state_is_not_stop(self):
-        self.multimedia.player.set_state(self.multimedia.NULL)  # set to NULL
+        self.multimedia.player.set_state(gst.STATE_NULL)
         self.multimedia.stop()
         self.assertNotEqual(self.multimedia.current_state, self.multimedia.STOP)
         self.assertEqual(self.multimedia.player.get_state()[1], gst.STATE_NULL)
