@@ -44,34 +44,77 @@ class GeneralWidget(QtGui.QWidget):
         self.mainLayout.addStretch(0)
         self.setLayout(self.mainLayout)
 
-        self.fontSize = self.font().pixelSize()
-        self.fontUnit = "px"
-        if self.fontSize == -1:  # Font is set as points, not pixels.
-            self.fontUnit = "pt"
-            self.fontSize = self.font().pointSize()
+        fontSize = self.font().pixelSize()
+        fontUnit = "px"
+        if fontSize == -1:  # Font is set as points, not pixels.
+            fontUnit = "pt"
+            fontSize = self.font().pointSize()
+
+        boxStyle = "QGroupBox {{ font-weight: bold; font-size: {}{} }}".format(fontSize + 1, fontUnit)
+        BOX_WIDTH = 400
+        BOX_HEIGHT = 60
+
         #
-        # General
+        # Heading
         #
 
-        self.boxStyle = "QGroupBox {{ font-weight: bold; font-size: {}{} }}".format(self.fontSize + 1, self.fontUnit)
-        self.miscLayout = QtGui.QVBoxLayout()
-        self.miscGroupBox = QtGui.QGroupBox("General")
-        self.miscGroupBox.setLayout(self.miscLayout)
-        self.miscGroupBox.setStyleSheet(self.boxStyle)
-        self.mainLayout.insertWidget(0, self.miscGroupBox)
+        self.title = QtGui.QLabel(u"{0} General {1}".format(u'<h1>', u'</h1>'))
+        self.mainLayout.insertWidget(0, self.title)
+        self.mainLayout.insertSpacerItem(1, QtGui.QSpacerItem(0, fontSize * 2))
 
-        self.languageLayout = QtGui.QHBoxLayout()
-        self.miscLayout.addLayout(self.languageLayout)
-        self.languageLabel = QtGui.QLabel("Default Language")
+        #
+        # Language
+        #
+
+        languageBoxLayout = QtGui.QVBoxLayout()
+        self.languageGroupBox = QtGui.QGroupBox("Language")
+        self.languageGroupBox.setLayout(languageBoxLayout)
+        self.languageGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.languageGroupBox.setFixedSize(BOX_WIDTH, BOX_HEIGHT)
+        self.languageGroupBox.setStyleSheet(boxStyle)
+        self.mainLayout.insertWidget(2, self.languageGroupBox)
+
+        languageLayout = QtGui.QHBoxLayout()
+        languageBoxLayout.addLayout(languageLayout)
+        self.translateButton = QtGui.QPushButton("Help us translate")
         self.languageComboBox = QtGui.QComboBox()
         self.languageComboBox.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
-        self.languageLabel.setBuddy(self.languageComboBox)
-        self.languageLayout.addWidget(self.languageLabel)
-        self.languageLayout.addWidget(self.languageComboBox)
+        languageLayout.addWidget(self.languageComboBox, 2)
+        languageLayout.addSpacerItem(QtGui.QSpacerItem(40, 0))
+        languageLayout.addWidget(self.translateButton, 1)
 
-        self.autoHideCheckBox = QtGui.QCheckBox("Enable Auto-Hide")
-        self.miscLayout.addWidget(self.autoHideCheckBox)
+        #
+        # Appearance
+        #
 
+        appearanceBoxLayout = QtGui.QVBoxLayout()
+        self.appearanceGroupBox = QtGui.QGroupBox("Appearance")
+        self.appearanceGroupBox.setLayout(appearanceBoxLayout)
+        self.appearanceGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.appearanceGroupBox.setFixedSize(BOX_WIDTH, BOX_HEIGHT)
+        self.appearanceGroupBox.setStyleSheet(boxStyle)
+        self.mainLayout.insertWidget(3, self.appearanceGroupBox)
+
+        self.autoHideCheckBox = QtGui.QCheckBox("Auto-Hide to system tray on record")
+        appearanceBoxLayout.addWidget(self.autoHideCheckBox)
+
+        #
+        # Reset
+        #
+
+        resetBoxLayout = QtGui.QVBoxLayout()
+        self.resetGroupBox = QtGui.QGroupBox("Reset")
+        self.resetGroupBox.setLayout(resetBoxLayout)
+        self.resetGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        self.resetGroupBox.setFixedSize(BOX_WIDTH / 2, BOX_HEIGHT)
+        self.resetGroupBox.setStyleSheet(boxStyle)
+        self.mainLayout.addWidget(self.resetGroupBox)
+        self.mainLayout.addSpacerItem(QtGui.QSpacerItem(0, 20))
+
+        resetLayout = QtGui.QHBoxLayout()
+        resetBoxLayout.addLayout(resetLayout)
+        self.resetButton = QtGui.QPushButton("Reset settings to defaults")
+        resetLayout.addWidget(self.resetButton)
 
 if __name__ == "__main__":
     import sys
