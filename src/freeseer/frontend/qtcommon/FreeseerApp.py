@@ -55,8 +55,9 @@ log = logging.getLogger(__name__)
 
 class FreeseerApp(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, config):
         super(FreeseerApp, self).__init__()
+        self.config = config
         self.icon = QIcon()
         self.icon.addPixmap(QPixmap(_fromUtf8(":/freeseer/logo.png")), QIcon.Normal, QIcon.Off)
         self.setWindowIcon(self.icon)
@@ -193,6 +194,3 @@ class FreeseerApp(QMainWindow):
             languageAction.setData(language)
             self.menuLanguage.addAction(languageAction)
             self.langActionGroup.addAction(languageAction)
-
-            if self.current_language == str(language).strip("tr_").rstrip(".qm"):
-                languageAction.setChecked(True)

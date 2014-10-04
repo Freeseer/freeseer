@@ -55,10 +55,9 @@ class RecordApp(FreeseerApp):
     """Freeseer's main GUI class."""
 
     def __init__(self, profile, config):
-        FreeseerApp.__init__(self)
+        super(RecordApp, self).__init__(config)
 
         self.db = profile.get_database()
-        self.config = config
         self.controller = RecordingController(profile, self.db, self.config)
 
         self.recently_recorded_video = None

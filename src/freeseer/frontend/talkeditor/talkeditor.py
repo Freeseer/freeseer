@@ -59,9 +59,8 @@ log = logging.getLogger(__name__)
 class TalkEditorApp(FreeseerApp):
     '''Freeseer talk database editor main gui class'''
     def __init__(self, config, db):
-        FreeseerApp.__init__(self)
+        super(TalkEditorApp, self).__init__(config)
 
-        self.config = config
         self.db = db
 
         icon = QIcon()

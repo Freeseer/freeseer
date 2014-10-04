@@ -55,9 +55,8 @@ class ReportEditorApp(FreeseerApp):
     '''
 
     def __init__(self, config, db):
-        FreeseerApp.__init__(self)
+        super(ReportEditorApp, self).__init__(config)
 
-        self.config = config
         self.db = db
 
         icon = QIcon()
