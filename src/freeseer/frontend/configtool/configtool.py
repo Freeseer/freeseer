@@ -120,10 +120,9 @@ class ConfigToolApp(FreeseerApp):
         # general tab connections
         #
         self.connect(self.generalWidget.languageComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.set_default_language)
-        self.connect(self.avWidget.fileDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
-        self.connect(self.avWidget.fileDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.generalWidget.autoHideCheckBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_autohide)
-
+        self.connect(self.generalWidget.translateButton, QtCore.SIGNAL('clicked()'), self.open_translate_url)
+        self.connect(self.generalWidget.resetButton, QtCore.SIGNAL('clicked()'), self.confirm_reset)
         #
         # AV tab connections
         #
@@ -134,6 +133,8 @@ class ConfigToolApp(FreeseerApp):
         self.connect(self.avWidget.videoMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
         self.connect(self.avWidget.videoMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
         self.connect(self.avWidget.fileGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_record_to_file)
+        self.connect(self.avWidget.fileDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
+        self.connect(self.avWidget.fileDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
         self.connect(self.avWidget.fileComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_file_format)
         self.connect(self.avWidget.fileSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_file_format)
         self.connect(self.avWidget.streamGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_record_to_stream)
@@ -169,6 +170,15 @@ class ConfigToolApp(FreeseerApp):
         self.setWindowTitle(self.app.translate("ConfigToolApp", "Freeseer ConfigTool"))
 
         #
+        # Reusable Strings
+        #
+        self.confirmResetDefaultsTitleString = self.app.translate("ConfigToolApp", "Freeseer")
+        self.confirmResetDefaultsQuestionString = self.app.translate(
+            "ConfigToolApp",
+            "Your Freeseer settings will be restored to their original defaults.")
+        # --- End Reusable Strings
+
+        #
         # Menu
         #
         self.saveProfileString = self.actionSaveProfile.setText(self.app.translate("ConfigToolApp", "Save Profile"))
@@ -196,9 +206,12 @@ class ConfigToolApp(FreeseerApp):
         #
         # GeneralWidget
         #
-        self.generalWidget.miscGroupBox.setTitle(self.app.translate("ConfigToolApp", "Miscellaneous"))
-        self.generalWidget.languageLabel.setText(self.app.translate("ConfigToolApp", "Default Language"))
-        self.generalWidget.autoHideCheckBox.setText(self.app.translate("ConfigToolApp", "Enable Auto-Hide"))
+        self.generalWidget.languageGroupBox.setTitle(self.app.translate("ConfigToolApp", "Language"))
+        self.generalWidget.translateButton.setText(self.app.translate("ConfigToolApp", "Help us translate"))
+        self.generalWidget.appearanceGroupBox.setTitle(self.app.translate("ConfigToolApp", "Appearance"))
+        self.generalWidget.autoHideCheckBox.setText(self.app.translate("ConfigToolApp", "Auto-Hide to system tray on record"))
+        self.generalWidget.resetGroupBox.setTitle(self.app.translate("ConfigToolApp", "Reset"))
+        self.generalWidget.resetButton.setText(self.app.translate("ConfigToolApp", "Reset settings to defaults"))
         # --- End GeneralWidget
 
         #
@@ -289,20 +302,24 @@ class ConfigToolApp(FreeseerApp):
         self.config.default_language = language_file
         self.config.save()
 
-    def browse_video_directory(self):
-        directory = self.avWidget.fileDirLineEdit.text()
+    def open_translate_url(self):
+        url = QtCore.QUrl("http://freeseer.readthedocs.org/en/latest/contribute/translation.html")
+        QtGui.QDesktopServices.openUrl(url)
 
-        newDir = QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)
-        if newDir == "":
-            newDir = directory
+    def confirm_reset(self):
+        """Presents a confirmation dialog to ask the user if they are sure they wish to reset all settings.
+        If confirmed, reset the settings in this profile to default
+        """
+        confirm = QMessageBox.question(self,
+                                       self.confirmResetDefaultsTitleString,
+                                       self.confirmResetDefaultsQuestionString,
+                                       QMessageBox.Reset | QMessageBox.Cancel,
+                                       QMessageBox.Cancel)
 
-        videodir = os.path.abspath(str(newDir))
-        self.avWidget.fileDirLineEdit.setText(videodir)
-        self.avWidget.fileDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
-
-    def update_record_directory(self):
-        self.config.videodir = str(self.avWidget.fileDirLineEdit.text())
-        self.config.save()
+        if confirm == QMessageBox.Reset:
+            self.config.set_defaults()
+            self.config.save()
+            self.load_general_widget()
 
     def toggle_autohide(self, state):
         self.config.auto_hide = state
@@ -429,6 +446,21 @@ class ConfigToolApp(FreeseerApp):
 
     def toggle_record_to_file(self, state):
         self.config.record_to_file = state
+        self.config.save()
+
+    def browse_video_directory(self):
+        directory = self.avWidget.fileDirLineEdit.text()
+
+        new_dir = QtGui.QFileDialog.getExistingDirectory(self, "Select Video Directory", directory)
+        if not new_dir:
+            new_dir = directory
+
+        videodir = os.path.abspath(str(new_dir))
+        self.avWidget.fileDirLineEdit.setText(videodir)
+        self.avWidget.fileDirLineEdit.emit(QtCore.SIGNAL("editingFinished()"))
+
+    def update_record_directory(self):
+        self.config.videodir = str(self.avWidget.fileDirLineEdit.text())
         self.config.save()
 
     def change_file_format(self, format):
