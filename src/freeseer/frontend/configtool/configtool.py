@@ -55,11 +55,10 @@ class ConfigToolApp(FreeseerApp):
     '''
 
     def __init__(self, profile, config):
-        FreeseerApp.__init__(self)
+        super(ConfigToolApp, self).__init__(config)
 
         # Load Config Stuff
         self.profile = profile
-        self.config = config
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/freeseer/logo.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)

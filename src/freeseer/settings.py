@@ -24,6 +24,8 @@
 
 import os
 
+from PyQt4.QtCore import QLocale
+
 from freeseer.framework.config.core import Config
 from freeseer.framework.config.profile import ProfileManager
 import freeseer.framework.config.options as options
@@ -34,6 +36,18 @@ default_profile_name = 'default'
 default_config_file = 'freeseer.conf'
 
 profile_manager = ProfileManager(os.path.join(configdir, 'profiles'))
+
+
+def detect_system_language():
+    """Detect the system language"""
+
+    translation = 'tr_{}'.format(QLocale.system().name())
+    translation_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'frontend', 'qtcommon', 'languages')
+    translation_country_language = os.path.join(translation_path, '{}.ts'.format(translation))
+    if os.path.isfile(translation_country_language):
+        return '{}.qm'.format(translation)
+    else:
+        return 'tr_en_US.qm'
 
 
 class FreeseerConfig(Config):
@@ -51,4 +65,4 @@ class FreeseerConfig(Config):
     record_to_stream_plugin = options.StringOption('RTMP Streaming')
     audio_feedback = options.BooleanOption(False)
     video_preview = options.BooleanOption(True)
-    default_language = options.StringOption('tr_en_US.qm')
+    default_language = options.StringOption(detect_system_language())
