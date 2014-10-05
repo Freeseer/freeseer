@@ -39,21 +39,8 @@ profile_manager = ProfileManager(os.path.join(configdir, 'profiles'))
 class FreeseerConfig(Config):
     """General Freeseer profile settings."""
 
-    resmap = {
-        # No Scaling
-        'default': '0x0',
-
-        # Scaling
-        '240p': '320x240',
-        '360p': '480x360',
-        '480p': '640x480',
-        '720p': '1280x720',
-        '1080p': '1920x1080'
-    }
-
     videodir = options.FolderOption('~/Videos', auto_create=True)
     auto_hide = options.BooleanOption(False)
-    resolution = options.ChoiceOption(resmap.keys(), 'default')
     enable_audio_recording = options.BooleanOption(True)
     enable_video_recording = options.BooleanOption(True)
     videomixer = options.StringOption('Video Passthrough')
