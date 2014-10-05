@@ -34,6 +34,7 @@ as well.
 import pygst
 pygst.require("0.10")
 import gst
+import logging
 
 # PyQt modules
 from PyQt4.QtCore import SIGNAL
@@ -45,13 +46,15 @@ from freeseer.framework.config import Config, options
 # .freeseer-plugin custom modules
 import widget
 
+log = logging.getLogger(__name__)
+
 
 class VideoPassthroughConfig(Config):
     """Configuration class for VideoPassthrough plugin."""
     input = options.StringOption("Video Test Source")
     input_type = options.StringOption("video/x-raw-rgb")
     framerate = options.IntegerOption(30)
-    resolution = options.StringOption("NOSCALE")
+    resolution = options.ChoiceOption(widget.resmap.keys(), "No Scaling")
 
 
 class VideoPassthrough(IVideoMixer):
@@ -78,9 +81,15 @@ class VideoPassthrough(IVideoMixer):
         bin.add(videoscale)
         videoscale_cap = gst.element_factory_make("capsfilter",
                                                   "videoscale_cap")
-        if self.config.resolution != "NOSCALE":
+
+        # Change the resolution of the source video.
+        log.debug("Record Resolution: %s", self.config.resolution)
+        if self.config.resolution != "No Scaling":
+            width, height = widget.resmap[self.config.resolution]
             videoscale_cap.set_property('caps',
-                                        gst.caps_from_string('%s, width=640, height=480' % (self.config.input_type)))
+                                        gst.caps_from_string("{}, width={}, height={}"
+                                        .format(self.config.input_type, width, height)))
+
         bin.add(videoscale_cap)
         # --- End Video Scaler
 
@@ -127,6 +136,7 @@ class VideoPassthrough(IVideoMixer):
         self.widget.connect(self.widget.framerateSlider, SIGNAL("valueChanged(int)"), self.set_framerate)
         self.widget.connect(self.widget.framerateSpinBox, SIGNAL("valueChanged(int)"), self.set_framerate)
         self.widget.connect(self.widget.inputSettingsToolButton, SIGNAL('clicked()'), self.source1_setup)
+        self.widget.connect(self.widget.videoscaleComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videoscale)
 
     def widget_load_config(self, plugman):
         self.load_config(plugman)
@@ -148,6 +158,9 @@ class VideoPassthrough(IVideoMixer):
 
         vcolour_index = self.widget.videocolourComboBox.findText(self.config.input_type)
         self.widget.videocolourComboBox.setCurrentIndex(vcolour_index)
+
+        vscale_index = self.widget.videoscaleComboBox.findText(self.config.resolution)
+        self.widget.videoscaleComboBox.setCurrentIndex(vscale_index)
 
         # Need to set both the Slider and Spingbox since connections
         # are not yet loaded at this point
@@ -180,6 +193,10 @@ class VideoPassthrough(IVideoMixer):
 
     def set_framerate(self, framerate):
         self.config.framerate = framerate
+        self.config.save()
+
+    def set_videoscale(self, resolution):
+        self.config.resolution = resolution
         self.config.save()
 
     ###

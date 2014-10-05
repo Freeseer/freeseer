@@ -26,6 +26,8 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+from collections import OrderedDict
+
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QComboBox
 from PyQt4.QtGui import QFormLayout
@@ -38,6 +40,16 @@ from PyQt4.QtGui import QSpinBox
 from PyQt4.QtGui import QStackedWidget
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
+
+
+resmap = OrderedDict([
+    ('No Scaling', (0, 0)),
+    ('240p', (320, 240)),
+    ('360p', (480, 360)),
+    ('480p', (640, 480)),
+    ('720p', (1280, 720)),
+    ('1080p', (1920, 1080)),
+])
 
 
 class ConfigWidget(QWidget):
@@ -87,6 +99,7 @@ class ConfigWidget(QWidget):
 
         self.videoscaleLabel = QLabel("Video Scale")
         self.videoscaleComboBox = QComboBox()
-        self.videoscaleComboBox.addItem("NOSCALE")
+        for scale in resmap:
+            self.videoscaleComboBox.addItem(scale)
         self.videoscaleComboBox.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Maximum)
         layout.addRow(self.videoscaleLabel, self.videoscaleComboBox)
