@@ -100,12 +100,12 @@ def setup_parser_config_reset(subparsers):
         formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("reset",
         choices=['all', 'configuration', 'database'],
-        help="""Reset's Freeseer (default: all)
+        help="""Resets Freeseer (default: all)
 
         Options:
-            all           - Reset's Freeseer (removes the Freeseer configuration directory)
-            configuration - Reset's Freeseer configuration (removes freeseer.conf and plugins.conf)
-            database      - Reset's Freeseer database (removes presentations.db)
+            all           - Resets Freeseer (removes the Freeseer configuration directory, thus clearing logs, settings, and talks)
+            configuration - Resets Freeseer configuration (removes freeseer.conf and plugins.conf)
+            database      - Resets Freeseer database (removes presentations.db)
         """)
     parser.add_argument("-p", "--profile", type=unicode, help="Profile to reset (Default: default)")
 
