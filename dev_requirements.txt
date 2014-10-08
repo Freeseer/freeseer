@@ -6,3 +6,4 @@ pep8==1.4.6
 pytest-cov==1.6
 pytest==2.5.2
 Sphinx<=1.2.3
+sphinx_rtd_theme
