@@ -7,4 +7,3 @@ oauth<1.1
 simplejson<3.4
 tabulate==0.7.2
 yapsy<1.11
-sphinx_rtd_theme
