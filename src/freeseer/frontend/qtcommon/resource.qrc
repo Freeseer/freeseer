@@ -1,7 +1,9 @@
 <RCC>
   <qresource>
-    <file alias="multimedia/record.png">images/record_red_button.png</file>
-    <file alias="multimedia/stop.png">images/stop_red_button.png</file>
+    <file alias="multimedia/record.png">images/media-record.png</file>
+    <file alias="multimedia/stop.png">images/media-playback-stop.png</file>
+    <file alias="multimedia/play.png">images/media-playback-start.png</file>
+    <file alias="multimedia/pause.png">images/media-playback-pause.png</file>
     <file alias="multimedia/headphones.png">images/headphones.png</file>
     <file alias="multimedia/rss.png">images/rss_logo.png</file>
     <file alias="freeseer/logo.png">images/freeseer_logo.png</file>

@@ -373,7 +373,7 @@
     </message>
     <message>
         <location filename="../../record/record.py" line="189"/>
-        <source>Play Video</source>
+        <source>Play</source>
         <translation>播放视频</translation>
     </message>
     <message>

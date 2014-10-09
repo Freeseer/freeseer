@@ -24,11 +24,13 @@
 
 from PyQt4.QtGui import QFont
 from PyQt4.QtGui import QVBoxLayout
+from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QApplication
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QShortcut
 from PyQt4.QtGui import QKeySequence
+from PyQt4.QtGui import QPushButton
 from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import Qt
 
@@ -47,20 +49,23 @@ class AutoRecordWidget(QWidget):
         self.resize(400, 400)
         self.mainLayout = QVBoxLayout()
         self.setLayout(self.mainLayout)
+        self.setStyleSheet("QWidget { background-color: white; }")
         self.talkInfoFont = QFont('Serif', 50, QFont.Light)
         self.countdownFont = QFont('Serif', 300, QFont.Light)
 
+        titleLayout = QHBoxLayout()
+        self.mainLayout.addLayout(titleLayout)
         self.talkInfoString = QLabel()
-        self.mainLayout.addWidget(self.talkInfoString)
+        titleLayout.addWidget(self.talkInfoString, 20)
         self.talkInfoString.setFont(self.talkInfoFont)
         self.talkInfoString.setAlignment(Qt.AlignCenter)
-        self.talkInfoString.setStyleSheet("QLabel { background-color : white; color : black; }")
+        self.leaveButton = QPushButton("Leave")
+        titleLayout.addWidget(self.leaveButton, 1, Qt.AlignRight | Qt.AlignTop)
 
         self.countdownString = QLabel()
         self.mainLayout.addWidget(self.countdownString)
         self.countdownString.setFont(self.countdownFont)
         self.countdownString.setAlignment(Qt.AlignCenter)
-        self.countdownString.setStyleSheet("QLabel { background-color : white; color : black; }")
 
         self.countdownTimer = QTimer()
         self.countdownTimer.timeout.connect(self.timertick)

@@ -26,6 +26,7 @@ import logging
 import os
 import subprocess
 import sys
+import functools
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import QCursor
@@ -115,8 +116,14 @@ class RecordApp(FreeseerApp):
         self.actionTalkEditor = QtGui.QAction(self)
         self.actionTalkEditor.setShortcut("Ctrl+E")
         self.actionTalkEditor.setObjectName(_fromUtf8("actionTalkEditor"))
+        self.actionAutoRecord = QtGui.QAction(self)
+        leaveButtonShortcut = "Ctrl+R"
+        self.actionAutoRecord.setShortcut(leaveButtonShortcut)
+        self.actionAutoRecord.setCheckable(True)
+        self.actionAutoRecord.setObjectName(_fromUtf8("actionAutoRecord"))
         self.menuOptions.addAction(self.actionConfigTool)
         self.menuOptions.addAction(self.actionTalkEditor)
+        self.menuOptions.addAction(self.actionAutoRecord)
 
         folderIcon = QtGui.QIcon.fromTheme("folder")
         self.actionOpenVideoFolder = QtGui.QAction(self)
@@ -156,21 +163,22 @@ class RecordApp(FreeseerApp):
         self.connect(self.mainWidget.roomComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_dates_from_event_room)
         self.connect(self.mainWidget.dateComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.load_talks_from_date)
         self.connect(self.mainWidget.talkComboBox, QtCore.SIGNAL('currentIndexChanged(const QString&)'), self.set_talk_tooltip)
-        self.connect(self.mainWidget.standbyPushButton, QtCore.SIGNAL("toggled(bool)"), self.standby)
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL('toggled(bool)'), self.record)
-        self.connect(self.mainWidget.autoRecordPushButton, QtCore.SIGNAL('toggled(bool)'), self.auto_record)
-        self.connect(self.mainWidget.pauseToolButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
+        self.connect(self.mainWidget.standbyButton, QtCore.SIGNAL("toggled(bool)"), self.standby)
+        self.connect(self.mainWidget.disengageButton, QtCore.SIGNAL("clicked()"), functools.partial(self.standby, state=False))
+        self.connect(self.mainWidget.recordButton, QtCore.SIGNAL('clicked()'), self.record)
+        self.connect(self.mainWidget.pauseButton, QtCore.SIGNAL('toggled(bool)'), self.pause)
         self.connect(self.mainWidget.audioFeedbackCheckbox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audio_feedback)
-        self.connect(self.mainWidget.playPushButton, QtCore.SIGNAL('toggled(bool)'), self.play_video)
+        self.connect(self.mainWidget.playButton, QtCore.SIGNAL('clicked()'), self.play_video)
+
+        self.connect(self.autoRecordWidget.leaveButton, QtCore.SIGNAL('clicked()'), functools.partial(self.auto_record, state=False))
+        self.autoRecordWidget.leaveButton.setShortcut(leaveButtonShortcut)
 
         # Main Window Connections
         self.connect(self.actionConfigTool, QtCore.SIGNAL('triggered()'), self.open_configtool)
         self.connect(self.actionTalkEditor, QtCore.SIGNAL('triggered()'), self.open_talkeditor)
+        self.connect(self.actionAutoRecord, QtCore.SIGNAL('toggled(bool)'), self.auto_record)
         self.connect(self.actionOpenVideoFolder, QtCore.SIGNAL('triggered()'), self.open_video_directory)
         self.connect(self.actionReport, QtCore.SIGNAL('triggered()'), self.show_report_widget)
-
-        # GUI Disabling/Enabling Connections
-        self.connect(self.mainWidget.recordPushButton, QtCore.SIGNAL("toggled(bool)"), self.mainWidget.pauseToolButton.setEnabled)
 
         #
         # ReportWidget Connections
@@ -180,8 +188,8 @@ class RecordApp(FreeseerApp):
         self.load_settings()
 
         # Setup spacebar key.
-        self.mainWidget.recordPushButton.setShortcut(QtCore.Qt.Key_Space)
-        self.mainWidget.recordPushButton.setFocus()
+        self.mainWidget.pauseButton.setShortcut(QtCore.Qt.Key_Space)
+        self.mainWidget.pauseButton.setFocus()
 
         self.retranslate()
 
@@ -194,6 +202,9 @@ class RecordApp(FreeseerApp):
         # Reusable Strings
         #
         self.standbyString = self.app.translate("RecordApp", "Standby")
+        self.disengageString = self.app.translate("RecordApp", "Leave record-mode")
+        self.standbyTooltipString = self.app.translate("RecordApp", "Sets up the system for recording")
+        self.disengageTooltipString = self.app.translate("RecordApp", "Go back to edit talk information or select a different talk")
         self.autoRecordString = self.app.translate("RecordApp", "Auto Record")
         self.recordString = self.app.translate("RecordApp", "Record")
         self.pauseString = self.app.translate("RecordApp", "Pause")
@@ -202,7 +213,7 @@ class RecordApp(FreeseerApp):
         self.stopAutoString = self.app.translate("RecordApp", "Stop Auto Record")
         self.hideWindowString = self.app.translate("RecordApp", "Hide Main Window")
         self.showWindowString = self.app.translate("RecordApp", "Show Main Window")
-        self.playVideoString = self.app.translate("RecordApp", "Play Video")
+        self.playVideoString = self.app.translate("RecordApp", "Play")
 
         # Status Bar messages
         self.idleString = self.app.translate("RecordApp", "Idle.")
@@ -213,13 +224,13 @@ class RecordApp(FreeseerApp):
         self.elapsedTimeString = self.app.translate("RecordApp", "Elapsed Time:")
         # --- End Reusable Strings
 
-        if self.mainWidget.recordPushButton.isChecked() and self.mainWidget.pauseToolButton.isChecked():
+        if self.mainWidget.is_recording and self.mainWidget.pauseButton.isChecked():
             self.mainWidget.statusLabel.setText(self.pausedString)
-        elif self.mainWidget.recordPushButton.isChecked() and (not self.mainWidget.pauseToolButton.isChecked()):
+        elif self.mainWidget.is_recording and (not self.mainWidget.pauseButton.isChecked()):
             self.mainWidget.statusLabel.setText(self.recordingString)
-        elif self.mainWidget.standbyPushButton.isChecked():
+        elif self.mainWidget.standbyButton.isChecked():
             self.mainWidget.statusLabel.setText(self.readyString)
-        elif self.mainWidget.autoRecordPushButton.isChecked():
+        elif self.actionAutoRecord.isChecked():
             self.mainWidget.statusLabel.setText(self.autoRecordString)
         else:
             self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
@@ -232,6 +243,7 @@ class RecordApp(FreeseerApp):
         self.menuOptions.setTitle(self.app.translate("RecordApp", "&Options"))
         self.actionConfigTool.setText(self.app.translate("RecordApp", "&Configuration"))
         self.actionTalkEditor.setText(self.app.translate("RecordApp", "&Edit Talks"))
+        self.actionAutoRecord.setText(self.autoRecordString)
         self.actionOpenVideoFolder.setText(self.app.translate("RecordApp", "&Open Video Directory"))
         self.actionReport.setText(self.app.translate("RecordApp", "&Report"))
         # --- End Menubar
@@ -246,23 +258,16 @@ class RecordApp(FreeseerApp):
         #
         # RecordingWidget
         #
-        self.mainWidget.playPushButton.setText(self.playVideoString)
-        self.mainWidget.standbyPushButton.setText(self.standbyString)
-        self.mainWidget.standbyPushButton.setToolTip(self.standbyString)
-        if self.mainWidget.autoRecordPushButton.isChecked():
-            self.mainWidget.autoRecordPushButton.setText(self.stopAutoString)
-            self.mainWidget.autoRecordPushButton.setToolTip(self.stopAutoString)
+        self.mainWidget.disengageButton.setText(self.disengageString)
+        self.mainWidget.standbyButton.setText(self.standbyString)
+        self.mainWidget.standbyButton.setToolTip(self.standbyTooltipString)
+        self.mainWidget.disengageButton.setToolTip(self.disengageTooltipString)
+        if self.mainWidget.is_recording:
+            self.mainWidget.recordButton.setToolTip(self.stopString)
         else:
-            self.mainWidget.autoRecordPushButton.setText(self.autoRecordString)
-            self.mainWidget.autoRecordPushButton.setToolTip(self.autoRecordString)
-        if self.mainWidget.recordPushButton.isChecked():
-            self.mainWidget.recordPushButton.setText(self.stopString)
-            self.mainWidget.recordPushButton.setToolTip(self.stopString)
-        else:
-            self.mainWidget.recordPushButton.setText(self.recordString)
-            self.mainWidget.recordPushButton.setToolTip(self.recordString)
-        self.mainWidget.pauseToolButton.setText(self.pauseString)
-        self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
+            self.mainWidget.recordButton.setToolTip(self.recordString)
+        self.mainWidget.pauseButton.setText(self.pauseString)
+        self.mainWidget.pauseButton.setToolTip(self.pauseString)
         self.mainWidget.eventLabel.setText(self.app.translate("RecordApp", "Event"))
         self.mainWidget.roomLabel.setText(self.app.translate("RecordApp", "Room"))
         self.mainWidget.dateLabel.setText(self.app.translate("RecordApp", "Date"))
@@ -336,18 +341,21 @@ class RecordApp(FreeseerApp):
         """
         def toggle_gui(state):
             """Toggles GUI components when standby is pressed"""
-            self.mainWidget.standbyPushButton.setHidden(state)
-            self.mainWidget.autoRecordPushButton.setHidden(state)
-            self.mainWidget.recordPushButton.setVisible(state)
-            self.mainWidget.recordPushButton.setEnabled(state)
-            self.mainWidget.pauseToolButton.setVisible(state)
+            if state:
+                self.mainWidget.standbyButton.setHidden(state)
+                self.mainWidget.disengageButton.setVisible(state)
+            else:
+                self.mainWidget.disengageButton.setVisible(state)
+                self.mainWidget.standbyButton.setHidden(state)
+
+            self.mainWidget.recordButton.setEnabled(state)
             self.mainWidget.eventComboBox.setDisabled(state)
             self.mainWidget.roomComboBox.setDisabled(state)
             self.mainWidget.dateComboBox.setDisabled(state)
             self.mainWidget.talkComboBox.setDisabled(state)
             self.mainWidget.audioFeedbackCheckbox.setDisabled(state)
 
-        if (state):  # Prepare the pipelines
+        if state:  # Prepare the pipelines
             if self.load_backend():
                 toggle_gui(True)
                 self.controller.pause()
@@ -356,23 +364,25 @@ class RecordApp(FreeseerApp):
                                                                             self.readyString))
             else:
                 toggle_gui(False)
-                self.mainWidget.standbyPushButton.setChecked(False)
+                self.mainWidget.standbyButton.setChecked(False)
         else:
             toggle_gui(False)
-            self.mainWidget.standbyPushButton.setChecked(False)
+            self.controller.stop()
+            self.mainWidget.standbyButton.setChecked(False)
 
-        self.mainWidget.playPushButton.setVisible(False)
-        self.mainWidget.playPushButton.setEnabled(False)
+        self.mainWidget.playButton.setEnabled(False)
 
-    def record(self, state):
+    def record(self):
         """The logic for recording and stopping recording."""
 
-        if state:  # Start Recording.
+        if self.mainWidget.is_recording:  # Start Recording.
             logo_rec = QtGui.QPixmap(":/freeseer/logo_rec.png")
             sysIcon2 = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon2)
             self.controller.record()
-            self.mainWidget.recordPushButton.setText(self.stopString)
+            self.mainWidget.recordButton.setToolTip(self.stopString)
+            self.mainWidget.disengageButton.setEnabled(False)
+            self.mainWidget.pauseButton.setEnabled(True)
             self.recordAction.setText(self.stopString)
 
             # Hide if auto-hide is set.
@@ -389,8 +399,10 @@ class RecordApp(FreeseerApp):
             sysIcon = QtGui.QIcon(logo_rec)
             self.systray.setIcon(sysIcon)
             self.controller.stop()
-            self.mainWidget.pauseToolButton.setChecked(False)
-            self.mainWidget.recordPushButton.setText(self.recordString)
+            self.mainWidget.pauseButton.setChecked(False)
+            self.mainWidget.recordButton.setToolTip(self.recordString)
+            self.mainWidget.disengageButton.setEnabled(True)
+            self.mainWidget.pauseButton.setEnabled(False)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
             self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
@@ -405,8 +417,8 @@ class RecordApp(FreeseerApp):
             self.reset_timer()
 
             #Show playback button
-            self.mainWidget.playPushButton.setVisible(True)
-            self.mainWidget.playPushButton.setEnabled(True)
+            self.mainWidget.playButton.setVisible(True)
+            self.mainWidget.playButton.setEnabled(True)
 
             # Select next talk if there is one within 15 minutes.
             if self.current_event and self.current_room:
@@ -422,7 +434,7 @@ class RecordApp(FreeseerApp):
 
     def _enable_disable_gui(self, state):
         """Disables GUI components when Auto Record is pressed, and enables them when Auto Record is released"""
-        self.mainWidget.standbyPushButton.setDisabled(state)
+        self.mainWidget.standbyButton.setDisabled(state)
         self.mainWidget.eventComboBox.setDisabled(state)
         self.mainWidget.roomComboBox.setDisabled(state)
         self.mainWidget.dateComboBox.setDisabled(state)
@@ -435,8 +447,7 @@ class RecordApp(FreeseerApp):
         self.autoRecordWidget.close()
         self._enable_disable_gui(False)
         self.recorded = False
-        self.mainWidget.autoRecordPushButton.setText(self.autoRecordString)
-        self.mainWidget.autoRecordPushButton.setChecked(False)
+        self.actionAutoRecord.setChecked(False)
 
     def auto_record(self, state):
         """Starts automated recording"""
@@ -449,27 +460,25 @@ class RecordApp(FreeseerApp):
                     # Set the cursor back to before the first record so that single_auto_record works properly
                     self.autoTalks.previous()
                     self._enable_disable_gui(True)
-                    self.mainWidget.autoRecordPushButton.setText(self.stopAutoString)
                     self.single_auto_record()
                 else:
                     # Dialog for no talks to auto-record
                     QtGui.QMessageBox.information(self, 'No Talks to Record',
                         'There are no upcoming talks to auto-record in this room', QtGui.QMessageBox.Ok)
-                    self.mainWidget.autoRecordPushButton.setChecked(False)
+                    self.actionAutoRecord.setChecked(False)
 
             else:
                 # Dialog that pops up when no room is selected
                 QtGui.QMessageBox.information(self, 'No Room Selected',
                     'Please select a room to auto-record', QtGui.QMessageBox.Ok)
-                self.mainWidget.autoRecordPushButton.setChecked(False)
+                self.actionAutoRecord.setChecked(False)
         else:
             self.beforeStartTimer.stop()
             self.beforeEndTimer.stop()
             self.controller.stop()
             self.stop_auto_record_gui()
 
-        self.mainWidget.playPushButton.setVisible(False)
-        self.mainWidget.playPushButton.setEnabled(False)
+        self.mainWidget.playButton.setEnabled(False)
 
     def single_auto_record(self):
         """Completes one display and record cycle of the auto-record feature.
@@ -528,16 +537,16 @@ class RecordApp(FreeseerApp):
 
     def pause(self, state):
         """Pause the recording"""
-        if (state):  # Pause Recording.
+        if state:  # Pause Recording.
             self.controller.pause()
             log.info("Recording paused.")
-            self.mainWidget.pauseToolButton.setToolTip(self.resumeString)
+            self.mainWidget.pauseButton.setToolTip(self.resumeString)
             self.mainWidget.statusLabel.setText(self.pausedString)
             self.timer.stop()
-        elif self.mainWidget.recordPushButton.isChecked():
+        elif self.mainWidget.is_recording:
             self.controller.record()
             log.info("Recording unpaused.")
-            self.mainWidget.pauseToolButton.setToolTip(self.pauseString)
+            self.mainWidget.pauseButton.setToolTip(self.pauseString)
             self.timer.start(1000)
 
     def load_backend(self):
@@ -685,8 +694,8 @@ class RecordApp(FreeseerApp):
             self.visibilityAction.setText(self.showWindowString)
 
     def toggle_record_button(self):
-        self.mainWidget.standbyPushButton.toggle()
-        self.mainWidget.recordPushButton.toggle()
+        self.mainWidget.standbyButton.toggle()
+        self.mainWidget.recordButton.toggle()
 
     def audio_feedback(self, value):
         self.mainWidget.audioSlider.setValue(value)
@@ -725,15 +734,15 @@ class RecordApp(FreeseerApp):
     def getAction(self):
         message = self.clientWidget.socket.read(self.clientWidget.socket.bytesAvailable())
         if message == 'Record':
-            self.mainWidget.standbyPushButton.toggle()
-            self.mainWidget.recordPushButton.toggle()
+            self.mainWidget.standbyButton.toggle()
+            self.mainWidget.recordButton.toggle()
             self.clientWidget.sendMessage('Started recording')
             log.info("Started recording by server's request")
         elif message == 'Stop':
-            self.mainWidget.recordPushButton.toggle()
+            self.mainWidget.recordButton.toggle()
             log.info("Stopping recording by server's request")
         elif message == 'Pause' or 'Resume':
-            self.mainWidget.pauseToolButton.toggle()
+            self.mainWidget.pauseButton.toggle()
             if message == 'Pause':
                 log.info("Paused recording by server's request")
             elif message == 'Resume':

@@ -150,6 +150,13 @@ class Multimedia:
             self.unload_output_plugins()
 
             self.current_state = Multimedia.STOP
+
+            try:
+                if not os.path.getsize(self.file_path):
+                    os.remove(self.file_path)
+            except OSError:
+                pass
+
             log.debug("Gstreamer stopped.")
 
     def prepare_metadata(self, presentation):
@@ -276,6 +283,8 @@ class Multimedia:
                     self.unload_audiomixer()
                     return False
 
+        if filename_for_frontend is not None:
+            self.file_path = os.path.join(self.config.videodir, filename_for_frontend)
         return True, filename_for_frontend
 
     def load_output_plugins(self, plugins, record_audio, record_video, metadata):

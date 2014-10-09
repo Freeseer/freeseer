@@ -39,6 +39,7 @@ from PyQt4.QtGui import QPixmap
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtGui import QSlider
+from PyQt4.QtGui import QSpacerItem
 from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QVBoxLayout
@@ -60,75 +61,150 @@ class RecordingWidget(QWidget):
         self.mainLayout = QVBoxLayout()
         self.setLayout(self.mainLayout)
 
+        self.setStyleSheet("""
+            QToolButton {
+                background-color: #D1D1D1;
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 10px;
+                border-color: #969696;
+                padding: 6px;
+            }
+
+            QToolButton:pressed {
+                background-color: #A3A2A2;
+                border-width: 2px;
+                border-color: #707070;
+            }
+
+            QToolButton:checked {
+                background-color: #A3A2A2;
+                border-width: 2px;
+                border-color: #707070;
+            }
+
+            QToolButton:disabled {
+                background-color: #EDEDED;
+                border-color: #BFBDBD;
+            }
+
+            QToolButton:hover {
+                border-width: 2px;
+            }
+        """)
+
         boldFont = QFont()
         boldFont.setBold(True)
+
+        fontSize = self.font().pixelSize()
+        fontUnit = "px"
+        if fontSize == -1:  # Font is set as points, not pixels.
+            fontUnit = "pt"
+            fontSize = self.font().pointSize()
 
         # Control bar
         self.controlRow = QHBoxLayout()
         self.mainLayout.addLayout(self.controlRow)
 
-        self.standbyIcon = QIcon.fromTheme("system-shutdown")
-        recordFallbackIcon = QIcon(":/multimedia/record.png")
-        self.recordIcon = QIcon.fromTheme("media-record", recordFallbackIcon)
-        stopFallbackIcon = QIcon(":/multimedia/stop.png")
-        self.stopIcon = QIcon.fromTheme("media-playback-stop", stopFallbackIcon)
-        self.pauseIcon = QIcon.fromTheme("media-playback-pause")
-        self.resumeIcon = QIcon.fromTheme("media-playback-start")
+        self.recordIcon = QIcon(":/multimedia/record.png")
+        self.stopIcon = QIcon(":/multimedia/stop.png")
+        pauseIcon = QIcon(":/multimedia/pause.png")
+        playIcon = QIcon(":/multimedia/play.png")
         self.headphoneIcon = QIcon()
         self.headphoneIcon.addPixmap(QPixmap(":/multimedia/headphones.png"), QIcon.Normal, QIcon.Off)
 
-        self.standbyPushButton = QPushButton("Standby")
-        self.standbyPushButton.setToolTip("Standby")
-        self.standbyPushButton.setMinimumSize(QSize(0, 40))
-        self.standbyPushButton.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        self.standbyPushButton.setIcon(self.standbyIcon)
-        self.standbyPushButton.setCheckable(True)
-        self.standbyPushButton.setObjectName("standbyButton")
-        self.controlRow.addWidget(self.standbyPushButton)
+        self.is_recording = False
+        self.recordButton = QToolButton()
+        self.recordButton.setToolTip("Record")
+        self.recordButton.setFixedSize(QSize(60, 40))
+        self.recordButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.recordButton.setIcon(self.recordIcon)
+        self.recordButton.setEnabled(False)
+        self.recordButton.setObjectName("recordButton")
+        self.controlRow.addWidget(self.recordButton, 0, Qt.AlignLeft)
+        self.connect(self.recordButton, SIGNAL("clicked()"), self.setRecordIcon)
 
-        self.autoRecordPushButton = QPushButton("Auto Record")
-        self.autoRecordPushButton.setToolTip("Automated Recording")
-        self.autoRecordPushButton.setMinimumSize(QSize(40, 40))
-        self.autoRecordPushButton.setMaximumSize(QSize(120, 40))
-        self.autoRecordPushButton.setCheckable(True)
-        self.autoRecordPushButton.setObjectName("autoRecordButton")
-        self.controlRow.addWidget(self.autoRecordPushButton)
+        self.playButton = QToolButton()
+        self.playButton.setToolTip("Play last recorded Video")
+        self.playButton.setFixedSize(QSize(60, 40))
+        self.playButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.playButton.setIcon(playIcon)
+        self.playButton.setEnabled(False)
+        self.controlRow.addWidget(self.playButton, 0, Qt.AlignLeft)
 
-        self.recordPushButton = QPushButton("Record")
-        self.recordPushButton.setToolTip("Record")
-        self.recordPushButton.setMinimumSize(QSize(0, 40))
-        self.recordPushButton.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        self.recordPushButton.setIcon(self.recordIcon)
-        self.recordPushButton.setHidden(True)
-        self.recordPushButton.setEnabled(False)
-        self.recordPushButton.setCheckable(True)
-        self.recordPushButton.setObjectName("recordButton")
-        self.controlRow.addWidget(self.recordPushButton)
-        self.connect(self.recordPushButton, SIGNAL("toggled(bool)"), self.setRecordIcon)
+        self.pauseButton = QToolButton()
+        self.pauseButton.setToolTip("Pause")
+        self.pauseButton.setIcon(pauseIcon)
+        self.pauseButton.setFixedSize(QSize(60, 40))
+        self.pauseButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.pauseButton.setEnabled(False)
+        self.pauseButton.setCheckable(True)
+        self.controlRow.addWidget(self.pauseButton, 0, Qt.AlignLeft)
 
-        self.pauseToolButton = QToolButton()
-        self.pauseToolButton.setText("Pause")
-        self.pauseToolButton.setToolTip("Pause")
-        self.pauseToolButton.setIcon(self.pauseIcon)
-        self.pauseToolButton.setMinimumSize(QSize(40, 40))
-        self.pauseToolButton.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Fixed)
-        self.pauseToolButton.setHidden(True)
-        self.pauseToolButton.setEnabled(False)
-        self.pauseToolButton.setCheckable(True)
-        self.controlRow.addWidget(self.pauseToolButton)
-        self.connect(self.pauseToolButton, SIGNAL("toggled(bool)"), self.setPauseIcon)
+        self.controlRow.addSpacerItem(QSpacerItem(30, 40))
+        self.controlRow.addStretch(1)
 
-        playbackIcon = QIcon.fromTheme("video-x-generic")
-        self.playPushButton = QPushButton()
-        self.playPushButton.setText("Play Video")
-        self.playPushButton.setToolTip("Play last recorded Video")
-        self.playPushButton.setIcon(playbackIcon)
-        self.playPushButton.setMinimumSize(QSize(40, 40))
-        self.playPushButton.setMaximumSize(QSize(120, 40))
-        self.playPushButton.setHidden(True)
-        self.playPushButton.setEnabled(False)
-        self.playPushButton.setCheckable(True)
-        self.controlRow.addWidget(self.playPushButton)
+        self.standbyButton = QPushButton("Standby")
+        self.standbyButton.setStyleSheet("""
+            QPushButton {{
+                color: white;
+                background-color: #47a447;
+                border-style: solid;
+                border-width: 0px;
+                border-radius: 10px;
+                border-color: #398439;
+                font: bold {}{};
+                padding: 6px;
+            }}
+
+            QPushButton:pressed {{
+                background-color: #3E8A3E;
+                border-color: #327532;
+            }}
+
+            QPushButton:hover {{
+                border-width: 2px;
+            }}
+        """.format(fontSize + 3, fontUnit))
+        self.standbyButton.setToolTip("Standby")
+        self.standbyButton.setFixedSize(QSize(180, 40))
+        self.standbyButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.standbyButton.setCheckable(True)
+        self.standbyButton.setObjectName("standbyButton")
+        self.controlRow.addWidget(self.standbyButton)
+
+        self.disengageButton = QPushButton("Leave record-mode")
+        self.disengageButton.setStyleSheet("""
+            QPushButton {{
+                color: white;
+                background-color: #D14343;
+                border-style: solid;
+                border-width: 0px;
+                border-radius: 10px;
+                border-color: #B02C2C;
+                font: bold {}{};
+                padding: 6px;
+            }}
+
+            QPushButton:pressed {{
+                background-color: #AD2B2B;
+                border-color: #8C2929;
+            }}
+
+            QPushButton:hover {{
+                border-width: 2px;
+            }}
+
+            QPushButton:disabled {{
+                background-color: #B89E9E;
+        }}
+        """.format(fontSize + 3, fontUnit))
+        self.disengageButton.setToolTip("Leave record-mode")
+        self.disengageButton.setFixedSize(QSize(180, 40))
+        self.disengageButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.disengageButton.setHidden(True)
+        self.disengageButton.setObjectName("disengageButton")
+        self.controlRow.addWidget(self.disengageButton)
 
         # Filter bar
         self.filterBarLayout = QVBoxLayout()
@@ -187,17 +263,12 @@ class RecordingWidget(QWidget):
         self.audioFeedbackCheckbox.setToolTip("Enable Audio Feedback")
         self.mainLayout.addWidget(self.audioFeedbackCheckbox)
 
-    def setRecordIcon(self, state):
-        if state:
-            self.recordPushButton.setIcon(self.stopIcon)
+    def setRecordIcon(self):
+        self.is_recording = not self.is_recording
+        if self.is_recording:
+            self.recordButton.setIcon(self.stopIcon)
         else:
-            self.recordPushButton.setIcon(self.recordIcon)
-
-    def setPauseIcon(self, state):
-        if state:
-            self.pauseToolButton.setIcon(self.resumeIcon)
-        else:
-            self.pauseToolButton.setIcon(self.pauseIcon)
+            self.recordButton.setIcon(self.recordIcon)
 
 if __name__ == "__main__":
     import sys

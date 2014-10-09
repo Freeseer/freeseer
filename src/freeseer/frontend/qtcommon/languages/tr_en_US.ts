@@ -374,8 +374,8 @@
     </message>
     <message>
         <location filename="../../record/record.py" line="189"/>
-        <source>Play Video</source>
-        <translation>Play Video</translation>
+        <source>Play</source>
+        <translation>Play</translation>
     </message>
     <message>
         <location filename="../../record/record.py" line="194"/>

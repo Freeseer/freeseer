@@ -87,26 +87,26 @@ class TestRecordApp(unittest.TestCase):
         # It is not trivial or clear how to detect whether or not the preview has loaded
         # It turns out that even if the state is Multimedia.PAUSE, the preview has not quite loaded
 
-#       self.assertTrue(self.record_app.mainWidget.standbyPushButton.isVisible(), "[PRE STANDBY] Expected Standby button to be visible")
-#       self.assertFalse(self.record_app.mainWidget.recordPushButton.isVisible(), "[PRE STANDBY] Expected Record button to be invisible")
+#       self.assertTrue(self.record_app.mainWidget.standbyButton.isVisible(), "[PRE STANDBY] Expected Standby button to be visible")
+#       self.assertFalse(self.record_app.mainWidget.recordButton.isVisible(), "[PRE STANDBY] Expected Record button to be invisible")
 
         # Click the Standby button with the left mouse button
-#       QtTest.QTest.mouseClick(self.record_app.mainWidget.standbyPushButton, Qt.Qt.LeftButton)
+#       QtTest.QTest.mouseClick(self.record_app.mainWidget.standbyButton, Qt.Qt.LeftButton)
 
-#       self.assertFalse(self.record_app.mainWidget.standbyPushButton.isVisible(), "[STANDBY] Expected Standby button to be invisible")
-#       self.assertTrue(self.record_app.mainWidget.recordPushButton.isVisible(), "[STANDBY] Expected Record button to be visible")
+#       self.assertFalse(self.record_app.mainWidget.standbyButton.isVisible(), "[STANDBY] Expected Standby button to be invisible")
+#       self.assertTrue(self.record_app.mainWidget.recordButton.isVisible(), "[STANDBY] Expected Record button to be visible")
 
         # TODO: Check if preview has loaded
 
         # Click the Record button with the left mouse button
-#       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordPushButton, Qt.Qt.LeftButton)
+#       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordButton, Qt.Qt.LeftButton)
 
-#       self.assertFalse(self.record_app.mainWidget.standbyPushButton.isVisible(), "[RECORDING] Expected Standby button to be invisible")
-#       self.assertTrue(self.record_app.mainWidget.recordPushButton.isVisible(), "[RECORDING] Expected Record button to be visible")
-#       self.assertTrue(self.record_app.mainWidget.recordPushButton.text() == self.record_app.stopString, "[RECORDING] Incorrect button text for this phase")
+#       self.assertFalse(self.record_app.mainWidget.standbyButton.isVisible(), "[RECORDING] Expected Standby button to be invisible")
+#       self.assertTrue(self.record_app.mainWidget.recordButton.isVisible(), "[RECORDING] Expected Record button to be visible")
+#       self.assertTrue(self.record_app.mainWidget.recordButton.text() == self.record_app.stopString, "[RECORDING] Incorrect button text for this phase")
 
         # Click the Record button again in 5 seconds with the left mouse button
-#       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordPushButton, Qt.Qt.LeftButton)
+#       QtTest.QTest.mouseClick(self.record_app.mainWidget.recordButton, Qt.Qt.LeftButton)
 
     def test_reset_timer(self):
         '''
