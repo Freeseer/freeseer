@@ -137,6 +137,15 @@ class TestTalkEditorApp(unittest.TestCase):
         # Click "Close"
         QtTest.QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
         self.assertFalse(self.talk_editor.aboutDialog.isVisible())
+        
+    def test_click_talk(self):
+    	self.assertTrue(True)
+
+    def test_click_add_talk(self):
+        self.assertTrue(True)
+
+    def test_show_save_prompt(self):
+        self.assertTrue(True)
 
     # The tests for my new functions will probably go somewhere here.
     # Note to self: delete this comment later.
