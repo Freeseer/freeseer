@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2013, 2014  Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -42,6 +42,7 @@ from PyQt4.QtGui import QMenu
 from PyQt4.QtGui import QPixmap
 
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.log import LogDialog
 from freeseer.frontend.qtcommon import resource  # noqa
 
 try:
@@ -62,6 +63,8 @@ class FreeseerApp(QMainWindow):
 
         self.aboutDialog = AboutDialog()
         self.aboutDialog.setModal(True)
+
+        self.logDialog = LogDialog()
 
         #
         # Translator
@@ -106,9 +109,14 @@ class FreeseerApp(QMainWindow):
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.actionAbout.setIcon(self.icon)
 
+        self.actionLog = QAction(self)
+        self.actionLog.setObjectName(_fromUtf8("actionLog"))
+        self.actionLog.setShortcut("Ctrl+L")
+
         # Actions
         self.menuFile.addAction(self.actionExit)
         self.menuHelp.addAction(self.actionAbout)
+        self.menuHelp.addAction(self.actionLog)
         self.menuHelp.addAction(self.actionOnlineHelp)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuLanguage.menuAction())
@@ -119,6 +127,7 @@ class FreeseerApp(QMainWindow):
 
         self.connect(self.actionExit, SIGNAL('triggered()'), self.close)
         self.connect(self.actionAbout, SIGNAL('triggered()'), self.aboutDialog.show)
+        self.connect(self.actionLog, SIGNAL('triggered()'), self.logDialog.show)
         self.connect(self.actionOnlineHelp, SIGNAL('triggered()'), self.openOnlineHelp)
 
         self.retranslateFreeseerApp()
@@ -144,6 +153,7 @@ class FreeseerApp(QMainWindow):
         self.retranslateFreeseerApp()
         self.aboutDialog.aboutWidget.retranslate(self.current_language)
         self.retranslate()
+        self.logDialog.retranslate()
 
     def retranslate(self):
         """
@@ -161,6 +171,7 @@ class FreeseerApp(QMainWindow):
 
         self.actionExit.setText(self.app.translate("FreeseerApp", "&Quit"))
         self.actionAbout.setText(self.app.translate("FreeseerApp", "&About"))
+        self.actionLog.setText(self.app.translate("FreeseerApp", "View &Log"))
         self.actionOnlineHelp.setText(self.app.translate("FreeseerApp", "Online Documentation"))
         # --- Menubar
 

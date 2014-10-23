@@ -40,6 +40,7 @@ from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
+from freeseer.frontend.qtcommon.log import LogStatusWidget
 from freeseer.frontend.configtool.configtool import ConfigToolApp
 from freeseer.frontend.record.RecordingController import RecordingController
 from freeseer.frontend.record.RecordingWidget import RecordingWidget
@@ -77,6 +78,8 @@ class RecordApp(FreeseerApp):
         self.talkEditorApp.setWindowModality(QtCore.Qt.ApplicationModal)
         self.talkEditorApp.setWindowFlags(QtCore.Qt.Dialog)
 
+        self.logStatusWidget = LogStatusWidget(self.logDialog)
+        self.statusBar().addPermanentWidget(self.logStatusWidget, 1)
         self.statusBar().addPermanentWidget(self.mainWidget.statusLabel)
 
         # Initialize geometry, to be used for restoring window positioning.
@@ -299,6 +302,8 @@ class RecordApp(FreeseerApp):
         for i in self.reportWidget.options:
             self.reportWidget.reportCombo.addItem(i)
         # --- End ReportWidget
+
+        self.logStatusWidget.retranslate()
 
     ###
     ### UI Logic
@@ -668,7 +673,6 @@ class RecordApp(FreeseerApp):
     ###
     ### Misc.
     ###
-
     def _icon_activated(self, reason):
         if reason == QtGui.QSystemTrayIcon.Trigger:
             self.systray.menu.popup(QCursor.pos())

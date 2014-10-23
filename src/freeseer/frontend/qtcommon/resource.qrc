@@ -8,6 +8,9 @@
     <file alias="multimedia/rss.png">images/rss_logo.png</file>
     <file alias="freeseer/logo.png">images/freeseer_logo.png</file>
     <file alias="freeseer/logo_rec.png">images/freeseer_logo_rec.png</file>
+    <file alias="freeseer/state_okay.png">images/green.png</file>
+    <file alias="freeseer/state_warning.png">images/yellow.png</file>
+    <file alias="freeseer/state_error.png">images/red.png</file>
     
     <file alias="languages/tr_en_US.qm">languages/tr_en_US.qm</file>
     <file alias="languages/tr_zh_CN.qm">languages/tr_zh_CN.qm</file>
