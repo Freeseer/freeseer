@@ -103,8 +103,8 @@ class DesktopLinuxSrc(IVideoInput):
             if self.config.desktop == "Area":
                 videosrc.set_property("x", self.config.start_x)
                 videosrc.set_property("y", self.config.start_y)
-                videosrc.set_property("width", self.config.start_x + self.config.end_x)
-                videosrc.set_property("height", self.config.start_y + self.config.end_y)
+                videosrc.set_property("width", self.config.end_x - self.config.start_x)
+                videosrc.set_property("height", self.config.end_y - self.config.start_y)
                 log.debug('Recording Area start: %sx%s end: %sx%s',
                           self.config.start_x,
                           self.config.start_y,
