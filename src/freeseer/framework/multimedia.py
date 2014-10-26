@@ -349,6 +349,7 @@ class Multimedia:
 
             self.audiomixer.unlink(self.audio_tee)
             self.player.remove(self.audiomixer)
+        self.record_audio = False
 
     def load_videomixer(self, mixer, inputs):
         self.record_video = True
@@ -375,3 +376,4 @@ class Multimedia:
 
             self.videomixer.unlink(self.video_tee)
             self.player.remove(self.videomixer)
+        self.record_video = False
