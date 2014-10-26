@@ -25,7 +25,6 @@
 from PyQt4.QtGui import QFont
 from PyQt4.QtGui import QVBoxLayout
 from PyQt4.QtGui import QHBoxLayout
-from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QApplication
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QShortcut
@@ -34,12 +33,14 @@ from PyQt4.QtGui import QPushButton
 from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import Qt
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 
-class AutoRecordWidget(QWidget):
+
+class AutoRecordWidget(QWidgetWithDpi):
     """Widget that displays the fullscreen countdown for Freeseer's automated recording mode"""
 
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
+        super(AutoRecordWidget, self).__init__(parent)
 
         self.secs = None
         self.recording = False

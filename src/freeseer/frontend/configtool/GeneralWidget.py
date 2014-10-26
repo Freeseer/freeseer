@@ -28,8 +28,11 @@ http://wiki.github.com/Freeseer/freeseer/
 
 from PyQt4 import QtCore, QtGui
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QGroupBoxWithDpi
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 
-class GeneralWidget(QtGui.QWidget):
+
+class GeneralWidget(QWidgetWithDpi):
     '''
     classdocs
     '''
@@ -38,7 +41,7 @@ class GeneralWidget(QtGui.QWidget):
         '''
         Constructor
         '''
-        QtGui.QWidget.__init__(self, parent)
+        super(GeneralWidget, self).__init__(parent)
 
         self.mainLayout = QtGui.QVBoxLayout()
         self.mainLayout.addStretch(0)
@@ -67,7 +70,7 @@ class GeneralWidget(QtGui.QWidget):
         #
 
         languageBoxLayout = QtGui.QVBoxLayout()
-        self.languageGroupBox = QtGui.QGroupBox("Language")
+        self.languageGroupBox = QGroupBoxWithDpi("Language")
         self.languageGroupBox.setLayout(languageBoxLayout)
         self.languageGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         self.languageGroupBox.setFixedSize(BOX_WIDTH, BOX_HEIGHT)
@@ -80,7 +83,7 @@ class GeneralWidget(QtGui.QWidget):
         self.languageComboBox = QtGui.QComboBox()
         self.languageComboBox.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         languageLayout.addWidget(self.languageComboBox, 2)
-        languageLayout.addSpacerItem(QtGui.QSpacerItem(40, 0))
+        languageLayout.addSpacerItem(self.qspacer_item_with_dpi(40, 0))
         languageLayout.addWidget(self.translateButton, 1)
 
         #
@@ -88,7 +91,7 @@ class GeneralWidget(QtGui.QWidget):
         #
 
         appearanceBoxLayout = QtGui.QVBoxLayout()
-        self.appearanceGroupBox = QtGui.QGroupBox("Appearance")
+        self.appearanceGroupBox = QGroupBoxWithDpi("Appearance")
         self.appearanceGroupBox.setLayout(appearanceBoxLayout)
         self.appearanceGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         self.appearanceGroupBox.setFixedSize(BOX_WIDTH, BOX_HEIGHT)
@@ -103,13 +106,13 @@ class GeneralWidget(QtGui.QWidget):
         #
 
         resetBoxLayout = QtGui.QVBoxLayout()
-        self.resetGroupBox = QtGui.QGroupBox("Reset")
+        self.resetGroupBox = QGroupBoxWithDpi("Reset")
         self.resetGroupBox.setLayout(resetBoxLayout)
         self.resetGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         self.resetGroupBox.setFixedSize(BOX_WIDTH / 2, BOX_HEIGHT)
         self.resetGroupBox.setStyleSheet(boxStyle)
         self.mainLayout.addWidget(self.resetGroupBox)
-        self.mainLayout.addSpacerItem(QtGui.QSpacerItem(0, 20))
+        self.mainLayout.addSpacerItem(self.qspacer_item_with_dpi(0, 20))
 
         resetLayout = QtGui.QHBoxLayout()
         resetBoxLayout.addLayout(resetLayout)

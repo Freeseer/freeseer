@@ -33,10 +33,11 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 from freeseer.frontend.qtcommon import resource  # noqa
 
 
-class ConfigToolWidget(QtGui.QWidget):
+class ConfigToolWidget(QWidgetWithDpi):
     '''
     classdocs
     '''
@@ -45,7 +46,7 @@ class ConfigToolWidget(QtGui.QWidget):
         '''
         Constructor
         '''
-        QtGui.QWidget.__init__(self, parent)
+        super(ConfigToolWidget, self).__init__(parent)
 
         self.setMinimumSize(800, 400)
         self.mainLayout = QtGui.QHBoxLayout()

@@ -29,8 +29,11 @@ http://wiki.github.com/Freeseer/freeseer/
 from PyQt4 import QtCore
 from PyQt4 import QtGui
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QGroupBoxWithDpi
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 
-class AVWidget(QtGui.QWidget):
+
+class AVWidget(QWidgetWithDpi):
     '''
     classdocs
     '''
@@ -39,7 +42,7 @@ class AVWidget(QtGui.QWidget):
         '''
         Constructor
         '''
-        QtGui.QWidget.__init__(self, parent)
+        super(AVWidget, self).__init__(parent)
 
         self.mainLayout = QtGui.QVBoxLayout()
         self.mainLayout.addStretch(0)
@@ -62,7 +65,7 @@ class AVWidget(QtGui.QWidget):
         #
 
         audioLayout = QtGui.QGridLayout()
-        self.audioGroupBox = QtGui.QGroupBox("Audio Input")
+        self.audioGroupBox = QGroupBoxWithDpi("Audio Input")
         self.audioGroupBox.setLayout(audioLayout)
         self.mainLayout.insertWidget(0, self.audioGroupBox)
 
@@ -89,7 +92,7 @@ class AVWidget(QtGui.QWidget):
         #
 
         videoLayout = QtGui.QGridLayout()
-        self.videoGroupBox = QtGui.QGroupBox("Video Input")
+        self.videoGroupBox = QGroupBoxWithDpi("Video Input")
         self.videoGroupBox.setLayout(videoLayout)
         self.mainLayout.insertWidget(0, self.videoGroupBox)
 
@@ -116,7 +119,7 @@ class AVWidget(QtGui.QWidget):
         #
 
         streamLayout = QtGui.QGridLayout()
-        self.streamGroupBox = QtGui.QGroupBox("Record to Stream")
+        self.streamGroupBox = QGroupBoxWithDpi("Record to Stream")
         self.streamGroupBox.setLayout(streamLayout)
         self.mainLayout.insertWidget(0, self.streamGroupBox)
 
@@ -143,7 +146,7 @@ class AVWidget(QtGui.QWidget):
         #
 
         fileLayout = QtGui.QGridLayout()
-        self.fileGroupBox = QtGui.QGroupBox("Record to File")
+        self.fileGroupBox = QGroupBoxWithDpi("Record to File")
         self.fileGroupBox.setLayout(fileLayout)
         self.mainLayout.insertWidget(0, self.fileGroupBox)
 

@@ -26,7 +26,6 @@ import logging
 
 from PyQt4.QtCore import QDir
 from PyQt4.QtCore import QLocale
-from PyQt4.QtCore import QRect
 from PyQt4.QtCore import QString
 from PyQt4.QtCore import QTextCodec
 from PyQt4.QtCore import QTranslator
@@ -37,11 +36,11 @@ from PyQt4.QtGui import QActionGroup
 from PyQt4.QtGui import QApplication
 from PyQt4.QtGui import QDesktopServices
 from PyQt4.QtGui import QIcon
-from PyQt4.QtGui import QMainWindow
 from PyQt4.QtGui import QMenu
 from PyQt4.QtGui import QPixmap
 
 from freeseer.frontend.qtcommon.AboutDialog import AboutDialog
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QMainWindowWithDpi
 from freeseer.frontend.qtcommon.log import LogDialog
 from freeseer.frontend.qtcommon import resource  # noqa
 
@@ -53,7 +52,7 @@ except AttributeError:
 log = logging.getLogger(__name__)
 
 
-class FreeseerApp(QMainWindow):
+class FreeseerApp(QMainWindowWithDpi):
 
     def __init__(self, config):
         super(FreeseerApp, self).__init__()
@@ -86,7 +85,7 @@ class FreeseerApp(QMainWindow):
         #
         self.menubar = self.menuBar()
 
-        self.menubar.setGeometry(QRect(0, 0, 500, 50))
+        self.menubar.setGeometry(self.qrect_with_dpi(0, 0, 500, 50))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))

@@ -22,16 +22,16 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-from PyQt4.QtGui import QDialog
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QVBoxLayout
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QDialogWithDpi
 from freeseer.frontend.talkeditor.TalkDetailsWidget import TalkDetailsWidget
 
 
-class NewTalkWidget(QDialog):
+class NewTalkWidget(QDialogWithDpi):
     """Dialog for adding new talk to database"""
     def __init__(self, parent=None):
         super(NewTalkWidget, self).__init__(parent)

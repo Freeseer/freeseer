@@ -37,7 +37,6 @@ from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPixmap
 from PyQt4.QtGui import QPushButton
-from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QSizePolicy
 
 try:
@@ -49,6 +48,8 @@ from freeseer import NAME
 from freeseer import URL
 from freeseer import __version__
 from freeseer.frontend.qtcommon import resource  # noqa
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
+
 
 RECORD_BUTTON_ARTIST = u'Sekkyumu'
 RECORD_BUTTON_LINK = u'http://sekkyumu.deviantart.com/'
@@ -56,7 +57,7 @@ HEADPHONES_ARTIST = u'Ben Fleming'
 HEADPHONES_LINK = u'http://mediadesign.deviantart.com/'
 
 
-class AboutWidget(QWidget):
+class AboutWidget(QWidgetWithDpi):
     """ Common About Dialog for the Freeseer Project. This should be used for the
     about dialog when including one in GUIs.
 
@@ -66,7 +67,7 @@ class AboutWidget(QWidget):
     """
 
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
+        super(AboutWidget, self).__init__(parent)
 
         self.current_language = "en_US"
         self.uiTranslator = QTranslator()
@@ -90,8 +91,8 @@ class AboutWidget(QWidget):
         self.logo = QLabel("Logo")
         # To offset the logo so that it's to the right of the title
         self.logo.setStyleSheet("QLabel {{ margin-left: {} {} }}"
-            .format(90 + (self.fontSize * 2.5), self.fontUnit))
-        self.logo.setPixmap(self.logoPixmap.scaledToHeight(80))
+            .format(self.set_width_with_dpi(90) + (self.fontSize * 2.5), self.fontUnit))
+        self.logo.setPixmap(self.logoPixmap.scaledToHeight(self.set_height_with_dpi(80)))
         self.mainLayout.addWidget(self.logo, 0, 0, Qt.AlignTop)
 
         # Info

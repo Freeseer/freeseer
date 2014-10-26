@@ -36,22 +36,22 @@ from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPixmap
-from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtGui import QSlider
-from PyQt4.QtGui import QSpacerItem
-from PyQt4.QtGui import QToolButton
 from PyQt4.QtGui import QWidget
 from PyQt4.QtGui import QVBoxLayout
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QPushButtonWithDpi
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QToolButtonWithDpi
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 from freeseer.frontend.qtcommon import resource  # noqa
 
 
-class RecordingWidget(QWidget):
+class RecordingWidget(QWidgetWithDpi):
     """Widget containing main recording UI for Freeseer"""
 
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
+        super(RecordingWidget, self).__init__(parent)
 
         icon = QIcon()
         icon.addPixmap(QPixmap(":/freeseer/logo.png"), QIcon.Normal, QIcon.Off)
@@ -114,7 +114,7 @@ class RecordingWidget(QWidget):
         self.headphoneIcon.addPixmap(QPixmap(":/multimedia/headphones.png"), QIcon.Normal, QIcon.Off)
 
         self.is_recording = False
-        self.recordButton = QToolButton()
+        self.recordButton = QToolButtonWithDpi()
         self.recordButton.setToolTip("Record")
         self.recordButton.setFixedSize(QSize(60, 40))
         self.recordButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -124,7 +124,7 @@ class RecordingWidget(QWidget):
         self.controlRow.addWidget(self.recordButton, 0, Qt.AlignLeft)
         self.connect(self.recordButton, SIGNAL("clicked()"), self.setRecordIcon)
 
-        self.playButton = QToolButton()
+        self.playButton = QToolButtonWithDpi()
         self.playButton.setToolTip("Play last recorded Video")
         self.playButton.setFixedSize(QSize(60, 40))
         self.playButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -132,7 +132,7 @@ class RecordingWidget(QWidget):
         self.playButton.setEnabled(False)
         self.controlRow.addWidget(self.playButton, 0, Qt.AlignLeft)
 
-        self.pauseButton = QToolButton()
+        self.pauseButton = QToolButtonWithDpi()
         self.pauseButton.setToolTip("Pause")
         self.pauseButton.setIcon(pauseIcon)
         self.pauseButton.setFixedSize(QSize(60, 40))
@@ -141,10 +141,10 @@ class RecordingWidget(QWidget):
         self.pauseButton.setCheckable(True)
         self.controlRow.addWidget(self.pauseButton, 0, Qt.AlignLeft)
 
-        self.controlRow.addSpacerItem(QSpacerItem(30, 40))
+        self.controlRow.addSpacerItem(self.qspacer_item_with_dpi(30, 40))
         self.controlRow.addStretch(1)
 
-        self.standbyButton = QPushButton("Standby")
+        self.standbyButton = QPushButtonWithDpi("Standby")
         self.standbyButton.setStyleSheet("""
             QPushButton {{
                 color: white;
@@ -173,7 +173,7 @@ class RecordingWidget(QWidget):
         self.standbyButton.setObjectName("standbyButton")
         self.controlRow.addWidget(self.standbyButton)
 
-        self.disengageButton = QPushButton("Leave record-mode")
+        self.disengageButton = QPushButtonWithDpi("Leave record-mode")
         self.disengageButton.setStyleSheet("""
             QPushButton {{
                 color: white;

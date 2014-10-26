@@ -262,6 +262,8 @@ class TalkEditorApp(FreeseerApp):
 
         # Fill table whitespace.
         self.tableView.horizontalHeader().setStretchLastSection(False)
+        for i in range(2, self.tableView.horizontalHeader().count() + 1):
+            self.tableView.horizontalHeader().resizeSection(i, self.set_width_with_dpi(80))
         self.tableView.horizontalHeader().setResizeMode(1, QHeaderView.Stretch)
 
         # Hide the ID field

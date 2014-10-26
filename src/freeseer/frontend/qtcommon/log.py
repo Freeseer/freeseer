@@ -34,30 +34,29 @@ from PyQt4.QtCore import Qt
 from PyQt4.QtCore import QTimer
 from PyQt4.QtCore import SIGNAL
 from PyQt4.QtGui import QApplication
-from PyQt4.QtGui import QDialog
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPixmap
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSlider
-from PyQt4.QtGui import QSpacerItem
 from PyQt4.QtGui import QStandardItem
 from PyQt4.QtGui import QStandardItemModel
 from PyQt4.QtGui import QTableView
 from PyQt4.QtGui import QVBoxLayout
-from PyQt4.QtGui import QWidget
 
 try:
     _fromUtf8 = QString.fromUtf8
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QDialogWithDpi
+from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 from freeseer.frontend.qtcommon.widgets import ClickableLabel
 from freeseer.frontend.qtcommon import resource  # noqa
 
 
-class LogDialog(QDialog):
+class LogDialog(QDialogWithDpi):
     """LogDialog for the Freeseer project.
 
     It is the dialog window for the log.
@@ -96,9 +95,9 @@ class LogDialog(QDialog):
         self.table_view = QTableView()
         self.table_view.setModel(self.table_model)
         self.table_view.horizontalHeader().setStretchLastSection(True)
-        self.table_view.setColumnWidth(date_column, 125)
-        self.table_view.setColumnWidth(level_column, 60)
-        self.table_view.setColumnWidth(module_column, 250)
+        self.table_view.setColumnWidth(date_column, self.set_width_with_dpi(125))
+        self.table_view.setColumnWidth(level_column, self.set_width_with_dpi(60))
+        self.table_view.setColumnWidth(module_column, self.set_width_with_dpi(250))
         self.table_view.setColumnHidden(self.level_num_column, True)
         self.table_view.setShowGrid(False)
         self.table_view.horizontalHeader().setClickable(False)
@@ -157,11 +156,11 @@ class LogDialog(QDialog):
         self.levels_slider.setTickPosition(QSlider.TicksBelow)
         self.levels_slider.setTickInterval(1)
 
-        top_panel.addSpacerItem(QSpacerItem(10, 0))
+        top_panel.addSpacerItem(self.qspacer_item_with_dpi(10, 0))
         top_panel.addWidget(self.levels_label, 3)
         top_panel.addWidget(self.current_level_label, 2)
         top_panel.addWidget(self.levels_slider, 8)
-        top_panel.addSpacerItem(QSpacerItem(25, 0))
+        top_panel.addSpacerItem(self.qspacer_item_with_dpi(25, 0))
         top_panel.addWidget(self.clear_button, 10)
 
         layout.addLayout(top_panel)
@@ -264,7 +263,7 @@ class LogHandler(logging.Handler):
             listener.message(message)
 
 
-class LogStatusWidget(QWidget):
+class LogStatusWidget(QWidgetWithDpi):
     """Widget to display latest log message and icon.
 
     This widget is used by RecordApp to show the latest
@@ -285,9 +284,9 @@ class LogStatusWidget(QWidget):
 
         self.label = ClickableLabel()
 
-        self.okay_pixmap = QPixmap(":/freeseer/state_okay.png").scaledToHeight(19)
-        self.warning_pixmap = QPixmap(":/freeseer/state_warning.png").scaledToHeight(19)
-        self.error_pixmap = QPixmap(":/freeseer/state_error.png").scaledToHeight(19)
+        self.okay_pixmap = QPixmap(":/freeseer/state_okay.png").scaledToHeight(self.set_height_with_dpi(19))
+        self.warning_pixmap = QPixmap(":/freeseer/state_warning.png").scaledToHeight(self.set_height_with_dpi(19))
+        self.error_pixmap = QPixmap(":/freeseer/state_error.png").scaledToHeight(self.set_height_with_dpi(19))
         self.icon = ClickableLabel()
         self.icon.setPixmap(self.okay_pixmap)
         self.icon.setToolTip("Okay")
