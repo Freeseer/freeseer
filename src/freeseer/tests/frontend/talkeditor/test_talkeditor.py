@@ -150,7 +150,7 @@ class TestTalkEditorApp(unittest.TestCase):
         # This will probably be more useful in test_show_save_prompt()
         QTimer.singleShot(0, self.talk_editor.newTalkWidget.cancelButton, QtCore.SLOT('click()'))
         QtTest.QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.Qt.LeftButton)
-        
+
         self.assertTrue(True)
 
     def test_show_save_prompt(self):
