@@ -26,9 +26,12 @@ import shutil
 import tempfile
 import unittest
 
+#from PyQt4.QtGui import QApplication
 from PyQt4 import Qt
+from PyQt4 import QtCore
 from PyQt4 import QtGui
 from PyQt4 import QtTest
+from PyQt4.QtCore import QTimer
 
 from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
@@ -142,14 +145,12 @@ class TestTalkEditorApp(unittest.TestCase):
         self.assertTrue(True)
 
     def test_click_add_talk(self):
-        # Click the "Add Talk" button
-        #QtTest.QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.Qt.LeftButton)
-        # For some reason, isVisible() returns False
-        #self.assertTrue(self.talk_editor.newTalkWidget.isVisible())
-
-        # For some reason, the New Talk window stays open.
-        #QtTest.QTest.mouseClick(self.talk_editor.newTalkWidget.cancelButton, Qt.Qt.LeftButton)
-        #self.assertFalse(self.talk_editor.newTalkWidget.isVisible())
+        # Click the "Add Talk" button, then click "cancel"
+        # This was just a test to see if it could be done -- the "exec_()" method is a bit tricky.
+        # This will probably be more useful in test_show_save_prompt()
+        QTimer.singleShot(0, self.talk_editor.newTalkWidget.cancelButton, QtCore.SLOT('click()'))
+        QtTest.QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.Qt.LeftButton)
+        
         self.assertTrue(True)
 
     def test_show_save_prompt(self):
