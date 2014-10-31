@@ -137,6 +137,10 @@ class DesktopLinuxSrc(IVideoInput):
         self.config.end_y = end_y
         self.config.save()
         log.debug('Area selector start: %sx%s end: %sx%s', start_x, start_y, end_x, end_y)
+        # Automatically check the "Record Region" button.
+        self.set_desktop_area()
+        self.widget.areaButton.setChecked(True)
+
         self.gui.show()
         self.widget.window().show()
 

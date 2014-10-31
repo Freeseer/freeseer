@@ -51,7 +51,7 @@ class ConfigWidget(QWidget):
         areaGroup = QHBoxLayout()
         self.areaLabel = QLabel("Record Region")
         self.areaButton = QRadioButton()
-        self.setAreaButton = QPushButton("Set")
+        self.setAreaButton = QPushButton("Select Region")
         areaGroup.addWidget(self.areaButton)
         areaGroup.addWidget(self.setAreaButton)
         layout.addRow(self.areaLabel, areaGroup)
