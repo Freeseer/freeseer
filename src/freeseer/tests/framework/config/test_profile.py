@@ -26,13 +26,10 @@ import shutil
 import tempfile
 import unittest
 
-from freeseer.framework.config import Config
-from freeseer.framework.config import options
+from freeseer.framework.config import Config, options
 from freeseer.framework.config.exceptions import StorageNotSetError
-from freeseer.framework.config.persist import ConfigParserStorage
-from freeseer.framework.config.persist import JSONConfigStorage
-from freeseer.framework.config.profile import Profile
-from freeseer.framework.config.profile import ProfileManager
+from freeseer.framework.config.persist import ConfigParserStorage, JSONConfigStorage
+from freeseer.framework.config.profile import Profile, ProfileAlreadyExists, ProfileDoesNotExist, ProfileManager
 from freeseer.framework.database import QtDBConnector
 
 
@@ -56,11 +53,54 @@ class TestProfileManager(unittest.TestCase):
         profile = self.profile_manager.get('testing')
         self.assertIsInstance(profile, Profile)
 
+    def test_get_non_existent(self):
+        """Test for non-existent profile."""
+        self.assertRaises(ProfileDoesNotExist, self.profile_manager.get, 'non-existent_profile', create_if_needed=False)
+
+    def test_get_non_existent_creates(self):
+        """Test that get creates non-existent profile if create_if_needed=True."""
+        self.assertRaises(ProfileDoesNotExist, self.profile_manager.get, 'non-existent_profile', create_if_needed=False)
+        profile = self.profile_manager.get('non_existent_profile')
+        self.assertIsInstance(profile, Profile)
+
     def test_get_cache(self):
         """Tests that get caching is working as expected."""
         profile1 = self.profile_manager.get('testing')
         profile2 = self.profile_manager.get('testing')
         self.assertEqual(profile1, profile2)
+
+    def test_list_profiles(self):
+        """Tests that list_profiles returns all profiles on file."""
+        self.profile_manager.create('testing1')
+        self.profile_manager.create('testing2')
+        profiles = self.profile_manager.list_profiles()
+        self.assertItemsEqual(['testing1', 'testing2'], profiles)
+
+    def test_create_profile(self):
+        """Tests that create_profile returns an instance of Profile.."""
+        profile = self.profile_manager.create('testing1')
+        self.assertIsInstance(profile, Profile)
+
+    def test_create_profile_existing(self):
+        """Tests that exception is raised if trying to overwrite existing profile."""
+        self.profile_manager.create('testing1')
+        self.assertRaises(ProfileAlreadyExists, self.profile_manager.create, 'testing1')
+
+    def test_create_profile_caches(self):
+        """Tests that create_profile adds the new Profile instance to cache."""
+        self.assertNotIn('testing1', self.profile_manager._cache)
+        self.profile_manager.create('testing1')
+        self.assertIn('testing1', self.profile_manager._cache)
+
+    def test_delete_profile_existing(self):
+        """Tests that delete_profile deletes the profile from cache and file."""
+        self.profile_manager.create('testing1')
+        self.profile_manager.delete('testing1')
+        self.assertRaises(ProfileDoesNotExist, self.profile_manager.get, 'testing1', create_if_needed=False)
+
+    def test_delete_profile_non_existing(self):
+        """Non-existent profiles can't be deleted."""
+        self.assertRaises(ProfileDoesNotExist, self.profile_manager.delete, 'testing')
 
 
 class TestProfile(unittest.TestCase):

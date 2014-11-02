@@ -23,6 +23,7 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import os
+import shutil
 
 from freeseer.framework.config.persist import ConfigParserStorage
 from freeseer.framework.config.persist import JSONConfigStorage
@@ -45,16 +46,78 @@ class ProfileManager(object):
             # This is thrown if path already exists.
             pass
 
-    def get(self, name='default'):
-        """Retrieve Profile instances by name.
-
-        Profiles are cached for future gets.
+    def get(self, name='default', create_if_needed=True):
         """
-        if name not in self._cache:
+        Retrieve Profile instances by name. Profiles are cached for future gets.
+
+        Args:
+            name: The name of the profile.
+            create_if_needed: When True, get creates a new profile instance
+                if profile for given name doesn't exist.
+
+        Returns:
+            The instance of Profile for the given name.
+
+        Raises:
+            ProfileDoesNotExist: If create_if_needed==False and
+            the given profile name doesn't exist.
+        """
+        if name in self._cache:
+            return self._cache[name]
+        else:
             full_path = os.path.join(self._base_folder, name)
-            self._create_if_needed(full_path)
-            self._cache[name] = Profile(full_path, name)
+            if os.path.exists(full_path):
+                self._cache[name] = Profile(full_path, name)
+                return self._cache[name]
+            elif create_if_needed:
+                return self.create(name)
+
+        raise ProfileDoesNotExist(name)
+
+    def create(self, name):
+        """
+        Creates a new Profile on file and adds it to the cache.
+
+        Args:
+            name: The name of the profile to create.
+
+        Returns:
+            The instance for the created Profile.
+
+        Raises:
+            ProfileAlreadyExists: If a profile by the same name exists.
+        """
+        path = os.path.join(self._base_folder, name)
+        try:
+            os.makedirs(path)
+        except OSError:
+            raise ProfileAlreadyExists(name)
+
+        self._cache[name] = Profile(path, name)
         return self._cache[name]
+
+    def list_profiles(self):
+        """Returns a list of available profiles on file."""
+        return os.listdir(self._base_folder)
+
+    def delete(self, name):
+        """
+        Deletes a profile and its configuration files from disk and cache.
+
+        Args:
+            name: The name of the profile to delete.
+
+        Raises:
+            ProfileDoesNotExist: If no profile exists for give name.
+        """
+        path = os.path.join(self._base_folder, name)
+        try:
+            shutil.rmtree(path)
+            del self._cache[name]
+        except OSError:
+            raise ProfileDoesNotExist(name)
+        except KeyError:
+            pass
 
 
 class Profile(object):
@@ -129,3 +192,15 @@ class Profile(object):
         if name not in self._databases:
             self._databases[name] = QtDBConnector(self.get_filepath(name), PluginManager(self))
         return self._databases[name]
+
+
+class ProfileAlreadyExists(Exception):
+    def __init__(self, value):
+        message = 'Profile already exists: "{}"'.format(value)
+        super(Exception, self).__init__(message)
+
+
+class ProfileDoesNotExist(Exception):
+    def __init__(self, value):
+        message = 'Profile does not exist: "{}"'.format(value)
+        super(Exception, self).__init__(message)
