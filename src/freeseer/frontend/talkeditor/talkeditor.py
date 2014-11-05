@@ -38,6 +38,7 @@ from PyQt4.QtGui import QHeaderView
 from PyQt4.QtGui import QIcon
 from PyQt4.QtGui import QMessageBox
 from PyQt4.QtGui import QPixmap
+from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QSortFilterProxyModel
 from PyQt4.QtGui import QTableView
 from PyQt4.QtGui import QVBoxLayout
@@ -97,13 +98,20 @@ class TalkEditorApp(FreeseerApp):
         self.currentTalkIndex = QPersistentModelIndex()
 
         # Prompt user to "Continue Editing", "Discard Changes" or "Save Changes"
+        # Can't be a QMessageBox anymore. Must be a QWidget?
         self.savePromptBox = QMessageBox()
         self.savePromptBox.setWindowTitle("Unsaved Changes Exist")
         self.savePromptBox.setIcon(QMessageBox.Information)
         self.savePromptBox.setText("The talk you were editing has unsaved changes.")
-        self.continueButton = self.savePromptBox.addButton("Continue Editing", QMessageBox.RejectRole)
-        self.discardButton = self.savePromptBox.addButton("Discard Changes", QMessageBox.DestructiveRole)
-        self.saveButton = self.savePromptBox.addButton("Save Changes", QMessageBox.AcceptRole)
+        self.continueButton = QPushButton('Continue Editing')
+        #self.continueButton = self.savePromptBox.addButton("Continue Editing", QMessageBox.RejectRole)
+        self.discardButton = QPushButton('Discard Changes')
+        #self.discardButton = self.savePromptBox.addButton("Discard Changes", QMessageBox.DestructiveRole)
+        self.saveButton = QPushButton('Save Changes')
+        #self.saveButton = self.savePromptBox.addButton("Save Changes", QMessageBox.AcceptRole)
+        self.savePromptBox.addWidget(self.continueButton)
+        self.savePromptBox.addWidget(self.discardButton)
+        self.savePromptBox.addWidget(self.saveButton)
         self.savePromptBox.setDefaultButton(self.saveButton)
 
         # Initialize geometry, to be used for restoring window positioning.
@@ -288,7 +296,7 @@ class TalkEditorApp(FreeseerApp):
         #self.eventList = QStringList(self.db.get_event_list())
         #self.roomList = QStringList(self.db.get_room_list())
 
-        #Disble input
+        #Disable input
         self.talkDetailsWidget.disable_input_fields()
 
     def search_talks(self):
@@ -298,7 +306,8 @@ class TalkEditorApp(FreeseerApp):
 
     def show_save_prompt(self):
         """Prompts the user to save or discard changes, or continue editing."""
-        self.savePromptBox.exec_()
+        self.savePromptBox.setModal(True)
+        self.savePromptBox.show()
         self.savePromptBox.setDefaultButton(self.saveButton)
         return self.savePromptBox.clickedButton()
 

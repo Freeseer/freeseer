@@ -26,12 +26,12 @@ import shutil
 import tempfile
 import unittest
 
-#from PyQt4.QtGui import QApplication
-from PyQt4 import Qt
-#from PyQt4 import QtCore
 from PyQt4 import QtGui
-from PyQt4 import QtTest
-#from PyQt4.QtCore import QTimer
+from PyQt4.QtCore import Qt
+from PyQt4.QtCore import QTimer
+from PyQt4.QtCore import SLOT
+#from PyQt4.QtGui import QApplication
+from PyQt4.QtTest import QTest
 
 from freeseer.framework.config.profile import ProfileManager
 from freeseer.frontend.talkeditor.talkeditor import TalkEditorApp
@@ -127,8 +127,8 @@ class TestTalkEditorApp(unittest.TestCase):
 
     def test_help_menu_about(self):
         '''
-        Tests TalkEditorApp's Help->About
-        '''
+       Tests TalkEditorApp's Help->About
+       '''
 
         self.assertTrue(self.talk_editor.isVisible())
 
@@ -138,7 +138,7 @@ class TestTalkEditorApp(unittest.TestCase):
         self.assertTrue(self.talk_editor.aboutDialog.isVisible())
 
         # Click "Close"
-        QtTest.QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.Qt.LeftButton)
+        QTest.mouseClick(self.talk_editor.aboutDialog.closeButton, Qt.LeftButton)
         self.assertFalse(self.talk_editor.aboutDialog.isVisible())
 
     def test_click_talk(self):
@@ -148,8 +148,8 @@ class TestTalkEditorApp(unittest.TestCase):
         # Click the "Add Talk" button, then click "cancel"
         # This was just a test to see if it could be done -- the "exec_()" method is a bit tricky.
         # This will probably be more useful in test_show_save_prompt()
-        #QTimer.singleShot(0, self.talk_editor.newTalkWidget.cancelButton, QtCore.SLOT('click()'))
-        #QtTest.QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.Qt.LeftButton)
+        #QTimer.singleShot(0, self.talk_editor.newTalkWidget.cancelButton, SLOT('click()'))
+        #QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.LeftButton
         self.assertTrue(True)
 
     def test_show_save_prompt(self):
