@@ -28,8 +28,8 @@ import unittest
 
 from PyQt4 import QtGui
 from PyQt4.QtCore import Qt
-from PyQt4.QtCore import QTimer
-from PyQt4.QtCore import SLOT
+#from PyQt4.QtCore import QTimer
+#from PyQt4.QtCore import SLOT
 #from PyQt4.QtGui import QApplication
 from PyQt4.QtTest import QTest
 
