@@ -53,6 +53,7 @@ from freeseer.frontend.talkeditor.CommandButtons import CommandButtons
 from freeseer.frontend.talkeditor.TalkDetailsWidget import TalkDetailsWidget
 from freeseer.frontend.talkeditor.NewTalkWidget import NewTalkWidget
 from freeseer.frontend.talkeditor.ImportTalksWidget import ImportTalksWidget
+from freeseer.frontend.talkeditor.SavePromptWidget import SavePromptWidget
 
 log = logging.getLogger(__name__)
 
@@ -98,21 +99,25 @@ class TalkEditorApp(FreeseerApp):
         self.currentTalkIndex = QPersistentModelIndex()
 
         # Prompt user to "Continue Editing", "Discard Changes" or "Save Changes"
-        # Can't be a QMessageBox anymore. Must be a QWidget?
+        # Can't be a QMessageBox anymore. Must be a QDialog? Put in separate file
         self.savePromptBox = QMessageBox()
         self.savePromptBox.setWindowTitle("Unsaved Changes Exist")
         self.savePromptBox.setIcon(QMessageBox.Information)
         self.savePromptBox.setText("The talk you were editing has unsaved changes.")
         self.continueButton = QPushButton('Continue Editing')
-        #self.continueButton = self.savePromptBox.addButton("Continue Editing", QMessageBox.RejectRole)
-        self.discardButton = QPushButton('Discard Changes')
-        #self.discardButton = self.savePromptBox.addButton("Discard Changes", QMessageBox.DestructiveRole)
-        self.saveButton = QPushButton('Save Changes')
-        #self.saveButton = self.savePromptBox.addButton("Save Changes", QMessageBox.AcceptRole)
-        self.savePromptBox.addWidget(self.continueButton)
-        self.savePromptBox.addWidget(self.discardButton)
-        self.savePromptBox.addWidget(self.saveButton)
+        self.continueButton = self.savePromptBox.addButton("Continue Editing", QMessageBox.RejectRole)
+        #self.discardButton = QPushButton('Discard Changes')
+        self.discardButton = self.savePromptBox.addButton("Discard Changes", QMessageBox.DestructiveRole)
+        #self.saveButton = QPushButton('Save Changes')
+        self.saveButton = self.savePromptBox.addButton("Save Changes", QMessageBox.AcceptRole)
+        #self.savePromptBox.addWidget(self.continueButton)
+        #self.savePromptBox.addWidget(self.discardButton)
+        #self.savePromptBox.addWidget(self.saveButton)
         self.savePromptBox.setDefaultButton(self.saveButton)
+
+        # Setup SavePromptWidget
+        self.savePromptWidget = SavePromptWidget()
+        self.connect(self.savePromptWidget.testButton, SIGNAL('clicked()'), self.savePromptWidget.reject)
 
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
@@ -306,10 +311,10 @@ class TalkEditorApp(FreeseerApp):
 
     def show_save_prompt(self):
         """Prompts the user to save or discard changes, or continue editing."""
-        self.savePromptBox.setModal(True)
-        self.savePromptBox.show()
-        self.savePromptBox.setDefaultButton(self.saveButton)
-        return self.savePromptBox.clickedButton()
+        self.savePromptWidget.setModal(True)
+        self.savePromptWidget.show()
+        #self.savePromptBox.setDefaultButton(self.saveButton)
+        #return self.savePromptBox.clickedButton()
 
     def click_talk(self, model):
         """Warns user if there are unsaved changes, and selects talk clicked by the user."""
@@ -317,7 +322,9 @@ class TalkEditorApp(FreeseerApp):
         modelRow = model.row()
         if self.unsaved_details_exist():
             log.info("Unsaved changes exist in row %d", self.currentTalkIndex.row())
-            confirm = self.show_save_prompt()
+            #confirm = self.show_save_prompt()
+            self.show_save_prompt()
+            confirm = self.discardButton
             if confirm == self.saveButton:
                 log.info("Saving changes in row %d...", self.currentTalkIndex.row())
                 self.tableView.selectRow(self.currentTalkIndex.row())
@@ -337,7 +344,9 @@ class TalkEditorApp(FreeseerApp):
         """Warns user if there are unsaved changes, and shows the New Talk window."""
         if self.unsaved_details_exist():
             log.info("Unsaved changes exist in row %d", self.currentTalkIndex.row())
-            confirm = self.show_save_prompt()
+            #confirm = self.show_save_prompt()
+            self.show_save_prompt()
+            confirm = self.discardButton
             if confirm == self.saveButton:
                 log.info("Saving changes in row %d...", self.currentTalkIndex.row())
                 self.update_talk()
@@ -515,7 +524,9 @@ class TalkEditorApp(FreeseerApp):
     def closeEvent(self, event):
         if self.unsaved_details_exist():
             log.info("Unsaved changes exist in row %d", self.currentTalkIndex.row())
-            confirm = self.show_save_prompt()
+            #confirm = self.show_save_prompt()
+            self.show_save_prompt()
+            confirm = self.discardButton
             if confirm == self.saveButton:
                 log.info("Saving changes in row %d...", self.currentTalkIndex.row())
                 self.update_talk()

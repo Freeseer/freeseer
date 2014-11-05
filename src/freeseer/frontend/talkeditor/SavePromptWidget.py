@@ -24,17 +24,15 @@
 
 from PyQt4.QtGui import QDialog
 from PyQt4.QtGui import QHBoxLayout
-from PyQt4.QtGui import QIcon
+from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPushButton
 from PyQt4.QtGui import QVBoxLayout
 
-from freeseer.frontend.talkeditor.TalkDetailsWidget import TalkDetailsWidget
 
-
-class NewTalkWidget(QDialog):
-    """Dialog for adding new talk to database"""
+class SavePromptWidget(QDialog):
+    """Dialog warning the user if there are unsaved changes to the current talk"""
     def __init__(self, parent=None):
-        super(NewTalkWidget, self).__init__(parent)
+        super(SavePromptWidget, self).__init__(parent)
 
         self.resize(600, 200)
 
@@ -43,24 +41,11 @@ class NewTalkWidget(QDialog):
 
         self.bottomButtonLayout = QHBoxLayout()
 
-        self.talkDetailsWidget = TalkDetailsWidget()
-        self.layout.addWidget(self.talkDetailsWidget)
+        self.label = QLabel("This is a test. Click the button below to continue.")
+        self.testButton = QPushButton('Test')
 
-        self.talkDetailsWidget.saveButton.hide()
-        addIcon = QIcon.fromTheme("list-add")
-        cancelIcon = QIcon.fromTheme("edit-clear")
+        #self.bottomButtonLayout.addWidget(self.testButton)
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.testButton)
 
-        self.addButton = QPushButton('Add')
-        self.addButton.setIcon(addIcon)
-        self.cancelButton = QPushButton('Cancel')
-        self.cancelButton.setIcon(cancelIcon)
-
-        self.talkDetailsWidget.layout.addLayout(self.bottomButtonLayout, 6, 1, 1, 1)
-
-        self.bottomButtonLayout.addWidget(self.addButton)
-        self.bottomButtonLayout.addWidget(self.cancelButton)
-
-        self.setWindowTitle("New Talk")
-
-        self.talkDetailsWidget.enable_input_fields()
-        self.talkDetailsWidget.dateEdit.setDisplayFormat('dd MMMM, yyyy')
+        self.setWindowTitle("Unsaved Changes Exist")
