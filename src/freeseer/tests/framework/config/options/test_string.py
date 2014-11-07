@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,9 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import unittest
+
+from jsonschema import validate
+from jsonschema import ValidationError
 
 from freeseer.framework.config.options import StringOption
 from freeseer.tests.framework.config.options import OptionTest
@@ -50,6 +53,12 @@ class TestStringOptionNoDefault(unittest.TestCase, OptionTest):
     def setUp(self):
         self.option = StringOption()
 
+    def test_schema(self):
+        """Tests StringOption schema method."""
+        self.assertRaises(ValidationError, validate, 1, self.option.schema())
+        self.assertIsNone(validate('string_value', self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'type': 'string'})
+
 
 class TestStringOptionWithDefault(TestStringOptionNoDefault):
     """Tests StringOption with a default value."""
@@ -60,3 +69,9 @@ class TestStringOptionWithDefault(TestStringOptionNoDefault):
     def test_default(self):
         """Tests that the default was set correctly."""
         self.assertEqual(self.option.default, 'testing')
+
+    def test_schema(self):
+        """Tests StringOption schema method."""
+        self.assertRaises(ValidationError, validate, 1, self.option.schema())
+        self.assertIsNone(validate('string_value', self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'default': 'testing', 'type': 'string'})

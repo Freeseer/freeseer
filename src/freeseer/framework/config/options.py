@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@ from freeseer.framework.config.exceptions import InvalidDecodeValueError
 
 class StringOption(Option):
     """Represents a string value."""
+    SCHEMA_TYPE = 'string'
 
     def is_valid(self, value):
         return isinstance(value, str) or hasattr(value, '__str__')
@@ -43,6 +44,7 @@ class StringOption(Option):
 
 class IntegerOption(Option):
     """Represents an integer number value."""
+    SCHEMA_TYPE = 'integer'
 
     def is_valid(self, value):
         return isinstance(value, int)
@@ -59,6 +61,7 @@ class IntegerOption(Option):
 
 class FloatOption(Option):
     """Represents a floating point number value."""
+    SCHEMA_TYPE = 'number'
 
     def is_valid(self, value):
         return isinstance(value, float)
@@ -75,6 +78,7 @@ class FloatOption(Option):
 
 class BooleanOption(Option):
     """Represents a boolean value."""
+    SCHEMA_TYPE = 'boolean'
 
     def is_valid(self, value):
         return isinstance(value, bool)
@@ -88,6 +92,7 @@ class BooleanOption(Option):
 
 class FolderOption(Option):
     """Represents the path to a folder."""
+    SCHEMA_TYPE = 'string'
 
     def __init__(self, default=Option.NotSpecified, auto_create=False):
         self.auto_create = auto_create
@@ -119,6 +124,7 @@ class FolderOption(Option):
 
 class ChoiceOption(StringOption):
     """Represents a selection from a pre-defined list of strings."""
+    SCHEMA_TYPE = 'enum'
 
     def __init__(self, choices, default=Option.NotSpecified):
         self.choices = choices
@@ -133,3 +139,9 @@ class ChoiceOption(StringOption):
             return choice
         else:
             raise InvalidDecodeValueError(value)
+
+    def schema(self):
+        schema = {'enum': self.choices}
+        if self.default != Option.NotSpecified:
+            schema['default'] = self.default
+        return schema

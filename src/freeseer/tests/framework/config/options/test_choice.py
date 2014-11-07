@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,9 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import unittest
+
+from jsonschema import validate
+from jsonschema import ValidationError
 
 from freeseer.framework.config.options import ChoiceOption
 from freeseer.tests.framework.config.options import OptionTest
@@ -52,6 +55,18 @@ class TestChoiceOptionNoDefault(unittest.TestCase, OptionTest):
             'world',
         ])
 
+    def test_schema(self):
+        """Tests a ChoiceOption schema method."""
+        expected = {
+            'enum': [
+                'hello',
+                'world',
+            ],
+        }
+        self.assertRaises(ValidationError, validate, 'error', self.option.schema())
+        self.assertIsNone(validate('world', self.option.schema()))
+        self.assertDictEqual(self.option.schema(), expected)
+
 
 class TestChoiceOptionWithDefault(TestChoiceOptionNoDefault):
     """Tests ChoiceOption with a default value."""
@@ -65,3 +80,16 @@ class TestChoiceOptionWithDefault(TestChoiceOptionNoDefault):
     def test_default(self):
         """Tests that the default was set correctly."""
         self.assertEqual(self.option.default, 'hello')
+
+    def test_schema(self):
+        """Tests a ChoiceOption schema method."""
+        expected = {
+            'default': 'hello',
+            'enum': [
+                'hello',
+                'world',
+            ],
+        }
+        self.assertRaises(ValidationError, validate, 'error', self.option.schema())
+        self.assertIsNone(validate('world', self.option.schema()))
+        self.assertDictEqual(self.option.schema(), expected)

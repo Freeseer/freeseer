@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
+#  Copyright (C) 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -27,14 +27,14 @@ import unittest
 from jsonschema import validate
 from jsonschema import ValidationError
 
-from freeseer.framework.config.options import IntegerOption
+from freeseer.framework.config.options import FloatOption
 from freeseer.tests.framework.config.options import OptionTest
 
 
-class TestIntegerOptionNoDefault(unittest.TestCase, OptionTest):
-    """Tests IntegerOption without a default value."""
+class TestFloatOptionNoDefault(unittest.TestCase, OptionTest):
+    """Tests FloatOption without a default value."""
 
-    valid_success = range(-1000, 1000)
+    valid_success = [x / 10.0 for x in xrange(-100, 100)]
 
     encode_success = zip(valid_success, map(str, valid_success))
 
@@ -46,27 +46,27 @@ class TestIntegerOptionNoDefault(unittest.TestCase, OptionTest):
     ]
 
     def setUp(self):
-        self.option = IntegerOption()
+        self.option = FloatOption()
 
     def test_schema(self):
-        """Tests IntegerOption schema method."""
-        self.assertRaises(ValidationError, validate, 1.0, self.option.schema())
-        self.assertIsNone(validate(5, self.option.schema()))
-        self.assertDictEqual(self.option.schema(), {'type': 'integer'})
+        """Tests FloatOption schema method."""
+        self.assertRaises(ValidationError, validate, 'error', self.option.schema())
+        self.assertIsNone(validate(5.5, self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'type': 'number'})
 
 
-class TestIntegerOptionWithDefault(TestIntegerOptionNoDefault):
-    """Tests IntegerOption with a default value."""
+class TestFloatOptionWithDefault(TestFloatOptionNoDefault):
+    """Tests FloatOption with a default value."""
 
     def setUp(self):
-        self.option = IntegerOption(1234)
+        self.option = FloatOption(1234.5)
 
     def test_default(self):
         """Tests that the default was set correctly."""
-        self.assertEqual(self.option.default, 1234)
+        self.assertEqual(self.option.default, 1234.5)
 
     def test_schema(self):
-        """Tests IntegerOption schema method."""
-        self.assertRaises(ValidationError, validate, 1.0, self.option.schema())
-        self.assertIsNone(validate(5, self.option.schema()))
-        self.assertDictEqual(self.option.schema(), {'default': 1234, 'type': 'integer'})
+        """Tests FloatOption schema method."""
+        self.assertRaises(ValidationError, validate, 'error', self.option.schema())
+        self.assertIsNone(validate(5.0, self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'default': 1234.5, 'type': 'number'})

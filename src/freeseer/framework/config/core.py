@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -55,6 +55,13 @@ class Option(object):
     def presentation(self, value):
         """Returns a modified version of value that will not itself be persisted."""
         return value
+
+    def schema(self):
+        """Returns the json schema for an Option."""
+        schema = {'type': self.SCHEMA_TYPE}
+        if self.default != self.NotSpecified:
+            schema['default'] = self.default
+        return schema
 
     # Override these!
 
@@ -192,6 +199,26 @@ class Config(object):
             self._storage.store(self, *self._storage_args)
         else:
             raise StorageNotSetError()
+
+    @classmethod
+    def schema(cls):
+        """Returns the json schema for this Config instance."""
+        required = []
+
+        schema = {
+            'type': 'object',
+            'properties': {},
+        }
+
+        for name, instance in cls.options.iteritems():
+            schema['properties'][name] = instance.schema()
+            if instance.is_required():
+                required.append(name)
+
+        if required:
+            schema['required'] = required
+
+        return schema
 
 
 class ConfigStorage(object):

@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,9 @@ import os
 import shutil
 import tempfile
 import unittest
+
+from jsonschema import validate
+from jsonschema import ValidationError
 
 from freeseer.framework.config.options import FolderOption
 from freeseer.tests.framework.config.options import OptionTest
@@ -56,6 +59,12 @@ class TestFolderOptionNoDefault(unittest.TestCase, OptionTest):
         presentation_value = self.option.presentation(path)
         self.assertEqual(presentation_value, path)
         self.assertFalse(os.path.exists(presentation_value))
+
+    def test_schema(self):
+        """Tests StringOption schema method."""
+        self.assertRaises(ValidationError, validate, 1, self.option.schema())
+        self.assertIsNone(validate('/tmp2', self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'type': 'string'})
 
 
 class TestFolderOptionAutoCreate(TestFolderOptionNoDefault):
@@ -88,3 +97,9 @@ class TestFolderOptionWithDefault(TestFolderOptionNoDefault):
     def test_default(self):
         """Tests that the default was set correctly."""
         self.assertEqual(self.option.default, '/tmp')
+
+    def test_schema(self):
+        """Tests StringOption schema method."""
+        self.assertRaises(ValidationError, validate, 1, self.option.schema())
+        self.assertIsNone(validate('/tmp2', self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'default': '/tmp', 'type': 'string'})

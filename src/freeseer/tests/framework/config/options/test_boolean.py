@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-#  Copyright (C) 2011, 2013  Free and Open Source Software Learning Centre
+#  Copyright (C) 2011, 2013, 2014 Free and Open Source Software Learning Centre
 #  http://fosslc.org
 #
 #  This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,9 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import unittest
+
+from jsonschema import validate
+from jsonschema import ValidationError
 
 from freeseer.framework.config.options import BooleanOption
 from freeseer.tests.framework.config.options import OptionTest
@@ -53,6 +56,12 @@ class TestBooleanOptionNoDefault(unittest.TestCase, OptionTest):
     def setUp(self):
         self.option = BooleanOption()
 
+    def test_schema(self):
+        """Tests BooleanOption schema method."""
+        self.assertRaises(ValidationError, validate, 4, self.option.schema())
+        self.assertIsNone(validate(True, self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'type': 'boolean'})
+
 
 class TestBooleanOptionWithDefault(TestBooleanOptionNoDefault):
     """Test BooleanOption with a default value."""
@@ -63,3 +72,9 @@ class TestBooleanOptionWithDefault(TestBooleanOptionNoDefault):
     def test_default(self):
         """Tests that the default was set correctly."""
         self.assertEqual(self.option.default, False)
+
+    def test_schema(self):
+        """Tests BooleanOption schema method."""
+        self.assertRaises(ValidationError, validate, 4, self.option.schema())
+        self.assertIsNone(validate(True, self.option.schema()))
+        self.assertDictEqual(self.option.schema(), {'default': False, 'type': 'boolean'})
