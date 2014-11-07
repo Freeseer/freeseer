@@ -29,6 +29,7 @@ http://wiki.github.com/Freeseer/freeseer/
 from PyQt4 import QtCore
 from PyQt4 import QtGui
 
+from freeseer.framework.multimedia import Quality
 from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QGroupBoxWithDpi
 from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 
@@ -71,7 +72,7 @@ class AVWidget(QWidgetWithDpi):
 
         self.audioGroupBox.setCheckable(True)
         self.audioGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        self.audioGroupBox.setFixedSize(BOX_WIDTH, BOX_HEIGHT)
+        self.audioGroupBox.setFixedSize(BOX_WIDTH, 1.5 * BOX_HEIGHT)
         self.audioGroupBox.setStyleSheet(boxStyle)
 
         self.audioMixerLabel = QtGui.QLabel("Audio Mixer")
@@ -87,6 +88,21 @@ class AVWidget(QWidgetWithDpi):
         audioLayout.addWidget(self.audioMixerComboBox, 0, 1)
         audioLayout.addWidget(self.audioMixerSetupPushButton, 0, 2)
 
+        self.audioQualityLabel = QtGui.QLabel("Audio Quality")
+        self.audioQualityLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.audioQualityComboBox = QtGui.QComboBox()
+        self.audioQualityComboBox.addItems(Quality.qualities)
+        self.audioQualityLabel.setBuddy(self.audioQualityComboBox)
+        self.audioQualitySetupPushButton = QtGui.QToolButton()
+        self.audioQualitySetupPushButton.setText("Setup")
+        self.audioQualitySetupPushButton.setIcon(config_icon)
+        self.audioQualitySetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.audioQualitySetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        self.audioQualitySetupPushButton.setEnabled(False)
+        audioLayout.addWidget(self.audioQualityLabel, 1, 0)
+        audioLayout.addWidget(self.audioQualityComboBox, 1, 1)
+        audioLayout.addWidget(self.audioQualitySetupPushButton, 1, 2)
+
         #
         # Video Input
         #
@@ -98,7 +114,7 @@ class AVWidget(QWidgetWithDpi):
 
         self.videoGroupBox.setCheckable(True)
         self.videoGroupBox.setSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
-        self.videoGroupBox.setFixedSize(BOX_WIDTH, BOX_HEIGHT)
+        self.videoGroupBox.setFixedSize(BOX_WIDTH, 1.5 * BOX_HEIGHT)
         self.videoGroupBox.setStyleSheet(boxStyle)
 
         self.videoMixerLabel = QtGui.QLabel("Video Mixer")
@@ -113,6 +129,21 @@ class AVWidget(QWidgetWithDpi):
         videoLayout.addWidget(self.videoMixerLabel, 0, 0)
         videoLayout.addWidget(self.videoMixerComboBox, 0, 1)
         videoLayout.addWidget(self.videoMixerSetupPushButton, 0, 2)
+
+        self.videoQualityLabel = QtGui.QLabel("Video Quality")
+        self.videoQualityLabel.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.videoQualityComboBox = QtGui.QComboBox()
+        self.videoQualityComboBox.addItems(Quality.qualities)
+        self.videoQualityLabel.setBuddy(self.videoQualityComboBox)
+        self.videoQualitySetupPushButton = QtGui.QToolButton()
+        self.videoQualitySetupPushButton.setText("Setup")
+        self.videoQualitySetupPushButton.setIcon(config_icon)
+        self.videoQualitySetupPushButton.setSizePolicy(QtGui.QSizePolicy.Maximum, QtGui.QSizePolicy.Maximum)
+        self.videoQualitySetupPushButton.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        self.videoQualitySetupPushButton.setEnabled(False)
+        videoLayout.addWidget(self.videoQualityLabel, 1, 0)
+        videoLayout.addWidget(self.videoQualityComboBox, 1, 1)
+        videoLayout.addWidget(self.videoQualitySetupPushButton, 1, 2)
 
         #
         # Record to Stream

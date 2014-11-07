@@ -37,6 +37,7 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeseer
+from freeseer.framework.multimedia import Quality
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.config import Config, options
 
@@ -50,6 +51,8 @@ class OggIcecastConfig(Config):
     port = options.IntegerOption(8000)
     password = options.StringOption("hackme")
     mount = options.StringOption("stream.ogg")
+    audio_quality = options.FloatOption(0.3)
+    video_bitrate = options.IntegerOption(2400)
 
 
 class OggIcecast(IOutput):
@@ -60,6 +63,9 @@ class OggIcecast(IOutput):
     extension = "ogg"
     tags = None
     CONFIG_CLASS = OggIcecastConfig
+    configurable = True
+    AUDIO_MIN = -0.1
+    AUDIO_RANGE = 1.1
 
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
@@ -89,6 +95,7 @@ class OggIcecast(IOutput):
             bin.add(audioconvert)
 
             audiocodec = gst.element_factory_make("vorbisenc", "audiocodec")
+            audiocodec.set_property("quality", self.config.audio_quality)
             bin.add(audiocodec)
 
             # Setup metadata
@@ -121,6 +128,7 @@ class OggIcecast(IOutput):
             bin.add(videoqueue)
 
             videocodec = gst.element_factory_make("theoraenc", "videocodec")
+            videocodec.set_property("bitrate", self.config.video_bitrate)
             bin.add(videocodec)
 
             videopad = videoqueue.get_pad("sink")
@@ -157,14 +165,24 @@ class OggIcecast(IOutput):
 
         return self.widget
 
+    def get_video_quality_layout(self):
+        """Returns a layout with the video quality config widgets for configtool to use."""
+        return self.get_widget().get_video_quality_layout()
+
+    def get_audio_quality_layout(self):
+        """Returns a layout with the audio quality config widgets for configtool to use."""
+        return self.get_widget().get_audio_quality_layout()
+
     def __enable_connections(self):
         self.widget.connect(self.widget.lineedit_ip, SIGNAL('editingFinished()'), self.set_ip)
         self.widget.connect(self.widget.spinbox_port, SIGNAL('valueChanged(int)'), self.set_port)
         self.widget.connect(self.widget.lineedit_password, SIGNAL('editingFinished()'), self.set_password)
         self.widget.connect(self.widget.lineedit_mount, SIGNAL('editingFinished()'), self.set_mount)
+        self.widget.connect(self.widget.spinbox_audio_quality, SIGNAL('valueChanged(double)'), self.audio_quality_changed)
+        self.widget.connect(self.widget.spinbox_video_quality, SIGNAL('valueChanged(int)'), self.video_bitrate_changed)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
+        self.get_config()
 
         self.widget.lineedit_ip.setText(self.config.ip)
         self.widget.spinbox_port.setValue(self.config.port)
@@ -188,6 +206,40 @@ class OggIcecast(IOutput):
 
     def set_mount(self):
         self.config.mount = str(self.widget.lineedit_mount.text())
+        self.config.save()
+
+    def audio_quality_changed(self):
+        """Called when a change to the SpinBox for audio quality is made"""
+        self.config.audio_quality = self.widget.spinbox_audio_quality.value()
+        self.config.save()
+
+    def set_audio_quality(self, quality):
+        self.get_config()
+
+        if quality == Quality.LOW:
+            self.config.audio_quality = self.AUDIO_MIN + (self.AUDIO_RANGE * Quality.LOW_AUDIO_FACTOR)
+        elif quality == Quality.MEDIUM:
+            self.config.audio_quality = self.AUDIO_MIN + (self.AUDIO_RANGE * Quality.MEDIUM_AUDIO_FACTOR)
+        elif quality == Quality.HIGH:
+            self.config.audio_quality = self.AUDIO_MIN + (self.AUDIO_RANGE * Quality.HIGH_AUDIO_FACTOR)
+
+        if self.widget_config_loaded:
+            self.widget.spinbox_audio_quality.setValue(self.config.audio_quality)
+
+        self.config.save()
+
+    def video_bitrate_changed(self):
+        """Called when a change to the SpinBox for video bitrate is made"""
+        self.config.video_bitrate = self.widget.spinbox_video_quality.value()
+        self.config.save()
+
+    def set_video_bitrate(self, bitrate):
+        self.get_config()
+
+        if self.widget_config_loaded:
+            self.widget.spinbox_video_quality.setValue(bitrate)
+
+        self.config.video_bitrate = bitrate
         self.config.save()
 
     ###

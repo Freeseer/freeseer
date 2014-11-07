@@ -38,6 +38,7 @@ import gst
 from PyQt4.QtCore import SIGNAL
 
 # Freeeseer
+from freeseer.framework.multimedia import Quality
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.config import Config, options
 
@@ -60,6 +61,9 @@ class OggOutput(IOutput):
     extension = "ogg"
     tags = None
     CONFIG_CLASS = OggOutputConfig
+    configurable = True
+    AUDIO_MIN = -0.1
+    AUDIO_RANGE = 1.1
 
     def get_output_bin(self, audio=True, video=True, metadata=None):
         bin = gst.Bin()
@@ -166,13 +170,21 @@ class OggOutput(IOutput):
 
         return self.widget
 
+    def get_video_quality_layout(self):
+        """Returns a layout with the video quality config widgets for configtool to use."""
+        return self.get_widget().get_video_quality_layout()
+
+    def get_audio_quality_layout(self):
+        """Returns a layout with the audio quality config widgets for configtool to use."""
+        return self.get_widget().get_audio_quality_layout()
+
     def __enable_connections(self):
-        self.widget.connect(self.widget.spinbox_audio_quality, SIGNAL('valueChanged(double)'), self.set_audio_quality)
-        self.widget.connect(self.widget.spinbox_video_quality, SIGNAL('valueChanged(int)'), self.set_video_bitrate)
+        self.widget.connect(self.widget.spinbox_audio_quality, SIGNAL('valueChanged(double)'), self.audio_quality_changed)
+        self.widget.connect(self.widget.spinbox_video_quality, SIGNAL('valueChanged(int)'), self.video_bitrate_changed)
         self.widget.connect(self.widget.checkbox_matterhorn, SIGNAL('stateChanged(int)'), self.set_matterhorn)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
+        self.get_config()
 
         self.widget.spinbox_audio_quality.setValue(self.config.audio_quality)
         self.widget.spinbox_video_quality.setValue(self.config.video_bitrate)
@@ -181,12 +193,38 @@ class OggOutput(IOutput):
         # Finally enable connections
         self.__enable_connections()
 
-    def set_audio_quality(self):
+    def audio_quality_changed(self):
+        """Called when a change to the SpinBox for audio quality is made"""
         self.config.audio_quality = self.widget.spinbox_audio_quality.value()
         self.config.save()
 
-    def set_video_bitrate(self):
+    def set_audio_quality(self, quality):
+        self.get_config()
+
+        if quality == Quality.LOW:
+            self.config.audio_quality = self.AUDIO_MIN + (self.AUDIO_RANGE * Quality.LOW_AUDIO_FACTOR)
+        elif quality == Quality.MEDIUM:
+            self.config.audio_quality = self.AUDIO_MIN + (self.AUDIO_RANGE * Quality.MEDIUM_AUDIO_FACTOR)
+        elif quality == Quality.HIGH:
+            self.config.audio_quality = self.AUDIO_MIN + (self.AUDIO_RANGE * Quality.HIGH_AUDIO_FACTOR)
+
+        if self.widget_config_loaded:
+            self.widget.spinbox_audio_quality.setValue(self.config.audio_quality)
+
+        self.config.save()
+
+    def video_bitrate_changed(self):
+        """Called when a change to the SpinBox for video bitrate is made"""
         self.config.video_bitrate = self.widget.spinbox_video_quality.value()
+        self.config.save()
+
+    def set_video_bitrate(self, bitrate):
+        self.get_config()
+
+        if self.widget_config_loaded:
+            self.widget.spinbox_video_quality.setValue(bitrate)
+
+        self.config.video_bitrate = bitrate
         self.config.save()
 
     def set_matterhorn(self, state):

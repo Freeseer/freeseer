@@ -48,7 +48,7 @@ class ConfigToolWidget(QWidgetWithDpi):
         '''
         super(ConfigToolWidget, self).__init__(parent)
 
-        self.setMinimumSize(800, 400)
+        self.setMinimumSize(800, 460)
         self.mainLayout = QtGui.QHBoxLayout()
         self.setLayout(self.mainLayout)
 

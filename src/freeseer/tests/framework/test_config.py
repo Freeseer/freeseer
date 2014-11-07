@@ -89,9 +89,17 @@ class TestConfig(unittest.TestCase):
                     'default': 'Video Passthrough',
                     'type': 'string',
                 },
+                'video_quality': {
+                    'default': 3,
+                    'type': 'integer',
+                },
                 'audiomixer': {
                     'default': 'Audio Passthrough',
                     'type': 'string',
+                },
+                'audio_quality': {
+                    'default': 3,
+                    'type': 'integer',
                 },
                 'record_to_file': {
                     'default': True,

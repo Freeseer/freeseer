@@ -92,6 +92,7 @@ import gst
 from PyQt4 import QtGui, QtCore
 
 # Freeseer libs
+from freeseer.framework.multimedia import Quality
 from freeseer.framework.plugin import IOutput
 from freeseer.framework.plugin import PluginError
 from freeseer.framework.config import Config, options
@@ -152,6 +153,11 @@ class RTMPOutput(IOutput):
     streaming_destination_widget = None
     load_config_delegate = None
     CONFIG_CLASS = RTMPOutputConfig
+    configurable = True
+    LAME_AUDIO_MIN = 0
+    LAME_AUDIO_RANGE = 9.999
+    FAAC_AUDIO_MIN = 1
+    FAAC_AUDIO_RANGE = 999
 
     #@brief - RTMP Streaming plugin.
     # Structure for function was based primarily off the ogg function
@@ -308,9 +314,8 @@ class RTMPOutput(IOutput):
         self.spinbox_audio_quality.setMaximum(9)
         self.spinbox_audio_quality.setSingleStep(1)
         self.spinbox_audio_quality.setValue(5)
-        self.stream_settings_widget_layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
 
-        self.stream_settings_widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_audio_quality)
+        self.stream_settings_widget.connect(self.spinbox_audio_quality, QtCore.SIGNAL('valueChanged(int)'), self.audio_quality_changed)
 
         #
         # Audio Codec
@@ -334,9 +339,8 @@ class RTMPOutput(IOutput):
         self.spinbox_video_quality.setMinimum(0)
         self.spinbox_video_quality.setMaximum(16777215)
         self.spinbox_video_quality.setValue(2400)           # Default value 2400
-        self.stream_settings_widget_layout.addRow(self.label_video_quality, self.spinbox_video_quality)
 
-        self.stream_settings_widget.connect(self.spinbox_video_quality, QtCore.SIGNAL('valueChanged(int)'), self.set_video_bitrate)
+        self.stream_settings_widget.connect(self.spinbox_video_quality, QtCore.SIGNAL('valueChanged(int)'), self.video_bitrate_changed)
 
         #
         # Video Tune
@@ -466,6 +470,26 @@ class RTMPOutput(IOutput):
 
         return self.widget
 
+    def get_video_quality_layout(self):
+        """Returns a layout with the video quality config widgets for configtool to use."""
+        self.get_widget()
+
+        layout_video_quality = QtGui.QHBoxLayout()
+        layout_video_quality.addWidget(self.label_video_quality)
+        layout_video_quality.addWidget(self.spinbox_video_quality)
+
+        return layout_video_quality
+
+    def get_audio_quality_layout(self):
+        """Returns a layout with the audio quality config widgets for configtool to use."""
+        self.get_widget()
+
+        layout_audio_quality = QtGui.QHBoxLayout()
+        layout_audio_quality.addWidget(self.label_audio_quality)
+        layout_audio_quality.addWidget(self.spinbox_audio_quality)
+
+        return layout_audio_quality
+
     def load_streaming_destination_widget(self):
         streaming_destination_widget = self.setup_streaming_destination_widget(self.config.streaming_destination)
 
@@ -478,7 +502,7 @@ class RTMPOutput(IOutput):
             self.streaming_destination_widget = streaming_destination_widget
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
+        self.get_config()
         self.stream_settings_load_config()
 
         self.combobox_streaming_dest.setCurrentIndex(STREAMING_DESTINATION_VALUES.index(self.config.streaming_destination))
@@ -521,12 +545,45 @@ class RTMPOutput(IOutput):
         self.config.url = text
         self.config.save()
 
-    def set_audio_quality(self):
+    def audio_quality_changed(self):
+        """Called when a change to the SpinBox for audio quality is made"""
         self.config.audio_quality = self.spinbox_audio_quality.value()
         self.config.save()
 
-    def set_video_bitrate(self):
+    def set_audio_quality(self, quality):
+        self.get_config()
+
+        if self.config.audio_codec == "lame":
+            min_val = self.LAME_AUDIO_MIN
+            range_val = self.LAME_AUDIO_RANGE
+        else:
+            min_val = self.FAAC_AUDIO_MIN
+            range_val = self.FAAC_AUDIO_RANGE
+
+        if quality == Quality.LOW:
+            self.config.audio_quality = int(min_val + (range_val * Quality.LOW_AUDIO_FACTOR))
+        elif quality == Quality.MEDIUM:
+            self.config.audio_quality = int(min_val + (range_val * Quality.MEDIUM_AUDIO_FACTOR))
+        elif quality == Quality.HIGH:
+            self.config.audio_quality = int(min_val + (range_val * Quality.HIGH_AUDIO_FACTOR))
+
+        if self.widget_config_loaded:
+            self.spinbox_audio_quality.setValue(self.config.audio_quality)
+
+        self.config.save()
+
+    def video_bitrate_changed(self):
+        """Called when a change to the SpinBox for video bitrate is made"""
         self.config.video_bitrate = self.spinbox_video_quality.value()
+        self.config.save()
+
+    def set_video_bitrate(self, bitrate):
+        self.get_config()
+
+        if self.widget_config_loaded:
+            self.spinbox_video_quality.setValue(bitrate)
+
+        self.config.video_bitrate = bitrate
         self.config.save()
 
     def set_video_tune(self, tune):
@@ -536,6 +593,9 @@ class RTMPOutput(IOutput):
     def set_audio_codec(self, codec):
         self.config.audio_codec = codec
         self.config.save()
+
+        if self.gui.config.audio_quality != Quality.CUSTOM:
+            self.set_audio_quality(self.gui.config.audio_quality)
 
     def set_streaming_dest(self, dest):
         self.config.streaming_destination = dest

@@ -29,6 +29,7 @@ http://wiki.github.com/Freeseer/freeseer/
 from PyQt4.QtGui import QCheckBox
 from PyQt4.QtGui import QDoubleSpinBox
 from PyQt4.QtGui import QFormLayout
+from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QSpinBox
 from PyQt4.QtGui import QWidget
@@ -53,7 +54,6 @@ class ConfigWidget(QWidget):
         self.spinbox_audio_quality.setSingleStep(0.1)
         self.spinbox_audio_quality.setDecimals(1)
         self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
-        layout.addRow(self.label_audio_quality, self.spinbox_audio_quality)
 
         #
         # Video Quality
@@ -64,7 +64,6 @@ class ConfigWidget(QWidget):
         self.spinbox_video_quality.setMinimum(0)
         self.spinbox_video_quality.setMaximum(16777215)
         self.spinbox_video_quality.setValue(2400)           # Default value 2400
-        layout.addRow(self.label_video_quality, self.spinbox_video_quality)
 
         #
         # Misc.
@@ -73,3 +72,17 @@ class ConfigWidget(QWidget):
         self.label_matterhorn.setToolTip("Generates Matterhorn Metadata in XML format")
         self.checkbox_matterhorn = QCheckBox()
         layout.addRow(self.label_matterhorn, self.checkbox_matterhorn)
+
+    def get_video_quality_layout(self):
+        layout_video_quality = QHBoxLayout()
+        layout_video_quality.addWidget(self.label_video_quality)
+        layout_video_quality.addWidget(self.spinbox_video_quality)
+
+        return layout_video_quality
+
+    def get_audio_quality_layout(self):
+        layout_audio_quality = QHBoxLayout()
+        layout_audio_quality.addWidget(self.label_audio_quality)
+        layout_audio_quality.addWidget(self.spinbox_audio_quality)
+
+        return layout_audio_quality

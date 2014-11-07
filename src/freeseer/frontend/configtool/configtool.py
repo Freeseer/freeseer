@@ -37,6 +37,7 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
+from freeseer.framework.multimedia import Quality
 from freeseer.framework.plugin import PluginManager, IOutput
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
 
@@ -68,6 +69,8 @@ class ConfigToolApp(FreeseerApp):
         self.geometry = None
 
         self.dialog = None
+        self.audio_quality_layout = None
+        self.video_quality_layout = None
 
         self.mainWidget = ConfigToolWidget()
         self.setCentralWidget(self.mainWidget)
@@ -130,9 +133,13 @@ class ConfigToolApp(FreeseerApp):
         self.connect(self.avWidget.audioGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_audiomixer_state)
         self.connect(self.avWidget.audioMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_audiomixer)
         self.connect(self.avWidget.audioMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_audio_mixer)
+        self.connect(self.avWidget.audioQualityComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_audio_quality)
+        self.connect(self.avWidget.audioQualitySetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_audio_quality)
         self.connect(self.avWidget.videoGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_videomixer_state)
         self.connect(self.avWidget.videoMixerComboBox, QtCore.SIGNAL('activated(const QString&)'), self.change_videomixer)
         self.connect(self.avWidget.videoMixerSetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_mixer)
+        self.connect(self.avWidget.videoQualityComboBox, QtCore.SIGNAL('currentIndexChanged(int)'), self.change_video_quality)
+        self.connect(self.avWidget.videoQualitySetupPushButton, QtCore.SIGNAL('clicked()'), self.setup_video_quality)
         self.connect(self.avWidget.fileGroupBox, QtCore.SIGNAL('toggled(bool)'), self.toggle_record_to_file)
         self.connect(self.avWidget.fileDirPushButton, QtCore.SIGNAL('clicked()'), self.browse_video_directory)
         self.connect(self.avWidget.fileDirLineEdit, QtCore.SIGNAL('editingFinished()'), self.update_record_directory)
@@ -339,6 +346,20 @@ class ConfigToolApp(FreeseerApp):
         self.currentWidget.show()
 
         #
+        # Set up Quality
+        #
+        self.supports_video_quality = self.plugman.get_plugin_by_name(self.config.videomixer, "VideoMixer").plugin_object.supports_video_quality()
+        self.file_configurable = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output").plugin_object.configurable
+        self.stream_configurable = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output").plugin_object.configurable
+
+        self.refresh_quality_config()
+        self.avWidget.videoQualityComboBox.setCurrentIndex(self.config.video_quality)
+        self.avWidget.audioQualityComboBox.setCurrentIndex(self.config.audio_quality)
+
+        if not self.supports_video_quality:
+            self.toggle_video_quality(False)
+
+        #
         # Set up Audio
         #
         if self.config.enable_audio_recording:
@@ -389,6 +410,9 @@ class ConfigToolApp(FreeseerApp):
             self.avWidget.fileComboBox.setEnabled(False)
             self.avWidget.fileSetupPushButton.setEnabled(False)
 
+        if not self.file_configurable:
+            self.avWidget.fileSetupPushButton.setEnabled(False)
+
         n = 0  # Counter for finding File Format to set as current
         self.avWidget.fileComboBox.clear()
         plugins = self.plugman.get_output_plugins()
@@ -409,6 +433,9 @@ class ConfigToolApp(FreeseerApp):
             self.avWidget.streamComboBox.setEnabled(False)
             self.avWidget.streamSetupPushButton.setEnabled(False)
 
+        if not self.stream_configurable:
+            self.avWidget.streamSetupPushButton.setEnabled(False)
+
         n = 0  # Counter for finding Stream Format to set as current
         self.avWidget.streamComboBox.clear()
         plugins = self.plugman.get_output_plugins()
@@ -423,6 +450,8 @@ class ConfigToolApp(FreeseerApp):
         self.config.enable_audio_recording = state
         self.config.save()
 
+        self.refresh_quality_config()
+
     def change_audiomixer(self, audiomixer):
         self.config.audiomixer = audiomixer
         self.config.save()
@@ -432,9 +461,60 @@ class ConfigToolApp(FreeseerApp):
         plugin = self.plugman.get_plugin_by_name(mixer, "AudioMixer")
         plugin.plugin_object.get_dialog()
 
+    def change_audio_quality(self, index):
+        """Used to change audio quality of output.
+
+        If the quality is set to 'Custom' then the setup button for quality is enabled otherwise it is disabled.
+        """
+        self.config.audio_quality = index
+        self.config.save()
+
+        if self.config.audio_quality == Quality.CUSTOM:
+            self.avWidget.audioQualitySetupPushButton.setEnabled(True)
+        else:
+            self.avWidget.audioQualitySetupPushButton.setEnabled(False)
+
+    def setup_audio_quality(self):
+        """Creates dialog to configure audio quality when quality is set to Custom"""
+        self.audio_quality_dialog = QtGui.QDialog(self)
+
+        self.audio_quality_dialog_layout = QtGui.QGridLayout()
+        self.audio_quality_dialog_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+        self.audio_quality_dialog.setLayout(self.audio_quality_dialog_layout)
+
+        self.audio_quality_dialog.closeButton = QtGui.QPushButton("Close")
+        self.connect(self.audio_quality_dialog.closeButton, QtCore.SIGNAL('clicked()'), self.audio_quality_dialog.close)
+        self.audio_quality_dialog.setWindowTitle("Audio Quality Setup")
+        self.audio_quality_dialog.setModal(True)
+        self.audio_quality_dialog.show()
+
+        file_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output")
+        stream_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output")
+
+        file_configurable = file_output_plugin.plugin_object.configurable
+        stream_configurable = stream_output_plugin.plugin_object.configurable
+
+        if file_configurable:
+            file_config_layout = file_output_plugin.plugin_object.get_audio_quality_layout()
+            self.audio_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>File Output</b>'), 0, 0, 1, 2, QtCore.Qt.AlignHCenter)
+            self.audio_quality_dialog_layout.addLayout(file_config_layout, 1, 0)
+
+        if stream_configurable:
+            stream_config_layout = stream_output_plugin.plugin_object.get_audio_quality_layout()
+            column_count = self.audio_quality_dialog_layout.columnCount()
+            self.audio_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>Stream Output</b>'), 0, column_count, 1, 2, QtCore.Qt.AlignHCenter)
+            self.audio_quality_dialog_layout.addLayout(stream_config_layout, 1, column_count)
+
+        self.audio_quality_dialog_layout.addWidget(self.audio_quality_dialog.closeButton, 2, 0, 1, self.audio_quality_dialog_layout.columnCount())
+
+        file_config_layout.itemAt(1).widget().setEnabled(self.config.record_to_file)
+        stream_config_layout.itemAt(1).widget().setEnabled(self.config.record_to_stream)
+
     def toggle_videomixer_state(self, state):
         self.config.enable_video_recording = state
         self.config.save()
+
+        self.refresh_quality_config()
 
     def change_videomixer(self, videomixer):
         self.config.videomixer = videomixer
@@ -445,9 +525,86 @@ class ConfigToolApp(FreeseerApp):
         plugin = self.plugman.get_plugin_by_name(mixer, "VideoMixer")
         plugin.plugin_object.get_dialog()
 
+    def change_video_quality(self, index):
+        """Used to change video quality of output.
+
+        If the quality is set to 'Custom' then the setup button for quality is enabled otherwise it is disabled.
+        Calculations are done by multiplying a constant factor by the total number of pixels in the output.
+        """
+        self.config.video_quality = index
+        self.config.save()
+
+        if self.config.video_quality == Quality.CUSTOM:
+            self.avWidget.videoQualitySetupPushButton.setEnabled(True)
+        else:
+            self.avWidget.videoQualitySetupPushButton.setEnabled(False)
+
+    def setup_video_quality(self):
+        """Creates dialog to configure video bitrate when quality is set to Custom"""
+        self.video_quality_dialog = QtGui.QDialog(self)
+
+        self.video_quality_dialog_layout = QtGui.QGridLayout()
+        self.video_quality_dialog_layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+        self.video_quality_dialog.setLayout(self.video_quality_dialog_layout)
+
+        self.video_quality_dialog.closeButton = QtGui.QPushButton("Close")
+        self.connect(self.video_quality_dialog.closeButton, QtCore.SIGNAL('clicked()'), self.video_quality_dialog.close)
+        self.video_quality_dialog.setWindowTitle("Video Quality Setup")
+        self.video_quality_dialog.setModal(True)
+        self.video_quality_dialog.show()
+
+        file_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output")
+        stream_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output")
+
+        file_configurable = file_output_plugin.plugin_object.configurable
+        stream_configurable = stream_output_plugin.plugin_object.configurable
+
+        if file_configurable:
+            file_config_layout = file_output_plugin.plugin_object.get_video_quality_layout()
+            self.video_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>File Output</b>'), 0, 0, 1, 2, QtCore.Qt.AlignHCenter)
+            self.video_quality_dialog_layout.addLayout(file_config_layout, 1, 0)
+
+        if stream_configurable:
+            stream_config_layout = stream_output_plugin.plugin_object.get_video_quality_layout()
+            column_count = self.video_quality_dialog_layout.columnCount()
+            self.video_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>Stream Output</b>'), 0, column_count, 1, 2, QtCore.Qt.AlignHCenter)
+            self.video_quality_dialog_layout.addLayout(stream_config_layout, 1, column_count)
+
+        self.video_quality_dialog_layout.addWidget(self.video_quality_dialog.closeButton, 2, 0, 1, self.video_quality_dialog_layout.columnCount())
+
+        file_config_layout.itemAt(1).widget().setEnabled(self.config.record_to_file)
+        stream_config_layout.itemAt(1).widget().setEnabled(self.config.record_to_stream)
+
+    def toggle_video_quality(self, enabled):
+        """Used by Video Mixer to disable quality options if video input is selected that does not support it."""
+        self.supports_video_quality = enabled
+        self.avWidget.videoQualityComboBox.setEnabled(enabled)
+
+        if enabled:
+            self.avWidget.videoQualityComboBox.setCurrentIndex(Quality.HIGH)
+        else:
+            self.avWidget.videoQualityComboBox.setCurrentIndex(Quality.CUSTOM)
+
+        self.avWidget.videoQualitySetupPushButton.setEnabled(not enabled)
+
+    def refresh_quality_config(self):
+        """Enable or disable quality options based on various variables"""
+        enabled = (self.config.record_to_file and self.file_configurable) or (self.config.record_to_stream and self.stream_configurable)
+        audio_enabled = self.config.enable_audio_recording and enabled
+        audio_configurable = self.config.audio_quality == Quality.CUSTOM
+        video_enabled = self.config.enable_video_recording and enabled and self.supports_video_quality
+        video_configurable = self.config.video_quality == Quality.CUSTOM
+
+        self.avWidget.audioQualitySetupPushButton.setEnabled(audio_enabled and audio_configurable)
+        self.avWidget.audioQualityComboBox.setEnabled(audio_enabled)
+        self.avWidget.videoQualitySetupPushButton.setEnabled(video_enabled and video_configurable)
+        self.avWidget.videoQualityComboBox.setEnabled(video_enabled)
+
     def toggle_record_to_file(self, state):
         self.config.record_to_file = state
         self.config.save()
+
+        self.refresh_quality_config()
 
     def browse_video_directory(self):
         directory = self.avWidget.fileDirLineEdit.text()
@@ -468,6 +625,13 @@ class ConfigToolApp(FreeseerApp):
         self.config.record_to_file_plugin = format
         self.config.save()
 
+        self.file_configurable = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output").plugin_object.configurable
+        self.stream_configurable = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output").plugin_object.configurable
+
+        self.avWidget.fileSetupPushButton.setEnabled(self.file_configurable)
+
+        self.refresh_quality_config()
+
     def setup_file_format(self):
         output = str(self.avWidget.fileComboBox.currentText())
         plugin = self.plugman.get_plugin_by_name(output, "Output")
@@ -477,9 +641,18 @@ class ConfigToolApp(FreeseerApp):
         self.config.record_to_stream = state
         self.config.save()
 
+        self.refresh_quality_config()
+
     def change_stream_format(self, format):
         self.config.record_to_stream_plugin = format
         self.config.save()
+
+        self.file_configurable = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output").plugin_object.configurable
+        self.stream_configurable = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output").plugin_object.configurable
+
+        self.avWidget.streamSetupPushButton.setEnabled(self.stream_configurable)
+
+        self.refresh_quality_config()
 
     def setup_stream_format(self):
         output = str(self.avWidget.streamComboBox.currentText())

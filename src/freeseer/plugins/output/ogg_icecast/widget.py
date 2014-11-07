@@ -26,7 +26,9 @@ http://wiki.github.com/Freeseer/freeseer/
 @author: Thanh Ha
 '''
 
+from PyQt4.QtGui import QDoubleSpinBox
 from PyQt4.QtGui import QFormLayout
+from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QLineEdit
 from PyQt4.QtGui import QSpinBox
@@ -58,3 +60,39 @@ class ConfigWidget(QWidget):
         self.label_mount = QLabel("Mount")
         self.lineedit_mount = QLineEdit()
         layout.addRow(self.label_mount, self.lineedit_mount)
+
+        #
+        # Audio Quality
+        #
+
+        self.label_audio_quality = QLabel("Audio Quality")
+        self.spinbox_audio_quality = QDoubleSpinBox()
+        self.spinbox_audio_quality.setMinimum(0.0)
+        self.spinbox_audio_quality.setMaximum(1.0)
+        self.spinbox_audio_quality.setSingleStep(0.1)
+        self.spinbox_audio_quality.setDecimals(1)
+        self.spinbox_audio_quality.setValue(0.3)            # Default value 0.3
+
+        #
+        # Video Quality
+        #
+
+        self.label_video_quality = QLabel("Video Quality (kb/s)")
+        self.spinbox_video_quality = QSpinBox()
+        self.spinbox_video_quality.setMinimum(0)
+        self.spinbox_video_quality.setMaximum(16777215)
+        self.spinbox_video_quality.setValue(2400)           # Default value 2400
+
+    def get_video_quality_layout(self):
+        layout_video_quality = QHBoxLayout()
+        layout_video_quality.addWidget(self.label_video_quality)
+        layout_video_quality.addWidget(self.spinbox_video_quality)
+
+        return layout_video_quality
+
+    def get_audio_quality_layout(self):
+        layout_audio_quality = QHBoxLayout()
+        layout_audio_quality.addWidget(self.label_audio_quality)
+        layout_audio_quality.addWidget(self.spinbox_audio_quality)
+
+        return layout_audio_quality

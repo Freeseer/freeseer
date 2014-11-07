@@ -37,6 +37,7 @@ import gst
 
 # PyQt4 modules
 from PyQt4.QtCore import SIGNAL
+from PyQt4.QtGui import QApplication
 from PyQt4.QtGui import QDesktopWidget
 
 # Freeseer modules
@@ -168,6 +169,18 @@ class DesktopLinuxSrc(IVideoInput):
 
         return self.widget
 
+    def get_resolution_pixels(self):
+        self.get_config()
+
+        if self.config.desktop == "Full":
+            app = QApplication.instance()
+            screen_rect = app.desktop().screenGeometry()
+            return screen_rect.width() * screen_rect.height()
+        elif self.config.desktop == "Area":
+            width = self.config.end_x - self.config.start_x
+            height = self.config.end_y - self.config.start_y
+            return width * height
+
     def __enable_connections(self):
         self.widget.connect(self.widget.desktopButton, SIGNAL('clicked()'), self.set_desktop_full)
         self.widget.connect(self.widget.areaButton, SIGNAL('clicked()'), self.set_desktop_area)
@@ -175,7 +188,7 @@ class DesktopLinuxSrc(IVideoInput):
         self.widget.connect(self.widget.screenSpinBox, SIGNAL('valueChanged(int)'), self.set_screen)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
+        self.get_config()
 
         if self.config.desktop == "Full":
             self.widget.desktopButton.setChecked(True)
@@ -200,10 +213,12 @@ class DesktopLinuxSrc(IVideoInput):
     def set_desktop_full(self):
         self.config.desktop = "Full"
         self.config.save()
+        self.gui.update_video_quality()
 
     def set_desktop_area(self):
         self.config.desktop = "Area"
         self.config.save()
+        self.gui.update_video_quality()
 
     ###
     ### Translations

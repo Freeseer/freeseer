@@ -28,6 +28,7 @@ from PyQt4.QtCore import QLocale
 
 from freeseer.framework.config.core import Config
 from freeseer.framework.config.profile import ProfileManager
+from freeseer.framework.multimedia import Quality
 import freeseer.framework.config.options as options
 
 # TODO: change to config_dir when all the pull requests from UCOSP Fall 2013 are merged in
@@ -57,7 +58,9 @@ class FreeseerConfig(Config):
     enable_audio_recording = options.BooleanOption(True)
     enable_video_recording = options.BooleanOption(True)
     videomixer = options.StringOption('Video Passthrough')
+    video_quality = options.IntegerOption(Quality.CUSTOM)
     audiomixer = options.StringOption('Audio Passthrough')
+    audio_quality = options.IntegerOption(Quality.CUSTOM)
     record_to_file = options.BooleanOption(True)
     record_to_file_plugin = options.StringOption('Ogg Output')
     record_to_stream = options.BooleanOption(False)

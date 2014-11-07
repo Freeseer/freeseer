@@ -56,6 +56,8 @@ class PictureInPicture(IVideoMixer):
     os = ["linux", "linux2", "win32", "cygwin", "darwin"]
     widget = None
     CONFIG_CLASS = PictureInPictureConfig
+    WIDTH = 640
+    HEIGHT = 480
 
     def get_videomixer_bin(self):
         bin = gst.Bin()
@@ -115,7 +117,7 @@ class PictureInPicture(IVideoMixer):
         # Create capsfilter for limiting to x-raw-rgb pixel video format and setting dimensions
         mainsrc_capsfilter = gst.element_factory_make("capsfilter", "mainsrc_capsfilter")
         mainsrc_capsfilter.set_property('caps',
-                        gst.caps_from_string('video/x-raw-rgb, width=640, height=480'))
+                        gst.caps_from_string('video/x-raw-rgb, width={}, height={}'.format(self.WIDTH, self.HEIGHT)))
 
         mainsrc_elements = [input1, mainsrc_scale, mainsrc_capsfilter, mainsrc_colorspace]
 
@@ -171,7 +173,7 @@ class PictureInPicture(IVideoMixer):
         self.widget.connect(self.widget.pipInputSetupButton, SIGNAL('clicked()'), self.open_pipInputSetup)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
+        self.get_config()
 
         sources = []
         plugins = self.plugman.get_videoinput_plugins()
@@ -194,6 +196,12 @@ class PictureInPicture(IVideoMixer):
 
         # Finally enable connections
         self.__enable_connections()
+
+    def supports_video_quality(self):
+        return True
+
+    def get_resolution_pixels(self):
+        return self.WIDTH * self.HEIGHT
 
     ###
     ### Main Input Functions

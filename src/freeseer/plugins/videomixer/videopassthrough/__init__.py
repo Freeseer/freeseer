@@ -117,6 +117,21 @@ class VideoPassthrough(IVideoMixer):
         inputs = [(self.config.input, 0)]
         return inputs
 
+    def get_resolution_pixels(self):
+        self.get_config()
+
+        if self.config.resolution == "No Scaling":
+            plugin = self.plugman.get_plugin_by_name(self.config.input, "VideoInput")
+            return plugin.plugin_object.get_resolution_pixels()
+        else:
+            width, height = widget.resmap[str(self.config.resolution)]
+            return width * height
+
+    def supports_video_quality(self):
+        self.get_config()
+
+        return self.config.input == "Desktop Source"
+
     def load_inputs(self, player, mixer, inputs):
         # Load source
         input = inputs[0]
@@ -139,7 +154,7 @@ class VideoPassthrough(IVideoMixer):
         self.widget.connect(self.widget.videoscaleComboBox, SIGNAL("currentIndexChanged(const QString&)"), self.set_videoscale)
 
     def widget_load_config(self, plugman):
-        self.load_config(plugman)
+        self.get_config()
 
         sources = []
         plugins = self.plugman.get_videoinput_plugins()
@@ -178,6 +193,7 @@ class VideoPassthrough(IVideoMixer):
         self.config.input = input
         self.config.save()
         self.__enable_source_setup(self.config.input)
+        self.gui.toggle_video_quality(input == "Desktop Source")
 
     def __enable_source_setup(self, source):
         '''Activates the source setup button if it has configurable settings'''
@@ -198,6 +214,7 @@ class VideoPassthrough(IVideoMixer):
     def set_videoscale(self, resolution):
         self.config.resolution = resolution
         self.config.save()
+        self.gui.update_video_quality()
 
     ###
     ### Translations

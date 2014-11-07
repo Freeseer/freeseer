@@ -249,6 +249,7 @@ class IBackendPlugin(IPlugin):
     os = []
 
     config_loaded = False
+    widget_config_loaded = False
 
     def __init__(self):
         IPlugin.__init__(self)
@@ -289,9 +290,9 @@ class IBackendPlugin(IPlugin):
         self.retranslate()  # Translate the UI
 
         # Only load configuration the first time the user opens widget
-        if not self.config_loaded:
+        if not self.widget_config_loaded:
             log.debug("%s loading configuration into widget.", self.name)
-            self.config_loaded = True
+            self.widget_config_loaded = True
             self.widget_load_config(self.plugman)
 
         if widget is not None:
@@ -299,6 +300,12 @@ class IBackendPlugin(IPlugin):
 
         if self.config is not None:
             self.config.save()
+
+    def get_config(self):
+        """Check if the config is loaded, if not then load it."""
+        if not self.config_loaded:
+            self.config_loaded = True
+            self.load_config(self.plugman)
 
     def get_widget(self):
         """
@@ -377,6 +384,9 @@ class IVideoInput(IBackendPlugin):
         """
         raise NotImplementedError
 
+    def get_resolution_pixels(self):
+        raise NotImplementedError
+
 
 class IVideoMixer(IBackendPlugin):
     CATEGORY = "VideoMixer"
@@ -408,6 +418,18 @@ class IVideoMixer(IBackendPlugin):
         """
         raise NotImplementedError
 
+    def get_resolution_pixels(self):
+        """
+        Returns the total number of pixels in the selected from the video input plugin.
+        """
+        raise NotImplementedError
+
+    def supports_video_quality(self):
+        """
+        Returns True if the current video input plugin supports video quality else returns False.
+        """
+        return False
+
 
 class IOutput(IBackendPlugin):
     #
@@ -432,6 +454,7 @@ class IOutput(IBackendPlugin):
     type = None  # Types: AUDIO, VIDEO, BOTH
     extension = None
     location = None
+    configurable = False
 
     metadata_order = [
         "title",
@@ -478,6 +501,20 @@ class IOutput(IBackendPlugin):
             node.text = metadata[key]
 
         return ET.ElementTree(root)
+
+    def set_audio_quality(self, quality):
+        """Implement this to set the audio quality of the plugin.
+
+        Input quality is either LOW, MEDIUM, or HIGH.
+        """
+        pass
+
+    def set_video_bitrate(self, bitrate):
+        """Implement this to set the bitrate of the plugin.
+
+        Only implement if the bitrate of the plugin can be specified.
+        """
+        pass
 
 
 class IImporter(IBackendPlugin):

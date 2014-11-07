@@ -119,6 +119,54 @@ class Multimedia:
         """Sets the handler for Audio Feedback levels"""
         self.audio_feedback_event = audio_feedback
 
+    def compute_bitrate(self):
+        """Compute the bitrate based on current quality and video input resolution"""
+        mixer_plugin = self.plugman.get_plugin_by_name(self.config.videomixer, "VideoMixer")
+        pixels = mixer_plugin.plugin_object.get_resolution_pixels()
+        quality = self.config.video_quality
+
+        if quality == Quality.LOW:
+            bitrate = pixels * Quality.LOW_VIDEO_FACTOR
+        elif quality == Quality.MEDIUM:
+            bitrate = pixels * Quality.MEDIUM_VIDEO_FACTOR
+        elif quality == Quality.HIGH:
+            bitrate = pixels * Quality.HIGH_VIDEO_FACTOR
+
+        return int(round(bitrate / 100) * 100)
+
+    def update_video_quality(self):
+        """Update video bitrate based on quality for file and stream output"""
+        if self.config.video_quality == Quality.CUSTOM:
+            return
+
+        bitrate = self.compute_bitrate()
+
+        file_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output")
+        stream_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output")
+
+        file_configurable = file_output_plugin.plugin_object.configurable
+        stream_configurable = stream_output_plugin.plugin_object.configurable
+
+        if file_configurable:
+            file_output_plugin.plugin_object.set_video_bitrate(bitrate)
+
+        if stream_configurable:
+            stream_output_plugin.plugin_object.set_video_bitrate(bitrate)
+
+        if file_configurable or stream_configurable:
+            log.info("Set video bitrate to %s", bitrate)
+
+    def update_audio_quality(self):
+        """Update audio quality for file and stream output"""
+        if self.config.audio_quality == Quality.CUSTOM:
+            return
+
+        file_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output")
+        stream_output_plugin = self.plugman.get_plugin_by_name(self.config.record_to_stream_plugin, "Output")
+
+        file_output_plugin.plugin_object.set_audio_quality(self.config.audio_quality)
+        stream_output_plugin.plugin_object.set_audio_quality(self.config.audio_quality)
+
     ##
     ## Recording functions
     ##
@@ -182,6 +230,9 @@ class Multimedia:
         filename_for_frontend = None
 
         load_plugins = []
+
+        self.update_video_quality()
+        self.update_audio_quality()
 
         if self.config.record_to_file:
             p = self.plugman.get_plugin_by_name(self.config.record_to_file_plugin, "Output")
@@ -377,3 +428,21 @@ class Multimedia:
             self.videomixer.unlink(self.video_tee)
             self.player.remove(self.videomixer)
         self.record_video = False
+
+
+class Quality:
+    """Class to hold constants for Audio/Video quality"""
+    qualities = ["High", "Medium", "Low", "Custom"]
+
+    LOW = qualities.index("Low")
+    MEDIUM = qualities.index("Medium")
+    HIGH = qualities.index("High")
+    CUSTOM = qualities.index("Custom")
+
+    HIGH_VIDEO_FACTOR = 0.006
+    MEDIUM_VIDEO_FACTOR = 0.0045
+    LOW_VIDEO_FACTOR = 0.003
+
+    HIGH_AUDIO_FACTOR = 0.8
+    MEDIUM_AUDIO_FACTOR = 0.5
+    LOW_AUDIO_FACTOR = 0.2
