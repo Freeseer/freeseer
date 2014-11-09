@@ -23,6 +23,8 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import functools
+import socket
+
 
 from flask import jsonify
 
@@ -37,7 +39,7 @@ def start_server(storage_file):
     """
 
     app.storage_file_path = storage_file
-    app.run()
+    app.run(host='0.0.0.0')
 
 
 def http_response(status_code):
