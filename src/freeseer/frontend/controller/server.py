@@ -42,13 +42,13 @@ def start_server(storage_file, port=7079):
 
     app.storage_file_path = storage_file
     app.service_announcer = ServiceAnnouncer('Freeseer Host', '_freeseer._tcp', port, [])
-    app.service_announcer.announce()
-    signal.signal(signal.SIGTERM, unpublish)
+    app.service_announcer.add_service()
+    signal.signal(signal.SIGTERM, remove)
     app.run('::0.0.0.0', port)
 
 
-def unpublish(signal, frame):
-    app.service_announcer.unpublish()
+def remove(signal, frame):
+    app.service_announcer.remove_service()
     sys.exit(0)
 
 
