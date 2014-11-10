@@ -40,6 +40,28 @@ from freeseer.frontend.controller.server import http_response
 
 recording = Blueprint('recording', __name__)
 
+recording.form_schema = {
+    'control_recording': {
+        'type': 'object',
+        'properties': {
+            'command': {
+                'enum': ['start', 'pause', 'stop']
+            }
+        },
+        'required': ['command']
+    },
+    'create_recording': {
+        'type': 'object',
+        'properties': {
+            'filename': {
+                'type': 'string',
+                'pattern': '^\w+$'
+            }
+        },
+        'required': ['filename']
+    }
+}
+
 
 def sync(func):
     @functools.wraps(func)
@@ -112,7 +134,7 @@ def get_specific_recording(recording_id):
     try:
         retrieved_media_entry = recording.media_info[key]
     except KeyError:
-        raise HTTPError('media with given recording id could not be found', 404)
+        raise HTTPError(404, 'No recording with id "{}" was found'.format(recording_id))
 
     current_state = recording.media_dict[recording_id].current_state
     filename = retrieved_media_entry['filename']
@@ -136,13 +158,12 @@ def get_specific_recording(recording_id):
 def control_recording(recording_id):
     """Change the state of a recording."""
 
-    if not validate.validate_control_recording_request_form(request.form):
-        raise HTTPError('Form data was invalid', 400)
+    validate.validate_form(request.form, recording.form_schema['control_recording'])
 
     try:
         retrieved_media = recording.media_dict[recording_id]
     except KeyError:
-        raise HTTPError('recording id could not be found', 404)
+        raise HTTPError(404, 'No recording with id "{}" was found'.format(recording_id))
 
     command = request.form['command']
     media_state = retrieved_media.current_state
@@ -154,7 +175,7 @@ def control_recording(recording_id):
     elif command == 'stop' and media_state in [Multimedia.RECORD, Multimedia.PAUSE]:
         retrieved_media.stop()
     else:
-        raise HTTPError('command could not be performed', 400)
+        raise HTTPError(400, 'Command "{}" could not be performed'.format(command))
 
     if media_state is not Multimedia.NULL:
         key = str(recording_id)
@@ -169,15 +190,14 @@ def control_recording(recording_id):
 def create_recording():
     """Initializes a recording and returns its id."""
 
-    if not validate.validate_create_recording_request_form(request.form):
-        raise HTTPError('Form data was invalid', 400)
+    validate.validate_form(request.form, recording.form_schema['create_recording'])
 
     new_filename = request.form['filename']
     new_media = Multimedia(recording.config, recording.plugin_manager)
     success, filename = new_media.load_backend(None, new_filename)
 
     if not success:
-        raise HTTPError('Could not load multimedia backend', 500)
+        raise HTTPError(500, 'Could not load multimedia backend')
 
     filepath = new_media.plugman.get_plugin_by_name(new_media.config.record_to_file_plugin, "Output").plugin_object.location
     new_recording_id = recording.next_id
@@ -203,7 +223,7 @@ def delete_recording(recording_id):
     try:
         retrieved_media = recording.media_dict[recording_id]
     except KeyError:
-        raise HTTPError('recording id could not be found', 404)
+        raise HTTPError(404, 'No recording with id "{}" was found'.format(recording_id))
 
     key = str(recording_id)
     retrieved_media_entry = recording.media_info[key]
