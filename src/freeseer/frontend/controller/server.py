@@ -44,7 +44,7 @@ def http_response(status_code):
     """Wraps any function that returns a dict, converts to JSON and returns an HTTP response.
 
     Args:
-        status_code - the http status code you want your http response to return
+        status_code - the http status code you want your http response to return when successful
     """
     def decorator(func):
         @functools.wraps(func)
@@ -55,10 +55,13 @@ def http_response(status_code):
                 response.status_code = status_code
                 return response
             except HTTPError as e:
-                response = jsonify({
+                error_dict = {
+                    'error_code': e.status_code,
                     'error_message': e.message,
-                    'error_code': e.status_code
-                })
+                }
+                if e.description:
+                    error_dict['description'] = e.description
+                response = jsonify(error_dict)
                 response.status_code = e.status_code
                 return response
         return wrapper
@@ -67,9 +70,18 @@ def http_response(status_code):
 
 class HTTPError(Exception):
 
-    def __init__(self, message, status_code):
+    HTTP_ERROR_MESSAGES = {
+        400: 'Bad Request: Request could not be understood due to malformed syntax.',
+        401: 'Unauthorized: Authentication was not provided or has failed.',
+        404: 'Not Found: Requested resource is not available.',
+        409: 'Conflict: Request could not be processed because of server conflict.',
+        422: 'Unprocessable Entity: Request could not be processed due to semantic errors.',
+    }
+
+    def __init__(self, status_code, description=None):
+        message = self.HTTP_ERROR_MESSAGES[status_code]
         super(HTTPError, self).__init__(message)
-        self.message = message
+        self.description = description
         self.status_code = status_code
 
 

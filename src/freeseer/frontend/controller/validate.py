@@ -25,48 +25,12 @@
 from jsonschema import validate
 from jsonschema import ValidationError
 
+from freeseer.frontend.controller.server import HTTPError
 
-def validate_control_recording_request_form(to_validate):
-    result = True
-    schema = {
-        "type": "object",
-        "properties": {
-            "command": {
-                "enum": ["start", "pause", "stop"]
-            }
-        },
-        "required": ["command"]
-    }
+
+def validate_form(to_validate, schema):
 
     try:
         validate(to_validate, schema)
-
-    except ValidationError:
-        result = False
-
-    return result
-
-
-def validate_create_recording_request_form(to_validate):
-    result = True
-    schema = {
-        "type": "object",
-        "properties": {
-            "filename": {
-                "type": "string",
-                "pattern": "^\w+$"
-            }
-        },
-        "required": ["filename"]
-    }
-
-    try:
-        validate(to_validate, schema)
-
-        if to_validate["filename"] == "":
-            result = False
-
-    except ValidationError:
-        result = False
-
-    return result
+    except ValidationError as e:
+        raise HTTPError(400, 'Form data was invalid: {}'.format(e.message))

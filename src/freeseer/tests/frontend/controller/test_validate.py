@@ -22,70 +22,62 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import unittest
+import pytest
 
 from freeseer.frontend.controller import validate
+from freeseer.frontend.controller import recording
+from freeseer.frontend.controller.server import HTTPError
 
 
-class TestServerApp(unittest.TestCase):
+class TestValidationApp:
     '''
     Test cases for validate.
     '''
-
-    def setUp(self):
-        '''
-        Stardard init method: runs before each test_* method
-        '''
-        self.test_form_data = {}
 
     def test_valid_control_recording_data(self):
         '''
         Tests validating the request form for controlling a recording with valid data
         '''
-        self.test_form_data["command"] = "start"
-        self.assertTrue(validate.validate_control_recording_request_form(self.test_form_data))
+        form_data = {'command': 'start'}
+        validate.validate_form(form_data, recording.form_schema['control_recording'])
 
-    def test_invalid_control_recording_data(self):
+    @pytest.mark.parametrize('control', [1, 'invalid-command'])
+    def test_invalid_control_recording_data(self, control):
         '''
         Tests validating the request form for controlling a recording with invalid data
         '''
-        self.test_form_data["command"] = 1
-        self.assertFalse(validate.validate_control_recording_request_form(self.test_form_data))
-        self.test_form_data["command"] = "invalid-command"
-        self.assertFalse(validate.validate_control_recording_request_form(self.test_form_data))
+        form_data = {'command': control}
+        with pytest.raises(HTTPError):
+            validate.validate_form(form_data, recording.form_schema['control_recording'])
 
-    def test_invalid_control_recording_data_structure(self):
+    @pytest.mark.parametrize('invalid_form', [None, {'test': 'should fail'}])
+    def test_invalid_control_recording_data_structure(self, invalid_form):
         '''
         Tests validating the request form for controlling a recording with an invalid data structure
         '''
-        invalid_structure = {"test": "should fail"}
-
-        self.assertFalse(validate.validate_control_recording_request_form(None))
-        self.assertFalse(validate.validate_control_recording_request_form(invalid_structure))
+        with pytest.raises(HTTPError):
+            validate.validate_form(invalid_form, recording.form_schema['control_recording'])
 
     def test_valid_create_recording_data(self):
         '''
         Tests validating the request form for creating a recording with valid data
         '''
-        self.test_form_data["filename"] = "valid_filename"
-        self.assertTrue(validate.validate_create_recording_request_form(self.test_form_data))
+        form_data = {'filename': 'valid_filename'}
+        validate.validate_form(form_data, recording.form_schema['create_recording'])
 
-    def test_invalid_create_recording_data(self):
+    @pytest.mark.parametrize('filename', ['invalid/filename', 1, ''])
+    def test_invalid_create_recording_data(self, filename):
         '''
         Tests validating the request form for creating a recording with invalid data
         '''
-        self.test_form_data["filename"] = "invalid/filename"
-        self.assertFalse(validate.validate_create_recording_request_form(self.test_form_data))
-        self.test_form_data["filename"] = 1
-        self.assertFalse(validate.validate_create_recording_request_form(self.test_form_data))
-        self.test_form_data["filename"] = ""
-        self.assertFalse(validate.validate_create_recording_request_form(self.test_form_data))
+        form_data = {'filename': filename}
+        with pytest.raises(HTTPError):
+            validate.validate_form(form_data, recording.form_schema['create_recording'])
 
-    def test_invalid_create_recording_data_structure(self):
+    @pytest.mark.parametrize('invalid_form', [None, {'test': 'should fail'}])
+    def test_invalid_create_recording_data_structure(self, invalid_form):
         '''
         Tests validating the request form for controlling a recording with an invalid data structure
         '''
-        invalid_structure = {"test": "should fail"}
-
-        self.assertFalse(validate.validate_create_recording_request_form(None))
-        self.assertFalse(validate.validate_create_recording_request_form(invalid_structure))
+        with pytest.raises(HTTPError):
+            validate.validate_form(invalid_form, recording.form_schema['create_recording'])
