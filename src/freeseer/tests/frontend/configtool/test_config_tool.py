@@ -3,7 +3,7 @@
 
 # freeseer - vga/presentation capture software
 #
-# Copyright (C) 2012, 2013 Free and Open Source Software Learning Centre
+# Copyright (C) 2012, 2013, 2014 Free and Open Source Software Learning Centre
 # http://fosslc.org
 #
 # This program is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
+from mock import MagicMock
 import shutil
 import tempfile
 import unittest
@@ -37,7 +38,7 @@ from freeseer import settings
 
 
 class TestConfigToolApp(unittest.TestCase):
-    '''
+    """
     Test suite to verify the functionality of the ConfigToolApp class.
 
     Tests interact like an end user (using QtTest). Expect the app to be rendered.
@@ -47,15 +48,15 @@ class TestConfigToolApp(unittest.TestCase):
         2. Make UI change (config change happens immediately)
         3. Reparse config file
         4. Test that has changed (using the previous and new)
-    '''
+    """
 
     def setUp(self):
-        '''
+        """
         Stardard init method: runs before each test_* method
 
         Initializes a QtGui.QApplication and ConfigToolApp object.
         ConfigToolApp.show() causes the UI to be rendered.
-        '''
+        """
         self.profile_manager = ProfileManager(tempfile.mkdtemp())
         profile = self.profile_manager.get('testing')
         config = profile.get_config('freeseer.conf', settings.FreeseerConfig, storage_args=['Global'], read_only=False)
@@ -65,11 +66,11 @@ class TestConfigToolApp(unittest.TestCase):
         self.config_tool.show()
 
     def tearDown(self):
-        '''
+        """
         Standard tear down method. Runs after each test_* method.
 
         This method closes the ConfigToolApp by clicking the "close" button
-        '''
+        """
 
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
         shutil.rmtree(self.profile_manager._base_folder)
@@ -77,184 +78,285 @@ class TestConfigToolApp(unittest.TestCase):
         self.app.deleteLater()
 
     def test_default_widget(self):
-        self.assertTrue(self.config_tool.currentWidget == self.config_tool.generalWidget)
+        self.assertEqual(self.config_tool.currentWidget, self.config_tool.generalWidget)
 
-    def test_general_settings(self):
-        '''
-        Tests for the config tool's General Tab
-        '''
+    def check_combobox_corner_cases_frontend(self, combobox_widget):
+        """
+        Tests that a given QtComboBox has:
+        - a default selected item
+        - does not blow up on the minimum and maximum index item in the combobox list
+        """
+        index = combobox_widget.currentIndex()
+        combobox_widget.setCurrentIndex(0)
+        self.assertEquals(combobox_widget.currentIndex(), 0)
+        self.assertIsNot(combobox_widget.currentText(), None)
+        combobox_widget.setCurrentIndex(combobox_widget.count() - 1)
+        self.assertEquals(combobox_widget.currentIndex(), (combobox_widget.count() - 1))
+        self.assertIsNot(combobox_widget.currentText(), None)
+        combobox_widget.setCurrentIndex(index)
+        self.assertEquals(combobox_widget.currentIndex(), index)
+        self.assertIsNot(combobox_widget.currentText(), None)
 
+    def select_general_settings_tab(self):
         # Select "General" tab
-        item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.generalString, QtCore.Qt.MatchExactly)
+        item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.generalString,
+                                                                       QtCore.Qt.MatchExactly)
         self.assertFalse(not item or item[0] is None)
         self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
 
-        # Language drop-down
-        # TODO
+    def test_general_settings_checkbox(self):
+        """
+        Test the config tool's General Tab auto-hide system tray icon checkbox with simulated user input
+        """
+        self.select_general_settings_tab()
+        # Test disabled checkbox
+        self.config_tool.currentWidget.autoHideCheckBox.setChecked(False)
+        self.assertEqual(self.config_tool.currentWidget.autoHideCheckBox.checkState(), QtCore.Qt.Unchecked)
+        self.assertFalse(self.config_tool.config.auto_hide)
 
-        # Record directory
-        # TODO
+        # Test enabled checkbox
+        self.config_tool.currentWidget.autoHideCheckBox.setChecked(True)
+        self.assertEqual(self.config_tool.currentWidget.autoHideCheckBox.checkState(), QtCore.Qt.Checked)
+        self.assertTrue(self.config_tool.config.auto_hide)
 
-        # AutoHide Checkbox
-        for i in range(2):
-            state = self.config_tool.currentWidget.autoHideCheckBox.checkState()
-            expected_state = QtCore.Qt.Unchecked
-            if state == QtCore.Qt.Unchecked:
-                expected_state = QtCore.Qt.Checked
-            self.config_tool.currentWidget.autoHideCheckBox.click()
-            self.assertEquals(
-                self.config_tool.currentWidget.autoHideCheckBox.checkState(), expected_state)
+    def test_general_settings_dropdown_menu(self):
+        """
+        Test the config tool's General Tab language selection drop down menu with simulated user input
+        """
+        self.select_general_settings_tab()
+        # Test dropdown menu
+        language_combo_box = self.config_tool.generalWidget.languageComboBox
+        self.check_combobox_corner_cases_frontend(language_combo_box)
 
-            self.assertEquals(self.config_tool.config.auto_hide, expected_state == QtCore.Qt.Checked)
+        QtTest.QTest.keyClick(language_combo_box, QtCore.Qt.Key_PageUp)  # Test simulated user interaction with drop down list
+        for i in range(language_combo_box.count() - 2):
+            last_language = self.config_tool.config.default_language
+            QtTest.QTest.keyClick(language_combo_box, QtCore.Qt.Key_Down)
+            current_language = self.config_tool.config.default_language
+            self.assertNotEqual(last_language, current_language)
 
-    def test_recording_settings(self):
-        '''
-        Tests for config tool's Recording tab
-        '''
+        # Test frontend constants
+        self.assertNotEqual(language_combo_box.findText('Deutsch'), -1)  # Assert there are multiple languages in the menu
+        self.assertNotEqual(language_combo_box.findText('English'), -1)
+        self.assertNotEqual(language_combo_box.findText('Nederlands'), -1)
 
-        # Select "Recording" tab
-        item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.avString, QtCore.Qt.MatchExactly)
+    def test_general_settings_help_reset(self):
+        """
+        Test the config tool's General Tab help link and reset button with simulated user input
+        """
+        self.select_general_settings_tab()
+        # Test that Help us translate tries to open a web url.
+        QtGui.QDesktopServices.openUrl = MagicMock(return_value=None)
+        self.config_tool.open_translate_url()
+        QtGui.QDesktopServices.openUrl.assert_called_with(
+            QtCore.QUrl("http://freeseer.readthedocs.org/en/latest/contribute/translation.html")
+        )
+
+        # Reset
+        # The reset test should set the backend config_tool values, simulate a user clicking through the reset popup and
+        # verify that the backend config_tool values have been set to defaults.
+        # TODO: FIXME. Related to gh#631. The buttons on the dialog cause segfaults in the test environment and prevent
+        # the test from being implemented at the present time.
+        # self.config_tool.confirm_reset()
+
+    def select_recording_tab(self):
+        """
+        Helper function used to open up the recording tab for recording tab related tests
+        """
+        item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.avString,
+                                                                       QtCore.Qt.MatchExactly)
         self.assertFalse(not item or item[0] is None)
         self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
+        self.assertEqual(self.config_tool.currentWidget, self.config_tool.avWidget)
 
-        # Recording tab
-        self.assertTrue(self.config_tool.currentWidget == self.config_tool.avWidget)
+    def test_recording_settings_file(self):
+        """
+        Simulates a user interacting with the config tool record to file settings.
+        """
+        self.select_recording_tab()
+        # Test disabled checkbox
+        self.config_tool.currentWidget.fileGroupBox.setChecked(False)
+        self.assertFalse(self.config_tool.config.record_to_file)
 
-        # Audio Input
+        # Test enabled checkbox
+        self.config_tool.currentWidget.fileGroupBox.setChecked(True)
+        self.assertTrue(self.config_tool.config.record_to_file)
+        self.assertIn(self.config_tool.config.record_to_file_plugin, ['Ogg Output', 'WebM Output', 'Raw Output'])
 
-        # Checkbox
-        for i in range(2):
-            #self.config_tool.config.readConfig()
-            if self.config_tool.currentWidget.audioGroupBox.isChecked():
-                self.assertTrue(self.config_tool.config.enable_audio_recording)
-                self.assertTrue(self.config_tool.config.audiomixer == "Audio Passthrough" or
-                    self.config_tool.config.audiomixer == "Multiple Audio Inputs")
-                self.config_tool.currentWidget.audioGroupBox.setChecked(False)
-            else:
-                self.assertFalse(self.config_tool.config.enable_audio_recording)
-                self.config_tool.currentWidget.audioGroupBox.setChecked(True)
+        # Test combo box
+        file_combo_box = self.config_tool.avWidget.fileComboBox
+        self.check_combobox_corner_cases_frontend(file_combo_box)
+        QtTest.QTest.keyClick(file_combo_box, QtCore.Qt.Key_PageUp)  # Simulate user input to test backend and frontend
+        for i in range(file_combo_box.count() - 2):
+            last_plugin = self.config_tool.config.record_to_file_plugin
+            QtTest.QTest.keyClick(file_combo_box, QtCore.Qt.Key_Down)
+            current_plugin = self.config_tool.config.record_to_file_plugin
+            self.assertNotEqual(last_plugin, current_plugin)
 
-        # Dropdown
-        # TODO
+        # Test frontend text values
+        self.assertNotEqual(file_combo_box.findText('Ogg Output'), -1)
+        self.assertNotEqual(file_combo_box.findText('WebM Output'), -1)
+        self.assertNotEqual(file_combo_box.findText('Raw Output'), -1)
 
-        # Video Input
-        # Checkbox
-        for i in range(2):
-            #self.config_tool.config.readConfig()
-            if self.config_tool.currentWidget.videoGroupBox.isChecked():
-                self.assertTrue(self.config_tool.config.enable_video_recording)
-                # TODO: Write better test case for this
-                self.assertTrue(self.config_tool.config.videomixer == "Video Passthrough" or
-                    self.config_tool.config.videomixer == "Picture-In-Picture")
-                self.config_tool.currentWidget.videoGroupBox.setChecked(False)
-            else:
-                self.assertFalse(self.config_tool.config.enable_video_recording)
-                self.config_tool.currentWidget.videoGroupBox.setChecked(True)
+    def test_recording_settings_stream(self):
+        """
+        Simulates a user interacting with the config tool record to output stream settings.
+        """
+        self.select_recording_tab()
+        # Test disabled checkbox
+        self.config_tool.currentWidget.streamGroupBox.setChecked(False)
+        self.assertFalse(self.config_tool.config.record_to_stream)
 
-        # Dropdown
-        # TODO
+        # Test enabled checkbox
+        self.config_tool.currentWidget.streamGroupBox.setChecked(True)
+        self.assertTrue(self.config_tool.config.record_to_stream)
 
-        # Record to File
+        # Test combo box
+        stream_combo_box = self.config_tool.avWidget.streamComboBox
+        self.check_combobox_corner_cases_frontend(stream_combo_box)
+        QtTest.QTest.keyClick(stream_combo_box, QtCore.Qt.Key_PageUp)  # Simulate user input to test backend and frontend
+        for i in range(stream_combo_box.count() - 2):
+            last_plugin = self.config_tool.plugman.get_plugin_by_name(stream_combo_box.currentText(), 'Output')
+            QtTest.QTest.keyClick(stream_combo_box, QtCore.Qt.Key_Down)
+            current_plugin = self.config_tool.plugman.get_plugin_by_name(stream_combo_box.currentText(), 'Output')
+            self.assertNotEqual(last_plugin, current_plugin)
 
-        # Checkbox
-        for i in range(2):
-            #self.config_tool.config.readConfig()
-            if self.config_tool.currentWidget.fileGroupBox.isChecked():
-                self.assertTrue(self.config_tool.config.record_to_file)
-                # TODO: Write better test case for this
-                self.assertTrue(self.config_tool.config.record_to_file_plugin == "Ogg Output" or
-                    self.config_tool.config.record_to_file_plugin == "WebM Output")
-                self.config_tool.currentWidget.fileGroupBox.setChecked(False)
-            else:
-                self.assertFalse(self.config_tool.config.record_to_file)
-                self.config_tool.currentWidget.fileGroupBox.setChecked(True)
+        # Test frontend text values
+        self.assertNotEqual(stream_combo_box.findText('RTMP Streaming'), -1)
+        self.assertNotEqual(stream_combo_box.findText('Ogg Icecast'), -1)
 
-        # Dropdown
-        # TODO
+    def test_recording_settings_video_input(self):
+        """
+        Simulates a user interacting with the config tool record to video input setting.
+        """
 
-        # Record to Stream
+        self.select_recording_tab()
+        # Test disabled checkbox
+        self.config_tool.currentWidget.videoGroupBox.setChecked(False)
+        self.assertFalse(self.config_tool.config.enable_video_recording)
 
-        # Checkbox
-        for i in range(2):
-            #self.config_tool.config.readConfig()
-            if self.config_tool.currentWidget.streamGroupBox.isChecked():
-                self.assertTrue(self.config_tool.config.record_to_stream)
-                # TODO: Write better test case for this
-                #self.assertTrue(self.config_tool.config.record_to_stream_plugin == None)
-                self.config_tool.currentWidget.streamGroupBox.setChecked(False)
-            else:
-                self.assertFalse(self.config_tool.config.record_to_stream)
-                self.config_tool.currentWidget.streamGroupBox.setChecked(True)
+        # Test enabled checkbox
+        self.config_tool.currentWidget.videoGroupBox.setChecked(True)
+        self.assertTrue(self.config_tool.config.enable_video_recording)
+        self.assertIn(self.config_tool.config.videomixer, ['Video Passthrough', 'Picture-In-Picture'])
 
-        # Dropdown
-        # TODO
+        # Test combo box
+        video_mixer_combo_box = self.config_tool.avWidget.videoMixerComboBox
+        self.check_combobox_corner_cases_frontend(video_mixer_combo_box)
+        QtTest.QTest.keyClick(video_mixer_combo_box, QtCore.Qt.Key_PageUp)  # Simulate user to test backend/frontend
+        for i in range(video_mixer_combo_box.count() - 2):
+            last_plugin = self.config_tool.videomixer
+            QtTest.QTest.keyClick(video_mixer_combo_box, QtCore.Qt.Key_Down)
+            current_plugin = self.config_tool.videomixer
+            self.assertNotEqual(last_plugin, current_plugin)
 
-    def test_plugin_audio_input_settings(self):
-        '''
-        Tests for config tool's Plugins->Audio Input tab
-        '''
+        # Test frontend text values
+        self.assertTrue(video_mixer_combo_box.findText('Video Passthrough') != -1)
+        self.assertTrue(video_mixer_combo_box.findText('Picture-In-Picture') != -1)
 
-        # TODO
-        pass
+    def test_recording_settings_audio_input(self):
+        """
+        Simulates a user interacting with the config tool record to audio input settings.
+        """
+        self.select_recording_tab()
+        # Test disabled checkbox
+        self.config_tool.currentWidget.audioGroupBox.setChecked(False)
+        self.assertFalse(self.config_tool.config.enable_audio_recording)
 
-    def test_plugin_audio_mixer_settings(self):
-        '''
-        Tests for config tool's Plugins->Audio Mixer tab
-        '''
+        # Test enabled checkbox
+        self.config_tool.currentWidget.audioGroupBox.setChecked(True)
+        self.assertTrue(self.config_tool.config.enable_audio_recording)
+        self.assertIn(self.config_tool.config.audiomixer, ['Audio Passthrough', 'Multiple Audio Inputs'])
 
-        # TODO
-        pass
+        # Test combo box
+        audio_mixer_combo_box = self.config_tool.avWidget.audioMixerComboBox
+        self.check_combobox_corner_cases_frontend(audio_mixer_combo_box)
+        QtTest.QTest.keyClick(audio_mixer_combo_box, QtCore.Qt.Key_PageUp)  # Simulate user to test backend/frontend
+        for i in range(audio_mixer_combo_box.count() - 2):
+            last_plugin = self.config_tool.audiomixer
+            QtTest.QTest.keyClick(audio_mixer_combo_box, QtCore.Qt.Key_Down)
+            current_plugin = self.config_tool.audiomixer
+            self.assertNotEqual(last_plugin, current_plugin)
 
-    def test_plugin_video_input_settings(self):
-        '''
-        Tests for config tool's Plugins->Video Input tab
-        '''
+        # Test frontend text values
+        self.assertNotEqual(audio_mixer_combo_box.findText('Audio Passthrough'), -1)
+        self.assertNotEqual(audio_mixer_combo_box.findText('Multiple Audio Inputs'), -1)
 
-        # TODO
-        pass
+    def test_plugin_settings(self):
+        """
+        Simulate a user going through the list of plugins in the plugin settings page of the config tool.
 
-    def test_plugin_video_mixer_settings(self):
-        '''
-        Tests for config tool's Plugins->Video Mixer tab
-        '''
+        This test builds a dictionary value based on a traversal of the QTreeWidget that contains the plugins displayed
+        in the GUI. The dictionary is then used to assert that plugins exist in the appropriate categories. This test
+        also uses a map to relate the GUI's category names to the backend's category names since the two differ.
+        """
+        item = self.config_tool.mainWidget.optionsTreeWidget.findItems(self.config_tool.pluginsString,
+                                                                       QtCore.Qt.MatchExactly)
+        self.assertFalse(not item or item[0] is None)
+        self.config_tool.mainWidget.optionsTreeWidget.setCurrentItem(item[0])
+        QtTest.QTest.mouseClick(self.config_tool.mainWidget.optionsTreeWidget, Qt.Qt.LeftButton)
+        self.assertEqual(self.config_tool.currentWidget, self.config_tool.pluginWidget)
 
-        # TODO
-        pass
+        # GUI names categories are different than the backend. Define a translation from GUI -> backend
+        gui_category_to_backend_category = {
+            'Audio Input': 'AudioInput',
+            'Audio Mixer': 'AudioMixer',
+            'Video Input': 'VideoInput',
+            'Video Mixer': 'VideoMixer',
+            'Output': 'Output',
+            'Input': 'Importer'
+        }
+        QtTest.QTest.keyClick(self.config_tool.pluginWidget.list, QtCore.Qt.Key_PageUp)
+        root = self.config_tool.pluginWidget.list.invisibleRootItem()
+        plugin_category = {}  # A dictionary of plugin -> category
+        for category_index in range(root.childCount()):
+            category = str(self.config_tool.pluginWidget.list.currentItem().text(0))
+            QtTest.QTest.keyClick(self.config_tool.pluginWidget.list, QtCore.Qt.Key_Down)
+            for plugin_index in range(root.child(category_index).childCount()):
+                plugin_name = str(self.config_tool.pluginWidget.list.currentItem().text(0))
+                plugin_category[plugin_name] = gui_category_to_backend_category[category]
+                QtTest.QTest.keyClick(self.config_tool.pluginWidget.list, QtCore.Qt.Key_Down)
 
-    def test_plugin_output_settings(self):
-        '''
-        Tests for config tool's Plugins->Output tab
-        '''
+        # Assert expected categories exist.
+        self.assertIn('AudioInput', plugin_category.values())
+        self.assertIn('AudioMixer', plugin_category.values())
+        self.assertIn('VideoInput', plugin_category.values())
+        self.assertIn('VideoMixer', plugin_category.values())
+        self.assertIn('Output', plugin_category.values())
+        self.assertIn('Importer', plugin_category.values())
 
-        # TODO
-        pass
+        for category in ['AudioInput', 'AudioMixer', 'VideoInput', 'VideoMixer', 'Output', 'Importer']:
+            for plugin in self.config_tool.get_plugins(category):
+                self.assertIn(plugin.plugin_object.name, plugin_category)
+                self.assertEqual(plugin_category[plugin.plugin_object.name], category)
+                self.assertEqual(category, plugin.plugin_object.CATEGORY)
 
     def test_logger_settings(self):
-        '''
+        """
         Tests for config tool's Logger tab
 
         Needs to be tested differently since the
         Config instance isn't affected by changes in this tab.
-        '''
+        """
 
         # TODO
         pass
 
     def test_close_configtool(self):
-        '''
+        """
         Tests for config tool's close button
-        '''
+        """
 
         self.assertTrue(self.config_tool.mainWidget.isVisible())
         QtTest.QTest.mouseClick(self.config_tool.mainWidget.closePushButton, Qt.Qt.LeftButton)
         self.assertFalse(self.config_tool.mainWidget.isVisible())
 
     def test_file_menu_quit(self):
-        '''
+        """
         Tests for config tool's File->Quit
-        '''
+        """
 
         self.assertTrue(self.config_tool.isVisible())
 
@@ -263,9 +365,9 @@ class TestConfigToolApp(unittest.TestCase):
         self.assertFalse(self.config_tool.isVisible())
 
     def test_help_menu_about(self):
-        '''
+        """
         Tests for config tool's Help->About
-        '''
+        """
 
         self.assertTrue(self.config_tool.isVisible())
 
