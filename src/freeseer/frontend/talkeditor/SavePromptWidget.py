@@ -42,10 +42,17 @@ class SavePromptWidget(QDialog):
         self.bottomButtonLayout = QHBoxLayout()
 
         self.label = QLabel("This is a test. Click the button below to continue.")
-        self.testButton = QPushButton('Test')
+        self.saveButton = QPushButton('Save Changes')
+        self.discardButton = QPushButton('Discard Changes')
+        self.continueButton = QPushButton('Continue Editing')
 
-        #self.bottomButtonLayout.addWidget(self.testButton)
         self.layout.addWidget(self.label)
-        self.layout.addWidget(self.testButton)
+
+        self.buttonLayout = QHBoxLayout()
+        self.buttonLayout.addWidget(self.saveButton)
+        self.buttonLayout.addWidget(self.discardButton)
+        self.buttonLayout.addWidget(self.continueButton)
+
+        self.layout.addLayout(self.buttonLayout)
 
         self.setWindowTitle("Unsaved Changes Exist")
