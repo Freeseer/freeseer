@@ -65,9 +65,17 @@ def detect_devices():
     return device_list
 
 
+def get_default_device():
+    """Returns a default recording device from get_devices()."""
+    devices = detect_devices()
+    if not devices:
+        return ''
+    return devices[0]
+
+
 class FirewireSrcConfig(Config):
     """Config settings for Firewire video source."""
-    device = options.StringOption('')
+    device = options.StringOption(get_default_device())
 
 
 class FirewireSrc(IVideoInput):

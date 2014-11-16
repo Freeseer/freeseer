@@ -60,9 +60,18 @@ def get_sources():
     return zip(names, names)
 
 
+def get_default_source():
+    """Returns the default audio source."""
+    sources = get_sources()
+    if not sources:
+        return ''
+    else:
+        return sources[0][0]
+
+
 class PulseSrcConfig(Config):
     """Default PulseSrc config settings."""
-    source = options.StringOption('')
+    source = options.StringOption(get_default_source())
 
 
 class PulseSrc(IAudioInput):

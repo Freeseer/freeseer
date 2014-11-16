@@ -85,9 +85,18 @@ def get_devices():
     return devicemap
 
 
+def get_default_device():
+    """Returns a default recording device from get_devices()."""
+    devicemap = get_devices()
+    if not devicemap:
+        return ''
+    default = devicemap.itervalues().next()
+    return default
+
+
 class USBSrcConfig(Config):
     """USBSrc Configuration settings."""
-    device = options.StringOption('')
+    device = options.StringOption(get_default_device())
 
 
 class USBSrc(IVideoInput):
