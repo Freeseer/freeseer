@@ -253,7 +253,7 @@ class LogHandler(logging.Handler):
         and Send it to all listeners by calling their message() method"""
         self.format(record)
         message = {
-            "message": record.msg % record.args,
+            "message": record.message,
             "level": record.levelname,
             "levelno": record.levelno,
             "time": record.asctime,
