@@ -332,6 +332,7 @@ class LogStatusWidget(QWidget):
                     self.icon.setToolTip(self.error_string)
 
             self.label.setText(message["message"])
+            self.last_message_level = level
 
     def retranslate(self):
         self.okay_string = self.app.translate("LogStatusWidget", "Okay")
