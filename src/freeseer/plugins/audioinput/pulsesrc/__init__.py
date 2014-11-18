@@ -71,7 +71,7 @@ def get_default_source():
 
 class PulseSrcConfig(Config):
     """Default PulseSrc config settings."""
-    source = options.StringOption(get_default_source())
+    source = options.StringOption('')
 
 
 class PulseSrc(IAudioInput):
@@ -84,9 +84,11 @@ class PulseSrc(IAudioInput):
 
         audiosrc = gst.element_factory_make("pulsesrc", "audiosrc")
 
-        if self.config.source:
-            audiosrc.set_property('device', self.config.source)
-            log.debug('Pulseaudio source is set to %s', audiosrc.get_property('device'))
+        if not self.config.source:
+            self.config.source = get_default_source()
+
+        audiosrc.set_property('device', self.config.source)
+        log.debug('Pulseaudio source is set to %s', audiosrc.get_property('device'))
 
         bin.add(audiosrc)
 

@@ -96,7 +96,7 @@ def get_default_device():
 
 class USBSrcConfig(Config):
     """USBSrc Configuration settings."""
-    device = options.StringOption(get_default_device())
+    device = options.StringOption('')
 
 
 class USBSrc(IVideoInput):
@@ -114,6 +114,9 @@ class USBSrc(IVideoInput):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
 
         videosrc = None
+
+        if not self.config.device:
+            self.config.device = get_default_device()
 
         if sys.platform.startswith("linux"):
             videosrc = gst.element_factory_make("v4l2src", "videosrc")
