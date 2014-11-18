@@ -75,7 +75,7 @@ def get_default_device():
 
 class FirewireSrcConfig(Config):
     """Config settings for Firewire video source."""
-    device = options.StringOption(get_default_device())
+    device = options.StringOption('')
 
 
 class FirewireSrc(IVideoInput):
@@ -88,6 +88,9 @@ class FirewireSrc(IVideoInput):
 
     def get_videoinput_bin(self):
         bin = gst.Bin()  # Do not pass a name so that we can load this input more than once.
+
+        if not self.config.device:
+            self.config.device = get_default_device()
 
         videosrc = gst.element_factory_make("dv1394src", "videosrc")
         dv1394q1 = gst.element_factory_make('queue', 'dv1394q1')
