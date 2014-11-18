@@ -177,7 +177,7 @@ class TalkEditorApp(FreeseerApp):
 
         # New Talk Widget
         self.newTalkWidget.connect(self.newTalkWidget.addButton, SIGNAL('clicked()'), self.add_talk)
-        self.newTalkWidget.connect(self.newTalkWidget.cancelButton, SIGNAL('clicked()'), self.newTalkWidget.reject)
+        self.newTalkWidget.connect(self.newTalkWidget.cancelButton, SIGNAL('clicked()'), self.cancel_add)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -399,7 +399,10 @@ class TalkEditorApp(FreeseerApp):
 
         if presentation:
             self.db.insert_presentation(presentation)
-            self.newTalkWidget.accept()  # Close the dialog
+            self.newTalkWidget.hide()
+            #self.newTalkWidget.accept()  # Close the dialog
+            self.apply_changes()
+            self.talkDetailsWidget.disable_input_fields()
 
     def update_talk(self):
         """Updates the currently selected talk using data from the TalkEditorApp input fields"""
@@ -432,6 +435,10 @@ class TalkEditorApp(FreeseerApp):
                 unicode(startTime.toString(Qt.ISODate)),
                 unicode(endTime.toString(Qt.ISODate)))
 
+    def cancel_add(self):
+        self.newTalkWidget.hide()
+        log.info('No talk added...')
+
     def show_new_talk_popup(self):
         """Displays a modal dialog with a talk details view
 
@@ -442,11 +449,8 @@ class TalkEditorApp(FreeseerApp):
         self.clear_new_talk_fields()
         self.remove_new_talk_placeholder_text()
         self.newTalkWidget.talkDetailsWidget.titleLineEdit.setFocus()
-        if self.newTalkWidget.exec_() == 1:
-            self.apply_changes()
-            self.talkDetailsWidget.disable_input_fields()
-        else:
-            log.info('No talk added...')
+        self.newTalkWidget.setModal(True)
+        self.newTalkWidget.show()
 
     def apply_changes(self, updated_talk=None):
         """Repopulates the model to display the effective changes

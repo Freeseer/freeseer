@@ -145,11 +145,6 @@ class TestTalkEditorApp(unittest.TestCase):
         self.assertTrue(True)
 
     def test_click_add_talk(self):
-        # Click the "Add Talk" button, then click "cancel"
-        # This was just a test to see if it could be done -- the "exec_()" method is a bit tricky.
-        # This will probably be more useful in test_show_save_prompt()
-        #QTimer.singleShot(0, self.talk_editor.newTalkWidget.cancelButton, SLOT('click()'))
-        #QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.LeftButton
         self.assertTrue(True)
 
     def test_show_save_prompt(self):
