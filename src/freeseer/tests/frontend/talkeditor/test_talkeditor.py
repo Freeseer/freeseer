@@ -145,7 +145,10 @@ class TestTalkEditorApp(unittest.TestCase):
         self.assertTrue(True)
 
     def test_click_add_talk(self):
-        self.assertTrue(True)
+        QTest.mouseClick(self.talk_editor.commandButtons.addButton, Qt.LeftButton)
+        self.assertTrue(self.talk_editor.newTalkWidget.isVisible())
+        QTest.mouseClick(self.talk_editor.newTalkWidget.cancelButton, Qt.LeftButton)
+        self.assertFalse(self.talk_editor.newTalkWidget.isVisible())
 
     def test_show_save_prompt(self):
         self.assertTrue(True)
