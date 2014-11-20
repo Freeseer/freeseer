@@ -372,26 +372,42 @@ class TalkEditorApp(FreeseerApp):
         self.oldTalkIndex = QPersistentModelIndex(model)
 
     def toggle_import(self):
-        if self.importTalksWidget.csvRadioButton.isChecked():
-            self.importTalksWidget.csvLineEdit.setEnabled(True)
-            self.importTalksWidget.csvFileSelectButton.setEnabled(True)
-            self.importTalksWidget.rssLineEdit.setEnabled(False)
-        else:
-            self.importTalksWidget.csvLineEdit.setEnabled(False)
-            self.importTalksWidget.csvFileSelectButton.setEnabled(False)
-            self.importTalksWidget.rssLineEdit.setEnabled(True)
+        isCheckedBool = self.importTalksWidget.csvRadioButton.isChecked()
+        self.importTalksWidget.csvLineEdit.setEnabled(isCheckedBool)
+        self.importTalksWidget.csvFileSelectButton.setEnabled(isCheckedBool)
+        self.importTalksWidget.rssLineEdit.setEnabled(not isCheckedBool)
+        #if self.importTalksWidget.csvRadioButton.isChecked():
+        #    self.importTalksWidget.csvLineEdit.setEnabled(True)
+        #    self.importTalksWidget.csvFileSelectButton.setEnabled(True)
+        #    self.importTalksWidget.rssLineEdit.setEnabled(False)
+        #else:
+        #    self.importTalksWidget.csvLineEdit.setEnabled(False)
+        #    self.importTalksWidget.csvFileSelectButton.setEnabled(False)
+        #    self.importTalksWidget.rssLineEdit.setEnabled(True)
+
+    def toggle_import_talks_widget(self, show):
+        self.commandButtons.setHidden(show)
+        self.tableView.setHidden(show)
+        self.talkDetailsWidget.setHidden(show)
+        self.importTalksWidget.setHidden(not show)
 
     def show_import_talks_widget(self):
-        self.commandButtons.setHidden(True)
-        self.tableView.setHidden(True)
-        self.talkDetailsWidget.setHidden(True)
-        self.importTalksWidget.setHidden(False)
+        self.toggle_import_talks_widget(True)
+
+    #def show_import_talks_widget(self):
+    #    self.commandButtons.setHidden(True)
+    #    self.tableView.setHidden(True)
+    #    self.talkDetailsWidget.setHidden(True)
+    #    self.importTalksWidget.setHidden(False)
 
     def hide_import_talks_widget(self):
-        self.commandButtons.setHidden(False)
-        self.tableView.setHidden(False)
-        self.talkDetailsWidget.setHidden(False)
-        self.importTalksWidget.setHidden(True)
+        self.toggle_import_talks_widget(False)
+
+    #def hide_import_talks_widget(self):
+    #    self.commandButtons.setHidden(False)
+    #    self.tableView.setHidden(False)
+    #    self.talkDetailsWidget.setHidden(False)
+    #    self.importTalksWidget.setHidden(True)
 
     def add_talk(self):
         """Adds a new talk to the database using data from the NewTalkWidget input fields"""
