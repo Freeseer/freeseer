@@ -50,19 +50,11 @@ def plugin_manager(tmpdir):
 
 @pytest.fixture(scope='module')
 def plugin_platform_category_cache():
-    """
-    Test Helper fixture used to create a count of the number of plugins a platform supports by category
-    """
+    """Helper fixture for counting the number of plugins a platform supports by category."""
     platforms = ['linux', 'linux2', 'win32', 'cygwin', 'darwin', 'fake-dos']
     pluginpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir, "plugins")
-
-    categories = []
-    # Categories are folder names in the plugins directory such as 'audioinput', 'audiomixer', etc.
-    for directory in os.listdir(pluginpath):
-        if os.path.isdir(os.path.join(pluginpath, directory)):
-            categories.append(directory)
-
-    plugin_platform_category_count = defaultdict(partial(defaultdict, int))  # {platform : {category : count, category2 : count2}}
+    categories = [entry for entry in os.listdir(pluginpath) if os.path.isdir(os.path.join(pluginpath, entry))]
+    plugin_platform_category_count = defaultdict(partial(defaultdict, int))  # { platform: { category: count, ... }, ... }
 
     for category in categories:
         for root, directories, files in os.walk(os.path.join(pluginpath, category)):
@@ -70,14 +62,11 @@ def plugin_platform_category_cache():
                 if filename.endswith('.freeseer-plugin'):
                     plugin_name, _ = os.path.splitext(filename)
 
-                    if os.path.isfile(os.path.join(root, '{}.py'.format(plugin_name))):
-                        # Case one: the plugin name is plugin.py
+                    if os.path.isfile(os.path.join(root, '{}.py'.format(plugin_name))): # <plugin>.py
                         plugin_file_name = os.path.join(root, '{}.py'.format(plugin_name))
-                    elif os.path.isfile(os.path.join(root, plugin_name, '__init__.py')):
-                        # Case two: the plugin is in the __init__.py file of the directory named plugin
+                    elif os.path.isfile(os.path.join(root, plugin_name, '__init__.py')): # <plugin>/__init__.py
                         plugin_file_name = os.path.join(root, plugin_name, '__init__.py')
                     else:
-                        # Case three, we could not find the plugin in the expected locations.
                         assert False, 'Failed to find plugin file but saw plugin.freeseer-plugin file.'
 
                     with open(plugin_file_name, 'r') as search_file:
@@ -86,6 +75,7 @@ def plugin_platform_category_cache():
                                 for platform in platforms:
                                     if platform in line:
                                         plugin_platform_category_count[platform][category] += 1
+
     return plugin_platform_category_count
 
 
@@ -94,7 +84,7 @@ def plugin_platform_category_cache():
     (('AudioMixer', 'get_audiomixer_bin'), gst.Bin),
     (('VideoInput', 'get_videoinput_bin'), gst.Bin),
     (('VideoMixer', 'get_videomixer_bin'), gst.Bin),
-    (('Output', 'get_output_bin'), gst.Bin)
+    (('Output', 'get_output_bin'), gst.Bin),
 ])
 def test_plugin_bin(plugin_manager, plugin_info, expected_instance):
     """Check that a plugin and its get method returns the proper gst.Bin object"""
@@ -103,21 +93,14 @@ def test_plugin_bin(plugin_manager, plugin_info, expected_instance):
 
     for plugin in plugins:
         plugin.plugin_object.load_config(plugin_manager)
-        if plugin.name == "Firewire Source":
-            # FIXME: There is a link error in firewiresrc/__init__.py on the line:
-            # dv1394dvdemux.link(dv1394q2)
-            # Related gh#141
-            # Issue gh#644
+        if plugin.name == "Firewire Source": # FIXME: link error (gh#644, gh#141)
             continue
         plugin_bin = getattr(plugin.plugin_object, get_plugin_method)()
         assert isinstance(plugin_bin, expected_instance)
 
 
 def test_os_supported(plugin_manager, monkeypatch):
-    """
-    Verifies that the os_supported function returns true when a plugin claims to support a given OS.
-    Verifies that the os_supported function returns false when a fake operating system is given.
-    """
+    """Tests that PluginManager._os_supported(plugin) returns the correct truth value."""
     plugins = plugin_manager.get_all_plugins()
     assert plugins, "The list of plugins should not be empty."
     for plugin in plugins:
@@ -136,31 +119,28 @@ def test_os_supported(plugin_manager, monkeypatch):
 
 
 def test_get_supported_plugins(plugin_manager, monkeypatch):
-    """
-    Verifies per platform that all plugins returned are indeed supported.
-    Also checks that an expected number of plugins are returned.
-    """
-    unfiltered_plugins = plugin_manager.plugmanc.getAllPlugins()
+    """Tests PluginManager._get_supported_plugins(plugins) per platform."""
+    all_plugins = plugin_manager.plugmanc.getAllPlugins()
     monkeypatch.setattr(sys, 'platform', 'linux2')
-    linux_plugins = plugin_manager._get_supported_plugins(unfiltered_plugins)
+    linux_plugins = plugin_manager._get_supported_plugins(all_plugins)
     assert linux_plugins
     for plugin in linux_plugins:
         assert 'linux2' in plugin.plugin_object.os
 
     monkeypatch.setattr(sys, 'platform', 'darwin')
-    darwin_plugins = plugin_manager._get_supported_plugins(unfiltered_plugins)
+    darwin_plugins = plugin_manager._get_supported_plugins(all_plugins)
     assert darwin_plugins
     for plugin in darwin_plugins:
         assert 'darwin' in plugin.plugin_object.os
 
     monkeypatch.setattr(sys, 'platform', 'win32')
-    win32_plugins = plugin_manager._get_supported_plugins(unfiltered_plugins)
+    win32_plugins = plugin_manager._get_supported_plugins(all_plugins)
     assert win32_plugins
     for plugin in win32_plugins:
         assert 'win32' in plugin.plugin_object.os
 
     monkeypatch.setattr(sys, 'platform', 'fake-dos')
-    fakeos_plugins = plugin_manager._get_supported_plugins(unfiltered_plugins)
+    fakeos_plugins = plugin_manager._get_supported_plugins(all_plugins)
     assert not fakeos_plugins
 
 
@@ -168,33 +148,29 @@ def test_get_supported_plugins(plugin_manager, monkeypatch):
     ('Audio Feedback', 'Output'),
     ('Video Preview', 'Output'),
     ('Rss FeedParser', 'Importer'),
-    ('CSV Importer', 'Importer')
+    ('CSV Importer', 'Importer'),
 ])
 def test_get_plugin_by_name(plugin_manager, plugin_name, plugin_category):
-    """
-    Verify that the get_plugin_by_name function returns given existing functions.
-    """
+    """Tests that PluginManager.get_plugin_by_name() retrieves the correct plugin."""
     plugin = plugin_manager.get_plugin_by_name(plugin_name, plugin_category)
     assert plugin.plugin_object
     assert plugin.plugin_object.name == plugin_name
     assert plugin.plugin_object.CATEGORY == plugin_category
 
 
-def test_get_plugin_by_name_fake_plugin(plugin_manager):
-    """
-    Verify that the get_plugin_by_name function does not return values when a fake name or category is given.
-    """
-    assert not plugin_manager.get_plugin_by_name('fakename', 'no category')
-    assert not plugin_manager.get_plugin_by_name('Audio Feedback', 'fake category')
-    assert not plugin_manager.get_plugin_by_name('fakename', 'Output')
+@pytest.mark.parametrize('plugin_name, plugin_category', [
+    ('Fake Plugin Name', 'FakeCategory'),
+    ('Video Preview', 'FakeCategory'),
+    ('Fake Plugin Name', 'Importer'),
+])
+def test_get_plugin_by_name_fake_plugin(plugin_manager, plugin_name, plugin_category):
+    """Tests that PluginManager.get_plugin_by_name() does not return a plugin when a fake name or category is given."""
+    assert not plugin_manager.get_plugin_by_name(plugin_name, plugin_category)
 
 
 @pytest.mark.parametrize('platform', ['linux2', 'win32', 'darwin', 'fake-dos'])
 def test_get_all_plugins(plugin_manager, monkeypatch, plugin_platform_category_cache, platform):
-    """
-    Verifies that get_all_plugins() finds the correct number of plugins for each of the specified
-    platforms. Verifies that 0 plugins are found for a platform that does not exist.
-    """
+    """Tests that PluginManager.get_all_plugins() returns the correct number of plugins per platform."""
     monkeypatch.setattr(sys, 'platform', platform)
     plugins = plugin_manager.get_all_plugins()
     assert len(plugins) == sum(plugin_platform_category_cache[platform].values())
@@ -202,12 +178,7 @@ def test_get_all_plugins(plugin_manager, monkeypatch, plugin_platform_category_c
 
 @pytest.mark.parametrize('platform', ['win32', 'darwin', 'linux', 'linux2', 'fake-dos'])
 def test_get_plugins_of_category(plugin_manager, plugin_platform_category_cache, monkeypatch, platform):
-    """
-    Assert that fetching plugins by categories works for multiple platforms.
-
-    This assertion is checked by counting the number of platform compatible plugins.
-    """
-
+    """Tests that PluginManager.get_plugins_of_category() returns the correct number of plugins per platform."""
     monkeypatch.setattr(sys, 'platform', platform)
     audioinput_count = plugin_platform_category_cache[platform]['audioinput']
     audiomixer_count = plugin_platform_category_cache[platform]['audiomixer']
@@ -216,7 +187,6 @@ def test_get_plugins_of_category(plugin_manager, plugin_platform_category_cache,
     importer_count = plugin_platform_category_cache[platform]['importer']
     output_count = plugin_platform_category_cache[platform]['output']
 
-    # Categories: AudioInput, AudioMixer, VideoInput, VideoMixer, Importer, Output
     assert len(plugin_manager.get_plugins_of_category('AudioInput')) == audioinput_count
     assert len(plugin_manager.get_plugins_of_category('AudioMixer')) == audiomixer_count
     assert len(plugin_manager.get_plugins_of_category('VideoInput')) == videoinput_count
@@ -227,7 +197,7 @@ def test_get_plugins_of_category(plugin_manager, plugin_platform_category_cache,
 
 @pytest.mark.parametrize('platform', ['win32', 'darwin', 'linux', 'linux2', 'fake-dos'])
 def test_get_category_plugins(plugin_manager, plugin_platform_category_cache, monkeypatch, platform):
-    """This test asserts that plugin getting commands work on multiple platforms."""
+    """Tests that PluginMananger.get_plugincategory_plugins() returns the correct number of plugins per platform."""
     monkeypatch.setattr(sys, 'platform', platform)
     audioinput_count = plugin_platform_category_cache[platform]['audioinput']
     audiomixer_count = plugin_platform_category_cache[platform]['audiomixer']
@@ -244,26 +214,12 @@ def test_get_category_plugins(plugin_manager, plugin_platform_category_cache, mo
     assert len(plugin_manager.get_output_plugins()) == output_count
 
 
-class TestFakeConfig(Config):
-    foo = options.StringOption("Bar")
-    i = options.IntegerOption(0)
-    pi = options.FloatOption(3.14)
-    not_true = options.BooleanOption(False)
-
-
-class TestFakePlugin(IAudioInput):
-    name = 'Fake Plugin'
-    os = ['fake-dos']
-    CONFIG_CLASS = TestFakeConfig
-
-
 def test_load_plugin_config(plugin_manager):
-    """
-    Test that if a plugin sets a CONFIG_CLASS attribute then the configuration can be loaded.
+    """Tests that PluginManager.load_plugin_config() properly loads the plugin when CONFIG_CLASS attribute is set.
 
     - Verifies that PluginManager.load_plugin_config() returns a configuration when a CONFIG_CLASS is present and that
-    the load_plugin_config() method does not set the plugin_object.config attribute.
-    - Verifies that IBackendPlugin.load_config() sets a plugin_object.config attribute when a CONFIG_CLASS is specified
+      it does not set the plugin_object.config attribute.
+    - Verifies that IBackendPlugin.load_config() sets the plugin_object.config attribute when a CONFIG_CLASS is specified.
     """
     plugins = plugin_manager.get_all_plugins()
     for plugin in plugins:
@@ -276,26 +232,35 @@ def test_load_plugin_config(plugin_manager):
             assert not plugin_manager.load_plugin_config(plugin.plugin_object.CONFIG_CLASS, plugin.plugin_object.get_section_name())
 
 
+class TestFakeConfig(Config):
+    string = options.StringOption("Bar")
+    integer = options.IntegerOption(0)
+    number = options.FloatOption(3.14)
+    boolean = options.BooleanOption(False)
+
+
+class TestFakePlugin(IAudioInput):
+    name = 'Fake Plugin'
+    os = ['fake-dos']
+    CONFIG_CLASS = TestFakeConfig
+
+
 def test_load_fake_config(plugin_manager):
-    """
-    Test that when a plugin with a CONFIG_CLASS loads its configuration, that all of the configuration values are valid.
-    """
+    """Tests that when a plugin with a CONFIG_CLASS loads its configuration, all of its configured values are valid."""
     fake_plugin = TestFakePlugin()
     fake_plugin.load_config(plugin_manager)
-    assert fake_plugin.config.foo == 'Bar'
-    assert fake_plugin.config.i == 0
-    assert fake_plugin.config.pi == 3.14
-    assert not fake_plugin.config.not_true
+    assert fake_plugin.config.string == 'Bar'
+    assert fake_plugin.config.integer == 0
+    assert fake_plugin.config.number == 3.14
+    assert not fake_plugin.config.boolean
 
 
 def test_load_fake_plugin_config(plugin_manager):
-    """
-    Test that when the PluginManager calls load_plugin_config() an instance of the plugin's CONFIG_CLASS is returned
-    with the correct values.
-    """
+    """Tests that load_plugin_config() returns an instance of the plugin's CONFIG_CLASS with the correct values."""
     fake_plugin = TestFakePlugin()
     fake_config = plugin_manager.load_plugin_config(fake_plugin.CONFIG_CLASS, fake_plugin.get_section_name())
-    assert fake_config.foo == 'Bar'
-    assert fake_config.i == 0
-    assert fake_config.pi == 3.14
-    assert not fake_config.not_true
+    assert isinstance(fake_config, TestFakeConfig)
+    assert fake_config.string == 'Bar'
+    assert fake_config.integer == 0
+    assert fake_config.number == 3.14
+    assert not fake_config.boolean
