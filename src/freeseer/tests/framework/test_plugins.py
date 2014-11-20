@@ -62,9 +62,9 @@ def plugin_platform_category_cache():
                 if filename.endswith('.freeseer-plugin'):
                     plugin_name, _ = os.path.splitext(filename)
 
-                    if os.path.isfile(os.path.join(root, '{}.py'.format(plugin_name))): # <plugin>.py
+                    if os.path.isfile(os.path.join(root, '{}.py'.format(plugin_name))):  # <plugin>.py
                         plugin_file_name = os.path.join(root, '{}.py'.format(plugin_name))
-                    elif os.path.isfile(os.path.join(root, plugin_name, '__init__.py')): # <plugin>/__init__.py
+                    elif os.path.isfile(os.path.join(root, plugin_name, '__init__.py')):  # <plugin>/__init__.py
                         plugin_file_name = os.path.join(root, plugin_name, '__init__.py')
                     else:
                         assert False, 'Failed to find plugin file but saw plugin.freeseer-plugin file.'
@@ -93,7 +93,7 @@ def test_plugin_bin(plugin_manager, plugin_info, expected_instance):
 
     for plugin in plugins:
         plugin.plugin_object.load_config(plugin_manager)
-        if plugin.name == "Firewire Source": # FIXME: link error (gh#644, gh#141)
+        if plugin.name == "Firewire Source":  # FIXME: link error (gh#644, gh#141)
             continue
         plugin_bin = getattr(plugin.plugin_object, get_plugin_method)()
         assert isinstance(plugin_bin, expected_instance)
