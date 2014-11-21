@@ -132,12 +132,26 @@ class DesktopLinuxSrc(IVideoInput):
         self.widget.window().hide()
 
     def areaSelectEvent(self, start_x, start_y, end_x, end_y):
-        self.config.start_x = start_x
-        self.config.start_y = start_y
-        self.config.end_x = end_x
-        self.config.end_y = end_y
+        if start_x <= end_x:
+            self.config.start_x = start_x
+            self.config.end_x = end_x
+        else:
+            self.config.start_x = end_x
+            self.config.end_x = start_x
+
+        if start_y <= end_y:
+            self.config.start_y = start_y
+            self.config.end_y = end_y
+        else:
+            self.config.start_y = end_y
+            self.config.end_y = start_y
+
         self.config.save()
-        log.debug('Area selector start: %sx%s end: %sx%s', start_x, start_y, end_x, end_y)
+        log.debug('Area selector start: %sx%s end: %sx%s',
+            self.config.start_x,
+            self.config.start_y,
+            self.config.end_x,
+            self.config.end_y)
         # Automatically check the "Record Region" button.
         self.set_desktop_area()
         self.widget.areaButton.setChecked(True)
