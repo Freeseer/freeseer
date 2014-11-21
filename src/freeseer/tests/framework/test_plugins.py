@@ -93,6 +93,9 @@ def test_plugin_bin(plugin_manager, plugin_info, expected_instance):
 
     for plugin in plugins:
         plugin.plugin_object.load_config(plugin_manager)
+        if plugin.name == "RTMP Streaming" and sys.platform == "win32":
+            # FIXME: plugin error (gh#647): Skip the RTMP plugin test case because it does not support win32 platform
+            continue
         if plugin.name == "Firewire Source":  # FIXME: link error (gh#644, gh#141)
             continue
         plugin_bin = getattr(plugin.plugin_object, get_plugin_method)()
