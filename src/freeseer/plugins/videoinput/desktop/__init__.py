@@ -128,6 +128,7 @@ class DesktopLinuxSrc(IVideoInput):
         self.area_selector = AreaSelector(self)
         self.area_selector.show()
         self.gui.hide()
+        self.gui.last_dialog.hide()
         self.widget.window().hide()
 
     def areaSelectEvent(self, start_x, start_y, end_x, end_y):
@@ -142,6 +143,7 @@ class DesktopLinuxSrc(IVideoInput):
         self.widget.areaButton.setChecked(True)
 
         self.gui.show()
+        self.gui.last_dialog.show()
         self.widget.window().show()
 
     def get_widget(self):

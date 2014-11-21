@@ -67,6 +67,8 @@ class ConfigToolApp(FreeseerApp):
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
 
+        self.dialog = None
+
         self.mainWidget = ConfigToolWidget()
         self.setCentralWidget(self.mainWidget)
 
@@ -564,6 +566,7 @@ class ConfigToolApp(FreeseerApp):
 
     def show_plugin_widget_dialog(self, widget, name):
         """Shows the configuration dialog for a plugin."""
+        self.last_dialog = self.dialog
         self.dialog = QtGui.QDialog(self)
 
         self.dialog_layout = QtGui.QVBoxLayout()
