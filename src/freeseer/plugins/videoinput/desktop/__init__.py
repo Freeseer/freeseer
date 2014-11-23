@@ -155,6 +155,8 @@ class DesktopLinuxSrc(IVideoInput):
         # Automatically check the "Record Region" button.
         self.set_desktop_area()
         self.widget.areaButton.setChecked(True)
+        self.widget.regionLabel.setText("{}x{} to {}x{}".format(
+            self.config.start_x, self.config.start_y, self.config.end_x, self.config.end_y))
 
         self.gui.show()
         self.gui.last_dialog.show()
@@ -184,6 +186,9 @@ class DesktopLinuxSrc(IVideoInput):
         # minus 1 since we like to start count at 0
         max_screens = QDesktopWidget().screenCount()
         self.widget.screenSpinBox.setMaximum(max_screens - 1)
+
+        self.widget.regionLabel.setText("{}x{} to {}x{}".format(
+            self.config.start_x, self.config.start_y, self.config.end_x, self.config.end_y))
 
         # Finally enable connections
         self.__enable_connections()

@@ -56,6 +56,10 @@ class ConfigWidget(QWidget):
         areaGroup.addWidget(self.setAreaButton)
         layout.addRow(self.areaLabel, areaGroup)
 
+        self.regionLabel = QLabel("")
+        self.regionLabel.setStyleSheet("QLabel { background-color: #ADADAD; border: 1px solid gray }")
+        layout.addRow(QLabel(""), self.regionLabel)
+
         # Select screen to record
         self.screenLabel = QLabel("Screen")
         self.screenSpinBox = QSpinBox()
