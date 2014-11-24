@@ -358,6 +358,7 @@ class QtDBConnector(object):
     def get_talk_between_dates(self, event, room, startDate, endDate):
         """Returns the talkID of the first talk found between a startDate, and endDate for a specified event/room.
         Else return None"""
+        # FIXME: This function only returns one of the Id's on a given date. What if there are two presentations on the same day?
         query = QtSql.QSqlQuery("""
             SELECT Id, Date FROM presentations
             WHERE Event='{0}' AND Room='{1}'

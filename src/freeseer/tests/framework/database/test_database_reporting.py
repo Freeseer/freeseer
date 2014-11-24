@@ -34,12 +34,7 @@ def test_insert_failure(db):
                       release=True)
 
     db.insert_failure(failure)
-
-    report = db.get_report('1')
-
-    assert report.talkId == failure.talkId
-    assert report.comment == failure.comment
-    assert report.release == failure.release
+    assert db.get_report('1') == failure
 
 
 def test_get_reports(db, presentation1):
@@ -61,9 +56,9 @@ def test_get_reports(db, presentation1):
 
     assert len(reports) == 2
     assert reports[0].presentation.title == presentation1.title
-    assert reports[0].failure.talkId == failure1.talkId
+    assert reports[0].failure == failure1
     assert not reports[1].presentation
-    assert reports[1].failure.talkId == failure2.talkId
+    assert reports[1].failure == failure2
 
 
 def test_export_reports_to_csv(db, tmpdir):
