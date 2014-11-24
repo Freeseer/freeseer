@@ -112,4 +112,4 @@ def test_add_talks_from_rss(db, feed, expected):
     httpretty.register_uri(httpretty.GET, feed_url, body=feed_data, content_type='application/rss+xml')
     db.add_talks_from_rss(feed_url)
     for presentation, expectation in expected:
-        assert db.presentation_exists(presentation) == expectation
+        assert db._helper_presentation_exists(presentation) == expectation

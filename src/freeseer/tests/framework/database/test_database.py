@@ -21,7 +21,7 @@
 
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
-
+import copy
 import os
 
 from PyQt4 import QtCore
@@ -31,12 +31,12 @@ from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 
 
-def test_first_talk_id(db, presentation):
+def test_first_talk_id(db, presentation1):
     """Assert the first presentation record id in the database is given the identity '1'"""
     no_ids = db.get_talk_ids()
     assert not no_ids.first()  # Assert that there are no ids in the database.
 
-    db.insert_presentation(presentation)
+    db.insert_presentation(presentation1)
 
     talk_ids = db.get_talk_ids()
     assert talk_ids.first()
@@ -46,42 +46,23 @@ def test_first_talk_id(db, presentation):
     assert not talk_ids.next()  # there should be no additional records.
 
 
-def test_get_presentation_id(db, presentation):
+def test_get_presentation_id(db, presentation1):
     """Assert that a valid record id is returned for a given presntation object in the database"""
-    assert not db.get_presentation_id(presentation)  # Test that None is returned when a record does not exist.
+    assert not db.get_presentation_id(presentation1)  # Test that None is returned when a record does not exist.
 
-    db.insert_presentation(presentation)
-    talk_id = db.get_presentation_id(presentation)
+    db.insert_presentation(presentation1)
+    talk_id = db.get_presentation_id(presentation1)
     assert talk_id == '1'
 
 
-def test_add_talks_from_csv(db):
+def test_add_talks_from_csv(db, presentation3):
     """Assert that presentations can be loaded to the database from a csv file"""
     dirname = os.path.dirname(__file__)
     fname = os.path.join(dirname, os.pardir, 'sample_talks.csv')
 
-    presentation = Presentation(
-        title='Building NetBSD',
-        speaker='David Maxwell',
-        description='''People who are interested in learning about operating systems have a lot of topics to absorb,'''
-        ''' but the very first barrier that gets in people's way is that you need to be able to build the software. '''
-        '''If you can't build it, you can't make changes. If building it is painful, you'll find other things to do '''
-        '''with your time.\n'''
-        '''\tThe NetBSD Project has a build system that goes far beyond what many other projects implement. Come to '''
-        '''this talk about learn about\n'''
-        '''\tbuild.sh and the features available that make multi-architecture and embedded development environments '''
-        '''a breeze with NetBSD.\n'''
-        '''\tNetBSD website: http://www.NetBSD.org/''',
-        event='SC2011',
-        category='Beginner',
-        room='None',
-        date='2011-08-17T20:29',
-        startTime='2011-08-17T20:29'
-    )
-
-    assert not db.presentation_exists(presentation)
+    assert not db._helper_presentation_exists(presentation3)
     db.add_talks_from_csv(fname)
-    assert db.presentation_exists(presentation)
+    assert db._helper_presentation_exists(presentation3)
 
 
 def test_add_talks_from_empty_csv(db):
@@ -113,23 +94,23 @@ def test_export_talks_to_csv(db, tmpdir):
         assert fd.readlines() == expected_csv_lines
 
 
-def test_insert_presentation(db, presentation):
+def test_insert_presentation(db, presentation1):
     """Assert that a presentation's fields are correctly inserted into the database"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
 
     talks = db.get_talks()
     assert talks.first()
 
     record = talks.record()
-    assert talks.value(record.indexOf('title')).toString() == presentation.title
-    assert talks.value(record.indexOf('speaker')).toString() == presentation.speaker
-    assert talks.value(record.indexOf('description')).toString() == presentation.description
-    assert talks.value(record.indexOf('category')).toString() == presentation.category
-    assert talks.value(record.indexOf('event')).toString() == presentation.event
-    assert talks.value(record.indexOf('date')).toString() == presentation.date
-    assert talks.value(record.indexOf('startTime')).toString() == presentation.startTime
-    assert talks.value(record.indexOf('endTime')).toString() == presentation.endTime
+    assert talks.value(record.indexOf('title')).toString() == presentation1.title
+    assert talks.value(record.indexOf('speaker')).toString() == presentation1.speaker
+    assert talks.value(record.indexOf('description')).toString() == presentation1.description
+    assert talks.value(record.indexOf('category')).toString() == presentation1.category
+    assert talks.value(record.indexOf('event')).toString() == presentation1.event
+    assert talks.value(record.indexOf('date')).toString() == presentation1.date
+    assert talks.value(record.indexOf('startTime')).toString() == presentation1.startTime
+    assert talks.value(record.indexOf('endTime')).toString() == presentation1.endTime
 
     # Check that no additional presentations were inserted.
     assert not talks.next()
@@ -140,75 +121,74 @@ def test_insert_presentation_empty_arguments(db):
     db.insert_presentation(Presentation('', room='', event=''))
 
 
-def test_update_presentation(db, presentation):
-    """Assert that a given presentation is updated with out side effects given its record id"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+def test_update_presentation(db, presentation1):
+    """Assert that a given presentation is updated without side effects given its record id"""
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
 
     # Update the inserted presentation
-    presentation.title = 'Presentation Title Redacted'
-    db.update_presentation('1', presentation)
+    presentation1.title = 'Presentation Title Redacted'
+    db.update_presentation('1', presentation1)
 
     updated_talks = db.get_talks()
     updated_talks.first()
     new_record = updated_talks.record()
 
     # Check the update worked.
-    assert updated_talks.value(new_record.indexOf('title')).toString() == presentation.title
-    assert updated_talks.value(new_record.indexOf('speaker')).toString() == presentation.speaker
-    assert updated_talks.value(new_record.indexOf('room')).toString() == presentation.room
+    assert updated_talks.value(new_record.indexOf('title')).toString() == presentation1.title
+    assert updated_talks.value(new_record.indexOf('speaker')).toString() == presentation1.speaker
+    assert updated_talks.value(new_record.indexOf('room')).toString() == presentation1.room
 
 
-def test_update_fake_presentation(db, presentation):
+def test_update_fake_presentation(db, presentation1):
     """Try to update a fake presentation. Assert this does not insert anything into the database"""
-    db.update_presentation('100', presentation)
+    db.update_presentation('100', presentation1)
     assert not db.get_presentation('100')
 
     talks = db.get_talks()
     assert not talks.first()
 
 
-def test_update_presentation_real_and_fake(db, presentation):
+def test_update_presentation_real_and_fake(db, presentation1):
     """
-    Assert that a given presentation is updated with out side effects given its record id and that a fake
+    Assert that a given presentation is updated without side effects given its record id and that a fake
     presentation update does not impact the existing database presentation.
     """
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
 
     # Update the inserted presentation
-    presentation.title = 'Presentation Title Redacted'
-    db.update_presentation('1', presentation)
+    presentation1.title = 'Presentation Title Redacted'
+    db.update_presentation('1', presentation1)
 
     updated_talks = db.get_talks()
     updated_talks.first()
     new_record = updated_talks.record()
 
     # Check the update worked.
-    assert updated_talks.value(new_record.indexOf('title')).toString() == presentation.title
-    assert updated_talks.value(new_record.indexOf('speaker')).toString() == presentation.speaker
-    assert updated_talks.value(new_record.indexOf('room')).toString() == presentation.room
+    assert updated_talks.value(new_record.indexOf('title')).toString() == presentation1.title
+    assert updated_talks.value(new_record.indexOf('speaker')).toString() == presentation1.speaker
+    assert updated_talks.value(new_record.indexOf('room')).toString() == presentation1.room
 
     # Try to update fake presentations, this case should never actually arise if the code is using the model objects
-    db.update_presentation('100', presentation)
+    db.update_presentation('100', presentation1)
     assert not db.get_presentation('100')
 
     # Make sure that the talk that was originally inserted has not changed and that no other rows have been added to the db.
     talks = db.get_talks()
     talks.first()
     record = talks.record()
-    assert talks.value(record.indexOf('title')).toString() == presentation.title
-    assert talks.value(record.indexOf('speaker')).toString() == presentation.speaker
-    assert talks.value(record.indexOf('room')).toString() == presentation.room
+    assert talks.value(record.indexOf('title')).toString() == presentation1.title
+    assert talks.value(record.indexOf('speaker')).toString() == presentation1.speaker
+    assert talks.value(record.indexOf('room')).toString() == presentation1.room
     assert not talks.next()  # there should be no other presentations
 
 
-def test_delete_presentation_valid(db, presentation):
-    """Assert that a presentation is removed with out side effects from the database"""
-    # delete a valid presentation
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
-    assert db.presentation_exists(presentation)
+def test_delete_presentation_valid(db, presentation1):
+    """Assert that a presentation is removed without side effects from the database"""
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
+    assert db._helper_presentation_exists(presentation1)
     db.delete_presentation('1')
     assert not db.get_presentation('1')
 
@@ -220,44 +200,47 @@ def test_delete_presentation_fake(db):
     assert not db.get_presentation('1')
 
 
-def test_delete_presentation_side_effects(db, presentation):
+def test_delete_presentation_side_effects(db, presentation1):
     """Delete an invalid presentation and make sure any valid presentations are not affected"""
-    db.insert_presentation(presentation)
-    assert db.presentation_exists(presentation)
+    db.insert_presentation(presentation1)
     db.delete_presentation('100')
-    assert db.presentation_exists(presentation)
+    assert db._helper_presentation_exists(presentation1)
 
 
-def test_clear_database(db, presentation):
+def test_clear_database(db, presentation1):
     """Assert that the presentation table is cleared"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
-    assert db.presentation_exists(presentation)
+    db.insert_presentation(presentation1)
+    assert db._helper_presentation_exists(presentation1)
     db.clear_database()
-    assert not db.presentation_exists(presentation)
+    assert not db._helper_presentation_exists(presentation1)
 
 
-def test_get_talk_ids(db, presentation):
+def test_get_talk_ids(db, presentation1, presentation2, presentation3, presentation4):
     """Assert that presentation record ids are returned from the database presentation table"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
+    db.insert_presentation(presentation2)
+    db.insert_presentation(presentation3)
+    db.insert_presentation(presentation4)
 
     talk_ids = db.get_talk_ids()
-    talk_ids.next()
-    talk_id_record = talk_ids.record()
-    assert talk_id_record.value(talk_id_record.indexOf('id')).toString() == '1'
-    assert not talk_ids.next()
+    expected_id = 1
+    while(talk_ids.next()):
+        talk_id_record = talk_ids.record()
+        assert talk_id_record.value(talk_id_record.indexOf('id')).toString() == str(expected_id)
+        expected_id = expected_id + 1
+    assert expected_id == 5  # we should have seen 4 ids.
 
 
-def test_get_talks_by_event(db, presentation):
+def test_get_talks_by_event(db, presentation1):
     """Assert that presentations can be retrieved from the database given an event name"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
 
-    talk_by_event = db.get_talks_by_event(presentation.event)
+    talk_by_event = db.get_talks_by_event(presentation1.event)
     assert talk_by_event.first()
     record = talk_by_event.record()
-    assert talk_by_event.value(record.indexOf('title')).toString() == presentation.title
+    assert talk_by_event.value(record.indexOf('title')).toString() == presentation1.title
     assert not talk_by_event.next()
 
 
@@ -267,15 +250,15 @@ def test_get_talks_by_event_fake(db):
     assert not fake_talk_by_event.first()
 
 
-def test_get_talks_by_room(db, presentation):
+def test_get_talks_by_room(db, presentation1):
     """Assert that presentations can be retrieved from the database given a room"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
 
-    talk_by_room = db.get_talks_by_room(presentation.room)
+    talk_by_room = db.get_talks_by_room(presentation1.room)
     assert talk_by_room.first()
     record = talk_by_room.record()
-    assert talk_by_room.value(record.indexOf('category')).toString() == presentation.category
+    assert talk_by_room.value(record.indexOf('category')).toString() == presentation1.category
     assert not talk_by_room.next()
 
 
@@ -285,66 +268,94 @@ def test_get_talks_by_room_fake(db):
     assert not fake_talk_by_room.first()
 
 
-def test_get_talks_by_room_and_time(db, presentation):
+def test_get_talks_by_room_and_time(db, presentation1):
     """Assert that presentations starting after the current date can be retrieved from the database given a room"""
-    assert not db.presentation_exists(presentation)
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)
+    db.insert_presentation(presentation1)
 
-    # The presentation should be returned because it starts later than the current date.
-    talks = db.get_talks_by_room_and_time(presentation.room)
+    old_presentation = copy.deepcopy(presentation1)
+    old_presentation.startTime = QtCore.QDateTime().addSecs(60 * -100).toString()
+    db.insert_presentation(old_presentation)
+
+    # presentation1 should be returned because it starts later than the current date.
+    # old_presentation should not be returned since it starts in the past
+    talks = db.get_talks_by_room_and_time(presentation1.room)
     assert talks.first()
     record = talks.record()
-    assert talks.value(record.indexOf('room')).toString() == presentation.room
+    assert talks.value(record.indexOf('room')).toString() == presentation1.room
+    assert talks.value(record.indexOf('startTime')).toString() == presentation1.startTime
+    assert talks.value(record.indexOf('date')).toString() == presentation1.date
     assert not talks.next()
 
 
-def test_get_talks_between_dates(db, presentation):
+def test_get_talks_by_room_and_time_no_results(db, presentation1):
+    """Assert that old presentations are not returned by get_talks_by_room_and_time()"""
+    presentation1.startTime = QtCore.QDateTime().addSecs(60 * -100).toString()
+    db.insert_presentation(presentation1)
+
+    # Nothing should be returned. presentation1 is should be too old.
+    talks = db.get_talks_by_room_and_time(presentation1.room)
+    assert not talks.first()
+
+
+def test_get_talks_by_room_and_time_fake_room(db, presentation1, presentation2):
+    """
+    Assert that nothing is returned when a room with no data associated with it is given to
+    get_talks_by_room_and_time()
+    """
+    db.insert_presentation(presentation1)
+    db.insert_presentation(presentation2)
+    talks = db.get_talks_by_room_and_time('made up room')
+    assert not talks.first()
+
+
+def test_get_talks_between_dates(db, presentation1):
     """Assert that presentations from the database can be retrieved given two dates"""
-    db.insert_presentation(presentation)
+    db.insert_presentation(presentation1)
 
     current_time = QtCore.QDateTime().currentDateTime()
     time_before_presentation = current_time.date().toString(1)
     time_after_presentation = current_time.addSecs(60 * 60).date().toString(1)
 
-    talk_id = db.get_talk_between_dates(presentation.event, presentation.room,
+    talk_id = db.get_talk_between_dates(presentation1.event, presentation1.room,
                                        time_before_presentation, time_after_presentation)
     assert talk_id == '1'
 
 
-def test_get_talks_between_dates_no_presentations(db, presentation):
+def test_get_talks_between_dates_no_presentations(db, presentation1):
     """
     Assert that no presentations are retrieved from the database when get_talk_between_dates() is given a time period
     which contains no presentations
     """
-    db.insert_presentation(presentation)
+    db.insert_presentation(presentation1)
 
-    no_talk_id = db.get_talk_between_dates(presentation.event, presentation.room, 0, 0)
+    no_talk_id = db.get_talk_between_dates(presentation1.event, presentation1.room, 0, 0)
     assert not no_talk_id
 
 
-def test_presentation_exists(db, presentation):
+def test__helper_presentation_exists(db, presentation1):
     """Assert that a given presentation exists in the database"""
     empty_result = QtSql.QSqlQuery('SELECT * FROM presentations')
     assert not empty_result.first()  # There should be no presentations
-    assert not db.presentation_exists(presentation)  # This should also be false
-    db.insert_presentation(presentation)
+    assert not db._helper_presentation_exists(presentation1)  # This should also be false
+    db.insert_presentation(presentation1)
     result = QtSql.QSqlQuery('SELECT * FROM presentations')
     assert result.first()
-    assert unicode(result.value(1).toString()) == unicode(presentation.title)
-    assert unicode(result.value(2).toString()) == unicode(presentation.speaker)
-    assert db.presentation_exists(presentation)  # This should now be true as the above is
+    assert unicode(result.value(1).toString()) == unicode(presentation1.title)
+    assert unicode(result.value(2).toString()) == unicode(presentation1.speaker)
+    assert db._helper_presentation_exists(presentation1)  # This should now be true as the above is
 
     db.clear_database()
-    assert not db.presentation_exists(presentation)
+    assert not db._helper_presentation_exists(presentation1)
 
 
-def test_get_presentation(db, presentation):
+def test_get_presentation(db, presentation1):
     """Assert that a presentation can be retrieved from the database by using its record id"""
     assert not db.get_presentation('1')
-    db.insert_presentation(presentation)
+    db.insert_presentation(presentation1)
     inserted_presentation = db.get_presentation('1')
-    assert inserted_presentation.title == presentation.title
-    assert inserted_presentation.room == presentation.room
+    assert inserted_presentation.title == presentation1.title
+    assert inserted_presentation.room == presentation1.room
 
 
 def test_get_presentation_fake(db):
@@ -352,52 +363,52 @@ def test_get_presentation_fake(db):
     assert not db.get_presentation('')
 
 
-def test_get_presentations_model(db, presentation):
+def test_get_presentations_model(db, presentation1):
     """Assert that a presentations model can be retrieved from the database"""
-    db.insert_presentation(presentation)
+    db.insert_presentation(presentation1)
 
     presentations_model = db.get_presentations_model()
     assert presentations_model.rowCount() == 1
     record = presentations_model.record(0)  # database index 0 is the first record
 
     assert record.value(record.indexOf('id')).toString() == '1'
-    assert record.value(record.indexOf('title')).toString() == presentation.title
+    assert record.value(record.indexOf('title')).toString() == presentation1.title
 
     fake_record = presentations_model.record(1)
     assert not fake_record.value(record.indexOf('id')).toString()
 
 
-def test_get_dates_from_event_room_model(db, presentation):
+def test_get_dates_from_event_room_model(db, presentation1):
     """Assert that a filtered by event and room presentation model can be retrieved from the database"""
-    db.insert_presentation(presentation)
-    dates_model = db.get_dates_from_event_room_model(presentation.event, presentation.room)
+    db.insert_presentation(presentation1)
+    dates_model = db.get_dates_from_event_room_model(presentation1.event, presentation1.room)
     assert dates_model.rowCount() == 1
     record = dates_model.record(0)
 
-    assert record.value(record.indexOf('Date')).toString() == presentation.date
+    assert record.value(record.indexOf('Date')).toString() == presentation1.date
 
 
-def test_get_rooms_model(db, presentation):
+def test_get_rooms_model(db, presentation1):
     """Assert that a model of presentation rooms can be retrieved from the database"""
-    db.insert_presentation(presentation)
-    rooms_model = db.get_rooms_model(presentation.event)
+    db.insert_presentation(presentation1)
+    rooms_model = db.get_rooms_model(presentation1.event)
     assert rooms_model.rowCount() == 1
     record = rooms_model.record(0)
-    assert record.value(record.indexOf('Room')).toString() == presentation.room
+    assert record.value(record.indexOf('Room')).toString() == presentation1.room
 
 
-def test_get_talks_model(db, presentation):
+def test_get_talks_model(db, presentation1):
     """Assert that a talk list model can be retrieved from the database"""
-    empty_talks_model = db.get_talks_model(presentation.event, presentation.room, presentation.date)
+    empty_talks_model = db.get_talks_model(presentation1.event, presentation1.room, presentation1.date)
     assert empty_talks_model.rowCount() == 0
 
-    db.insert_presentation(presentation)
-    talks_model = db.get_talks_model(presentation.event, presentation.room, presentation.date)
+    db.insert_presentation(presentation1)
+    talks_model = db.get_talks_model(presentation1.event, presentation1.room, presentation1.date)
 
     assert talks_model.rowCount() == 1
     record = talks_model.record(0)
     assert (record.value(record.indexOf("(Speaker || ' - ' || Title)")).toString() ==
-           "{0} - {1}".format(presentation.speaker, presentation.title))
+           "{0} - {1}".format(presentation1.speaker, presentation1.title))
 
 
 def test_upgrade_database(db, monkeypatch):

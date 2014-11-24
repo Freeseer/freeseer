@@ -224,8 +224,8 @@ class QtDBConnector(object):
             tempList.append(result.value(0).toString())
         return tempList
 
-    def presentation_exists(self, presentation):
-        """Checks if there's a presentation with the same Speaker and Title already stored. This is used in testing."""
+    def _helper_presentation_exists(self, presentation):
+        """This is used in testing. Checks if there's a presentation with the same Speaker and Title already stored."""
         # FIXME/TODO, For some reason when the python value '' is passed into the QSqlQuery, it is not seen as ''. In
         # SQL '' is NULL. So the query looks for a row with a magical value in it that can never actually exist...
         if presentation.room == '':
@@ -495,6 +495,7 @@ class QtDBConnector(object):
     def drop_report_db(self):
         """Drops the failures (reports) table from the database"""
         QtSql.QSqlQuery('DROP TABLE IF EXISTS failures')
+        log.info('failures table dropped')
 
     def get_report(self, talkid):
         """Returns a failure from a given talkid. Returned value is a Failure object"""

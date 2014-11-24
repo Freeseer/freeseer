@@ -42,7 +42,7 @@ def test_insert_failure(db):
     assert report.release == failure.release
 
 
-def test_get_reports(db, presentation):
+def test_get_reports(db, presentation1):
     """Assert that failure reports may be fetched from the database"""
     failure1 = Failure(talkID='1',
                        comment='Fake presentation',
@@ -53,14 +53,14 @@ def test_get_reports(db, presentation):
                        indicator='It is not in the database',
                        release=True)
 
-    db.insert_presentation(presentation)
+    db.insert_presentation(presentation1)
     db.insert_failure(failure1)
     db.insert_failure(failure2)  # There is no presentation associated with failure2.talkId
 
     reports = db.get_reports()
 
     assert len(reports) == 2
-    assert reports[0].presentation.title == presentation.title
+    assert reports[0].presentation.title == presentation1.title
     assert reports[0].failure.talkId == failure1.talkId
     assert not reports[1].presentation
     assert reports[1].failure.talkId == failure2.talkId
