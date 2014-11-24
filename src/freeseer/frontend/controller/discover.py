@@ -67,3 +67,4 @@ def search(timeout):
     print('Results:')
     display_results(listener.servers)
     zeroconf.close()
+    sleep(1)  # WORKAROUND: on some boxes, leaving out this sleep() causes an exception to occur on shutdown.
