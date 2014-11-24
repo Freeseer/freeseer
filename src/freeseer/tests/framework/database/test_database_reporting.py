@@ -125,8 +125,6 @@ def test_update_failure(db):
                        release=True)
 
     db.insert_failure(failure1)  # make sure that failure1 is actually in the database
-    assert db.get_report('1').comment == failure1.comment
+    assert db.get_report('1') == failure1
     db.update_failure('1', failure2)  # replace failure1 with failure2
-    assert db.get_report('1').comment == failure2.comment
-    assert db.get_report('1').indicator == failure2.indicator
-    assert db.get_report('1').release == failure2.release
+    assert db.get_report('1') == failure2

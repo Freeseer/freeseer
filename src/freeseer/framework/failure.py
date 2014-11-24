@@ -39,6 +39,18 @@ class Failure():
         self.indicator = indicator
         self.release = release
 
+    def __eq__(self, obj):
+        if (
+            self.talkId == obj.talkId and self.comment == obj.comment and
+            self.indicator == obj.indicator and self.release == obj.release
+        ):
+            return True
+        else:
+            return False
+
+    def __ne__(self, obj):
+        return not self == obj
+
 
 class Report():
     def __init__(self, presentation, failure):

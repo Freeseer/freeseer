@@ -40,8 +40,8 @@ class Presentation(object):
         self.category = category
         self.event = event
         self.room = room
-        self.date = date  # QDate.currentDate().toString(1) # create a yyyy-mm-dd format varchar
-        self.startTime = startTime  # QTime.currentTime().toString() # create a hh:mm:ss format varchar
+        self.date = date  # QDateTime.currentDateTime().toString(1) # eg date='2010-05-14T10:45'
+        self.startTime = startTime  # QDateTime.currentDateTime().toString(1) # eg startTime='2010-05-14T10:45'
         self.endTime = endTime
 
 

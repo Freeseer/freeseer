@@ -49,6 +49,8 @@ PRESENTATIONS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS presentations
                                         Time timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
 
+# FIXME: Document what is Date, StartTime, EndTime below.
+# From CSV/RSS they look like yyyy-mm-ddThh:mm:ss
 PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
                                        (Id INTEGER PRIMARY KEY,
                                         Title varchar(255),
@@ -91,7 +93,7 @@ class QtDBConnector(object):
 
             # check if presentations table exists and if not create it.
             if not self.talkdb.tables().contains("presentations"):
-                self.__create_presentations_table()
+                self._create_presentations_table()
 
                 # If presentations table did not exist, it is safe to say that the reports table needs to be reset
                 # or initialized.
@@ -137,7 +139,7 @@ class QtDBConnector(object):
 
             log.debug('Updating to schema 300.')
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')  # temporary table
-            self.__create_presentations_table(PRESENTATIONS_SCHEMA_300)
+            self._create_presentations_table(PRESENTATIONS_SCHEMA_300)
             QtSql.QSqlQuery("""INSERT INTO presentations
                             SELECT Id, Title, Speaker, Description, Level, Event, Room, Time FROM presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
@@ -145,7 +147,7 @@ class QtDBConnector(object):
         def update_30to31():
             """Performs incremental update of database from 3.0 and older to 3.1."""
             QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
-            self.__create_presentations_table(PRESENTATIONS_SCHEMA_310)
+            self._create_presentations_table(PRESENTATIONS_SCHEMA_310)
             QtSql.QSqlQuery("""INSERT INTO presentations
                             SELECT Id, Title, Speaker, Description, Level, Event, Room, Time, Time, Time
                             FROM presentations_old""")
@@ -161,7 +163,7 @@ class QtDBConnector(object):
         QtSql.QSqlQuery('PRAGMA user_version = {}'.format(SCHEMA_VERSION))
         log.info('Upgraded presentations database from version %d to %d', db_version, SCHEMA_VERSION)
 
-    def __create_presentations_table(self, schema=PRESENTATIONS_SCHEMA_310):
+    def _create_presentations_table(self, schema=PRESENTATIONS_SCHEMA_310):
         """Creates the presentations table in the database. Should be used to initialize a new table."""
         log.info("table created")
         QtSql.QSqlQuery(schema)
@@ -224,12 +226,25 @@ class QtDBConnector(object):
 
     def presentation_exists(self, presentation):
         """Checks if there's a presentation with the same Speaker and Title already stored. This is used in testing."""
-        result = QtSql.QSqlQuery('SELECT * FROM presentations')
-        while result.next():
-            if (unicode(presentation.title) == unicode(result.value(1).toString())
-            and unicode(presentation.speaker) == unicode(result.value(2).toString())):
-                return True
-        return False
+        # FIXME/TODO, For some reason when the python value '' is passed into the QSqlQuery, it is not seen as ''. In
+        # SQL '' is NULL. So the query looks for a row with a magical value in it that can never actually exist...
+        if presentation.room == '':
+            presentation.room = None
+        result = QtSql.QSqlQuery('''
+            SELECT *
+            FROM presentations
+            WHERE Title="{0}" AND Speaker="{1}" AND Description="{2}" AND Category="{3}" AND
+                  Event="{4}" AND (Room="{5}" OR Room is NULL) AND (Date="{6}" OR Date is NULL) AND
+                  (StartTime="{7}" or StartTime is Null) AND EndTime="{8}"
+        '''.format(
+            presentation.title, presentation.speaker, presentation.description, presentation.category,
+            presentation.event, presentation.room, presentation.date, presentation.startTime,
+            presentation.endTime
+        ))
+        if result.next():
+            return True
+        else:
+            return False
 
     #
     # Presentation Create, Update, Delete

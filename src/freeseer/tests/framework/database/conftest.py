@@ -40,7 +40,7 @@ def db(tmpdir):
 def presentation():
     """Returns a populated presentation object. Also demonstrates how to construct time values for presentations"""
     today = QtCore.QDateTime().currentDateTime()  # today
-    current_time = QtCore.QDateTime().currentDateTime()  # hh:mm:ss
+    current_time = QtCore.QDateTime().currentDateTime()  # yyyy-mm-ddThh:mm:ss
     return Presentation(
         title='MITM presentation attacks',
         speaker='Alice and Eve',

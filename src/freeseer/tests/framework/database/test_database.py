@@ -60,7 +60,24 @@ def test_add_talks_from_csv(db):
     dirname = os.path.dirname(__file__)
     fname = os.path.join(dirname, os.pardir, 'sample_talks.csv')
 
-    presentation = Presentation('Building NetBSD', 'David Maxwell')
+    presentation = Presentation(
+        title='Building NetBSD',
+        speaker='David Maxwell',
+        description='''People who are interested in learning about operating systems have a lot of topics to absorb,'''
+        ''' but the very first barrier that gets in people's way is that you need to be able to build the software. '''
+        '''If you can't build it, you can't make changes. If building it is painful, you'll find other things to do '''
+        '''with your time.\n'''
+        '''\tThe NetBSD Project has a build system that goes far beyond what many other projects implement. Come to '''
+        '''this talk about learn about\n'''
+        '''\tbuild.sh and the features available that make multi-architecture and embedded development environments '''
+        '''a breeze with NetBSD.\n'''
+        '''\tNetBSD website: http://www.NetBSD.org/''',
+        event='SC2011',
+        category='Beginner',
+        room='None',
+        date='2011-08-17T20:29',
+        startTime='2011-08-17T20:29'
+    )
 
     assert not db.presentation_exists(presentation)
     db.add_talks_from_csv(fname)
@@ -193,14 +210,14 @@ def test_delete_presentation_valid(db, presentation):
     db.insert_presentation(presentation)
     assert db.presentation_exists(presentation)
     db.delete_presentation('1')
-    assert not db.presentation_exists('1')
+    assert not db.get_presentation('1')
 
 
 def test_delete_presentation_fake(db):
     """Try to delete a fake presentation and assert that no errors occurred"""
-    assert not db.presentation_exists('1')
+    assert not db.get_presentation('1')
     db.delete_presentation('1')
-    assert not db.presentation_exists('1')
+    assert not db.get_presentation('1')
 
 
 def test_delete_presentation_side_effects(db, presentation):
