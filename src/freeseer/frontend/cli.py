@@ -70,6 +70,7 @@ def setup_parser():
     setup_parser_report(subparsers)
     setup_parser_upload(subparsers)
     setup_parser_server(subparsers)
+    setup_parser_discover(subparsers)
     return parser
 
 
@@ -156,6 +157,12 @@ def setup_parser_server(subparsers):
     """Setup server command parser"""
     parser = subparsers.add_parser("server", help="Setup a freeseer restful server")
     parser.add_argument("-f", "--filename", type=unicode, help="file to load recordings")
+
+
+def setup_parser_discover(subparsers):
+    """Setup discover command parser"""
+    parsers = subparsers.add_parser('discover', help='Search for freeseer servers on the network')
+    parsers.add_argument("-t", "--timeout", help="Poll for freeseer servers continually", action="store")
 
 
 def parse_args(parser, parse_args=None):
@@ -272,6 +279,13 @@ def parse_args(parser, parse_args=None):
         else:
             launch_server()
 
+    elif args.app == 'discover':
+        if args.timeout:
+            timeout = int(args.timeout)
+            launch_discover(timeout)
+        else:
+            launch_discover()
+
 
 def launch_recordapp():
     """Launch the Recording GUI if no arguments are passed"""
@@ -341,3 +355,13 @@ def launch_server(storage_file="recording_storage"):
     import freeseer.frontend.controller.server as server
 
     server.start_server(storage_file)
+
+
+def launch_discover(timeout=5):
+    """Begin server discovery"""
+    import freeseer.frontend.controller.discover as discover
+
+    if timeout < 5:
+        timeout = 5
+
+    discover.search(timeout)
