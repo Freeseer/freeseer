@@ -45,20 +45,7 @@ class Presentation(object):
         self.endTime = endTime
 
     def __eq__(self, obj):
-        if (
-            self.title == obj.title and
-            self.speaker == obj.speaker and
-            self.description == obj.description and
-            self.category == obj.category and
-            self.event == obj.event and
-            self.room == obj.room and
-            self.date == obj.date and
-            self.startTime == obj.startTime and
-            self.endTime == obj.endTime
-        ):
-            return True
-        else:
-            return False
+        return self.__dict__ == obj.__dict__
 
     def __ne__(self, obj):
         return not self == obj
