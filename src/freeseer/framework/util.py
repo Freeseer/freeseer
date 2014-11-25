@@ -149,7 +149,7 @@ def reset_database(configdir, profile='default'):
 
     if validate_configdir(configdir):
         dbfile = os.path.join(configdir, 'profiles', profile, 'presentations.db')
-        
+
         if os.path.exists(dbfile):
             os.remove(dbfile)
     else:
