@@ -40,13 +40,7 @@ class Failure():
         self.release = release
 
     def __eq__(self, obj):
-        if (
-            self.talkId == obj.talkId and self.comment == obj.comment and
-            self.indicator == obj.indicator and self.release == obj.release
-        ):
-            return True
-        else:
-            return False
+        return self.__dict__ == obj.__dict__
 
     def __ne__(self, obj):
         return not self == obj
