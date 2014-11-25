@@ -63,12 +63,14 @@ class CsvImporter(IImporter):
                         'Level': unicode(row.get('Level', ''), 'utf-8'),
                         'Event': unicode(row.get('Event', ''), 'utf-8'),
                         'Room': unicode(row.get('Room', ''), 'utf-8'),
-                        'Time': unicode(row.get('Time', ''), 'utf-8')
+                        'Time': unicode(row.get('Time', ''), 'utf-8'),
+                        'Problem': unicode(row.get('Problem', ''), 'utf-8'),  # optional value from report csv
+                        'Error': unicode(row.get('Error', ''), 'utf-8')  # optional value from report csv
                     }
 
                     presentations.append(talk)
 
         except IOError:
-            log.exception("CSV: File %s not found", csv_file)
+            log.exception("CSV: File %s not found", fname)
 
         return presentations

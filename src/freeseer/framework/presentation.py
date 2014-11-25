@@ -40,9 +40,15 @@ class Presentation(object):
         self.category = category
         self.event = event
         self.room = room
-        self.date = date
-        self.startTime = startTime
+        self.date = date  # QDateTime.currentDateTime().toString(1) # eg date='2010-05-14T10:45'
+        self.startTime = startTime  # QDateTime.currentDateTime().toString(1) # eg startTime='2010-05-14T10:45'
         self.endTime = endTime
+
+    def __eq__(self, obj):
+        return self.__dict__ == obj.__dict__
+
+    def __ne__(self, obj):
+        return not self == obj
 
 
 class PresentationFile(Presentation):
