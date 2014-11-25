@@ -259,7 +259,7 @@ class QtDBConnector(object):
         if not presentation.date and presentation.startTime and len(presentation.startTime) == 16:
             presentation.date, presentation.startTime = presentation.startTime[:-6], presentation.startTime[11:]
 
-        query = QtSql.QSqlQuery()
+        query = QtSql.QSqlQuery()  # The data comes from user input. Use prepare statement to sanitize it.
         query.prepare('''
             INSERT INTO presentations(Title, Speaker, Description, Category, Event, Room, Date, StartTime, EndTime)
             VALUES (:title, :speaker, :description, :category, :event, :room, :date, :startTime, :endTime)
@@ -279,7 +279,7 @@ class QtDBConnector(object):
 
     def update_presentation(self, talk_id, presentation):
         """Updates an existing Presentation in the database."""
-        query = QtSql.QSqlQuery()
+        query = QtSql.QSqlQuery()  # The data comes from user input. Use prepare statement to sanitize it.
         query.prepare('''
             UPDATE presentations
             SET Title=:title, Speaker=:speaker, Description=:description, Category=:category,
