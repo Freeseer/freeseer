@@ -31,6 +31,23 @@ from freeseer.framework.database import QtDBConnector
 from freeseer.framework.presentation import Presentation
 
 
+def helper_presentation_record_to_presentation(query, record):
+    """
+    Takes a QSqlQuery object from the presentation table and a QSqlRecord and returns a Python Presentation object.
+    """
+    return Presentation(
+        title=query.value(record.indexOf('title')).toString(),
+        speaker=query.value(record.indexOf('speaker')).toString(),
+        description=query.value(record.indexOf('description')).toString(),
+        category=query.value(record.indexOf('category')).toString(),
+        event=query.value(record.indexOf('event')).toString(),
+        room=query.value(record.indexOf('room')).toString(),
+        date=query.value(record.indexOf('date')).toString(),
+        startTime=query.value(record.indexOf('startTime')).toString(),
+        endTime=query.value(record.indexOf('endTime')).toString()
+    )
+
+
 def test_first_talk_id(db, presentation1):
     """Assert the first presentation record id in the database is given the identity '1'"""
     no_ids = db.get_talk_ids()
@@ -92,23 +109,6 @@ def test_export_talks_to_csv(db, tmpdir):
 
     with open(temp_csv) as fd:
         assert fd.readlines() == expected_csv_lines
-
-
-def helper_presentation_record_to_presentation(query, record):
-    """
-    Takes a QSqlQuery object from the presentation table and a QSqlRecord and returns a Python Presentation object.
-    """
-    return Presentation(
-        title=query.value(record.indexOf('title')).toString(),
-        speaker=query.value(record.indexOf('speaker')).toString(),
-        description=query.value(record.indexOf('description')).toString(),
-        category=query.value(record.indexOf('category')).toString(),
-        event=query.value(record.indexOf('event')).toString(),
-        room=query.value(record.indexOf('room')).toString(),
-        date=query.value(record.indexOf('date')).toString(),
-        startTime=query.value(record.indexOf('startTime')).toString(),
-        endTime=query.value(record.indexOf('endTime')).toString()
-    )
 
 
 def test_insert_presentation(db, presentation1):
@@ -273,7 +273,6 @@ def test_get_talks_by_room_and_time(db, presentation1):
     assert talks.first()
     inserted_presentation = helper_presentation_record_to_presentation(talks, talks.record())
     assert inserted_presentation == presentation1
-
     assert not talks.next()
 
 
@@ -359,7 +358,6 @@ def test_get_presentation_fake(db):
 def test_get_presentations_model(db, presentation1):
     """Assert that a presentations model can be retrieved from the database"""
     db.insert_presentation(presentation1)
-
     presentations_model = db.get_presentations_model()
     assert presentations_model.rowCount() == 1
     record = presentations_model.record(0)  # database index 0 is the first record
@@ -371,8 +369,20 @@ def test_get_presentations_model(db, presentation1):
     assert not fake_record.value(record.indexOf('id')).toString()
 
 
+def test_get_empty_presentations_model(db, presentation1):
+    """
+    Assert that when a new presentation model is created, when there is nothing in the database, that there is nothing
+    in the created model.
+    """
+    empty_presentations_model = db.get_presentations_model()  # The get_presentations_model produces a singleton
+    assert empty_presentations_model.rowCount() == 0
+
+
 def test_get_dates_from_event_room_model(db, presentation1):
     """Assert that a filtered by event and room presentation model can be retrieved from the database"""
+    empty_dates_from_room_model = db.get_dates_from_event_room_model(presentation1.event, presentation1.room)
+    assert empty_dates_from_room_model.rowCount() == 0
+
     db.insert_presentation(presentation1)
     dates_model = db.get_dates_from_event_room_model(presentation1.event, presentation1.room)
     assert dates_model.rowCount() == 1
@@ -383,6 +393,9 @@ def test_get_dates_from_event_room_model(db, presentation1):
 
 def test_get_rooms_model(db, presentation1):
     """Assert that a model of presentation rooms can be retrieved from the database"""
+    empty_rooms_model = db.get_rooms_model(presentation1.event)
+    assert empty_rooms_model.rowCount() == 0
+
     db.insert_presentation(presentation1)
     rooms_model = db.get_rooms_model(presentation1.event)
     assert rooms_model.rowCount() == 1

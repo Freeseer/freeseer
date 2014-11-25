@@ -21,33 +21,40 @@
 
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
+import pytest
 
 from freeseer.framework.failure import Failure
 from freeseer.framework.presentation import Presentation
 
 
-def test_insert_failure(db):
+@pytest.fixture
+def failure1():
+    return Failure(
+        talkID='1',
+        comment='Fake presentation',
+        indicator='It is a fixture',
+        release=True
+    )
+
+
+@pytest.fixture
+def failure2():
+    return Failure(
+        talkID='2',
+        comment='Non-existant failure',
+        indicator='This is a fake failure',
+        release=True
+    )
+
+
+def test_insert_failure(db, failure1):
     """Assert that a failure can be inserted in the database failure table"""
-    failure = Failure(talkID='1',
-                      comment='Fake presentation',
-                      indicator='It is a fixture',
-                      release=True)
-
-    db.insert_failure(failure)
-    assert db.get_report('1') == failure
+    db.insert_failure(failure1)
+    assert db.get_report('1') == failure1
 
 
-def test_get_reports(db, presentation1):
+def test_get_reports(db, presentation1, failure1, failure2):
     """Assert that failure reports may be fetched from the database"""
-    failure1 = Failure(talkID='1',
-                       comment='Fake presentation',
-                       indicator='It is a fixture',
-                       release=True)
-    failure2 = Failure(talkID='2',
-                       comment='Non-existant failure',
-                       indicator='It is not in the database',
-                       release=True)
-
     db.insert_presentation(presentation1)
     db.insert_failure(failure1)
     db.insert_failure(failure2)  # There is no presentation associated with failure2.talkId
@@ -61,7 +68,7 @@ def test_get_reports(db, presentation1):
     assert reports[1].failure == failure2
 
 
-def test_export_reports_to_csv(db, tmpdir):
+def test_export_reports_to_csv(db, tmpdir, failure1, failure2):
     """Assert that failure reports from the database can exported to a csv file"""
     presentation1 = Presentation(title='Fake it',
                                  speaker='John Doe',
@@ -71,14 +78,6 @@ def test_export_reports_to_csv(db, tmpdir):
                                  room='Mystery')
 
     temp_csv = str(tmpdir.join('reports.csv'))
-    failure1 = Failure(talkID='1',
-                       comment='Fake presentation',
-                       indicator='It is a fixture',
-                       release=True)
-    failure2 = Failure(talkID='2',
-                       comment='Non-existant failure',
-                       indicator='This is a fake failure',
-                       release=True)
 
     db.insert_presentation(presentation1)
     db.insert_presentation(presentation2)
@@ -96,30 +95,21 @@ def test_export_reports_to_csv(db, tmpdir):
         assert fd.readlines() == expected_csv_lines
 
 
-def test_delete_failure(db):
+def test_delete_failure(db, failure1):
     """Assert that failure reports can be deleted, without side effects, from the database"""
-    failure = Failure(talkID='1',
-                      comment='Fake presentation',
-                      indicator='It is a fixture',
-                      release=True)
-
-    db.insert_failure(failure)
+    db.insert_failure(failure1)
     db.delete_failure('1')
     assert not db.get_report('1')
 
 
-def test_update_failure(db):
+def test_update_failure(db, failure1):
     """Assert that a given failure can be updated without causing side effects, in the database"""
-    failure1 = Failure(talkID='1',
-                       comment='Fake presentation',
-                       indicator='It is a fixture',
-                       release=True)
-    failure2 = Failure(talkID='1',
+    failure_update = Failure(talkID='1',
                        comment='Super fake presentation',
                        indicator='It is not really real',
                        release=True)
 
     db.insert_failure(failure1)  # make sure that failure1 is actually in the database
     assert db.get_report('1') == failure1
-    db.update_failure('1', failure2)  # replace failure1 with failure2
-    assert db.get_report('1') == failure2
+    db.update_failure('1', failure_update)  # replace failure1 with failure2
+    assert db.get_report('1') == failure_update

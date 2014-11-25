@@ -209,6 +209,7 @@ class QtDBConnector(object):
             return None
 
     def get_presentation_id(self, presentation):
+        # FIXME: This should use more than just the title and speaker to find an Id.
         """Returns a Presentation talk_id associated to a Presentation object"""
         result = QtSql.QSqlQuery('SELECT Id FROM presentations WHERE Title="{0}" and Speaker="{1}"'.format(presentation.title, presentation.speaker))
         if result.next():
