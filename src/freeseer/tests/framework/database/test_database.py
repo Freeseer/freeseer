@@ -23,6 +23,7 @@
 # http://wiki.github.com/Freeseer/freeseer/
 import copy
 import os
+import pytest
 
 from PyQt4 import QtCore
 from PyQt4 import QtSql
@@ -46,21 +47,6 @@ def helper_presentation_record_to_presentation(query, record):
         startTime=query.value(record.indexOf('startTime')).toString(),
         endTime=query.value(record.indexOf('endTime')).toString()
     )
-
-
-def test_first_talk_id(db, presentation1):
-    """Assert the first presentation record id in the database is given the identity '1'"""
-    no_ids = db.get_talk_ids()
-    assert not no_ids.first()  # Assert that there are no ids in the database.
-
-    db.insert_presentation(presentation1)
-
-    talk_ids = db.get_talk_ids()
-    assert talk_ids.first()
-    talk_id_record = talk_ids.record()
-    talk_id = talk_ids.value(talk_id_record.indexOf('id')).toString()
-    assert talk_id == '1'
-    assert not talk_ids.next()  # there should be no additional records.
 
 
 def test_get_presentation_id(db, presentation1):
@@ -132,30 +118,6 @@ def test_insert_presentation_empty_arguments(db):
     db.insert_presentation(Presentation('', room='', event=''))
 
 
-def test_update_presentation(db, presentation1):
-    """Assert that a given presentation is updated without side effects given its record id"""
-    db.insert_presentation(presentation1)
-
-    # Update the inserted presentation
-    presentation1.title = 'Presentation Title Redacted'
-    db.update_presentation('1', presentation1)
-
-    updated_talks = db.get_talks()
-    updated_talks.first()
-    # Check the update worked.
-    updated_presentation = helper_presentation_record_to_presentation(updated_talks, updated_talks.record())
-    assert updated_presentation == presentation1
-
-
-def test_update_fake_presentation(db, presentation1):
-    """Try to update a fake presentation. Assert this does not insert anything into the database"""
-    db.update_presentation('100', presentation1)
-    assert not db.get_presentation('100')
-
-    talks = db.get_talks()
-    assert not talks.first()
-
-
 def test_update_presentation_real_and_fake(db, presentation1):
     """
     Assert that a given presentation is updated without side effects given its record id and that a fake
@@ -164,7 +126,7 @@ def test_update_presentation_real_and_fake(db, presentation1):
     db.insert_presentation(presentation1)
     # Update the inserted presentation
     presentation1.title = 'Presentation Title Redacted'
-    db.update_presentation('1', presentation1)
+    db.update_presentation(1, presentation1)
 
     updated_talks = db.get_talks()
     updated_talks.first()
@@ -173,8 +135,8 @@ def test_update_presentation_real_and_fake(db, presentation1):
     assert updated_presentation == presentation1
 
     # Try to update fake presentations, this case should never actually arise if the code is using the model objects
-    db.update_presentation('100', presentation1)
-    assert not db.get_presentation('100')
+    db.update_presentation(100, presentation1)
+    assert not db.get_presentation(100)
 
     # Make sure that the talk that was originally inserted has not changed and that no other rows have been added to the db.
     talks = db.get_talks()
@@ -187,21 +149,21 @@ def test_update_presentation_real_and_fake(db, presentation1):
 def test_delete_presentation_valid(db, presentation1):
     """Assert that a presentation is removed without side effects from the database"""
     db.insert_presentation(presentation1)
-    db.delete_presentation('1')
-    assert not db.get_presentation('1')
+    db.delete_presentation(1)
+    assert not db.get_presentation(1)
 
 
 def test_delete_presentation_fake(db):
     """Try to delete a fake presentation and assert that no errors occurred"""
-    assert not db.get_presentation('1')
-    db.delete_presentation('1')
-    assert not db.get_presentation('1')
+    assert not db.get_presentation(1)
+    db.delete_presentation(1)
+    assert not db.get_presentation(1)
 
 
 def test_delete_presentation_side_effects(db, presentation1):
     """Delete an invalid presentation and make sure any valid presentations are not affected"""
     db.insert_presentation(presentation1)
-    db.delete_presentation('100')
+    db.delete_presentation(100)
     assert db._helper_presentation_exists(presentation1)
 
 
@@ -213,7 +175,10 @@ def test_clear_database(db, presentation1):
 
 
 def test_get_talk_ids(db, presentation1, presentation2, presentation3, presentation4):
-    """Assert that presentation record ids are returned from the database presentation table"""
+    """
+    Assert that presentation record ids are returned from the database presentation table. It is expected that the
+    first talk inserted into the database will have an id of 1. Otherwise, tests will start failing.
+    """
     db.insert_presentation(presentation1)
     db.insert_presentation(presentation2)
     db.insert_presentation(presentation3)
@@ -221,11 +186,12 @@ def test_get_talk_ids(db, presentation1, presentation2, presentation3, presentat
 
     talk_ids = db.get_talk_ids()
     expected_id = 1
-    while(talk_ids.next()):
+    while talk_ids.next():
         talk_id_record = talk_ids.record()
         assert talk_id_record.value(talk_id_record.indexOf('id')).toString() == str(expected_id)
-        expected_id = expected_id + 1
-    assert expected_id == 5  # we should have seen 4 ids.
+        expected_id += 1
+    if expected_id != 5:
+        pytest.fail("Expected 4 talks to be returned from the database but only saw: {}".format(expected_id - 1))
 
 
 def test_get_talks_by_event(db, presentation1):
@@ -344,15 +310,15 @@ def test_helper_presentation_exists(db, presentation1):
 
 def test_get_presentation(db, presentation1):
     """Assert that a presentation can be retrieved from the database by using its record id"""
-    assert not db.get_presentation('1')
+    assert not db.get_presentation(1)
     db.insert_presentation(presentation1)
-    inserted_presentation = db.get_presentation('1')
+    inserted_presentation = db.get_presentation(1)
     assert inserted_presentation == presentation1
 
 
 def test_get_presentation_fake(db):
     """Assert that a presentation is not retrieved from the database given a fake record id"""
-    assert not db.get_presentation('-1')
+    assert not db.get_presentation(-1)
 
 
 def test_get_presentations_model(db, presentation1):
@@ -438,6 +404,17 @@ def test_upgrade_database(db, monkeypatch):
         VALUES(1, 'An Old Title', 'Old Speaker', 'This is an example presentation from 2x', 'level 9',
             'Winter conference', '12', '2002-10-05')
     ''')
+    inserted_presentation = Presentation(
+        title='An Old Title',
+        speaker='Old Speaker',
+        description='This is an example presentation from 2x',
+        category='level 9',
+        event='Winter conference',
+        room='12',
+        date='2002-10-05',
+        startTime='2002-10-05',
+        endTime='2002-10-05'
+    )
 
     # Mock out the db schema version to a 2x version.
     def mock_version(self):
@@ -445,6 +422,4 @@ def test_upgrade_database(db, monkeypatch):
     monkeypatch.setattr(QtDBConnector, '_get_db_version_int', mock_version)
 
     db._update_version()
-    presentation = db.get_presentation('1')
-    assert presentation
-    assert presentation.title == 'An Old Title'
+    assert db.get_presentation(1) == inserted_presentation
