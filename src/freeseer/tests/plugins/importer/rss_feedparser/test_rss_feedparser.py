@@ -34,7 +34,7 @@ from freeseer.plugins.importer.rss_feedparser import FeedParser
 @pytest.yield_fixture
 def presentation_feed():
     httpretty.enable()
-    rss_data_relative_path = '../../../resources/sample_rss_data/'
+    rss_data_relative_path = os.path.join(os.pardir, os.pardir, os.pardir, 'resources', 'sample_rss_data')
     rss_file = os.path.join(os.path.dirname(__file__), rss_data_relative_path, 'summercamp2010.rss')
     with open(rss_file, 'r') as presentation_rss_file:
         rss_feed = presentation_rss_file.read()
