@@ -132,7 +132,6 @@ def reset_configuration(configdir, profile='default'):
     if validate_configdir(configdir):
         freeseer_conf = os.path.join(configdir, 'profiles', profile, 'freeseer.conf')
         plugin_conf = os.path.join(configdir, 'profiles', profile, 'plugin.conf')
-
         
 	if os.path.exists(freeseer_conf):
 		os.remove(freeseer_conf)
