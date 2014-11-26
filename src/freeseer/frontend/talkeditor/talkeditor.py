@@ -461,6 +461,8 @@ class TalkEditorApp(FreeseerApp):
         # Reversed because rows in list change position once row is removed
         for row in reversed(rows_selected):
             self.presentationModel.removeRow(row.row())
+        self.talkDetailsWidget.clear_input_fields()
+        self.talkDetailsWidget.disable_input_fields()
 
     def load_talk(self):
         try:
@@ -474,6 +476,8 @@ class TalkEditorApp(FreeseerApp):
     def reset(self):
         self.db.clear_database()
         self.presentationModel.select()
+        self.talkDetailsWidget.clear_input_fields()
+        self.talkDetailsWidget.disable_input_fields()
 
     def confirm_reset(self):
         """Presents a confirmation dialog to ask the user if they are sure they wish to remove the talk database.

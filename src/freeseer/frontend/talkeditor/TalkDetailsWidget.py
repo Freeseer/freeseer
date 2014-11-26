@@ -144,6 +144,14 @@ class TalkDetailsWidget(QWidget):
             self.endTimeEdit.setEnabled(False)
             self.descriptionTextEdit.setEnabled(False)
 
+    def clear_input_fields(self):
+            self.titleLineEdit.clear()
+            self.presenterLineEdit.clear()
+            self.categoryLineEdit.clear()
+            self.eventLineEdit.clear()
+            self.roomLineEdit.clear()
+            self.descriptionTextEdit.clear()
+
 if __name__ == "__main__":
     import sys
     from PyQt4.QtGui import QApplication
