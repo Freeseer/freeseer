@@ -112,18 +112,16 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.descriptionLabel, 5, 0, 1, 1)
         self.layout.addWidget(self.descriptionTextEdit, 5, 1, 1, 3)
 
+        self.fields = [self.titleLineEdit, self.presenterLineEdit, self.categoryLineEdit,
+                       self.eventLineEdit, self.roomLineEdit, self.dateEdit, self.startTimeEdit,
+                       self.endTimeEdit, self.descriptionTextEdit]
+
     def toggle_input_fields(self, enable):
-        allFields = [self.titleLineEdit, self.presenterLineEdit, self.categoryLineEdit,
-                     self.eventLineEdit, self.roomLineEdit, self.dateEdit, self.startTimeEdit,
-                     self.endTimeEdit, self.descriptionTextEdit]
-        for field in allFields:
+        for field in self.fields:
             field.setEnabled(enable)
 
     def input_fields_enabled(self):
-        allFields = [self.titleLineEdit, self.presenterLineEdit, self.categoryLineEdit,
-                     self.eventLineEdit, self.roomLineEdit, self.dateEdit, self.startTimeEdit,
-                     self.endTimeEdit, self.descriptionTextEdit]
-        for field in allFields:
+        for field in self.fields:
             if not field.isEnabled():
                 return False
         return True
