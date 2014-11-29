@@ -17,21 +17,21 @@ Designing Endpoints
 
 In the most simplistic and crude sense, a RESTful endpoint will be the plural of the type of resource that you want perform a ``GET``, ``POST``, ``DELETE``, or ``PATCH`` on. For example if you want to have RESTful endpoint for handling a server's users, you could have an endpoint named:
 
-``/users``
+ ``/users``
 
 You could either get a list of all users with
 
-``GET /users``
+ ``GET /users``
 
 Or post a new user with
 
-``POST /users``
+ ``POST /users``
 
 Or if you want to get specific instances of that resource, you use some identifier.
 
-``GET /users/1`` (to get user with id “1”)
+ ``GET /users/1`` - to get user with id “1”
 
-``DELETE /users/1`` (to delete user with id “1”)
+ ``DELETE /users/1`` - to delete user with id “1”
 
 You also want to have some parameters for your endpoint. For example for creating a user, you will want some set of parameters like, username, email, etc.
 
@@ -93,11 +93,11 @@ Developing Endpoints
 
 Every endpoint is wrapped with a ``@<name_of_api>.route()`` decorator. 
 
- **Parameters**:
+ **Decorator Parameters**
 
- **rule:** the first parameter of the ``route()`` function. The path of the endpoint with any path parameters declared. Ex. route('/users') will establish a route at to http://<host_info>/users
+ :rule: the first parameter of the ``route()`` function. The path of the endpoint with any path parameters declared. Ex. route('/users') will establish a route at to http://<host_info>/users
 
- **methods:** a list of all methods (GET, POST, etc.) this route accepts. Example: ``route('users/<int:id>', methods=['GET'])`` means this function will only fire if a GET request is sent to the corresponding path.
+ :methods: a list of all methods (GET, POST, etc.) this route accepts. Example: ``route('users/<int:id>', methods=['GET'])`` means this function will only fire if a GET request is sent to the corresponding path.
 
 More information about route registration can be found in the `Flask documentation <http://flask.pocoo.org/docs/0.10/api/#url-route-registration>`_
 
@@ -120,11 +120,10 @@ Obviously we want some way to ensure our endpoint gets the right kind of data (i
 
 The validate module validates request data through ``validate_form(to_validate, schema)``
 
- **Parameters:**
+ **Function Parameters:**
 
- **to_validate:** the body data of our request. In most cases this will be 'request.form'.
-
- **schema:** a `jsonschema <http://json-schema.org>`_ formatted schema to describe what our request data should look like.   
+ :to_validate: the body data of our request. In most cases this will be 'request.form'.
+ :schema: a `jsonschema <http://json-schema.org>`_ formatted schema to describe what our request data should look like.   
 
 If the validation fails, ``validate_form()`` throws an ``HTTPError`` which will be sent to the client as a response.
 
@@ -146,25 +145,29 @@ By wrapping our endpoint function with ``@http_response(status_code)`` (status_c
 
 **Error handling**
 
-Our endpoints needs some way of handling requests that would cause our endpoint functions to fail, and alert the client that their request was faulty. We do this by catching the error as it happens, or pre-empting it via some validation, and sending a response back to the client that includes error information for why the request failed.
+Our endpoints needs some way of handling requests that would cause our endpoint functions to fail, and alert the client that their request was faulty. We do this by catching the error as it happens, or pre-empting it via some validation, and sending a response back to the client that includes error information for why the request failed. For example, an endpoint receiving a request for a non-existent resources like a non-existing user.
 
-- Example: an endpoint receiving a request for a non-existent resources like a non-existent recording. When we do run into one of these errors, we need to send a response with an appropriate status code, and error information in our responses body. In the case of a non-existent recording, we alert the user with a 404 status code, and our response body will be a JSON object that includes a useful message such as 'No recording with id <id> was found.'
+When we do run into one of these errors, we need to send a response with an appropriate status code, and error information in our responses body. In the case of a non-existent recording, we alert the user with a 404 status code, and our response body will be a JSON object that includes a useful message such as 'No recording with id <id> was found.'
 
 **HTTPError**
 
 If we encounter some error, we always raise an ``HTTPError`` in our endpoint function if that error is to be returned to the client.
 
-``HTTPError(status_code, description=None)``
+ **HTTPError Parameters**
 
- **status_code:** the HTTP Error code that corresponds to our error, the error codes supported at present are (more can always be added):
+ :status_code: 
+  the HTTP Error code that corresponds to our error. The error codes supported at present are below (more can be added as needed)
+  ::
 
- 400: 'Bad Request: Request could not be understood due to malformed syntax.',
- 401: 'Unauthorized: Authentication was not provided or has failed.',
- 404: 'Not Found: Requested resource is not available.',
- 409: 'Conflict: Request could not be processed because of server conflict.',
- 422: 'Unprocessable Entity: Request could not be processed due to semantic errors.'
+   400: 'Bad Request: Request could not be understood due to malformed syntax.'
+   401: 'Unauthorized: Authentication was not provided or has failed.'
+   404: 'Not Found: Requested resource is not available.'
+   409: 'Conflict: Request could not be processed because of server conflict.'
+   422: 'Unprocessable Entity: Request could not be processed due to semantic errors.'
 
- **description:** a string containing human readable information that a client user would find informative, and rectify the issue. If we don't supply a description method, the user will only read a generic message corresponding to the status code.
+
+ :description: 
+  a string containing human readable information that a client user would find informative, and rectify the issue. If we don't supply a description method, the user will only read a generic message corresponding to the status code.
 
 **Errors Handled by the Framework**
 
