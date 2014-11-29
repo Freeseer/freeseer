@@ -63,7 +63,7 @@ You will also need to import the following:
 
 **Using Blueprints**
 
- To organize our endpoints into separate APIs, we make use of Flask's ``Blueprint`` module. All of our endpoints and API specific code and data will exist in an instance of the ``Blueprint`` module, which simply extends the existing Flask server app. 
+To organize our endpoints into separate APIs, we make use of Flask's ``Blueprint`` module. All of our endpoints and API specific code and data will exist in an instance of the ``Blueprint`` module, which simply extends the existing Flask server app. 
 
 To instantiate our API, we add the following code to our API module.
 
@@ -93,11 +93,11 @@ Developing Endpoints
 
 Every endpoint is wrapped with a ``@<name_of_api>.route()`` decorator. 
 
-**Parameters**:
+ **Parameters**:
 
-**rule:** the first parameter of the ``route()`` function. The path of the endpoint with any path parameters declared. Ex. route('/users') will establish a route at to http://<host_info>/users
+ **rule:** the first parameter of the ``route()`` function. The path of the endpoint with any path parameters declared. Ex. route('/users') will establish a route at to http://<host_info>/users
 
-**methods:** a list of all methods (GET, POST, etc.) this route accepts. Example: ``route('users/<int:id>', methods=['GET'])`` means this function will only fire if a GET request is sent to the corresponding path.
+ **methods:** a list of all methods (GET, POST, etc.) this route accepts. Example: ``route('users/<int:id>', methods=['GET'])`` means this function will only fire if a GET request is sent to the corresponding path.
 
 More information about route registration can be found in the `Flask documentation <http://flask.pocoo.org/docs/0.10/api/#url-route-registration>`_
 
@@ -120,11 +120,11 @@ Obviously we want some way to ensure our endpoint gets the right kind of data (i
 
 The validate module validates request data through ``validate_form(to_validate, schema)``
 
-**Parameters:**
+ **Parameters:**
 
-**to_validate:** the body data of our request. In most cases this will be 'request.form'.
+ **to_validate:** the body data of our request. In most cases this will be 'request.form'.
 
-**schema:** a `jsonschema <http://json-schema.org>`_ formatted schema to describe what our request data should look like.   
+ **schema:** a `jsonschema <http://json-schema.org>`_ formatted schema to describe what our request data should look like.   
 
 If the validation fails, ``validate_form()`` throws an ``HTTPError`` which will be sent to the client as a response.
 
@@ -156,21 +156,20 @@ If we encounter some error, we always raise an ``HTTPError`` in our endpoint fun
 
 ``HTTPError(status_code, description=None)``
 
-**status_code:** the HTTP Error code that corresponds to our error, the error codes supported at present are (more can always be added):
+ **status_code:** the HTTP Error code that corresponds to our error, the error codes supported at present are (more can always be added):
 
-- 400: 'Bad Request: Request could not be understood due to malformed syntax.',
-- 401: 'Unauthorized: Authentication was not provided or has failed.',
-- 404: 'Not Found: Requested resource is not available.',
-- 409: 'Conflict: Request could not be processed because of server conflict.',
-- 422: 'Unprocessable Entity: Request could not be processed due to semantic errors.'
+ 400: 'Bad Request: Request could not be understood due to malformed syntax.',
+ 401: 'Unauthorized: Authentication was not provided or has failed.',
+ 404: 'Not Found: Requested resource is not available.',
+ 409: 'Conflict: Request could not be processed because of server conflict.',
+ 422: 'Unprocessable Entity: Request could not be processed due to semantic errors.'
 
-
-**description:** a string containing human readable information that a client user would find informative, and rectify the issue. If we don't supply a description method, the user will only read a generic message corresponding to the status code.
+ **description:** a string containing human readable information that a client user would find informative, and rectify the issue. If we don't supply a description method, the user will only read a generic message corresponding to the status code.
 
 **Errors Handled by the Framework**
 
 In some situations the framework or another module already handles these errors for us, so we do not need to worry about them. (The following list may not be exhaustive, feel free to add more)
 
-**Faulty Path Parameters:** If path parameters cannot be coerced to the type specified by the route's rule parameter, it will send the client a response with error information.
+ **Faulty Path Parameters:** If path parameters cannot be coerced to the type specified by the route's rule parameter, it will send the client a response with error information.
 
-**Validation Errors:** when we call the validate_form method from the validate module, the validate module will always raise an HTTPError and supply appropriate information.
+ **Validation Errors:** when we call the validate_form method from the validate module, the validate module will always raise an HTTPError and supply appropriate information.
