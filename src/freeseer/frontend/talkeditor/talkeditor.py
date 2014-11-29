@@ -95,13 +95,14 @@ class TalkEditorApp(FreeseerApp):
         # --- End Layout
 
         # Keep track of current and most recently selected talk
-        self.oldTalkIndex = QPersistentModelIndex()
-        self.newTalkIndex = QPersistentModelIndex()
+        self.old_talk_index = QPersistentModelIndex()
+        self.new_talk_index = QPersistentModelIndex()
 
         # Setup SavePromptWidget for selecting a talk, adding a talk, or exiting the talk editor
         self.savePromptWidgetTalk = SavePromptWidget()
         self.savePromptWidgetAdd = SavePromptWidget()
         self.savePromptWidgetExit = SavePromptWidget()
+
         # The actions of the save, discard and continue buttons vary depending on why they are pushed
         self.connect(self.savePromptWidgetTalk.saveButton, SIGNAL('clicked()'), self.save_button_talk)
         self.connect(self.savePromptWidgetTalk.discardButton, SIGNAL('clicked()'), self.discard_button_talk)
@@ -306,23 +307,21 @@ class TalkEditorApp(FreeseerApp):
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
 
     def save_button_talk(self):
-        log.info("NewTalkIndex row = %d.", self.newTalkIndex.row())
-        log.info("Saving changes in row %d...", self.oldTalkIndex.row())
-        self.tableView.selectRow(self.oldTalkIndex.row())
-        newRow = self.newTalkIndex.row()
+        log.info("Saving changes in row %d...", self.old_talk_index.row())
+        self.tableView.selectRow(self.old_talk_index.row())
+        newRow = self.new_talk_index.row()
         self.update_talk()
-        log.info("NewTalkIndex row = %d.", self.newTalkIndex.row())
         self.select_talk(self.tableView.currentIndex().sibling(newRow, 0))
         self.savePromptWidgetTalk.hide()
 
     def discard_button_talk(self):
-        log.info("Discarding changes in row %d...", self.oldTalkIndex.row())
-        self.talk_selected(self.newTalkIndex)
+        log.info("Discarding changes in row %d...", self.old_talk_index.row())
+        self.talk_selected(self.new_talk_index)
         self.savePromptWidgetTalk.hide()
 
     def continue_button_talk(self):
-        log.info("Continue editing row %d", self.oldTalkIndex.row())
-        self.tableView.selectRow(self.oldTalkIndex.row())
+        log.info("Continue editing row %d", self.old_talk_index.row())
+        self.tableView.selectRow(self.old_talk_index.row())
         self.savePromptWidgetTalk.hide()
 
     def show_save_prompt(self, promptWidget):
@@ -334,33 +333,32 @@ class TalkEditorApp(FreeseerApp):
     def click_talk(self, model):
         """Warns user if there are unsaved changes, and selects talk clicked by the user."""
         log.info("Selecting row %d", model.row())
-        self.newTalkIndex = QPersistentModelIndex(model)
-        log.info("newTalkIndex.row(): %d.", self.newTalkIndex.row())
+        self.new_talk_index = QPersistentModelIndex(model)
         if self.unsaved_details_exist():
-            log.info("Unsaved changes exist in row %d", self.oldTalkIndex.row())
+            log.info("Unsaved changes exist in row %d", self.old_talk_index.row())
             self.show_save_prompt(self.savePromptWidgetTalk)
         else:
             self.talk_selected(model)
 
     def save_button_add(self):
-        log.info("Saving changes in row %d...", self.oldTalkIndex.row())
+        log.info("Saving changes in row %d...", self.old_talk_index.row())
         self.update_talk()
         self.savePromptWidgetAdd.hide()
         self.show_new_talk_popup()
 
     def discard_button_add(self):
-        log.info("Discarding changes in row %d...", self.oldTalkIndex.row())
+        log.info("Discarding changes in row %d...", self.old_talk_index.row())
         self.savePromptWidgetAdd.hide()
         self.show_new_talk_popup()
 
     def continue_button_add(self):
-        log.info("Continue editing row %d", self.oldTalkIndex.row())
+        log.info("Continue editing row %d", self.old_talk_index.row())
         self.savePromptWidgetAdd.hide()
 
     def click_add_button(self):
         """Warns user if there are unsaved changes, and shows the New Talk window."""
         if self.unsaved_details_exist():
-            log.info("Unsaved changes exist in row %d", self.oldTalkIndex.row())
+            log.info("Unsaved changes exist in row %d", self.old_talk_index.row())
             self.show_save_prompt(self.savePromptWidgetAdd)
         else:
             self.show_new_talk_popup()
@@ -369,7 +367,7 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.setCurrentIndex(model.row())
         self.talkDetailsWidget.enable_input_fields()
         self.talkDetailsWidget.saveButton.setEnabled(False)
-        self.oldTalkIndex = QPersistentModelIndex(model)
+        self.old_talk_index = QPersistentModelIndex(model)
 
     def toggle_import(self):
         isCheckedBool = self.importTalksWidget.csvRadioButton.isChecked()
@@ -546,7 +544,7 @@ class TalkEditorApp(FreeseerApp):
             error.exec_()
 
     def save_button_exit(self):
-        log.info("Saving changes in row %d...", self.oldTalkIndex.row())
+        log.info("Saving changes in row %d...", self.old_talk_index.row())
         self.update_talk()
         log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
@@ -554,20 +552,20 @@ class TalkEditorApp(FreeseerApp):
         self.close()
 
     def discard_button_exit(self):
-        log.info("Discarding changes in row %d...", self.oldTalkIndex.row())
-        self.talk_selected(self.newTalkIndex)
+        log.info("Discarding changes in row %d...", self.old_talk_index.row())
+        self.talk_selected(self.new_talk_index)
         log.info('Exiting talk database editor...')
         self.geometry = self.saveGeometry()
         self.savePromptWidgetExit.hide()
         self.close()
 
     def continue_button_exit(self):
-        log.info("Continue editing row %d", self.oldTalkIndex.row())
+        log.info("Continue editing row %d", self.old_talk_index.row())
         self.savePromptWidgetExit.hide()
 
     def closeEvent(self, event):
         if self.unsaved_details_exist():
-            log.info("Unsaved changes exist in row %d", self.oldTalkIndex.row())
+            log.info("Unsaved changes exist in row %d", self.old_talk_index.row())
             event.ignore()
             self.show_save_prompt(self.savePromptWidgetExit)
         else:

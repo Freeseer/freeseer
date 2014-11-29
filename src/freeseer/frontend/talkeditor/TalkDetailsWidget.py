@@ -120,12 +120,6 @@ class TalkDetailsWidget(QWidget):
         for field in self.fields:
             field.setEnabled(enable)
 
-    def input_fields_enabled(self):
-        for field in self.fields:
-            if not field.isEnabled():
-                return False
-        return True
-
     def enable_input_fields(self):
             self.titleLineEdit.setPlaceholderText("Enter Talk Title")
             self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")

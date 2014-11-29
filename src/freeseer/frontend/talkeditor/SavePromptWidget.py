@@ -26,6 +26,7 @@ from PyQt4.QtGui import QDialog
 from PyQt4.QtGui import QHBoxLayout
 from PyQt4.QtGui import QLabel
 from PyQt4.QtGui import QPushButton
+from PyQt4.QtGui import QSizePolicy
 from PyQt4.QtGui import QVBoxLayout
 
 
@@ -34,14 +35,14 @@ class SavePromptWidget(QDialog):
     def __init__(self, parent=None):
         super(SavePromptWidget, self).__init__(parent)
 
-        self.resize(600, 200)
+        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
 
         self.bottomButtonLayout = QHBoxLayout()
 
-        self.label = QLabel("This is a test. Click the button below to continue.")
+        self.label = QLabel("The talk you were editing has unsaved changes.")
         self.saveButton = QPushButton('Save Changes')
         self.discardButton = QPushButton('Discard Changes')
         self.continueButton = QPushButton('Continue Editing')
