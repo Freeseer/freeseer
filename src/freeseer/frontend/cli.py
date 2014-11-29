@@ -70,7 +70,7 @@ def setup_parser():
     setup_parser_report(subparsers)
     setup_parser_upload(subparsers)
     setup_parser_server(subparsers)
-    setup_parser_discover(subparsers)
+    setup_parser_browse(subparsers)
     return parser
 
 
@@ -156,13 +156,13 @@ def setup_parser_upload_youtube(subparsers):
 def setup_parser_server(subparsers):
     """Setup server command parser"""
     parser = subparsers.add_parser("server", help="Setup a freeseer restful server")
-    parser.add_argument("-f", "--filename", type=unicode, help="file to load recordings")
+    parser.add_argument("--filename", type=unicode, help="file to load recordings")
 
 
-def setup_parser_discover(subparsers):
-    """Setup discover command parser"""
-    parsers = subparsers.add_parser('discover', help='Search for freeseer servers on the network')
-    parsers.add_argument("-t", "--timeout", help="Poll for freeseer servers continually", action="store")
+def setup_parser_browse(subparsers):
+    """Setup browse command parser"""
+    parsers = subparsers.add_parser('browse', help='Search for freeseer servers on the network')
+    parsers.add_argument('-t', '--timeout', help='Poll for freeseer servers continually', type=int)
 
 
 def parse_args(parser, parse_args=None):
@@ -279,12 +279,12 @@ def parse_args(parser, parse_args=None):
         else:
             launch_server()
 
-    elif args.app == 'discover':
+    elif args.app == 'browse':
         if args.timeout:
-            timeout = int(args.timeout)
-            launch_discover(timeout)
+            timeout = args.timeout
+            launch_browser(timeout)
         else:
-            launch_discover()
+            launch_browser()
 
 
 def launch_recordapp():
@@ -357,11 +357,8 @@ def launch_server(storage_file="recording_storage"):
     server.start_server(storage_file)
 
 
-def launch_discover(timeout=5):
-    """Begin server discovery"""
-    import freeseer.frontend.controller.discover as discover
+def launch_browser(timeout=5):
+    """Search for Freeseer hosts on client's network"""
+    import freeseer.frontend.controller.listener as listener
 
-    if timeout < 5:
-        timeout = 5
-
-    discover.search(timeout)
+    listener.search(max(timeout, 5))

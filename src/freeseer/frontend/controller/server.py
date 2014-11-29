@@ -37,7 +37,7 @@ def start_server(storage_file, port=7079):
 
     Args:
         storage_file - name of storage file to which you are saving recordings
-        port - the port you wish to broadcast your server on. Default is 7079.
+        port - the port you wish to broadcast your server on.
     """
 
     app.storage_file_path = storage_file

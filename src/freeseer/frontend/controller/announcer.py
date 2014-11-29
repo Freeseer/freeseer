@@ -27,14 +27,14 @@ import dbus
 
 
 class ServiceAnnouncer:
+    """ServiceAnnouncer publishes Freeseer service over Zeroconf/Avahi protocol"""
     def __init__(self, name, service, port, txt):
-        """Creates a ServiceAnnouncer that publishes Freeseer service on Zeroconf/Avahi
-
+        """
         Args:
             name - instance name i.e Freeseer Host
             service - service type i.e _freeseer._tcp
             port - port number
-            info_list - List containing strings of information you wish to include.
+            txt - List containing strings of information you wish to include.
         """
         bus = dbus.SystemBus()
         server = dbus.Interface(bus.get_object(avahi.DBUS_NAME, avahi.DBUS_PATH_SERVER), avahi.DBUS_INTERFACE_SERVER)
@@ -44,13 +44,13 @@ class ServiceAnnouncer:
         self.port = port
         self.txt = txt
 
-    def add_service(self):
+    def advertise(self):
         """Announces Freeseer service over Zeroconf/Avahi"""
         self.group.AddService(avahi.IF_UNSPEC, avahi.PROTO_INET, 0,
                               self.name, self.service, '', '', self.port,
                               avahi.string_array_to_txt_array(self.txt))
         self.group.Commit()
 
-    def remove_service(self):
+    def unpublish(self):
         """Removes service from Zeroconf/Avahi"""
         self.group.Reset()
