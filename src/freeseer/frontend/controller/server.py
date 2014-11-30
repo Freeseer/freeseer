@@ -29,7 +29,7 @@ import sys
 from flask import jsonify
 
 from freeseer.frontend.controller import app
-from freeseer.frontend.controller.announcer import ServiceAnnouncer
+from freeseer.framework.announcer import ServiceAnnouncer
 
 
 def start_server(storage_file, port=7079):
@@ -42,7 +42,7 @@ def start_server(storage_file, port=7079):
 
     app.storage_file_path = storage_file
     app.service_announcer = ServiceAnnouncer('Freeseer Host', '_freeseer._tcp', port, [])
-    app.service_announcer.add_service()
+    app.service_announcer.advertise()
     signal.signal(signal.SIGTERM, remove)
     app.run('::0.0.0.0', port)
 

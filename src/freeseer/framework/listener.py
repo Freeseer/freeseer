@@ -52,19 +52,13 @@ class Listener(object):
             }
 
 
-def display_results(servers):
-    for (ipaddr, port), value in servers.iteritems():
-        print('{}\t{}:{}'.format(value['name'].split('.')[0], ipaddr, port))
-
-
 def search(timeout):
-    print('Searching for Freeseer hosts:')
+    results = []
     zeroconf = Zeroconf(socket.gethostbyname(socket.gethostname()))
     listener = Listener()
     ServiceBrowser(zeroconf, '_freeseer._tcp.local.', listener)
     sleep(timeout)
-    print('----------------------------')
-    print('Results:')
-    display_results(listener.servers)
+    for (ipaddr, port), value in listener.servers.iteritems():
+        results.append('{}\t{}:{}'.format(value['name'].split('.')[0], ipaddr, port))
     zeroconf.close()
-    sleep(1)  # WORKAROUND: on some boxes, leaving out this sleep() causes an exception to occur on shutdown.
+    return results

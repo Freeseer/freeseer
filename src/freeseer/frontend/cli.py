@@ -27,6 +27,7 @@ import argparse
 import signal
 import sys
 import textwrap
+from time import sleep
 
 import pygst
 import yapsy
@@ -359,6 +360,10 @@ def launch_server(storage_file="recording_storage"):
 
 def launch_browser(timeout=5):
     """Search for Freeseer hosts on client's network"""
-    import freeseer.frontend.controller.listener as listener
+    import freeseer.framework.listener as listener
 
-    listener.search(max(timeout, 5))
+    print('Searching for Freeseer Hosts\n')
+    results = listener.search(max(timeout, 5))
+    print('Results:')
+    print('\n'.join(results))
+    sleep(0.1)  # workaround hack. Without sleep(0.1) exception is thrown on shutdown on my ubuntu vm.
