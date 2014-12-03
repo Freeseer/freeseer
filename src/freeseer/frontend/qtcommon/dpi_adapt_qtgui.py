@@ -35,197 +35,151 @@ from PyQt4.QtGui import QWidget
 
 
 class QtGuiWithDpi(QWidget):
-    '''This class is used as a base class for other DPI adatping QtGui classes.
+    """Base class to make QtGui classes adapt to the device's logical dots per inch (DPI).
 
-    Use the QWidget as the base class so it will be compatible with the inherited classes.
-    The original QtWidget class is not DPI adapting. The widget resizing functions are DPI independent.
-    The methods been defined or overrided in this class can help scale the arguments according to system logical Dpis.
-    As a result, the resizing functions called via this class can give a result that fits the system environment best.
-    Call the classes inherited from this class when the target widget should be DPI adapting.
-    '''
+    The methods defined in this class can be used to adjust sizing values according to system's logical DPI.
+    Use the derived classes when the widget in question should auto-adjust to the system's logical DPI.
+
+    Physical DPI is the actual physical resolution available on the device. Logical DPI on the other hand is set by
+    the user via their desktop environment, to globally control UI and font size in different applications.
+    Logical DPI is often used for increasing text size on high-resolution/retina screens.
+    """
     def __init__(self, *args, **kwargs):
-        '''
-        Directly pass the arguments to QWidget Constructor, also set the logical dpi rate
-        using the QWidget.logicalDpiX/logicalDpiY APIs for further methods.
-        The standard DPI is the system default DPI value for Linux, Windows and Mac.
-        A DPI adapting application should use system DPI for the size of fonts, icons, windows, etc.
-        The default value for standard DPI is 96 for Linux, Windows and Mac. And Freeseer is designed under this DPI.
-        The logical DPI is the DPI the users defined for their computer to get large and clearer fonts and pictures.
-        This value is changed mostly on the computers will high resolution but small scale screen.
-        Please notice that this value is just "logical", it is not the actual DPI of the user's screen.
-        '''
         super(QtGuiWithDpi, self).__init__(*args, **kwargs)
 
-        STANDARD_DPI = 96.0
-        self.logical_dpi_x = self.logicalDpiX() / STANDARD_DPI
-        self.logical_dpi_y = self.logicalDpiY() / STANDARD_DPI
+        STANDARD_DPI = 96.0  # 96 DPI is the default value for 100% scale on Linux, Windows, and OSX.
+        self.dpi_x_ratio = self.logicalDpiX() / STANDARD_DPI
+        self.dpi_y_ratio = self.logicalDpiY() / STANDARD_DPI
 
     def adjust_dpi(self, *args):
-        '''Returns a QSize with adjusted width and height values based on the system logical DPI
+        """Returns a QSize which holds adjusted width and height values based on the systeam's logical DPI.
 
-        The Qt sizing methods that are used in Freeseer takes integers or a QSize to specify width and height.
-        It is needed to handle both cases in one method.
-        '''
-        try:  # (QSize) input
+        Sizing can be given with a QSize object or width and height integers. Both cases are handled.
+        """
+        try:  # QSize
             width, height = args[0].width(), args[0].height()
-        except AttributeError:  # (width, height) input
+        except AttributeError:  # width, height
             width, height = args[0], args[1]
         return QSize(self.set_width_with_dpi(width), self.set_height_with_dpi(height))
 
     def set_width_with_dpi(self, width):
-        '''Return the multiplication of the input width with the horizontal DPI rate.
-
-        Use for the classes/methods that cannot be included into the DPI adapting class.
-        '''
-        return round(width * self.logical_dpi_x)
+        """"Returns a width value adjusted to the horizontal resolution of the device."""
+        return round(width * self.dpi_x_ratio)
 
     def set_height_with_dpi(self, height):
-        '''Return the multiplication of the input height with the vertical DPI rate.
-
-        Use for the classes/methods that cannot be included into the DPI adapting class.
-        '''
-        return round(height * self.logical_dpi_y)
+        """"Returns a height value adjusted to the vertical resolution of the device."""
+        return round(height * self.dpi_y_ratio)
 
     def qspacer_item_with_dpi(self, width, height):
-        '''The interlayer method that change QSpacerItem class to a DPI adapting
-        method under QtGuiWithDpi
-
-        Read in width and height value and create a white space in window.
-        This method change the origin fixed width and height to DPI adatping
-        value and pass them to QSpacerItem constructor.
-        '''
+        """Returns a QSpacerItem with DPI-adjusted width and height."""
         return QSpacerItem(self.set_width_with_dpi(width), self.set_height_with_dpi(height))
 
-    def qrect_with_dpi(self, left, top, width, height):
-        '''The interlayer method that change QRect class to a DPI adapting
-        method under QtGuiWithDpi
-
-        Read in left, top, width and height value and create a rect in window.
-        This method change the origin fixed size to DPI adatping value and
-        pass them to QRect constructor.
-        '''
-        return QRect(self.set_width_with_dpi(left),
-                     self.set_height_with_dpi(top),
-                     self.set_width_with_dpi(width),
-                     self.set_height_with_dpi(height))
+    def qrect_with_dpi(self, x, y, width, height):
+        """Returns a QRect with DPI-adjusted width and height."""
+        return QRect(self.set_width_with_dpi(x), self.set_height_with_dpi(y),
+                     self.set_width_with_dpi(width), self.set_height_with_dpi(height))
 
 
 class QWidgetWithDpi(QtGuiWithDpi):
-    '''The interlayer class that change the methods in QWidget to DPI adapting version.'''
+    """An enhanced QWidget. Sizing methods are overridden to be DPI friendly."""
 
     def __init__(self, *args, **kwargs):
-        ''' Pass the arguments directly to QtGuiWithDpi '''
         super(QWidgetWithDpi, self).__init__(*args, **kwargs)
 
     def setMinimumSize(self, *args):
-        '''Set the minimum size of the window with DPI adapting
+        """Sets the minimum size of the widget, adjusted to the logical DPI.
 
-        The interlayer for QWidget.setMinimumSize(). Read in fixed size of min
-        width and min height and transfer to DPI adatping values
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QWidget.setMinimumSize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QWidgetWithDpi, self).setMinimumSize(*args)
         super(QWidgetWithDpi, self).setMinimumSize(self.adjust_dpi(*args))
 
     def resize(self, *args):
-        '''Resize the window with DPI adapting
+        """Resizes the widget with a DPI-adjusted size.
 
-        The interlayer for QWidget.resize(). Read in fixed size of the target
-        width and height and transfer to DPI adapting values.
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QWidget.reize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QWidgetWithDpi, self).resize(*args)
         super(QWidgetWithDpi, self).resize(self.adjust_dpi(*args))
 
 
 class QMainWindowWithDpi(QMainWindow, QtGuiWithDpi):
-    '''The interlayer class that change the methods in QMainWindow to DPI adapting version.'''
+    """An enhanced QMainWindow. Sizing methods are overridden to be DPI friendly."""
 
     def __init__(self, *args, **kwargs):
-        ''' Pass the arguments directly to QMainWindow and QtGuiWithDpi '''
         super(QMainWindowWithDpi, self).__init__(*args, **kwargs)
 
     def resize(self, *args):
-        '''Resize the window with DPI adapting
+        """Resizes the window with a DPI-adjusted size.
 
-        The interlayer for QMainWindow.resize(). Read in fixed size of the target
-        width and height and transfer to DPI adapting values.
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QMainWindow.reize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QMainWindowWithDpi, self).resize(*args)
         super(QMainWindowWithDpi, self).resize(self.adjust_dpi(*args))
 
 
 class QDialogWithDpi(QDialog, QtGuiWithDpi):
-    '''The interlayer class that change the methods in QDialog to DPI adapting version.'''
+    """An enhanced QDialog. Sizing methods are overridden to be DPI friendly."""
 
     def __init__(self, *args, **kwargs):
-        ''' Pass the arguments directly to QDialogWithDpi and QtGuiWithDpi '''
         super(QDialogWithDpi, self).__init__(*args, **kwargs)
 
     def resize(self, *args):
-        '''Resize the window with DPI adapting
+        """Resizes the widget with a DPI-adjusted size.
 
-        The interlayer for QDialog.resize(). Read in fixed size of the target
-        width and height and transfer to DPI adapting values.
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QDialog.reize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QDialogWithDpi, self).resize(*args)
         super(QDialogWithDpi, self).resize(self.adjust_dpi(*args))
 
 
 class QGroupBoxWithDpi(QGroupBox, QtGuiWithDpi):
-    '''The interlayer class that change the methods in QGroupBox to DPI adapting version.'''
+    """An enhanced QGroupBox. Sizing methods are overridden to be DPI friendly."""
+
     def __init__(self, *args, **kwargs):
-        ''' Pass the arguments directly to QGroupBoxWithDpi and QtGuiWithDpi '''
         super(QGroupBoxWithDpi, self).__init__(*args, **kwargs)
 
     def setFixedSize(self, *args):
-        '''Set the size of the QGroupBox with DPI adapting
+        """Sets a fixed size for the widget, adjusted to the logical DPI.
 
-        The method is overwritten QWidget.setFixedSize(). Since QGroupBox is
-        inherit from QWidget instead of QWidgetWithDpi, this method needs to
-        be rewrite here. It resize the input value using system DPI rate and
-        pass the changed arguments to QWidget.setFixedSize()
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QGroupBox.setFixedSize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QGroupBoxWithDpi, self).setFixedSize(*args)
         super(QGroupBoxWithDpi, self).setFixedSize(self.adjust_dpi(*args))
 
 
 class QPushButtonWithDpi(QPushButton, QtGuiWithDpi):
-    '''The interlayer class that change the methods in QPushButton to DPI adapting version.'''
+    """An enhanced QPushButton. Sizing methods are overridden to be DPI friendly."""
+
     def __init__(self, *args, **kwargs):
-        ''' Pass the arguments directly to QPushButtonWithDpi and QtGuiWithDpi '''
         super(QPushButtonWithDpi, self).__init__(*args, **kwargs)
 
     def setFixedSize(self, *args):
-        '''Set the size of the QPushButton with DPI adapting
+        """Sets a fixed size for the widget, adjusted to the logical DPI.
 
-        The method is overwritten QWidget.setFixedSize(). Since QPushButton is
-        inherit from QWidget instead of QWidgetWithDpi, this method needs to
-        be rewrite here. It resize the input value using system DPI rate and
-        pass the changed arguments to QWidget.setFixedSize()
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QPushButton.setFixedSize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QPushButtonWithDpi, self).setFixedSize(*args)
         super(QPushButtonWithDpi, self).setFixedSize(self.adjust_dpi(*args))
 
 
 class QToolButtonWithDpi(QToolButton, QtGuiWithDpi):
-    '''The interlayer class that change the methods in QToolButton to DPI adapting version.'''
+    """An enhanced QToolButton. Sizing methods are overridden to be DPI friendly."""
+
     def __init__(self, *args, **kwargs):
-        ''' Pass the arguments directly to QToolButtonWithDpi and QtGuiWithDpi '''
         super(QToolButtonWithDpi, self).__init__(*args, **kwargs)
 
     def setFixedSize(self, *args):
-        '''Set the size of the QToolButton with DPI adapting
+        """Sets a fixed size for the widget, adjusted to the logical DPI.
 
-        The method is overwritten QWidget.setFixedSize(). Since QToolButton is
-        inherit from QWidget instead of QWidgetWithDpi, this method needs to
-        be rewrite here. It resize the input value using system DPI rate and
-        pass the changed arguments to QWidget.setFixedSize()
-        '''
-        # Call using the origin arguments as the TypeError filter.
+        Calls QToolButton.setFixedSize() with the given arguments in case it raises an exception.
+        If it works, calls it again, but this time passing it a DPI-adjusted size.
+        """
         super(QToolButtonWithDpi, self).setFixedSize(*args)
         super(QToolButtonWithDpi, self).setFixedSize(self.adjust_dpi(*args))
