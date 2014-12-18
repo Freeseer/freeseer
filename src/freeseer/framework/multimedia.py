@@ -212,13 +212,13 @@ class Multimedia:
 
         To be used for populating the current recording's file metadata.
         """
-        return {"title":     presentation.title,
-                "artist":    presentation.speaker,
+        return {"title": presentation.title,
+                "artist": presentation.speaker,
                 "performer": presentation.speaker,
-                "album":     presentation.event,
-                "location":  presentation.room,
-                "date":      str(datetime.date.today()),
-                "comment":   presentation.description}
+                "album": presentation.event,
+                "location": presentation.room,
+                "date": str(datetime.date.today()),
+                "comment": presentation.description}
 
     ##
     ## Plugin Loading
