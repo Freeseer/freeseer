@@ -49,6 +49,8 @@ PRESENTATIONS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS presentations
                                         Time timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
 
+# The SQLITE timestamp field corresponds to the DateTime object. The Date column in the database can be created from
+# a DateTime.date() call.
 PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
                                        (Id INTEGER PRIMARY KEY,
                                         Title varchar(255),
@@ -62,12 +64,42 @@ PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
                                         EndTime timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
 
+# TODO: Make PRESENTATIONS_SCHEMA_315 the default schema when the presentation table is created
+# TODO: Make an upgrade method from PRESENTATIONS_SCHEMA_310 to PRESENTATIONS_SCHEMA_315
+# TODO: Update the SCHEMA_VERSION to 315
+# TODO: Integrate new database scheme with importers/exporter functions
+# TODO: Force Presentation.Date to be a QDate
+# TODO: Figure out what the types should be for Presentation.StartTime/EndTime e.g. QTime
+# TODO: Enforce the default database values in the CSV/RSS importer
+# TODO: Enforce the default database values in Presentation.__init__
+# TODO: Enforce the default database values in db.insert_presentation()
+# TODO: Check what format the csv and rss sample files are in. For instance, do the rss files use 'None' instead of ''
+#       for missing fields?
+# TODO: Update _helper_presentation_exists() and get_presentation_id() to use the new schema such that they no longer
+#       check if the stored data values are NULL
+PRESENTATIONS_SCHEMA_315 = '''CREATE TABLE IF NOT EXISTS presentations
+                                       (Id INTEGER PRIMARY KEY,
+                                        Title varchar(255) NOT NULL DEFAULT '',
+                                        Speaker varchar(100) NOT NULL DEFAULT '',
+                                        Description text NOT NULL DEFAULT '',
+                                        Category varchar(25) NOT NULL DEFAULT '',
+                                        Event varchar(100) NOT NULL DEFAULT '',
+                                        Room varchar(25) NOT NULL DEFAULT '',
+                                        Date timestamp NOT NULL DEFAULT '',
+                                        StartTime timestamp NOT NULL DEFAULT '',
+                                        EndTime timestamp NOT NULL DEFAULT '',
+                                        UNIQUE (Speaker, Title, Event) ON CONFLICT IGNORE)'''
+
 REPORTS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS failures
                                         (Id INTERGER PRIMARY KEY,
                                         Comments TEXT,
                                         Indicator TEXT,
                                         Release INTEGER,
                                         UNIQUE (ID) ON CONFLICT REPLACE)'''
+
+# TODO: Ensure that the CSV/RSS to presentation importers are done using the same conventions. For instance, convert a
+#       room with value None to '' in both the csv and rss importer. Instead of the csv parser converting None to 'None'
+#       and the rss importer doing something else etcetera.
 
 
 class QtDBConnector(object):
