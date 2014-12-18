@@ -63,7 +63,10 @@ class CsvImporter(IImporter):
                         'Level': unicode(row.get('Level', ''), 'utf-8'),
                         'Event': unicode(row.get('Event', ''), 'utf-8'),
                         'Room': unicode(row.get('Room', ''), 'utf-8'),
-                        'Time': unicode(row.get('Time', ''), 'utf-8')
+                        'Time': unicode(row.get('Time', ''), 'utf-8'),  # Legacy csv time field
+                        'Date': unicode(row.get('Date', ''), 'utf-8'),
+                        'StartTime': unicode(row.get('StartTime', ''), 'utf-8'),
+                        'EndTime': unicode(row.get('EndTime', ''), 'utf-8')
                     }
 
                     presentations.append(talk)

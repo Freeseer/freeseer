@@ -384,14 +384,25 @@ class QtDBConnector(object):
 
         if presentations:
             for presentation in presentations:
-                talk = Presentation(presentation["Title"],
-                                    presentation["Speaker"],
-                                    presentation["Abstract"],  # Description
-                                    presentation["Level"],
-                                    presentation["Event"],
-                                    presentation["Room"],
-                                    presentation["Time"],
-                                    presentation["Time"])
+                if presentation['Time']:
+                    talk = Presentation(presentation["Title"],
+                                        presentation["Speaker"],
+                                        presentation["Abstract"],  # Description
+                                        presentation["Level"],
+                                        presentation["Event"],
+                                        presentation["Room"],
+                                        presentation["Time"],
+                                        presentation["Time"])  # Presentation using legacy time field
+                else:
+                    talk = Presentation(presentation["Title"],
+                                        presentation["Speaker"],
+                                        presentation["Abstract"],  # Description
+                                        presentation["Level"],
+                                        presentation["Event"],
+                                        presentation["Room"],
+                                        presentation["Date"],
+                                        presentation["StartTime"],
+                                        presentation["EndTime"])
                 self.insert_presentation(talk)
 
         else:
