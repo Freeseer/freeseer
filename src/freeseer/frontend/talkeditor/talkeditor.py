@@ -254,9 +254,6 @@ class TalkEditorApp(FreeseerApp):
 
     def load_presentations_model(self):
         # Load Presentation Model
-        # FIXME: The raw databse values are being loaded into the view. This means the date, startTime, and
-        # endTime are showing the raw QDate(Time) values. There should be a layer that converts between the
-        # frontend values and the backend.
         self.presentationModel = self.db.get_presentations_model()
         self.proxy = QSortFilterProxyModel()
         self.proxy.setSourceModel(self.presentationModel)

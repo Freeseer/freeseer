@@ -87,9 +87,9 @@ def test_export_reports_to_csv(db, tmpdir, failure1, failure2):
 
     expected_csv_lines = [
         'Title,Speaker,Abstract,Category,Event,Room,Date,StartTime,EndTime,Problem,Error\r\n',
-        'Fake it,John Doe,,,Default,200,{},{},{},It is a fixture,Fake presentation\r\n'.format(
+        'Fake it,John Doe,,,,200,{},{},{},It is a fixture,Fake presentation\r\n'.format(
             Presentation.DEFAULT_DATE, Presentation.DEFAULT_TIME, Presentation.DEFAULT_TIME),
-        'A fake presentation,No one,,,Default,Mystery,{},{},{},This is a fake failure,Non-existant failure\r\n'.format(
+        'A fake presentation,No one,,,,Mystery,{},{},{},This is a fake failure,Non-existant failure\r\n'.format(
             Presentation.DEFAULT_DATE, Presentation.DEFAULT_TIME, Presentation.DEFAULT_TIME)
     ]
 

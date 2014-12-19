@@ -44,8 +44,8 @@ def helper_presentation_record_to_presentation(query, record):
         event=unicode(query.value(record.indexOf('event')).toString()),
         room=unicode(query.value(record.indexOf('room')).toString()),
         date=query.value(record.indexOf('date')).toDate(),
-        startTime=query.value(record.indexOf('startTime')).toDateTime(),
-        endTime=query.value(record.indexOf('endTime')).toDateTime()
+        startTime=unicode(query.value(record.indexOf('startTime')).toString()),
+        endTime=unicode(query.value(record.indexOf('endTime')).toString())
     )
 
 
@@ -88,11 +88,11 @@ def test_export_talks_to_csv(db, tmpdir):
 
     expected_csv_lines = [
         'Title,Speaker,Abstract,Category,Event,Room,Date,StartTime,EndTime\r\n',
-        'Managing map data in a database,Andrew Ross,,,Default,Default,{},{},{}\r\n'.format(
+        'Managing map data in a database,Andrew Ross,,,,,{},{},{}\r\n'.format(
             Presentation.DEFAULT_DATE, Presentation.DEFAULT_TIME, Presentation.DEFAULT_TIME),
-        'Building NetBSD,David Maxwell,,,Default,Default,{},{},{}\r\n'.format(
+        'Building NetBSD,David Maxwell,,,,,{},{},{}\r\n'.format(
             Presentation.DEFAULT_DATE, Presentation.DEFAULT_TIME, Presentation.DEFAULT_TIME),
-        'Faking it till you make it,John Doe,,,Default,Default,{},{},{}\r\n'.format(
+        'Faking it till you make it,John Doe,,,,,{},{},{}\r\n'.format(
             Presentation.DEFAULT_DATE, Presentation.DEFAULT_TIME, Presentation.DEFAULT_TIME)
     ]
 
@@ -233,7 +233,7 @@ def test_get_talks_by_room_and_time(db, fake_presentation):
     """Assert that presentations starting after the current date can be retrieved from the database given a room"""
     db.insert_presentation(fake_presentation)
     old_presentation = copy.deepcopy(fake_presentation)
-    old_presentation.startTime = QtCore.QDateTime().addSecs(60 * -100)
+    old_presentation.startTime = QtCore.QTime().addSecs(60 * -100).toString('hh:mm ap')
     db.insert_presentation(old_presentation)
 
     # fake_presentation should be returned because it starts later than the current date.
@@ -415,8 +415,8 @@ def test_upgrade_database(db, monkeypatch):
         event='Winter conference',
         room='12',
         date=QtCore.QVariant('2002-10-05T00:00').toDate(),
-        startTime=QtCore.QVariant('2002-10-05T10:45').toDateTime(),
-        endTime=QtCore.QVariant('2002-10-05T10:45').toDateTime()
+        startTime=QtCore.QTime.fromString('2002-10-05T10:45', 'yyyy-MM-ddTmm:hh').toString('hh:mm ap'),
+        endTime=QtCore.QTime.fromString('2002-10-05T10:45', 'yyyy-MM-ddTmm:hh').toString('hh:mm ap')
     )
 
     # Mock out the db schema version to a 2x version.

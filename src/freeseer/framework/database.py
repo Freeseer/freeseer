@@ -48,8 +48,7 @@ PRESENTATIONS_SCHEMA_300 = '''CREATE TABLE IF NOT EXISTS presentations
                                         Time timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
 
-# The SQLITE timestamp field corresponds to the DateTime object. The Date column in the database can be created from
-# a DateTime.date() call.
+# The SQLITE timestamp field corresponds to the QDate and QTime object.
 PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
                                        (Id INTEGER PRIMARY KEY,
                                         Title varchar(255),
@@ -63,15 +62,7 @@ PRESENTATIONS_SCHEMA_310 = '''CREATE TABLE IF NOT EXISTS presentations
                                         EndTime timestamp,
                                         UNIQUE (Speaker, Title) ON CONFLICT IGNORE)'''
 
-# TODO: Make PRESENTATIONS_SCHEMA_315 the default schema when the presentation table is created
-# TODO: Make an upgrade method from PRESENTATIONS_SCHEMA_310 to PRESENTATIONS_SCHEMA_315
-# TODO: Update the SCHEMA_VERSION to 315
 # TODO: Integrate new database scheme with importers/exporter functions
-# TODO: Force Presentation.Date to be a QDate
-# TODO: Figure out what the types should be for Presentation.StartTime/EndTime e.g. QTime
-# TODO: Enforce the default database values in the CSV/RSS importer
-# TODO: Enforce the default database values in Presentation.__init__
-# TODO: Enforce the default database values in db.insert_presentation()
 # TODO: Check what format the csv and rss sample files are in. For instance, do the rss files use 'None' instead of ''
 #       for missing fields?
 # TODO: Update _helper_presentation_exists() and get_presentation_id() to use the new schema such that they no longer
@@ -182,17 +173,44 @@ class QtDBConnector(object):
                             FROM presentations_old""")
             QtSql.QSqlQuery('DROP TABLE presentations_old')
 
+        def update_31to315():
+            """Performs incremental update of database from 3.1 and older to 3.15."""
+            QtSql.QSqlQuery('ALTER TABLE presentations RENAME TO presentations_old')
+            self._create_presentations_table(PRESENTATIONS_SCHEMA_315)
+
+            old_presentations = QtSql.QSqlQuery('SELECT * FROM presentations_old')
+            # Convert old presentation values, specifically startTime and endTime, to new format
+            while old_presentations.next():
+                presentation_date = unicode(old_presentations.value(7).toDate().toString(QtCore.Qt.ISODate))
+                presentation_startTime = unicode(QtCore.QTime.fromString(old_presentations.value(8).toString(),
+                                                                         'mm:hh:ss').toString('hh:mm ap'))
+                presentation_endTime = unicode(QtCore.QTime.fromString(old_presentations.value(9).toString(),
+                                                                       'mm:hh:ss').toString('hh:mm ap'))
+
+                QtSql.QSqlQuery('''
+                    INSERT INTO
+                    presentations(Id, Title, Speaker, Description, Category, Event, Room, Date, StartTime, EndTime)
+                    VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');
+                '''.format(
+                    unicode(old_presentations.value(0).toString()), unicode(old_presentations.value(1).toString()),
+                    unicode(old_presentations.value(2).toString()), unicode(old_presentations.value(3).toString()),
+                    unicode(old_presentations.value(4).toString()), unicode(old_presentations.value(5).toString()),
+                    unicode(old_presentations.value(6).toString()), presentation_date, presentation_startTime,
+                    presentation_endTime
+                ))
+            QtSql.QSqlQuery('DROP TABLE presentations_old')
+
         #
         # Perform the upgrade
         #
-        updaters = [update_2xto30, update_30to31]
+        updaters = [update_2xto30, update_30to31, update_31to315]
         for updater in updaters:
             updater()
 
         QtSql.QSqlQuery('PRAGMA user_version = {}'.format(SCHEMA_VERSION))
         log.info('Upgraded presentations database from version %d to %d', db_version, SCHEMA_VERSION)
 
-    def _create_presentations_table(self, schema=PRESENTATIONS_SCHEMA_310):
+    def _create_presentations_table(self, schema=PRESENTATIONS_SCHEMA_315):
         """Creates the presentations table in the database. Should be used to initialize a new table."""
         log.info("table created")
         QtSql.QSqlQuery(schema)
@@ -215,7 +233,7 @@ class QtDBConnector(object):
 
     def get_talks_by_room_and_time(self, room):
         """Returns the talks hosted in a specified room, starting from the current date and time"""
-        current_time = QtCore.QDateTime.currentDateTime()
+        current_time = QtCore.QTime.currentTime().toString('hh:mm ap')
         current_date = QtCore.QDate.currentDate()
         query = QtSql.QSqlQuery()
         query.prepare('''
@@ -240,8 +258,8 @@ class QtDBConnector(object):
                              event=unicode(result.value(5).toString()),
                              room=unicode(result.value(6).toString()),
                              date=result.value(7).toDate(),
-                             startTime=result.value(8).toDateTime(),
-                             endTime=result.value(9).toDateTime())
+                             startTime=unicode(result.value(8).toString()),
+                             endTime=unicode(result.value(9).toString()))
         else:
             return None
 
@@ -294,7 +312,7 @@ class QtDBConnector(object):
             FROM presentations
             WHERE Title=:title AND Speaker=:speaker AND Description=:description AND Category=:category AND
                   Event=:event AND
-                  (Date=date(:date) OR Date is NULL) AND
+                  (Date=:date OR Date is NULL) AND
                   (Room=:room OR Room is NULL) AND
                   (StartTime=:startTime OR StartTime is NULL) AND
                   (EndTime=:endTime OR EndTime is NULL)
@@ -322,9 +340,9 @@ class QtDBConnector(object):
         """Inserts a passed Presentation into the database."""
         # The data comes from user input. Use prepare statement to sanitize it.
         query = QtSql.QSqlQuery()
-        assert query.prepare('''
+        query.prepare('''
             INSERT INTO presentations(Title, Speaker, Description, Category, Event, Room, Date, StartTime, EndTime)
-            VALUES (:title, :speaker, :description, :category, :event, :room, date(:date), :startTime, :endTime)
+            VALUES (:title, :speaker, :description, :category, :event, :room, :date, :startTime, :endTime)
         ''')
         query.bindValue(':title', presentation.title)
         query.bindValue(':speaker', presentation.speaker)
@@ -454,7 +472,7 @@ class QtDBConnector(object):
     #
     def isodate_string_to_qtime(self, date):
         """Converts ISODate format strings to times. Example, 2014-01-01T15:32 -> 3:32 pm"""
-        return QtCore.QDateTime.fromString(date, 'yyyy-MM-ddThh:mm').time().toString('hh:mm ap')
+        return QtCore.QDateTime.fromString(date, 'yyyy-MM-ddThh:mm').time()
 
     def add_talks_from_rss(self, feed_url):
         """Adds talks from an rss feed."""
@@ -465,7 +483,8 @@ class QtDBConnector(object):
         if presentations:
             for presentation in presentations:
                 # TODO: The presentation['Time'] field should never be None. This can be removed after defaults are
-                # added and the csv/rss impoters are fixed to handle Date, StartTime, and EndTime.
+                # added and the rss impoter are fixed to handle Date, StartTime, and EndTime.
+                # TODO2: Does the code that creates the RSS feeds handle Date, StartTime, and EndTime values?
                 if not presentation["Time"]:
                     presentation["Time"] = ''
                 talk = Presentation(title=presentation["Title"],
@@ -475,7 +494,7 @@ class QtDBConnector(object):
                                     event=presentation["Event"],
                                     room=presentation["Room"],
                                     date=QtCore.QDate.fromString(presentation["Time"], QtCore.Qt.ISODate),
-                                    startTime=QtCore.QDateTime.fromString(presentation["Time"], 'yyyy-MM-ddThh:mm'))
+                                    startTime=QtCore.QDateTime.fromString(presentation["Time"], 'yyyy-MM-ddThh:mm').time().toString('hh:mm ap'))
                 self.insert_presentation(talk)
 
         else:
@@ -500,7 +519,7 @@ class QtDBConnector(object):
                                         presentation["Event"],
                                         presentation["Room"],
                                         QtCore.QDate.fromString(presentation["Time"], QtCore.Qt.ISODate),
-                                        self.isodate_string_to_qtime(presentation["Time"]))  # Presentation using legacy time field
+                                        self.isodate_string_to_qtime(presentation["Time"]).toString('hh:mm ap'))  # Presentation using legacy time field
                 else:
                     talk = Presentation(presentation["Title"],
                                         presentation["Speaker"],
@@ -508,9 +527,9 @@ class QtDBConnector(object):
                                         presentation["Level"],
                                         presentation["Event"],
                                         presentation["Room"],
-                                        QtCore.QDate.fromString(presentation["Time"], QtCore.Qt.ISODate),
-                                        self.isodate_string_to_qtime(presentation["StartTime"]),
-                                        self.isodate_string_to_qtime(presentation["EndTime"]))
+                                        QtCore.QDate.fromString(presentation["Date"], QtCore.Qt.ISODate),
+                                        QtCore.QTime.fromString(presentation["StartTime"]).toString('hh:mm ap'),
+                                        QtCore.QTime.fromString(presentation["EndTime"]).toString('hh:mm ap'))
                 self.insert_presentation(talk)
 
         else:
@@ -542,8 +561,8 @@ class QtDBConnector(object):
                                  'Event': unicode(result.value(5).toString()),
                                  'Room': unicode(result.value(6).toString()),
                                  'Date': unicode(result.value(7).toDate().toString(QtCore.Qt.ISODate)),
-                                 'StartTime': unicode(result.value(8).toDateTime().toString(QtCore.Qt.ISODate)),
-                                 'EndTime': unicode(result.value(9).toDateTime().toString(QtCore.Qt.ISODate))})
+                                 'StartTime': unicode(QtCore.QTime.fromString(result.value(8).toString(), 'hh:mm ap').toString()),
+                                 'EndTime': unicode(QtCore.QTime.fromString(result.value(9).toString(), 'hh:mm ap').toString())})
 
     def export_reports_to_csv(self, fname):
         fieldNames = ('Title',

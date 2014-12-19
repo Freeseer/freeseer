@@ -40,9 +40,7 @@ def db(tmpdir):
 def fake_presentation():
     """Returns a presentation object with fake data. Also demonstrates how to construct time values for presentations"""
     today = QtCore.QDate().currentDate()  # today
-    # TODO: The currentDateTime object sets milliseconds. Convert it back to a string then to a QDateTime object again
-    # to get rid of milliseconds. There has got to be a better solution...
-    current_time = QtCore.QDateTime.fromString(QtCore.QDateTime().currentDateTime().toString())  # yyyy-mm-ddThh:mm:ss
+    current_time = QtCore.QTime.fromString(QtCore.QTime.currentTime().toString('hh:mm:ss'))  # format removes mseconds
     return Presentation(
         title='MITM presentation attacks',
         speaker='Alice and Eve',
@@ -51,8 +49,8 @@ def fake_presentation():
         event='testing event',
         room='1300',
         date=today,
-        startTime=current_time.addSecs(60 * 5),
-        endTime=current_time.addSecs(60 * 10)
+        startTime=current_time.addSecs(60 * 5).toString('hh:mm ap'),
+        endTime=current_time.addSecs(60 * 10).toString('hh:mm ap')
     )
 
 
@@ -70,7 +68,7 @@ def presentation_sc2010():
         event='Summercamp2010',
         room='Rom AB113',
         date=QtCore.QDate.fromString('2010-05-14T10:45', QtCore.Qt.ISODate),
-        startTime=QtCore.QDateTime.fromString('2010-05-14T10:45', 'yyyy-MM-ddThh:mm')
+        startTime=QtCore.QDateTime.fromString('2010-05-14T10:45', 'yyyy-MM-ddThh:mm').time().toString('hh:mm ap')
     )
 
 
@@ -93,7 +91,7 @@ def presentation_sc2011_maxwell_rss():
         category='Beginner',
         room='',
         date=QtCore.QDate.fromString('2011-08-17T20:29', QtCore.Qt.ISODate),
-        startTime=QtCore.QDateTime.fromString('2011-08-17T20:29', 'yyyy-MM-ddThh:mm')
+        startTime=QtCore.QDateTime.fromString('2011-08-17T20:29', 'yyyy-MM-ddThh:mm').time().toString('hh:mm ap')
     )
 
 
@@ -116,7 +114,8 @@ def presentation_sc2011_maxwell_csv():
         category='Beginner',
         room='None',
         date=QtCore.QDate.fromString('2011-08-17T20:29', QtCore.Qt.ISODate),
-        startTime=QtCore.QDateTime.fromString('2011-08-17T20:29', 'yyyy-MM-ddThh:mm').time().toString('hh:mm ap')
+        startTime=QtCore.QDateTime.fromString('2011-08-17T20:29', 'yyyy-MM-ddThh:mm').time().toString('hh:mm ap'),
+        endTime=''
     )
 
 
