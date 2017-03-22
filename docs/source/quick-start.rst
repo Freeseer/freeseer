@@ -157,7 +157,7 @@ Install the remaining packages. You may need administrator access.
 
 On Linux::
 
-    pip install -Ur dev_requirements.txt
+    sudo pip install -Ur dev_requirements.txt
 
 On Windows::
 
