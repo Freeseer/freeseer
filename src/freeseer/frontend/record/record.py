@@ -36,7 +36,6 @@ try:
 except AttributeError:
     _fromUtf8 = lambda s: s
 
-from freeseer.framework.presentation import Presentation
 from freeseer.framework.failure import Failure
 from freeseer.framework.util import get_free_space
 from freeseer.frontend.qtcommon.FreeseerApp import FreeseerApp
@@ -556,15 +555,19 @@ class RecordApp(FreeseerApp):
     def load_backend(self):
         """Prepares the backend for recording"""
         if self.current_presentation():
+            self.mainWidget.recordPushButton.setEnabled(True)
+            self.mainWidget.standbyPushButton.setToolTip(self.standbyString)
             presentation = self.current_presentation()
+            self.recently_recorded_video = self.controller.load_backend_with_presentation(presentation)
 
-        # If current presentation is no existant (empty talk database)
-        # use a default recording name.
+        # If current presentation is non-existent (empty talk database)
+        # disable Record button and set tooltip
         else:
-            presentation = Presentation(title=unicode("default"))
+            self.mainWidget.recordPushButton.setEnabled(False)
+            self.mainWidget.standbyPushButton.setToolTip('No presentations available')
+            return False
 
-        initialized, self.recently_recorded_video = self.controller.load_backend(presentation)
-        if initialized:
+        if self.recently_recorded_video:
             return True
         else:
             return False  # Error something failed while loading the backend
