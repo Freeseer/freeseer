@@ -62,8 +62,8 @@ class PluginManager(QtCore.QObject):
             "AudioMixer": IAudioMixer,
             "VideoInput": IVideoInput,
             "VideoMixer": IVideoMixer,
-            "Importer":   IImporter,
-            "Output":     IOutput})
+            "Importer": IImporter,
+            "Output": IOutput})
         self.plugmanc.collectPlugins()
 
         for plugin in self.plugmanc.getAllPlugins():
