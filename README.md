@@ -20,6 +20,6 @@ Documentation: http://freeseer.readthedocs.org
 [coverage-status]: https://coveralls.io/r/Freeseer/freeseer "Test coverage"
 [coverage-status-badge]: https://coveralls.io/repos/Freeseer/freeseer/badge.png
 [pypi-version]: https://crate.io/packages/freeseer "Latest version hosted on PyPi"
-[pypi-version-badge]: https://pypip.in/v/freeseer/badge.png
+[pypi-version-badge]: https://img.shields.io/pypi/v/freeseer.svg
 [pypi-downloads]: https://crate.io/packages/freeseer "Number of downloads from PyPi"
-[pypi-downloads-badge]: https://pypip.in/d/freeseer/badge.png
+[pypi-downloads-badge]: https://img.shields.io/pypi/dm/freeseer.svg
