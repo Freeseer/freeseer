@@ -1,18 +1,21 @@
-Freeseer ![][freeseer-logo]
-===========================
+# [Freeseer][freeseer-logo]
+
 [![Build Status][build-status-badge]] [build-status]
 [![Coverage Status][coverage-status-badge]] [coverage-status]
 [![PyPi version][pypi-version-badge]] [pypi-version]
-[![PyPi downloads][pypi-downloads-badge]] [pypi-downloads]
+[![PyPi downloads]] [pypi-downloads][pypi-downloads-badge]
 
-Downloads: https://github.com/Freeseer/freeseer/releases
+## Downloads:
+https://github.com/Freeseer/freeseer/releases
+## Quick-Start:
 
-Quick-Start: http://freeseer.readthedocs.org/en/latest/quick-start.html
+http://freeseer.readthedocs.org/en/latest/quick-start.html
+## Documentation:
 
-Documentation: http://freeseer.readthedocs.org
+http://freeseer.readthedocs.org
+## Contribution :
 
-[Contribute to the documentation project](docs/README.md)
-
+See more at [Contribute to the documentation project](docs/README.md)
 
 [freeseer-logo]: http://i.imgur.com/tqivk.png
 [build-status]: https://travis-ci.org/Freeseer/freeseer "Build status"
