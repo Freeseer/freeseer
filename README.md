@@ -1,9 +1,10 @@
 # [Freeseer][freeseer-logo]
+---
+![PyPI-Version](https://img.shields.io/pypi/v/freeseer.svg?style=for-the-badge)
+![Github-Issues](https://img.shields.io/github/issues/freeseer/freeseer.svg?style=for-the-badge)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/freeseer.svg?style=for-the-badge)
+![Open-Issues](https://img.shields.io/github/issues-pr-raw/freeseer/freeseer.svg?style=for-the-badge)
 
-[![Build Status][build-status-badge]] [build-status]
-[![Coverage Status][coverage-status-badge]] [coverage-status]
-[![PyPi version][pypi-version-badge]] [pypi-version]
-[![PyPi downloads]] [pypi-downloads][pypi-downloads-badge]
 
 ## Downloads:
 https://github.com/Freeseer/freeseer/releases
