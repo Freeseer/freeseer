@@ -1,4 +1,4 @@
-Flask==0.10.1
+Flask==1.0
 feedparser<5.2
 google-api-python-client==1.2
 jsonschema==2.3
