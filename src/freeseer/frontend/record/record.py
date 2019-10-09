@@ -235,7 +235,7 @@ class RecordApp(FreeseerApp):
         elif self.actionAutoRecord.isChecked():
             self.mainWidget.statusLabel.setText(self.autoRecordString)
         else:
-            self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
+            self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
                                                                         get_free_space(self.config.videodir),
                                                                         self.idleString))
 
@@ -363,7 +363,7 @@ class RecordApp(FreeseerApp):
             if self.load_backend():
                 toggle_gui(True)
                 self.controller.pause()
-                self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
+                self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
                                                                             get_free_space(self.config.videodir),
                                                                             self.readyString))
             else:
@@ -409,7 +409,7 @@ class RecordApp(FreeseerApp):
             self.mainWidget.pauseButton.setEnabled(False)
             self.recordAction.setText(self.recordString)
             self.mainWidget.audioSlider.setValue(0)
-            self.mainWidget.statusLabel.setText(u"{} {} --- {} ".format(self.freeSpaceString,
+            self.mainWidget.statusLabel.setText("{} {} --- {} ".format(self.freeSpaceString,
                                                                         get_free_space(self.config.videodir),
                                                                         self.idleString))
 
@@ -460,7 +460,7 @@ class RecordApp(FreeseerApp):
             if self.current_room:
                 self.autoTalks = self.db.get_talks_by_room_and_time(self.current_room)
                 # Start recording if there are talks in database that can be auto-recorded
-                if self.autoTalks.next():
+                if next(self.autoTalks):
                     # Set the cursor back to before the first record so that single_auto_record works properly
                     self.autoTalks.previous()
                     self._enable_disable_gui(True)
@@ -496,7 +496,7 @@ class RecordApp(FreeseerApp):
             self.recorded = False
             log.debug("Auto-recording for the current talk stopped.")
 
-        if self.autoTalks.next():
+        if next(self.autoTalks):
             starttime = QtCore.QTime.fromString(self.autoTalks.value(8).toString())
             endtime = QtCore.QTime.fromString(self.autoTalks.value(9).toString())
             currenttime = QtCore.QTime.currentTime()
@@ -561,7 +561,7 @@ class RecordApp(FreeseerApp):
         # If current presentation is no existant (empty talk database)
         # use a default recording name.
         else:
-            presentation = Presentation(title=unicode("default"))
+            presentation = Presentation(title=str("default"))
 
         initialized, self.recently_recorded_video = self.controller.load_backend(presentation)
         if initialized:
@@ -580,7 +580,7 @@ class RecordApp(FreeseerApp):
             self.time_seconds = 0
             self.time_minutes += 1
 
-        self.mainWidget.statusLabel.setText(u"{} {} --- {} {} --- {}".format(self.elapsedTimeString,
+        self.mainWidget.statusLabel.setText("{} {} --- {} {} --- {}".format(self.elapsedTimeString,
                                                                              frmt_time,
                                                                              self.freeSpaceString,
                                                                              get_free_space(self.config.videodir),

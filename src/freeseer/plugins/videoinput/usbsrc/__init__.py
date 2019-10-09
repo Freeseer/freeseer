@@ -44,7 +44,7 @@ from freeseer.framework.plugin import IVideoInput
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
-import widget
+from . import widget
 
 
 def get_devices():
@@ -90,7 +90,7 @@ def get_default_device():
     devicemap = get_devices()
     if not devicemap:
         return ''
-    default = devicemap.itervalues().next()
+    default = next(iter(devicemap.values()))
     return default
 
 
@@ -152,7 +152,7 @@ class USBSrc(IVideoInput):
         # Load the combobox with inputs
         self.widget.devicesCombobox.clear()
         n = 0
-        for device, devurl in get_devices().items():
+        for device, devurl in list(get_devices().items()):
             self.widget.devicesCombobox.addItem(device, devurl)
             if devurl == self.config.device:
                 self.widget.devicesCombobox.setCurrentIndex(n)

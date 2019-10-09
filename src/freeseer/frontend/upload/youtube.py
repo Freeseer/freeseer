@@ -51,11 +51,11 @@ def get_defaults():
 def handle_response(response_code, response):
     """Process the response from the Youtube API"""
     if response_code is Response.SUCCESS:
-        print("The file was successfully uploaded with video id: {}".format(response['id']))
+        print(("The file was successfully uploaded with video id: {}".format(response['id'])))
     elif response_code is Response.UNEXPECTED_FAILURE:
-        print("The file failed to upload with unexpected response: {}".format(response))
+        print(("The file failed to upload with unexpected response: {}".format(response)))
     elif response_code is Response.UNRETRIABLE_ERROR:
-        print("An unretriable HTTP error {} occurred:\n{}".format(response['status'], response['content']))
+        print(("An unretriable HTTP error {} occurred:\n{}".format(response['status'], response['content'])))
     elif response_code is Response.MAX_RETRIES_REACHED:
         print("The maximum number of retries has been reached")
     elif response_code is Response.ACCESS_TOKEN_ERROR:
@@ -88,9 +88,9 @@ def prompt_user(videos, confirmation=False):
     """
     if not confirmation:
         print("Found videos:")
-        print("\n".join(videos))
+        print(("\n".join(videos)))
         question = "Are you sure you would like to upload these videos? [Y/n]"
-        confirmation = raw_input(question).lower() in ('', 'y', 'yes')
+        confirmation = input(question).lower() in ('', 'y', 'yes')
     return confirmation
 
 
@@ -106,7 +106,7 @@ def upload(files, token, assume_yes):
     """
     # check if token exists
     if not os.path.exists(token):
-        print("{} does not exist, please specify a valid token file".format(token))
+        print(("{} does not exist, please specify a valid token file".format(token)))
     else:
         # Gather videos specified and vids from folders specified into list
         videos = gather_videos(files)

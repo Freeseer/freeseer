@@ -42,7 +42,7 @@ from freeseer.framework.plugin import IOutput
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
-import widget
+from . import widget
 
 # Leaky Queue
 LEAKY_VALUES = ["no", "upstream", "downstream"]

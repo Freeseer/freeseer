@@ -52,10 +52,10 @@ class TestMultimedia(unittest.TestCase):
         shutil.rmtree(self.profile_manager._base_folder)
 
     def test_load_backend(self):
-        self.multimedia.load_backend(filename=u"test.ogg")
+        self.multimedia.load_backend(filename="test.ogg")
 
     def test_record_functions(self):
-        self.multimedia.load_backend(filename=u"test.ogg")
+        self.multimedia.load_backend(filename="test.ogg")
         self.multimedia.record()
         self.multimedia.pause()
         self.multimedia.stop()

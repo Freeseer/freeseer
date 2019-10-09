@@ -34,7 +34,7 @@ An import plugin which provides a RSS parser used when adding presentations
 try:  # Import Python3 module if possible
     from html.parser import HTMLParser
 except ImportError:
-    from HTMLParser import HTMLParser
+    from html.parser import HTMLParser
 
 from feedparser import parse
 
@@ -87,7 +87,7 @@ class FeedParser(IImporter):
             # data contain spaces and we don't want to erroneously split that
             # data.
 
-            pres_data = filter(None, pres_data.split("   "))
+            pres_data = [_f for _f in pres_data.split("   ") if _f]
 
             presentation = {
                 'Title': entry.title.strip(),
@@ -116,6 +116,6 @@ class FeedParser(IImporter):
                 # data in element is in unicode, we want an error raised if
                 # there are characters that we are not expecting
 
-                field_data = unicode(presentation[i + item_presentation_offset])
+                field_data = str(presentation[i + item_presentation_offset])
 
                 return strip_tags(field_data).strip()

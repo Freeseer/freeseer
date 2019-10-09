@@ -39,10 +39,10 @@ except AttributeError:
 from freeseer.frontend.qtcommon import resource  # noqa
 from freeseer.frontend.qtcommon.AboutWidget import AboutWidget
 
-RECORD_BUTTON_ARTIST = u'Sekkyumu'
-RECORD_BUTTON_LINK = u'http://sekkyumu.deviantart.com/'
-HEADPHONES_ARTIST = u'Ben Fleming'
-HEADPHONES_LINK = u'http://mediadesign.deviantart.com/'
+RECORD_BUTTON_ARTIST = 'Sekkyumu'
+RECORD_BUTTON_LINK = 'http://sekkyumu.deviantart.com/'
+HEADPHONES_ARTIST = 'Ben Fleming'
+HEADPHONES_LINK = 'http://mediadesign.deviantart.com/'
 
 
 class AboutDialog(QDialog):

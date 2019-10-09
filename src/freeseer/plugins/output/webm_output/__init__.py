@@ -132,7 +132,7 @@ class WebMOutput(IOutput):
         '''
         self.tags = gst.TagList()
 
-        for tag in data.keys():
+        for tag in list(data.keys()):
             if(gst.tag_exists(tag)):
                 self.tags[tag] = data[tag]
             else:

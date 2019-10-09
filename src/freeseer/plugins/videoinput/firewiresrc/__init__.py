@@ -45,7 +45,7 @@ from freeseer.framework.plugin import IVideoInput
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
-import widget
+from . import widget
 
 
 def detect_devices():

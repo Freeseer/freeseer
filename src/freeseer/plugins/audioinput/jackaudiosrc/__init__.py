@@ -41,7 +41,7 @@ from freeseer.framework.config import Config
 import freeseer.framework.config.options as options
 
 # .freeseer-plugin custom
-import widget
+from . import widget
 
 
 class JackAudioConfig(Config):

@@ -51,10 +51,10 @@ from freeseer.frontend.qtcommon import resource  # noqa
 from freeseer.frontend.qtcommon.dpi_adapt_qtgui import QWidgetWithDpi
 
 
-RECORD_BUTTON_ARTIST = u'Sekkyumu'
-RECORD_BUTTON_LINK = u'http://sekkyumu.deviantart.com/'
-HEADPHONES_ARTIST = u'Ben Fleming'
-HEADPHONES_LINK = u'http://mediadesign.deviantart.com/'
+RECORD_BUTTON_ARTIST = 'Sekkyumu'
+RECORD_BUTTON_LINK = 'http://sekkyumu.deviantart.com/'
+HEADPHONES_ARTIST = 'Ben Fleming'
+HEADPHONES_LINK = 'http://mediadesign.deviantart.com/'
 
 
 class AboutWidget(QWidgetWithDpi):
@@ -137,17 +137,17 @@ class AboutWidget(QWidgetWithDpi):
                     "version 3. This software is provided 'as-is',without any express or implied warranty. In "
                     "no event will the authors be held liable for any damages arising from the use of this software.")
 
-        self.aboutInfoString = u'<h1>' + NAME.capitalize() + u'</h1>' + \
-            u'<br><b>' + self.uiTranslator.translate("AboutDialog", "Version") + \
-            ": " + __version__ + u'</b>' + \
-            u'<p>' + self.descriptionString + u'</p>' + \
-            u'<p>' + self.copyrightString + u'</p>' + \
-            u'<p><a href="' + URL + u'">' + URL + u'</a></p>' \
-            u'<p>' + self.licenseTextString + u'</p>' \
-            u'<p>' + self.uiTranslator.translate("AboutDialog", "Record button graphics by") + \
-            u': <a href="' + RECORD_BUTTON_LINK + u'">' + RECORD_BUTTON_ARTIST + u'</a></p>' \
-            u'<p>' + self.uiTranslator.translate("AboutDialog", "Headphones graphics by") + \
-            u': <a href="' + HEADPHONES_LINK + u'">' + HEADPHONES_ARTIST + u'</a></p><br>'
+        self.aboutInfoString = '<h1>' + NAME.capitalize() + '</h1>' + \
+            '<br><b>' + self.uiTranslator.translate("AboutDialog", "Version") + \
+            ": " + __version__ + '</b>' + \
+            '<p>' + self.descriptionString + '</p>' + \
+            '<p>' + self.copyrightString + '</p>' + \
+            '<p><a href="' + URL + '">' + URL + '</a></p>' \
+            '<p>' + self.licenseTextString + '</p>' \
+            '<p>' + self.uiTranslator.translate("AboutDialog", "Record button graphics by") + \
+            ': <a href="' + RECORD_BUTTON_LINK + '">' + RECORD_BUTTON_ARTIST + '</a></p>' \
+            '<p>' + self.uiTranslator.translate("AboutDialog", "Headphones graphics by") + \
+            ': <a href="' + HEADPHONES_LINK + '">' + HEADPHONES_ARTIST + '</a></p><br>'
 
         self.aboutInfo.setText(self.aboutInfoString)
         # --- End Main Text

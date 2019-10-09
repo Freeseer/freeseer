@@ -89,7 +89,7 @@ class PluginWidget(QWidget):
     def treeViewSelect(self):
         item = self.list.currentItem()
         key = str(item.text(0))
-        if key in self.pluginMetadata.keys():
+        if key in list(self.pluginMetadata.keys()):
             self.showDetails(key)
         else:
             self.hideDetails()

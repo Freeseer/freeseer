@@ -63,16 +63,16 @@ class TestCli(unittest.TestCase):
         sys.argv[1:] = args
         cli.parse_args(self.parser, args)
         talks = self.db.get_talks()
-        talks.next()  # Point to talk data
-        talks.next()  # Skip default blank entry
-        talks.next()  # Skip first test entry
-        talks.next()  # Skip second test entry
+        next(talks)  # Point to talk data
+        next(talks)  # Skip default blank entry
+        next(talks)  # Skip first test entry
+        next(talks)  # Skip second test entry
         record = talks.record()
 
-        self.assertEqual(talks.value(record.indexOf('title')).toString(), u'test title')
-        self.assertEqual(talks.value(record.indexOf('speaker')).toString(), u'john doe')
-        self.assertEqual(talks.value(record.indexOf('event')).toString(), u'testing')
-        self.assertEqual(talks.value(record.indexOf('room')).toString(), u'rm123')
+        self.assertEqual(talks.value(record.indexOf('title')).toString(), 'test title')
+        self.assertEqual(talks.value(record.indexOf('speaker')).toString(), 'john doe')
+        self.assertEqual(talks.value(record.indexOf('event')).toString(), 'testing')
+        self.assertEqual(talks.value(record.indexOf('room')).toString(), 'rm123')
 
     def test_remove_talk(self):
         """Test removing a talk"""

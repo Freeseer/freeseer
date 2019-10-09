@@ -43,8 +43,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Freeseer'
-copyright = u'© 2011-2014 Free and Open Source Software Learning Centre'
+project = 'Freeseer'
+copyright = '© 2011-2014 Free and Open Source Software Learning Centre'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -182,8 +182,8 @@ htmlhelp_basename = 'Freeseerdoc'
 latex_documents = [(
     'index',  # source start file
     'Freeseer.tex',  # target name
-    u'Freeseer Documentation',  # title
-    u'Free and Open Source Software Learning Centre',  # author
+    'Freeseer Documentation',  # title
+    'Free and Open Source Software Learning Centre',  # author
     'manual'  # documentclass [howto/manual]
 )]
 
@@ -216,6 +216,6 @@ latex_documents = [(
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'freeseer', u'Freeseer Documentation',
-     [u'Free and Open Source Software Learning Centre'], 1)
+    ('index', 'freeseer', 'Freeseer Documentation',
+     ['Free and Open Source Software Learning Centre'], 1)
 ]

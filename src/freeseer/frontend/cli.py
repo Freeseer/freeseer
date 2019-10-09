@@ -77,8 +77,8 @@ def setup_parser_record(subparsers):
     """Setup the record command parser"""
     parser = subparsers.add_parser('record', help='Freeseer recording functions')
     parser.add_argument("-t", "--talk", type=int, help="Talk ID of the talk you would like to record")
-    parser.add_argument("-f", "--filename", type=unicode, help="Record to filename")
-    parser.add_argument("-p", "--profile", type=unicode, help="Use profile")
+    parser.add_argument("-f", "--filename", type=str, help="Record to filename")
+    parser.add_argument("-p", "--profile", type=str, help="Use profile")
     parser.add_argument("-s", "--show-talks", help="Shows all talks", action="store_true")
 
 
@@ -107,7 +107,7 @@ def setup_parser_config_reset(subparsers):
             configuration - Resets Freeseer configuration (removes freeseer.conf and plugins.conf)
             database      - Resets Freeseer database (removes presentations.db)
         """)
-    parser.add_argument("-p", "--profile", type=unicode, help="Profile to reset (Default: default)")
+    parser.add_argument("-p", "--profile", type=str, help="Profile to reset (Default: default)")
 
 
 def setup_parser_config_youtube(subparsers):
@@ -124,10 +124,10 @@ def setup_parser_talk(subparsers):
     """Setup the talk command parser"""
     parser = subparsers.add_parser('talk', help='Freeseer talk database functions')
     parser.add_argument("action", choices=['add', 'remove', 'clear', 'list'], nargs='?')
-    parser.add_argument("-t", "--title", type=unicode, help="Title")
-    parser.add_argument("-s", "--speaker", type=unicode, help="Speaker")
-    parser.add_argument("-r", "--room", type=unicode, help="Room")
-    parser.add_argument("-e", "--event", type=unicode, help="Event")
+    parser.add_argument("-t", "--title", type=str, help="Title")
+    parser.add_argument("-s", "--speaker", type=str, help="Speaker")
+    parser.add_argument("-r", "--room", type=str, help="Room")
+    parser.add_argument("-e", "--event", type=str, help="Event")
     parser.add_argument("-i", "--talk-id", type=int, help="Talk ID")
 
 
@@ -155,7 +155,7 @@ def setup_parser_upload_youtube(subparsers):
 def setup_parser_server(subparsers):
     """Setup server command parser"""
     parser = subparsers.add_parser("server", help="Setup a freeseer restful server")
-    parser.add_argument("-f", "--filename", type=unicode, help="file to load recordings")
+    parser.add_argument("-f", "--filename", type=str, help="file to load recordings")
 
 
 def parse_args(parser, parse_args=None):
@@ -242,7 +242,7 @@ def parse_args(parser, parse_args=None):
         elif args.action == "list":
             talks_query = db.get_talks()
             talks_table = []
-            while talks_query.next():
+            while next(talks_query):
                 record = talks_query.record()
                 talks_table.append([
                     talks_query.value(record.indexOf('id')).toString(),
@@ -251,7 +251,7 @@ def parse_args(parser, parse_args=None):
                     talks_query.value(record.indexOf('event')).toString(),
                 ])
             if talks_table:
-                print(tabulate(talks_table, headers=["ID", "Title", "Speaker", "Event"]))
+                print((tabulate(talks_table, headers=["ID", "Title", "Speaker", "Event"])))
             else:
                 print("No talks present.")
 

@@ -89,7 +89,7 @@ def configure_recording():
 
     recording.next_id = 1
     recording.media_dict = {}
-    for key, value in media_info.iteritems():
+    for key, value in media_info.items():
         new_media = Multimedia(recording.config, recording.plugin_manager)
         if value['null_multimeda']:
             new_media.current_state = Multimedia.NULL
@@ -122,7 +122,7 @@ def configure_recording():
 @http_response(200)
 def get_all_recordings():
     """Returns list of all recordings."""
-    return {'recordings': recording.media_dict.keys()}
+    return {'recordings': list(recording.media_dict.keys())}
 
 
 @recording.route('/recordings/<int:recording_id>', methods=['GET'])

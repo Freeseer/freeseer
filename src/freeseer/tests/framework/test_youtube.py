@@ -41,7 +41,7 @@ class TestYoutubeService(unittest.TestCase):
         ],
         'categoryId': 27,
         'description': 'At Test by Alex recorded on 2014-03-09',
-        'title': u'Test',
+        'title': 'Test',
     }
 
     def test_get_metadata(self):

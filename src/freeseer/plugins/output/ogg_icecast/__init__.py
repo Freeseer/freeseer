@@ -42,7 +42,7 @@ from freeseer.framework.plugin import IOutput
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
-import widget
+from . import widget
 
 
 class OggIcecastConfig(Config):
@@ -152,7 +152,7 @@ class OggIcecast(IOutput):
         '''
         self.tags = gst.TagList()
 
-        for tag in data.keys():
+        for tag in list(data.keys()):
             if(gst.tag_exists(tag)):
                 self.tags[tag] = data[tag]
             else:

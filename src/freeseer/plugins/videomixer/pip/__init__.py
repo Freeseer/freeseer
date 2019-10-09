@@ -42,7 +42,7 @@ from freeseer.framework.plugin import IVideoMixer
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
-import widget
+from . import widget
 
 
 class PictureInPictureConfig(Config):
@@ -122,7 +122,7 @@ class PictureInPicture(IVideoMixer):
         mainsrc_elements = [input1, mainsrc_scale, mainsrc_capsfilter, mainsrc_colorspace]
 
         # Add elements to player in list order
-        map(lambda element: player.add(element), mainsrc_elements)
+        list(map(lambda element: player.add(element), mainsrc_elements))
 
         # Link elements in a specific order
         input1.link(mainsrc_scale)
@@ -147,7 +147,7 @@ class PictureInPicture(IVideoMixer):
         pipsrc_elements = [input2, pipsrc_scale, pipsrc_capsfilter, pipsrc_colorspace]
 
         #Add elements to player in list order
-        map(lambda element: player.add(element), pipsrc_elements)
+        list(map(lambda element: player.add(element), pipsrc_elements))
 
         # Link elements in specific order
         input2.link(pipsrc_scale)

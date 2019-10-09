@@ -239,16 +239,16 @@ class QtDBConnector(object):
     def get_presentation(self, talk_id):
         """Returns a Presentation object associated to a talk_id"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations WHERE Id="%s"''' % talk_id)
-        if result.next():
-            return Presentation(title=unicode(result.value(1).toString()),
-                             speaker=unicode(result.value(2).toString()),
-                             description=unicode(result.value(3).toString()),
-                             category=unicode(result.value(4).toString()),
-                             event=unicode(result.value(5).toString()),
-                             room=unicode(result.value(6).toString()),
-                             date=unicode(result.value(7).toString()),
-                             startTime=unicode(result.value(8).toString()),
-                             endTime=unicode(result.value(9).toString()))
+        if next(result):
+            return Presentation(title=str(result.value(1).toString()),
+                             speaker=str(result.value(2).toString()),
+                             description=str(result.value(3).toString()),
+                             category=str(result.value(4).toString()),
+                             event=str(result.value(5).toString()),
+                             room=str(result.value(6).toString()),
+                             date=str(result.value(7).toString()),
+                             startTime=str(result.value(8).toString()),
+                             endTime=str(result.value(9).toString()))
         else:
             return None
 
@@ -256,16 +256,16 @@ class QtDBConnector(object):
         """Returns a column as a QStringList"""
         tempList = QStringList()
         result = QtSql.QSqlQuery('''SELECT DISTINCT %s FROM presentations''' % column)
-        while result.next():
+        while next(result):
             tempList.append(result.value(0).toString())
         return tempList
 
     def presentation_exists(self, presentation):
         """Checks if there's a presentation with the same Speaker and Title already stored"""
         result = QtSql.QSqlQuery('''SELECT * FROM presentations''')
-        while result.next():
-            if (unicode(presentation.title) == unicode(result.value(1).toString())
-            and unicode(presentation.speaker) == unicode(result.value(2).toString())):
+        while next(result):
+            if (str(presentation.title) == str(result.value(1).toString())
+            and str(presentation.speaker) == str(result.value(2).toString())):
                 return True
         return False
 
@@ -374,7 +374,7 @@ class QtDBConnector(object):
                                  WHERE Event='%s' AND Room='%s' \
                                  AND Date BETWEEN '%s' \
                                               AND '%s' ORDER BY Date ASC" % (event, room, startTime, endTime))
-        query.next()
+        next(query)
         if query.isValid():
             return query.value(0)
         else:
@@ -458,17 +458,17 @@ class QtDBConnector(object):
             writer.writerow(headers)
 
             result = self.get_talks()
-            while result.next():
-                log.debug(unicode(result.value(1).toString()))
-                writer.writerow({'Title': unicode(result.value(1).toString()),
-                                 'Speaker': unicode(result.value(2).toString()),
-                                 'Abstract': unicode(result.value(3).toString()),
-                                 'Category': unicode(result.value(4).toString()),
-                                 'Event': unicode(result.value(5).toString()),
-                                 'Room': unicode(result.value(6).toString()),
-                                 'Date': unicode(result.value(7).toString()),
-                                 'StartTime': unicode(result.value(8).toString()),
-                                 'EndTime': unicode(result.value(9).toString())})
+            while next(result):
+                log.debug(str(result.value(1).toString()))
+                writer.writerow({'Title': str(result.value(1).toString()),
+                                 'Speaker': str(result.value(2).toString()),
+                                 'Abstract': str(result.value(3).toString()),
+                                 'Category': str(result.value(4).toString()),
+                                 'Event': str(result.value(5).toString()),
+                                 'Room': str(result.value(6).toString()),
+                                 'Date': str(result.value(7).toString()),
+                                 'StartTime': str(result.value(8).toString()),
+                                 'EndTime': str(result.value(9).toString())})
         finally:
             file.close()
 
@@ -520,10 +520,10 @@ class QtDBConnector(object):
     def get_report(self, talkid):
         """Returns a failure from a given talkid. Returned value is a Failure object"""
         result = QtSql.QSqlQuery('''SELECT * FROM failures WHERE Id = "%s"''' % talkid)
-        if result.next():
-            failure = Failure(unicode(result.value(0).toString()),  # id
-                              unicode(result.value(1).toString()),  # comment
-                              unicode(result.value(2).toString()),  # indicator
+        if next(result):
+            failure = Failure(str(result.value(0).toString()),  # id
+                              str(result.value(1).toString()),  # comment
+                              str(result.value(2).toString()),  # indicator
                               result.value(3).toBool())             # release
         else:
             failure = None
@@ -533,10 +533,10 @@ class QtDBConnector(object):
         """Returns a list of failures in Report format"""
         result = QtSql.QSqlQuery('''Select * FROM failures''')
         list = []
-        while result.next():
-            failure = Failure(unicode(result.value(0).toString()),    # id
-                              unicode(result.value(1).toString()),    # comment
-                              unicode(result.value(2).toString()),    # indicator
+        while next(result):
+            failure = Failure(str(result.value(0).toString()),    # id
+                              str(result.value(1).toString()),    # comment
+                              str(result.value(2).toString()),    # indicator
                               bool(result.value(3)))                  # release
             p = self.get_presentation(failure.talkId)
             r = Report(p, failure)

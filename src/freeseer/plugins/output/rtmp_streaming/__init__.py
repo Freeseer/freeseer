@@ -104,7 +104,7 @@ log = logging.getLogger(__name__)
 # for freeseer to run.
 #
 try:
-    import httplib
+    import http.client
     import simplejson
     from oauth import oauth
 except:
@@ -275,7 +275,7 @@ class RTMPOutput(IOutput):
         '''
         self.tags = gst.TagList()
 
-        for tag in data.keys():
+        for tag in list(data.keys()):
             if(gst.tag_exists(tag)):
                 self.tags[tag] = data[tag]
             else:
@@ -690,7 +690,7 @@ class JustinApi:
 
         request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, None)
 
-        connection = httplib.HTTPConnection(JustinApi.addr)
+        connection = http.client.HTTPConnection(JustinApi.addr)
         connection.request('GET', request.http_url, headers=request.to_header())
         result = connection.getresponse().read()
 
@@ -739,7 +739,7 @@ class JustinApi:
                 http_method='GET',
                 http_url=url)
             request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-            connection = httplib.HTTPConnection(self.addr)
+            connection = http.client.HTTPConnection(self.addr)
             connection.request('GET', request.http_url, headers=request.to_header())
             result = connection.getresponse().read()
             self.access_token_str = result
@@ -758,11 +758,12 @@ class JustinApi:
                 http_method='GET',
                 http_url="http://%s/api/%s" % (JustinApi.addr, endpoint))
             request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-            connection = httplib.HTTPConnection(self.addr)
+            connection = http.client.HTTPConnection(self.addr)
             connection.request('GET', request.http_url, headers=request.to_header())
             result = connection.getresponse().read()
             data = simplejson.loads(result)
-        except KeyError, simplejson.decoder.JSONDecodeError:
+        except KeyError as xxx_todo_changeme:
+            simplejson.decoder.JSONDecodeError = xxx_todo_changeme
             log.error("justin.tv API: failed fetch data from endpoint %s" % endpoint)
             return dict()
         return data
@@ -778,7 +779,7 @@ class JustinApi:
                 http_url="http://%s/api/%s" % (JustinApi.addr, endpoint),
                 parameters=payload)
             request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-            connection = httplib.HTTPConnection(self.addr)
+            connection = http.client.HTTPConnection(self.addr)
             connection.request('POST', request.http_url, body=request.to_postdata())
             result = connection.getresponse().read()
         except KeyError:

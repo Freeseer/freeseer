@@ -51,7 +51,7 @@ class TestPresentation(unittest.TestCase):
         self.assertTrue(self.pres.endTime == "Later")
 
     def test_speaker_not_first_param(self):
-        self.assertNotEquals(self.pres.speaker, "John Doe")
+        self.assertNotEqual(self.pres.speaker, "John Doe")
 
     def test_event_is_default(self):
         self.assertTrue(self.pres.event == "haha")

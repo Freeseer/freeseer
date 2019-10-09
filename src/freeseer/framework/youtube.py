@@ -23,7 +23,7 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 
-import httplib
+import http.client
 import httplib2
 import logging
 import os
@@ -58,13 +58,13 @@ class YoutubeService(object):
     RETRIABLE_EXCEPTIONS = (
         httplib2.HttpLib2Error,
         IOError,
-        httplib.NotConnected,
-        httplib.IncompleteRead,
-        httplib.ImproperConnectionState,
-        httplib.CannotSendRequest,
-        httplib.CannotSendHeader,
-        httplib.ResponseNotReady,
-        httplib.BadStatusLine
+        http.client.NotConnected,
+        http.client.IncompleteRead,
+        http.client.ImproperConnectionState,
+        http.client.CannotSendRequest,
+        http.client.CannotSendHeader,
+        http.client.ResponseNotReady,
+        http.client.BadStatusLine
     )
     RETRIABLE_STATUS_CODES = (500, 502, 503, 504)
 

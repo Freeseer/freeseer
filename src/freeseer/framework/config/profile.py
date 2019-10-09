@@ -153,7 +153,7 @@ class Profile(object):
         It will also be cached for future invocations of this method.
         """
         if name not in self._storages:
-            for suffix, engine in self.STORAGE_MAP.iteritems():
+            for suffix, engine in self.STORAGE_MAP.items():
                 if name.endswith(suffix):
                     self._storages[name] = engine(self.get_filepath(name))
                     break

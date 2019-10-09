@@ -90,7 +90,7 @@ def make_record_name(presentation):
         make_shortname(presentation.speaker),
         make_shortname(presentation.title),
     ]
-    record_name = unicode('-'.join(tag for tag in tags if tag))
+    record_name = str('-'.join(tag for tag in tags if tag))
 
     # Convert unicode filenames to their equivalent ascii so that
     # we don't run into issues with gstreamer or filesystems.
@@ -121,7 +121,7 @@ def reset(configdir):
         if confirm_yes() is True:
             shutil.rmtree(configdir)
     else:
-        print("%s is not a invalid configuration directory." % configdir)
+        print(("%s is not a invalid configuration directory." % configdir))
 
 
 def reset_configuration(configdir, profile='default'):
@@ -139,7 +139,7 @@ def reset_configuration(configdir, profile='default'):
         if os.path.exists(plugin_conf):
             os.remove(plugin_conf)
     else:
-        print("%s is not a invalid configuration directory." % configdir)
+        print(("%s is not a invalid configuration directory." % configdir))
 
 
 def reset_database(configdir, profile='default'):
@@ -153,7 +153,7 @@ def reset_database(configdir, profile='default'):
         if os.path.exists(dbfile):
             os.remove(dbfile)
     else:
-        print("%s is not a invalid configuration directory." % configdir)
+        print(("%s is not a invalid configuration directory." % configdir))
 
 
 def validate_configdir(configdir):
@@ -168,7 +168,7 @@ def validate_configdir(configdir):
 
 def confirm_yes():
     """Prompts the user to confirm by typing 'yes' in response"""
-    confirm = raw_input("Enter 'yes' to confirm: ")
+    confirm = input("Enter 'yes' to confirm: ")
     if confirm == 'yes':
         return True
     return False
