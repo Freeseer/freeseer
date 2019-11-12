@@ -27,5 +27,7 @@ from flask import Flask
 app = Flask(__name__)
 
 from freeseer.frontend.controller.recording import recording
+from freeseer.frontend.controller.configuration.configuration import configuration
 
 app.register_blueprint(recording)
+app.register_blueprint(configuration)
