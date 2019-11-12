@@ -23,21 +23,33 @@
 # http://wiki.github.com/Freeseer/freeseer/
 
 import functools
+import signal
+import sys
 
 from flask import jsonify
 
 from freeseer.frontend.controller import app
+from freeseer.framework.announcer import ServiceAnnouncer
 
 
-def start_server(storage_file):
+def start_server(storage_file, port=7079):
     """Starts the restapi server.
 
     Args:
         storage_file - name of storage file to which you are saving recordings
+        port - the port you wish to broadcast your server on.
     """
 
     app.storage_file_path = storage_file
-    app.run()
+    app.service_announcer = ServiceAnnouncer('Freeseer Host', '_freeseer._tcp', port, [])
+    app.service_announcer.advertise()
+    signal.signal(signal.SIGTERM, remove)
+    app.run('::0.0.0.0', port)
+
+
+def remove(signal, frame):
+    app.service_announcer.remove_service()
+    sys.exit(0)
 
 
 def http_response(status_code):

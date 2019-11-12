@@ -27,6 +27,7 @@ import argparse
 import signal
 import sys
 import textwrap
+from time import sleep
 
 import pygst
 import yapsy
@@ -70,6 +71,7 @@ def setup_parser():
     setup_parser_report(subparsers)
     setup_parser_upload(subparsers)
     setup_parser_server(subparsers)
+    setup_parser_browse(subparsers)
     return parser
 
 
@@ -155,7 +157,13 @@ def setup_parser_upload_youtube(subparsers):
 def setup_parser_server(subparsers):
     """Setup server command parser"""
     parser = subparsers.add_parser("server", help="Setup a freeseer restful server")
-    parser.add_argument("-f", "--filename", type=unicode, help="file to load recordings")
+    parser.add_argument("--filename", type=unicode, help="file to load recordings")
+
+
+def setup_parser_browse(subparsers):
+    """Setup browse command parser"""
+    parsers = subparsers.add_parser('browse', help='Search for freeseer servers on the network')
+    parsers.add_argument('-t', '--timeout', help='Poll for freeseer servers continually', type=int)
 
 
 def parse_args(parser, parse_args=None):
@@ -272,6 +280,13 @@ def parse_args(parser, parse_args=None):
         else:
             launch_server()
 
+    elif args.app == 'browse':
+        if args.timeout:
+            timeout = args.timeout
+            launch_browser(timeout)
+        else:
+            launch_browser()
+
 
 def launch_recordapp():
     """Launch the Recording GUI if no arguments are passed"""
@@ -341,3 +356,14 @@ def launch_server(storage_file="recording_storage"):
     import freeseer.frontend.controller.server as server
 
     server.start_server(storage_file)
+
+
+def launch_browser(timeout=5):
+    """Search for Freeseer hosts on client's network"""
+    import freeseer.framework.listener as listener
+
+    print('Searching for Freeseer Hosts\n')
+    results = listener.search(max(timeout, 5))
+    print('Results:')
+    print('\n'.join(results))
+    sleep(0.1)  # workaround hack. Without sleep(0.1) exception is thrown on shutdown on my ubuntu vm.
