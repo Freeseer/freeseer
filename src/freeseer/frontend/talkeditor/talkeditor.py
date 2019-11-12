@@ -52,6 +52,7 @@ from freeseer.frontend.talkeditor.CommandButtons import CommandButtons
 from freeseer.frontend.talkeditor.TalkDetailsWidget import TalkDetailsWidget
 from freeseer.frontend.talkeditor.NewTalkWidget import NewTalkWidget
 from freeseer.frontend.talkeditor.ImportTalksWidget import ImportTalksWidget
+from freeseer.frontend.talkeditor.SavePromptWidget import SavePromptWidget
 
 log = logging.getLogger(__name__)
 
@@ -93,18 +94,27 @@ class TalkEditorApp(FreeseerApp):
         self.mainLayout.addWidget(self.importTalksWidget)
         # --- End Layout
 
-        # Keep track of index of the most recently selected talk
-        self.currentTalkIndex = QPersistentModelIndex()
+        # Keep track of current and most recently selected talk
+        self.old_talk_index = QPersistentModelIndex()
+        self.new_talk_index = QPersistentModelIndex()
 
-        # Prompt user to "Continue Editing", "Discard Changes" or "Save Changes"
-        self.savePromptBox = QMessageBox()
-        self.savePromptBox.setWindowTitle("Unsaved Changes Exist")
-        self.savePromptBox.setIcon(QMessageBox.Information)
-        self.savePromptBox.setText("The talk you were editing has unsaved changes.")
-        self.continueButton = self.savePromptBox.addButton("Continue Editing", QMessageBox.RejectRole)
-        self.discardButton = self.savePromptBox.addButton("Discard Changes", QMessageBox.DestructiveRole)
-        self.saveButton = self.savePromptBox.addButton("Save Changes", QMessageBox.AcceptRole)
-        self.savePromptBox.setDefaultButton(self.saveButton)
+        # Setup SavePromptWidget for selecting a talk, adding a talk, or exiting the talk editor
+        self.savePromptWidgetTalk = SavePromptWidget()
+        self.savePromptWidgetAdd = SavePromptWidget()
+        self.savePromptWidgetExit = SavePromptWidget()
+
+        # The actions of the save, discard and continue buttons vary depending on why they are pushed
+        self.connect(self.savePromptWidgetTalk.saveButton, SIGNAL('clicked()'), self.save_button_talk)
+        self.connect(self.savePromptWidgetTalk.discardButton, SIGNAL('clicked()'), self.discard_button_talk)
+        self.connect(self.savePromptWidgetTalk.continueButton, SIGNAL('clicked()'), self.continue_button_talk)
+
+        self.connect(self.savePromptWidgetAdd.saveButton, SIGNAL('clicked()'), self.save_button_add)
+        self.connect(self.savePromptWidgetAdd.discardButton, SIGNAL('clicked()'), self.discard_button_add)
+        self.connect(self.savePromptWidgetAdd.continueButton, SIGNAL('clicked()'), self.continue_button_add)
+
+        self.connect(self.savePromptWidgetExit.saveButton, SIGNAL('clicked()'), self.save_button_exit)
+        self.connect(self.savePromptWidgetExit.discardButton, SIGNAL('clicked()'), self.discard_button_exit)
+        self.connect(self.savePromptWidgetExit.continueButton, SIGNAL('clicked()'), self.continue_button_exit)
 
         # Initialize geometry, to be used for restoring window positioning.
         self.geometry = None
@@ -168,7 +178,7 @@ class TalkEditorApp(FreeseerApp):
 
         # New Talk Widget
         self.newTalkWidget.connect(self.newTalkWidget.addButton, SIGNAL('clicked()'), self.add_talk)
-        self.newTalkWidget.connect(self.newTalkWidget.cancelButton, SIGNAL('clicked()'), self.newTalkWidget.reject)
+        self.newTalkWidget.connect(self.newTalkWidget.cancelButton, SIGNAL('clicked()'), self.cancel_add)
 
         # Load default language
         actions = self.menuLanguage.actions()
@@ -290,7 +300,7 @@ class TalkEditorApp(FreeseerApp):
         #self.eventList = QStringList(self.db.get_event_list())
         #self.roomList = QStringList(self.db.get_room_list())
 
-        #Disble input
+        # Disable input
         self.talkDetailsWidget.disable_input_fields()
 
     def search_talks(self):
@@ -298,50 +308,60 @@ class TalkEditorApp(FreeseerApp):
         self.proxy.setFilterKeyColumn(-1)
         self.proxy.setFilterFixedString(self.commandButtons.searchLineEdit.text())
 
-    def show_save_prompt(self):
+    def save_button_talk(self):
+        log.info("Saving changes in row %d...", self.old_talk_index.row())
+        self.tableView.selectRow(self.old_talk_index.row())
+        newRow = self.new_talk_index.row()
+        self.update_talk()
+        self.select_talk(self.tableView.currentIndex().sibling(newRow, 0))
+        self.savePromptWidgetTalk.hide()
+
+    def discard_button_talk(self):
+        log.info("Discarding changes in row %d...", self.old_talk_index.row())
+        self.talk_selected(self.new_talk_index)
+        self.savePromptWidgetTalk.hide()
+
+    def continue_button_talk(self):
+        log.info("Continue editing row %d", self.old_talk_index.row())
+        self.tableView.selectRow(self.old_talk_index.row())
+        self.savePromptWidgetTalk.hide()
+
+    def show_save_prompt(self, promptWidget):
         """Prompts the user to save or discard changes, or continue editing."""
-        self.savePromptBox.exec_()
-        self.savePromptBox.setDefaultButton(self.saveButton)
-        return self.savePromptBox.clickedButton()
+        promptWidget.setModal(True)
+        promptWidget.show()
+        promptWidget.saveButton.setFocus()
 
     def click_talk(self, model):
         """Warns user if there are unsaved changes, and selects talk clicked by the user."""
         log.info("Selecting row %d", model.row())
-        modelRow = model.row()
+        self.new_talk_index = QPersistentModelIndex(model)
         if self.unsaved_details_exist():
-            log.info("Unsaved changes exist in row %d", self.currentTalkIndex.row())
-            confirm = self.show_save_prompt()
-            if confirm == self.saveButton:
-                log.info("Saving changes in row %d...", self.currentTalkIndex.row())
-                self.tableView.selectRow(self.currentTalkIndex.row())
-                self.update_talk()
-                newModel = self.tableView.currentIndex().sibling(modelRow, 0)
-                self.select_talk(newModel)
-            elif confirm == self.discardButton:
-                log.info("Discarding changes in row %d...", self.currentTalkIndex.row())
-                self.talk_selected(model)
-            else:
-                log.info("Continue editing row %d", self.currentTalkIndex.row())
-                self.tableView.selectRow(self.currentTalkIndex.row())
+            log.info("Unsaved changes exist in row %d", self.old_talk_index.row())
+            self.show_save_prompt(self.savePromptWidgetTalk)
         else:
             self.talk_selected(model)
+
+    def save_button_add(self):
+        log.info("Saving changes in row %d...", self.old_talk_index.row())
+        self.update_talk()
+        self.savePromptWidgetAdd.hide()
+        self.show_new_talk_popup()
+
+    def discard_button_add(self):
+        log.info("Discarding changes in row %d...", self.old_talk_index.row())
+        self.savePromptWidgetAdd.hide()
+        self.show_new_talk_popup()
+
+    def continue_button_add(self):
+        log.info("Continue editing row %d", self.old_talk_index.row())
+        self.savePromptWidgetAdd.hide()
 
     def click_add_button(self):
         """Warns user if there are unsaved changes, and shows the New Talk window."""
         if self.unsaved_details_exist():
-            log.info("Unsaved changes exist in row %d", self.currentTalkIndex.row())
-            confirm = self.show_save_prompt()
-            if confirm == self.saveButton:
-                log.info("Saving changes in row %d...", self.currentTalkIndex.row())
-                self.update_talk()
-                self.show_new_talk_popup()
-            elif confirm == self.discardButton:
-                log.info("Discarding changes in row %d...", self.currentTalkIndex.row())
-                # Ensure that changes are discarded
-                self.talk_selected(self.currentTalkIndex)
-                self.show_new_talk_popup()
-            else:
-                log.info("Continue editing row %d", self.currentTalkIndex.row())
+            log.info("Unsaved changes exist in row %d", self.old_talk_index.row())
+            self.show_save_prompt(self.savePromptWidgetAdd)
         else:
             self.show_new_talk_popup()
 
@@ -349,29 +369,45 @@ class TalkEditorApp(FreeseerApp):
         self.mapper.setCurrentIndex(model.row())
         self.talkDetailsWidget.enable_input_fields()
         self.talkDetailsWidget.saveButton.setEnabled(False)
-        self.currentTalkIndex = QPersistentModelIndex(model)
+        self.old_talk_index = QPersistentModelIndex(model)
 
     def toggle_import(self):
-        if self.importTalksWidget.csvRadioButton.isChecked():
-            self.importTalksWidget.csvLineEdit.setEnabled(True)
-            self.importTalksWidget.csvFileSelectButton.setEnabled(True)
-            self.importTalksWidget.rssLineEdit.setEnabled(False)
-        else:
-            self.importTalksWidget.csvLineEdit.setEnabled(False)
-            self.importTalksWidget.csvFileSelectButton.setEnabled(False)
-            self.importTalksWidget.rssLineEdit.setEnabled(True)
+        isCheckedBool = self.importTalksWidget.csvRadioButton.isChecked()
+        self.importTalksWidget.csvLineEdit.setEnabled(isCheckedBool)
+        self.importTalksWidget.csvFileSelectButton.setEnabled(isCheckedBool)
+        self.importTalksWidget.rssLineEdit.setEnabled(not isCheckedBool)
+        #if self.importTalksWidget.csvRadioButton.isChecked():
+        #    self.importTalksWidget.csvLineEdit.setEnabled(True)
+        #    self.importTalksWidget.csvFileSelectButton.setEnabled(True)
+        #    self.importTalksWidget.rssLineEdit.setEnabled(False)
+        #else:
+        #    self.importTalksWidget.csvLineEdit.setEnabled(False)
+        #    self.importTalksWidget.csvFileSelectButton.setEnabled(False)
+        #    self.importTalksWidget.rssLineEdit.setEnabled(True)
+
+    def toggle_import_talks_widget(self, show):
+        self.commandButtons.setHidden(show)
+        self.tableView.setHidden(show)
+        self.talkDetailsWidget.setHidden(show)
+        self.importTalksWidget.setHidden(not show)
 
     def show_import_talks_widget(self):
-        self.commandButtons.setHidden(True)
-        self.tableView.setHidden(True)
-        self.talkDetailsWidget.setHidden(True)
-        self.importTalksWidget.setHidden(False)
+        self.toggle_import_talks_widget(True)
+
+    #def show_import_talks_widget(self):
+    #    self.commandButtons.setHidden(True)
+    #    self.tableView.setHidden(True)
+    #    self.talkDetailsWidget.setHidden(True)
+    #    self.importTalksWidget.setHidden(False)
 
     def hide_import_talks_widget(self):
-        self.commandButtons.setHidden(False)
-        self.tableView.setHidden(False)
-        self.talkDetailsWidget.setHidden(False)
-        self.importTalksWidget.setHidden(True)
+        self.toggle_import_talks_widget(False)
+
+    #def hide_import_talks_widget(self):
+    #    self.commandButtons.setHidden(False)
+    #    self.tableView.setHidden(False)
+    #    self.talkDetailsWidget.setHidden(False)
+    #    self.importTalksWidget.setHidden(True)
 
     def add_talk(self):
         """Adds a new talk to the database using data from the NewTalkWidget input fields"""
@@ -379,7 +415,10 @@ class TalkEditorApp(FreeseerApp):
 
         if presentation:
             self.db.insert_presentation(presentation)
-            self.newTalkWidget.accept()  # Close the dialog
+            self.newTalkWidget.hide()
+            #self.newTalkWidget.accept()  # Close the dialog
+            self.apply_changes()
+            self.talkDetailsWidget.disable_input_fields()
 
     def update_talk(self):
         """Updates the currently selected talk using data from the TalkEditorApp input fields"""
@@ -412,6 +451,10 @@ class TalkEditorApp(FreeseerApp):
                 unicode(startTime.toString(Qt.ISODate)),
                 unicode(endTime.toString(Qt.ISODate)))
 
+    def cancel_add(self):
+        self.newTalkWidget.hide()
+        log.info('No talk added...')
+
     def show_new_talk_popup(self):
         """Displays a modal dialog with a talk details view
 
@@ -422,11 +465,8 @@ class TalkEditorApp(FreeseerApp):
         self.clear_new_talk_fields()
         self.remove_new_talk_placeholder_text()
         self.newTalkWidget.talkDetailsWidget.titleLineEdit.setFocus()
-        if self.newTalkWidget.exec_() == 1:
-            self.apply_changes()
-            self.talkDetailsWidget.disable_input_fields()
-        else:
-            log.info('No talk added...')
+        self.newTalkWidget.setModal(True)
+        self.newTalkWidget.show()
 
     def apply_changes(self, updated_talk=None):
         """Repopulates the model to display the effective changes
@@ -505,26 +545,31 @@ class TalkEditorApp(FreeseerApp):
             error.setText("Please enter a RSS URL")
             error.exec_()
 
+    def save_button_exit(self):
+        log.info("Saving changes in row %d...", self.old_talk_index.row())
+        self.update_talk()
+        log.info('Exiting talk database editor...')
+        self.geometry = self.saveGeometry()
+        self.savePromptWidgetExit.hide()
+        self.close()
+
+    def discard_button_exit(self):
+        log.info("Discarding changes in row %d...", self.old_talk_index.row())
+        self.talk_selected(self.new_talk_index)
+        log.info('Exiting talk database editor...')
+        self.geometry = self.saveGeometry()
+        self.savePromptWidgetExit.hide()
+        self.close()
+
+    def continue_button_exit(self):
+        log.info("Continue editing row %d", self.old_talk_index.row())
+        self.savePromptWidgetExit.hide()
+
     def closeEvent(self, event):
         if self.unsaved_details_exist():
-            log.info("Unsaved changes exist in row %d", self.currentTalkIndex.row())
-            confirm = self.show_save_prompt()
-            if confirm == self.saveButton:
-                log.info("Saving changes in row %d...", self.currentTalkIndex.row())
-                self.update_talk()
-                log.info('Exiting talk database editor...')
-                self.geometry = self.saveGeometry()
-                event.accept()
-            elif confirm == self.discardButton:
-                log.info("Discarding changes in row %d...", self.currentTalkIndex.row())
-                # Ensure that changes are discarded
-                self.talk_selected(self.currentTalkIndex)
-                log.info('Exiting talk database editor...')
-                self.geometry = self.saveGeometry()
-                event.accept()
-            else:
-                log.info("Continue editing row %d", self.currentTalkIndex.row())
-                event.ignore()
+            log.info("Unsaved changes exist in row %d", self.old_talk_index.row())
+            event.ignore()
+            self.show_save_prompt(self.savePromptWidgetExit)
         else:
             log.info('Exiting talk database editor...')
             self.geometry = self.saveGeometry()

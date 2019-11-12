@@ -112,21 +112,21 @@ class TalkDetailsWidget(QWidget):
         self.layout.addWidget(self.descriptionLabel, 5, 0, 1, 1)
         self.layout.addWidget(self.descriptionTextEdit, 5, 1, 1, 3)
 
+        self.fields = [self.titleLineEdit, self.presenterLineEdit, self.categoryLineEdit,
+                       self.eventLineEdit, self.roomLineEdit, self.dateEdit, self.startTimeEdit,
+                       self.endTimeEdit, self.descriptionTextEdit]
+
+    def toggle_input_fields(self, enable):
+        for field in self.fields:
+            field.setEnabled(enable)
+
     def enable_input_fields(self):
             self.titleLineEdit.setPlaceholderText("Enter Talk Title")
             self.presenterLineEdit.setPlaceholderText("Enter Presenter Name")
             self.categoryLineEdit.setPlaceholderText("Enter Category Type")
             self.eventLineEdit.setPlaceholderText("Enter Event Name")
             self.roomLineEdit.setPlaceholderText("Enter Room Location")
-            self.titleLineEdit.setEnabled(True)
-            self.presenterLineEdit.setEnabled(True)
-            self.categoryLineEdit.setEnabled(True)
-            self.eventLineEdit.setEnabled(True)
-            self.roomLineEdit.setEnabled(True)
-            self.dateEdit.setEnabled(True)
-            self.startTimeEdit.setEnabled(True)
-            self.endTimeEdit.setEnabled(True)
-            self.descriptionTextEdit.setEnabled(True)
+            self.toggle_input_fields(True)
 
     def disable_input_fields(self):
             self.titleLineEdit.setPlaceholderText("")
@@ -134,15 +134,7 @@ class TalkDetailsWidget(QWidget):
             self.categoryLineEdit.setPlaceholderText("")
             self.eventLineEdit.setPlaceholderText("")
             self.roomLineEdit.setPlaceholderText("")
-            self.titleLineEdit.setEnabled(False)
-            self.presenterLineEdit.setEnabled(False)
-            self.categoryLineEdit.setEnabled(False)
-            self.eventLineEdit.setEnabled(False)
-            self.roomLineEdit.setEnabled(False)
-            self.dateEdit.setEnabled(False)
-            self.startTimeEdit.setEnabled(False)
-            self.endTimeEdit.setEnabled(False)
-            self.descriptionTextEdit.setEnabled(False)
+            self.toggle_input_fields(False)
 
     def clear_input_fields(self):
             self.titleLineEdit.clear()
