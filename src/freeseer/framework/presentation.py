@@ -24,25 +24,51 @@
 
 from os import path
 
+from PyQt4.QtCore import QDate
+from PyQt4.QtCore import QTime
 
+
+# TODO: Add a print presentation method? print self.__dict__
+# TODO: Write a database record to Presentation method
 class Presentation(object):
     '''
     This class is responsible for encapsulate data about presentations
     and its database related operations
     '''
-    def __init__(self, title, speaker="", description="", category="", event="Default", room="Default", date="", startTime="", endTime=""):
+
+    DEFAULT_ROOM = ''
+    DEFAULT_DATE = ''
+    DEFAULT_TIME = ''
+
+    def __init__(self, title, speaker='', description='', category='', event='', room='',
+                 date='', startTime='', endTime=''):
         '''
         Initialize a presentation instance
         '''
-        self.title = title
-        self.speaker = speaker
-        self.description = description
-        self.category = category
-        self.event = event
-        self.room = room
-        self.date = date
-        self.startTime = startTime
-        self.endTime = endTime
+        self.title = title if title else ''
+        self.speaker = speaker if speaker else ''
+        self.description = description if description else ''
+        self.category = category if category else ''
+        self.event = event if event else ''
+        self.room = room if room else ''
+        self.date = date if date else ''  # QDate ISODate format string
+        self.startTime = startTime if startTime else ''  # QTime string with format 'hh:mm ap'
+        self.endTime = endTime if endTime else ''  # QTime string with format 'hh:mm ap'
+
+        # Set the date, startTime, or endTime if they are null timestamp values
+        # occurs when an invalid timestamp is parsed by fromString() for the QDate or QTime object.
+        if self.date == QDate():
+            self.date = self.DEFAULT_DATE
+        if self.startTime == QTime():
+            self.startTime = self.DEFAULT_TIME
+        if self.endTime == QTime():
+            self.endTime = self.DEFAULT_TIME
+
+    def __eq__(self, obj):
+        return self.__dict__ == obj.__dict__
+
+    def __ne__(self, obj):
+        return not self == obj
 
 
 class PresentationFile(Presentation):

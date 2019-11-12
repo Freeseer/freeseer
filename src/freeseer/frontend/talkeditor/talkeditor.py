@@ -395,9 +395,6 @@ class TalkEditorApp(FreeseerApp):
 
     def create_presentation(self, talkDetailsWidget):
         """Creates and returns an instance of Presentation using data from the input fields"""
-        date = talkDetailsWidget.dateEdit.date()
-        startTime = talkDetailsWidget.startTimeEdit.time()
-        endTime = talkDetailsWidget.endTimeEdit.time()
 
         title = unicode(talkDetailsWidget.titleLineEdit.text()).strip()
         if title:
@@ -408,9 +405,9 @@ class TalkEditorApp(FreeseerApp):
                 unicode(talkDetailsWidget.categoryLineEdit.text()).strip(),
                 unicode(talkDetailsWidget.eventLineEdit.text()).strip(),
                 unicode(talkDetailsWidget.roomLineEdit.text()).strip(),
-                unicode(date.toString(Qt.ISODate)),
-                unicode(startTime.toString(Qt.ISODate)),
-                unicode(endTime.toString(Qt.ISODate)))
+                talkDetailsWidget.dateEdit.date(),
+                talkDetailsWidget.startTimeEdit.time().toString('hh:mm ap'),
+                talkDetailsWidget.endTimeEdit.time().toString('hh:mm ap'))
 
     def show_new_talk_popup(self):
         """Displays a modal dialog with a talk details view

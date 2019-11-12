@@ -39,6 +39,12 @@ class Failure():
         self.indicator = indicator
         self.release = release
 
+    def __eq__(self, obj):
+        return self.__dict__ == obj.__dict__
+
+    def __ne__(self, obj):
+        return not self == obj
+
 
 class Report():
     def __init__(self, presentation, failure):

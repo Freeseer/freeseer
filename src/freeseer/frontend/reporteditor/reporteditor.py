@@ -170,7 +170,7 @@ class ReportEditorApp(FreeseerApp):
                                     "",  # level
                                     unicode(self.addTalkWidget.eventLineEdit.text()),
                                     unicode(self.addTalkWidget.roomLineEdit.text()),
-                                    unicode(datetime.toString()),
+                                    datetime.date(),
                                     unicode(self.addTalkWidget.endTimeEdit.text()))
 
         # Do not add talks if they are empty strings

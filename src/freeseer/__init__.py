@@ -41,7 +41,7 @@ is available on GitHub.
 
 NAME = 'freeseer'
 __version__ = '3.0.9999'
-SCHEMA_VERSION = 310
+SCHEMA_VERSION = 315
 __author__ = "Free and Open Source Software Learning Center"
 __email__ = "fosslc@gmail.com"
 URL = 'http://github.com/Freeseer/freeseer'
