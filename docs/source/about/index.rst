@@ -86,7 +86,7 @@ What Freeseer Can Do
    .. raw:: html
 
       <iframe type="text/html" width="100%" height="500"
-       src="http://www.youtube-nocookie.com/embed/wOr1ZeQG__k?rel=0&autohide=1&showinfo=0&theme=light"
+       src="https://www.youtube-nocookie.com/embed/wOr1ZeQG__k?rel=0&autohide=1&showinfo=0&theme=light"
        frameborder="0"></iframe>
 
 At its heart, Freeseer is a screencasting tool. Freeseer helps you record your desktop and audio,
