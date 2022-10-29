@@ -46,7 +46,7 @@ from freeseer.framework.area_selector import AreaSelector
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
-import widget
+from . import widget
 
 log = logging.getLogger(__name__)
 

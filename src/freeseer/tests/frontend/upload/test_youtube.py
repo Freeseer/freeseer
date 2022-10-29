@@ -26,7 +26,7 @@ import mock
 import sys
 import unittest
 import pytest
-from StringIO import StringIO
+from io import StringIO
 
 from freeseer.framework.youtube import Response
 from freeseer.frontend.upload import youtube

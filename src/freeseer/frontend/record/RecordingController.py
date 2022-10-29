@@ -69,12 +69,12 @@ class RecordingController:
         print("ID: Speaker - Title")
         print("-------------------")
 
-        while(query.next()):
-            talkid = unicode(query.value(0).toString())
-            title = unicode(query.value(1).toString())
-            speaker = unicode(query.value(2).toString())
+        while(next(query)):
+            talkid = str(query.value(0).toString())
+            title = str(query.value(1).toString())
+            speaker = str(query.value(2).toString())
 
-            print("{talkid}: {speaker} - {title}".format(talkid=talkid, speaker=speaker, title=title))
+            print(("{talkid}: {speaker} - {title}".format(talkid=talkid, speaker=speaker, title=title)))
 
     ###
     ### Convenience commands

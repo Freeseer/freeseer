@@ -49,7 +49,7 @@ class JSONConfigStorage(ConfigStorage):
         if section not in dict_:
             return config_instance
 
-        for name, option in config_instance.options.iteritems():
+        for name, option in config_instance.options.items():
             if name in dict_[section]:
                 raw = dict_[section][name]
                 clean = option.decode(raw)
@@ -61,7 +61,7 @@ class JSONConfigStorage(ConfigStorage):
         if section not in dict_:
             dict_[section] = {}
 
-        for name, option in config_instance.options.iteritems():
+        for name, option in config_instance.options.items():
             raw = config_instance.get_value(name, option)
             clean = option.encode(raw)
             dict_[section][name] = clean

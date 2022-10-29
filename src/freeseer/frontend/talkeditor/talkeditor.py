@@ -399,18 +399,18 @@ class TalkEditorApp(FreeseerApp):
         startTime = talkDetailsWidget.startTimeEdit.time()
         endTime = talkDetailsWidget.endTimeEdit.time()
 
-        title = unicode(talkDetailsWidget.titleLineEdit.text()).strip()
+        title = str(talkDetailsWidget.titleLineEdit.text()).strip()
         if title:
             return Presentation(
-                unicode(talkDetailsWidget.titleLineEdit.text()).strip(),
-                unicode(talkDetailsWidget.presenterLineEdit.text()).strip(),
-                unicode(talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
-                unicode(talkDetailsWidget.categoryLineEdit.text()).strip(),
-                unicode(talkDetailsWidget.eventLineEdit.text()).strip(),
-                unicode(talkDetailsWidget.roomLineEdit.text()).strip(),
-                unicode(date.toString(Qt.ISODate)),
-                unicode(startTime.toString(Qt.ISODate)),
-                unicode(endTime.toString(Qt.ISODate)))
+                str(talkDetailsWidget.titleLineEdit.text()).strip(),
+                str(talkDetailsWidget.presenterLineEdit.text()).strip(),
+                str(talkDetailsWidget.descriptionTextEdit.toPlainText()).strip(),
+                str(talkDetailsWidget.categoryLineEdit.text()).strip(),
+                str(talkDetailsWidget.eventLineEdit.text()).strip(),
+                str(talkDetailsWidget.roomLineEdit.text()).strip(),
+                str(date.toString(Qt.ISODate)),
+                str(startTime.toString(Qt.ISODate)),
+                str(endTime.toString(Qt.ISODate)))
 
     def show_new_talk_popup(self):
         """Displays a modal dialog with a talk details view
@@ -495,7 +495,7 @@ class TalkEditorApp(FreeseerApp):
             self.reset()
 
     def add_talks_from_rss(self):
-        rss_url = unicode(self.importTalksWidget.rssLineEdit.text())
+        rss_url = str(self.importTalksWidget.rssLineEdit.text())
         if rss_url:
             self.db.add_talks_from_rss(rss_url)
             self.presentationModel.select()

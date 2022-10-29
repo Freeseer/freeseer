@@ -41,7 +41,7 @@ from freeseer.framework.plugin import IAudioMixer
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
-import widget
+from . import widget
 
 
 class MultiAudioConfig(Config):

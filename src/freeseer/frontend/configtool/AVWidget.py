@@ -212,7 +212,7 @@ class AVWidget(QWidgetWithDpi):
         #
 
         self.mainLayout.insertSpacerItem(0, QtGui.QSpacerItem(0, fontSize * 2))
-        self.title = QtGui.QLabel(u"{0} Recording {1}".format(u'<h1>', u'</h1>'))
+        self.title = QtGui.QLabel("{0} Recording {1}".format('<h1>', '</h1>'))
         self.mainLayout.insertWidget(0, self.title)
 
 

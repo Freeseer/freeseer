@@ -44,9 +44,9 @@ class TestFolderOptionNoDefault(unittest.TestCase, OptionTest):
         '/tmp/1',
     ]
 
-    encode_success = zip(valid_success, valid_success)
+    encode_success = list(zip(valid_success, valid_success))
 
-    decode_success = zip(valid_success, valid_success)
+    decode_success = list(zip(valid_success, valid_success))
     decode_failure = valid_failure
 
     def setUp(self):

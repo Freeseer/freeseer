@@ -44,7 +44,7 @@ from freeseer.framework.plugin import IAudioInput
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom
-import widget
+from . import widget
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ def get_sources():
     audiosrc.probe_property_name('device')
     names = audiosrc.probe_get_values_name('device')
     # TODO: should be getting actual device description, but .get_property('device-name') does not work
-    return zip(names, names)
+    return list(zip(names, names))
 
 
 def get_default_source():

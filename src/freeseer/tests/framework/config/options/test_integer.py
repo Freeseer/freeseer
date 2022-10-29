@@ -34,11 +34,11 @@ from freeseer.tests.framework.config.options import OptionTest
 class TestIntegerOptionNoDefault(unittest.TestCase, OptionTest):
     """Tests IntegerOption without a default value."""
 
-    valid_success = range(-1000, 1000)
+    valid_success = list(range(-1000, 1000))
 
-    encode_success = zip(valid_success, map(str, valid_success))
+    encode_success = list(zip(valid_success, list(map(str, valid_success))))
 
-    decode_success = zip(map(str, valid_success), valid_success)
+    decode_success = list(zip(list(map(str, valid_success)), valid_success))
     decode_failure = [
         'hello',
         '1world',

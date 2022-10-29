@@ -225,7 +225,7 @@ class ConfigToolApp(FreeseerApp):
         #
         # AV Widget
         #
-        self.avWidget.title.setText(u"{0} {1} {2}".format(u'<h1>', self.app.translate("ConfigToolApp", "Recording"), u'</h1>'))
+        self.avWidget.title.setText("{0} {1} {2}".format('<h1>', self.app.translate("ConfigToolApp", "Recording"), '</h1>'))
 
         self.avWidget.audioGroupBox.setTitle(self.app.translate("ConfigToolApp", "Audio Input"))
         self.avWidget.audioMixerLabel.setText(self.app.translate("ConfigToolApp", "Audio Mixer"))
@@ -237,7 +237,7 @@ class ConfigToolApp(FreeseerApp):
 
         self.avWidget.fileGroupBox.setTitle(self.app.translate("ConfigToolApp", "Record to File"))
         self.avWidget.fileDirLabel.setText(self.app.translate("ConfigToolApp", "Record Directory"))
-        self.avWidget.fileDirPushButton.setText(u"{}...".format(self.app.translate("ConfigToolApp", "Browse")))
+        self.avWidget.fileDirPushButton.setText("{}...".format(self.app.translate("ConfigToolApp", "Browse")))
         self.avWidget.fileLabel.setText(self.app.translate("ConfigToolApp", "File Format"))
         self.avWidget.fileSetupPushButton.setToolTip(self.app.translate("ConfigToolApp", "Setup"))
 
@@ -496,13 +496,13 @@ class ConfigToolApp(FreeseerApp):
 
         if file_configurable:
             file_config_layout = file_output_plugin.plugin_object.get_audio_quality_layout()
-            self.audio_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>File Output</b>'), 0, 0, 1, 2, QtCore.Qt.AlignHCenter)
+            self.audio_quality_dialog_layout.addWidget(QtGui.QLabel('<b>File Output</b>'), 0, 0, 1, 2, QtCore.Qt.AlignHCenter)
             self.audio_quality_dialog_layout.addLayout(file_config_layout, 1, 0)
 
         if stream_configurable:
             stream_config_layout = stream_output_plugin.plugin_object.get_audio_quality_layout()
             column_count = self.audio_quality_dialog_layout.columnCount()
-            self.audio_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>Stream Output</b>'), 0, column_count, 1, 2, QtCore.Qt.AlignHCenter)
+            self.audio_quality_dialog_layout.addWidget(QtGui.QLabel('<b>Stream Output</b>'), 0, column_count, 1, 2, QtCore.Qt.AlignHCenter)
             self.audio_quality_dialog_layout.addLayout(stream_config_layout, 1, column_count)
 
         self.audio_quality_dialog_layout.addWidget(self.audio_quality_dialog.closeButton, 2, 0, 1, self.audio_quality_dialog_layout.columnCount())
@@ -561,13 +561,13 @@ class ConfigToolApp(FreeseerApp):
 
         if file_configurable:
             file_config_layout = file_output_plugin.plugin_object.get_video_quality_layout()
-            self.video_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>File Output</b>'), 0, 0, 1, 2, QtCore.Qt.AlignHCenter)
+            self.video_quality_dialog_layout.addWidget(QtGui.QLabel('<b>File Output</b>'), 0, 0, 1, 2, QtCore.Qt.AlignHCenter)
             self.video_quality_dialog_layout.addLayout(file_config_layout, 1, 0)
 
         if stream_configurable:
             stream_config_layout = stream_output_plugin.plugin_object.get_video_quality_layout()
             column_count = self.video_quality_dialog_layout.columnCount()
-            self.video_quality_dialog_layout.addWidget(QtGui.QLabel(u'<b>Stream Output</b>'), 0, column_count, 1, 2, QtCore.Qt.AlignHCenter)
+            self.video_quality_dialog_layout.addWidget(QtGui.QLabel('<b>Stream Output</b>'), 0, column_count, 1, 2, QtCore.Qt.AlignHCenter)
             self.video_quality_dialog_layout.addLayout(stream_config_layout, 1, column_count)
 
         self.video_quality_dialog_layout.addWidget(self.video_quality_dialog.closeButton, 2, 0, 1, self.video_quality_dialog_layout.columnCount())
@@ -750,7 +750,7 @@ class ConfigToolApp(FreeseerApp):
         self.dialog.closeButton = QtGui.QPushButton("Close")
         self.dialog_layout.addWidget(self.dialog.closeButton)
         self.connect(self.dialog.closeButton, QtCore.SIGNAL('clicked()'), self.dialog.close)
-        self.dialog.setWindowTitle(u'{} Setup'.format(name))
+        self.dialog.setWindowTitle('{} Setup'.format(name))
         self.dialog.setModal(True)
         self.dialog.show()
 

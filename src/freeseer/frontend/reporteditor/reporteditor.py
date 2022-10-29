@@ -164,14 +164,14 @@ class ReportEditorApp(FreeseerApp):
         date = self.addTalkWidget.dateEdit.date()
         startTime = self.addTalkWidget.startTimeEdit.time()
         datetime = QDateTime(date, startTime)  # original "time" is now "startTime"
-        presentation = Presentation(unicode(self.addTalkWidget.titleLineEdit.text()),
-                                    unicode(self.addTalkWidget.presenterLineEdit.text()),
+        presentation = Presentation(str(self.addTalkWidget.titleLineEdit.text()),
+                                    str(self.addTalkWidget.presenterLineEdit.text()),
                                     "",  # description
                                     "",  # level
-                                    unicode(self.addTalkWidget.eventLineEdit.text()),
-                                    unicode(self.addTalkWidget.roomLineEdit.text()),
-                                    unicode(datetime.toString()),
-                                    unicode(self.addTalkWidget.endTimeEdit.text()))
+                                    str(self.addTalkWidget.eventLineEdit.text()),
+                                    str(self.addTalkWidget.roomLineEdit.text()),
+                                    str(datetime.toString()),
+                                    str(self.addTalkWidget.endTimeEdit.text()))
 
         # Do not add talks if they are empty strings
         if (len(presentation.title) == 0):

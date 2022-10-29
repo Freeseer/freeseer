@@ -274,7 +274,7 @@ class TestServerApp:
         assert len(recording.media_dict) == 0
         response = test_client.post('/recordings', data={'filename': 'test'})
         assert response.status_code == 201
-        assert recording.media_dict.keys() == [1]
+        assert list(recording.media_dict.keys()) == [1]
         assert recording.media_info['1']['filename'] == 'test.ogg'
 
     def test_delete_no_recording_id(self, test_client):
@@ -311,7 +311,7 @@ class TestServerApp:
         response = test_client.delete('/recordings/1')
         assert response.status_code == 204
         assert del_media.num_times_stop_called == 1
-        assert recording.media_dict.keys() == [2]
+        assert list(recording.media_dict.keys()) == [2]
 
     def test_delete_recording_id_and_file(self, test_client, recording, mock_media_dict):
         '''
@@ -333,7 +333,7 @@ class TestServerApp:
 
         response = test_client.delete('/recordings/1')
         assert response.status_code == 204
-        assert recording.media_dict.keys() == [2]
+        assert list(recording.media_dict.keys()) == [2]
 
         # assert the file no longer exists
         assert not os.path.isfile(file_to_delete_path)

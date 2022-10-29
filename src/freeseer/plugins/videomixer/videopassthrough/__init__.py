@@ -44,7 +44,7 @@ from freeseer.framework.plugin import IVideoMixer
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin custom modules
-import widget
+from . import widget
 
 log = logging.getLogger(__name__)
 
@@ -54,7 +54,7 @@ class VideoPassthroughConfig(Config):
     input = options.StringOption("Video Test Source")
     input_type = options.StringOption("video/x-raw-rgb")
     framerate = options.IntegerOption(30)
-    resolution = options.ChoiceOption(widget.resmap.keys(), "No Scaling")
+    resolution = options.ChoiceOption(list(widget.resmap.keys()), "No Scaling")
 
 
 class VideoPassthrough(IVideoMixer):

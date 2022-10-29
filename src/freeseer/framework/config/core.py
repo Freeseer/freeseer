@@ -31,10 +31,8 @@ from freeseer.framework.config.exceptions import OptionValueNotSetError
 from freeseer.framework.config.exceptions import StorageNotSetError
 
 
-class Option(object):
+class Option(object, metaclass=abc.ABCMeta):
     """Represents a Config option."""
-
-    __metaclass__ = abc.ABCMeta
 
     class NotSpecified(object):
         pass
@@ -98,7 +96,7 @@ class ConfigBase(abc.ABCMeta):
         class_attributes, options = meta.find_options(class_attributes)
         class_attributes['options'] = options
         cls = super(ConfigBase, meta).__new__(meta, name, bases, class_attributes)
-        for opt_name, option in options.iteritems():
+        for opt_name, option in options.items():
             opt_get = functools.partial(cls.get_value, name=opt_name, option=option, presentation=True)
             opt_set = functools.partial(cls._set_value, name=opt_name, option=option)
             setattr(cls, opt_name, property(opt_get, opt_set))
@@ -118,7 +116,7 @@ class ConfigBase(abc.ABCMeta):
         return new_attributes, options
 
 
-class Config(object):
+class Config(object, metaclass=ConfigBase):
     """Base class for all custom configs.
 
     To be useful, its body must contain some number of Option instances.
@@ -127,8 +125,6 @@ class Config(object):
         class MyConfig(Config):
             test = StringOption('default_value')
     """
-
-    __metaclass__ = ConfigBase
 
     def __init__(self, storage=None, storage_args=None):
         """
@@ -149,7 +145,7 @@ class Config(object):
 
     def set_defaults(self):
         """Sets the values of all options to their default value (if applicable)."""
-        for name, option in self.options.iteritems():
+        for name, option in self.options.items():
             if not option.is_required():
                 self.set_value(name, option, option.default)
 
@@ -210,7 +206,7 @@ class Config(object):
             'properties': {},
         }
 
-        for name, instance in cls.options.iteritems():
+        for name, instance in cls.options.items():
             schema['properties'][name] = instance.schema()
             if instance.is_required():
                 required.append(name)
@@ -221,10 +217,8 @@ class Config(object):
         return schema
 
 
-class ConfigStorage(object):
+class ConfigStorage(object, metaclass=abc.ABCMeta):
     """Defines an interface for loading and storing Config instances."""
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, filepath):
         """

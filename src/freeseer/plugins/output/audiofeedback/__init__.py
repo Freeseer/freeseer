@@ -42,7 +42,7 @@ from freeseer.framework.plugin import IOutput
 from freeseer.framework.config import Config, options
 
 # .freeseer-plugin
-import widget
+from . import widget
 
 
 class AudioFeedbackConfig(Config):

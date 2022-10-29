@@ -48,22 +48,22 @@ class QtKeyGrabber(QtGui.QWidget):
     def keyPressEvent(self, event):
         other = None
         if event.key() == QtCore.Qt.Key_Shift:
-            self.modifiers[QtCore.Qt.Key_Shift] = u'Shift'
+            self.modifiers[QtCore.Qt.Key_Shift] = 'Shift'
         elif event.key() == QtCore.Qt.Key_Control:
-            self.modifiers[QtCore.Qt.Key_Control] = u'Ctrl'
+            self.modifiers[QtCore.Qt.Key_Control] = 'Ctrl'
         elif event.key() == QtCore.Qt.Key_Alt:
-            self.modifiers[QtCore.Qt.Key_Alt] = u'Alt'
+            self.modifiers[QtCore.Qt.Key_Alt] = 'Alt'
         elif event.key() == QtCore.Qt.Key_Meta:
-            self.modifiers[QtCore.Qt.Key_Meta] = u'Meta'
+            self.modifiers[QtCore.Qt.Key_Meta] = 'Meta'
         else:
             other = event.text()
         if other:
             if QtCore.Qt.Key_Control in self.modifiers:
-                self.key_string = u'+'.join(self.modifiers.values() + [unicode(chr(event.key()))])
+                self.key_string = '+'.join(list(self.modifiers.values()) + [str(chr(event.key()))])
             else:
-                self.key_string = u'+'.join(self.modifiers.values() + [unicode(other)])
+                self.key_string = '+'.join(list(self.modifiers.values()) + [str(other)])
         else:
-            self.key_string = u'+'.join(self.modifiers.values())
+            self.key_string = '+'.join(list(self.modifiers.values()))
         if (self.parent.core.config.key_rec == 'Ctrl+Shift+R'):
             self.flag = True
 

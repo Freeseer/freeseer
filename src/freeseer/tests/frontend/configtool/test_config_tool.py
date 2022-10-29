@@ -88,13 +88,13 @@ class TestConfigToolApp(unittest.TestCase):
         """
         index = combobox_widget.currentIndex()
         combobox_widget.setCurrentIndex(0)
-        self.assertEquals(combobox_widget.currentIndex(), 0)
+        self.assertEqual(combobox_widget.currentIndex(), 0)
         self.assertIsNot(combobox_widget.currentText(), None)
         combobox_widget.setCurrentIndex(combobox_widget.count() - 1)
-        self.assertEquals(combobox_widget.currentIndex(), (combobox_widget.count() - 1))
+        self.assertEqual(combobox_widget.currentIndex(), (combobox_widget.count() - 1))
         self.assertIsNot(combobox_widget.currentText(), None)
         combobox_widget.setCurrentIndex(index)
-        self.assertEquals(combobox_widget.currentIndex(), index)
+        self.assertEqual(combobox_widget.currentIndex(), index)
         self.assertIsNot(combobox_widget.currentText(), None)
 
     def select_general_settings_tab(self):
@@ -320,12 +320,12 @@ class TestConfigToolApp(unittest.TestCase):
                 QtTest.QTest.keyClick(self.config_tool.pluginWidget.list, QtCore.Qt.Key_Down)
 
         # Assert expected categories exist.
-        self.assertIn('AudioInput', plugin_category.values())
-        self.assertIn('AudioMixer', plugin_category.values())
-        self.assertIn('VideoInput', plugin_category.values())
-        self.assertIn('VideoMixer', plugin_category.values())
-        self.assertIn('Output', plugin_category.values())
-        self.assertIn('Importer', plugin_category.values())
+        self.assertIn('AudioInput', list(plugin_category.values()))
+        self.assertIn('AudioMixer', list(plugin_category.values()))
+        self.assertIn('VideoInput', list(plugin_category.values()))
+        self.assertIn('VideoMixer', list(plugin_category.values()))
+        self.assertIn('Output', list(plugin_category.values()))
+        self.assertIn('Importer', list(plugin_category.values()))
 
         for category in ['AudioInput', 'AudioMixer', 'VideoInput', 'VideoMixer', 'Output', 'Importer']:
             for plugin in self.config_tool.get_plugins(category):

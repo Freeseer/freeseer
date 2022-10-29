@@ -22,7 +22,7 @@
 # For support, questions, suggestions or any other inquiries, visit:
 # http://wiki.github.com/Freeseer/freeseer/
 
-import ConfigParser
+from . import ConfigParser
 
 from freeseer.framework.config.core import ConfigStorage
 
@@ -34,7 +34,7 @@ class ConfigParserStorage(ConfigStorage):
         parser = ConfigParser.ConfigParser()
         parser.read([self._filepath])
 
-        for name, option in config_instance.options.iteritems():
+        for name, option in config_instance.options.items():
             if parser.has_option(section, name):
                 raw = parser.get(section, name)
                 clean = option.decode(raw)
@@ -49,7 +49,7 @@ class ConfigParserStorage(ConfigStorage):
         if not parser.has_section(section):
             parser.add_section(section)
 
-        for name, option in config_instance.options.iteritems():
+        for name, option in config_instance.options.items():
             raw = config_instance.get_value(name, option)
             clean = option.encode(raw)
             parser.set(section, name, clean)
